@@ -37,11 +37,11 @@ public class AnalyseTask implements Runnable {
 				
 				for (int i = 0; i < this.applicationDTO.projects.size(); i++) {
 
+					this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
+					
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
 					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
 					
-					this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
-
 					// Add analysed root modules to project
 					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
 					AnalysedModuleDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
@@ -49,8 +49,6 @@ public class AnalyseTask implements Runnable {
 						currentProject.analysedModules.add(analysedModule);
 					}
 
-					//ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
-					
 					// Update project with analysedRootModules
 					this.applicationDTO.projects.remove(i);
 					this.applicationDTO.projects.add(i, currentProject);

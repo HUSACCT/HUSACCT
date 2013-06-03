@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -29,6 +30,8 @@ import javax.swing.event.ListSelectionListener;
 @SuppressWarnings("serial")
 public class ConfigurationDialog extends JDialog {
 	
+	private String subItem = " - ";
+	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private ArrayList<IConfigurable> configurableServices = new ArrayList<IConfigurable>();
 	
@@ -36,25 +39,22 @@ public class ConfigurationDialog extends JDialog {
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
 	private JList<String> list;
 	
-	//TODO remove code after demonstration 14-05-2013
-	private JButton showError = new JButton("Show Violations");
-	
 	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<String, ConfigPanel>();
 	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.setLayout(new BorderLayout());
-		initiliaze();
+		initialise();
 		setComponentText();
-		
 		this.setVisible(true);
 	}
 	
-	public void initiliaze() {
+	public void initialise() {
 		getConfigurableServices();
-		mainPanel = configurableServices.get(0).getConfigurationPanel();
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(configurableServices.get(0).getConfigurationPanel(), BorderLayout.CENTER);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(800, 600));
+		this.setSize(new Dimension(900, 600));
 		loadSidePanel();
 		loadButtons();
 		
@@ -81,6 +81,9 @@ public class ConfigurationDialog extends JDialog {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		for(final IConfigurable config : configurableServices) {
 			listModel.addElement(config.getConfigurationName());
+			for(Entry<String, ConfigPanel> entry : config.getSubItems().entrySet()) {
+				listModel.addElement(subItem + entry.getKey());
+			}
 		}
 		list = new JList<String>(listModel);
 		list.setSelectedIndex(0);
@@ -88,7 +91,12 @@ public class ConfigurationDialog extends JDialog {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
 				if(event.getValueIsAdjusting()) {
-					mainPanel = configPanelMap.get(list.getSelectedValue());
+					String selected = list.getSelectedValue();
+					if(selected.startsWith(subItem))
+						selected = selected.substring(subItem.length());
+					mainPanel.removeAll();
+					mainPanel.add(configPanelMap.get(selected), BorderLayout.CENTER);
+					mainPanel.updateUI();
 				}
 			}
 		});
@@ -98,6 +106,8 @@ public class ConfigurationDialog extends JDialog {
 	}
 	
 	public void loadButtons() {
+		final ConfigurationDialog configDialog = this;
+		
 		buttonPanel.add(save);
 		save.addActionListener(new ActionListener() {
 			@Override
@@ -106,6 +116,7 @@ public class ConfigurationDialog extends JDialog {
 					configPanel.SaveSettings();
 				}
 				ConfigurationManager.storeProperties();
+				configDialog.setVisible(false);
 			}	
 		});
 		
@@ -125,21 +136,6 @@ public class ConfigurationDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				configurationDialog.setVisible(false);
-			}	
-		});
-		
-		//TODO remove code after demonstration 14-05-2013
-		buttonPanel.add(showError);
-		showError.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				ArrayList<Integer> errorLines = new ArrayList<Integer>();
-				errorLines.add(4);
-				errorLines.add(12);
-				errorLines.add(27);
-				errorLines.add(51);
-				errorLines.add(79);
-				ServiceProvider.getInstance().getControlService().displayErrorsInFile("D:\\Dropbox\\Hogeschool Utrecht\\General GUI & Control\\Construction 2\\AnalyseServiceImpl.java", errorLines);
 			}	
 		});
 		
@@ -167,8 +163,9 @@ public class ConfigurationDialog extends JDialog {
 			configurableServices.add((IConfigurable) ServiceProvider.getInstance().getGraphicsService());
 		}
 		for(final IConfigurable config : configurableServices) {
-			if(config.getConfigurationPanel() instanceof ConfigPanel) {
-				configPanelMap.put(config.getConfigurationName(), (ConfigPanel)config.getConfigurationPanel());
+			configPanelMap.put(config.getConfigurationName(), config.getConfigurationPanel());
+			for(Entry<String, ConfigPanel> entry : config.getSubItems().entrySet()) {
+				configPanelMap.put(entry.getKey(), entry.getValue());
 			}
 		}
 	}
@@ -176,7 +173,7 @@ public class ConfigurationDialog extends JDialog {
 	private void setComponentText() {
 		this.setTitle(localeService.getTranslatedString("ToolsOptions"));
 		
-		save.setText(localeService.getTranslatedString("SaveButton"));
+		save.setText(localeService.getTranslatedString("SaveAndCloseButton"));
 		reset.setText(localeService.getTranslatedString("ResetButton"));
 		cancel.setText(localeService.getTranslatedString("CancelButton"));
 	}
