@@ -223,11 +223,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public HashMap<String, ConfigPanel> getSubItems() {
 		HashMap<String, ConfigPanel> subitems = new HashMap<String, ConfigPanel>();
-		//Test Code
-		subitems.put("extra", new GeneralConfigurationPanel());
-		subitems.put("options", new GeneralConfigurationPanel());
-		subitems.put("test", new GeneralConfigurationPanel());
-		//End
 		return subitems;
 	}
 	
