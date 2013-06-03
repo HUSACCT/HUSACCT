@@ -1,4 +1,4 @@
-package husaccttest.analyse.csharp.benchmark.accuracy;
+/*package husaccttest.analyse.csharp.benchmark.accuracy;
 
 
 import husacct.ServiceProvider;
@@ -909,3 +909,4 @@ public class DependencyDetectionAccuracyTest {
 	}
 }
 >>>>>>> 4e65191ad88116080e8b23218d2832541ab44931
+*/
