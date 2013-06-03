@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MustUseRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED, RuleTypes.IS_NOT_ALLOWED);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE, RuleTypes.IS_NOT_ALLOWED_TO_USE);
 
 	public MustUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
@@ -28,24 +28,20 @@ public class MustUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		int dependencyCounter = 0;
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-						if (dependency.to.equals(classPathTo.getPhysicalPath())) {
-							if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-								dependencyCounter++;
-							}
-						}
+					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
+                            dependency.to.equals(classPathTo.getPhysicalPath()) &&
+                            Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                        dependencyCounter++;
 					}
 				}
 			}

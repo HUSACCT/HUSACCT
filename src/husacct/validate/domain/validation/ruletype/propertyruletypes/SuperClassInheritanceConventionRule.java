@@ -16,37 +16,34 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-public class SubClassConventionRule extends RuleType {
+public class SuperClassInheritanceConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> subClassExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> superClassInheritanceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
-	public SubClassConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, subClassExceptionRules, severity);
+	public SuperClassInheritanceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, superClassInheritanceExceptionRules, severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
-		List<Mapping> classpathsTo = mappings.getMappingTo();
+		physicalClasspathsFrom = mappings.getMappingFrom();
+		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			int dependencyCounter = 0;
-			for (Mapping classPathTo : classpathsTo) {
+			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-						if (dependency.to.equals(classPathTo.getPhysicalPath())) {
-							if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-								dependencyCounter++;
-							}
-						}
-					}
+					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
+                            dependency.to.equals(classPathTo.getPhysicalPath()) &&
+                            Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                        dependencyCounter++;
+                    }
 				}
 			}
-			if (dependencyCounter == 0 && !classpathsTo.isEmpty()) {
+			if (dependencyCounter == 0 && !physicalClasspathsTo.isEmpty()) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}

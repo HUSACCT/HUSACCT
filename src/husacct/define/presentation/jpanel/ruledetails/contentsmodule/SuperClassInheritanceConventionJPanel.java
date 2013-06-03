@@ -12,16 +12,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
 
-public class SubClassConventionJPanel extends AbstractDetailsJPanel {
+public class SuperClassInheritanceConventionJPanel extends AbstractDetailsJPanel {
 	private static final long serialVersionUID = 376037038601799822L;
-	public static final String ruleTypeKey = "SubClassConvention";
+	public static final String ruleTypeKey = "SuperClassInheritanceConvention";
 	
 	public ModuleFromPanelComponent moduleFromPanelComponent;
 	public ModuleToPanelComponent moduleToPanelComponent;
 	public EnabledPanelComponent enabledPanelComponent;
 	public DescriptionPanelComponent descriptionPanelComponent;
 	
-	public SubClassConventionJPanel(AppliedRuleController appliedRuleController) {
+	public SuperClassInheritanceConventionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 	}
 

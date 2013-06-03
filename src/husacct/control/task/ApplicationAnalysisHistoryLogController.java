@@ -1,10 +1,10 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.common.OSDetector;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
-import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
-import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.presentation.log.ApplicationAnalysisHistoryOverviewFrame;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -18,16 +18,16 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public class LogController {
+public class ApplicationAnalysisHistoryLogController{
 
-	private Logger logger = Logger.getLogger(LogController.class);
+	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
 	private Workspace currentWorkspace;
 
 	private MainController mainController;
 	
-	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", ""));
+	private File logFile = new File(OSDetector.getAppFolder());
 	
-	public LogController(MainController mainController){
+	public ApplicationAnalysisHistoryLogController(MainController mainController){
 		this.mainController = mainController;
 		currentWorkspace = null;
 	}
@@ -84,7 +84,6 @@ public class LogController {
 					}
 				}
 			}
-			
 		} catch (Exception e) {
 			logger.debug("Unable load application analysis history file: " + e.getMessage());
 		}
@@ -152,7 +151,9 @@ public class LogController {
 			if(getNumberOfAnalyses(workspace, application, projects)<1){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);
 			}else{
-				new AnalysisHistoryOverviewFrame(mainController);
+				//TODO: Remove this demonstration code after 04-06-2013
+				mainController.getUserActionLogController().addUserAction("Viewed Analysis History File: " + logFile.getAbsolutePath());
+				new ApplicationAnalysisHistoryOverviewFrame(mainController);
 			}
 		}else{
 			JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ApplicationAnalysisHistoryFileDoesntExist"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("ApplicationAnalysisHistoryFileDoesntExistTitle"), JOptionPane.ERROR_MESSAGE);

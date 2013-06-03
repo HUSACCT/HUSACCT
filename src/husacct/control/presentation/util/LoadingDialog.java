@@ -7,7 +7,6 @@ import husacct.control.task.MainController;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,7 +44,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 		this.processInfoText = processInfoText;
 		setup();
 		addComponents();
-
 	}
 	
 	public LoadingDialog(String processInfoText){

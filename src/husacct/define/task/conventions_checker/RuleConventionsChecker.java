@@ -27,8 +27,8 @@ public class RuleConventionsChecker {
 			conventionCheckSucces = checkVisibilityConvention();
 		} else if(ruleTypeKey.equals("NamingConvention")) {
 			conventionCheckSucces = checkNamingConvention();
-		} else if(ruleTypeKey.equals("SubClassConvention")) {
-			conventionCheckSucces = checkSubClassConvention();
+		} else if(ruleTypeKey.equals("SuperClassInheritanceConvention")) {
+			conventionCheckSucces = checkSuperClassInheritanceConvention();
 		} else if(ruleTypeKey.equals("InterfaceConvention")) {
 			conventionCheckSucces = checkInterfaceConvention();
 		} else if(ruleTypeKey.equals("IsNotAllowedToUse")) {
@@ -62,12 +62,12 @@ public class RuleConventionsChecker {
 	/**
 	 * checks are the same as MustUse
 	 */
-	private boolean checkSubClassConvention() {
-		boolean subClassConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
-		if(subClassConventionSucces) {
-			subClassConventionSucces = checkMustUse();
+	private boolean checkSuperClassInheritanceConvention() {
+		boolean superClassInheritanceConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		if(superClassInheritanceConventionSucces) {
+			superClassInheritanceConventionSucces = checkMustUse();
 		}
-		return subClassConventionSucces;
+		return superClassInheritanceConventionSucces;
 	}
 	
 	/**
