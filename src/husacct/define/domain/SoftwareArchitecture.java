@@ -8,6 +8,7 @@ import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -477,6 +478,7 @@ public class SoftwareArchitecture {
 		ArrayList<Object[]> toBeSaved = new ArrayList<Object[]>();
 		removeRecursively(moduleToRemove, toBeRemoved);
 		Collections.reverse(toBeRemoved);
+		JtreeController.instance().restoreTreeItems(moduleToRemove);
 		for (ModuleStrategy module : toBeRemoved) {
 			ModuleStrategy parent = module.getparent();
 			ArrayList<AppliedRuleStrategy> moduleRules = removeRelatedRules(module);
