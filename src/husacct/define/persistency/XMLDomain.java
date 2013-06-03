@@ -44,7 +44,7 @@ public class XMLDomain {
 
 	application = new Application(name.getValue(), projectsList, version.getValue());
 	application.setArchitecture(createArchitectureFromElement(architecture));
-	}catch(Exception exe){exe.printStackTrace();}
+	}catch(Exception exe){System.out.println("XMLDOMAIN :86 nill");}
 	return application;
     }
 
@@ -101,7 +101,7 @@ public class XMLDomain {
 
 	    // TODO: When modules change to factory, this should be revised
 	    switch(moduleType){
-	    case "ExternalSystem"	: newModule = factory.createModule("ExternalSystem"); break;
+	    case "ExternalSystem"	: newModule = factory.createModule("ExternalLibrary"); break;
 	    case "Component" 		: newModule = factory.createModule("Componen"); break;
 	    case "SubSystem"		: newModule = factory.createModule("SubSystem"); break;
 	    case "Layer"		    : newModule = factory.createModule("Layer");                   
@@ -112,12 +112,12 @@ public class XMLDomain {
 	    }
 	    newModule.set(moduleName, moduleDescription);
 	    newModule.setId(moduleId);
-	    System.out.println(newModule.getName()+" >>>>>>  ");
+	
 
 	    // Add to Software Unit
 	    if(parentId == 0){
 	    	try{
-	    	System.out.println(newModule.getName()+" >>>>>><<<<  ");
+	    	
 	    	moduleService.addModuleToRoot(newModule);
 	    	}catch(Exception e)
 	    	{e.printStackTrace();}
@@ -187,8 +187,8 @@ public class XMLDomain {
 
 	    String[] dependencyList = getDependenciesFromXML(dependencies);
 
-	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("Module").getChildText("id"));
-	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("Module").getChildText("id"));
+	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
+	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
 
 	    AppliedRuleStrategy dummyRule 	= ruleFactory.createDummyRule(ruleTypeKey);
 	    ModuleStrategy moduleFrom 			= moduleService.getModuleById(moduleFromId);
