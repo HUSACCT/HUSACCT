@@ -1,6 +1,6 @@
 .idea*
 out/
-*.iml
+HUSACCT.iml
 bin
 build.xml
 build/bin
@@ -16,4 +16,3 @@ nbproject/
 .metadata
 /bin
 /config.properties
-test.xml.decrypted
