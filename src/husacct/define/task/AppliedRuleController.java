@@ -204,12 +204,15 @@ public class AppliedRuleController extends PopUpController {
 
 	Module selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
 	for(String[] category : categories){
-	    if(categories[0][0].equals(category)){
-		ruleTypeKeys.add("setDisabled");
-		ruleTypeValues.add("--- Property rule types ---");
-	    }else{
-		ruleTypeKeys.add("setDisabled");
-		ruleTypeValues.add("--- Relation rule types ---");
+	    if(category[0].equals("IsNotAllowedToUse"))
+	    {
+	    	ruleTypeKeys.add("setDisabled");
+	    	ruleTypeValues.add("--- Relation rule types ---");
+	    }
+	    else
+	    {
+	    	ruleTypeKeys.add("setDisabled");
+	    	ruleTypeValues.add("--- Property rule types ---");
 	    }
 	    for(String ruleType : category){
 		if(!(selectedModule instanceof Layer)  && (ruleType.contains("SkipCall") || ruleType.contains("BackCall"))) {
