@@ -1,5 +1,7 @@
 package husacct.control.task.configuration;
 
+import husacct.common.OSDetector;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,10 +31,10 @@ public class ConfigurationManager {
 	private static Properties loadProperties() {
 		Properties props = new Properties();
 		try {
-			File file = new File("config.properties");
+			File file = new File(OSDetector.getAppFolder() + File.separator + "config.properties");
 			if(!file.isFile()) {
 				props.load(ConfigurationManager.class.getResourceAsStream("/husacct/common/resources/config.properties"));
-				props.store(new FileOutputStream("config.properties"), null);
+				storeProperties(props);
 			}
 			props.load(new FileInputStream(file));
 		} catch (IOException e) {
@@ -42,8 +44,15 @@ public class ConfigurationManager {
 	}
 	
 	public static void storeProperties() {
+		storeProperties(properties);
+	}
+	
+	public static void storeProperties(Properties props) {
 		try {
-			properties.store(new FileOutputStream("config.properties"), null);
+			File path = new File(OSDetector.getAppFolder());
+			if(!path.isDirectory())
+				path.mkdir();
+			properties.store(new FileOutputStream(OSDetector.getAppFolder() + File.separator + "config.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
