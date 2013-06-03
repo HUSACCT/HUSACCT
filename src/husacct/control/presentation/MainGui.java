@@ -4,11 +4,7 @@ import husacct.common.help.presentation.HelpableJFrame;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
-<<<<<<< HEAD
-=======
-import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.presentation.util.UserActionLogPanel;
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 import husacct.control.task.MainController;
 
 import java.awt.AWTEvent;
@@ -105,25 +101,7 @@ public class MainGui extends HelpableJFrame{
 	}
 	
 	private void addListeners(){
-<<<<<<< HEAD
-		
-=======
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			@Override
-			public boolean dispatchKeyEvent(KeyEvent event) {
-				if(event.getKeyCode() == KeyEvent.VK_F12){
-					try {
-						moonwalkThread.start();
-					} catch (Exception e){
-						logger.debug("Unable to start Moonwalk");
-					}
-				}
-				return false;
-			}
-		});
-		
 		addGlobalWindowFocusListeners();
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 	}
 	
 	private void createMenuBar() {

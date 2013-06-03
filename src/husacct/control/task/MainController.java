@@ -39,10 +39,6 @@ public class MainController {
 	}
 
 	private void setControllers() {
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 		this.commandLineController = new CommandLineController();
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
@@ -50,13 +46,8 @@ public class MainController {
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
-<<<<<<< HEAD
-		this.logController = new LogController(this);
-
-=======
 		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
 		this.userActionLogController = new UserActionLogController(this);
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 	}
 
 	private void setAppleProperties(){
@@ -101,11 +92,6 @@ public class MainController {
 	public ExportController getExportController(){
 		return this.exportController;
 	}
-<<<<<<< HEAD
-
-	public LogController getLogController(){
-		return this.logController;
-=======
 	
 	public ApplicationAnalysisHistoryLogController getApplicationAnalysisHistoryLogController(){
 		return this.applicationAnalysisHistoryLogController;
@@ -113,14 +99,12 @@ public class MainController {
 	
 	public UserActionLogController getUserActionLogController(){
 		return this.userActionLogController;
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 	}
 
 	public void exit(){
 		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 		int clickedOption = JOptionPane.showConfirmDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_OPTION);
 		if(clickedOption == JOptionPane.YES_OPTION){
-<<<<<<< HEAD
 			if(stateController.getState().contains(States.OPENED)) {			
 				clickedOption = JOptionPane.showConfirmDialog(this.mainGUI, localeService.getTranslatedString("DoYouWantToSaveBeforeQuit"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_OPTION);
 				if(clickedOption == JOptionPane.NO_OPTION){				
@@ -134,12 +118,6 @@ public class MainController {
 			else {
 				System.exit(0);
 			}
-
-=======
-			logger.debug("Close HUSACCT");
-			ConfigurationManager.storeProperties();
-			System.exit(0);
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 		}
 	}
 

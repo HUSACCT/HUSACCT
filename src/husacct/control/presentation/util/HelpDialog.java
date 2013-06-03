@@ -85,7 +85,6 @@ public class HelpDialog extends JDialog {
 
 	public HelpDialog(MainController mainController, Component component) {
 		super(mainController.mainGUI, true);
-		this.mainController = mainController;
 		this.component = component;
 		this.hpl = new HelpTreeModelLoader();
 		this.setTitle(localeService.getTranslatedString("Help"));
@@ -104,7 +103,6 @@ public class HelpDialog extends JDialog {
 		this.getContentPane().setBackground(Color.WHITE);
 
 		DialogUtils.alignCenter(this);
-
 	}
 	
 	public JPanel getYouTubePanel() {
@@ -121,10 +119,6 @@ public class HelpDialog extends JDialog {
 	}
 
 	private void addComponents() {
-		
-
-			
-		
 		JSplitPane rootPanel = new JSplitPane();
 		rootPanel.setDividerLocation(200);
 
@@ -157,9 +151,7 @@ public class HelpDialog extends JDialog {
 		rootPanel.setPreferredSize(new Dimension(this.getSize().width-5, this.getSize().height-55));
 		getContentPane().add(rootPanel, BorderLayout.NORTH);
 
-
 		getContentPane().add(getYouTubePanel());
-	
 	}
 
 	private void setListeners() {
@@ -192,7 +184,6 @@ public class HelpDialog extends JDialog {
 		
 		pictureLabel.addMouseListener(new MouseListener() {
 			@Override
-<<<<<<< HEAD
 			public void mouseClicked(MouseEvent e) {		
 						try {
 							Desktop.getDesktop().browse(new URI("http://www.youtube.com/user/HUSACCT"));
@@ -211,30 +202,5 @@ public class HelpDialog extends JDialog {
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 		});		
-
-=======
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					String id =  e.getDescription().replaceAll("#", "");
-					int position = editorpane.getText().indexOf(("id=\"" + id));
-					if(position==-1) {
-						position = editorpane.getText().indexOf("id = \"" + id);
-						
-					}
-					System.out.println(editorpane.getText());
-					System.out.println(position);
-					if(position > 0) {
-						editorpane.setCaretPosition(position);
-					}
-				}
-			}
-
-
-		});
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git

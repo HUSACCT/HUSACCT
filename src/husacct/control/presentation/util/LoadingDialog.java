@@ -51,11 +51,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 		new LoadingDialog(controlService.getMainController(), processInfoText);
 	}
 	
-<<<<<<< HEAD
-	public void setProgressText(int percentage) {
-=======
 	public void setProgressText(int percentage) {	
->>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 		progressBar.setIndeterminate(false);
 		this.progressLabel.setText(percentage + "%");
 		this.setTitle((percentage/amountOfProcesses) + (currentProcessNumber*(100/amountOfProcesses)) + "%");
