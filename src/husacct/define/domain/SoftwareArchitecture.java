@@ -6,6 +6,7 @@ import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
@@ -490,6 +491,7 @@ public class SoftwareArchitecture {
 			DefinitionController.getInstance().setSelectedModuleId(0);
 			parent.getSubModules().remove(index);
 			toBeSaved.add(new Object[]{module,moduleRules});
+			WarningMessageService.getInstance().removeImplementationWarning(module);
 		}
 
 		boolean moduleFound = true;

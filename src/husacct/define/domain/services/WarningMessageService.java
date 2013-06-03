@@ -112,7 +112,7 @@ public class WarningMessageService extends Observable implements Observer {
 	}
 
 
-	private void removeImplementationWarning(ModuleStrategy module) {
+	public void removeImplementationWarning(ModuleStrategy module) {
 		for (WarningMessage warning : warnings) {
 			
 			if(warning instanceof ImplementationLevelWarning)
