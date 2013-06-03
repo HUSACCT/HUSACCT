@@ -1,5 +1,7 @@
 package husacct.common.credits;
 
+import husacct.common.Resource;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,7 +14,8 @@ public class creditsFetcher {
 		
 		List<String> students = new ArrayList<String>();
 		try {
-			File f = new File(new File(".").getCanonicalPath() + "\\src\\husacct\\common\\resources\\credits\\credits_students.txt");
+			String CreditsPath = (Resource.get(Resource.CREDITS_PATH) +"credits_students.txt").replaceAll("file:/", "");
+			File f = new File(CreditsPath);
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String line;
 			while((line = br.readLine()) != null) {
@@ -31,7 +34,8 @@ public class creditsFetcher {
 		
 		List<String> teacher = new ArrayList<String>();
 		try {
-			File f = new File(new File(".").getCanonicalPath() + "\\src\\husacct\\common\\resources\\credits\\credits_teachers.txt");
+			String CreditsPath = (Resource.get(Resource.CREDITS_PATH) +"credits_teachers.txt").replaceAll("file:/", "");
+			File f = new File(CreditsPath);
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String line;
 			while((line = br.readLine()) != null) {
