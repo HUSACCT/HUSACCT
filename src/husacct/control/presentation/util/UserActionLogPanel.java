@@ -5,52 +5,41 @@ import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class UserActionLogDialog extends JDialog{
+public class UserActionLogPanel extends JPanel{
 
 	private static final long serialVersionUID = 9105220354932171257L;
 	private MainController mainController;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
-	public UserActionLogDialog(Frame owner, MainController mainController){
-		super(owner);
+	public UserActionLogPanel(MainController mainController){
+		super();
 		this.mainController = mainController;
 		init();
 	}
 	
 	private void init(){
-		this.setUndecorated(true);
-		this.setAlwaysOnTop(true);
-		this.setFocusableWindowState(false);
 		this.setFocusable(false);
-		this.setTitle(localeService.getTranslatedString("ActionLog"));
+		//this.setOpaque(false);
+		this.setBackground(new Color(172, 181, 189));
+		
+		BorderLayout defaultBorderLayout = new BorderLayout();
+		this.setLayout(defaultBorderLayout);
+		Dimension preferredSize = new Dimension(250, 212);
+		this.setPreferredSize(preferredSize);
+		
 		this.setVisible(true);
 		
-		int dialogWidth = 300;
-		int dialogHeight = 212;
-		this.setSize(dialogWidth, dialogHeight);
-
-		//Absolute positioning: Right bottom of screen
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int marginRight = 5;
-		int marginBottom = 40;
-		int dialogLocationX = (int)dim.getWidth()-dialogWidth-marginRight;
-		int dialogLocationY = (int)dim.getHeight()-dialogHeight-marginBottom;
-		this.setLocation(dialogLocationX, dialogLocationY);
-		
-		refreshUserActionsDialog();
+		refreshUserActionsPanel();
 	}
 	
 	@SuppressWarnings("serial")
@@ -75,10 +64,15 @@ public class UserActionLogDialog extends JDialog{
 			i++;
 		}
 		
-		return new JScrollPane(logTable);
+		JScrollPane output = new JScrollPane(logTable);
+		output.setOpaque(false);
+		Dimension preferredSize = new Dimension(250, 212);
+		output.setPreferredSize(preferredSize);
+		
+		return output;
 	}
 	
-	private JPanel getUserActionsDialogButtonsPanel(){
+	/*private JPanel getUserActionsDialogButtonsPanel(){
 		JPanel buttonsPanel = new JPanel();
 		
 		JButton undoButton = new JButton(localeService.getTranslatedString("Undo"));
@@ -90,12 +84,12 @@ public class UserActionLogDialog extends JDialog{
 		buttonsPanel.add(redoButton);
 		
 		return buttonsPanel;
-	}
+	}*/
 	
-	public void refreshUserActionsDialog(){
-		this.getContentPane().removeAll();
-		this.add(getUserActionsDialogScrollPaneContents());
-		this.add(getUserActionsDialogButtonsPanel(), BorderLayout.SOUTH);
+	public void refreshUserActionsPanel(){
+		this.removeAll();
+		this.add(getUserActionsDialogScrollPaneContents(), BorderLayout.SOUTH);
+		//this.add(getUserActionsDialogButtonsPanel(), BorderLayout.SOUTH);
 		this.validate();
 		this.repaint();
 	}
