@@ -22,7 +22,7 @@ public class Component extends ModuleStrategy {
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
-		this.type = "Module";
+		this.type = "Component";
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
