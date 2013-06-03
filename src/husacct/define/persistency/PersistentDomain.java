@@ -1,5 +1,7 @@
 package husacct.define.persistency;
 
+
+
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
