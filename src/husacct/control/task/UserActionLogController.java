@@ -30,6 +30,9 @@ public class UserActionLogController {
 		String calledMethodName = elements[0].getMethodName(); 
 		message = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + message;
 		
+		System.out.println("classPath: " + classPath);
+		System.out.println("calledMethodName: " + calledMethodName);
+		
 		HashMap<String, String> loggedMethodInfo = new HashMap<String, String>();
 		loggedMethodInfo.put("classPath", classPath);
 		loggedMethodInfo.put("calledMethodName", calledMethodName);

@@ -7,19 +7,11 @@ import husacct.control.presentation.toolbar.ToolBar;
 import husacct.control.presentation.util.UserActionLogPanel;
 import husacct.control.task.MainController;
 
-import java.awt.AWTEvent;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -37,14 +29,12 @@ import com.pagosoft.plaf.PgsLookAndFeel;
 public class MainGui extends HelpableJFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
-	private Toolkit tk = Toolkit.getDefaultToolkit();
 	private Logger logger = Logger.getLogger(MainGui.class);
 	private MainController mainController;
 	private MenuBar menuBar;
 	private String titlePrefix = "HUSACCT";
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
-	private Thread moonwalkThread;
 	private ToolBar toolBar;
 	private UserActionLogPanel userActionLogPanel;
 	
@@ -53,7 +43,6 @@ public class MainGui extends HelpableJFrame{
 		setup();
 		createMenuBar();
 		addComponents();
-		addListeners();
 		setVisible(true);
 		mainController.getStateController().checkState();
 	}
@@ -100,10 +89,6 @@ public class MainGui extends HelpableJFrame{
 		add(taskBarPane);
 	}
 	
-	private void addListeners(){
-		addGlobalWindowFocusListeners();
-	}
-	
 	private void createMenuBar() {
 		menuBar = new MenuBar(mainController);		
 		setJMenuBar(menuBar);
@@ -135,20 +120,5 @@ public class MainGui extends HelpableJFrame{
 	
 	public UserActionLogPanel getUserActionLogPanel(){
 		return userActionLogPanel;
-	}
-	
-	public void addGlobalWindowFocusListeners(){
-		long windowFocusEvent = AWTEvent.WINDOW_FOCUS_EVENT_MASK;
-	    tk.addAWTEventListener(new AWTEventListener() {
-            public void eventDispatched(AWTEvent e) {
-            	int eventId = e.getID();
-            	
-            	if(eventId==207){			//WINDOW_GAINED_FOCUS
-            		userActionLogPanel.setVisible(true);
-            	}else if (eventId==208) {	//WINDOW_LOST_FOCUS
-            		userActionLogPanel.setVisible(false);
-				}
-            }
-        }, windowFocusEvent);
 	}
 }
