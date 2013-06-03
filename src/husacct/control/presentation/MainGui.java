@@ -4,8 +4,11 @@ import husacct.common.help.presentation.HelpableJFrame;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
+<<<<<<< HEAD
+=======
 import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.presentation.util.UserActionLogPanel;
+>>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 import husacct.control.task.MainController;
 
 import java.awt.AWTEvent;
@@ -45,7 +48,6 @@ public class MainGui extends HelpableJFrame{
 	private String titlePrefix = "HUSACCT";
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
-	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
 	private ToolBar toolBar;
 	private UserActionLogPanel userActionLogPanel;
@@ -90,8 +92,6 @@ public class MainGui extends HelpableJFrame{
 		JPanel contentPane = new JPanel(new BorderLayout()); 
 		desktopPane = new JDesktopPane();
 		JPanel taskBarPane = new JPanel(new GridLayout());
-		moonwalkPanel = new MoonWalkPanel();
-		moonwalkThread = new Thread(moonwalkPanel);
 		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
 		userActionLogPanel = new UserActionLogPanel(mainController);
@@ -101,11 +101,13 @@ public class MainGui extends HelpableJFrame{
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		add(contentPane);
-		add(moonwalkPanel);
 		add(taskBarPane);
 	}
 	
 	private void addListeners(){
+<<<<<<< HEAD
+		
+=======
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 			@Override
 			public boolean dispatchKeyEvent(KeyEvent event) {
@@ -121,6 +123,7 @@ public class MainGui extends HelpableJFrame{
 		});
 		
 		addGlobalWindowFocusListeners();
+>>>>>>> branch 'develop' of https://github.com/thijsghu/HUSACCT.git
 	}
 	
 	private void createMenuBar() {
