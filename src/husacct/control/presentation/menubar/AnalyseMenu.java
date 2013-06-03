@@ -93,7 +93,7 @@ public class AnalyseMenu extends JMenu{
 		
 		analysisHistoryItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getLogController().showApplicationAnalysisHistoryOverview();
+				mainController.getApplicationAnalysisHistoryLogController().showApplicationAnalysisHistoryOverview();
 			}
 		});
 		

@@ -13,9 +13,6 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public String[] getAvailableLanguages();
 
-    @Deprecated
-    public void analyseApplication(String[] paths, String programmingLanguage);
-
     public void analyseApplication(ProjectDTO project);
 
     public boolean isAnalysed();
@@ -53,4 +50,14 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     public ExternalSystemDTO[] getExternalSystems();
     
     public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
+    
+    public int getAmountOfDependencies();
+
+    public int getAmountOfInterfaces();
+    
+    public int getAmountOfPackages();
+    
+    public int getAmountOfClasses();
+    
+    public int buildCache();
 }

@@ -17,20 +17,17 @@ import java.util.List;
 
 public class VisibilityConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.VISIBILITY_CONVENTION, RuleTypes.VISIBILITY_CONVENTION_EXCEPTION);
-
-	public VisibilityConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+	public VisibilityConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.VISIBILITY_CONVENTION, RuleTypes.VISIBILITY_CONVENTION_EXCEPTION), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		int violationCounter = 0;
-		for (Mapping physicalClasspathFrom : classpathsFrom) {
+		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!analysedModule.type.toLowerCase().equals("package")) {
 				for (String violationKey : currentRule.violationTypeKeys) {

@@ -34,15 +34,14 @@ public class SetApplicationPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JLabel applicationNameLabel, languageSelectLabel, versionLabel, projectsLabel;
 	private JTextField applicationNameText, versionText;
-	private JComboBox languageSelect;
+	private JComboBox<Object> languageSelect;
 	private JButton addButton, removeButton, editButton;
 	private String[] languages;
-	private JList projectList;
-	private DefaultListModel projectListModel = new DefaultListModel();
+	private JList<ProjectDTO> projectList;
+	private DefaultListModel<ProjectDTO> projectListModel = new DefaultListModel<ProjectDTO>();
 	private boolean UpdateFlag;
 	
 	private JDialog dialogOwner;
-	private JPanel panel;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
@@ -68,10 +67,10 @@ public class SetApplicationPanel extends JPanel{
 		editButton = new JButton(localeService.getTranslatedString("Edit"));
 		
 		applicationNameText = new JTextField("myApplication", 20);
-		languageSelect = new JComboBox(languages);
+		languageSelect = new JComboBox<Object>(languages);
 		versionText = new JTextField(10);
 		
-		projectList = new JList(projectListModel);
+		projectList = new JList<ProjectDTO>(projectListModel);
 		projectList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		projectList.setLayoutOrientation(JList.VERTICAL);
 		projectList.setVisibleRowCount(-1);

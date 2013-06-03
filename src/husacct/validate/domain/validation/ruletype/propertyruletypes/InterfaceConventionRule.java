@@ -18,36 +18,33 @@ import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> interfaceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED);
 	private HashSet<String> interfaceCache;
 	private HashSet<String> noInterfaceCache;
 
-	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, interfaceExceptionRules, severity);
-
+	public InterfaceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 		interfaceCache = new HashSet<>();
 		noInterfaceCache = new HashSet<>();
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
-		List<Mapping> classpathsTo = mappings.getMappingTo();
+		physicalClasspathsFrom = mappings.getMappingFrom();
+		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			int interfaceCounter = 0;
-			for (Mapping classPathTo : classpathsTo) {
+			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
 					if (dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)) {
 						interfaceCounter++;
 					}
 				}
 			}
-			if (interfaceCounter == 0 && !classpathsTo.isEmpty()) {
+			if (interfaceCounter == 0 && !physicalClasspathsTo.isEmpty()) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}

@@ -19,7 +19,6 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
 	private MainController mainController;
-	private JMenuItem configureItem;
 	private JMenuItem validateItem;
 	private JMenuItem exportViolationReportItem;
 	
@@ -38,14 +37,10 @@ public class ValidateMenu extends JMenu{
 		validateItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
 		validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
 				
-		configureItem = new JMenuItem(localeService.getTranslatedString("Configuration"));
-		configureItem.setMnemonic(getMnemonicKeycode("ConfigurationMnemonic"));
-				
 		exportViolationReportItem = new JMenuItem(localeService.getTranslatedString("ViolationReport"));
 		exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
 		
 		this.add(validateItem);
-		this.add(configureItem);
 		this.add(exportViolationReportItem);
 	}
 	
@@ -53,12 +48,6 @@ public class ValidateMenu extends JMenu{
 		validateItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showValidateGui();
-			}
-		});
-		
-		configureItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showConfigurationGui();
 			}
 		});
 		
@@ -71,7 +60,6 @@ public class ValidateMenu extends JMenu{
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				validateItem.setEnabled(false);
-				configureItem.setEnabled(false);
 				exportViolationReportItem.setEnabled(false);
 				
 				if(states.contains(States.VALIDATED)){
@@ -81,10 +69,6 @@ public class ValidateMenu extends JMenu{
 				if(states.contains(States.MAPPED) && states.contains(States.ANALYSED) || states.contains(States.VALIDATED)){
 					validateItem.setEnabled(true);
 				}
-				
-				if(states.contains(States.OPENED)){
-					configureItem.setEnabled(true);
-				}
 			}
 		});
 		
@@ -92,18 +76,12 @@ public class ValidateMenu extends JMenu{
 		localeService.addServiceListener(new IServiceListener() {
 			public void update() {
 				validateMenu.setText(localeService.getTranslatedString("Validate"));
-				configureItem.setText(localeService.getTranslatedString("Configuration"));
 				validateItem.setText(localeService.getTranslatedString("ValidateNow"));
 				exportViolationReportItem.setText(localeService.getTranslatedString("ViolationReport"));
 				validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
-				configureItem.setMnemonic(getMnemonicKeycode("ConfigurationMnemonic"));
 				exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
 			}
 		});
-	}
-	
-	public JMenuItem getConfigureItem(){
-		return configureItem;
 	}
 	
 	public JMenuItem getValidateItem(){

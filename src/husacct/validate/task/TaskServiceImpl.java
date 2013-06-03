@@ -59,6 +59,18 @@ public class TaskServiceImpl {
 	public void setFilterValues(PathDTO dto, boolean hideFilter, Calendar date) {
 		filterController.setFilterValues(dto, hideFilter, getHistoryViolations(date));
 	}
+	
+	public ArrayList<String> getEnabledFilterRuleTypes() {
+		return filterController.getEnabledFilterRuleTypes();
+	}
+
+	public ArrayList<String> getEnabledFilterViolations() {
+		return filterController.getEnabledFilterViolations();
+	}
+	
+	public ArrayList<String> getEnabledFilterPaths() {
+		return filterController.getEnabledFilterPaths();
+	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
 		return filterController.filterViolations(violations);

@@ -3,23 +3,19 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.apache.log4j.Logger;
-
-import com.itextpdf.text.log.SysoLogger;
 
 public class JavaInvocationGenerator extends JavaGenerator {
 
-    private String from = "";
-    private String to = "";
+    private String from;
+    private String to;
     private int lineNumber;
-    private String invocationName = "";
-    private String belongsToMethod = "";
-    private String nameOfInstance = "";
+    private String invocationName;
+    private String belongsToMethod;
+    private String nameOfInstance;
     private boolean invocationNameFound;
     private boolean constructorInMethodInvocationFound = false;
     private boolean foundAllMethodInvocInfo = false;
     private boolean allIdents = true;
-    private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
 
     public JavaInvocationGenerator(String uniqueClassName) {
         from = uniqueClassName;
@@ -81,18 +77,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
     }
 
     private void checkKindOfTreeAndDelegate(CommonTree treeNode) {
-        if (treeNode.getChildCount() <= 0) {
+        if ((treeNode.getChildCount() <= 0) || (treeNode.getChild(0).getChildCount() <= 0) || (treeNode.getChild(0).getChild(0).getType() == JavaParser.METHOD_CALL)) {
             return;
         }
-
-        if (treeNode.getChild(0).getChildCount() <= 0) {
-            return;
-        }
-
-        if (treeNode.getChild(0).getChild(0).getType() == JavaParser.METHOD_CALL) {
-            return;
-        }
-
         if (TreeHasConstructorInvocation(treeNode)) {
             createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
         } else {
@@ -218,15 +205,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
                     myInvocationGenerator.generateMethodInvocToDomain(exprTree, belongsToMethod);
                     break;
                 default:
-//					System.out.println(exprTree.getChildCount() + " - " + exprTree.toStringTree());
-//					System.out.println(from);
                     for (int i = 0; i < exprTree.getChildCount(); i++) {
-//						if(from.startsWith("infrastructure.socialmedia.flickr.Backup")){
-//							System.out.println(exprTree.getChild(i).toStringTree());
-//						}
                         parseExprToAssociation((CommonTree) exprTree.getChild(i));
                     }
-//					System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.toStringTree() +") (" + exprTree.getType() + ")");		
             }
         }
     }
