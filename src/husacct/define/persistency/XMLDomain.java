@@ -5,12 +5,10 @@ import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Component;
-import husacct.define.domain.module.ExternalSystem;
-import husacct.define.domain.module.Facade;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.SubSystem;
+import husacct.define.domain.module.ModuleFactory;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
+
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 
@@ -92,7 +90,8 @@ public class XMLDomain {
 
     private void createModulesFromXML(long parentId, Element XMLElement){
 	for(Element module : XMLElement.getChildren()){
-	    Module newModule;
+	    ModuleStrategy newModule;
+	    ModuleFactory factory = new ModuleFactory();
 	    String moduleType		 = module.getChildText("type");
 	    String moduleDescription	 = module.getChildText("description");
 	    int moduleId 		 = Integer.parseInt(module.getChildText("id"));
@@ -100,13 +99,16 @@ public class XMLDomain {
 
 	    // TODO: When modules change to factory, this should be revised
 	    switch(moduleType){
-	    case "ExternalSystem"	: newModule = new ExternalSystem(moduleName, moduleDescription); break;
-	    case "Component" 		: newModule = new Component(moduleName, moduleDescription); break;
-	    case "SubSystem"		: newModule = new SubSystem(moduleName, moduleDescription); break;
-	    case "Facade"		: newModule = new Facade(moduleName, moduleDescription); break;
-	    case "Layer"		: newModule = new Layer(moduleName, moduleDescription, Integer.parseInt(module.getChildText("HierarchicalLevel"))); break;
-	    default			: newModule = new Module(moduleName, moduleDescription); break;	    	
+	    case "ExternalLibrary"	: newModule = factory.createModule("ExternalLibrary"); break;
+	    case "Component" 		: newModule = factory.createModule("Component"); break;
+	    case "SubSystem"		: newModule = factory.createModule("SubSystem"); break;
+	    case "Layer"		    : newModule = factory.createModule("Layer");                   
+	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
+	    	                      ((Layer)newModule).setHierarchicalLevel(HierarchicalLevel); break;
+	    default			        : newModule = factory.createDummy("blank"); break;	    	
+
 	    }
+	    newModule.set(moduleName, moduleDescription);
 	    newModule.setId(moduleId);
 
 	    // Add to Software Unit
@@ -134,7 +136,7 @@ public class XMLDomain {
 	for(Element appliedRule : XMLElement.getChildren()){
 	    AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
 	    Element exceptions 	= appliedRule.getChild("exceptions");
-	    
+
 	    if(!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())){
 		long newID = ruleService.addAppliedRule(
 			dummyRule.getRuleType(),
@@ -176,12 +178,12 @@ public class XMLDomain {
 
 	    String[] dependencyList = getDependenciesFromXML(dependencies);
 
-	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("Module").getChildText("id"));
-	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("Module").getChildText("id"));
+	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
+	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
 
 	    AppliedRuleStrategy dummyRule 	= ruleFactory.createDummyRule(ruleTypeKey);
-	    Module moduleFrom 			= moduleService.getModuleById(moduleFromId);
-	    Module moduleTo 			= moduleService.getModuleById(moduleToId);
+	    ModuleStrategy moduleFrom 			= moduleService.getModuleById(moduleFromId);
+	    ModuleStrategy moduleTo 			= moduleService.getModuleById(moduleToId);
 
 	    dummyRule.setAppliedRule(description, dependencyList, regex, moduleFrom, moduleTo, enabled);
 	    dummyRule.setId(ruleId);

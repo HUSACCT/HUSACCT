@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
@@ -29,7 +30,7 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 
 	private static final long serialVersionUID = 7060253504620240808L;
 	
-	private SoftwareUnitController softwareUnitController;
+
 	private String enteredRegEx;
 	
 	private JButton saveButton;
@@ -43,10 +44,10 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree resultTree, String enteredRegEx, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.resultTree = resultTree;
-		this.softwareUnitController = new SoftwareUnitController(moduleId);
+		
 		this.enteredRegEx = enteredRegEx;
 		this.previousSoftwareUnitJDialog = previousSoftwareUnitJDialog;
-		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
+		
 		initUI();
 	}
 	
@@ -136,7 +137,7 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}
 		
-		this.softwareUnitController.saveRegEx(components, enteredRegEx);
+		DomainGateway.getInstance().saveRegEx(components, enteredRegEx);
 		this.dispose();
 	}
 	

@@ -3,6 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
@@ -203,13 +204,22 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 
     private long getSelectedModuleId() {
 	long moduleId = -1;
+
 	TreePath path = moduleTree.getSelectionPath();
 	if (path != null) {// returns null if nothing is selected
 	    AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path
 		    .getLastPathComponent();
 	    moduleId = selectedComponent.getModuleId();
 	}
+	
+	
+	
 	return moduleId;
+    
+  
+    
+    
+    
     }
 
     public void initGui() {
@@ -253,13 +263,15 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 
     public void moveLayerDown() {
 	long layerId = getSelectedModuleId();
-	DefinitionController.getInstance().moveLayerDown(layerId);
+	DomainGateway.getInstance().moveLayerDown(layerId);
+	
 	updateModuleTree();
     }
 
     public void moveLayerUp() {
 	long layerId = getSelectedModuleId();
-	DefinitionController.getInstance().moveLayerUp(layerId);
+	DomainGateway.getInstance().moveLayerUp(layerId);
+	
 	updateModuleTree();
     }
 
@@ -355,7 +367,7 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 		.getLastPathComponent();
 	if (selectedComponent.getModuleId() != DefinitionController
 		.getInstance().getSelectedModuleId()) {
-	    updateSelectedModule(selectedComponent.getModuleId());
+		updateSelectedModule(selectedComponent.getModuleId());
 	}
 	checkLayerComponentIsSelected();
     }

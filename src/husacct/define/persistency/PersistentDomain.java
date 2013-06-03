@@ -1,5 +1,7 @@
 package husacct.define.persistency;
 
+
+
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
@@ -43,19 +45,7 @@ public class PersistentDomain implements ISaveable {
 
     @Override
     public Element getWorkspaceData() {
-	domainParser = new DomainXML(SoftwareArchitecture.getInstance());
-
-	switch (parseData) {
-	case LOGICAL:
-	    domainParser.setParseLogical(false);
-	    return domainParser.getApplicationInXML(domainService
-		    .getApplicationDetails());
-	case APPLICATION:
-	case PHYSICAL:
-	default:
-	    return domainParser.getApplicationInXML(domainService
-		    .getApplicationDetails());
-	}
+		return domainParser.getApplicationInXML(workspaceApplication);
     }
 
     @Override

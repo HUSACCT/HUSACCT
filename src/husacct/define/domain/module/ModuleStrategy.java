@@ -6,6 +6,7 @@ import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
 
@@ -26,11 +27,11 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
-		this.type = "Module";
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
 	}
+	
 
 	public String getName() {
 		return name;
@@ -57,7 +58,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public ArrayList<SoftwareUnitDefinition> getUnits() {
-		return mappedSUunits;
+	return mappedSUunits;
 	}
 
 	public void setUnits(ArrayList<SoftwareUnitDefinition> units) {
@@ -122,6 +123,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
 			service.addDefaultRules(subModule);
+			StateService.instance().addModule(subModule);
 			WarningMessageService.getInstance().processModule(subModule);
 			return "";
 		}else{
@@ -309,5 +311,24 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		}
 		return hasSoftwareUnit;
 	}
+	
+	public void copyValuestoNewCompont(ModuleStrategy newModule)
+	{
+		newModule.setId(this.getId());
+		newModule.setName(this.getName());
+		newModule.setDescription(this.getDescription());
+		newModule.parent=this.getparent();
+		newModule.setSubModules(this.getSubModules());
+		newModule.setRegExUnits(this.getRegExUnits());
+		newModule.setUnits(this.getUnits());
+		
+		
+	}
+
+	public void setParent(ModuleStrategy moduleParent) {
+		this.parent=moduleParent;
+		
+	}
+	
 
 }

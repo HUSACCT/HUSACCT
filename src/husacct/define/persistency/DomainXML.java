@@ -5,8 +5,8 @@ import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
 
 import org.jdom2.Element;
 
@@ -69,13 +69,13 @@ public class DomainXML {
 	ruleType.addContent(AR.getRuleType());
 	XMLAppliedRule.addContent(ruleType);
 
-	if (AR.getModuleFrom() instanceof Module) {
+	if (AR.getModuleFrom() instanceof ModuleStrategy) {
 	    Element moduleFrom = new Element("moduleFrom");
 	    moduleFrom.addContent(getModuleInXML(AR.getModuleFrom()));
 	    XMLAppliedRule.addContent(moduleFrom);
 	}
 
-	if (AR.getModuleTo() instanceof Module) {
+	if (AR.getModuleTo() instanceof ModuleStrategy) {
 	    Element moduleTo = new Element("moduleTo");
 	    moduleTo.addContent(getModuleInXML(AR.getModuleTo()));
 	    XMLAppliedRule.addContent(moduleTo);
@@ -102,8 +102,8 @@ public class DomainXML {
 	return XMLAppliedRule;
     }
 
-    public Element getModuleInXML(Module module) {
-	Element xmlModule = new Element("Module");
+    public Element getModuleInXML(ModuleStrategy module) {
+	Element xmlModule = new Element("ModuleStrategy");
 
 	Element moduleType = new Element("type");
 	moduleType.addContent(module.getClass().getSimpleName());
@@ -122,7 +122,7 @@ public class DomainXML {
 	xmlModule.addContent(moduleName);
 
 	/**
-	 * build extra elements based on type (Module is generic)
+	 * build extra elements based on type (ModuleStrategy is generic)
 	 */
 	if (module.getClass().getSimpleName().toLowerCase().equals("layer")) {
 	    Element moduleLevel = new Element("HierarchicalLevel");
@@ -148,7 +148,7 @@ public class DomainXML {
 	 */
 	if (module.getSubModules().size() > 0) {
 	    Element subModule = new Element("SubModules");
-	    for (Module m : module.getSubModules()) {
+	    for (ModuleStrategy m : module.getSubModules()) {
 		subModule.addContent(getModuleInXML(m));
 	    }
 	    xmlModule.addContent(subModule);
@@ -220,7 +220,7 @@ public class DomainXML {
 
 	if (domainSoftwareArchitecture.getModules().size() > 0) {
 	    Element SAModules = new Element("modules");
-	    for (Module m : domainSoftwareArchitecture.getModules()) {
+	    for (ModuleStrategy m : domainSoftwareArchitecture.getModules()) {
 		SAModules.addContent(getModuleInXML(m));
 	    }
 	    XMLArchitecture.addContent(SAModules);

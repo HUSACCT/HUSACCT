@@ -1,24 +1,26 @@
 package husacct.define.task.conventions_checker;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.ModuleDomainService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LayerCheckerHelper {
 
     private String errorMessage;
     private ArrayList<Layer> layers;
 
-    public LayerCheckerHelper(Module moduleFrom) {
+    public LayerCheckerHelper(ModuleStrategy moduleFrom) {
 	layers = new ArrayList<Layer>();
 	fillLayerList(moduleFrom);
 	setErrorMessage("");
     }
 
-    public boolean checkTypeIsLayer(Module module) {
+    public boolean checkTypeIsLayer(ModuleStrategy module) {
 	if (module.getType() == "Layer") {
 	    return true;
 	} else {
@@ -28,9 +30,9 @@ public class LayerCheckerHelper {
 	}
     }
 
-    public void fillLayerList(Module moduleFrom) {
-	ArrayList<Module> currentModules = getCurrentModules(moduleFrom);
-	for (Module module : currentModules) {
+    public void fillLayerList(ModuleStrategy moduleFrom) {
+	ArrayList<ModuleStrategy> currentModules = getCurrentModules(moduleFrom);
+	for (ModuleStrategy module : currentModules) {
 	    if (module instanceof Layer) {
 		layers.add((Layer) module);
 	    }
@@ -51,17 +53,30 @@ public class LayerCheckerHelper {
 	return backCallLayers;
     }
 
-    private ArrayList<Module> getCurrentModules(Module moduleFrom) {
-	ModuleDomainService moduleService = new ModuleDomainService();
-	Long parentId = moduleService.getParentModuleIdByChildId(moduleFrom
-		.getId());
+    private ArrayList<ModuleStrategy> getCurrentModules(ModuleStrategy moduleFrom) {
+	
+    	ModuleDomainService moduleService =new  ModuleDomainService();
+	
+    	Long parentId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(1L);
+    	System.out.println("oppp "+parentId);
+    	parentId=-1L;
 	if (parentId != -1) {
-	    Module parentModule = moduleService.getModuleById(parentId);
+		try{
+		
+		}catch(Exception e)
+		{
+			System.out.println("<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>"+moduleFrom==null ?  "klop":moduleFrom.getName());e.getStackTrace();
+		}
+		ModuleStrategy parentModule = moduleService.getModuleById(parentId);
 	    moduleService.sortModuleChildren(parentModule);
 	    return parentModule.getSubModules();
 	} else {
-	    return moduleService.getSortedModules();
+	    
+		return moduleService.getSortedModules();
 	}
+    
+	
+	
     }
 
     public String getErrorMessage() {
@@ -74,7 +89,7 @@ public class LayerCheckerHelper {
 	return layerSkipperToId;
     }
 
-    public Module getLayerById(Long layerId) {
+    public ModuleStrategy getLayerById(Long layerId) {
 	Layer returnLayer = new Layer();
 	for (Layer layer : layers) {
 	    if (layer.getId() == layerId) {

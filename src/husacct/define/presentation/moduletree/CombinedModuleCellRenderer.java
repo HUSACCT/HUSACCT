@@ -21,7 +21,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = 6225304804416378425L;
 
-    private void checkEnabled(AbstractCombinedComponent component, JTree tree) {
+    protected void checkEnabled(AbstractCombinedComponent component, JTree tree) {
 	if (component instanceof AbstractDefineComponent
 		&& tree instanceof CombinedModuleTree) {
 	    AbstractDefineComponent abstractDefineComponent = (AbstractDefineComponent) component;
@@ -36,7 +36,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	setEnabled(true);
     }
 
-    private ImageIcon determineAbstractDefineComponentIcon(
+    protected ImageIcon determineAbstractDefineComponentIcon(
 	    AbstractDefineComponent component) {
 	ImageIcon icon = new ImageIcon();
 	if (component instanceof ComponentComponent) {
@@ -56,7 +56,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	return icon;
     }
 
-    private ImageIcon determineAnalyzedModuleComponentIcon(
+    protected ImageIcon determineAnalyzedModuleComponentIcon(
 	    AnalyzedModuleComponent component) {
 	ImageIcon icon = new ImageIcon();
 	if (component.getType().equals("PACKAGE")) {
@@ -126,7 +126,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	return icon;
     }
 
-    private void determineIcon(AbstractCombinedComponent component) {
+    protected void determineIcon(AbstractCombinedComponent component) {
 	if (component instanceof AnalyzedModuleComponent) {
 	    AnalyzedModuleComponent analyzedModuleComponent = (AnalyzedModuleComponent) component;
 	    setIcon(determineAnalyzedModuleComponentIcon(analyzedModuleComponent));

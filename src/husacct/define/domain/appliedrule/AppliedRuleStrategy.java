@@ -1,7 +1,7 @@
 package husacct.define.domain.appliedrule;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ModuleStrategy;
 
 import java.util.ArrayList;
 
@@ -12,14 +12,14 @@ public abstract class AppliedRuleStrategy {
 	private String description;
 	private String[] dependencies;
 	private String regex;
-	private Module moduleTo;
-	private Module moduleFrom;
+	private ModuleStrategy moduleTo;
+	private ModuleStrategy moduleFrom;
 	private boolean enabled;
 	private ArrayList<AppliedRuleStrategy> exceptions;
 	
 	public void setAppliedRule(String description, String[] dependencies,
-			String regex, Module moduleFrom,
-			Module moduleTo, boolean enabled) {
+			String regex, ModuleStrategy moduleFrom,
+			ModuleStrategy moduleTo, boolean enabled) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.description = description;
@@ -41,7 +41,7 @@ public abstract class AppliedRuleStrategy {
 		this.enabled = clone.isEnabled();
 	}
 	
-	public void setAppliedRule(String description, Module moduleFrom, Module moduleTo){
+	public void setAppliedRule(String description, ModuleStrategy moduleFrom, ModuleStrategy moduleTo){
 		setAppliedRule(description, new String[0], "",moduleFrom,moduleTo, true);
 	}
 
@@ -148,19 +148,19 @@ public abstract class AppliedRuleStrategy {
 		return regex;
 	}
 
-	public Module getModuleTo() {
+	public ModuleStrategy getModuleTo() {
 		return moduleTo;
 	}
 
-	public void setModuleTo(Module moduleTo) {
+	public void setModuleTo(ModuleStrategy moduleTo) {
 		this.moduleTo = moduleTo;
 	}
 
-	public Module getModuleFrom() {
+	public ModuleStrategy getModuleFrom() {
 		return moduleFrom;
 	}
 
-	public void setModuleFrom(Module moduleFrom) {
+	public void setModuleFrom(ModuleStrategy moduleFrom) {
 		this.moduleFrom = moduleFrom;
 	}
 	
@@ -181,10 +181,19 @@ public abstract class AppliedRuleStrategy {
 	 */
 	@Override
 	public boolean equals(Object obj){
+		boolean returnme=false;
 		AppliedRuleStrategy doppelganger = (AppliedRuleStrategy) obj;
-		if(this.type == doppelganger.type && this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom && this.sameExceptions(doppelganger))
-			return true;
-		return false;
+		if(this.type==doppelganger.type 
+				&& 
+				this.moduleTo == doppelganger.moduleTo
+				&& 
+				this.moduleFrom == doppelganger.moduleFrom 
+				&& 
+				this.sameExceptions(doppelganger)){
+		
+			returnme= true;
+		}
+			return returnme;
 	}
 	
 	/**

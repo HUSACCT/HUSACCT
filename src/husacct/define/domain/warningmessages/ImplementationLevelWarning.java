@@ -1,20 +1,24 @@
 package husacct.define.domain.warningmessages;
 
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ModuleStrategy;
+
+import java.util.Observable;
+
+
 
 public class ImplementationLevelWarning extends WarningMessage {
 
-	private Module module;
+	private ModuleStrategy module;
 
-	public Module getModule() {
+	public ModuleStrategy getModule() {
 		return module;
 	}
 
-	public void setModule(Module module) {
+	public void setModule(ModuleStrategy module) {
 		this.module = module;
 	}
 
-	public ImplementationLevelWarning(Module module) {
+	public ImplementationLevelWarning(ModuleStrategy module) {
 		this.module = module;
 		generateMessage();
 	}
@@ -26,5 +30,17 @@ public class ImplementationLevelWarning extends WarningMessage {
 		this.type = "Implentation Level";
 		this.location = "";
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object[] getValue() {
+		// TODO Auto-generated method stub
+		return new Object[]{module};
 	}
 }
