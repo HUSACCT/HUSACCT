@@ -168,10 +168,7 @@ public class AboutDialog extends JDialog{
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 		});		
-
 	}
-	
-	
 
 	private GridBagConstraints getConstraint(int gridx, int gridy){
 		constraint.fill = GridBagConstraints.BOTH;
@@ -181,7 +178,4 @@ public class AboutDialog extends JDialog{
 		return constraint;		
 	}
 
-
-
 }
-

@@ -24,6 +24,7 @@ public class WorkspaceController {
 	private Workspace currentWorkspace;
 
 	private MainController mainController;
+
 	
 	public WorkspaceController(MainController mainController){
 		this.mainController = mainController;
@@ -166,5 +167,7 @@ public class WorkspaceController {
 			mainController.getMainGui().setTitle(workspace.getName());
 		}
 	}
+	
+
 
 }
