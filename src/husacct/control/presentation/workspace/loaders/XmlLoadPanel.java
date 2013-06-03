@@ -30,7 +30,8 @@ public class XmlLoadPanel extends LoaderPanel{
 	private JTextField pathText;
 	private JButton browseButton;
 	
-	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedLoadXMLWorkspacePath", ""));
+	String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedLoadXMLWorkspacePath"));
 	
 	private GridBagConstraints constraints;
 	

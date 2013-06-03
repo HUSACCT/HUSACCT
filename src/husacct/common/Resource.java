@@ -13,11 +13,15 @@ public class Resource {
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
 	public static final String CREDITS_PATH = RESOURCE_PATH +"credits/";
+	public static final String HELP_PATH = RESOURCE_PATH +"help/";
+	
 	
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
 	public static final String DEFINE_WORKFLOW = IMAGE_PATH + "define_workflow.png";
-	
+	public static final String BIG_YOUTUBE_LOGO = IMAGE_PATH + "yt-brand-standard-logo-630px.png";
+
+	public static final String SMALL_YOUTUBE_LOGO = IMAGE_PATH + "yt-brand-standard-logo-95px.png";
 	public static final String ICON_BACK = ICONSET_PATH + "back.png";
 	public static final String ICON_ANALYSED_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "analysed-architecture-diagram.png";
 	public static final String ICON_APPLICATION_OVERVIEW = ICONSET_PATH + "application-overview.png";

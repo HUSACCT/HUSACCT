@@ -1,9 +1,5 @@
 package husacct.control.task;
 
-import java.awt.Component;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.locale.ILocaleService;
@@ -15,6 +11,10 @@ import husacct.control.presentation.util.HelpDialog;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
 import husacct.control.task.threading.ThreadWithLoader;
+
+import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
