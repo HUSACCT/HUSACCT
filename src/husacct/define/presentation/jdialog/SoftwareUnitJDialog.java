@@ -3,11 +3,14 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
+import husacct.define.domain.services.DomainGateway;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 
 import husacct.define.task.JtreeController;
 
 import husacct.define.presentation.utils.DefaultMessages;
+import husacct.define.presentation.utils.ExpressionEngine;
 
 import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.PopUpController;
@@ -23,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -218,29 +222,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	
 	private void getSoftwareDefinationTree() {
-		if(JtreeController.instance().isLoaded())
-		{
-			if (ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-				
-				AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-				JtreeStateEngine.instance().compareNewData(rootComponent);
-				
-				
-				
-			}
-			
-			this.softwareDefinitionTree= JtreeController.instance().getTree();
-		
-		}else {
-			
-		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-		
-		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
-		JtreeController.instance().setCurrentTree(this.softwareDefinitionTree);
-		
-		JtreeController.instance().setLoadState(true);
+	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
 	
-		}
 		
 	}
 	
@@ -328,20 +311,22 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
+		
 		boolean canclose= false;
 		if(regExMappingPanel != null) {
+			ExpressionEngine expressionEngine = new ExpressionEngine();
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
 					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
 					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
-							this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "PC");
+							expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC");
 					}
 					else if(packageCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "P");
+						expressionEngine.saveRegExToResultTree(regExTextField.getText(), "P");
 					}
 					else if(classCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "C");
+						expressionEngine.saveRegExToResultTree(regExTextField.getText(), "C");
 					}
 					this.dispose();
 					new SoftwareUnitResultJDialog(_moduleId, resultTree, regExTextField.getText(), this);
@@ -356,11 +341,15 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		}
 		else {
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
+			ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-				
-				canclose= this.softwareUnitController.save(selectedComponent);			
+				units.add(selectedComponent);
+						
 			}
+			canclose= DomainGateway.getInstance().saveAnalzedModule(units);	
+			
+			
 			if (canclose) {
 				
 				this.dispose();

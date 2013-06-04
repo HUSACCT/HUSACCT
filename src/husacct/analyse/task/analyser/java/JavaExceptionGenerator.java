@@ -35,6 +35,7 @@ class JavaExceptionGenerator extends JavaGenerator {
             for (int index = 0; index < tree.getChildCount(); index++) {
                 if (tree.getType() == typeIdentifierNode) {
                     this.exceptionClass = this.parserUniquename((CommonTree) tree);
+                    // TreeType 156 is a THROWS_CLAUSE
                 } else if (tree.getType() == 156) {
                     this.exceptionClass = this.parserUniquename((CommonTree) tree.getChild(0));
                 } else {

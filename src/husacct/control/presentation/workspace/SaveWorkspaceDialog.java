@@ -29,7 +29,7 @@ import javax.swing.event.ListSelectionListener;
 public class SaveWorkspaceDialog extends JDialog{
 
 	private MainController mainController;
-	private JList saverList;
+	private JList<Object> saverList;
 	private List<String> saverListData;
 	private JButton saveButton, cancelButton;
 	
@@ -64,7 +64,7 @@ public class SaveWorkspaceDialog extends JDialog{
 	
 	private void addComponents(){
 		
-		saverList = new JList(saverListData.toArray());
+		saverList = new JList<Object>(saverListData.toArray());
 		saverList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		saverList.setLayoutOrientation(JList.VERTICAL);
 		saverList.setVisibleRowCount(-1);

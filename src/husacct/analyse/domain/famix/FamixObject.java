@@ -32,18 +32,20 @@ abstract class FamixObject {
     }
 
     private String getFieldValue(Field field, Object object) {
+    	String returnVariable;
         String fieldName = field.getName();
         String methodName = getFieldMethodName(fieldName);
         try {
             Method method = this.getClass().getMethod(methodName, (Class<?>) null);
             java.lang.Object response = (java.lang.Object) method.invoke(this, (Object) null);
             if (response == null) {
-                return "null";
+                returnVariable = "null";
             }
-            return response.toString();
+            returnVariable = response.toString();
         } catch (Exception e) {
-            return "-";
+            returnVariable = "-";
         }
+		return returnVariable;
     }
 
     private String getFieldMethodName(String fieldName) {

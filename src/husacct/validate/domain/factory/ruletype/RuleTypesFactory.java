@@ -203,7 +203,7 @@ public class RuleTypesFactory {
 					exceptionRuletypes.add(generatedRuleType);
 				}
 			}
-			rootRule.setExceptionrules(exceptionRuletypes);
+			rootRule.setExceptionRules(exceptionRuletypes);
 			return rootRule;
 		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);
