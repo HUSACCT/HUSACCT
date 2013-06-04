@@ -14,7 +14,7 @@ class AnalyserBuilder {
     	{
     case "Java":
     	return new JavaAnalyser();
-    case "CSharp":
+    case "C#":
     	return new CSharpAnalyser();
     case "Clojure":
     	return new ClojureAnalyser();
