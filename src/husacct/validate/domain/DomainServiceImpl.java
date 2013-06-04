@@ -91,7 +91,7 @@ public class DomainServiceImpl {
 
 		modulefactory = new ModuleFactory();
 		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
-		List<RuleType> moduleRuleTypes = module.getDefaultModuleruleTypes();
+		List<RuleType> moduleRuleTypes = module.getDefaultModuleRuleTypes();
 
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
 	}
@@ -101,7 +101,7 @@ public class DomainServiceImpl {
 
 		modulefactory = new ModuleFactory();
 		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
-		List<RuleType> moduleRuleTypes = module.getAllowedModuleruleTypes();
+		List<RuleType> moduleRuleTypes = module.getAllowedModuleRuleTypes();
 
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
 	}
