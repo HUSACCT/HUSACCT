@@ -54,10 +54,10 @@ public class DefineServiceTests {
 		layer1.addSubModule(module1);
 		layer2.addSubModule(module2);
 		
-		sA.addModule(layer1);
-		sA.addModule(layer2);
-		sA.addModule(module3);
-		sA.addModule(component1);
+		sA.addSeperatedModule(layer1);
+		sA.addSeperatedModule(layer2);
+		sA.addSeperatedModule(module3);
+		sA.addSeperatedModule(component1);
 		
 		//sA.addAppliedRule(rule1);
 		

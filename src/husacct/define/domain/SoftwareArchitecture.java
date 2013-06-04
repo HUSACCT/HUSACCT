@@ -6,6 +6,7 @@ import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.DefinitionController;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import org.jfree.data.time.MovingAverage;
 
-public class SoftwareArchitecture {
+public class SoftwareArchitecture implements IseparatedDefinition {
 
 	private ModuleFactory factory = new ModuleFactory();
 
@@ -602,5 +603,53 @@ public class SoftwareArchitecture {
 		}
 
 		return result;
+	}
+
+	@Override
+	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeSeperatedSoftUnit(List<SoftwareUnitDefinition> units) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addSeperatedExeptionRule(List<AppliedRuleStrategy> rules) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeSeperatedExeptionRule(List<AppliedRuleStrategy> rules) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addSeperatedModule(ModuleStrategy module) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeSeperatedModule(ModuleStrategy module) {
+		// TODO Auto-generated method stub
+		
 	}
 }

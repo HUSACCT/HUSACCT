@@ -28,7 +28,7 @@ public class ModuleDomainService {
 
 	public long addModuleToRoot(ModuleStrategy module) {
 	
-		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+		long moduleId = SoftwareArchitecture.getInstance().addSeperatedModule(module);
 	
 		
 	
@@ -168,7 +168,7 @@ public class ModuleDomainService {
 		ModuleStrategy module = SoftwareArchitecture.getInstance()
 				.getModuleById(moduleId);
       try{
-		SoftwareArchitecture.getInstance().removeModule(module);
+		SoftwareArchitecture.getInstance().removeSeperatedModule(module);
 	    JtreeController.instance().registerTreeRemoval(module);
       }catch(Exception e)
       {

@@ -101,8 +101,8 @@ public class DefineSoftwareArchitectureTests {
 	public void addModule(){
 		//getModules.size is equal to all the root modules
 		assertTrue(sA.getModules().size() == 0);
-		sA.addModule(moduleFrom);
-		sA.addModule(moduleTo);
+		sA.addSeperatedModule(moduleFrom);
+		sA.addSeperatedModule(moduleTo);
 		assertTrue(sA.getModules().size() == 2);
 		subModule1 = new Layer("subLayer1");
 		subModule2 = new Layer("subLayer2");
@@ -122,7 +122,7 @@ public class DefineSoftwareArchitectureTests {
 	private void SpecialAddModule(){
 		//Add dupicate module
 		try {
-			sA.addModule(moduleTo);
+			sA.addSeperatedModule(moduleTo);
 		} catch (RuntimeException e){
 			if (e.getMessage().equals(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"))){
 				assertTrue(true);
@@ -132,7 +132,7 @@ public class DefineSoftwareArchitectureTests {
 		}
 		//Add a module with the same name
 		try {
-			sA.addModule(new SubSystem("Infrastructure"));
+			sA.addSeperatedModule(new SubSystem("Infrastructure"));
 		} catch (RuntimeException e){
 			if (e.getMessage().equals(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"))){
 				assertTrue(true);
@@ -221,25 +221,25 @@ public class DefineSoftwareArchitectureTests {
 		assertTrue(moduleFrom.getSubModules().size() == 3);
 		assertTrue(moduleTo.getSubModules().size() == 0);
 		
-		sA.removeModule(subsubModule1);
+		sA.removeSeperatedModule(subsubModule1);
 		assertTrue(subModule1.getSubModules().size() == 0);
 		assertTrue(subModule2.getSubModules().size() == 0);
 		assertTrue(moduleFrom.getSubModules().size() == 3);
 		assertTrue(moduleTo.getSubModules().size() == 0);
 	
 		
-		sA.removeModule(moduleFrom);
+		sA.removeSeperatedModule(moduleFrom);
 		assertTrue(sA.getModules().size() == 1);
 		assertTrue(moduleTo.getSubModules().size() == 0);
 	
-		sA.addModule(moduleFrom);
+		sA.addSeperatedModule(moduleFrom);
 		sA.removeAllModules();
 		assertTrue(sA.getModules().size() == 0);
 		
 		//rootModule should not be removeable
 		Long id =sA.getModuleById(rootModule.getId()).getId();
 		assertTrue(rootModule.getId()==id);
-		sA.removeModule(rootModule);
+		sA.removeSeperatedModule(rootModule);
 		assertTrue(rootModule.equals(sA.getModuleById(rootModule.getId())));
 	}
 	
@@ -249,8 +249,8 @@ public class DefineSoftwareArchitectureTests {
 		moduleFrom.addSUDefinition(su1);
 		su2 = new SoftwareUnitDefinition("infrastructure", Type.PACKAGE);
 		moduleTo.addSUDefinition(su2);
-		sA.addModule(moduleFrom);
-		sA.addModule(moduleTo);
+		sA.addSeperatedModule(moduleFrom);
+		sA.addSeperatedModule(moduleTo);
 		su3 = new SoftwareUnitDefinition("presentation.gui", Type.PACKAGE);
 		su4 = new SoftwareUnitDefinition("presentation.upload", Type.PACKAGE);
 		su5 = new SoftwareUnitDefinition("presentation.post", Type.PACKAGE);

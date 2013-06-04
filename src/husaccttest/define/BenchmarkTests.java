@@ -91,10 +91,10 @@ public class BenchmarkTests {
 		//external library 1
 		
 		
-		sA.addModule(layer1);
-		sA.addModule(layer2);
-		sA.addModule(layer3);
-		sA.addModule(externalLibrary1);
+		sA.addSeperatedModule(layer1);
+		sA.addSeperatedModule(layer2);
+		sA.addSeperatedModule(layer3);
+		sA.addSeperatedModule(externalLibrary1);
 		
 		//Rules
 //		AppliedRule rule1 = new AppliedRule("IsOnlyModuleAllowedToUse", "Only the classes in package infrastructure.socialmedia are only allowed to use the JDBC library (derbyclient.jar)", 

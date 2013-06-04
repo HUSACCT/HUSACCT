@@ -5,6 +5,7 @@ import husacct.define.analyzer.AnalyzedUnitRegistry;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.StateDefineController;

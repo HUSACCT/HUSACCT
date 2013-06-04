@@ -36,17 +36,17 @@ public class DefineTestSoftwareArchitecture {
 
 	public void addModuleFrom(Module moduleFrom) {
 		this.moduleFrom = moduleFrom;
-		softwareA.addModule(moduleFrom);
+		softwareA.addSeperatedModule(moduleFrom);
 	}
 	
 	public void addModuleTo(Module moduleTo) {
 		this.moduleTo = moduleTo;
-		softwareA.addModule(moduleTo);
+		softwareA.addSeperatedModule(moduleTo);
 	}
 	
 	public void addAppliedRule(AppliedRule rule) {
 		this.rule = rule;
-		softwareA.addAppliedRule(rule);
+		softwareA.addSeperatedAppliedRule(rule);
 	}
 	
 

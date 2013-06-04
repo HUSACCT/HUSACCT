@@ -75,13 +75,13 @@ public class DefineTestSoftwareArchitectureFacade {
 		
 		moduleFrom.addSubModule(subModule1);
 		subModule1.addSubModule(subModule2);
-		softwareA.addModule(moduleFrom);
-		softwareA.addModule(moduleTo);
+		softwareA.addSeperatedModule(moduleFrom);
+		softwareA.addSeperatedModule(moduleTo);
 	}
 	
 	private void addAppliedRule() {
 		this.rule = new AppliedRule("FacadeConvention", "", moduleFrom, moduleTo);
-		softwareA.addAppliedRule(rule);
+		softwareA.addSeperatedAppliedRule(rule);
 	}
 	
 	public boolean checkFacadeConventionRule() {
