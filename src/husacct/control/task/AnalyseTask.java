@@ -17,17 +17,13 @@ public class AnalyseTask implements Runnable {
 	private final MainController mainController;
 	private final ApplicationDTO applicationDTO;
 
-	public AnalyseTask(MainController mainController,
-			ApplicationDTO applicationDTO) {
+	public AnalyseTask(MainController mainController, ApplicationDTO applicationDTO) {
 		this.applicationDTO = applicationDTO;
 		this.mainController = mainController;
 	}
 
 	@Override
 	public void run() {
-		// Thread.sleep added to support InterruptedException catch
-		// InterruptedException is not yet implemented by analyse
-		// Therefore this thread can never be interrupted.
 		try {
 			this.mainController.getStateController().setAnalysing(true);
 			this.mainController.getStateController().setPreAnalysed(false);
@@ -38,11 +34,11 @@ public class AnalyseTask implements Runnable {
 				
 				for (int i = 0; i < this.applicationDTO.projects.size(); i++) {
 
+					this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
+					
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
 					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
 					
-					this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
-
 					// Add analysed root modules to project
 					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
 					AnalysedModuleDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
@@ -50,8 +46,6 @@ public class AnalyseTask implements Runnable {
 						currentProject.analysedModules.add(analysedModule);
 					}
 
-					//ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
-					
 					// Update project with analysedRootModules
 					this.applicationDTO.projects.remove(i);
 					this.applicationDTO.projects.add(i, currentProject);

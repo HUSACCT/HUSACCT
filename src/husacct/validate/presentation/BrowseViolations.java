@@ -162,9 +162,45 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private void createRightLayout() {
 		GroupLayout rightSideGroupLayout = new GroupLayout(rightSidePane);
 
-		rightSideGroupLayout.setHorizontalGroup(rightSideGroupLayout.createParallelGroup(Alignment.TRAILING).addComponent(informationScrollPane).addGroup(rightSideGroupLayout.createSequentialGroup().addGroup(rightSideGroupLayout.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING, rightSideGroupLayout.createSequentialGroup().addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.RELATED).addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)).addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)).addGap(1)));
+		rightSideGroupLayout.setHorizontalGroup(
+			rightSideGroupLayout
+				.createParallelGroup(Alignment.TRAILING)
+				.addComponent(informationScrollPane)
+				.addGroup(
+					rightSideGroupLayout.createSequentialGroup()
+						.addGroup(
+							rightSideGroupLayout
+								.createParallelGroup(Alignment.TRAILING)
+								.addGroup(
+									Alignment.LEADING, rightSideGroupLayout
+										.createSequentialGroup()
+										.addComponent(statisticsScrollPane, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
+								)
+								.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+						)
+						.addGap(1)
+				)
+		);
 
-		rightSideGroupLayout.setVerticalGroup(rightSideGroupLayout.createParallelGroup(Alignment.LEADING).addGroup(rightSideGroupLayout.createSequentialGroup().addGroup(rightSideGroupLayout.createParallelGroup(Alignment.LEADING).addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE).addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE).addComponent(informationScrollPane, GroupLayout.DEFAULT_SIZE, 220, GroupLayout.PREFERRED_SIZE)));
+		rightSideGroupLayout.setVerticalGroup(
+			rightSideGroupLayout
+				.createParallelGroup(Alignment.LEADING)
+				.addGroup(
+					rightSideGroupLayout
+						.createSequentialGroup()
+						.addGroup(
+							rightSideGroupLayout
+								.createParallelGroup(Alignment.LEADING)
+								.addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+								.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+						)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+						.addComponent(informationScrollPane, 190, 190, 190)
+				)
+		);
 
 		rightSidePane.setLayout(rightSideGroupLayout);
 	}
@@ -190,13 +226,13 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)){
+					selectedViolationHistory = null;
 					ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
 					LoadingDialog currentLoader = validateThread.getLoader();
 					currentLoader.addWindowListener(new WindowAdapter() {
 						@Override
 						public void windowClosing(WindowEvent e) {
 							ServiceProvider.getInstance().getControlService().setValidate(false);
-
 							logger.debug("Stopping Thread");
 						}
 					});
@@ -419,7 +455,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	public void reloadViolations() {
-		shownViolations = taskServiceImpl.getAllViolations().getValue();
+		if (selectedViolationHistory != null) {
+			shownViolations = selectedViolationHistory.getViolations();
+		} else {
+			shownViolations = taskServiceImpl.getAllViolations().getValue();
+		}
+		
 		shownViolations = filterPane.fillViolationsTable(shownViolations);
 		if (filterPane.getApplyFilter().isSelected()) {
 			shownViolations = filterViolations(shownViolations);

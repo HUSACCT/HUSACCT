@@ -1,5 +1,10 @@
 package husacct.define.domain.module;
 
+
+import husacct.define.domain.module.modules.Component;
+import husacct.define.domain.module.modules.Facade;
+import husacct.define.domain.module.modules.Layer;
+
 import java.util.Comparator;
 
 public class ModuleComparator implements Comparator<Object> {
@@ -15,12 +20,12 @@ public class ModuleComparator implements Comparator<Object> {
 			compareReturn = -1;
 		} else if(emp2 instanceof Layer) {
 			compareReturn = 1;
-		}  else if(((Module) emp1).getparent() instanceof Component&&
-				((Module) emp1).getparent() instanceof Component) {
+		}  else if(((ModuleStrategy) emp1).getparent() instanceof Component&&
+				((ModuleStrategy) emp1).getparent() instanceof Component) {
 		compareReturn=	compareComponents(emp1,emp2);
 		}else {
-			long moduleid1 = ((Module)emp1).getId();
-			long moduleid2 = ((Module)emp2).getId();
+			long moduleid1 = ((ModuleStrategy)emp1).getId();
+			long moduleid2 = ((ModuleStrategy)emp2).getId();
 			compareReturn = this.compareLongs(moduleid1, moduleid2);
 		} 
 		return compareReturn;
@@ -49,8 +54,8 @@ public class ModuleComparator implements Comparator<Object> {
 	}
 	
 	private int compareComponents(Object emp1, Object emp2) {
-		long long1 = ((Module)emp1).getId();
-		long long2 = ((Module)emp1).getId();
+		long long1 = ((ModuleStrategy)emp1).getId();
+		long long2 = ((ModuleStrategy)emp1).getId();
 		if(emp1 instanceof Facade || emp2 instanceof Facade){
 			return 1;
 		}else if(long1 > long2) {

@@ -6,18 +6,29 @@ import common.Logger;
 
 public class Resource {
 	private static Logger logger = Logger.getLogger(Resource.class);
-
+	
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
 	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
 	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
 	public static final String CREDITS_PATH = RESOURCE_PATH +"credits/";
+	public static final String HELP_PATH = RESOURCE_PATH +"help/";
+	public static final String HELP_PAGES_PATH = HELP_PATH +"pages/";
+	
+	public static final String test_page = HELP_PAGES_PATH + "about.html";
 	
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
 	public static final String DEFINE_WORKFLOW = IMAGE_PATH + "define_workflow.png";
+	public static final String BIG_YOUTUBE_LOGO = IMAGE_PATH + "yt-brand-standard-logo-630px.png";
+
+	public static final String GIT_FORK_1 = IMAGE_PATH +"fork_1.png";
+	public static final String GIT_FORK_2 = IMAGE_PATH +"fork_2.png";
+	public static final String GIT_FORK_3 = IMAGE_PATH +"fork_3.png";
+	public static final String GIT_FORK_4 = IMAGE_PATH +"fork_4.png";
 	
+	public static final String SMALL_YOUTUBE_LOGO = IMAGE_PATH + "yt-brand-standard-logo-95px.png";
 	public static final String ICON_BACK = ICONSET_PATH + "back.png";
 	public static final String ICON_ANALYSED_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "analysed-architecture-diagram.png";
 	public static final String ICON_APPLICATION_OVERVIEW = ICONSET_PATH + "application-overview.png";
@@ -61,42 +72,17 @@ public class Resource {
 	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
 	public static final String ICON_QUESTIONMARK =ICONSET_PATH+"question_mark.png";
 	public static final String ICON_EXTERNALLIB2 =ICONSET_PATH+"define-externallib.png";
-    public static final String ICON_CLASS_PUBLIC_GRAY = ICONSET_PATH + "class-public-gray.png";
-    public static final String ICON_INTERFACE_PUBLIC_GRAY = ICONSET_PATH + "interface-public-gray.png";
-    public static final String ICON_ENUMERATION_GRAY = ICONSET_PATH + "enumeration-gray.png";
-    public static final String ICON_EXTERNALLIB_GRAY =ICONSET_PATH+"define_externalLib-gray.png";
-    public static final String ICON_SUBSYSTEMJAVA_GRAY = ICONSET_PATH+"define-subsystem-gray.png";
-    public static final String ICON_EXTERNALLIB2_GRAY = ICONSET_PATH+"define-externallib-gray.png";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static String ICON_FACADE=ICONSET_PATH+"define-facade.png";;
+	public static final String ICON_CLASS_PUBLIC_GRAY = ICONSET_PATH + "class-public-gray.png";
+	public static final String ICON_INTERFACE_PUBLIC_GRAY = ICONSET_PATH + "interface-public-gray.png";
+	public static final String ICON_ENUMERATION_GRAY = ICONSET_PATH + "enumeration-gray.png";
+	public static final String ICON_EXTERNALLIB_GRAY =ICONSET_PATH+"define_externalLib-gray.png";
+	public static final String ICON_SUBSYSTEMJAVA_GRAY = ICONSET_PATH+"define-subsystem-gray.png";
+	public static final String ICON_EXTERNALLIB2_GRAY = ICONSET_PATH+"define-externallib-gray.png";
+	public static final String ICON_PAN_TOOL = ICONSET_PATH
+			+ "icon-hand-clean-hi.png";
+	public static final String ICON_SELECT_TOOL = ICONSET_PATH
+			+ "mouse-cursor-icon.jpg";
+	public static String ICON_FACADE = ICONSET_PATH + "define-facade.png";
 	
 	public static URL get(String path){
 		URL resourceUrl = null;

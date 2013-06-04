@@ -27,27 +27,23 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		// Only used to get the mappings, because filtering the 'From' is not
 		// corectly for this rule
 		// (need to filter for the 'To')
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		for (Mapping classPathTo : physicalClasspathsTo) {
 			for (DependencyDTO dependency : dependencies) {
-				if (dependency.to.equals(classPathTo.getPhysicalPath())) {
-					if (!containsMapping(mappings, dependency.from)) {
-						if (Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0) {
-							Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
-							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-							violations.add(violation);
-						}
-					}
+				if (dependency.to.equals(classPathTo.getPhysicalPath()) &&
+                        !containsMapping(mappings, dependency.from) &&
+                        Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0) {
+                    Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
+                    Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                    violations.add(violation);
 				}
 			}
 		}

@@ -1,7 +1,6 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import java.util.ArrayList;
-
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
@@ -22,10 +21,13 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 	}
 	
 	private void checkForConstructorInvocation(CommonTree tree) {
-		CommonTree constructorTree = findConstructorInvocation(tree);
+		CommonTree constructorTree = tree;
+		if (constructorTree.getType() != CSharpParser.OBJECT_CREATION_EXPRESSION) {
+			constructorTree = findConstructorInvocation(tree);
+		}
 		if (constructorTree != null) {
 			createConstructorInvocationDetails(constructorTree);
-			checkForArguments(constructorTree);
+			checkForArguments(tree);
 			saveInvocationToDomain();	
 		}
 	}
@@ -46,7 +48,7 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 		for (String name : toNames) {
 			toName += name + ".";
 		}
-		
+		toNames.clear();
 		toName = removeLastDot(toName);
 		return toName;
 	}
@@ -66,7 +68,7 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 	}
 	
 	private String removeLastDot(String toName) {
-		return toName.substring(0, toName.length()-1);
+		return toName.endsWith(".") ? toName.substring(0, toName.length() -1) : toName;
 	}
 
 	private void checkForArguments(CommonTree methodTree) {

@@ -76,7 +76,6 @@ public class FilterController {
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-
 			if (!appliedViolationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey()))) {
 				appliedViolationtypes.add(localeService.getTranslatedString(violation.getViolationtypeKey()));
 			}
@@ -144,5 +143,17 @@ public class FilterController {
 		}
 
 		return violationsPerSeverity;
+	}
+
+	public ArrayList<String> getEnabledFilterRuleTypes() {
+		return this.ruletypes;
+	}
+
+	public ArrayList<String> getEnabledFilterViolations() {
+		return this.violationtypes;
+	}
+	
+	public ArrayList<String> getEnabledFilterPaths() {
+		return this.paths;
 	}
 }

@@ -19,16 +19,12 @@ import java.util.List;
 
 public class NamingConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> specificExceptionRules = EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION);
-
-	public NamingConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, specificExceptionRules, severity);
+	public NamingConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		if (arrayContainsValue(currentRule.violationTypeKeys, "package")) {
 			checkPackageConvention(currentRule, rootRule, configuration);
 		}
@@ -41,14 +37,12 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
-		for (Mapping physicalClasspathFrom : classpathsFrom) {
+		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
@@ -59,14 +53,12 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
-		for (Mapping physicalClasspathFrom : classpathsFrom) {
+		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && !analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);

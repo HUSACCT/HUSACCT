@@ -17,8 +17,10 @@ public abstract class SaverPanel extends JPanel{
 		
 		if(file != null){
 			String pathWithSelectedFile = file.getAbsolutePath();
+			if(pathWithSelectedFile.contains("//")) {
 			String pathToSelectedFile = pathWithSelectedFile.substring(0, pathWithSelectedFile.lastIndexOf('\\') + 1);
 			output = new File(pathToSelectedFile);
+			}
 		}
 		
 		return output;

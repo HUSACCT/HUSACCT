@@ -1,4 +1,4 @@
-package husacct.control.presentation.workspace.savers;
+	package husacct.control.presentation.workspace.savers;
 
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
@@ -47,7 +47,7 @@ public class XmlSavePanel extends SaverPanel{
 	private JLabel spaceAvailableDescription;
 	private JLabel spaceAvailable;
 	
-	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedSaveXMLWorkspacePath", ""));
+	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedSaveXMLWorkspacePath"));
 	
 	private GridBagConstraints constraints;
 	
