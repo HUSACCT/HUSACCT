@@ -30,7 +30,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 	private DefaultTableModel tableModel;
 	private RuleTypeDTO[] allowedRules, currentlyDefaultRules;
 	private String[] componentList = {"Component", "ExternalLibrary", "Facade", "Layer", "SubSystem"};
-	private HashMap allowedRulesMap;
+	private HashMap<Integer, String> allowedRulesMap;
 
 	// ==================================
 	// Init panel
@@ -64,9 +64,6 @@ public class ManageDefaultRulesPanel extends JPanel {
 		tableModel.addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
 				if(e.getColumn() == 1){
-					//System.out.println("=== VALUE CHANGED, CALL VALIDATE TO SET NEW VALUE ===");
-					//System.out.println("New value: " + tableModel.getValueAt(e.getFirstRow(), 1));
-					//System.out.println(allowedRulesMap.get(e.getFirstRow()));
 					System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
 					//SetDefaultRule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), tableModel.getValueAt(e.getFirstRow(), 1));
 				}
@@ -86,7 +83,14 @@ public class ManageDefaultRulesPanel extends JPanel {
                         return String.class;
                 }
             }
+			
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return (column == 1);
+		    }
 		};
+		ruleTable.getColumnModel().getColumn(1).setMaxWidth(100);
+		ruleTable.getColumnModel().getColumn(1).setMinWidth(100);
 		rulesScrollpane = new JScrollPane(ruleTable);
 		
 		// ===== Create layout =====
@@ -111,7 +115,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 		tableModel.setRowCount(0);
 		allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(componentList[listItem]);
 		currentlyDefaultRules = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(componentList[listItem]);
-		allowedRulesMap = new HashMap();
+		allowedRulesMap = new HashMap<Integer, String>();
 		int count = 0;
 		
 		for(RuleTypeDTO allowedRule : allowedRules){
