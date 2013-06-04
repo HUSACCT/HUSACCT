@@ -7,6 +7,7 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 public class Component extends AbstractModule {
+	
 	public Component(List<RuleType> ruleTypes) {
 		super(ruleTypes);
 	}

@@ -65,7 +65,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 			public void tableChanged(TableModelEvent e) {
 				if(e.getColumn() == 1){
 					System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
-					//SetDefaultRule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), tableModel.getValueAt(e.getFirstRow(), 1));
+					ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), (Boolean)(tableModel.getValueAt(e.getFirstRow(), 1)));
 				}
 			}
 		});
