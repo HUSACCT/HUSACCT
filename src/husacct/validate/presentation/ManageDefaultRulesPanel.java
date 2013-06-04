@@ -1,5 +1,7 @@
 package husacct.validate.presentation;
 
+import java.util.HashMap;
+
 import husacct.ServiceProvider;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.locale.ILocaleService;
@@ -14,6 +16,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 public class ManageDefaultRulesPanel extends JPanel {
@@ -26,6 +30,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 	private DefaultTableModel tableModel;
 	private RuleTypeDTO[] allowedRules, currentlyDefaultRules;
 	private String[] componentList = {"Component", "ExternalLibrary", "Facade", "Layer", "SubSystem"};
+	private HashMap allowedRulesMap;
 
 	// ==================================
 	// Init panel
@@ -42,20 +47,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 		ListSelectionListener listSelectionListener = new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent listSelectionEvent) {
 				if(listSelectionEvent.getValueIsAdjusting()){
-					System.out.println("Selected item: " + components.getSelectedIndex());
-					tableModel.setRowCount(0);
-
-					allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(componentList[components.getSelectedIndex()]);
-					currentlyDefaultRules = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(componentList[components.getSelectedIndex()]);
-					
-					for(RuleTypeDTO allowedRule : allowedRules){
-						String curRule = allowedRule.key;
-						Boolean isDefault = false;
-						for(RuleTypeDTO defaultRule : currentlyDefaultRules)
-							if(defaultRule.key.equals(curRule))
-								isDefault = true;
-						tableModel.addRow(new Object[]{curRule, isDefault});
-					}
+					loadTable(components.getSelectedIndex());
 				}
 	    	}
 		};
@@ -63,16 +55,26 @@ public class ManageDefaultRulesPanel extends JPanel {
 	    
 		components.setModel(rtsComponentModel);
 		components.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		if (!rtsComponentModel.isEmpty()) {
-			components.setSelectedIndex(0);
-		}
 		componentScrollpane.setViewportView(components);
 		
 		// ===== Rule checkbox table =====		
 		tableModel = new DefaultTableModel();
 		tableModel.addColumn(localeService.getTranslatedString("Rule"));
 		tableModel.addColumn(localeService.getTranslatedString("RuleIsDefault"));
+		tableModel.addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent e) {
+				if(e.getColumn() == 1){
+					//System.out.println("=== VALUE CHANGED, CALL VALIDATE TO SET NEW VALUE ===");
+					//System.out.println("New value: " + tableModel.getValueAt(e.getFirstRow(), 1));
+					//System.out.println(allowedRulesMap.get(e.getFirstRow()));
+					System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
+					//SetDefaultRule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), tableModel.getValueAt(e.getFirstRow(), 1));
+				}
+			}
+		});
 		ruleTable = new JTable(tableModel){
+			private static final long serialVersionUID = 1L;
+
 			@Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -103,5 +105,24 @@ public class ManageDefaultRulesPanel extends JPanel {
 			)
 		);
 		this.setLayout(layout);
+	}
+	
+	private void loadTable(int listItem){
+		tableModel.setRowCount(0);
+		allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(componentList[listItem]);
+		currentlyDefaultRules = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(componentList[listItem]);
+		allowedRulesMap = new HashMap();
+		int count = 0;
+		
+		for(RuleTypeDTO allowedRule : allowedRules){
+			String curRule = allowedRule.key;
+			allowedRulesMap.put(count, allowedRule.key);
+			count++;
+			Boolean isDefault = false;
+			for(RuleTypeDTO defaultRule : currentlyDefaultRules)
+				if(defaultRule.key.equals(curRule))
+					isDefault = true;
+			tableModel.addRow(new Object[]{curRule, isDefault});
+		}
 	}
 }
