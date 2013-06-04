@@ -1,10 +1,10 @@
 package husacct.graphics.presentation.decorators;
 
+import husacct.graphics.presentation.figures.BaseFigure;
+
 import java.awt.Color;
 
 import org.jhotdraw.draw.AttributeKeys;
-
-import husacct.graphics.presentation.figures.BaseFigure;
 
 public class ViolationsDecorator implements Decorator {
 	private Color oldStrokeColor;
@@ -16,13 +16,13 @@ public class ViolationsDecorator implements Decorator {
 
 	@Override
 	public void decorate(BaseFigure f) {
-		this.oldStrokeColor = f.get(AttributeKeys.STROKE_COLOR);
-		f.setStrokeColor(this.severityColor);
+		oldStrokeColor = f.get(AttributeKeys.STROKE_COLOR);
+		f.setStrokeColor(severityColor);
 	}
 
 	@Override
 	public void deDecorate(BaseFigure f) {
-		f.setStrokeColor(this.oldStrokeColor);
+		f.setStrokeColor(oldStrokeColor);
 	}
 
 }

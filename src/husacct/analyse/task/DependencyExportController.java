@@ -1,13 +1,14 @@
 package husacct.analyse.task;
 
-import java.util.HashMap;
-import org.apache.log4j.Logger;
 import husacct.analyse.abstraction.export.AbstractFileExporter;
 import husacct.analyse.abstraction.export.NoDataException;
 import husacct.analyse.abstraction.export.excel.ExcelExporter;
-import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.common.dto.DependencyDTO;
+
+import java.util.HashMap;
+
+import org.apache.log4j.Logger;
 
 public class DependencyExportController {
 
@@ -17,7 +18,10 @@ public class DependencyExportController {
     private HashMap<String, DependencyDTO> exportData;
 
     public DependencyExportController() {
-        this.analysedDomain = new AnalyseDomainServiceImpl();
+    }
+    
+    public DependencyExportController(IAnalyseDomainService analyseDomainService){
+    	this.analysedDomain = analyseDomainService;
     }
 
     public void export(String path) {

@@ -3,7 +3,9 @@ package husacct.graphics.presentation.figures;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
@@ -13,6 +15,8 @@ import org.apache.log4j.Logger;
 
 public final class FigureFactory {
 	protected Logger logger = Logger.getLogger(FigureFactory.class);
+	private String PROJECT_TYPE = "Project";
+	private String EXTERNALSYSTEM_TYPE = "ExternalSystem";
 
 	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
 		if (dependencyDTOs.length <= 0) {
@@ -22,20 +26,15 @@ public final class FigureFactory {
 	}
 
 	public ViolationsDecorator createViolationsDecorator(ViolationDTO[] violationDTOs) {
-		if (violationDTOs.length <= 0) {
-			throw new RuntimeException("No violations received. Cannot create a violation figure.");
-		}
-		
 		Color highestColor = null;
-		try{
-			// The violations are sorted on severity order. Highest are first in the array.
+		if (violationDTOs.length <= 0) {
+			logger.warn("No violations received. Cannot create a violation figure.");
+		} else{
 			highestColor = violationDTOs[0].severityColor;
-		}catch(Exception e){
-			// See if-statement below
-		}
-		if (null == highestColor) {
-			logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
-			highestColor = Color.RED;
+			if (highestColor == null) {
+				logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
+				highestColor = Color.RED;
+			}
 		}
 		return new ViolationsDecorator(highestColor);
 	}
@@ -51,14 +50,10 @@ public final class FigureFactory {
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto) {
-		BaseFigure createdFigure = null;
-
-		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
-			createdFigure = createModuleFigure(dto);
-		}
-
-		if (null == createdFigure) {
-			throw new RuntimeException("Unimplemented dto type '" + (null == dto ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
+		BaseFigure createdFigure = createModuleFigure(dto);
+		
+		if (createdFigure == null) {
+			throw new RuntimeException("Unimplemented dto type '" + (dto == null ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
 		}
 		return createdFigure;
 	}
@@ -78,27 +73,38 @@ public final class FigureFactory {
 		} else if (dto instanceof AnalysedModuleDTO) {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
+		} else if (dto instanceof ExternalSystemDTO) {
+			type = EXTERNALSYSTEM_TYPE;
+			name = ((ExternalSystemDTO) dto).systemPackage;
+		} else if (dto instanceof ProjectDTO){
+			type = PROJECT_TYPE;
+			name = ((ProjectDTO) dto).name;
 		} else {
-			throw new RuntimeException("DTO type '" + dto.getClass().getSimpleName() + "' is not recognized as a module dto.");
+			return null;
 		}
 
 		// TODO check these values with the define team
-		if (type.toLowerCase().equals("layer")) {
+		if (type.toLowerCase().equals("project"))
+			return new ProjectFigure(name);
+		else if (type.toLowerCase().equals("layer"))
 			return new LayerFigure(name);
-		} else if (type.toLowerCase().equals("component")) {
+		else if (type.toLowerCase().equals("component"))
 			return new ComponentFigure(name);
-		} else if (type.toLowerCase().equals("class")) {
+		else if (type.toLowerCase().equals("class"))
 			return new ClassFigure(name);
-		} else if (type.toLowerCase().equals("abstract")) {
+		else if (type.toLowerCase().equals("abstract"))
 			return new AbstractClassFigure(name);
-		} else if (type.toLowerCase().equals("interface")) {
+		else if (type.toLowerCase().equals("interface"))
 			return new InterfaceFigure(name);
-		} else if (type.toLowerCase().equals("package")) {
+		else if (type.toLowerCase().equals("package"))
 			return new PackageFigure(name);
-		} else if (type.toLowerCase().equals("subsystem")) {
+		else if (type.toLowerCase().equals("subsystem"))
 			return new SubsystemFigure(name);
-		} else {
-			logger.debug("Type " + type.toLowerCase() + " is not supported. Created a ModuleFigure instead.");
+		else if (type.toLowerCase().equals("externalsystem"))
+			return new ExternalSystemFigure(name);
+		else {
+			logger.debug("Type " + type.toLowerCase()
+					+ " is not supported. Created a ModuleFigure instead.");
 			return new ModuleFigure(name, type);
 		}
 	}

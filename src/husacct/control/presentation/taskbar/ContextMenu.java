@@ -13,7 +13,6 @@ import javax.swing.DesktopManager;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JToggleButton;
 
 import org.apache.log4j.Logger;
 

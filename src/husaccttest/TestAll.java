@@ -1,4 +1,4 @@
-package husaccttest;
+/*package husaccttest;
 
 import husaccttest.analyse.AnalyseTestSuite;
 import husaccttest.control.ControlTestSuite;
@@ -24,4 +24,4 @@ public class TestAll {
 	public void prepareLog4J(){
 		BasicConfigurator.configure();
 	}
-}
+}*/

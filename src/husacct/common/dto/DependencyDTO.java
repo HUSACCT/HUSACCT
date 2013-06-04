@@ -4,6 +4,7 @@ public class DependencyDTO extends AbstractDTO{
 	
 	public String from;
 	public String to;
+	public String via;
 	public String type;
 	public int lineNumber;
 	public boolean isIndirect;

@@ -1,5 +1,7 @@
 package husacct.common;
 
+import java.io.File;
+
 public class OSDetector {
 	public enum OS {
 		WINDOWS,
@@ -8,20 +10,29 @@ public class OSDetector {
 	};
 	
 	private static OS operatingSystem;
+	private static String appPath;
 
     static
     {
         String os = System.getProperty("os.name").toLowerCase();
-        if(os.contains("win"))
+        if(os.contains("win")) {
         	operatingSystem = OS.WINDOWS;
-        else if(os.contains("nux") || os.contains("nix"))
+        	appPath = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+        } else if(os.contains("nux") || os.contains("nix")) {
         	operatingSystem = OS.LINUX;
-        else if(os.contains("mac"))
+        	appPath = System.getProperty("user.home") + File.separator + ".husacct" + File.separator;
+        } else if(os.contains("mac")) {
         	operatingSystem = OS.MAC;
+        	appPath = System.getProperty("user.home") + File.separator + ".husacct" + File.separator;
+        }
     }
 
     public static OS getOS() {
     	return operatingSystem;
+    }
+    
+    public static  String getAppFolder() {
+    	return appPath;
     }
     
     

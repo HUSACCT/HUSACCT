@@ -2,7 +2,6 @@ package husacct.analyse.presentation;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
