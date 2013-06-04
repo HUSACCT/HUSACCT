@@ -7,7 +7,7 @@ public interface IModule {
 	abstract List<RuleType> initDefaultModuleRuleTypes();
 	abstract List<RuleType> initAllowedModuleRuleTypes();
 
-	public List<RuleType> getDefaultModuleruleTypes();
+	public List<RuleType> getDefaultModuleRuleTypes();
 
-	public List<RuleType> getAllowedModuleruleTypes();
+	public List<RuleType> getAllowedModuleRuleTypes();
 }

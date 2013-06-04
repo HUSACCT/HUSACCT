@@ -19,11 +19,11 @@ public abstract class AbstractModule implements IModule {
 		this.allowedModuleRuleTypes = this.initAllowedModuleRuleTypes();
 	}
 
-	public List<RuleType> getDefaultModuleruleTypes() {
+	public List<RuleType> getDefaultModuleRuleTypes() {
 		return this.defaultModuleRuleTypes;
 	}
 
-	public List<RuleType> getAllowedModuleruleTypes() {
+	public List<RuleType> getAllowedModuleRuleTypes() {
 		return this.allowedModuleRuleTypes;
 	}
 }
