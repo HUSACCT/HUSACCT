@@ -6,6 +6,7 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -16,17 +17,13 @@ public class AnalyseTask implements Runnable {
 	private final MainController mainController;
 	private final ApplicationDTO applicationDTO;
 
-	public AnalyseTask(MainController mainController,
-			ApplicationDTO applicationDTO) {
+	public AnalyseTask(MainController mainController, ApplicationDTO applicationDTO) {
 		this.applicationDTO = applicationDTO;
 		this.mainController = mainController;
 	}
 
 	@Override
 	public void run() {
-		// Thread.sleep added to support InterruptedException catch
-		// InterruptedException is not yet implemented by analyse
-		// Therefore this thread can never be interrupted.
 		try {
 			this.mainController.getStateController().setAnalysing(true);
 			this.mainController.getStateController().setPreAnalysed(false);
@@ -59,13 +56,19 @@ public class AnalyseTask implements Runnable {
 			
 			logger.debug("Analysing finished");
 			
-			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
-			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
 			
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
 			this.mainController.getStateController().setAnalysing(false);
+			
+			logger.debug(new Date().toString() + ": Building cache");
+			int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
+			logger.debug(new Date().toString() + ": Cache is ready and filled with " + cacheSize + " dependencies");
+			
+			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
+			
 			// ServiceProvider.getInstance().getDefineService().isReAnalyzed();
 		} catch (InterruptedException exception) {
 			this.logger.debug("RESETTING ANALYSE SERVICE");

@@ -5,6 +5,7 @@ import husacct.common.OSDetector;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.ApplicationAnalysisHistoryOverviewFrame;
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -25,7 +26,7 @@ public class ApplicationAnalysisHistoryLogController{
 
 	private MainController mainController;
 	
-	private File logFile = new File(OSDetector.getAppFolder());
+	private File logFile = new File(OSDetector.getAppFolder() + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename"));
 	
 	public ApplicationAnalysisHistoryLogController(MainController mainController){
 		this.mainController = mainController;

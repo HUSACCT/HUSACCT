@@ -24,31 +24,34 @@ public class JavaLoopGenerator extends JavaGenerator {
         } else if (loopTree.getType() == JavaParser.FOR_EACH) {
             walkForEachAST(loopTree);
         } else {
-            logger.warn("Onbekend type loop gevonden tijdens analyseren");
+            logger.warn("Found unknown type looping during analysis");
         }
 
     }
-
+    
     private void walkForAndWhileAST(Tree tree) {
 		int size = tree.getChildCount();
         for (int i = 0; i < size; i++) {
             Tree child = tree.getChild(i);
-            int treeType = child.getType();
-            if (treeType == JavaParser.VAR_DECLARATION) {
+            int treeType = child.getType();    
+            switch(treeType) {
+            case JavaParser.VAR_DECLARATION:
                 javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.METHOD_CALL) {
+                break;
+            case JavaParser.METHOD_CALL:
                 javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.DOT) {
+                break;
+            case JavaParser.DOT:
                 CommonTree newTree = new CommonTree();
                 newTree.addChild(child);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.BLOCK_SCOPE) {
+                break;
+            case JavaParser.BLOCK_SCOPE:
                 delegateBlockScope(child);
             }
-
             walkForAndWhileAST(child);
         }
     }
@@ -61,12 +64,12 @@ public class JavaLoopGenerator extends JavaGenerator {
         for (int childCount = 0; childCount < size; childCount++) {
             child = tree.getChild(childCount);
             int treeType = child.getType();
-            if (treeType == JavaParser.TYPE) {
+            switch(treeType) {
+            case JavaParser.TYPE:
                 if (tree.getType() != JavaParser.CAST_EXPR) {
                     myLoopTree = (CommonTree) child;
                     typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
                     if (typeIdentTree != null) {
-
                         String type = "";
                         for (int count = 0; count < typeIdentTree.getChildCount(); count++) {
                             type += !type.equals("") ? "." : "";
@@ -81,27 +84,30 @@ public class JavaLoopGenerator extends JavaGenerator {
                         int lineNumber = tree.getChild(childCount + 1).getLine();
                         javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText(), tree.getChild(childCount + 1).getText(), lineNumber);
                     } else {
-                        logger.warn("Problemen with finding type. Please notice analyse");
+                        logger.warn("Problems with finding type. Please notice analyse");
                     }
                 }
-            } else if (treeType == JavaParser.CAST_EXPR) {
+            	break;
+            case JavaParser.CAST_EXPR:
                 //a cast can ruin our algorithm. We delete the cast part since we don't need to know it anyway
                 deleteTreeChild(child.getChild(0));
-            } else if (treeType == JavaParser.METHOD_CALL) {
+            	break;
+            case JavaParser.METHOD_CALL:
                 javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.DOT) {
+            	break;
+            case JavaParser.DOT:
                 CommonTree newTree = new CommonTree();
                 newTree.addChild(child);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.BLOCK_SCOPE) {
+            	break;
+            case JavaParser.BLOCK_SCOPE:
                 delegateBlockScope(child);
+                break;
             }
-
             walkForEachAST(child);
         }
-
     }
 
     private void deleteTreeChild(Tree treeNode) {

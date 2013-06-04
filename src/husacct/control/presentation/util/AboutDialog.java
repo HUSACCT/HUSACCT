@@ -67,52 +67,67 @@ public class AboutDialog extends JDialog{
 	}
 
 	private void addComponents(){
-		
-		try {
-			int i = 1+ (int)(Math.random() * 4);
-			img = Toolkit.getDefaultToolkit().getImage(new File(".").getCanonicalPath() + "\\src\\husacct\\common\\resources\\image\\fork_" + i + ".png");
-				
-		} catch (IOException e) {
-			e.printStackTrace();
+
+
+		int i = 1+ (int)(Math.random() * 4);
+		switch(i) {
+		case 1: 
+			img = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.GIT_FORK_1));
+			break;
+		case 2:
+			img = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.GIT_FORK_2));
+			break;
+		case 3:
+			img = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.GIT_FORK_3));
+			break;
+		case 4:
+			img = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.GIT_FORK_4));
+			break;
+		default:
+			img = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.GIT_FORK_1));
+			break;
 		}
+
+
+
 		gitForkPanel = new JPanel();
 		gitForkPanel.setLayout(new FlowLayout(0,0,0));
 		gitForkPanel.setPreferredSize(new Dimension(420,256));		
 		gitForkPanel.setBounds(0,0,420,300);
 		gitForkPanel.setLocation(0,0);
-		
+
 		forkLabelPanel = new JPanel();
 		forkLabelPanel.setLayout(new FlowLayout(0,0,0));
 		forkLabelPanel.setPreferredSize(new Dimension(150,256));
-		
+
 		forkLabel = new JLabel(new ImageIcon (img));
 		forkLabel.setBounds(0,0,150,150);	
-		
+
 		forkLabelPanel.add(forkLabel);
-		
-		
+
+
 		JPanel logoLabelPanel = new JPanel();
 		logoLabelPanel.setLayout(new FlowLayout(0,0,0));
 		logoLabelPanel.setPreferredSize(new Dimension(256,256));
-		
+
 		Image logo = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.HUSACCT_LOGO));
 		pictureLabel = new JLabel(new ImageIcon(logo));
 		pictureLabel.setBounds(0,0,256,256);
 		logoLabelPanel.add(pictureLabel);		
-		
-		
+
+
 		gitForkPanel.add(forkLabelPanel);
 		gitForkPanel.add(logoLabelPanel);
-		
+
 		textPanel = new JPanel();
 		husacctLabel = new JLabel("\u00a9 2013 HUSACCT");
 		versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 		versionNumberLabel = new JLabel(versionNumber);
-		
-		
+
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setPreferredSize(new Dimension(420,70));
-		
+
 		okButton = new JButton(localeService.getTranslatedString("OkButton"));
 		creditsButton = new JButton(localeService.getTranslatedString("Credits"));
 		getRootPane().setDefaultButton(okButton);
@@ -122,9 +137,9 @@ public class AboutDialog extends JDialog{
 		textPanel.add(husacctLabel);//, getConstraint(0, 0));
 		textPanel.add(versionLabel);//, getConstraint(0, 1));	
 		textPanel.add(versionNumberLabel);//, getConstraint(1, 1));
-		
+
 		add(gitForkPanel);
-		
+
 		add(buttonPanel);	
 		add(textPanel);
 	}
@@ -141,15 +156,15 @@ public class AboutDialog extends JDialog{
 			}
 		});
 		forkLabelPanel.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
 					if(e.getX() + e.getY() > 90 && e.getX() + e.getY() < 140) {
-						
+
 						Desktop.getDesktop().browse(new URI("https://github.com/HUSACCT/HUSACCT"));
 					}
-					
+
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();

@@ -5,10 +5,7 @@ public class FamixLibrary extends FamixEntity {
     public String belongsToPackage;
 
     public boolean equals(FamixLibrary other) {
-        boolean result = true;
-        result = result && (other.belongsToPackage == this.belongsToPackage);
-        result = result && (other.uniqueName == this.uniqueName);
-        return result;
+        return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 
     }
 
     @Override

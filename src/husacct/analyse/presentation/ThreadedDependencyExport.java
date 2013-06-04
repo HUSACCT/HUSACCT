@@ -18,7 +18,7 @@ class ThreadedDependencyExport implements Runnable {
             Thread.sleep(20);
             dataControl.exportDependencies(path);
         } catch (InterruptedException exception) {
-            husacctLogger.debug("Analyse export dependencies interupted");
+            husacctLogger.debug("Analyse export dependencies interrupted");
         }
     }
 }

@@ -12,14 +12,17 @@ public class ConnectorLineSeparationStrategy implements ILineSeparationStrategy 
 	@Override
 	public void separateLines(HashSet<RelationFigure> overlappingLineFigures) {
 
-		double start = 0 - ((overlappingLineFigures.size() - 1) * RELATIONS_DISTANCE / 2);
+		double start = 0 - (overlappingLineFigures.size() - 1)
+				* RELATIONS_DISTANCE / 2;
 
 		for (RelationFigure figure : overlappingLineFigures) {
 
-			Connector newStartConnector = new DistantiatedChopRectangleConnector(figure.getStartFigure(), start);
+			Connector newStartConnector = new DistantiatedChopRectangleConnector(
+					figure.getStartFigure(), start);
 			figure.setStartConnector(newStartConnector);
 
-			Connector newEndConnector = new DistantiatedChopRectangleConnector(figure.getEndFigure(), start);
+			Connector newEndConnector = new DistantiatedChopRectangleConnector(
+					figure.getEndFigure(), start);
 			figure.setEndConnector(newEndConnector);
 
 			start += RELATIONS_DISTANCE;

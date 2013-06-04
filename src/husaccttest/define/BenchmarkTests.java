@@ -1,10 +1,9 @@
-package husaccttest.define;
+/*package husaccttest.define;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Layer;
@@ -98,10 +97,10 @@ public class BenchmarkTests {
 		sA.addModule(externalLibrary1);
 		
 		//Rules
-		AppliedRule rule1 = new AppliedRule("IsOnlyModuleAllowedToUse", "Only the classes in package infrastructure.socialmedia are only allowed to use the JDBC library (derbyclient.jar)", 
-				getViolationTypeByRuleType("IsOnlyModuleAllowedToUse"),	"", module25, externalLibrary1, true);
+//		AppliedRule rule1 = new AppliedRule("IsOnlyModuleAllowedToUse", "Only the classes in package infrastructure.socialmedia are only allowed to use the JDBC library (derbyclient.jar)", 
+//				getViolationTypeByRuleType("IsOnlyModuleAllowedToUse"),	"", module25, externalLibrary1, true);
 		
-		sA.addAppliedRule(rule1);
+		//sA.addAppliedRule(rule1);
 	}
 	
 	private String[] getViolationTypeByRuleType(String ruleTypeKey){
@@ -127,3 +126,4 @@ public class BenchmarkTests {
 	
 	
 
+*/

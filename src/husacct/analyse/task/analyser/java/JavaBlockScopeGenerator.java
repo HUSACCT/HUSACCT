@@ -18,34 +18,43 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 
         walkThroughBlockScope(tree);
     }
-
+    
     private void walkThroughBlockScope(Tree tree) {
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            Tree child = tree.getChild(i);
-            int treeType = child.getType();
-            if (treeType == JavaParser.VAR_DECLARATION) {
-                javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
-                deleteTreeChild(child);
-            } else if (treeType == JavaParser.CLASS_CONSTRUCTOR_CALL) {
-                delegateInvocation(child, "invocConstructor");
-            } else if (treeType == JavaParser.METHOD_CALL) {
-                if (child.getChild(0).getType() == JavaParser.DOT) {
-                    delegateInvocation(child, "invocMethod");
-                }
-            } else if (treeType == JavaParser.THROW || treeType == JavaParser.CATCH || treeType == JavaParser.THROWS) {
-                delegateException(child);
-                deleteTreeChild(child);
-            } else if (treeType == JavaParser.ASSIGN) { //=
-                if (child.getChild(0).getType() == JavaParser.DOT) {
-                    delegateInvocation(child, "accessPropertyOrField");
-                }
-            } else if (treeType == JavaParser.FOR_EACH || treeType == JavaParser.FOR || treeType == JavaParser.WHILE) {
-                delegateLoop(child);
-                deleteTreeChild(child);
+    for (int i = 0; i < tree.getChildCount(); i++) {
+        Tree child = tree.getChild(i);
+        int treeType = child.getType();
+        switch(treeType) {
+        case JavaParser.VAR_DECLARATION:
+            javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
+            deleteTreeChild(child);
+            break;
+        case JavaParser.CLASS_CONSTRUCTOR_CALL:
+            delegateInvocation(child, "invocConstructor");
+            break;
+        case JavaParser.METHOD_CALL: 
+            if (child.getChild(0).getType() == JavaParser.DOT) {
+                delegateInvocation(child, "invocMethod");
             }
-            walkThroughBlockScope(child);
-        }
+            break;
+        case JavaParser.THROW: case JavaParser.CATCH: case JavaParser.THROWS:
+            delegateException(child);
+            deleteTreeChild(child);
+        	break;
+        case JavaParser.ASSIGN:
+            if (child.getChild(0).getType() == JavaParser.DOT) {
+                delegateInvocation(child, "accessPropertyOrField");
+            }
+            break;
+        case JavaParser.FOR_EACH: case JavaParser.FOR: case JavaParser.WHILE:
+            delegateLoop(child);
+            deleteTreeChild(child);
+            break;
+        
     }
+        walkThroughBlockScope(child);
+    }
+    }
+
 
     private void delegateInvocation(Tree treeNode, String type) {
         JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);

@@ -5,116 +5,111 @@ import husacct.define.presentation.jpanel.ModuleJPanel;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import org.jfree.ui.action.ActionMenuItem;
+public class ModuletreeContextMenu extends JPopupMenu {
 
-public class ModuletreeContextMenu extends JPopupMenu{
-
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
+    private AbstractAction createNewModuleAction = new AbstractAction() {
 
-private JMenuItem newModule,removeModule,moveUp,moveDown;
-private JPanel parentPanel;
+	/**
+     * 
+     */
+	private static final long serialVersionUID = 648949586322816554L;
 
-public ModuletreeContextMenu(JPanel parentPanel)
-{
-	this.parentPanel=parentPanel;
-newModule = new JMenuItem("new module");
-removeModule = new JMenuItem("remove module");
-moveUp = new JMenuItem("level up");
-moveUp.addActionListener(moveUpAction);
-moveDown = new JMenuItem("level down");
-moveDown.addActionListener(moveDownAction);
-newModule.addActionListener(createNewModuleAction);
-removeModule.addActionListener(removeModuleAction);
-
-
-}
-
-
-
-
-
-private AbstractAction createNewModuleAction = new AbstractAction() {
-	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-	if(parentPanel instanceof ModuleJPanel)
-	{
-       ((ModuleJPanel) parentPanel).newModule();
+	    if (parentPanel instanceof ModuleJPanel) {
+		((ModuleJPanel) parentPanel).newModule();
+	    }
+
 	}
-		
-	}
-};
+    };
+    private AbstractAction moveDownAction = new AbstractAction() {
 
+	/**
+     * 
+     */
+	private static final long serialVersionUID = -1396467062324885098L;
 
-
-private AbstractAction removeModuleAction = new AbstractAction() {
-	
 	@Override
 	public void actionPerformed(ActionEvent a) {
-		
-		
-	if(parentPanel instanceof ModuleJPanel)
-	{
-       ((ModuleJPanel) parentPanel).removeModule();
+
+	    if (parentPanel instanceof ModuleJPanel) {
+		((ModuleJPanel) parentPanel).moveLayerDown();
+	    }
+
 	}
-		
-	}
-};
+    };
 
+    private AbstractAction moveUpAction = new AbstractAction() {
 
+	/**
+     * 
+     */
+	private static final long serialVersionUID = 5859872060456988463L;
 
-private AbstractAction moveUpAction = new AbstractAction() {
-	
 	@Override
 	public void actionPerformed(ActionEvent a) {
-		
-		
-	if(parentPanel instanceof ModuleJPanel)
-	{
-       ((ModuleJPanel) parentPanel).moveLayerUp();
-	}
-		
-	}
-};
 
-private AbstractAction moveDownAction = new AbstractAction() {
-	
+	    if (parentPanel instanceof ModuleJPanel) {
+		((ModuleJPanel) parentPanel).moveLayerUp();
+	    }
+
+	}
+    };
+
+    private JMenuItem newModule, removeModule, moveUp, moveDown;
+
+    private JPanel parentPanel;
+
+    private AbstractAction removeModuleAction = new AbstractAction() {
+
+	/**
+     * 
+     */
+	private static final long serialVersionUID = 3393078113848071817L;
+
 	@Override
 	public void actionPerformed(ActionEvent a) {
-		
-		
-	if(parentPanel instanceof ModuleJPanel)
-	{
-       ((ModuleJPanel) parentPanel).moveLayerDown();
+
+	    if (parentPanel instanceof ModuleJPanel) {
+		((ModuleJPanel) parentPanel).removeModule();
+	    }
+
 	}
-		
-	}
-};
+    };
 
+    public ModuletreeContextMenu(JPanel parentPanel) {
+	this.parentPanel = parentPanel;
+	newModule = new JMenuItem("new module");
+	removeModule = new JMenuItem("remove module");
+	moveUp = new JMenuItem("level up");
+	moveUp.addActionListener(moveUpAction);
+	moveDown = new JMenuItem("level down");
+	moveDown.addActionListener(moveDownAction);
+	newModule.addActionListener(createNewModuleAction);
+	removeModule.addActionListener(removeModuleAction);
 
+    }
 
+    public void isComponent() {
+	this.add(newModule);
+	this.add(removeModule);
 
-public void isLayer() {
+    }
+
+    public void isLayer() {
 	isComponent();
 	this.add(moveUp);
 	this.add(moveDown);
-	
-}
 
-
-public void isComponent() {
-	this.add(newModule);
-this.add(removeModule);
-	
-}
+    }
 
 }
