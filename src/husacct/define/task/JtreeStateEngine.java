@@ -213,4 +213,10 @@ return allUnitsRegistry.getAnalyzedUnit(unit);
 		return data;
 	}
 
+	public AnalyzedModuleComponent getAnalyzedSoftWareUnits(
+			ArrayList<SoftwareUnitDefinition> units) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
