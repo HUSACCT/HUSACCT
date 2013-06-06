@@ -2,7 +2,6 @@ package husacct.define.task;
 
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.analyzer.AnalyzedUnitRegistry;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
@@ -20,6 +19,7 @@ import husacct.define.domain.services.stateservice.state.module.UpdateModuleComm
 import husacct.define.domain.services.stateservice.state.module.UpdateModuleTypeCommand;
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package husacct.define.analyzer;
 
-import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 

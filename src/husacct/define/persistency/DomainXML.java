@@ -3,10 +3,10 @@ package husacct.define.persistency;
 import husacct.define.domain.Application;
 import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import org.jdom2.Element;
 

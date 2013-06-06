@@ -3,10 +3,10 @@ package husacct.define.domain.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 public class UndoRedoService  implements IseparatedDefinition{
  private List<IseparatedDefinition> observers = new ArrayList<IseparatedDefinition>();

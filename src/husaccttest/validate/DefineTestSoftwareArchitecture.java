@@ -2,8 +2,8 @@ package husaccttest.validate;
 
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 /*
  * IMPORTANT NOTICE
