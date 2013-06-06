@@ -35,6 +35,7 @@ public class MainGui extends HelpableJFrame{
 	private String titlePrefix = "HUSACCT";
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
+	private ToolBar toolBar;
 	private UserActionLogPanel userActionLogPanel;
 	
 	public MainGui(MainController mainController) {
@@ -76,11 +77,13 @@ public class MainGui extends HelpableJFrame{
 		JPanel contentPane = new JPanel(new BorderLayout()); 
 		desktopPane = new JDesktopPane();
 		JPanel taskBarPane = new JPanel(new GridLayout());
+		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
 		userActionLogPanel = new UserActionLogPanel(mainController);
 		
 		taskBarPane.add(taskBar);
 		contentPane.add(userActionLogPanel, BorderLayout.EAST);
+		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		add(contentPane);
 		add(taskBarPane);
