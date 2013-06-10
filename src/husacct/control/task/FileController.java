@@ -53,6 +53,10 @@ public class FileController {
         });
 	}
 	
+	public void addFileChangeListener(IFileChangeListener listener) {
+		listeners.add(listener);
+	}
+	
 	public void processEvents() throws IOException {
         for (;;) {
             WatchKey key;
