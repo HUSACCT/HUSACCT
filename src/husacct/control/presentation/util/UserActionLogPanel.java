@@ -37,7 +37,7 @@ public class UserActionLogPanel extends JPanel{
 		Dimension preferredSize = new Dimension(250, 212);
 		this.setPreferredSize(preferredSize);
 		
-		this.setVisible(true);
+		this.setVisible(false);
 		
 		refreshUserActionsPanel();
 	}
