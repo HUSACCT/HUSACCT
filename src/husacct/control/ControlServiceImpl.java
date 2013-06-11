@@ -12,6 +12,8 @@ import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
 import husacct.control.task.CodeViewController;
+import husacct.control.task.FileController;
+import husacct.control.task.IFileChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
 import husacct.control.task.States;
@@ -24,6 +26,7 @@ import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +50,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ViewController viewController;
 	private CodeViewController codeViewController;
 	private GeneralConfigurationPanel generalConfigurationPanel;
+	private FileController fileController;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -57,6 +61,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		viewController = mainController.getViewController();
 		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
+		fileController = new FileController(mainController); //TODO put in mainController?
 		setDefaultSettings();
 	}
 	
@@ -229,6 +234,23 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void showHelpDialog(Component comp) {
 		mainController.getApplicationController().showHelpGUI(comp);
+	}
+
+	@Override
+	public void addProjectForListening(String path) {
+		
+		try {
+			fileController.addProject(path);
+			fileController.processEvents(); //TODO Execute in thread, will hang application.
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 
+	}
+
+	@Override
+	public void addFileChangeListener(IFileChangeListener listener) {
+		fileController.addFileChangeListener(listener);
 	}
 
 	
