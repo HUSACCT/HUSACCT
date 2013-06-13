@@ -24,7 +24,6 @@ import org.antlr.runtime.tree.RewriteEarlyExitException;
 import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
 import org.antlr.runtime.tree.RewriteRuleTokenStream;
 import org.antlr.runtime.tree.TreeAdaptor;
-import org.apache.log4j.Logger;
 
 /**
  * An ANTLRv3 capable Java 1.5 grammar for building ASTs.
@@ -81,8 +80,6 @@ import org.apache.log4j.Logger;
  *
  */
 public class JavaParser extends Parser {
-
-	private Logger logger = Logger.getLogger(JavaParser.class);
     public static class additiveExpression_return extends ParserRuleReturnScope {
 
         CommonTree tree;

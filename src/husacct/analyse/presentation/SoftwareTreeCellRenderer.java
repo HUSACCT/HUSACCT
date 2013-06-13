@@ -36,30 +36,34 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             AnalysedModuleDTO moduleSelected = (AnalysedModuleDTO) node.getUserObject();
             ImageIcon icon;
-            if (moduleSelected.uniqueName.equals("")) {
-                icon = new ImageIcon(Resource.get(Resource.ICON_SOURCE));
-            } else if (moduleSelected.type.equals("package")) {
-                icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
-            } else if (moduleSelected.type.equals("library")) {
-                icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
-            } else if (moduleSelected.type.equals("class")) {
-                if (moduleSelected.visibility.equals("public")) {
-                    icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
-                } else {
-                    icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PRIVATE));
-                }
-            } else if (moduleSelected.type.equals("interface")) {
-                if (moduleSelected.visibility.equals("public")) {
-                    icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
-                } else {
-                    icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PRIVATE));
-                }
-            } else if (moduleSelected.type.equals("library")) {
-                icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
-            } else if (moduleSelected.type.equals("enumeration")) {
-                icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
-            } else {
-                icon = new ImageIcon(Resource.get(Resource.ICON_MODULE));
+            if(moduleSelected.uniqueName.equals("")){
+            	icon = new ImageIcon(Resource.get(Resource.ICON_SOURCE));
+            }else{
+	            switch(moduleSelected.type){
+		            case "package":  icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE)); break;
+		            case "library":  icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE)); break;
+		            case "class":{
+		            	if (moduleSelected.visibility.equals("public")) {
+		                    icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
+		                } 
+		            	else {
+		                    icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PRIVATE));
+		                }
+		            	break;  
+			        }
+		            case "interface": {
+		            	if (moduleSelected.visibility.equals("public")) {
+		                    icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
+		                }
+		            	else {
+		                    icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PRIVATE));
+		                }
+		            	break;
+		            	
+		            }
+		            case "enumeration" : icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION)); break;
+		            default: icon = new ImageIcon(Resource.get(Resource.ICON_MODULE)); break;
+	            }
             }
             label.setIcon(icon);
 

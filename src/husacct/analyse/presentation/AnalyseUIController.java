@@ -1,8 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
-import husacct.analyse.task.AnalyseControlerServiceImpl;
-import husacct.analyse.task.IAnalyseControlService;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.locale.ILocaleService;
@@ -13,10 +12,9 @@ import java.util.List;
 public class AnalyseUIController {
 
     private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
-    private IAnalyseControlService analyseTaskService = new AnalyseControlerServiceImpl();
+    private IAnalyseService analyseTaskService = ServiceProvider.getInstance().getAnalyseService();
 
     public AnalyseUIController() {
-        this.analyseTaskService = new AnalyseControlerServiceImpl();
     }
 
     public String translate(String key) {

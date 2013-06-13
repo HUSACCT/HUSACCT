@@ -151,6 +151,27 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
 	@Override
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
-		historyLogger.saveHistory(applicationDTO, workspaceName);
+		historyLogger.logHistory(applicationDTO, workspaceName);
+	}
+	
+	public int getAmountOfDependencies() {
+    	return service.getAmountOfDependencies();
+    }
+    
+    public int getAmountOfInterfaces() {
+    	return service.getAmountOfInterfaces();
+    }
+    
+    public int getAmountOfPackages() {
+    	return service.getAmountOfPackages();
+    }
+    
+    public int getAmountOfClasses() {
+    	return service.getAmountOfClasses();
+    }
+    
+	@Override
+	public int buildCache(){
+		return service.buildCache();
 	}
 }

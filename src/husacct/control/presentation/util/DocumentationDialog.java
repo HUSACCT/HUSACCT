@@ -70,7 +70,7 @@ public class DocumentationDialog extends JDialog{
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 		try {
-			File root = new File(new File(".").getCanonicalPath() + "\\doc");
+			File root = new File("doc");
 			tree = new JTree(getTreeModel(root));
 			treeView = new JScrollPane(tree);
 			treeView.setPreferredSize(new Dimension(420,280));
@@ -120,7 +120,7 @@ public class DocumentationDialog extends JDialog{
 					}
 					
 					try {
-						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ new File(".").getCanonicalPath() + path);
+						//Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ new File(".").getCanonicalPath() + path);
 					}
 					catch (Exception ex) {
 						ex.printStackTrace();

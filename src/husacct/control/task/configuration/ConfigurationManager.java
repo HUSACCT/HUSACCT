@@ -52,7 +52,7 @@ public class ConfigurationManager {
 			File path = new File(OSDetector.getAppFolder());
 			if(!path.isDirectory())
 				path.mkdir();
-			properties.store(new FileOutputStream(OSDetector.getAppFolder() + File.separator + "config.properties"), null);
+			props.store(new FileOutputStream(OSDetector.getAppFolder() + File.separator + "config.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -29,9 +29,10 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 		if (methodTree != null) {
 			deleteTrainWreck(methodTree);
 			determineMethodType(methodTree);
-			checkForArguments(methodTree);
+			checkForArguments(tree);
 			saveInvocationToDomain();
 		}
+		
   	}
 	
 	private void deleteTrainWreck(CommonTree tree) {

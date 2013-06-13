@@ -3,7 +3,9 @@ package husacct.graphics.util;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
@@ -21,95 +23,93 @@ public class FigureMap {
 	private int maxDependencies, maxViolations, maxAll;
 
 	public FigureMap() {
-		this.clearAll();
+		clearAll();
 	}
 
 	public void clearAll() {
-		this.maxDependencies = 0;
-		this.maxViolations = 0;
-		this.maxAll = 0;
-		this.moduleFigureDTOMap.clear();
-		this.dependencyLineDTOMap.clear();
-		this.clearAllViolations();
-		this.moduleFiguresByName.clear();
+		maxDependencies = 0;
+		maxViolations = 0;
+		maxAll = 0;
+		moduleFigureDTOMap.clear();
+		dependencyLineDTOMap.clear();
+		clearAllViolations();
+		moduleFiguresByName.clear();
 	}
 
 	public void clearAllViolations() {
-		this.violationLineDTOMap.clear();
-		this.violatedFigureDTOMap.clear();
+		violationLineDTOMap.clear();
+		violatedFigureDTOMap.clear();
 	}
 
 	public boolean containsModule(String path) {
-		return this.moduleFiguresByName.containsKey(path);
+		return moduleFiguresByName.containsKey(path);
 	}
 
 	public BaseFigure findModuleByPath(String path) {
-		return this.moduleFiguresByName.get(path);
+		return moduleFiguresByName.get(path);
 	}
 
 	public DependencyDTO[] getDependencyDTOs(BaseFigure figure) {
-		return this.dependencyLineDTOMap.get(figure);
+		return dependencyLineDTOMap.get(figure);
 	}
 
 	public int getMaxAll() {
-		return this.maxAll;
+		return maxAll;
 	}
 
 	public int getMaxDependencies() {
-		return this.maxDependencies;
+		return maxDependencies;
 	}
 
 	public int getMaxViolations() {
-		return this.maxViolations;
+		return maxViolations;
 	}
 
 	public AbstractDTO getModuleDTO(BaseFigure figure) {
-		return this.moduleFigureDTOMap.get(figure);
+		return moduleFigureDTOMap.get(figure);
 	}
 
 	public ViolationDTO[] getViolatedDTOs(BaseFigure figure) {
-		return this.violatedFigureDTOMap.get(figure);
+		return violatedFigureDTOMap.get(figure);
 	}
 
 	public ArrayList<BaseFigure> getViolatedFigures() {
 		ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-		for (BaseFigure figure : this.violatedFigureDTOMap.keySet()) {
+		for (BaseFigure figure : violatedFigureDTOMap.keySet())
 			figures.add(figure);
-		}
 		return figures;
 	}
 
 	public ViolationDTO[] getViolationDTOs(BaseFigure figure) {
-		return this.violationLineDTOMap.get(figure);
+		return violationLineDTOMap.get(figure);
 	}
 
 	public ArrayList<BaseFigure> getViolationLines() {
 		ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-		for (BaseFigure figure : this.violationLineDTOMap.keySet()) {
+		for (BaseFigure figure : violationLineDTOMap.keySet())
 			figures.add(figure);
-		}
 		return figures;
 	}
 
 	public boolean isDependencyLine(BaseFigure figure) {
-		return this.dependencyLineDTOMap.containsKey(figure);
+		return dependencyLineDTOMap.containsKey(figure);
 	}
 
 	public boolean isViolatedFigure(BaseFigure figure) {
-		return this.violatedFigureDTOMap.containsKey(figure);
+		return violatedFigureDTOMap.containsKey(figure);
 	}
 
 	public boolean isViolationLine(BaseFigure figure) {
-		return this.violationLineDTOMap.containsKey(figure);
+		return violationLineDTOMap.containsKey(figure);
 	}
 
 	public void linkDependencies(RelationFigure figure, DependencyDTO[] dtos) {
-		this.dependencyLineDTOMap.put(figure, dtos);
-		this.setMaxDependencies(dtos.length);
+		dependencyLineDTOMap.put(figure, dtos);
+		setMaxDependencies(dtos.length);
 	}
 
 	public void linkModule(BaseFigure figure, AbstractDTO dto) {
-		this.moduleFigureDTOMap.put(figure, dto);
+		moduleFigureDTOMap.put(figure, dto);
 
 		// TODO: Re-factor this into a more clean design. Perhaps turn into a
 		// dictionary?
@@ -119,37 +119,39 @@ public class FigureMap {
 		// design?
 		if (dto instanceof ModuleDTO) {
 			ModuleDTO md = (ModuleDTO) dto;
-			this.moduleFiguresByName.put(md.logicalPath, figure);
+			moduleFiguresByName.put(md.logicalPath, figure);
 		} else if (dto instanceof AnalysedModuleDTO) {
 			AnalysedModuleDTO md = (AnalysedModuleDTO) dto;
 			this.moduleFiguresByName.put(md.uniqueName, figure);
+		} else if (dto instanceof ExternalSystemDTO) {
+			ExternalSystemDTO es = (ExternalSystemDTO) dto;
+			this.moduleFiguresByName.put(es.systemPackage, figure);
+		} else if(dto instanceof ProjectDTO){
+			ProjectDTO pd = (ProjectDTO) dto;
+			this.moduleFiguresByName.put(pd.name, figure);
 		}
 	}
 
 	public void linkViolatedModule(BaseFigure figure, ViolationDTO[] dtos) {
-		this.violatedFigureDTOMap.put(figure, dtos);
+		violatedFigureDTOMap.put(figure, dtos);
 	}
 
 	public void linkViolations(RelationFigure figure, ViolationDTO[] dtos) {
-		this.violationLineDTOMap.put(figure, dtos);
-		this.setMaxViolations(dtos.length);
+		violationLineDTOMap.put(figure, dtos);
+		setMaxViolations(dtos.length);
 	}
 
 	private void setMaxDependencies(int newMax) {
-		if (newMax > this.maxDependencies) {
-			this.maxDependencies = newMax;
-		}
-		if (newMax > this.maxAll) {
-			this.maxAll = newMax;
-		}
+		if (newMax > maxDependencies)
+			maxDependencies = newMax;
+		if (newMax > maxAll)
+			maxAll = newMax;
 	}
 
 	private void setMaxViolations(int newMax) {
-		if (newMax > this.maxViolations) {
-			this.maxViolations = newMax;
-		}
-		if (newMax > this.maxAll) {
-			this.maxAll = newMax;
-		}
+		if (newMax > maxViolations)
+			maxViolations = newMax;
+		if (newMax > maxAll)
+			maxAll = newMax;
 	}
 }

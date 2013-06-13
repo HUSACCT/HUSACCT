@@ -28,7 +28,8 @@ public class HelpTreeModelLoader {
 	List<HelpTreeNode> HelpTreeNodeList = new ArrayList<HelpTreeNode>();
 
 	public Document getXmlDocument() {
-		File manualDescriptionFile = new File("src\\husacct\\common\\resources\\help\\manuals.xml");
+		String manualXmlPath = (Resource.get(Resource.HELP_PATH) + "manuals.xml").replace("file:/", "");
+		File manualDescriptionFile = new File(manualXmlPath);
 
 		SAXBuilder sax = new SAXBuilder();
 		Document doc = new Document();
@@ -67,7 +68,7 @@ public class HelpTreeModelLoader {
 
 
 	public String getContent(File f) throws FileNotFoundException {
-	//	File f = new File("src\\common\resources\\help\\pages\\" + userObject.getFilename());
+	
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		String line;
 		String html = "";
@@ -90,7 +91,8 @@ public class HelpTreeModelLoader {
 		for(HelpTreeNode htn : HelpTreeNodeList) {
 			if(htn.getcomponentname().equals(component.getClass().getName().substring(component.getClass().getName().lastIndexOf('.')+1))) {
 				try {
-					File f = new File(new File(".").getCanonicalPath()+ "\\src\\husacct\\common\\resources\\help\\pages\\" + htn.getFilename());
+					String HelpPagePath = (Resource.get(Resource.HELP_PAGES_PATH) + htn.getFilename()).replace("file:/", "");
+					File f = new File(HelpPagePath);
 					if(f.exists()) {
 						return getContent(f);
 					}
@@ -101,7 +103,8 @@ public class HelpTreeModelLoader {
 			}
 		}
 		try {
-			File defaultFile = new File(new File(".").getCanonicalPath() + "\\src\\husacct\\common\\resources\\help\\pages\\home.html");
+			String HelpPagePath = (Resource.get(Resource.HELP_PAGES_PATH) + "home.html").replace("file:/", "");
+			File defaultFile = new File(HelpPagePath);
 			return getContent(defaultFile);
 		} catch (IOException e) {
 			e.printStackTrace();

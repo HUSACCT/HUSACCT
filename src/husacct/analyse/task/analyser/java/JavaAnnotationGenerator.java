@@ -5,9 +5,9 @@ import org.antlr.runtime.tree.CommonTree;
 
 class JavaAnnotationGenerator extends JavaGenerator {
 
-    private String name = "";
-    private String uniqueName = "";
-    private String belongsToPackage = "";
+    private String name;
+    private String uniqueName;
+    private String belongsToPackage;
     private int lineNumber = 0;
 
     public JavaAnnotationGenerator(String uniquePackageName) {
@@ -78,9 +78,9 @@ class JavaAnnotationGenerator extends JavaGenerator {
     }
 
     private boolean isTreeAvailable(CommonTree tree) {
-        if (tree != null) {
-            return true;
-        }
-        return false;
+     if (tree != null) {
+    	         return true;
+          }
+    	    return false; 
     }
 }
