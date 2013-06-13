@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.getFirstDescendantWithType;
-import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.tryToGetFilePath;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,11 +56,17 @@ public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvo
 	private void createPropertyOrFieldInvocationDetails(CommonTree tree) {
 		try {
 			this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-			
-			CommonTree accessToClass = getFirstDescendantWithType(tree, CSharpParser.SIMPLE_NAME);
-
 			this.to = setToName(tree);
-			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();	
+			CommonTree accessToClass = getFirstDescendantWithType(tree, CSharpParser.SIMPLE_NAME);
+			
+			if (accessToClass == null) {
+				accessToClass = tree;
+				while(hasChild(accessToClass, CSharpParser.MEMBER_ACCESS)) {
+					accessToClass = (CommonTree)accessToClass.getFirstChildWithType(CSharpParser.MEMBER_ACCESS);	
+				}
+			}
+			
+			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 		} catch (Exception e) {
 			System.out.println("Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
 		}
