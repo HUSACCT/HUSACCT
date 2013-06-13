@@ -47,6 +47,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         super.notifyServiceListeners();
     }
 
+	@Override
     public void analyseApplication(ProjectDTO project) {
         service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
         this.analyseInternalFrame = new AnalyseInternalFrame();
