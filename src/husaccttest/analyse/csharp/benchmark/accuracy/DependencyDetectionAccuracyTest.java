@@ -208,7 +208,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpAccessClassVariableTest(){
 		boolean found = false;
-		String toTestFrom = "DeclarationVariableStatic";
+		String toTestFrom = "AccessClassVariable";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
