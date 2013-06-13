@@ -180,7 +180,8 @@ footer {
   width:270px;
   float:left;
   position:fixed;
-  bottom:50px;
+  bottom:80px;
+  text-align: center;
 }
 
 @media print, screen and (max-width: 960px) {
@@ -252,4 +253,9 @@ footer {
     font-size:12pt;
     color:#444;
   }
+}
+#PagesHeading{
+	font-size: 18px;
+	padding-bottom: 5px;
+	font-weight: bold;
 }
