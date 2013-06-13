@@ -67,7 +67,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpCallInstanceMethodTest(){
 		boolean found = false;
-		String toTestFrom = "CallInstanceMethod";
+		String toTestFrom = "CallInstance";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -81,7 +81,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpCallInstanceMethodInheritedTest(){
 		boolean found = false;
-		String toTestFrom = "CallInstanceMethodInherited";
+		String toTestFrom = "CallInstanceSuperClass";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -123,7 +123,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpCallInnerClassMethodTest(){
 		boolean found = false;
-		String toTestFrom = "CallInnerClassMethod";
+		String toTestFrom = "CallInstanceInnerClass";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -137,7 +137,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpCallInterfaceMethodTest(){
 		boolean found = false;
-		String toTestFrom = "CallInterfaceMethod";
+		String toTestFrom = "CallInstanceInterface";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -151,7 +151,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpCallLibraryClassTest(){
 		boolean found = false;
-		String toTestFrom = "CallLibraryClass";
+		String toTestFrom = "CallInstanceLibraryClass";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -208,7 +208,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpAccessClassVariableTest(){
 		boolean found = false;
-		String toTestFrom = "AccessClassVariable";
+		String toTestFrom = "DeclarationVariableStatic";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -266,7 +266,20 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void ObjectReferenceReferenceVariableTest(){
 		boolean found = false;
-		String toTestFrom = "ReferenceReferenceVariable";
+		String toTestFrom = "AccessObjectReferenceAsParameter";
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			if(toTestFrom.equals(from)){
+				found = true;
+				break;
+			}
+		}
+		Assert.assertTrue(found);
+	}
+	@Test
+	public void ObjectReferenceReferenceVariableTest2(){
+		boolean found = false;
+		String toTestFrom = "AccessObjectReferenceWithinIfStatement";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -322,7 +335,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpDeclarationInstanceVariableTest(){
 		boolean found = false;
-		String toTestFrom = "DeclarationInstanceVariable";
+		String toTestFrom = "DeclarationVariableInstance";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -350,7 +363,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpDeclarationLocalVariableTest(){
 		boolean found = false;
-		String toTestFrom = "DeclarationLocalVariable";
+		String toTestFrom = "DeclarationVariableLocal";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
@@ -728,7 +741,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpICallInstanceMethodTest3(){
 		boolean found = false;
-		String toTestFrom = "CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
+		String toTestFrom = "CallInstanceMethodIndirect_MethodMethodViaConstructor";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
