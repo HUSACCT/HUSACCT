@@ -1,6 +1,6 @@
 namespace Domain.Direct.Violating
 {
-    public class DeclerationVariableLocal
+    public class DeclarationVariableLocal
     {
         public String GetProfileInformation()
         {

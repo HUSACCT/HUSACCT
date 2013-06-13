@@ -1,4 +1,4 @@
-namespace Domain.Indirect.AlowedFrom
+namespace Domain.Indirect.AllowedFrom
 {
     public class AccessInstanceVariableIndirect_SuperClass : Domain.Indirect.BaseIndirect
     {

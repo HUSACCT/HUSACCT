@@ -307,7 +307,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpInheritanceExtendsAbstractTest(){
 		boolean found = false;
-		String toTestFrom = "InheritanceExtendsAbstract";
+		String toTestFrom = "InheritanceExtendsAbstractClass";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
