@@ -1,6 +1,6 @@
-namespace Domain.Direct.Alowed
+namespace Domain.Direct.Allowed
 {
-    public class DeclerationVariableLocal
+    public class DeclarationVariableLocal
     {
         public String GetProfileInformation()
         {
