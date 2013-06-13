@@ -21,6 +21,7 @@ public class MainController {
 	private ApplicationAnalysisHistoryLogController applicationAnalysisHistoryLogController;
 	private UserActionLogController userActionLogController;
 	private CodeViewController codeViewController;
+	private FileController fileController;
 
 	public MainGui mainGUI;
 
@@ -48,6 +49,7 @@ public class MainController {
 		this.exportController = new ExportController(this);
 		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
 		this.userActionLogController = new UserActionLogController(this);
+		this.fileController = new FileController(this);
 	}
 
 	private void setAppleProperties(){
@@ -99,6 +101,10 @@ public class MainController {
 	
 	public UserActionLogController getUserActionLogController(){
 		return this.userActionLogController;
+	}
+	
+	public FileController getFileController() {
+		return this.fileController;
 	}
 
 	public void exit(){
