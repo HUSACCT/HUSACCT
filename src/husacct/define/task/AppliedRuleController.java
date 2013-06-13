@@ -223,7 +223,7 @@ public class AppliedRuleController extends PopUpController {
 				.getModuleById(DefinitionController.getInstance()
 						.getSelectedModuleId());
 		for (String[] category : categories) {
-			if (categories[0][0].equals(category)) {
+			if (categories[0][0].equals(category[0])) {
 				ruleTypeKeys.add("setDisabled");
 				ruleTypeValues.add("--- Property rule types ---");
 			} else {
