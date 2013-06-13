@@ -13,7 +13,13 @@ public class UndoRedoService  implements IseparatedDefinition{
  private static UndoRedoService instance =null;
  public static UndoRedoService getInstance()
  {
-	 return instance==null ? new UndoRedoService():instance;
+	if (instance==null) {
+	
+		return instance= new UndoRedoService();
+	} else {
+	
+		return instance;
+	}
 	 
  } 
 
@@ -31,24 +37,26 @@ public class UndoRedoService  implements IseparatedDefinition{
 
 	@Override
 	public void removeSeperatedModule(ModuleStrategy module) {
+		System.out.println("i tried queee "+observers.size());
 		for (IseparatedDefinition observer : observers) {
+			System.out.println("i tried");
 			observer.removeSeperatedModule(module);
 		}
 		
 	}
 
 	@Override
-	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units) {
+	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
 		for (IseparatedDefinition observer : observers) {
-			observer.addSeperatedSoftwareUnit(units);
+			observer.addSeperatedSoftwareUnit(units, moduleId);
 		}
 		
 	}
 
 	@Override
-	public void removeSeperatedSoftUnit(List<SoftwareUnitDefinition> units) {
+	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
 		for (IseparatedDefinition observer : observers) {
-			observer.removeSeperatedSoftUnit(units);
+			observer.removeSeperatedSoftwareUnit(units, moduleId);
 		}
 		
 	}
@@ -74,9 +82,9 @@ public class UndoRedoService  implements IseparatedDefinition{
 
 
 	@Override
-	public void addSeperatedExeptionRule(List<AppliedRuleStrategy> rules) {
+	public void addSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
 		for (IseparatedDefinition observer : observers) {
-			observer.addSeperatedExeptionRule(rules);
+			observer.addSeperatedExeptionRule(parentRuleID,rules);
 		}
 		
 	}
@@ -86,10 +94,50 @@ public class UndoRedoService  implements IseparatedDefinition{
 
 
 	@Override
-	public void removeSeperatedExeptionRule(List<AppliedRuleStrategy> rules) {
+	public void removeSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
 		for (IseparatedDefinition observer : observers) {
-			observer.removeSeperatedAppliedRule(rules);
+			observer.removeSeperatedExeptionRule(parentRuleID,rules);
 		}
+		
+	}
+
+
+
+
+
+	@Override
+	public void layerUp(long moduleID) {
+		for (IseparatedDefinition observer : observers) {
+			observer.layerUp(moduleID);
+		}
+		
+	}
+
+
+
+
+
+	@Override
+	public void layerDown(long moduleID) {
+		for (IseparatedDefinition observer : observers) {
+			observer.layerDown(moduleID);
+		}
+		
+	}
+
+
+
+
+
+	public void registerObserver(IseparatedDefinition observer) {
+		
+		if (observers.size()==0) {
+			observers.add(observer);System.out.println("Registerd");
+			System.out.println("Registerd"+observers.size());
+		} else {
+
+		}
+		
 		
 	}
 

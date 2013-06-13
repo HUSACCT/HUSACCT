@@ -2,9 +2,11 @@ package husacct.define.task;
 
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.analyzer.AnalyzedUnitRegistry;
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.StateDefineController;
@@ -42,6 +44,7 @@ public abstract class JtreeStateEngine {
 
 	public JtreeStateEngine() {
 		logger = Logger.getLogger(JtreeStateEngine.class);
+		UndoRedoService.getInstance().registerObserver(SoftwareArchitecture.getInstance());
 	}
 
 	public boolean undo() {

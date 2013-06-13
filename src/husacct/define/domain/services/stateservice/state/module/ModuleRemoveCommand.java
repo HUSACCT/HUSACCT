@@ -10,6 +10,7 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -30,22 +31,24 @@ public class ModuleRemoveCommand implements Istate {
 
 	@Override
 	public void undo() {
-		// module,moduleRules
+		
 	for (Object[] info : data) {
 		ModuleStrategy module =(ModuleStrategy) info[0];
 		ArrayList<AppliedRuleStrategy> rules= (ArrayList<AppliedRuleStrategy>)info[1];
+		UndoRedoService.getInstance().addSeperatedModule(module);
+	
 		
-		DefinitionController.getInstance().passModuleToService(module.getparent().getId(), module);
-		AppliedRuleController appliedruleController = new AppliedRuleController(module.getId(), -1);
 		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 			
 			boolean chek= DefaultRuleDomainService.getInstance().isMandatoryRule(appliedRuleStrategy);
 			if(!chek)
 			{
-				SoftwareArchitecture.getInstance().addAppliedRule(appliedRuleStrategy);
+				rules.add(appliedRuleStrategy);
+				//SoftwareArchitecture.getInstance().addAppliedRule(appliedRuleStrategy);
 			}
 			
 		}
+		
 		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
 		for (SoftwareUnitDefinition unit : module.getUnits()) {
 		
@@ -65,9 +68,12 @@ public class ModuleRemoveCommand implements Istate {
 	@Override
 	public void redo() {
 		
-		ModuleDomainService service = new ModuleDomainService();
+
+		
 		ModuleStrategy  module = (ModuleStrategy)data.get(0)[0];
-		DefinitionController.getInstance().removeModuleById(module.getId());
+	
+		UndoRedoService.getInstance().removeSeperatedModule(module);
+		
 	}
 
 }

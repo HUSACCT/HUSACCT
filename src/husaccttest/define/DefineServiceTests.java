@@ -7,10 +7,8 @@ import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.DefineServiceImpl;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.module.Component;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.SubSystem;
+import husacct.define.domain.module.ModuleFactory;
+import husacct.define.domain.module.ModuleStrategy;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,24 +16,24 @@ import org.junit.Test;
 public class DefineServiceTests {
 	private SoftwareArchitecture sA = SoftwareArchitecture.getInstance();
 	private DefineServiceImpl defineService = new DefineServiceImpl();
-	
+	private ModuleFactory facotry= new ModuleFactory();
 	@Before
 	public void setUp(){
 		sA = new SoftwareArchitecture("Test architecture", "This architecture is used for testing purposes");
 		SoftwareArchitecture.setInstance(sA);
-		Module module1 = new SubSystem("SubSystem 1", "This is subsystem 1");
-		Module module2 = new SubSystem("SubSystem 2", "This is subsystem 2");
-		Module module3 = new SubSystem("SubSystem 3", "This is subsystem 3");
+		ModuleStrategy module1 = facotry.createModule("externalsystem").set(name, description)("SubSystem 1", "This is subsystem 1");
+		ModuleStrategy module2 = new SubSystem("SubSystem 2", "This is subsystem 2");
+		ModuleStrategy module3 = new SubSystem("SubSystem 3", "This is subsystem 3");
 
-		Module layer1 = new Layer("Layer 1", "This is layer 1", 1);
-		Module layer2 = new Layer("Layer 2", "This is layer 2", 2);
+		ModuleStrategy layer1 = new Layer("Layer 1", "This is layer 1", 1);
+		ModuleStrategy layer2 = new Layer("Layer 2", "This is layer 2", 2);
 		
-		Module component1 = new Component("Component 1", "This is component 1");
+		ModuleStrategy component1 = new Component("Component 1", "This is component 1");
 
-		Module subModule1 = new SubSystem("SubSystem 4", "This is a subsystem");
-		Module subModule11 = new SubSystem("SubSystem 5", "This is a subsystem");
-		Module subModule2 = new SubSystem("SubSystem 6", "This is a subsystem");		
-		Module subModule3 = new SubSystem("SubSystem 7", "This is a subsystem");		
+		ModuleStrategy subModule1 = new SubSystem("SubSystem 4", "This is a subsystem");
+		ModuleStrategy subModule11 = new SubSystem("SubSystem 5", "This is a subsystem");
+		ModuleStrategy subModule2 = new SubSystem("SubSystem 6", "This is a subsystem");		
+		ModuleStrategy subModule3 = new SubSystem("SubSystem 7", "This is a subsystem");		
 
 //		AppliedRule rule1 = new AppliedRule("IsNotAllowedToUse", "Test", new String[]{},
 //				"", module1, module2, true);

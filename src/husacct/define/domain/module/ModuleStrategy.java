@@ -9,6 +9,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
@@ -123,8 +124,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
 			service.addDefaultRules(subModule);
-			StateService.instance().addModule(subModule);
-			WarningMessageService.getInstance().processModule(subModule);
+		
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
@@ -329,6 +329,25 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		this.parent=moduleParent;
 		
 	}
+
+
+	public void addSUDefinition(List<SoftwareUnitDefinition> units) {
+		for (SoftwareUnitDefinition softwareUnitDefinition : units) {
+			addSUDefinition(softwareUnitDefinition);
+		}
+		
+	}
+
+
+	public void removeSUDefintion(List<SoftwareUnitDefinition> units) {
+		for (SoftwareUnitDefinition softwareUnitDefinition : units) {
+			removeSUDefintion(softwareUnitDefinition);
+		}
+		
+	}
+
+
+
 	
 
 }

@@ -7,6 +7,7 @@ import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -59,6 +60,7 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 		rootModule.set(name, description);
 		setModules(modules);
 		setAppliedRules(rules);
+	
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
@@ -85,14 +87,11 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 		return moduleId;
 	}
 
-	public String addNewModule(ModuleStrategy module) {
-		if (hasModule(module.getName())) {
-			return ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("SameNameModule");
-		} else {
-			rootModule.addSubModule(module);
-		}
-		return "";
+	public String addModule(long parentModuleId, ModuleStrategy module) {
+		ModuleStrategy parentModule = getModuleById(parentModuleId);
+		StateService.instance().addModule(module);
+		WarningMessageService.getInstance().processModule(module);
+		return parentModule.addSubModule(module);
 	}
 
 	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
@@ -147,10 +146,11 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 		return enabledRuleList;
 	}
 
+	//will be deleted in the next 2 days
 	public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
 		return null; // TODO: Has to get an implementation
 	}
-
+//	//will be deleted in the next 2 days
 	public ArrayList<Layer> getLayersBelow(Layer layer) {
 		ArrayList<Layer> returnList = new ArrayList<Layer>();
 		Layer underlyingLayer = getTheFirstLayerBelow(layer);
@@ -607,50 +607,80 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 	}
 
 	@Override
-	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units) {
-		// TODO Auto-generated method stub
-		
+	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleID) {
+	ModuleStrategy module=	getModuleById(moduleID);
+		module.addSUDefinition(units);
 	}
 
 	@Override
-	public void removeSeperatedSoftUnit(List<SoftwareUnitDefinition> units) {
-		// TODO Auto-generated method stub
+	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
+		ModuleStrategy module=	getModuleById(moduleId);
+		module.removeSUDefintion(units);
 		
 	}
 
 	@Override
 	public void addSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
-		// TODO Auto-generated method stub
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			addAppliedRule(appliedRuleStrategy);
+		}
 		
 	}
 
 	@Override
 	public void removeSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
-		// TODO Auto-generated method stub
+for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			
+			removeAppliedRule(appliedRuleStrategy.getId());
+		}
 		
 	}
 
 	@Override
-	public void addSeperatedExeptionRule(List<AppliedRuleStrategy> rules) {
-		// TODO Auto-generated method stub
+	public void addSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
+		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			
+			parent.addException(appliedRuleStrategy);
+		}
 		
 	}
 
 	@Override
-	public void removeSeperatedExeptionRule(List<AppliedRuleStrategy> rules) {
-		// TODO Auto-generated method stub
+	public void removeSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
+		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			
+			parent.removeException(appliedRuleStrategy);
+		}
 		
 	}
 
 	@Override
 	public void addSeperatedModule(ModuleStrategy module) {
-		// TODO Auto-generated method stub
+	 
+		module.getparent().addSubModule(module);
 		
 	}
 
 	@Override
 	public void removeSeperatedModule(ModuleStrategy module) {
-		// TODO Auto-generated method stub
+		System.out.println("ooooooooooooooooooookkkkkkkkkkkkkk");
+		module.getparent().removeSubModule(module);
 		
 	}
+
+	@Override
+	public void layerUp(long moduleID) {
+		moveLayerUp(moduleID);
+		
+	}
+
+	@Override
+	public void layerDown(long moduleID) {
+	 moveLayerDown(moduleID);
+		
+	}
+
+	
 }

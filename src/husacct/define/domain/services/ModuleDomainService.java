@@ -17,7 +17,8 @@ public class ModuleDomainService {
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
 				.getModuleById(parentModuleId);
-		
+		StateService.instance().addModule(module);
+		WarningMessageService.getInstance().processModule(module);
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
 
@@ -30,7 +31,8 @@ public class ModuleDomainService {
 	
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
 	
-		
+		StateService.instance().addModule(module);
+		WarningMessageService.getInstance().processModule(module);
 	
 		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
@@ -39,11 +41,12 @@ public class ModuleDomainService {
 
 	public String addNewModuleToParent(long parentModuleId,
 			ModuleStrategy module) {
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
-				.getModuleById(parentModuleId);
+		
+		
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
-		return parentModule.addSubModule(module);
+	
+		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
 	}
 
 	public ModuleStrategy getModuleById(long moduleId) {
