@@ -93,7 +93,7 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter){
-		return findDependencies(findFunction, from, to, applyFilter, false);
+		return findDependencies(findFunction, from, to, applyFilter, true);
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
