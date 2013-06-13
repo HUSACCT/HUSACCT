@@ -1,4 +1,4 @@
-/*package husaccttest.analyse.csharp.benchmark.accuracy;
+package husaccttest.analyse.csharp.benchmark.accuracy;
 
 
 import husacct.ServiceProvider;
@@ -26,7 +26,6 @@ public class DependencyDetectionAccuracyTest {
 	private static String path = new File(TestProjectFinder.lookupProject("csharp", "benchmark")).getAbsolutePath();
 	private static String language = "C#";
 	
-	@SuppressWarnings("static-access")
 	@BeforeClass
 	public static void beforeClass() {
 		try {
@@ -41,17 +40,18 @@ public class DependencyDetectionAccuracyTest {
 			//analyse is in a different Thread, and needs some time
 			while(!isAnalysed){
 				try {
-					Thread.currentThread().sleep((long)10);
+					Thread.sleep((long)10);
 				} catch (InterruptedException e) {}
 				isAnalysed = service.isAnalysed();
 			}
 			allDependencies = service.getAllDependencies();
 			//for testing only
-			//printDependencies();
+			printDependencies();
 			
 		} catch (Exception e){
 			String errorMessage =  "We're sorry. You need to have a C# project 'benchmark_accuracy'. Or you have the wrong version of the benchmark_accuracy.";
 			logger.warn(errorMessage);
+			logger.warn(e.getStackTrace().toString());
 			System.exit(0);
 		}
 	}
@@ -892,21 +892,19 @@ public class DependencyDetectionAccuracyTest {
 		return projects;
 	}
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/husacct.properties");
+		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
+	
 	private static void printDependencies() {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
 		for(DependencyDTO d : allDependencies){
-			logger.info(d.type);
-			//logger.info(getClass(d.from));
+			logger.info(d.toString());
 		}
 	}
 	private static String getClass(String fromPath){
 		return (String) fromPath.subSequence(fromPath.lastIndexOf('.')+1, fromPath.length());
 	}
 }
->>>>>>> 4e65191ad88116080e8b23218d2832541ab44931
-*/
