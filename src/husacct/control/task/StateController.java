@@ -15,7 +15,7 @@ public class StateController {
 
 	private List<States> states = new ArrayList<States>();
 
-	ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
+	private ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
 
 	private WorkspaceController workspaceController;
 

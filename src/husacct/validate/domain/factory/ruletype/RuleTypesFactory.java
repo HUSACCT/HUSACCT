@@ -12,7 +12,7 @@ import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.CategoryKeyClassDTO;
+import husacct.validate.domain.validation.internaltransferobjects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -203,7 +203,7 @@ public class RuleTypesFactory {
 					exceptionRuletypes.add(generatedRuleType);
 				}
 			}
-			rootRule.setExceptionrules(exceptionRuletypes);
+			rootRule.setExceptionRules(exceptionRuletypes);
 			return rootRule;
 		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);

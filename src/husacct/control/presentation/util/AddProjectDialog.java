@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,7 +21,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -36,15 +36,14 @@ public class AddProjectDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private JLabel pathLabel, projectNameLabel, versionLabel;
 	private JTextArea descriptionText;
-	private JList pathList;
+	private JList<String> pathList;
 	private JPanel panel;
 	private JTextField projectNameText, versionText;
 	private JButton addButton, cancelButton, removeButton, confirmButton;
-	private DefaultListModel pathListModel = new DefaultListModel();
+	private DefaultListModel<String> pathListModel = new DefaultListModel<String>();
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private boolean CancelFlag = true;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public AddProjectDialog(JDialog dialogOwner){
@@ -88,7 +87,7 @@ public class AddProjectDialog extends JDialog{
 		versionText = new JTextField(10);
 		descriptionText = new JTextArea(localeService.getTranslatedString("ProjectTextSpace"), 5, 5);
 		
-		pathList = new JList(pathListModel);
+		pathList = new JList<String>(pathListModel);
 		pathList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		pathList.setLayoutOrientation(JList.VERTICAL);
 		pathList.setVisibleRowCount(-1);
@@ -162,9 +161,12 @@ public class AddProjectDialog extends JDialog{
 	
 	private void showAddFileDialog() {
 		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, localeService.getTranslatedString("AddButton"));
+		fileChooser.setCurrentDirectory(new File(ConfigurationManager.getProperty("LastUsedAddProjectPath")));
 		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
+			String addedProjectPath = fileChooser.getSelectedFile().getAbsolutePath();
+			ConfigurationManager.setProperty("LastUsedAddProjectPath", addedProjectPath);
+			pathListModel.add(pathListModel.size(), addedProjectPath);
 		}
 	}
 	

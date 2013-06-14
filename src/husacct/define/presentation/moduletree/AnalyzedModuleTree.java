@@ -2,16 +2,11 @@ package husacct.define.presentation.moduletree;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import husacct.define.task.JtreeController;
-import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
-
-import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -33,18 +28,14 @@ public class AnalyzedModuleTree extends JTree {
 
 	public void restoreTreeItem(
 			AnalyzedModuleComponent analyzedsoftwarecomponent) {
+
 		analyzedsoftwarecomponent.unfreeze();
 	}
 
-	public void removeTreeItem(long moduleId,
-			AnalyzedModuleComponent analyzedsoftwarecomponent) {
-
+	public void removeTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent) {
+	
 		analyzedsoftwarecomponent.freeze();
-		JtreeController.instance().registerTreeRemoval(moduleId,
-				analyzedsoftwarecomponent);
-		JtreeStateEngine.instance().registerSate(moduleId,
-				analyzedsoftwarecomponent);
-		JtreeController.instance().getTree().repaint();
+
 	}
 
 	private CodeLevelWarning CodeLevelWarning(long moduleId,
@@ -74,7 +65,7 @@ public class AnalyzedModuleTree extends JTree {
 
 	}
 
-	// Todo make it more Generic
+	// Todo make it more Generic need to fix 
 	public void removeRegexTreeItem(long id, RegexComponent softwareunit) {
 
 		for (AbstractCombinedComponent result : softwareunit.getChildren()) {
@@ -129,8 +120,9 @@ public class AnalyzedModuleTree extends JTree {
 				}
 			}
 
+
 		}
-		JtreeController.instance().registerTreeRemoval(id, softwareunit);
-		JtreeStateEngine.instance().registerSate(id, softwareunit);
+		
+
 	}
 }

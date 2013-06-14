@@ -3,12 +3,11 @@ package husacct.validate.domain.validation.ruletype.propertyruletypes;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
-import husacct.validate.domain.check.util.CheckConformanceUtilPackage;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -17,18 +16,16 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class FacadeConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 
-	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationtypes, Severity severity) {
-		super(key, categoryKey, violationtypes, exceptionrules, severity);
+	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationTypes, Severity severity) {
+		super(key, categoryKey, violationTypes, EnumSet.noneOf(RuleTypes.class), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();	
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> mappingsFrom = mappings.getMappingFrom();
-		List<Violation> allViolations = new ArrayList<Violation>();
+		List<Violation> allViolations = new ArrayList<>();
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		Mapping componentMapping = null;
@@ -52,11 +49,11 @@ public class FacadeConventionRule extends RuleType {
 
 		if(facadeMapping != null) {
 			//TIJDELIJK
-			//System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - " 
-			//		+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - " 
-			//		+ facadeMapping.getLogicalPathType() + "\n================");
+//			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
+//					+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
+//					+ facadeMapping.getLogicalPathType() + "\n================");
 			//EINDE
-			
+
 			for (DependencyDTO dependency : dependencies) {
 				if (dependency.to.contains(componentMapping.getPhysicalPath())) {
 					if (!dependency.from.contains(componentMapping.getPhysicalPath())) {
@@ -66,16 +63,16 @@ public class FacadeConventionRule extends RuleType {
 
 							for(Mapping theMapping: mappingsFrom) {
 								if(theMapping.getPhysicalPath().equals(fromMapping.getPhysicalPath())) {
-									fromMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(), 
+									fromMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
 										fromMapping.getPhysicalPath(), theMapping.getViolationTypes());
 								}
 								else if(theMapping.getPhysicalPath().equals(toMapping.getPhysicalPath())) {
-									toMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(), 
+									toMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
 										toMapping.getPhysicalPath(), theMapping.getViolationTypes());
 								}
 							}
 
-							Violation violation = createViolation(rootRule, fromMapping, toMapping, dependency, configuration); 
+							Violation violation = createViolation(rootRule, fromMapping, toMapping, dependency, configuration);
 							allViolations.add(violation);;
 						}
 					}
@@ -83,16 +80,6 @@ public class FacadeConventionRule extends RuleType {
 			}
 		}
 
-//		mappingsFrom = CheckConformanceUtilClass.filterClassesFrom(rootRule).getMappingFrom();
-//		for(Mapping theMapping: mappingsFrom) {
-//			System.out.println("[TEST 1] " + theMapping.getLogicalPath() + " - " + theMapping.getLogicalPathType() + " - " + theMapping.getPhysicalPath());
-//		}
-//		System.out.println("=================");
-//		mappingsFrom = CheckConformanceUtilPackage.filterPackages(rootRule).getMappingFrom();
-//		for(Mapping theMapping: mappingsFrom) {
-//			System.out.println("[TEST 2] " + theMapping.getLogicalPath() + " - " + theMapping.getLogicalPathType() + " - " + theMapping.getPhysicalPath());
-//		}
-		
 		return allViolations;
 	}
 }

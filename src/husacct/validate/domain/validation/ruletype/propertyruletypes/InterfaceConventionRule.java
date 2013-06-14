@@ -7,7 +7,7 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -18,23 +18,19 @@ import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 	private HashSet<String> interfaceCache;
 	private HashSet<String> noInterfaceCache;
 
-	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
-
-		this.interfaceCache = new HashSet<String>();
-		this.noInterfaceCache = new HashSet<String>();
+	public InterfaceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
+		interfaceCache = new HashSet<>();
+		noInterfaceCache = new HashSet<>();
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
-
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
@@ -48,7 +44,7 @@ public class InterfaceConventionRule extends RuleType {
 					}
 				}
 			}
-			if (interfaceCounter == 0 && physicalClasspathsTo.size() != 0) {
+			if (interfaceCounter == 0 && !physicalClasspathsTo.isEmpty()) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}

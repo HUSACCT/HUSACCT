@@ -37,6 +37,8 @@ public interface IModelQueryService {
     
     public ExternalSystemDTO[] getExternalSystems();
     
+    public int buildCache();
+    
     public int getAmountOfDependencies();
     
     public int getAmountOfInterfaces();

@@ -31,11 +31,7 @@ class JavaPackageGenerator extends JavaGenerator {
 
     private String getUniqueNameOfPackage(Tree antlrTree) {
         String uniqueName = antlrTree.toStringTree();
-        uniqueName = uniqueName.replace("(package", "");
-        uniqueName = uniqueName.replace("(", "");
-        uniqueName = uniqueName.replace(")", "");
-        uniqueName = uniqueName.replace(". ", "").substring(1); //trim first space character
-        uniqueName = uniqueName.replace(" ", ".");
+        uniqueName = uniqueName.replace("(package", "").replace("(", "").replace(")", "").replace(". ", "").substring(1).replace(" ", ".");
         return uniqueName;
     }
 

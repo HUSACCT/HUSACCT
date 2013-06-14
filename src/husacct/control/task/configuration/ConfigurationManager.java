@@ -1,5 +1,7 @@
 package husacct.control.task.configuration;
 
+import husacct.common.OSDetector;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,49 +12,29 @@ public class ConfigurationManager {
 
 	private final static Properties properties = loadProperties();
 	
-	public static String getProperty(String key, String defaultParam) {
+	public static String getProperty(String key) {
 		if(properties.containsKey(key))
 			return properties.getProperty(key);
-		else {
-			setProperty(key, defaultParam);
-			return defaultParam;
-		}
+		else
+			return "";
 	}
-	
-	public static int getPropertyAsInteger(String key, String defaultParam) throws NumberFormatException {
-		String property = getProperty(key, defaultParam);
-		return Integer.parseInt(property);
-	}
-	
-	public static boolean getPropertyAsBoolean(String key, String defaultParam) {
-		String property = getProperty(key, defaultParam);
-		return Boolean.parseBoolean(property);
-	}
-	
+
 	public static void setProperty(String key, String value) {
 		properties.setProperty(key, value);
 	}
 	
-	public static void setPropertyFromInteger(String key, int value) {
-		properties.setProperty(key, String.valueOf(value));
-	}
-	
-	public static void setPropertyFromBoolean(String key, boolean value) {
-		properties.setProperty(key, String.valueOf(value));
-	}
-	
-	public static void setPropertie(String key, String value) {
-		properties.setProperty(key, value);
-		storeProperties();
+	public static void setPropertyIfEmpty(String key, String value) {
+		if(!properties.containsKey(key) || properties.getProperty(key).equals(""))
+			properties.setProperty(key, value);
 	}
 	
 	private static Properties loadProperties() {
 		Properties props = new Properties();
 		try {
-			File file = new File("config.properties");
+			File file = new File(OSDetector.getAppFolder() + File.separator + "config.properties");
 			if(!file.isFile()) {
 				props.load(ConfigurationManager.class.getResourceAsStream("/husacct/common/resources/config.properties"));
-				props.store(new FileOutputStream("config.properties"), null);
+				storeProperties(props);
 			}
 			props.load(new FileInputStream(file));
 		} catch (IOException e) {
@@ -62,8 +44,15 @@ public class ConfigurationManager {
 	}
 	
 	public static void storeProperties() {
+		storeProperties(properties);
+	}
+	
+	public static void storeProperties(Properties props) {
 		try {
-			properties.store(new FileOutputStream("config.properties"), null);
+			File path = new File(OSDetector.getAppFolder());
+			if(!path.isDirectory())
+				path.mkdir();
+			props.store(new FileOutputStream(OSDetector.getAppFolder() + File.separator + "config.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

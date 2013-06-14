@@ -9,7 +9,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.internal_transfer_objects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
@@ -76,7 +76,6 @@ public class FilterController {
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-
 			if (!appliedViolationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey()))) {
 				appliedViolationtypes.add(localeService.getTranslatedString(violation.getViolationtypeKey()));
 			}
@@ -144,5 +143,17 @@ public class FilterController {
 		}
 
 		return violationsPerSeverity;
+	}
+
+	public ArrayList<String> getEnabledFilterRuleTypes() {
+		return this.ruletypes;
+	}
+
+	public ArrayList<String> getEnabledFilterViolations() {
+		return this.violationtypes;
+	}
+	
+	public ArrayList<String> getEnabledFilterPaths() {
+		return this.paths;
 	}
 }

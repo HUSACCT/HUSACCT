@@ -4,6 +4,7 @@ import antlr.Token;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpLexer;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.AbstractAnalyser;
+import husacct.analyse.task.analyser.csharp.generators.buffers.BufferService;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,5 +46,10 @@ public class CSharpAnalyser extends AbstractAnalyser {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    @Override
+    public void clearLambdaBuffers() {
+    	BufferService.getInstance().clear();
     }
 }

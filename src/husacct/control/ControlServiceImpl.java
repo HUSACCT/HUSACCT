@@ -1,6 +1,7 @@
 package husacct.control;
 
 import husacct.ServiceProvider;
+import husacct.common.OSDetector;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
@@ -16,15 +17,19 @@ import husacct.control.task.StateController;
 import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.configuration.ConfigPanel;
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.threading.ThreadWithLoader;
+import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
@@ -52,8 +57,34 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		viewController = mainController.getViewController();
 		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
+		setDefaultSettings();
 	}
 	
+	private void setDefaultSettings() {
+		String OSSpecificAppDataFolderName;
+		switch(OSDetector.getOS()) {
+			case LINUX:
+				OSSpecificAppDataFolderName = ".husacct";
+			break;
+			case MAC:
+				OSSpecificAppDataFolderName = ".husacct";
+			break;
+			default:
+				OSSpecificAppDataFolderName = "HUSACCT";
+			break;
+		}
+		
+		String appDataFolderPath = System.getProperty("user.home") + File.separator + OSSpecificAppDataFolderName + File.separator;
+		logger.info("App data folder (platform specific): " + appDataFolderPath);
+		File appDataFolderObject = new File(appDataFolderPath);
+		if(!appDataFolderObject.exists()){
+			appDataFolderObject.mkdir();
+		}
+		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
+		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
+		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);	
+	}
+
 	@Override
 	public void parseCommandLineArguments(String[] commandLineArguments){
 		mainController.parseCommandLineArguments(commandLineArguments);
@@ -164,21 +195,41 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
 		codeViewController.displayErrorsInFile(fileName, errors);
 	}
+	
+	@Override
+	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
+		codeViewController.displayErrorsInFile(fileName, errors);
+	}
 
+	@Override
+	public void displayErrorInFile(String fileName, int lineNumber, Severity severity) {
+		HashMap<Integer, Severity> errors = new HashMap<Integer, Severity>();
+		errors.put(lineNumber, severity);
+		codeViewController.displayErrorsInFile(fileName, errors);
+	}
+	
 	@Override
 	public String getConfigurationName() {
 		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
 	}
 
 	@Override
-	public JPanel getConfigurationPanel() {
+	public ConfigPanel getConfigurationPanel() {
 		if (generalConfigurationPanel == null)
 			generalConfigurationPanel = new GeneralConfigurationPanel();
 		return generalConfigurationPanel;
 	}
+	
+	@Override
+	public HashMap<String, ConfigPanel> getSubItems() {
+		HashMap<String, ConfigPanel> subitems = new HashMap<String, ConfigPanel>();
+		return subitems;
+	}
+	
 	@Override
 	public void showHelpDialog(Component comp) {
 		mainController.getApplicationController().showHelpGUI(comp);
-		
 	}
+
+	
 }

@@ -80,7 +80,6 @@ import org.antlr.runtime.tree.TreeAdaptor;
  *
  */
 public class JavaParser extends Parser {
-
     public static class additiveExpression_return extends ParserRuleReturnScope {
 
         CommonTree tree;
@@ -25170,9 +25169,8 @@ public class JavaParser extends Parser {
                             root_1 = (CommonTree) adaptor.becomeRoot(adaptor
                                     .create(SWITCH_BLOCK_LABEL_LIST,
                                     "SWITCH_BLOCK_LABEL_LIST"), root_1);
-
-                            adaptor.addChild(root_1,
-                                    stream_switchCaseLabels.nextTree());
+	                            adaptor.addChild(root_1,
+	                                    stream_switchCaseLabels.nextTree());
                             // :801:56: ( switchDefaultLabel )?
                             if (stream_switchDefaultLabel.hasNext()) {
                                 adaptor.addChild(root_1,
@@ -25182,7 +25180,6 @@ public class JavaParser extends Parser {
                             stream_switchDefaultLabel.reset();
                             adaptor.addChild(root_1,
                                     stream_switchCaseLabels.nextTree());
-
                             adaptor.addChild(root_0, root_1);
                         }
 

@@ -12,7 +12,7 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
@@ -58,6 +58,18 @@ public class TaskServiceImpl {
 
 	public void setFilterValues(PathDTO dto, boolean hideFilter, Calendar date) {
 		filterController.setFilterValues(dto, hideFilter, getHistoryViolations(date));
+	}
+	
+	public ArrayList<String> getEnabledFilterRuleTypes() {
+		return filterController.getEnabledFilterRuleTypes();
+	}
+
+	public ArrayList<String> getEnabledFilterViolations() {
+		return filterController.getEnabledFilterViolations();
+	}
+	
+	public ArrayList<String> getEnabledFilterPaths() {
+		return filterController.getEnabledFilterPaths();
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {

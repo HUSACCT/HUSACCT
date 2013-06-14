@@ -22,7 +22,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 
 	public void generateMethodToDomain(CommonTree methodTree, String currentUniqueClassName) {
 		belongsToClass = currentUniqueClassName;
-		accessControlQualifier = CSharpGeneratorToolkit.getVisibility(methodTree);
+		accessControlQualifier = getVisibility(methodTree);
 		lineNumber = methodTree.getLine();
 
 		checkMethodType(methodTree, belongsToClass);

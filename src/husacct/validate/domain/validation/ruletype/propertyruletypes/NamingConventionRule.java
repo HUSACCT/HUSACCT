@@ -9,7 +9,7 @@ import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -19,16 +19,12 @@ import java.util.List;
 
 public class NamingConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION);
-
-	public NamingConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+	public NamingConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
-
 		if (arrayContainsValue(currentRule.violationTypeKeys, "package")) {
 			checkPackageConvention(currentRule, rootRule, configuration);
 		}
@@ -41,10 +37,8 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		this.violations = new ArrayList<Violation>();
-
-		this.mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
@@ -59,10 +53,8 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		this.violations = new ArrayList<Violation>();
-
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 

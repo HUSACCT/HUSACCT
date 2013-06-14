@@ -1,10 +1,8 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
-
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import java.util.ArrayList;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -44,7 +42,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
 
 	private void createAttributeObject() {
-		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1);
+		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
 		if(!SkippableTypes.isSkippable(declareType)){
 			modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, this.declareTypes);
 		}
@@ -53,7 +51,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	private void createLocalVariableObject() {
-		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1);
+		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
 		if(!SkippableTypes.isSkippable(declareType)){
 			modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
 		}
@@ -85,36 +83,59 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 			case CSharpParser.TYPE:
 				setDeclareType(child);		
 				break;
+			case CSharpParser.VARIABLE_INITIALIZER:				
+				break;
+			case CSharpParser.OBJECT_CREATION_EXPRESSION:
+				delegateInvocationConstructor(child);
+				break;
+			case CSharpParser.METHOD_INVOCATION:
+				delegateInvocationMethod(child);
+				break;
+			case CSharpParser.MEMBER_ACCESS:
+				delegateInvocationPropertyOrField(child);
+				deleteTreeChild(child);
+				break;
 			}
 			treeNodeTypeFilter(child);
 		}
 	}
+	
+	private void delegateInvocationMethod(Tree tree) {
+		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
+		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	}
 
-
+	private void delegateInvocationPropertyOrField(Tree tree) {
+		CSharpInvocationPropertyOrFieldGenerator csharpInvocationPropertyOrFieldGenerator = new CSharpInvocationPropertyOrFieldGenerator(this.packageAndClassName);
+		csharpInvocationPropertyOrFieldGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	}
+	
+	private void delegateInvocationConstructor(Tree tree) {
+		CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator= new CSharpInvocationConstructorGenerator(this.packageAndClassName);
+		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	}
+	
 	private void setDeclareType(Tree typeNode) {
-		Tree child = typeNode.getChild(0);
-		Tree declareTypeNode = child.getChild(0);
-		String foundType = "";
-		if(child.getType() != CSharpParser.NAMESPACE_OR_TYPE_NAME){
-			foundType = child.getText();
-		}else{
-			if(child.getChildCount() > 1){
-				for(int i = 0; i<child.getChildCount(); i++){
-					if(i >= 1){
-						foundType += child.getChild(i).getChild(0).toString() + ".";
-					}else{
-						foundType += child.getChild(0).toString() + ".";
-					}
-				}
-			}
-			else foundType = declareTypeNode.getText();
-		}
+		CommonTree typeTree = (CommonTree) typeNode;
+		if(declareType == null || !SkippableTypes.isSkippable(declareType))	declareType = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree); 
+		addTypeNameIfNotSkippable(typeTree);
+		addArgumentListTypes(typeTree);
+	}
 
-		if(this.declareType == null || this.declareType.equals("")){
-			this.declareType = foundType;
-		} else {
-			declareTypes.add(foundType);
+	private void addArgumentListTypes(CommonTree typeTree) {
+		if(CSharpGeneratorToolkit.hasChild(typeTree, CSharpParser.TYPE_ARGUMENT_LIST)) {
+			addTypeNameIfNotSkippable((CommonTree)typeTree.getChild(1));
 		}
+		if(CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST) != null) {
+			CommonTree typeArgumentListTree =  CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST);
+			treeNodeTypeFilter(typeArgumentListTree);
+		}
+		
+	}
+	
+	private void addTypeNameIfNotSkippable(CommonTree typeTree) {
+		String s = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree);
+		if(!SkippableTypes.isSkippable(s))declareTypes.add(s);
 
 	}
 

@@ -2,9 +2,11 @@ package husacct.control.task.codeviewer;
 
 import husacct.common.OSDetector;
 import husacct.control.task.configuration.ConfigurationManager;
+import husacct.validate.domain.validation.Severity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EclipseCodeviewerImpl implements CodeviewerService {
 	
@@ -14,7 +16,7 @@ public class EclipseCodeviewerImpl implements CodeviewerService {
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
 		String location = "";
-		location = ConfigurationManager.getProperty("IDELocation", "");
+		location = ConfigurationManager.getProperty("IDELocation");
 		switch(OSDetector.getOS()) {
 		case LINUX:
 			break;
@@ -23,17 +25,16 @@ public class EclipseCodeviewerImpl implements CodeviewerService {
 		case WINDOWS:
 			try {
 				Runtime.getRuntime().exec(location + " --launcher.openFile \"" + fileName + "\"");
-				/* TODO Remove after testing
-				 Runtime.getRuntime().exec(new String[] {
-					"rundll32", 
-					"url.dll,FileProtocolHandler",
-					location + " --launcher.openFile " + fileName
-				});
-				 */
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
 		}
 	}
+
+	@Override
+	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
+		displayErrorsInFile(fileName, new ArrayList<Integer>(errors.keySet()));
+	}
+
 }

@@ -25,21 +25,19 @@ public class Geom {
 		return Math.toDegrees(inRads);
 	}
 
-	public static Point2D.Double
-			getPointMovementFromLineAngle(Point2D.Double pointStart, Point2D.Double pointEnd, double movement) {
+	public static Point2D.Double getPointMovementFromLineAngle(
+			Point2D.Double pointStart, Point2D.Double pointEnd, double movement) {
 		double width;
-		if (pointStart.x > pointEnd.x) {
+		if (pointStart.x > pointEnd.x)
 			width = pointStart.x - pointEnd.x;
-		} else {
+		else
 			width = pointEnd.x - pointStart.x;
-		}
 
 		double height;
-		if (pointStart.y > pointEnd.y) {
+		if (pointStart.y > pointEnd.y)
 			height = pointStart.y - pointEnd.y;
-		} else {
+		else
 			height = pointEnd.y - pointStart.y;
-		}
 
 		double diffX = width / (width + height);
 		double diffY = height / (width + height);
@@ -48,7 +46,7 @@ public class Geom {
 		double movementY = 0;
 
 		double angle = getAngle(pointStart, pointEnd);
-		if (angle < 90 || (angle > 180 && angle < 270)) {
+		if (angle < 90 || angle > 180 && angle < 270) {
 			movementX += diffY * movement;
 			movementY -= diffX * movement;
 		} else {

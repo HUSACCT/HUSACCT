@@ -7,10 +7,11 @@ import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.CategoryKeySeverityDTO;
+import husacct.validate.domain.validation.internaltransferobjects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -102,8 +103,11 @@ public abstract class AbstractViolationType {
 		} else {
 			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
 		}
-		throw new ViolationTypeNotFoundException();
-	}
+		
+		//Verbeteren
+		return new ViolationType("", false, new Severity("", Color.GREEN));
+		//throw new ViolationTypeNotFoundException(); TODO: Onaangekondige ViolationTypes ondersteunen (van team Define)
+		}
 
 	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue) {
 		final Severity severity = createSeverity(languageName, enumValue.toString());
@@ -112,7 +116,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.MUST_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
+		if (ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.MUST_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
 			return true;
 		} else {
 			return false;
@@ -143,8 +147,8 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected boolean isSubClassConvention(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)) {
+	protected boolean isSuperClassInheritanceConvention(String ruleTypeKey) {
+		if (ruleTypeKey.equals(RuleTypes.SUPERCLASSINHERITANCE_CONVENTION)) {
 			return true;
 		} else {
 			return false;
