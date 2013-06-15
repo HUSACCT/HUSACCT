@@ -431,7 +431,8 @@ public class DefinitionController extends Observable implements Observer {
 
 	public void addModule(String name, String description, String type) {
 		ModuleStrategy module= moduleFactory.createModule(type);
-		 module.set(name, description);
+		module.set(name, description);
+		module.setType(type);
 		this.passModuleToService(getSelectedModuleId(), module);
 		
 	}
