@@ -73,7 +73,8 @@ public class AppliedRuleFactory {
 				"NamingConvention",
 				"VisibilityConvention",
 				"InterfaceConvention",
-				"SubClassConvention"
+				"SubClassConvention",
+				"FacadeConvention"
 		}
 	};
 	

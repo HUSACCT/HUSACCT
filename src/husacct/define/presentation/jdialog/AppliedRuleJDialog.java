@@ -121,10 +121,11 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 
 	private void createAppliedRuleKeyValueComboBox() {
 		this.appliedRuleKeyValueComboBox = new KeyValueComboBox();
-		this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
-
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)){
+			this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox, true);
 			this.appliedRuleKeyValueComboBox.setEnabled(false);
+		}else{
+			this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
 		}
 	}
 
