@@ -3,6 +3,7 @@ package husacct.define.domain.services;
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleComparator;
+import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -12,7 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ModuleDomainService {
-	private DefaultRuleDomainService service = new DefaultRuleDomainService();
+
+	private ModuleFactory factory = new ModuleFactory();
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
@@ -47,6 +49,12 @@ public class ModuleDomainService {
 				.notifyServiceListeners();
 	
 		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
+	}
+	
+	public ModuleStrategy createNewModule(String type)
+	{
+		return factory.createModule(type);
+		
 	}
 
 	public ModuleStrategy getModuleById(long moduleId) {
@@ -171,7 +179,7 @@ public class ModuleDomainService {
 		ModuleStrategy module = SoftwareArchitecture.getInstance()
 				.getModuleById(moduleId);
       try{
-		SoftwareArchitecture.getInstance().removeSeperatedModule(module);
+		SoftwareArchitecture.getInstance().removeModule(module);
 	    JtreeController.instance().registerTreeRemoval(module);
       }catch(Exception e)
       {
@@ -219,4 +227,6 @@ public class ModuleDomainService {
 				.notifyServiceListeners();
 
 	}
+	
+	
 }

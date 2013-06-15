@@ -25,7 +25,7 @@ public class XMLDomain {
     private AppliedRuleDomainService ruleService = new AppliedRuleDomainService();
     private ModuleDomainService moduleService = new ModuleDomainService();
     private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
-    private ArrayList<AppliedRuleStrategy> appliedRules;
+   
 
     public XMLDomain(Element workspaceData) {
 	workspace = workspaceData;
@@ -101,10 +101,12 @@ public class XMLDomain {
 
 	    // TODO: When modules change to factory, this should be revised
 	    switch(moduleType){
-	    case "ExternalSystem"	: newModule = factory.createModule("ExternalLibrary"); break;
-	    case "Component" 		: newModule = factory.createModule("Componen"); break;
-	    case "SubSystem"		: newModule = factory.createModule("SubSystem"); break;
-	    case "Layer"		    : newModule = factory.createModule("Layer");                   
+
+	    case "ExternalLibrary"	: newModule = moduleService.createNewModule("ExternalLibrary"); break;
+	    case "Component" 		: newModule =  moduleService.createNewModule("Component"); break;
+
+	    case "SubSystem"		: newModule =  moduleService.createNewModule("SubSystem"); break;
+	    case "Layer"		    : newModule =  moduleService.createNewModule("Layer");                   
 	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
 	    	                      ((Layer)newModule).setHierarchicalLevel(HierarchicalLevel); break;
 	    default			        : newModule = factory.createDummy("Empty"); break;	    	

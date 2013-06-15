@@ -46,7 +46,7 @@ class ActiveViolationTypesRepository {
 					ActiveRuleType activeRuleType = initializeActiveViolationTypes(ruleType);
 					activeRuleTypes.add(activeRuleType);
 
-					for (RuleType exceptionRuleType : ruleType.getExceptionrules()) {
+					for (RuleType exceptionRuleType : ruleType.getExceptionRules()) {
 						try {
 							containsRuleType(activeRuleTypes, exceptionRuleType.getKey());
 							activeRuleTypes.add(initializeActiveViolationTypes(exceptionRuleType));

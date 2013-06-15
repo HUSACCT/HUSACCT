@@ -1,4 +1,4 @@
-package husaccttest.validate;
+/*package husaccttest.validate;
 
 import java.util.ArrayList;
 
@@ -94,4 +94,4 @@ public class DefineTestSoftwareArchitectureFacade {
 			return false;
 		}
 	}
-}
+}*/

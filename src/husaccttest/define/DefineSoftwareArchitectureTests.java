@@ -1,4 +1,4 @@
-package husaccttest.define;
+/*package husaccttest.define;
 
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
@@ -294,3 +294,4 @@ public class DefineSoftwareArchitectureTests {
 		
 	}
 }
+*/

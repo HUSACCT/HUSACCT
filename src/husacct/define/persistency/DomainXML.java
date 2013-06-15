@@ -24,11 +24,14 @@ public class DomainXML {
 	Element XMLApplication = new Element("Application");
 
 	Element applicationName = new Element("name");
+
 	applicationName.addContent(App.getName());
 	XMLApplication.addContent(applicationName);
 
 	Element applicationVersion = new Element("version");
+
 	applicationVersion.addContent(App.getVersion());
+
 	XMLApplication.addContent(applicationVersion);
 
 	Element applicationProjects = new Element("projects");
@@ -45,6 +48,7 @@ public class DomainXML {
     public Element getAppliedRuleInXML(AppliedRuleStrategy AR) {
 	Element XMLAppliedRule = new Element("AppliedRule");
 
+	
 	Element ruleRegex = new Element("regex");
 	ruleRegex.addContent(AR.getRegex());
 	XMLAppliedRule.addContent(ruleRegex);
@@ -103,7 +107,8 @@ public class DomainXML {
     }
 
     public Element getModuleInXML(ModuleStrategy module) {
-	Element xmlModule = new Element("ModuleStrategy");
+
+    	Element xmlModule = new Element("ModuleStrategy");
 
 	Element moduleType = new Element("type");
 	moduleType.addContent(module.getClass().getSimpleName());
@@ -126,8 +131,7 @@ public class DomainXML {
 	 */
 	if (module.getClass().getSimpleName().toLowerCase().equals("layer")) {
 	    Element moduleLevel = new Element("HierarchicalLevel");
-	    moduleLevel
-		    .addContent("" + ((Layer) module).getHierarchicalLevel());
+	    moduleLevel.addContent("" + ((Layer) module).getHierarchicalLevel());
 	    xmlModule.addContent(moduleLevel);
 	}
 
@@ -208,8 +212,9 @@ public class DomainXML {
     }
 
     public Element getSoftwareArchitectureInXML() {
-	Element XMLArchitecture = new Element("Architecture");
-
+	
+    	Element XMLArchitecture = new Element("Architecture");
+try{
 	Element SAName = new Element("name");
 	SAName.addContent(domainSoftwareArchitecture.getName());
 	XMLArchitecture.addContent(SAName);
@@ -218,6 +223,7 @@ public class DomainXML {
 	SADescription.addContent(domainSoftwareArchitecture.getDescription());
 	XMLArchitecture.addContent(SADescription);
 
+	
 	if (domainSoftwareArchitecture.getModules().size() > 0) {
 	    Element SAModules = new Element("modules");
 	    for (ModuleStrategy m : domainSoftwareArchitecture.getModules()) {
@@ -226,6 +232,7 @@ public class DomainXML {
 	    XMLArchitecture.addContent(SAModules);
 	}
 
+	
 	if (domainSoftwareArchitecture.getAppliedRules().size() > 0) {
 	    Element SARules = new Element("rules");
 	    for (AppliedRuleStrategy ar : domainSoftwareArchitecture.getAppliedRules()) {
@@ -234,6 +241,10 @@ public class DomainXML {
 	    XMLArchitecture.addContent(SARules);
 	}
 
+	}catch(Exception er)
+{
+	er.getStackTrace();
+}
 	return XMLArchitecture;
     }
 

@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
 
+
 public class SubClassConventionJPanel extends AbstractDetailsJPanel {
     public static final String ruleTypeKey = "SubClassConvention";
     private static final long serialVersionUID = 376037038601799822L;

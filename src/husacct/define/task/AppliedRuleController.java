@@ -11,7 +11,6 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
-import husacct.define.domain.module.modules.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -224,7 +223,7 @@ public class AppliedRuleController extends PopUpController {
 				.getModuleById(DefinitionController.getInstance()
 						.getSelectedModuleId());
 		for (String[] category : categories) {
-			if (categories[0][0].equals(category)) {
+			if (categories[0][0].equals(category[0])) {
 				ruleTypeKeys.add("setDisabled");
 				ruleTypeValues.add("--- Property rule types ---");
 			} else {

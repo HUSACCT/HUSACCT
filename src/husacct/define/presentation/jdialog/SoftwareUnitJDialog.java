@@ -48,6 +48,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.omg.CORBA.Object;
+
 public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
@@ -370,6 +372,9 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = softwareDefinitionTree.getSelectionModel();
 			boolean isButtonAddEnabled =true;
 			for (TreePath path : paths.getSelectionPaths()){
+				
+			
+				
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
 				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")) {
 					isButtonAddEnabled=false;

@@ -161,14 +161,15 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	}
 
 	public void loadDefaults() {
+		String ExternalCodeviewer = ConfigurationManager.getProperty("ExternalCodeviewer");
 		boolean external = false;
-		external = ConfigurationManager.getPropertyAsBoolean("ExternalCodeviewer", "false");
+		external = Boolean.valueOf(ExternalCodeviewer);
 	
 		enable.setSelected(external);
 		location.setEnabled(external);
 		selectFile.setEnabled(external);
 
-		location.setText(ConfigurationManager.getProperty("IDELocation", ""));
+		location.setText(ConfigurationManager.getProperty("IDELocation"));
 	}
 	
 	private void setLanguage(String language) {
@@ -177,7 +178,7 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	@Override
 	public void SaveSettings() {
-		ConfigurationManager.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
+		ConfigurationManager.setProperty("ExternalCodeviewer", String.valueOf(enable.isSelected()));
 		ConfigurationManager.setProperty("IDELocation", location.getText());
 		ConfigurationManager.setProperty("Language", language);
 		

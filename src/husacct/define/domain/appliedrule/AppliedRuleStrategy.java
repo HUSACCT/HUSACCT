@@ -54,15 +54,7 @@ public abstract class AppliedRuleStrategy {
 	 */
 	
 	public void addException(AppliedRuleStrategy exception){
-		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
-			exceptions.add(exception);
-		} else {
-			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExceptionAlreadyAdded"));
-		}
-	}
-
-	private boolean hasException(long l){
-		return exceptions.size()>=0;
+		exceptions.add(exception);
 	}
 
 	public void removeException(AppliedRuleStrategy exception){

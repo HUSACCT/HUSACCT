@@ -1,7 +1,9 @@
 package husacct.graphics.presentation.figures;
 
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+
 import org.jhotdraw.draw.TextFigure;
 
 public class InterfaceFigure extends ClassFigure {
@@ -55,6 +57,7 @@ public class InterfaceFigure extends ClassFigure {
 
 		invalidate();
 	}
+	
 
 	@Override
 	public InterfaceFigure clone() {

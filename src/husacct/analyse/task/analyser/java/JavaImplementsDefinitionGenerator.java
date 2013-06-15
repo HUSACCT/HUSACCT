@@ -7,7 +7,7 @@ import org.antlr.runtime.tree.Tree;
 public class JavaImplementsDefinitionGenerator extends JavaGenerator {
 
     private String from;
-    private String to = "";
+    private String to;
     private int lineNumber;
 
     public void generateToDomain(CommonTree tree, String belongsToClass) {
@@ -38,7 +38,7 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator {
     }
 
     private void createDomainObject() {
-        to = to.substring(0, to.length() - 1); //delete last point
+        to = to.substring(0, to.length() - 1); 
         if (!SkippedTypes.isSkippable(to)) {
             modelService.createImplementsDefinition(from, to, lineNumber);
         }

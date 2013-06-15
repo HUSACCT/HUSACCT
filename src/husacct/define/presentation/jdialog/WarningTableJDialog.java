@@ -26,16 +26,16 @@ import javax.swing.WindowConstants;
 import org.jdesktop.swingx.JXTreeTable;
 
 public class WarningTableJDialog extends JDialog implements ActionListener,
-		KeyListener {
-	
+KeyListener {
+
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-private	WarningMessageFactory factory = new WarningMessageFactory();
-private JXTreeTable treeTab = new JXTreeTable();
-private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+	private	WarningMessageFactory factory = new WarningMessageFactory();
+	private JXTreeTable treeTab = new JXTreeTable();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public WarningTableJDialog() {
 		init();
@@ -53,53 +53,40 @@ private ILocaleService localeService = ServiceProvider.getInstance().getLocaleSe
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation( d.width / 2 - 512, d.height/2 - 384 );
 		setSize( 600, 300 );
-		
-
 	}
 
-
-	
-	
 	public JTabbedPane createTreeTable()
 	{
-		 JTabbedPane tabs = new JTabbedPane();
+		JTabbedPane tabs = new JTabbedPane();
 		JPanel treeTablePanel = new JPanel( new BorderLayout() );
 
-	
+
 		WarningTreeTableModel model = new WarningTreeTableModel(factory.getsortedMessages());
-	 
-	    treeTab = new JXTreeTable(model);
+
+		treeTab = new JXTreeTable(model);
 		treeTab.setTreeCellRenderer(new WarningTreeTableCellrenderer());
 		treeTablePanel.add( new JScrollPane( treeTab ) );
 		tabs.addTab( "Warnings", treeTablePanel );
 		return tabs;
-		
-		
-		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-
 	}
 
 	public void refresh() {
@@ -107,5 +94,4 @@ private ILocaleService localeService = ServiceProvider.getInstance().getLocaleSe
 		treeTab.repaint();
 		this.repaint();
 	}
-
 }

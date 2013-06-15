@@ -6,8 +6,10 @@ import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
-import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
-import husacct.define.domain.services.UndoRedoService;
+import husacct.define.domain.seperatedinterfaces.IAppliedRuleSeperatedInterface;
+import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
+import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
+import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -18,15 +20,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jfree.data.time.MovingAverage;
 
-public class SoftwareArchitecture implements IseparatedDefinition {
 
-	private ModuleFactory factory = new ModuleFactory();
+public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedRuleSeperatedInterface,ISofwareUnitSeperatedInterface {
 
-	private static int counter = 0;
 
-	private static SoftwareArchitecture instance = null;
+    private static SoftwareArchitecture instance = null;
 
 	public static SoftwareArchitecture getInstance() {
 		return instance == null ? (instance = new SoftwareArchitecture())
@@ -38,6 +37,7 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 	}
 
 	private ArrayList<AppliedRuleStrategy> appliedRules;
+	private ArrayList<ModuleStrategy> modules = new ArrayList<ModuleStrategy>();
 
 	private ModuleStrategy rootModule;
 
@@ -55,8 +55,7 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 	public SoftwareArchitecture(String name, String description,
 			ArrayList<ModuleStrategy> modules,
 			ArrayList<AppliedRuleStrategy> rules) {
-		rootModule = factory.createModule("Root");
-
+		rootModule = new ModuleDomainService().createNewModule("Root");
 		rootModule.set(name, description);
 		setModules(modules);
 		setAppliedRules(rules);
@@ -238,8 +237,18 @@ public class SoftwareArchitecture implements IseparatedDefinition {
 
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
 		ModuleStrategy currentModule = null;
-	currentModule= StateService.instance().getModulebySoftwareUnitUniqName(softwareUnitName);
-		if (currentModule == null) {
+
+		
+	for (ModuleStrategy moduleResult : modules) {
+	for (SoftwareUnitDefinition softwareUnitResult : moduleResult.getUnits()) {
+		if (softwareUnitResult.getName().toLowerCase().equals(softwareUnitName.toLowerCase())) {
+			currentModule=moduleResult;
+			break;
+		}
+	}
+	}
+	
+	if (currentModule == null) {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService()
 					.getTranslatedString("SoftwareUnitNotMapped"));

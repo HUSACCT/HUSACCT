@@ -1,15 +1,15 @@
-package husaccttest.validate;
+/*package husaccttest.validate;
 
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
-/*
+
  * IMPORTANT NOTICE
  * The code of this class is a partly modified version of the code from the class husaccttest.define.DefineSoftwareArchitectureTests
  * If changes are made to the DefineSoftwareArchitectureTests class, the changes must be also be applied to the methods of this class, if necessarily
- */
+ 
 
 public class DefineTestSoftwareArchitecture {
 	private SoftwareArchitecture softwareA;
@@ -77,3 +77,4 @@ public class DefineTestSoftwareArchitecture {
 //		return softwareA.getAppliedRules();
 //	}
 }
+*/

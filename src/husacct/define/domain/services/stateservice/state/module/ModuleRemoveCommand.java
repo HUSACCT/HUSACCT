@@ -44,11 +44,13 @@ public class ModuleRemoveCommand implements Istate {
 			if(!chek)
 			{
 				rules.add(appliedRuleStrategy);
-				//SoftwareArchitecture.getInstance().addAppliedRule(appliedRuleStrategy);
+				
+			
 			}
 			
 		}
 		
+		UndoRedoService.getInstance().addSeperatedAppliedRule(rules);
 		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
 		for (SoftwareUnitDefinition unit : module.getUnits()) {
 		

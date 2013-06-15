@@ -1,8 +1,11 @@
 package husacct.common.services;
 
-import javax.swing.JPanel;
+import java.util.HashMap;
+
+import husacct.control.task.configuration.ConfigPanel;
 
 public interface IConfigurable {
 	String getConfigurationName();
-	JPanel getConfigurationPanel();
+	ConfigPanel getConfigurationPanel();
+	HashMap<String, ConfigPanel> getSubItems();
 }

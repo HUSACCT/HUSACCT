@@ -21,6 +21,7 @@ import husacct.define.task.AppliedRuleController;
 import org.apache.log4j.Logger;
 
 public class FactoryDetails {
+
     private BackCallJPanel backCallJPanel;
     // Rules on the Dependency Limitation
     private CyclesBetweenModulesJPanel cyclesBetweenModules;

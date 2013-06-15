@@ -1,4 +1,4 @@
-package husaccttest.define;
+/*package husaccttest.define;
 
 import static org.junit.Assert.assertTrue;
 import husacct.common.dto.ApplicationDTO;
@@ -179,3 +179,4 @@ public class DefineServiceTests {
 	}
 
 }
+*/

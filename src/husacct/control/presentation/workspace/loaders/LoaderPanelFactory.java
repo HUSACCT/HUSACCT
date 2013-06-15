@@ -10,15 +10,7 @@ public class LoaderPanelFactory {
 			Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
             Object instance = myClass.newInstance();
             return (LoaderPanel) instance;
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         

@@ -144,9 +144,11 @@ public class DefineServiceImpl extends ObservableService implements
 
     @Override
     public Element getWorkspaceData() {
-	PersistentDomain pd = new PersistentDomain(defineDomainService,
+    	PersistentDomain pd= new PersistentDomain(defineDomainService,
 		moduleService, appliedRuleService, exceptionService);
+	
 	return pd.getWorkspaceData();
+	
     }
 
     @Override

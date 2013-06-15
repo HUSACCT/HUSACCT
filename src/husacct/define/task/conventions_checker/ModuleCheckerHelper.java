@@ -23,7 +23,7 @@ public class ModuleCheckerHelper {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
 			    appliedRule.getModuleFrom(), fromModule)
-		    && appliedRule.getModuleTo().getId() == toModule.getId()) {
+		    && appliedRule.getModuleTo().getId() == toModule.getId() && !appliedRule.isEnabled()) {
 		setErrorMessage("'"
 			+ appliedRule.getModuleFrom().getName()
 			+ "' "
@@ -63,7 +63,7 @@ public class ModuleCheckerHelper {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
 			    .getId()
-		    && appliedRule.getModuleTo().getId() != toModule.getId()) {
+		    && appliedRule.getModuleTo().getId() != toModule.getId() && !appliedRule.isEnabled()) {
 		setErrorMessage("'"
 			+ appliedRule.getModuleFrom().getName()
 			+ "' "
@@ -94,7 +94,7 @@ public class ModuleCheckerHelper {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
 			    .getId()
-		    && appliedRule.getModuleTo().getId() == toModule.getId()) {
+		    && appliedRule.getModuleTo().getId() == toModule.getId() && appliedRule.isEnabled()) {
 		setErrorMessage("'"
 			+ appliedRule.getModuleFrom().getName()
 			+ "' "

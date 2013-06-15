@@ -41,23 +41,23 @@ public class PersistentDomain implements ISaveable {
 	moduleService = ms;
 	appliedRuleService = ards;
 	exceptionService = ared;
+	domainParser= new DomainXML(SoftwareArchitecture.getInstance());
     }
 
     @Override
     public Element getWorkspaceData() {
-	domainParser = new DomainXML(SoftwareArchitecture.getInstance());
+		
+		domainParser = new DomainXML(SoftwareArchitecture.getInstance());
 
-	switch (parseData) {
-	case LOGICAL:
-	    domainParser.setParseLogical(false);
-	    return domainParser.getApplicationInXML(domainService
-		    .getApplicationDetails());
-	case APPLICATION:
-	case PHYSICAL:
-	default:
-	    return domainParser.getApplicationInXML(domainService
-		    .getApplicationDetails());
-	}
+		switch (parseData){
+			case LOGICAL:
+				domainParser.setParseLogical(false);
+				return domainParser.getApplicationInXML( domainService.getApplicationDetails() );
+			case APPLICATION:
+			case PHYSICAL:
+			default:
+	        return domainParser.getApplicationInXML( domainService.getApplicationDetails() );
+		}
     }
 
     @Override

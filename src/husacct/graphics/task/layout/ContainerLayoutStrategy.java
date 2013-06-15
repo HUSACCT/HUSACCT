@@ -16,7 +16,8 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 	private ParentFigure container = null;
 	private Point2D.Double location;
 
-	public ContainerLayoutStrategy(ParentFigure theParent, int minimumHorizontalPadding, int minimumVerticalPadding) {
+	public ContainerLayoutStrategy(ParentFigure theParent,
+			int minimumHorizontalPadding, int minimumVerticalPadding) {
 		container = theParent;
 		HORZ_SPACING = minimumHorizontalPadding;
 		VERT_SPACING = minimumVerticalPadding;
@@ -41,8 +42,10 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 			if (!figure.isLine()) {
 				Rectangle2D.Double bounds = figure.getBounds();
 
-				Point2D.Double anchor = new Point2D.Double(parentBounds.x + location.x, parentBounds.y + location.y);
-				Point2D.Double lead = new Point2D.Double(parentBounds.x + location.x + bounds.width, parentBounds.y
+				Point2D.Double anchor = new Point2D.Double(parentBounds.x
+						+ location.x, parentBounds.y + location.y);
+				Point2D.Double lead = new Point2D.Double(parentBounds.x
+						+ location.x + bounds.width, parentBounds.y
 						+ location.y + bounds.height);
 
 				figure.setBounds(anchor, lead);

@@ -3,6 +3,8 @@ package husacct.define.task;
 
 
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
@@ -14,13 +16,12 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.swing.tree.TreePath;
 
 
-	public class JtreeController {
+	public class JtreeController implements ISofwareUnitSeperatedInterface{
 	private  AnalyzedModuleTree tree;
 	private static JtreeController instance;	
 	private AnalyzedModuleTree resultTree;
@@ -30,7 +31,7 @@ import javax.swing.tree.TreePath;
 
 	public  JtreeController()
 	{
-
+      UndoRedoService.getInstance().registerObserver(this);
 	}
 
 	public static JtreeController instance()
@@ -230,6 +231,28 @@ public void restoreTreeItems(ModuleStrategy module) {
 
 public void restoreTreeItem(List<String> softwareUnitNames, List<String> types) {
 	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
+		long moduleID) {
+	for (SoftwareUnitDefinition softwareUnitDefinition : units) {
+	AnalyzedModuleComponent	unitToBeinserted=	StateService.instance().getAnalyzedSoftWareUnit(softwareUnitDefinition);
+		removeTreeItem(unitToBeinserted);
+		
+	}
+	
+}
+
+@Override
+public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
+		long moduleId) {
+	for (SoftwareUnitDefinition softwareUnitDefinition : units) {
+		AnalyzedModuleComponent	unitToBeinserted=	StateService.instance().getAnalyzedSoftWareUnit(softwareUnitDefinition);
+			restoreTreeItem(unitToBeinserted);
+			
+		}
 	
 }
 

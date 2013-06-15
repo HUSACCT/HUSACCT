@@ -1,5 +1,6 @@
 package husacct.define.domain.services;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
@@ -29,7 +30,7 @@ public class DefaultRuleDomainService {
 	}
 
 	private void retrieveRuleTypeDTOsByModule() {
-		defaultRuleTypeDTOs = dirtyHack(_module.getType());
+		defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
 	}
 
 	public RuleTypeDTO[] dirtyHack(String moduleType) {

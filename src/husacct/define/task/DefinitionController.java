@@ -245,8 +245,7 @@ public class DefinitionController extends Observable implements Observer {
 	    moduleService.addModuleToRoot(module);
 	} else {
 	    logger.debug("Adding child");
-	    ExceptionMessage = moduleService.addNewModuleToParent(
-		    selectedModuleId, module);
+	    ExceptionMessage = moduleService.addNewModuleToParent(selectedModuleId, module);
 	}
 	this.notifyObservers();
 
@@ -430,7 +429,7 @@ public class DefinitionController extends Observable implements Observer {
     }
 
 	public void addModule(String name, String description, String type) {
-		ModuleStrategy module= moduleFactory.createModule(type);
+		ModuleStrategy module=  moduleService.createNewModule(type);
 		 module.set(name, description);
 		this.passModuleToService(getSelectedModuleId(), module);
 		

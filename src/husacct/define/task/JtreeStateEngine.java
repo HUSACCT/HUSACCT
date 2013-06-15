@@ -1,11 +1,9 @@
 package husacct.define.task;
 
 import husacct.define.analyzer.AnalyzedUnitComparator;
-import husacct.define.analyzer.AnalyzedUnitRegistry;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
 import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
@@ -22,22 +20,19 @@ import husacct.define.domain.services.stateservice.state.module.UpdateModuleType
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+import husacct.define.domain.warningmessages.CustomWarningMessage;
+import husacct.define.domain.warningmessages.WarningMessageContainer;
+import husacct.define.presentation.registry.AnalyzedUnitRegistry;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 public abstract class JtreeStateEngine {
 	private Logger logger;
-	private Map<String, Object[]> mapRegistry = new LinkedHashMap<String, Object[]>();
+
 	private StateDefineController stateController = new StateDefineController();
 	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
@@ -48,12 +43,19 @@ public abstract class JtreeStateEngine {
 	}
 
 	public boolean undo() {
-		return stateController.undo();
+		boolean res =stateController.undo();
+		DefinitionController.getInstance().notifyObservers();
+		
+				
+		return res;
+		
 
 	}
 
 	public boolean redo() {
-		return stateController.redo();
+		boolean res =stateController.redo();;
+		DefinitionController.getInstance().notifyObservers();
+		return res;
 	}
 
 	
@@ -91,10 +93,10 @@ public abstract class JtreeStateEngine {
 	public void removeSoftwareUnit(ModuleStrategy module,
 			SoftwareUnitDefinition unit) {
 
-		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
-				.get(unit.getName().toLowerCase())[1];
+		AnalyzedModuleComponent analyzeModuleTobeRestored =  allUnitsRegistry.getAnalyzedUnit(unit);
+				
 		
-		mapRegistry.remove(unit.getName());
+		
 		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
 		data.add(analyzeModuleTobeRestored);
 		StateService.instance().allUnitsRegistry
@@ -110,23 +112,12 @@ public abstract class JtreeStateEngine {
 				unitToBeinserted));
 		for (AnalyzedModuleComponent analyzedModuleComponent : unitToBeinserted) {
 			JtreeController.instance().removeTreeItem(analyzedModuleComponent);
-			mapRegistry.put(analyzedModuleComponent.getUniqueName()
-					.toLowerCase(), new Object[] { module,
-					analyzedModuleComponent });
-			StateService.instance().allUnitsRegistry
-					.removeAnalyzedUnit(analyzedModuleComponent);
+		
 			WarningMessageService.getInstance().updateWarnings();
 		}
 	}
 
-	public ModuleStrategy getModulebySoftwareUnitUniqName(String Uniqname) {
 
-		Object[] result = mapRegistry.get(Uniqname.toLowerCase());
-		ModuleStrategy resultModule = (ModuleStrategy) result[0];
-
-		return resultModule;
-
-	}
 
 	public AnalyzedModuleComponent getRootModel() {
 
@@ -152,10 +143,7 @@ public abstract class JtreeStateEngine {
 
 	}
 
-	public void fromGui() {
-		stateController.unlock();
 
-	}
 
 	public boolean[] getRedoAndUndoStates() {
 		return stateController.getStatesStatus();
@@ -179,17 +167,11 @@ public abstract class JtreeStateEngine {
 	}
 
 	public void removeSoftwareUnit(List<String> selectedModules) {
-		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
+		
 	
-	Object[] m=	mapRegistry.get(selectedModules.get(0));
 
-		for (String uniqname : selectedModules) {
-			AnalyzedModuleComponent softwareUnit = (AnalyzedModuleComponent) mapRegistry
-					.get(uniqname)[1];
-			units.add(softwareUnit);
-		}
 
-	//	stateController.insertCommand(new SoftwareUnitRemoveCommand(m, units));
+
 
 	}
 
@@ -205,21 +187,18 @@ return allUnitsRegistry.getAnalyzedUnit(unit);
 		
 	}
 
-	public ArrayList<AnalyzedModuleComponent>  getmappedUnits() {
-    ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
-		for (Object[] obj : mapRegistry.values()) {
-			data.add((AnalyzedModuleComponent)obj[1]);
-		}
-    		
+	public ModuleStrategy getModulebySoftwareUnitUniqName(String uniqueName) {
 		
-		
-		return data;
+		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(uniqueName);
 	}
 
-	public AnalyzedModuleComponent getAnalyzedSoftWareUnits(
-			ArrayList<SoftwareUnitDefinition> units) {
-		// TODO Auto-generated method stub
-		return null;
+	public WarningMessageContainer getNotMappedUnits() {
+	
+return	allUnitsRegistry.getNotMappedUnits();
+	
 	}
+
+
+
 
 }
