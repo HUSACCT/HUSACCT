@@ -200,47 +200,17 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void submitForModuleType(String moduleType) {
-		/*
-		 * if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem")) {
-			this.submitSubSystem();
-		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer")) {
-			this.submitLayer();
-		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component")) {
-			this.submitComponent();
-		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")) {
-			this.submitExternalLibrary();
-		}
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * */
-		
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
-			String moduleDescription = this.moduleDescriptionField.getText();
-			String type ="";
-			
+			String moduleDescription = this.moduleDescriptionField.getText();			
 			
 			boolean hasBeenAdded = DomainGateway.getInstance().addModule(moduleName, moduleDescription, moduleType);
 			if (hasBeenAdded){
-				//update tree view
 				this.modulePanel.updateModuleTree();
 				this.dispose();
 			}
-		}
-		
-		
+		}		
 	}
-	
-	
-	      
-		
-	
-
-	
 	
 	private boolean checkModuleName() {
 		String moduleNameValue = this.moduleNameField.getText();

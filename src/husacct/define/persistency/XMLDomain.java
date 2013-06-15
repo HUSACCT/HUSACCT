@@ -8,7 +8,6 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
-
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 
@@ -19,194 +18,188 @@ import org.jdom2.Element;
 
 public class XMLDomain {
 
-    private Element workspace;
-    private Application application;
-    private SoftwareArchitecture softwareArchitecture;
-    private AppliedRuleDomainService ruleService = new AppliedRuleDomainService();
-    private ModuleDomainService moduleService = new ModuleDomainService();
-    private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
-    private ArrayList<AppliedRuleStrategy> appliedRules;
+	private Element workspace;
+	private Application application;
+	private SoftwareArchitecture softwareArchitecture;
+	private AppliedRuleDomainService ruleService = new AppliedRuleDomainService();
+	private ModuleDomainService moduleService = new ModuleDomainService();
+	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
+	private ArrayList<AppliedRuleStrategy> appliedRules;
 
-    public XMLDomain(Element workspaceData) {
-	workspace = workspaceData;
-	softwareArchitecture = SoftwareArchitecture.getInstance();
-    }
-
-    public Application createApplication(){
-	List<Element> applicationProperties = workspace.getChildren();
-
-	Element name = applicationProperties.get(0);
-	Element version = applicationProperties.get(1);
-	Element projects = applicationProperties.get(2);
-	Element architecture = applicationProperties.get(3);
-	ArrayList<Project> projectsList = getProjectsFromElement(projects);
-
-	application = new Application(name.getValue(), projectsList, version.getValue());
-	application.setArchitecture(createArchitectureFromElement(architecture));
-	return application;
-    }
-
-    private ArrayList<Project> getProjectsFromElement(Element XMLElement){
-	ArrayList<Project> projects = new ArrayList<Project>();
-	for(Element project : XMLElement.getChildren("Project")){
-	    projects.add(getProjectFromElement(project));
-	}
-	return projects;
-    }
-
-    private Project getProjectFromElement(Element XMLElement){
-	Project project = new Project();
-	project.setName(XMLElement.getChild("name").getText());
-	project.setProgrammingLanguage(XMLElement.getChild("programmingLanguage").getText());
-	project.setVersion(XMLElement.getChild("version").getText());
-	project.setDescription(XMLElement.getChild("description").getText());
-
-	ArrayList<String> projectPaths = new ArrayList<String>();
-	List<Element> pathElements = XMLElement.getChild("paths").getChildren("path");
-	for (Element path : pathElements) {
-	    projectPaths.add(path.getText());
-	}
-	project.setPaths(projectPaths);
-
-	return project;
-    }
-
-    private SoftwareArchitecture createArchitectureFromElement(Element XMLElement){
-	softwareArchitecture.setName(XMLElement.getChild("name").getValue());
-	softwareArchitecture.setDescription(XMLElement.getChild("description").getValue());
-
-	// Check if there are modules in the XML
-	if(XMLElement.getChild("modules").getChildren().size() > 0){
-	    createModulesFromXML((long)0, XMLElement.getChild("modules"));
+	public XMLDomain(Element workspaceData) {
+		workspace = workspaceData;
+		softwareArchitecture = SoftwareArchitecture.getInstance();
 	}
 
-	// Check if there are rules in the XML
-	if(XMLElement.getChild("rules").getChildren().size() > 0){
-	    createAppliedRulesFromXML(XMLElement.getChild("rules"));
+	public Application createApplication(){
+		List<Element> applicationProperties = workspace.getChildren();
+
+		Element name = applicationProperties.get(0);
+		Element version = applicationProperties.get(1);
+		Element projects = applicationProperties.get(2);
+		Element architecture = applicationProperties.get(3);
+		ArrayList<Project> projectsList = getProjectsFromElement(projects);
+
+		application = new Application(name.getValue(), projectsList, version.getValue());
+		application.setArchitecture(createArchitectureFromElement(architecture));
+		return application;
 	}
 
-	return softwareArchitecture;
-    }
-
-    private void createModulesFromXML(long parentId, Element XMLElement){
-	for(Element module : XMLElement.getChildren()){
-	    ModuleStrategy newModule;
-	    ModuleFactory factory = new ModuleFactory();
-	    String moduleType		 = module.getChildText("type");
-	    String moduleDescription	 = module.getChildText("description");
-	    int moduleId 		 = Integer.parseInt(module.getChildText("id"));
-	    String moduleName 		 = module.getChildText("name");
-
-	    // TODO: When modules change to factory, this should be revised
-	    switch(moduleType){
-	    case "ExternalLibrary"	: newModule = factory.createModule("ExternalLibrary"); break;
-	    case "Component" 		: newModule = factory.createModule("Component"); break;
-	    case "SubSystem"		: newModule = factory.createModule("SubSystem"); break;
-	    case "Layer"		    : newModule = factory.createModule("Layer");                   
-	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
-	    	                      ((Layer)newModule).setHierarchicalLevel(HierarchicalLevel); break;
-	    default			        : newModule = factory.createDummy("blank"); break;	    	
-
-	    }
-	    newModule.set(moduleName, moduleDescription);
-	    newModule.setId(moduleId);
-
-	    // Add to Software Unit
-	    if(parentId == 0){
-		moduleService.addModuleToRoot(newModule);
-	    }else{
-		moduleService.addModuleToParent(parentId, newModule);
-	    }
-
-	    // Add submodules
-	    if(hasSubmodules(module)){
-		createModulesFromXML(newModule.getId(), module.getChild("SubModules"));
-	    }
+	private ArrayList<Project> getProjectsFromElement(Element XMLElement){
+		ArrayList<Project> projects = new ArrayList<Project>();
+		for(Element project : XMLElement.getChildren("Project")){
+			projects.add(getProjectFromElement(project));
+		}
+		return projects;
 	}
-    }
 
-    private boolean hasSubmodules(Element XMLElement){
-	if(XMLElement.getChildren("SubModules").size() > 0){
-	    return true;
+	private Project getProjectFromElement(Element XMLElement){
+		Project project = new Project();
+		project.setName(XMLElement.getChild("name").getText());
+		project.setProgrammingLanguage(XMLElement.getChild("programmingLanguage").getText());
+		project.setVersion(XMLElement.getChild("version").getText());
+		project.setDescription(XMLElement.getChild("description").getText());
+
+		ArrayList<String> projectPaths = new ArrayList<String>();
+		List<Element> pathElements = XMLElement.getChild("paths").getChildren("path");
+		for (Element path : pathElements) {
+			projectPaths.add(path.getText());
+		}
+		project.setPaths(projectPaths);
+
+		return project;
 	}
-	return false;
-    }
 
-    private void createAppliedRulesFromXML(Element XMLElement){
-	for(Element appliedRule : XMLElement.getChildren()){
-	    AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
-	    Element exceptions 	= appliedRule.getChild("exceptions");
+	private SoftwareArchitecture createArchitectureFromElement(Element XMLElement){
+		softwareArchitecture.setName(XMLElement.getChild("name").getValue());
+		softwareArchitecture.setDescription(XMLElement.getChild("description").getValue());
 
-	    if(!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())){
+		// Check if there are modules in the XML
+		if(XMLElement.getChild("modules").getChildren().size() > 0){
+			createModulesFromXML((long)0, XMLElement.getChild("modules"));
+		}
+
+		// Check if there are rules in the XML
+		if(XMLElement.getChild("rules").getChildren().size() > 0){
+			createAppliedRulesFromXML(XMLElement.getChild("rules"));
+		}
+
+		return softwareArchitecture;
+	}
+
+	private void createModulesFromXML(long parentId, Element XMLElement){
+		for(Element module : XMLElement.getChildren()){
+			ModuleStrategy newModule;
+			ModuleFactory factory 		= new ModuleFactory();
+			String moduleType		 	= module.getChildText("type");
+			String moduleDescription	= module.getChildText("description");
+			int moduleId 		 		= Integer.parseInt(module.getChildText("id"));
+			String moduleName 		 	= module.getChildText("name");
+
+			newModule = factory.createModule(moduleType);
+			if(newModule.getType().equalsIgnoreCase("Layer")){
+				((Layer)newModule).setHierarchicalLevel(Integer.parseInt((module.getChildText("HierarchicalLevel"))));
+			}
+
+			newModule.set(moduleName, moduleDescription);
+			newModule.setId(moduleId);
+			moduleService.addModuleToParent(parentId, newModule);
+
+			// Add submodules
+			if(hasSubmodules(module)){
+				createModulesFromXML(newModule.getId(), module.getChild("SubModules"));
+			}
+		}
+	}
+
+	private boolean hasSubmodules(Element XMLElement){
+		if(XMLElement.getChildren("SubModules").size() > 0){
+			return true;
+		}
+		return false;
+	}
+
+	private void createAppliedRulesFromXML(Element XMLElement){
+		for(Element appliedRule : XMLElement.getChildren()){
+			AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
+
+			if(!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())){
+				long newID = ruleService.addAppliedRule(
+						dummyRule.getRuleType(),
+						dummyRule.getDescription(),
+						dummyRule.getDependencies(),
+						dummyRule.getRegex(),
+						dummyRule.getModuleFrom(),
+						dummyRule.getModuleTo(),
+						dummyRule.isEnabled());
+				AppliedRuleStrategy newRule = ruleService.getAppliedRuleById(newID);
+				newRule.setId(dummyRule.getId());
+				if(hasExceptions(appliedRule)){
+					newRule.setExceptions(getExceptionsFromXML(appliedRule));
+				}
+			}
+		}
+	}
+
+	private AppliedRuleStrategy getAppliedRuleFromXML(Element XMLElement){
+		AppliedRuleStrategy dummyRule = createDummyRule(XMLElement);
 		long newID = ruleService.addAppliedRule(
-			dummyRule.getRuleType(),
-			dummyRule.getDescription(),
-			dummyRule.getDependencies(),
-			dummyRule.getRegex(),
-			dummyRule.getModuleFrom(),
-			dummyRule.getModuleTo(),
-			dummyRule.isEnabled());
-		ruleService.getAppliedRuleById(newID).setId(dummyRule.getId());
-		ruleService.getAppliedRuleById(newID).setExceptions(getExceptionsFromXML(exceptions));
-	    }
+				dummyRule.getRuleType(),
+				dummyRule.getDescription(),
+				dummyRule.getDependencies(),
+				dummyRule.getRegex(),
+				dummyRule.getModuleFrom(),
+				dummyRule.getModuleTo(),
+				dummyRule.isEnabled());
+		AppliedRuleStrategy newRule = ruleService.getAppliedRuleById(newID);
+		newRule.setId(dummyRule.getId());
+		return newRule;
 	}
-    }
-    
-    private AppliedRuleStrategy getAppliedRuleFromXML(Element XMLElement){
-	AppliedRuleStrategy dummyRule = createDummyRule(XMLElement);
-	long newID = ruleService.addAppliedRule(
-		dummyRule.getRuleType(),
-		dummyRule.getDescription(),
-		dummyRule.getDependencies(),
-		dummyRule.getRegex(),
-		dummyRule.getModuleFrom(),
-		dummyRule.getModuleTo(),
-		dummyRule.isEnabled());
-	AppliedRuleStrategy newRule = ruleService.getAppliedRuleById(newID);
-	newRule.setId(dummyRule.getId());
-	return newRule;
-    }
-    
-    private AppliedRuleStrategy createDummyRule(Element appliedRule){
-	    String ruleTypeKey 	= appliedRule.getChildText("type");
-	    String description	= appliedRule.getChildText("description");
-	    boolean enabled 	= Boolean.parseBoolean(appliedRule.getChildText("enabled"));
-	    String regex 	= appliedRule.getChildText("regex");
-	    int ruleId 		= Integer.parseInt(appliedRule.getChildText("id"));
 
-	    Element dependencies= appliedRule.getChild("dependencies");
+	private AppliedRuleStrategy createDummyRule(Element appliedRule){
+		String ruleTypeKey 	= appliedRule.getChildText("type");
+		String description	= appliedRule.getChildText("description");
+		boolean enabled 	= Boolean.parseBoolean(appliedRule.getChildText("enabled"));
+		String regex 	= appliedRule.getChildText("regex");
+		int ruleId 		= Integer.parseInt(appliedRule.getChildText("id"));
 
-	    String[] dependencyList = getDependenciesFromXML(dependencies);
+		Element dependencies= appliedRule.getChild("dependencies");
 
-	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
-	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
+		String[] dependencyList = getDependenciesFromXML(dependencies);
 
-	    AppliedRuleStrategy dummyRule 	= ruleFactory.createDummyRule(ruleTypeKey);
-	    ModuleStrategy moduleFrom 			= moduleService.getModuleById(moduleFromId);
-	    ModuleStrategy moduleTo 			= moduleService.getModuleById(moduleToId);
+		int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
+		int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
 
-	    dummyRule.setAppliedRule(description, dependencyList, regex, moduleFrom, moduleTo, enabled);
-	    dummyRule.setId(ruleId);
-	    return dummyRule;
-    }
+		AppliedRuleStrategy dummyRule 	= ruleFactory.createDummyRule(ruleTypeKey);
+		ModuleStrategy moduleFrom 			= moduleService.getModuleById(moduleFromId);
+		ModuleStrategy moduleTo 			= moduleService.getModuleById(moduleToId);
 
-    //TODO: Check if this function really works
-    private String[] getDependenciesFromXML(Element XMLElement){
-	ArrayList<String> dependencies = new ArrayList<String>();
-	for(Element dependency : XMLElement.getChildren("dependency")){
-	    dependencies.add(dependency.getValue());
+		dummyRule.setAppliedRule(description, dependencyList, regex, moduleFrom, moduleTo, enabled);
+		dummyRule.setId(ruleId);
+		return dummyRule;
 	}
-	return dependencies.toArray(new String[dependencies.size()]);
-    }
 
-    //TODO: Check if this function really works
-    private ArrayList<AppliedRuleStrategy> getExceptionsFromXML(Element XMLElement){
-	ArrayList<AppliedRuleStrategy> exceptions = new ArrayList<AppliedRuleStrategy>();
-	for(Element exception : XMLElement.getChildren("AppliedRule")){
-	    exceptions.add(getAppliedRuleFromXML(exception));
+	//TODO: Check if this function really works
+	private String[] getDependenciesFromXML(Element XMLElement){
+		ArrayList<String> dependencies = new ArrayList<String>();
+		for(Element dependency : XMLElement.getChildren("dependency")){
+			dependencies.add(dependency.getValue());
+		}
+		return dependencies.toArray(new String[dependencies.size()]);
 	}
-	return exceptions;
-    }
+
+	private boolean hasExceptions(Element XMLElement){
+		return (XMLElement.getChildren("exceptions").size() > 0)? true : false;
+	}
+	
+	//TODO: Check if this function really works
+	private ArrayList<AppliedRuleStrategy> getExceptionsFromXML(Element XMLElement){
+		ArrayList<AppliedRuleStrategy> exceptions = new ArrayList<AppliedRuleStrategy>();
+		for(Element exception : XMLElement.getChild("exceptions").getChildren("AppliedRule")){
+			exceptions.add(getAppliedRuleFromXML(exception));
+		}
+		return exceptions;
+	}
 }
 
 /*

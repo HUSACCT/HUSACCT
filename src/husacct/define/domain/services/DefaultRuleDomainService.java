@@ -30,7 +30,13 @@ public class DefaultRuleDomainService {
 	}
 
 	private void retrieveRuleTypeDTOsByModule() {
-		defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+		if(!_module.getType().equals("Root")){
+			defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+			// When not bootstrapping, service returns nothing.
+			if(defaultRuleTypeDTOs.length < 1){
+				defaultRuleTypeDTOs = dirtyHack(_module.getType());
+			}
+		}		
 	}
 
 	public RuleTypeDTO[] dirtyHack(String moduleType) {
@@ -133,10 +139,8 @@ public class DefaultRuleDomainService {
 		ArrayList<Long> appliedRuleIds = new ArrayList<>();
 		if (defaultRuleTypeDTOs.length > 0) {
 			for (RuleTypeDTO rule : defaultRuleTypeDTOs) {
-				for (AppliedRuleStrategy appliedRule : SoftwareArchitecture
-						.getInstance().getAppliedRules()) {
-					if (appliedRule.getModuleFrom().getId() == _module.getId()
-							&& rule.getKey().equals(appliedRule.getRuleType())) {
+				for (AppliedRuleStrategy appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
+					if (appliedRule.getModuleFrom().getId() == _module.getId()	&& rule.getKey().equals(appliedRule.getRuleType())) {
 						appliedRuleIds.add(appliedRule.getId());
 					}
 				}

@@ -1,11 +1,10 @@
 package husacct.define.domain.module.modules;
 
-import java.util.ArrayList;
-
-import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
+
+import java.util.ArrayList;
 
 
 public class Layer extends ModuleStrategy {
@@ -20,6 +19,7 @@ public class Layer extends ModuleStrategy {
 		STATIC_LEVEL++;
 		this.name = name;
 		this.description = description;
+		this.type = "Layer";
 		
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();

@@ -1,7 +1,3 @@
-
-
-
-
 package husacct.define.domain.module;
 
 import husacct.define.domain.module.modules.Blank;
@@ -22,7 +18,9 @@ public class ModuleFactory {
 		"Component",
 		"Facade",
 		"SubSystem",
-		"ExternalLibrary","Root","Blank"
+		"ExternalLibrary",
+		"Root",
+		"Blank"
 	};
 	
 	public static Class<?>[] icecreams = new Class[]{
@@ -30,7 +28,9 @@ public class ModuleFactory {
 		Component.class,
 		Facade.class,
 		SubSystem.class,
-		ExternalLibrary.class,Root.class,Blank.class
+		ExternalLibrary.class,
+		Root.class,
+		Blank.class
 	};
 	
 	public ModuleStrategy createModule(String choice){
@@ -67,31 +67,14 @@ public class ModuleFactory {
 	}
 	
 	
-	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,String choice)
-	{
-		
+	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,String choice){
 		ModuleStrategy newModule = createModule(choice);
 		oldModule.copyValuestoNewCompont(newModule);
 		if (choice.toLowerCase().equals("component")) {
 		 ModuleStrategy facade=	this.createModule("Facade");
 		 facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
 		 newModule.addSubModule(0, facade);
-		}
-		
-		
-		
-		return newModule;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		}	
+		return newModule;		
 	}
 }

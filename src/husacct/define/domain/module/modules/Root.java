@@ -7,9 +7,6 @@ import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 
 public class Root extends ModuleStrategy {
-
-	
-	
 	public void set(String name, String description){
 		this.id=0;
 		this.name = name;

@@ -29,178 +29,177 @@ import javax.swing.JInternalFrame;
 import org.jdom2.Element;
 
 public class DefineServiceImpl extends ObservableService implements
-	IDefineService {
-    private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
-    private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
-    private DomainParser domainParser = new DomainParser();
-    private AppliedRuleExceptionDomainService exceptionService = new AppliedRuleExceptionDomainService();
-    private ModuleDomainService moduleService = new ModuleDomainService();
+IDefineService {
+	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
+	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
+	private DomainParser domainParser = new DomainParser();
+	private AppliedRuleExceptionDomainService exceptionService = new AppliedRuleExceptionDomainService();
+	private ModuleDomainService moduleService = new ModuleDomainService();
 
-    public DefineServiceImpl() {
-	super();
-	reset();
-    }
-
-    @Override
-    public void analyze() {
-	StateService.instance().analyze();
-	System.out.println("Define Service is now begining to call for units");
-
-    }
-
-    @Override
-    public void createApplication(String name, ArrayList<ProjectDTO> projects,
-	    String version) {
-	defineDomainService.createApplication(name, projects, version);
-    }
-
-    @Override
-    public ApplicationDTO getApplicationDetails() {
-	Application app = defineDomainService.getApplicationDetails();
-	ApplicationDTO appDTO = domainParser.parseApplication(app);
-	return appDTO;
-    }
-
-    public AppliedRuleController getAppliedRuleController() {
-	return new AppliedRuleController(0, -1);
-    }
-
-    @Override
-    public ModuleDTO[] getChildrenFromModule(String logicalPath) {
-	ModuleDTO[] childModuleDTOs;
-	if (logicalPath.equals("**")) {
-	    childModuleDTOs = getRootModules();
-	} else {
-	    ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
-	    ModuleDTO moduleDTO = domainParser.parseModule(module);
-	    childModuleDTOs = moduleDTO.subModules;
+	public DefineServiceImpl() {
+		super();
+		reset();
 	}
 
-	// Removing nested childs
-	for (ModuleDTO modDTO : childModuleDTOs) {
-	    modDTO.subModules = new ModuleDTO[] {};
+	@Override
+	public void analyze() {
+		StateService.instance().analyze();
+		System.out.println("Define Service is now begining to call for units");
+
 	}
 
-	return childModuleDTOs;
-    }
-
-    @Override
-    public JInternalFrame getDefinedGUI() {
-	ApplicationController applicationController = new ApplicationController();
-	applicationController.initUi();
-	JInternalFrame jinternalFrame = applicationController
-		.getApplicationFrame();
-	jinternalFrame.setVisible(false);
-	return jinternalFrame;
-    }
-
-    @Override
-    public RuleDTO[] getDefinedRules() {
-	AppliedRuleStrategy[] rules = appliedRuleService.getAppliedRules();
-	RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
-	return ruleDTOs;
-    }
-
-    public DefinitionController getDefinitionController() {
-	return DefinitionController.getInstance();
-    }
-
-    @Override
-    public Element getLogicalArchitectureData() {
-	PersistentDomain pd = new PersistentDomain(defineDomainService,
-		moduleService, appliedRuleService, exceptionService);
-	pd.setParseData(DomainElement.LOGICAL);
-	return pd.getWorkspaceData();
-    }
-
-    @Override
-    public String getParentFromModule(String logicalPath) {
-	String parentLogicalPath = "";
-	if (logicalPath.contains(".")) {
-	    String[] moduleNames = logicalPath.split("\\.");
-	    parentLogicalPath += moduleNames[0];
-	    for (int i = 1; i < moduleNames.length - 1; i++) {
-		parentLogicalPath += "." + moduleNames[i];
-	    }
-	    // Check if exists, an exception will automaticly be thrown
-	    SoftwareArchitecture.getInstance().getModuleByLogicalPath(
-		    parentLogicalPath);
-	} else {
-	    parentLogicalPath = "**";
+	@Override
+	public void createApplication(String name, ArrayList<ProjectDTO> projects,
+			String version) {
+		defineDomainService.createApplication(name, projects, version);
 	}
-	return parentLogicalPath;
-    }
 
-    @Override
-    public ModuleDTO[] getRootModules() {
-	ModuleStrategy[] modules = moduleService.getRootModules();
-	ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
-	return moduleDTOs;
-    }
-
-    public SoftwareUnitController getSoftwareUnitController() {
-	return new SoftwareUnitController(0);
-    }
-
-    @Override
-    public Element getWorkspaceData() {
-	PersistentDomain pd = new PersistentDomain(defineDomainService,
-		moduleService, appliedRuleService, exceptionService);
-	return pd.getWorkspaceData();
-    }
-
-    @Override
-    public boolean isDefined() {
-	boolean isDefined = false;
-	if (SoftwareArchitecture.getInstance().getModules().size() > 0) {
-	    isDefined = true;
+	@Override
+	public ApplicationDTO getApplicationDetails() {
+		Application app = defineDomainService.getApplicationDetails();
+		ApplicationDTO appDTO = domainParser.parseApplication(app);
+		return appDTO;
 	}
-	return isDefined;
-    }
 
-    @Override
-    public boolean isMapped() {
-	boolean isMapped = false;
-	ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance()
-		.getModules();
-	for (ModuleStrategy module : modules) {
-	    if (module.isMapped()) {
-		isMapped = true;
-	    }
+	public AppliedRuleController getAppliedRuleController() {
+		return new AppliedRuleController(0, -1);
 	}
-	return isMapped;
-    }
 
-    @Override
-    public void isReanalyzed() {
-	JtreeController.instance().setLoadState(false);
+	@Override
+	public ModuleDTO[] getChildrenFromModule(String logicalPath) {
+		ModuleDTO[] childModuleDTOs;
+		if (logicalPath.equals("**")) {
+			childModuleDTOs = getRootModules();
+		} else {
+			ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
+			ModuleDTO moduleDTO = domainParser.parseModule(module);
+			childModuleDTOs = moduleDTO.subModules;
+		}
 
-    }
+		// Removing nested childs
+		for (ModuleDTO modDTO : childModuleDTOs) {
+			modDTO.subModules = new ModuleDTO[] {};
+		}
 
-    @Override
-    public void loadLogicalArchitectureData(Element e) {
-	PersistentDomain pd = new PersistentDomain(defineDomainService,
-		moduleService, appliedRuleService, exceptionService);
-	pd.setParseData(DomainElement.LOGICAL);
-	pd.loadWorkspaceData(e);
-    }
+		return childModuleDTOs;
+	}
 
-    @Override
-    public void loadWorkspaceData(Element workspaceData) {
-	PersistentDomain pd = new PersistentDomain(defineDomainService,
-		moduleService, appliedRuleService, exceptionService);
-	pd.loadWorkspaceData(workspaceData);
-    }
+	@Override
+	public JInternalFrame getDefinedGUI() {
+		ApplicationController applicationController = new ApplicationController();
+		applicationController.initUi();
+		JInternalFrame jinternalFrame = applicationController
+				.getApplicationFrame();
+		jinternalFrame.setVisible(false);
+		return jinternalFrame;
+	}
 
-    private void reset() {
-	// TODO this is just a hotfix
-	defineDomainService = new SoftwareArchitectureDomainService();
-	moduleService = new ModuleDomainService();
-	appliedRuleService = new AppliedRuleDomainService();
-	domainParser = new DomainParser();
-	exceptionService = new AppliedRuleExceptionDomainService();
+	@Override
+	public RuleDTO[] getDefinedRules() {
+		AppliedRuleStrategy[] rules = appliedRuleService.getAppliedRules();
+		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
+		return ruleDTOs;
+	}
 
-	SoftwareArchitecture.setInstance(new SoftwareArchitecture());
-	DefinitionController.setInstance(new DefinitionController());
-    }
+	public DefinitionController getDefinitionController() {
+		return DefinitionController.getInstance();
+	}
+
+	@Override
+	public Element getLogicalArchitectureData() {
+		PersistentDomain pd = new PersistentDomain(defineDomainService,
+				moduleService, appliedRuleService, exceptionService);
+		pd.setParseData(DomainElement.LOGICAL);
+		return pd.getWorkspaceData();
+	}
+
+	@Override
+	public String getParentFromModule(String logicalPath) {
+		String parentLogicalPath = "";
+		if (logicalPath.contains(".")) {
+			String[] moduleNames = logicalPath.split("\\.");
+			parentLogicalPath += moduleNames[0];
+			for (int i = 1; i < moduleNames.length - 1; i++) {
+				parentLogicalPath += "." + moduleNames[i];
+			}
+			// Check if exists, an exception will automaticly be thrown
+			SoftwareArchitecture.getInstance().getModuleByLogicalPath(
+					parentLogicalPath);
+		} else {
+			parentLogicalPath = "**";
+		}
+		return parentLogicalPath;
+	}
+
+	@Override
+	public ModuleDTO[] getRootModules() {
+		ModuleStrategy[] modules = moduleService.getRootModules();
+		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
+		return moduleDTOs;
+	}
+
+	public SoftwareUnitController getSoftwareUnitController() {
+		return new SoftwareUnitController(0);
+	}
+
+	@Override
+	public Element getWorkspaceData() {
+		PersistentDomain pd = new PersistentDomain(defineDomainService,moduleService, appliedRuleService, exceptionService);
+		return pd.getWorkspaceData();
+	}
+
+	@Override
+	public boolean isDefined() {
+		boolean isDefined = false;
+		if (SoftwareArchitecture.getInstance().getModules().size() > 0) {
+			isDefined = true;
+		}
+		return isDefined;
+	}
+
+	@Override
+	public boolean isMapped() {
+		boolean isMapped = false;
+		ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance()
+				.getModules();
+		for (ModuleStrategy module : modules) {
+			if (module.isMapped()) {
+				isMapped = true;
+			}
+		}
+		return isMapped;
+	}
+
+	@Override
+	public void isReanalyzed() {
+		JtreeController.instance().setLoadState(false);
+
+	}
+
+	@Override
+	public void loadLogicalArchitectureData(Element e) {
+		PersistentDomain pd = new PersistentDomain(defineDomainService,
+				moduleService, appliedRuleService, exceptionService);
+		pd.setParseData(DomainElement.LOGICAL);
+		pd.loadWorkspaceData(e);
+	}
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		PersistentDomain pd = new PersistentDomain(defineDomainService,
+				moduleService, appliedRuleService, exceptionService);
+		pd.loadWorkspaceData(workspaceData);
+	}
+
+	private void reset() {
+		// TODO this is just a hotfix
+		defineDomainService = new SoftwareArchitectureDomainService();
+		moduleService = new ModuleDomainService();
+		appliedRuleService = new AppliedRuleDomainService();
+		domainParser = new DomainParser();
+		exceptionService = new AppliedRuleExceptionDomainService();
+
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
+		DefinitionController.setInstance(new DefinitionController());
+	}
 }

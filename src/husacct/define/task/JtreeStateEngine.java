@@ -22,15 +22,11 @@ import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUn
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public abstract class JtreeStateEngine {
 	private Logger logger;

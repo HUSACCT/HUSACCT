@@ -33,15 +33,10 @@ public class DomainGateway {
 	
 	
 	
-	public boolean addModule(String name,String description,String type)
-	{
+	public boolean addModule(String name,String description,String type){
 		StateService.instance().fromGui();
-		DefinitionController.getInstance().addModule( name, description,type);
-		
-		
-		return true;
-		
-		
+		DefinitionController.getInstance().addModule( name, description,type);		
+		return true;		
 	}
 	
 	public void moveLayerUp(long layerId)

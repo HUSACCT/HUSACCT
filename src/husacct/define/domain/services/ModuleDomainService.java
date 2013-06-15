@@ -15,30 +15,23 @@ public class ModuleDomainService {
 	private DefaultRuleDomainService service = new DefaultRuleDomainService();
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
-				.getModuleById(parentModuleId);
+		ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
 
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 
-	public long addModuleToRoot(ModuleStrategy module) {
-		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
-		//service.addDefaultRules(module);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
-		return moduleId;
+	public String addModuleToRoot(ModuleStrategy module) {
+		ModuleStrategy rootModule = SoftwareArchitecture.getInstance().getModuleById(0);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();		
+		return rootModule.addSubModule(module);
 	}
 
-	public String addNewModuleToParent(long parentModuleId,
-			ModuleStrategy module) {
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
-				.getModuleById(parentModuleId);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+	public String addNewModuleToParent(long parentModuleId,	ModuleStrategy module) {
+		ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return parentModule.addSubModule(module);
 	}
 
@@ -54,6 +47,10 @@ public class ModuleDomainService {
 	public ModuleStrategy getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {
 		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(
 				su.getName());
+	}
+	
+	public ModuleStrategy getModuleByName(String name){
+		return SoftwareArchitecture.getInstance().getModuleByName(name);
 	}
 
 	public String getModuleNameById(long moduleId) {

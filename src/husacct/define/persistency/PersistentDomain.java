@@ -81,35 +81,7 @@ public class PersistentDomain implements ISaveable {
 						.getPaths(), project.getProgrammingLanguage(), project
 						.getVersion(), project.getDescription(), null));
 			}
-			ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(),
-			projects, 
-			workspaceApplication.getVersion());
-			domainService.createNewArchitectureDefinition(workspaceArchitecture
-					.getName());
-			for (ModuleStrategy m : workspaceArchitecture.getModules()) {
-				long rootModule = moduleService.addModuleToRoot(m);
-				if (m.getSubModules().size() > 0) {
-					for (ModuleStrategy subModule : m.getSubModules()) {
-						moduleService.addModuleToParent(rootModule, subModule);
-					}
-				}
-			}
-			for (AppliedRuleStrategy ApplRule : workspaceArchitecture.getAppliedRules()) {
-				long addedRule = appliedRuleService.addAppliedRule(ApplRule
-						.getRuleType(), ApplRule.getDescription(), ApplRule
-						.getDependencies(), ApplRule.getRegex(), ApplRule
-						.getModuleFrom().getId(), ApplRule.getModuleTo()
-						.getId(), ApplRule.isEnabled());
-				if (ApplRule.getExceptions().size() > 0) {
-					for (AppliedRuleStrategy Ap : ApplRule.getExceptions()) {
-						exceptionService.addExceptionToAppliedRule(addedRule,
-								Ap.getRuleType(), Ap.getDescription(), Ap
-								.getModuleFrom().getId(), Ap
-								.getModuleTo().getId(), Ap
-								.getDependencies());
-					}
-				}
-			}
+			ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), projects, workspaceApplication.getVersion());
 		} 
 	}
 
