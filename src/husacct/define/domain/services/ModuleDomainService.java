@@ -204,16 +204,15 @@ public class ModuleDomainService {
 	public void updateModule(long moduleId, String moduleName,
 			String moduleDescription, String newType) {
 
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
-		DefaultRuleDomainService service = new DefaultRuleDomainService();
-		service.removeDefaultRules(module);
-		ModuleStrategy updatedModule = SoftwareArchitecture.getInstance()
-				.updateModuleType(module, newType);
-		service.addDefaultRules(updatedModule);
-		service.updateModuleRules(updatedModule);
-		StateService.instance().addUpdateModule(module, updatedModule);
-
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		if(module.getId() > 0){
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.removeDefaultRules(module);
+			ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(module, newType);
+			service.addDefaultRules(updatedModule);
+			service.updateModuleRules(updatedModule);
+			StateService.instance().addUpdateModule(module, updatedModule);
+		}
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 
