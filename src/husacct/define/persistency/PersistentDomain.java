@@ -20,64 +20,74 @@ import org.jdom2.Element;
  * 
  */
 public class PersistentDomain implements ISaveable {
-    public enum DomainElement {
-	APPLICATION, LOGICAL, PHYSICAL
-    }
+	public enum DomainElement {
+		APPLICATION, LOGICAL, PHYSICAL
+	}
 
-    private AppliedRuleDomainService appliedRuleService;
-    private DomainXML domainParser;
-    private SoftwareArchitectureDomainService domainService;
-    private AppliedRuleExceptionDomainService exceptionService;
+	private AppliedRuleDomainService appliedRuleService;
+	private DomainXML domainParser;
+	private SoftwareArchitectureDomainService domainService;
+	private AppliedRuleExceptionDomainService exceptionService;
 
-    private ModuleDomainService moduleService;
-    private DomainElement parseData = DomainElement.APPLICATION;
-    private XMLDomain XMLParser;
-    
-    private Application workspaceApplication;
-    public PersistentDomain(SoftwareArchitectureDomainService ds,
-	    ModuleDomainService ms, AppliedRuleDomainService ards,
-	    AppliedRuleExceptionDomainService ared) {
-	domainService = ds;
-	moduleService = ms;
-	appliedRuleService = ards;
-	exceptionService = ared;
-    }
+	private ModuleDomainService moduleService;
+	private DomainElement parseData = DomainElement.APPLICATION;
+	private XMLDomain XMLParser;
 
-    @Override
-    public Element getWorkspaceData() {
-		return domainParser.getApplicationInXML(workspaceApplication);
-    }
+	private Application workspaceApplication;
+	public PersistentDomain(SoftwareArchitectureDomainService ds,
+			ModuleDomainService ms, AppliedRuleDomainService ards,
+			AppliedRuleExceptionDomainService ared) {
+		domainService = ds;
+		moduleService = ms;
+		appliedRuleService = ards;
+		exceptionService = ared;
+	}
 
-    @Override
-    public void loadWorkspaceData(Element workspaceData) {
-	resetWorkspaceData();
+	@Override
+	public Element getWorkspaceData() {
+		domainParser = new DomainXML(SoftwareArchitecture.getInstance());
 
-	XMLParser = new XMLDomain(workspaceData);
-	workspaceApplication = XMLParser.createApplication();
-    }
+		switch(parseData){
+		case LOGICAL:
+			domainParser.setParseLogical(false);
+			return domainParser.getApplicationInXML(domainService.getApplicationDetails());
+		case APPLICATION:
+		case PHYSICAL:
+		default:
+			return domainParser.getApplicationInXML(domainService.getApplicationDetails());
+		}
+	}
 
-    /**
-     * Resets all workspace date prior to import.
-     */
-    private void resetWorkspaceData() {
-	appliedRuleService.removeAppliedRules();
-	moduleService.removeAllModules();
-	workspaceApplication = new Application();
-    }
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		resetWorkspaceData();
 
-    public void setDefineDomainService(SoftwareArchitectureDomainService ds) {
-	domainService = ds;
-    }
+		XMLParser = new XMLDomain(workspaceData);
+		workspaceApplication = XMLParser.createApplication();
+	}
 
-    public void setExceptionService(AppliedRuleExceptionDomainService ARED) {
-	exceptionService = ARED;
-    }
+	/**
+	 * Resets all workspace date prior to import.
+	 */
+	private void resetWorkspaceData() {
+		appliedRuleService.removeAppliedRules();
+		moduleService.removeAllModules();
+		workspaceApplication = new Application();
+	}
 
-    public void setParseData(DomainElement de) {
-	parseData = de;
-    }
+	public void setDefineDomainService(SoftwareArchitectureDomainService ds) {
+		domainService = ds;
+	}
 
-    public void setXMLDomain(XMLDomain xd) {
-	XMLParser = xd;
-    }
+	public void setExceptionService(AppliedRuleExceptionDomainService ARED) {
+		exceptionService = ARED;
+	}
+
+	public void setParseData(DomainElement de) {
+		parseData = de;
+	}
+
+	public void setXMLDomain(XMLDomain xd) {
+		XMLParser = xd;
+	}
 }
