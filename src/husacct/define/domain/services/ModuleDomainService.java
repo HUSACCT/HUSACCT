@@ -191,6 +191,15 @@ public class ModuleDomainService {
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 	}
+	
+	public void updateFacade(long moduleId, String moduleName){
+		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		for(ModuleStrategy subModule : parent.getSubModules()){
+			if(subModule.getType().equals("Facade")){
+				subModule.setName(moduleName+"Facade");
+			}
+		}
+	}
 
 	public void updateModule(long moduleId, String moduleName,
 			String moduleDescription, String newType) {
