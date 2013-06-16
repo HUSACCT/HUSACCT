@@ -217,7 +217,9 @@ IServiceListener {
 	private void updateModule() {
 		String moduleName = nameTextfield.getText();
 		String moduleDescription = descriptionTextArea.getText();
-		DomainGateway.getInstance().updateModule(moduleName,
-				moduleDescription);
+		DomainGateway.getInstance().updateModule(moduleName, moduleDescription);
+		if(moduleTypeComboBox.getSelectedItem().toString().equalsIgnoreCase(moduleTypes[2])){
+			DomainGateway.getInstance().updateFacade(moduleName);
+		}
 	}
 }

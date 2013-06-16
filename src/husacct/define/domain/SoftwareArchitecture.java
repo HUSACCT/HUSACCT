@@ -184,6 +184,15 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		}
 		return currentModule;
 	}
+	
+	public ModuleStrategy getModuleByName(String name){
+		for(ModuleStrategy module : rootModule.getSubModules()){
+			if(module.getName().equalsIgnoreCase(name)){
+				return module;
+			}
+		}
+		return null;
+	}
 
 	public ModuleStrategy getModuleByLogicalPath(String logicalPath) {
 		ModuleStrategy currentModule = null;

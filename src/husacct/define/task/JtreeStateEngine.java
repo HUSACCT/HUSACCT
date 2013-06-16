@@ -20,7 +20,6 @@ import husacct.define.domain.services.stateservice.state.module.UpdateModuleType
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
-import husacct.define.domain.warningmessages.CustomWarningMessage;
 import husacct.define.domain.warningmessages.WarningMessageContainer;
 import husacct.define.presentation.registry.AnalyzedUnitRegistry;
 import husacct.define.task.components.AnalyzedModuleComponent;

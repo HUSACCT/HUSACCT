@@ -92,6 +92,8 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 		d.width = 150;
 		warningButton.setMinimumSize(new Dimension(50, 50));
 		warningButton.setMaximumSize(d);
+		Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
+		warningButton.setIcon(icon);
 		undoButton= new JButton("<");
 		redoButton= new JButton(">");
 		setButtonsVisability(undoButton,redoButton);
@@ -146,8 +148,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == warningButton) {
-				Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
-				warningButton.setIcon(icon);
+				
 			  warnings.refresh();
 				warnings.setVisible(true);
 			}

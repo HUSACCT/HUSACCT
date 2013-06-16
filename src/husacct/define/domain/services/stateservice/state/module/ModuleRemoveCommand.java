@@ -1,10 +1,5 @@
 package husacct.define.domain.services.stateservice.state.module;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
-
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
@@ -16,9 +11,10 @@ import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
-import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
+
+import java.util.ArrayList;
 
 public class ModuleRemoveCommand implements Istate {
 
