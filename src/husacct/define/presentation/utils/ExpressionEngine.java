@@ -91,7 +91,7 @@ logger=	Logger.getLogger(ExpressionEngine.class);
 	Pattern regExPattern = null;
 
 	for (Iterator<AbstractCombinedComponent> it = JtreeController
-			.instance().getRootprojectsModules().getChildren().iterator(); it
+			.instance().getRootprojectsModules().iterator(); it
 			.hasNext();) {
 		AnalyzedModuleComponent module = (AnalyzedModuleComponent) it
 				.next();

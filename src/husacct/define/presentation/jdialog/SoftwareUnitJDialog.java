@@ -319,7 +319,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			ExpressionEngine expressionEngine = new ExpressionEngine();
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
-					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
+					
 					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
 							expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC");
@@ -376,7 +376,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			
 				
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")) {
+				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")
+						||selectedComponent.getType().toLowerCase().equals("externalpackage")) {
 					isButtonAddEnabled=false;
 				}
 			}

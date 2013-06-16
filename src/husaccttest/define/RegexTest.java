@@ -16,7 +16,7 @@ public class RegexTest {
 	@Before
 	public void setupTest()
 	{
-		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
+		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "application", "public");
 		AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
 				"hello313", "hello", "root", "public");
 		AnalyzedModuleComponent softwareunit1 = new  AnalyzedModuleComponent("test", "test", "package", "public");

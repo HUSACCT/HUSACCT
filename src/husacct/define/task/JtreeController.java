@@ -256,13 +256,19 @@ public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
 	
 }
 
-public AbstractCombinedComponent getRootprojectsModules()
+public List<AbstractCombinedComponent> getRootprojectsModules()
 {
+	List<AbstractCombinedComponent> returnList = new ArrayList<AbstractCombinedComponent>();
 	
+	for (AbstractCombinedComponent result : getRootOfModel().getChildren()) {
+		if (result.getType().toLowerCase().equals("root")) {
+			returnList.addAll(result.getChildren());
+		}
+	}
 
 
 
-return getRootOfModel().getChildren().get(0);
+return returnList;
 }
 
 
