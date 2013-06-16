@@ -59,6 +59,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		rootModule.set(name, description);
 		setModules(modules);
 		setAppliedRules(rules);
+		this.modules.add(rootModule);
 	
 	}
 
@@ -77,6 +78,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		try{
 		if (!hasModule(module.getName())) {
 			rootModule.addSubModule(module);
+			modules.add(module);
 			moduleId = module.getId();
 		} else {
 			throw new RuntimeException(ServiceProvider.getInstance()
@@ -89,6 +91,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		StateService.instance().addModule(module);
+		modules.add(module);
 		WarningMessageService.getInstance().processModule(module);
 		return parentModule.addSubModule(module);
 	}
@@ -145,11 +148,11 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		return enabledRuleList;
 	}
 
-	//will be deleted in the next 2 days
+	//TODO: will be deleted in the next 2 days
 	public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
 		return null; // TODO: Has to get an implementation
 	}
-//	//will be deleted in the next 2 days
+//	// TODO: will be deleted in the next 2 days
 	public ArrayList<Layer> getLayersBelow(Layer layer) {
 		ArrayList<Layer> returnList = new ArrayList<Layer>();
 		Layer underlyingLayer = getTheFirstLayerBelow(layer);

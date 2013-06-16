@@ -203,9 +203,10 @@ public class SoftwareUnitDefinitionDomainService {
 			{
 				module.addSUDefinition(unit);
 			
-			
 				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
 			}else{
+
+				
 				module.addSUDefinition(unit);
 				
 				

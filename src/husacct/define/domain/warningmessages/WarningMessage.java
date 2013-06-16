@@ -30,4 +30,6 @@ public abstract Object[] getValue();
 
 		return type;
 	}
+	
+	
 }

@@ -91,7 +91,7 @@ logger=	Logger.getLogger(ExpressionEngine.class);
 	Pattern regExPattern = null;
 
 	for (Iterator<AbstractCombinedComponent> it = JtreeController
-			.instance().getRootOfModel().getChildren().iterator(); it
+			.instance().getRootprojectsModules().getChildren().iterator(); it
 			.hasNext();) {
 		AnalyzedModuleComponent module = (AnalyzedModuleComponent) it
 				.next();
@@ -117,6 +117,7 @@ logger=	Logger.getLogger(ExpressionEngine.class);
 			}
 
 			else if (packageClass.equals("C")) {
+				System.out.println();
 				if (module.getType().equals("CLASS")
 						|| module.getType().equals("INTERFACE")) {
 					while (matcher.find()) {

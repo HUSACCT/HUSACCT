@@ -143,7 +143,7 @@ public class DragAndDropJdialog extends JDialog {
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
 		softwareUnitScrollPane.setSize(400, 220);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
-	   AnalyzedModuleComponent rootofMappedUnits = StateService.instance().getAnalyzedSoftWareUnits(data.getUnits());
+	//   AnalyzedModuleComponent rootofMappedUnits = StateService.instance().getAnalyzedSoftWareUnits(data.getUnits());
 		
 	   softwareUnitScrollPane.setViewportView(new JTableSoftwareUnits());
 		return softwareUnitScrollPane;

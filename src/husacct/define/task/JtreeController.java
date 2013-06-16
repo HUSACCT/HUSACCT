@@ -256,6 +256,15 @@ public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
 	
 }
 
+public AbstractCombinedComponent getRootprojectsModules()
+{
+	
+
+
+
+return getRootOfModel().getChildren().get(0);
+}
+
 
 
 }

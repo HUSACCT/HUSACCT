@@ -349,7 +349,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
     }
 
     public void updateSoftwareUnitTable() {
-	try {
+    	
+    	try {
 	    JTableTableModel atm = (JTableTableModel) softwareUnitsTable
 		    .getModel();
 	    atm.getDataVector().removeAllElements();
@@ -376,7 +377,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
 				.getSoftwareUnitTypeBySoftwareUnitName(
 					softwareUnitName);
 			Object rowdata[] = { softwareUnitName, softwareUnitType };
-
+           
 			atm.addRow(rowdata);
 		    }
 		}
@@ -388,7 +389,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
 		    }
 		}
 	    }
+	   
 	    atm.fireTableDataChanged();
+	
 	} catch (Exception e) {
 	   e.printStackTrace();
 		UiDialogs.errorDialog(this, e.getMessage());

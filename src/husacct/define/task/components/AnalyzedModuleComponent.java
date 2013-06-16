@@ -135,4 +135,27 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 
     }
 
+	public boolean isAncestorsMapped() {
+		boolean result = false;
+		AnalyzedModuleComponent buffer =null;
+		String type = this.getType().toLowerCase();
+		buffer = (AnalyzedModuleComponent) this.getParentofChild();
+		while (!type.equals("application")) {
+		if (buffer.isMapped()) {
+			result =true;
+		    break;
+		
+		
+		}else{	
+		type=buffer.getParentofChild().getType().toLowerCase();
+		buffer=buffer.getParentofChild();
+		}
+		}
+		
+		
+		
+		
+		return result;
+	}
+
 }

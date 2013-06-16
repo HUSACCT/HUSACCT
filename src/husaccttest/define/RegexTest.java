@@ -1,27 +1,26 @@
-/*package husaccttest.define;
+package husaccttest.define;
 
-import static org.junit.Assert.*;
-
-import java.net.URL;
-
+import static org.junit.Assert.assertTrue;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.presentation.utils.ExpressionEngine;
 import husacct.define.task.JtreeController;
-import husacct.define.task.SoftwareUnitController;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
 public class RegexTest {
-	private SoftwareUnitController softwareUnitController = new SoftwareUnitController(0);
+	private ExpressionEngine softwareUnitController = new ExpressionEngine();
 	
 	@Before
 	public void setupTest()
 	{
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
+		AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
+				"hello313", "hello", "root", "public");
 		AnalyzedModuleComponent softwareunit1 = new  AnalyzedModuleComponent("test", "test", "package", "public");
-		rootComponent.addChild(softwareunit1);
+		projectComponent.addChild(softwareunit1);
 		AnalyzedModuleComponent softwareunit2 = new  AnalyzedModuleComponent("test.hellur", "hellur", "package", "public");
 		AnalyzedModuleComponent softwareunit3 = new  AnalyzedModuleComponent("test.facebook", "facebook", "package", "public");
 		AnalyzedModuleComponent softwareunit4 = new  AnalyzedModuleComponent("test.twitter", "class", "package", "public");
@@ -34,7 +33,7 @@ public class RegexTest {
 		AnalyzedModuleComponent softwareunit7 = new  AnalyzedModuleComponent("hu.nl", "nl", "package", "public");
 		AnalyzedModuleComponent softwareunit9 = new  AnalyzedModuleComponent("hu.nl.taal", "taal", "class", "public");
 		AnalyzedModuleComponent softwareunit8 = new  AnalyzedModuleComponent("hu.mediatheek", "mediatheek", "class", "public");
-		rootComponent.addChild(softwareunit6);
+		projectComponent.addChild(softwareunit6);
 		softwareunit6.addChild(softwareunit7);
 		softwareunit7.addChild(softwareunit9);
 		softwareunit6.addChild(softwareunit8);
@@ -50,9 +49,10 @@ public class RegexTest {
 		softwareunit10.addChild(softwareunit13);
 		softwareunit13.addChild(softwareunit14);
 		softwareunit13.addChild(softwareunit15);
+		rootComponent.addChild(projectComponent);
 		JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(rootComponent));
-		URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
-		PropertyConfigurator.configure(propertiesFile);
+	
+	
 		
 		
 	}
@@ -100,6 +100,21 @@ public class RegexTest {
 		assertTrue(result.getType().toLowerCase().equals("class"));
 	
 	}
+	
+	@Test
+	public void testRegexPackAndClasses2() {
+		AnalyzedModuleTree  restultTree= JtreeController.instance().getResultTree();
+		softwareUnitController.saveRegExToResultTree("hu.mediatheek.*","PC");
+	    AnalyzedModuleComponent rootOfResults = (AnalyzedModuleComponent) restultTree.getModel().getRoot();
+		for (AbstractCombinedComponent it : rootOfResults.getChildren()) {
+			System.out.println(it.getUniqueName());
+		}
+	    assertTrue(rootOfResults.getChildren().size()==1);
+		AnalyzedModuleComponent result = (AnalyzedModuleComponent) rootOfResults.getChildren().get(0);
+		assertTrue(result.getUniqueName().equals("hu.mediatheek"));
+		assertTrue(result.getName().equals("mediatheek"));
+		assertTrue(result.getType().toLowerCase().equals("class"));
+	
+	}
 
 }
-*/
