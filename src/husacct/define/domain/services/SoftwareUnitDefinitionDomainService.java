@@ -2,11 +2,11 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
@@ -194,24 +194,26 @@ public class SoftwareUnitDefinitionDomainService {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		try{
 
-			for (AnalyzedModuleComponent softwareunit : units) {
+		
+		for (AnalyzedModuleComponent softwareunit : units) {
+			
+			Type type = Type.valueOf(softwareunit.getType());
+			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper "+softwareunit.getType()+"ok "+softwareunit.getUniqueName());
+			if(softwareunit instanceof RegexComponent)
+			{
+				module.addSUDefinition(unit);
+			
+				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
+			}else{
 
-				Type type = Type.valueOf(softwareunit.getType());
-				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
-				Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper "+softwareunit.getType()+"ok "+softwareunit.getUniqueName());
-				if(softwareunit instanceof RegexComponent)
-				{
-					module.addSUDefinition(unit);
-
-
-					RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
-				}else{
-					module.addSUDefinition(unit);
-
-
-				}
+				
+				module.addSUDefinition(unit);
+				
+				
 
 			}
+		}
 
 			WarningMessageService.getInstance().processModule(module);
 		}catch(Exception e){

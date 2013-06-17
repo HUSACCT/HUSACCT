@@ -1,7 +1,7 @@
 package husacct.define.presentation.moduletree;
 
-import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.SoftwareUnitDefinition.Type;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;

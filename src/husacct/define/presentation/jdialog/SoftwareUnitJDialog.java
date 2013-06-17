@@ -48,6 +48,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.omg.CORBA.Object;
+
 public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
@@ -317,7 +319,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			ExpressionEngine expressionEngine = new ExpressionEngine();
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
-					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
+					
 					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
 							expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC");
@@ -370,8 +372,12 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = softwareDefinitionTree.getSelectionModel();
 			boolean isButtonAddEnabled =true;
 			for (TreePath path : paths.getSelectionPaths()){
+				
+			
+				
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")) {
+				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")
+						||selectedComponent.getType().toLowerCase().equals("externalpackage")) {
 					isButtonAddEnabled=false;
 				}
 			}

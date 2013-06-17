@@ -254,6 +254,10 @@ Observer, IServiceListener {
 		removeSoftwareUnitButton.setEnabled(true);
 		removeSoftwareUnitItem.setEnabled(true);
 	}
+    
+
+  
+
 
 	public TableModel getModel() {
 		return softwareUnitsTable.getModel();
@@ -315,6 +319,7 @@ Observer, IServiceListener {
 					ServiceProvider.getInstance().getLocaleService()
 					.getTranslatedString("WrongSelectionTitle"),
 					JOptionPane.ERROR_MESSAGE);
+
 		}
 	}
 
@@ -408,5 +413,6 @@ Observer, IServiceListener {
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
-	}
+
 }
+		}

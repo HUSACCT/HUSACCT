@@ -220,14 +220,9 @@ public class AnalyzedUnitComparator {
 
 	private void addExternalComponents(AnalyzedModuleComponent root) {
 		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent(
-				"external library", "externallibrary", "externalpackage",
+				"external library", "External Systems", "externalpackage",
 				"public");
-		AnalyzedModuleComponent javalibrary = new AnalyzedModuleComponent(
-				"externallibrary", "java library", "externallibrary", "public");
-		AnalyzedModuleComponent externalsubsystem = new AnalyzedModuleComponent(
-				"subsystem", "external subsystem", "subsystem", "public");
-		rootOfExterexternalLibrary.addChild(javalibrary);
-		rootOfExterexternalLibrary.addChild(externalsubsystem);
+		
 		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance()
 				.getAnalyseService().getExternalSystems();
 		for (ExternalSystemDTO exe : externalSystems) {
@@ -235,12 +230,12 @@ public class AnalyzedUnitComparator {
 				AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
 						exe.systemPackage, exe.systemName, "externallibrary",
 						"public");
-				javalibrary.addChild(javalib);
+				rootOfExterexternalLibrary.addChild(javalib);
 			} else {
 				AnalyzedModuleComponent subsystem = new AnalyzedModuleComponent(
 						exe.systemPackage, exe.systemName, "subsystem",
 						"public");
-				externalsubsystem.addChild(subsystem);
+				rootOfExterexternalLibrary.addChild(subsystem);
 			}
 
 		}

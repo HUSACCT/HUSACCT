@@ -13,6 +13,8 @@ public class WarningMessageContainer {
 	private WarningMessage warning;
 	
 	
+	
+	
 	public WarningMessageContainer(WarningMessage msg) {
 		this.warning=msg;
 	}
@@ -47,6 +49,13 @@ public class WarningMessageContainer {
 			this.warnings.add(new WarningMessageContainer(new NotmappedWarningMessage(classs)));
 		}
 		
+	}
+	
+	
+	public int getWarningsCount()
+	{
+		
+		return warnings.size();
 	}
 	
 	

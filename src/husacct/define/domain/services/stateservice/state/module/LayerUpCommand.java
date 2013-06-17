@@ -1,7 +1,7 @@
 package husacct.define.domain.services.stateservice.state.module;
 
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
-import husacct.define.task.DefinitionController;
 
 public class LayerUpCommand implements Istate {
 
@@ -13,14 +13,15 @@ public class LayerUpCommand implements Istate {
 	
 	@Override
 	public void undo() {
-		DefinitionController.getInstance().moveLayerDown(moduleId);
 
+		UndoRedoService.getInstance().layerDown(moduleId);
+	
 	}
 
 	@Override
 	public void redo() {
-		DefinitionController.getInstance().moveLayerUp(moduleId);
-
+		
+	UndoRedoService.getInstance().layerUp(moduleId);
 	}
 
 }
