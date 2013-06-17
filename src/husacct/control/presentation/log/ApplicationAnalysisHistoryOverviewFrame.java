@@ -67,7 +67,6 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		};
 
 		analysisTableModel.addColumn(localeService.getTranslatedString("Application"));
-		analysisTableModel.addColumn(localeService.getTranslatedString("Project"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Path"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("DateTime"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Packages"));
@@ -89,7 +88,6 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		    HashMap<String, String> analysisData = entry.getValue();
 		    analysisTableModel.addRow(new Object[]{
 		    		analysisData.get("application"), 
-		    		analysisData.get("project"), 
 		    		analysisData.get("path"), 
 		    		analysisTimestampFormat.format(analysisTimestampDate),
 		    		analysisData.get("packages"), 
