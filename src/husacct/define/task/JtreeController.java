@@ -4,6 +4,7 @@ package husacct.define.task;
 
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -162,10 +163,10 @@ public void setModuleTree(ModuleTree moduleTree) {
 
 public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	
-	RegexComponent  result = new RegexComponent();
+	RegexComponent  result = new RegexComponent("root","editRegex","SEARCH","public");
 
-	editTree = new AnalyzedModuleTree(result.getWrapper());
-	
+	editTree = new AnalyzedModuleTree(result);
+	result.setRegex(new SoftwareUnitDefinitionDomainService().getRegExSoftwareUnitByName(editingRegEx));
 	return editTree;
 }
 

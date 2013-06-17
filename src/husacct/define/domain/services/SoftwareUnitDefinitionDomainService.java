@@ -31,17 +31,10 @@ public class SoftwareUnitDefinitionDomainService {
 					"cheking if regex wrapper " + softwareunit.getType()
 					+ "ok " + softwareunit.getUniqueName());
 			if (softwareunit instanceof RegexComponent) {
-				module.addSUDefinition(unit);
+				ExpressionUnitDefinition ex = new ExpressionUnitDefinition(softwareunit.getUniqueName(),SoftwareUnitDefinition.Type.REGEX);
+				module.addSUDefinition(ex);
 				RegisterRegixSoftwareUnits((RegexComponent) softwareunit,
 						module, unit);
-				for (AbstractCombinedComponent result : ((RegexComponent) softwareunit).getChildren()) {
-					
-					SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(
-							softwareunit.getUniqueName(),  Type.valueOf(result.getType()));
-					
-					
-				}
-			
 				
 				
 			} else {
@@ -85,13 +78,13 @@ public class SoftwareUnitDefinitionDomainService {
 		SoftwareUnitRegExDefinition regExDefinition = new SoftwareUnitRegExDefinition(
 				regExName);
 		
-		ExpressionUnitDefinition expression = new ExpressionUnitDefinition(regExName, Type.valueOf("regex"));
+		
 		try {
 			for (AnalyzedModuleComponent softwareUnit : softwareUnits) {
 				Type type = Type.valueOf(softwareUnit.getType());
 				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(
 						softwareUnit.getUniqueName(), type);
-				expression.addSoftwareUnit(unit);
+			
 				regExDefinition.addSoftwareUnitDefinition(unit);
 			}
 			RegexComponent regixwrapper = JtreeController.instance()
