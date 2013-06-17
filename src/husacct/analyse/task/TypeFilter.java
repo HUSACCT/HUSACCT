@@ -15,58 +15,18 @@ public class TypeFilter {
 	private static final List<String> DICTIONARY_KEYS;
 	
 	static {
-		TYPE_DICTIONARY.put("Inheritance", Arrays.asList(new String[] {
-				"ExtendsConcreteExtendsAbstract",
-				"ExtendsAbstractExtendsAbstract",
-				"ExtendsAbstractExtendsConcrete",
-				"ExtendsConcreteExtendsConcrete",
-				"ExtendsConcreteImplements",
-				"ImplementsExtendsInterface",
-				"ExtendsConcrete",
-				"ExtendsAbstract",
-				"ExtendsLibrary",
-				"ExtendsInterface",
-				"ExtendsConcreteInvocMethod",
-				"ExtendsConcreteImport",
-				"ExtendsConcreteDeclarationInstanceVariable",
-				"ExtendsConcreteDeclarationVariableWithinMethod",
-				"ExtendsConcreteDeclarationReturnType",
-				"ExtendsConcreteException",
-				"Implements",
-				"Extends"
-		}) );
-		TYPE_DICTIONARY.put("Import", Arrays.asList(new String[] {
-				"Import"
-		} ));
-		TYPE_DICTIONARY.put("Call", Arrays.asList(new String[] {
-				"InvocMethod",
-				"InvocConstructor"
-		}));
-		TYPE_DICTIONARY.put("Annotation", Arrays.asList(new String[] {
-				"Annotation"
-		}));
-		TYPE_DICTIONARY.put("Access", Arrays.asList(new String[] {
-				"AccessPropertyOrField",
-				"AccessClassVariableInterface"	
-		}));
-		TYPE_DICTIONARY.put("Declaration", Arrays.asList(new String[] {
-				"Declaration",
-				"Declaration1",
-				"Declaration3",
-				"DeclarationLocalVariable",
-				"Declaration6",
-				"DeclarationReturnType",
-				"DeclarationParameter",
-				"DeclarationInstanceVariable",
-				"DeclarationVariableWithinMethod",
-				"Exception"
-		}));
-		DICTIONARY_KEYS = new ArrayList<String>(TYPE_DICTIONARY.keySet());
+		TYPE_DICTIONARY.put("Inheritance", Arrays.asList(new String[] {"Extends", "Implements"}));
+		TYPE_DICTIONARY.put("Import", Arrays.asList(new String[] {"Import"} ));
+		TYPE_DICTIONARY.put("Call", Arrays.asList(new String[] {"Invoc"} ));
+		TYPE_DICTIONARY.put("Annotation", Arrays.asList(new String[] { "Annotation" }));
+		TYPE_DICTIONARY.put("Access", Arrays.asList(new String[] { "Access" }));
+		TYPE_DICTIONARY.put("Declaration", Arrays.asList(new String[] { "Exception", "Declaration" }));
+		DICTIONARY_KEYS = new ArrayList<>(TYPE_DICTIONARY.keySet());
 	}
 
 	public static DependencyDTO[] filterDependencies(DependencyDTO[] dtos) {
-		for (int i = 0; i < dtos.length; i++)
-			dtos[i] = editDTO(dtos[i]);
+		for (int dto = 0; dto < dtos.length; dto++)
+			dtos[dto] = editDTO(dtos[dto]);
 		return dtos;
 	}
 	
@@ -79,8 +39,8 @@ public class TypeFilter {
 	}
 	
 	public static ExternalSystemDTO[] filterExternalSystems(ExternalSystemDTO[] dtos) {
-		for (int i = 0; i < dtos.length; i++)
-			dtos[i] = editExternalSystemDTO(dtos[i]);
+		for (int dto = 0; dto < dtos.length; dto++)
+			dtos[dto] = editExternalSystemDTO(dtos[dto]);
 		return dtos;
 	}
 
@@ -90,14 +50,27 @@ public class TypeFilter {
 	}
 
 	private static DependencyDTO editDTO(DependencyDTO dto) {
-		dto.type = getSimpleType(dto.type);
+		try {
+			dto.type = getSimpleType(dto.type);
+		} catch (NoSimpleTypeFoundException e) {
+			e.printStackTrace();
+		}
 		return dto;
 	}
 
-	private static String getSimpleType(String type) {
-		for (String simplenameAsKey : DICTIONARY_KEYS)
-			if (TYPE_DICTIONARY.get(simplenameAsKey).contains(type))
-				return simplenameAsKey;
-		return null;
+	private static String getSimpleType(String complexType) throws NoSimpleTypeFoundException {
+		for (String simpleTypeAsKey : DICTIONARY_KEYS)
+			for (String subcat : TYPE_DICTIONARY.get(simpleTypeAsKey))
+				if (complexType.startsWith(subcat))
+					return simpleTypeAsKey;
+		throw new NoSimpleTypeFoundException("No simple type found for " + complexType);
+	}
+	
+	private static class NoSimpleTypeFoundException extends Exception {
+		private static final long serialVersionUID = 1L;
+
+		public NoSimpleTypeFoundException(String message) {
+			super(message);
+		}
 	}
 }
