@@ -3,6 +3,7 @@ package husacct.control.presentation.util;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
+import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.ConfigurationManager;
 
@@ -40,15 +41,16 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	private Logger logger = Logger.getLogger(GeneralConfigurationPanel.class);
+	private MainController mainController;
 	
 	private ButtonGroup languageGroup = new ButtonGroup();
 	private GridBagConstraints constraints = new GridBagConstraints();
 	
 	private String language;
 	
-	public GeneralConfigurationPanel() {
+	public GeneralConfigurationPanel(MainController mainController) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
+		this.mainController = mainController;
 		initialiseLanguage();
 		initialiseCodeviewer();
 		initialiseActionLogger();
@@ -194,7 +196,10 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 		ConfigurationManager.setProperty("ExternalCodeviewer", String.valueOf(enableExternalCodeviewer.isSelected()));
 		ConfigurationManager.setProperty("IDELocation", location.getText());
 		ConfigurationManager.setProperty("Language", language);
-		ConfigurationManager.setProperty("ActionLogger", String.valueOf(enableActionLogger.isSelected()));
+		
+		boolean showActionLogger = enableActionLogger.isSelected();
+		ConfigurationManager.setProperty("ActionLogger", String.valueOf(showActionLogger));
+		mainController.getActionLogController().setActionLogVisibility(showActionLogger);
 		
 		setLocaleFromString(language);
 	}

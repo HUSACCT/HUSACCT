@@ -213,7 +213,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public ConfigPanel getConfigurationPanel() {
 		if (generalConfigurationPanel == null)
-			generalConfigurationPanel = new GeneralConfigurationPanel();
+			generalConfigurationPanel = new GeneralConfigurationPanel(mainController);
 		return generalConfigurationPanel;
 	}
 	

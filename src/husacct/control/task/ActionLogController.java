@@ -1,5 +1,10 @@
 package husacct.control.task;
 
+import husacct.control.task.configuration.ConfigPanel;
+import husacct.control.task.configuration.ConfigurationManager;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,4 +55,9 @@ public class ActionLogController {
 	public ArrayList<HashMap<String, String>> getLoggedActionsArrayList(){
 		return loggedActions;
 	}
+	
+	public void setActionLogVisibility(boolean isVisible){
+		mainController.getMainGui().getActionLogPanel().setVisible(isVisible);
+	}
+	
 }
