@@ -1,6 +1,5 @@
 package husaccttest.analyse.java.benchmark.accuracy;
 
-
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -28,34 +27,40 @@ public class DependencyDetectionAccuracyTest {
 	private static String path = new File(TestProjectFinder.lookupProject("java", "accuracy")).getAbsolutePath();
 	private static String language = "Java";
 	
-	@SuppressWarnings("static-access")
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			ArrayList<ProjectDTO> projects = createProjectDTOs();
 			
+			ArrayList<ProjectDTO> projects = createProjectDTOs();
+
 			ServiceProvider.getInstance().getDefineService().createApplication(language+" test", projects, "1.0");
 			service = ServiceProvider.getInstance().getAnalyseService();
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+			//The next line is to fix the nullpointer on the workspace. But if we enable it the tests won't run.
+			//ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
 			ctrlS.getMainController().getApplicationController().analyseApplication();
+			
 			logger.debug("PROJECT LOADED");
 			//analyse is in a different Thread, and needs some time
+			
 			while(!isAnalysed){
 				try {
 					Thread.sleep((long)10);
 				} catch (InterruptedException e) {}
 				isAnalysed = service.isAnalysed();
 			}
+			
 			allDependencies = service.getAllDependencies();
 			//for testing only
 			printDependencies();
 		} catch (Exception e){
-			String errorMessage =  "We're sorry. You need to have a Java project 'benchmark_accuracy'. Or you have the wrong version of the benchmark_accuracy.";
+			String errorMessage =  "We're sorry. You need to have a Java project 'Accuracy'. Or you have the wrong version of the Accuracy Test.";
 			logger.warn(errorMessage);
 			System.exit(0);
 		}
 	}
+	
 	@AfterClass
 	public static void tearDown(){
 		allDependencies = null;
@@ -210,7 +215,7 @@ public class DependencyDetectionAccuracyTest {
 	public void javaAccessClassVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessClassVariable";
-		for(DependencyDTO dependency : allDependencies){
+		for(DependencyDTO dependency : allDependencies){ 
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
 				found = true;
@@ -877,8 +882,6 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-	
-	
 	
 	//
 	//private helpers
