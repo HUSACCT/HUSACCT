@@ -109,21 +109,15 @@ public class MainController {
 
 	public void exit(){
 		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-		int clickedOption = JOptionPane.showConfirmDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_OPTION);
+		Object[] options = { localeService.getTranslatedString("Exit"), 
+							 localeService.getTranslatedString("Save&Exit"),
+				             localeService.getTranslatedString("Cancel") };
+		int clickedOption = JOptionPane.showOptionDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 		if(clickedOption == JOptionPane.YES_OPTION){
-			if(stateController.getState().contains(States.OPENED)) {			
-				clickedOption = JOptionPane.showConfirmDialog(this.mainGUI, localeService.getTranslatedString("DoYouWantToSaveBeforeQuit"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_OPTION);
-				if(clickedOption == JOptionPane.NO_OPTION){				
-					logger.debug("Close HUSACCT");
-					System.exit(0);
-				}
-				else {
-					workspaceController.showSaveWorkspaceGui();
-				}
-			}
-			else {
-				System.exit(0);
-			}
+			logger.debug("Close HUSACCT");
+			System.exit(0);
+		} else if (clickedOption == JOptionPane.NO_OPTION) {
+			workspaceController.showSaveWorkspaceGui();
 		}
 	}
 
