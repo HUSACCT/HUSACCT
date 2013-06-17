@@ -118,7 +118,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public String addSubModule(ModuleStrategy subModule){
-		if(!subModules.contains(subModule) && !moduleAlreadyExistentWithinSystem(subModule.getName())) {
+		if(!subModules.contains(subModule) && !hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
@@ -151,14 +151,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	public boolean hasSubModules(){
 		return subModules.isEmpty();	
-	}
-
-	public boolean moduleAlreadyExistentWithinSystem(String name) {
-		ModuleStrategy parentWalker = this;
-		while (parentWalker.parent != null && !(parentWalker instanceof Layer)) {
-			parentWalker = parentWalker.parent;
-		}
-		return parentWalker.hasSubModule(name);
 	}
 
 	public boolean hasSubModule(String name){
