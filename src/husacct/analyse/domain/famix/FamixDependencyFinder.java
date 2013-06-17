@@ -20,8 +20,9 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	public int buildCache(){
+		int amountOfDependencies = getAllDependencies().size();
 		getExternalSystems().size();
-		return getAllDependencies().size();
+		return amountOfDependencies;
 	}
 	
 	public List<DependencyDTO> getAllDependencies(){
@@ -57,7 +58,7 @@ class FamixDependencyFinder extends FamixFinder {
 	public List<DependencyDTO> getDependenciesTo(String to, String[] dependencyFilter){
 		return findDependencies(FinderFunction.TO, "", to, dependencyFilter);
 	}
-	
+
 	public List<ExternalSystemDTO> getExternalSystems(){
 		if(externalSystemCache != null)
 			return externalSystemCache;
@@ -83,7 +84,20 @@ class FamixDependencyFinder extends FamixFinder {
 		for(ExternalSystemDTO dto : externalSystems){
 			dto.fromDependencies = (ArrayList<DependencyDTO>) getDependenciesTo(dto.systemPackage);
 		}
+		
+		List<FamixAssociation> externalSystemsInAssociation = new ArrayList<FamixAssociation>();
+		
+		for(FamixAssociation fa : theModel.associations)
+			for(ExternalSystemDTO dto : externalSystems)
+				if(fa.to.equals(dto.systemPackage))
+					if(!externalSystemsInAssociation.contains(fa))
+						externalSystemsInAssociation.add(fa);
+		
+//		System.out.println(externalSystemsInAssociation.toString());
+//		System.out.println("Found " + externalSystemsInAssociation.size() + " dependencies");
+		
 		externalSystemCache = externalSystems;
+		
 		return externalSystemCache;
 	}
 	
@@ -92,7 +106,7 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter){
-		return findDependencies(findFunction, from, to, applyFilter, false);
+		return findDependencies(findFunction, from, to, applyFilter, true);
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
