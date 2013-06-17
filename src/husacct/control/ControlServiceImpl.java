@@ -66,20 +66,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	private void setDefaultSettings() {
-		String OSSpecificAppDataFolderName;
-		switch(OSDetector.getOS()) {
-			case LINUX:
-				OSSpecificAppDataFolderName = ".husacct";
-			break;
-			case MAC:
-				OSSpecificAppDataFolderName = ".husacct";
-			break;
-			default:
-				OSSpecificAppDataFolderName = "HUSACCT";
-			break;
-		}
-		
-		String appDataFolderPath = System.getProperty("user.home") + File.separator + OSSpecificAppDataFolderName + File.separator;
+		String appDataFolderPath = OSDetector.getAppFolder();
 		logger.info("App data folder (platform specific): " + appDataFolderPath);
 		File appDataFolderObject = new File(appDataFolderPath);
 		if(!appDataFolderObject.exists()){
@@ -87,7 +74,10 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		}
 		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
 		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
-		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);	
+		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);
+		ConfigurationManager.setPropertyIfEmpty("ApplicationHistoryXMLFilename", "applicationanalysishistory.xml");
+		ConfigurationManager.setPropertyIfEmpty("ActionLogger", "false");
+		ConfigurationManager.setPropertyIfEmpty("Language", "en");
 	}
 
 	@Override
