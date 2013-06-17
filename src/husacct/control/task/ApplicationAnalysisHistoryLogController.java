@@ -153,7 +153,7 @@ public class ApplicationAnalysisHistoryLogController{
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);
 			}else{
 				//TODO: Remove this demonstration code after 04-06-2013
-				mainController.getUserActionLogController().addUserAction("Viewed Analysis History File: " + logFile.getAbsolutePath());
+				mainController.getActionLogController().addAction("Viewed Analysis History File: " + logFile.getAbsolutePath());
 				new ApplicationAnalysisHistoryOverviewFrame(mainController);
 			}
 		}else{

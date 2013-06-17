@@ -48,7 +48,7 @@ public class SetApplicationPanel extends JPanel{
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public SetApplicationPanel(JDialog dialogOwner){
-		this.dialogOwner = dialogOwner;
+		this.setDialogOwner(dialogOwner);
 		addComponents();
 		setListeners();
 		setDefaultValues();
@@ -69,7 +69,7 @@ public class SetApplicationPanel extends JPanel{
 		languageSelect = new JComboBox<String>(languages);
 		versionText = new JTextField(10);
 
-		pathList = new JList(pathListModel);
+		pathList = new JList<String>(pathListModel);
 		pathList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		pathList.setLayoutOrientation(JList.VERTICAL);
 		pathList.setVisibleRowCount(-1);
@@ -209,6 +209,14 @@ public class SetApplicationPanel extends JPanel{
 			return false;
 		}
 		return true;
+	}
+
+	public JDialog getDialogOwner() {
+		return dialogOwner;
+	}
+
+	public void setDialogOwner(JDialog dialogOwner) {
+		this.dialogOwner = dialogOwner;
 	}
 
 }

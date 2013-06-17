@@ -15,13 +15,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class UserActionLogPanel extends JPanel{
+public class ActionLogPanel extends JPanel{
 
 	private static final long serialVersionUID = 9105220354932171257L;
 	private MainController mainController;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
-	public UserActionLogPanel(MainController mainController){
+	public ActionLogPanel(MainController mainController){
 		super();
 		this.mainController = mainController;
 		init();
@@ -39,11 +39,11 @@ public class UserActionLogPanel extends JPanel{
 		
 		this.setVisible(false);
 		
-		refreshUserActionsPanel();
+		refreshActionLogPanel();
 	}
 	
 	@SuppressWarnings("serial")
-	private JScrollPane getUserActionsDialogScrollPaneContents(){
+	private JScrollPane getActionsDialogScrollPaneContents(){
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -57,9 +57,9 @@ public class UserActionLogPanel extends JPanel{
 
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
 
-		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getUserActionLogController().getLoggedUserActionsArrayList();
+		ArrayList<HashMap<String, String>> loggedActions = mainController.getActionLogController().getLoggedActionsArrayList();
 		int i = 1;
-		for(HashMap<String, String> loggedUserAction : loggedUserActions){
+		for(HashMap<String, String> loggedUserAction : loggedActions){
 			logTableModel.addRow(new Object[]{i + ": " + loggedUserAction.get("message")});
 			i++;
 		}
@@ -72,24 +72,9 @@ public class UserActionLogPanel extends JPanel{
 		return output;
 	}
 	
-	/*private JPanel getUserActionsDialogButtonsPanel(){
-		JPanel buttonsPanel = new JPanel();
-		
-		JButton undoButton = new JButton(localeService.getTranslatedString("Undo"));
-		undoButton.setEnabled(false);
-		buttonsPanel.add(undoButton);
-		
-		JButton redoButton = new JButton(localeService.getTranslatedString("Redo"));
-		redoButton.setEnabled(false);
-		buttonsPanel.add(redoButton);
-		
-		return buttonsPanel;
-	}*/
-	
-	public void refreshUserActionsPanel(){
+	public void refreshActionLogPanel(){
 		this.removeAll();
-		this.add(getUserActionsDialogScrollPaneContents(), BorderLayout.SOUTH);
-		//this.add(getUserActionsDialogButtonsPanel(), BorderLayout.SOUTH);
+		this.add(getActionsDialogScrollPaneContents(), BorderLayout.SOUTH);
 		this.validate();
 		this.repaint();
 	}
