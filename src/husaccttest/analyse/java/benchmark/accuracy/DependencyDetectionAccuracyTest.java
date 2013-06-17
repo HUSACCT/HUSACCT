@@ -26,7 +26,7 @@ public class DependencyDetectionAccuracyTest {
 	private static boolean isAnalysed = false;
 	private static Logger logger;
 	private static DependencyDTO[] allDependencies = null;
-	private static String path = new File(TestProjectFinder.lookupProject("java", "benchmark"+File.separator+"accuracy-test-2013-04-17")).getAbsolutePath();
+	private static String path = new File(TestProjectFinder.lookupProject("java", "accuracy")).getAbsolutePath();
 	private static String language = "Java";
 	
 	@SuppressWarnings("static-access")
