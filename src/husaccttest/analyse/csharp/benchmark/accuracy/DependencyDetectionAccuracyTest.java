@@ -46,7 +46,7 @@ public class DependencyDetectionAccuracyTest {
 			}
 			allDependencies = service.getAllDependencies();
 			//for testing only
-			printDependencies();
+			//printDependencies();
 			
 		} catch (Exception e){
 			String errorMessage =  "We're sorry. You need to have a C# project 'benchmark_accuracy'. Or you have the wrong version of the benchmark_accuracy.";
@@ -910,7 +910,7 @@ public class DependencyDetectionAccuracyTest {
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
 	
-	private static void printDependencies() {
+	public static void printDependencies() {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
 		for(DependencyDTO d : allDependencies){
