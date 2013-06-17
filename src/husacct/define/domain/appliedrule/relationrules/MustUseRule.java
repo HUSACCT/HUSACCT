@@ -1,6 +1,7 @@
 package husacct.define.domain.appliedrule.relationrules;
 
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.task.conventions_checker.LayerCheckerHelper;
 import husacct.define.task.conventions_checker.ModuleCheckerHelper;
@@ -30,9 +31,9 @@ public class MustUseRule extends AppliedRuleStrategy{
 			if (conventionSuccess) {
 			    if (!moduleCheckerHelper.checkRuleTypeAlreadySet(
 				    "IsNotAllowedToMakeSkipCall", this.getModuleFrom())) {
-				ArrayList<Layer> skipCallLayers = layerCheckerHelper
+				ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
 					.getSkipCallLayers(this.getModuleFrom().getId());
-				for (Layer skipCallLayer : skipCallLayers) {
+				for (ModuleStrategy skipCallLayer : skipCallLayers) {
 				    if (skipCallLayer == this.getModuleTo()) {
 				    	conventionSuccess = false;
 					break;
@@ -43,9 +44,9 @@ public class MustUseRule extends AppliedRuleStrategy{
 			if (conventionSuccess) {
 			    if (!moduleCheckerHelper.checkRuleTypeAlreadySet(
 				    "IsNotAllowedToMakeBackCall", this.getModuleFrom())) {
-				ArrayList<Layer> skipCallLayers = layerCheckerHelper
+				ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
 					.getBackCallLayers(this.getModuleFrom().getId());
-				for (Layer skipCallLayer : skipCallLayers) {
+				for (ModuleStrategy skipCallLayer : skipCallLayers) {
 				    if (skipCallLayer == this.getModuleTo()) {
 				    	conventionSuccess = false;
 					break;
