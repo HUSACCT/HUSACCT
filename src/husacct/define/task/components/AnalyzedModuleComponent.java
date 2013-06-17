@@ -1,5 +1,8 @@
 package husacct.define.task.components;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AnalyzedModuleComponent extends AbstractCombinedComponent {
@@ -157,5 +160,8 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		
 		return result;
 	}
+
+	
+	
 
 }

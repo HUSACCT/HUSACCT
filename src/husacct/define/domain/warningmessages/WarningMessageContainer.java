@@ -57,6 +57,17 @@ public class WarningMessageContainer {
 		
 		return warnings.size();
 	}
+
+
+	public int getAllWarningsCount() {
+		int total =0;
+		for (WarningMessageContainer cont : this.getchildren()) {
+			total+=cont.getchildren().size();
+		}
+		
+		return total;
+		
+	}
 	
 	
 }

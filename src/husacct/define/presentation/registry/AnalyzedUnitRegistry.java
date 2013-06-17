@@ -122,13 +122,19 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 			
 			}
 		}
-		WarningMessageContainer notMapped = new WarningMessageContainer(new CustomWarningMessage("NotMapped("+StateService.instance().getAnalzedModuleRegistry().getUnitsCount()+")"));
+		WarningMessageContainer notMapped = new WarningMessageContainer(new CustomWarningMessage("NotMapped"));
+	
+		
+		((CustomWarningMessage)packagesroot.getvalue()).setDecription(packagesroot.getchildren().size());
+		((CustomWarningMessage)classesroot.getvalue()).setDecription(classesroot.getchildren().size());
+		((CustomWarningMessage)interfaceroot.getvalue()).setDecription(interfaceroot.getchildren().size());
+		((CustomWarningMessage)enumroot.getvalue()).setDecription(enumroot.getchildren().size());
 		notMapped.addChild(packagesroot);
 		notMapped.addChild(classesroot);
 		notMapped.addChild(interfaceroot);
 		notMapped.addChild(enumroot);
-		
-		
+	   
+	    ((CustomWarningMessage)notMapped.getvalue()).setDecription( notMapped.getAllWarningsCount());
 		return notMapped;
 	}
 }

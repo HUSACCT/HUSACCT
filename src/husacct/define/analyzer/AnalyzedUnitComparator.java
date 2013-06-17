@@ -226,19 +226,16 @@ public class AnalyzedUnitComparator {
 		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance()
 				.getAnalyseService().getExternalSystems();
 		for (ExternalSystemDTO exe : externalSystems) {
-			if (exe.systemPackage.startsWith("java.")) {
+			
 				AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
 						exe.systemPackage, exe.systemName, "externallibrary",
 						"public");
 				rootOfExterexternalLibrary.addChild(javalib);
-			} else {
-				AnalyzedModuleComponent subsystem = new AnalyzedModuleComponent(
-						exe.systemPackage, exe.systemName, "subsystem",
-						"public");
-				rootOfExterexternalLibrary.addChild(subsystem);
+			
+				
 			}
 
-		}
+		
 
 		root.addChild(rootOfExterexternalLibrary);
 

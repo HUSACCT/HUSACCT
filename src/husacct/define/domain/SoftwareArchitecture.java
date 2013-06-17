@@ -680,13 +680,14 @@ for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 	@Override
 	public void addSeperatedModule(ModuleStrategy module) {
 	 
+		System.out.println(module.getparent().getName()+" >>>>>>??????");
 		module.getparent().addSubModule(module);
 		
 	}
 
 	@Override
 	public void removeSeperatedModule(ModuleStrategy module) {
-		System.out.println("ooooooooooooooooooookkkkkkkkkkkkkk");
+		
 		module.getparent().removeSubModule(module);
 		
 	}

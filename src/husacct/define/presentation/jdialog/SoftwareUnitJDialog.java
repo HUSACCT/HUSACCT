@@ -4,24 +4,27 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.define.domain.services.DomainGateway;
-import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.presentation.draganddrop.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
-
-import husacct.define.task.JtreeController;
-
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.presentation.utils.ExpressionEngine;
-
-import husacct.define.task.JtreeStateEngine;
+import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
+
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -48,9 +51,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.omg.CORBA.Object;
-
-public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
+public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener,DropTargetListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	
@@ -75,7 +76,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private long _moduleId;
 	
 	public SoftwareUnitJDialog(long moduleId) {
-		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), false);
 		_moduleId=moduleId;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
@@ -98,6 +99,9 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			UIMapping.setEnabled(false);
 			this.setResizable(false);
 			this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
+			softwareDefinitionTree.setDragEnabled(true);
+			new DropTarget(softwareDefinitionTree, DnDConstants.ACTION_COPY_OR_MOVE, this);
+			
 		
 			this.setSize(650, 300);
 			this.pack();
@@ -225,6 +229,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	private void getSoftwareDefinationTree() {
 	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
+	this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
+	this.softwareDefinitionTree.setDragEnabled(true);
 	
 		
 	}
@@ -387,4 +393,39 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 
 	
 	};
+
+	@Override
+	public void dragEnter(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragExit(DropTargetEvent dte) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragOver(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drop(DropTargetDropEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dropActionChanged(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+
+	
 }

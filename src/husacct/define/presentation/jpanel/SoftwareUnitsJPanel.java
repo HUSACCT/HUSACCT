@@ -16,10 +16,20 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -36,7 +46,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
-Observer, IServiceListener {
+Observer, IServiceListener,DropTargetListener ,Transferable {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JButton addSoftwareUnitButton;
@@ -147,6 +157,8 @@ Observer, IServiceListener {
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
+		new DropTarget(softwareUnitsPane, DnDConstants.ACTION_COPY_OR_MOVE, this);
+		softwareUnitsTable.setDragEnabled(true);
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -415,4 +427,53 @@ Observer, IServiceListener {
 		}
 
 }
+
+	@Override
+	public void dragEnter(DropTargetDragEvent dtde) {
+		
+		
+	}
+
+	@Override
+	public void dragExit(DropTargetEvent dte) {
+	
+		
+	}
+
+	@Override
+	public void dragOver(DropTargetDragEvent dtde) {
+		
+		
+	}
+
+	@Override
+	public void drop(DropTargetDropEvent dtde) {
+
+		
+	}
+
+	@Override
+	public void dropActionChanged(DropTargetDragEvent dtde) {
+		
+		
+	}
+
+	@Override
+	public Object getTransferData(DataFlavor flavor)
+			throws UnsupportedFlavorException, IOException {
+		// TODO Auto-generated method stub
+		return  softwareUnitsTable.getSelectedRows();
+	}
+
+	@Override
+	public DataFlavor[] getTransferDataFlavors() {
+	
+		return null;
+	}
+
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		
+		return false;
+	}
 		}

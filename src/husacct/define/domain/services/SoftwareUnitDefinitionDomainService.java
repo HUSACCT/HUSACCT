@@ -5,9 +5,11 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
 import husacct.define.task.JtreeController;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
 
@@ -32,6 +34,16 @@ public class SoftwareUnitDefinitionDomainService {
 				module.addSUDefinition(unit);
 				RegisterRegixSoftwareUnits((RegexComponent) softwareunit,
 						module, unit);
+				for (AbstractCombinedComponent result : ((RegexComponent) softwareunit).getChildren()) {
+					
+					SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(
+							softwareunit.getUniqueName(),  Type.valueOf(result.getType()));
+					
+					
+				}
+			
+				
+				
 			} else {
 				module.addSUDefinition(unit);
 				JtreeController.instance().getTree().removeTreeItem(softwareunit);
@@ -72,11 +84,14 @@ public class SoftwareUnitDefinitionDomainService {
 			ArrayList<AnalyzedModuleComponent> softwareUnits, String regExName) {
 		SoftwareUnitRegExDefinition regExDefinition = new SoftwareUnitRegExDefinition(
 				regExName);
+		
+		ExpressionUnitDefinition expression = new ExpressionUnitDefinition(regExName, Type.valueOf("regex"));
 		try {
 			for (AnalyzedModuleComponent softwareUnit : softwareUnits) {
 				Type type = Type.valueOf(softwareUnit.getType());
 				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(
 						softwareUnit.getUniqueName(), type);
+				expression.addSoftwareUnit(unit);
 				regExDefinition.addSoftwareUnitDefinition(unit);
 			}
 			RegexComponent regixwrapper = JtreeController.instance()
