@@ -194,7 +194,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpAccessInstanceVariableInheritedTest(){
 		boolean found = false;
-		String toTestFrom = "AccessInstanceVariableInherited";
+		String toTestFrom = "AccessInstanceVariableSuperClass";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
