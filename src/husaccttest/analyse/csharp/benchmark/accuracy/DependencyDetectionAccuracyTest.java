@@ -711,7 +711,7 @@ public class DependencyDetectionAccuracyTest {
 	@Test
 	public void cSharpICallInstanceMethodTest(){
 		boolean found = false;
-		String toTestFrom = "ImportDependencyUnused";
+		String toTestFrom = "CallInstanceMethodIndirect_MethodMethod";
 		for(DependencyDTO dependency : allDependencies){
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
