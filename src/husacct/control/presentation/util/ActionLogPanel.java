@@ -3,6 +3,7 @@ package husacct.control.presentation.util;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,7 +38,8 @@ public class ActionLogPanel extends JPanel{
 		Dimension preferredSize = new Dimension(250, 212);
 		this.setPreferredSize(preferredSize);
 		
-		this.setVisible(false);
+		boolean showActionLog = ConfigurationManager.getProperty("ActionLogger").equals("true");
+		this.setVisible(showActionLog);
 		
 		refreshActionLogPanel();
 	}
