@@ -186,7 +186,7 @@ class FamixDependencyConnector {
 		FamixLocalVariable variable;
 		
         for (String s : theModel.structuralEntities.keySet()) {
-            if (s.startsWith(declareClass)) {
+            if (!s.startsWith(declareClass)) {
                 entity = (FamixStructuralEntity) theModel.structuralEntities.get(s);
                 if (entity instanceof FamixLocalVariable) {
                     variable = (FamixLocalVariable) entity;
