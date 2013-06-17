@@ -5,6 +5,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -77,28 +78,32 @@ public class FileController {
 
                 WatchEvent<Path> castedEvent = cast(event);
                 Path relativePath = castedEvent.context();
-                Path file = directory.resolve(relativePath);
+                Path path = directory.resolve(relativePath);
 
-                System.out.format("%s: %s\n", kind.name(), file);
+                System.out.format("%s: %s\n", kind.name(), path);
 
                 if ((kind == ENTRY_CREATE)) {
-                    if (Files.isDirectory(file, NOFOLLOW_LINKS)) {
-                        addDirectory(file);
+                    if (Files.isDirectory(path, NOFOLLOW_LINKS)) {
+                        addDirectory(path);
                     } else {
                     	for(IFileChangeListener listener : listeners)
-                    		listener.addFile(file);
+                    		listener.onCreate(path);
                     }
                 } else if((kind == ENTRY_MODIFY)) {
-                	if (!Files.isDirectory(file, NOFOLLOW_LINKS)) {
+                	if (!Files.isDirectory(path, NOFOLLOW_LINKS)) {
                 		for(IFileChangeListener listener : listeners)
-                			listener.updateFile(file);
+                			listener.onUpdate(path);
                 	}
                 } else if ((kind == ENTRY_DELETE)) {
-                    if (Files.isDirectory(file, NOFOLLOW_LINKS)) {
-                        //TODO Directory removed
+                    if (Files.isDirectory(path, NOFOLLOW_LINKS)) {
+                    	File dir = path.toFile();
+                        for(File f : dir.listFiles()) {
+                        	for(IFileChangeListener listener : listeners)
+                        		listener.onRemove(f.toPath());
+                        }
                     } else {
                     	for(IFileChangeListener listener : listeners)
-                    		listener.removeFile(file);
+                    		listener.onRemove(path);
                     }
                 }
             }

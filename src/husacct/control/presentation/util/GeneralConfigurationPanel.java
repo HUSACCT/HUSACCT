@@ -33,9 +33,9 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	final JTextField location = new JTextField();
 	final JFileChooser fileChooser = new JFileChooser();
 	
-	private JCheckBox enable = new JCheckBox();
+	private JCheckBox enableExternalCodeviewer, enableActionLogger;
 	private JButton selectFile = new JButton();
-	private JPanel languagePanel, codeviewerPanel;
+	private JPanel languagePanel, codeviewerPanel, actionLoggerPanel;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -51,6 +51,7 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 		
 		initialiseLanguage();
 		initialiseCodeviewer();
+		initialiseActionLogger();
 		
 		setComponentText();
 		setListeners();
@@ -94,8 +95,8 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	private void initialiseCodeviewer() {
 		codeviewerPanel = new JPanel(new GridBagLayout());
-
-		enable.addItemListener(new ItemListener() {
+		enableExternalCodeviewer = new JCheckBox();
+		enableExternalCodeviewer.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
 				if(event.getStateChange() == ItemEvent.SELECTED) {
@@ -111,7 +112,7 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		codeviewerPanel.add(enable, constraints);
+		codeviewerPanel.add(enableExternalCodeviewer, constraints);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -123,6 +124,13 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 		codeviewerPanel.add(selectFile, constraints);
 		
 		this.add(codeviewerPanel);
+	}
+	
+	private void initialiseActionLogger() {
+		actionLoggerPanel = new JPanel();
+		enableActionLogger = new JCheckBox();
+		actionLoggerPanel.add(enableActionLogger);
+		this.add(actionLoggerPanel);
 	}
 	
 	private void setListeners() {
@@ -155,17 +163,22 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	protected void setComponentText() {
 		languagePanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralLanguage")));
 		codeviewerPanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralCodeviewer")));
+		actionLoggerPanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralActionLogger")));
 		
-		enable.setText(localeService.getTranslatedString("ConfigGeneralCodeviewerEnable"));
+		enableExternalCodeviewer.setText(localeService.getTranslatedString("ConfigGeneralCodeviewerEnable"));
+		enableActionLogger.setText(localeService.getTranslatedString("ConfigGeneralActionLoggerEnable"));
 		selectFile.setText(localeService.getTranslatedString("ConfigGeneralCodeviewerBrowse"));
 	}
 
 	public void loadDefaults() {
 		String ExternalCodeviewer = ConfigurationManager.getProperty("ExternalCodeviewer");
+		String ActionLogger = ConfigurationManager.getProperty("ActionLogger");
 		boolean external = false;
+		boolean logger = false;
 		external = Boolean.valueOf(ExternalCodeviewer);
-	
-		enable.setSelected(external);
+		logger = Boolean.valueOf(ActionLogger);
+		enableExternalCodeviewer.setSelected(external);
+		enableActionLogger.setSelected(logger);
 		location.setEnabled(external);
 		selectFile.setEnabled(external);
 
@@ -178,9 +191,10 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	@Override
 	public void SaveSettings() {
-		ConfigurationManager.setProperty("ExternalCodeviewer", String.valueOf(enable.isSelected()));
+		ConfigurationManager.setProperty("ExternalCodeviewer", String.valueOf(enableExternalCodeviewer.isSelected()));
 		ConfigurationManager.setProperty("IDELocation", location.getText());
 		ConfigurationManager.setProperty("Language", language);
+		ConfigurationManager.setProperty("ActionLogger", String.valueOf(enableActionLogger.isSelected()));
 		
 		setLocaleFromString(language);
 	}
