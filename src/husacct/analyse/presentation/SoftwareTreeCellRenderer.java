@@ -41,7 +41,7 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
             }else{
 	            switch(moduleSelected.type){
 		            case "package":  icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE)); break;
-		            case "library":  icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2)); break;
+		            case "library":  icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2_GRAY)); break;
 		            case "class":{
 		            	if (moduleSelected.visibility.equals("public")) {
 		                    icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));

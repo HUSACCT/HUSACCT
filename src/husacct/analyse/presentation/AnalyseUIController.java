@@ -62,8 +62,8 @@ public class AnalyseUIController {
     
     public List<AnalysedModuleDTO> listAllExternalSystems(){
     	List<AnalysedModuleDTO> allModules = new ArrayList<AnalysedModuleDTO>();
-    	for(ExternalSystemDTO eSystem : analyseTaskService.getExternalSystems())
-    		allModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
+//    	for(ExternalSystemDTO eSystem : analyseTaskService.getExternalSystems())
+//    		allModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
     	return allModules;
     }
 
