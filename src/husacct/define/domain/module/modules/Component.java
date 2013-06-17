@@ -19,7 +19,7 @@ public class Component extends ModuleStrategy {
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
 	    ModuleStrategy facade = new ModuleFactory().createModule("Facade");
-	    facade.set(name+"Facade","this is the Facade of your Component");
+	    facade.set("Facade<"+name+">","this is the Facade of your Component");
 	    this.subModules.add(facade);
 	}
 	
