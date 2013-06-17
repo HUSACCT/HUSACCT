@@ -19,7 +19,7 @@ public class MainController {
 	private ImportController importController;
 	private ExportController exportController;
 	private ApplicationAnalysisHistoryLogController applicationAnalysisHistoryLogController;
-	private UserActionLogController userActionLogController;
+	private ActionLogController actionLogController;
 	private CodeViewController codeViewController;
 	private FileController fileController;
 
@@ -48,7 +48,7 @@ public class MainController {
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
 		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
-		this.userActionLogController = new UserActionLogController(this);
+		this.actionLogController = new ActionLogController(this);
 		this.fileController = new FileController(this);
 	}
 
@@ -99,8 +99,8 @@ public class MainController {
 		return this.applicationAnalysisHistoryLogController;
 	}
 	
-	public UserActionLogController getUserActionLogController(){
-		return this.userActionLogController;
+	public ActionLogController getActionLogController(){
+		return this.actionLogController;
 	}
 	
 	public FileController getFileController() {

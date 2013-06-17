@@ -5,21 +5,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class UserActionLogController {
-	private ArrayList<HashMap<String, String>> loggedUserActions = new ArrayList<HashMap<String, String>>();
-	private int maxUserActions = 10;
+public class ActionLogController {
+	private ArrayList<HashMap<String, String>> loggedActions = new ArrayList<HashMap<String, String>>();
+	private int maxActions = 10;
 	private MainController mainController;
 	
-	public UserActionLogController(MainController mainController){
+	public ActionLogController(MainController mainController){
 		this.mainController = mainController;
 	}
 	
-	public void addUserAction(String message){
+	public void addAction(String message){
 		if(message==""){
 			return;
 		}
 		
-		if(maxUserActionsAreLogged()){
+		if(maxNumberOfActionsAreLogged()){
 			removeFirstLoggedUserAction();
 		}
 		
@@ -34,21 +34,20 @@ public class UserActionLogController {
 		loggedMethodInfo.put("classPath", classPath);
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);
-		loggedUserActions.add(loggedMethodInfo);
+		loggedActions.add(loggedMethodInfo);
 		
-		mainController.getMainGui().getUserActionLogPanel().refreshUserActionsPanel();
+		mainController.getMainGui().getActionLogPanel().refreshActionLogPanel();
 	}
 	
-	private boolean maxUserActionsAreLogged(){
-		return loggedUserActions.size()==maxUserActions;
+	private boolean maxNumberOfActionsAreLogged(){
+		return loggedActions.size()==maxActions;
 	}
 	
 	private void removeFirstLoggedUserAction(){
-		loggedUserActions.remove(0);
+		loggedActions.remove(0);
 	}
 	
-	public ArrayList<HashMap<String, String>> getLoggedUserActionsArrayList(){
-		return loggedUserActions;
+	public ArrayList<HashMap<String, String>> getLoggedActionsArrayList(){
+		return loggedActions;
 	}
-
 }
