@@ -44,7 +44,7 @@ public class DependencyDetectionAccuracyTest {
 			//analyse is in a different Thread, and needs some time
 			while(!isAnalysed){
 				try {
-					Thread.currentThread().sleep((long)10);
+					Thread.sleep((long)10);
 				} catch (InterruptedException e) {}
 				isAnalysed = service.isAnalysed();
 			}
@@ -893,11 +893,13 @@ public class DependencyDetectionAccuracyTest {
 		projects.add(project);
 		return projects;
 	}
+	
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/husacct.properties");
+		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
+	
 	private static void printDependencies() {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
@@ -909,6 +911,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		logger.info(uniqueDependencies);
 	}
+	
 	private static String getClass(String fromPath){
 		return (String) fromPath.subSequence(fromPath.lastIndexOf('.')+1, fromPath.length());
 	}
