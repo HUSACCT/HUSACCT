@@ -8,11 +8,10 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
 import husaccttest.analyse.TestProjectFinder;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -903,13 +902,9 @@ public class DependencyDetectionAccuracyTest {
 	private static void printDependencies() {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
-		Set<String> uniqueDependencies = new HashSet<String>();
 		for(DependencyDTO d : allDependencies){
-			uniqueDependencies.add("\n"+d.type);
-			//logger.info(d.type);
-			//logger.info(getClass(d.from));
+			logger.info(d.toString());
 		}
-		logger.info(uniqueDependencies);
 	}
 	
 	private static String getClass(String fromPath){
