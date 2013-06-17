@@ -136,6 +136,7 @@ public class DefaultRuleDomainService {
 	public void removeDefaultRules(ModuleStrategy module) {
 		_module = module;
 		retrieveRuleTypeDTOsByModule();
+
 		ArrayList<Long> appliedRuleIds = new ArrayList<>();
 		if (defaultRuleTypeDTOs.length > 0) {
 			for (RuleTypeDTO rule : defaultRuleTypeDTOs) {
@@ -146,8 +147,7 @@ public class DefaultRuleDomainService {
 				}
 			}
 			for (Long appliedRuleid : appliedRuleIds) {
-				SoftwareArchitecture.getInstance().removeAppliedRule(
-						appliedRuleid);
+				SoftwareArchitecture.getInstance().removeAppliedRule(appliedRuleid);
 			}
 		}
 	}

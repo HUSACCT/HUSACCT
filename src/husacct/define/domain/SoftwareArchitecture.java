@@ -583,7 +583,7 @@ public class SoftwareArchitecture {
 				oldModule, newType);
 		parent.addSubModule(index, updatedModule);
 
-		return oldModule;
+		return updatedModule;
 	}
 
 	public void removeAppliedRule(List<Long> selectedRules) {

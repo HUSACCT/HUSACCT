@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 public class ModuleFactory {
 	private static Logger logger = Logger.getLogger(ModuleFactory.class);
-	
+
 	public static String[] flavors = new String[]{
 		"Layer",
 		"Component",
@@ -22,7 +22,7 @@ public class ModuleFactory {
 		"Root",
 		"Blank"
 	};
-	
+
 	public static Class<?>[] icecreams = new Class[]{
 		Layer.class,
 		Component.class,
@@ -32,7 +32,7 @@ public class ModuleFactory {
 		Root.class,
 		Blank.class
 	};
-	
+
 	public ModuleStrategy createModule(String choice){
 		for(int i = 0; i < flavors.length; i++){
 			if(flavors[i].equalsIgnoreCase(choice)) try{
@@ -48,7 +48,7 @@ public class ModuleFactory {
 		logger.error("Error in ModuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}
-	
+
 	public ModuleStrategy createDummy(String choice){
 		for(int i = 0; i < flavors.length; i++){
 			if(flavors[i].equalsIgnoreCase(choice)) try{
@@ -65,15 +65,15 @@ public class ModuleFactory {
 		logger.error("Error in ModuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}
-	
-	
+
+
 	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,String choice){
 		ModuleStrategy newModule = createModule(choice);
 		oldModule.copyValuestoNewCompont(newModule);
 		if (choice.toLowerCase().equals("component")) {
-		 ModuleStrategy facade=	this.createModule("Facade");
-		 facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
-		 newModule.addSubModule(0, facade);
+			ModuleStrategy facade=	this.createModule("Facade");
+			facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
+			newModule.addSubModule(0, facade);
 		}	
 		return newModule;		
 	}
