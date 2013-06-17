@@ -52,6 +52,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private GeneralConfigurationPanel generalConfigurationPanel;
 	private FileController fileController;
 	
+	private Thread eventHandlerThread;
+	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
 		mainController = new MainController();
@@ -61,7 +63,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		viewController = mainController.getViewController();
 		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
-		fileController = new FileController(mainController); //TODO put in mainController?
+		fileController = mainController.getFileController();
 		setDefaultSettings();
 	}
 	
@@ -228,14 +230,21 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public void addProjectForListening(String path) {
-		
 		try {
 			fileController.addProject(path);
-			fileController.processEvents(); //TODO Execute in thread, will hang application.
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		 
+		eventHandlerThread = new Thread() {
+			public void run() {
+				try {
+					fileController.processEvents();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		eventHandlerThread.start();
 	}
 
 	@Override
