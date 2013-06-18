@@ -21,6 +21,7 @@ public class Component extends ModuleStrategy {
 		this.subModules = new ArrayList<ModuleStrategy>();
 	    ModuleStrategy facade = new ModuleFactory().createModule("Facade");
 	    facade.set("Facade<"+name+">","this is the Facade of your Component");
+	    facade.setParent(this);
 	    this.subModules.add(facade);
 	}
 	
