@@ -26,7 +26,7 @@ class DependencyTableModel extends AbstractTableModel {
         titleLine = uiController.translate("Linenumber");
         titleType = uiController.translate("Type");
         titleIndirect = uiController.translate("Direct") + "/" + uiController.translate("Indirect");
-        fields = new String[]{titleFrom, titleVia, titleTo, titleType, titleLine, titleIndirect};
+        fields = new String[]{titleFrom, titleTo, titleType, titleLine, titleIndirect};
     }
 
     public void setModel(List<DependencyDTO> newData) {
