@@ -62,14 +62,14 @@ public class LayerCheckerHelper {
     	ModuleDomainService moduleService =new  ModuleDomainService();
 	
     	Long parentId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(1L);
-    	System.out.println("oppp "+parentId);
+    	
     	parentId=-1L;
 	if (parentId != -1) {
 		try{
 		
 		}catch(Exception e)
 		{
-			System.out.println("<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>"+moduleFrom==null ?  "klop":moduleFrom.getName());e.getStackTrace();
+			
 		}
 		ModuleStrategy parentModule = moduleService.getModuleById(parentId);
 	    moduleService.sortModuleChildren(parentModule);
