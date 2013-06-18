@@ -37,7 +37,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
-Observer, IServiceListener {
+		Observer, IServiceListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JButton addSoftwareUnitButton;
@@ -46,6 +46,7 @@ Observer, IServiceListener {
 	private JMenuItem editSoftwareUnitItem = new JMenuItem();
 	private JPopupMenu popupMenu = new JPopupMenu();
 	private JButton removeSoftwareUnitButton;
+	SoftwareUnitJDialog softwareUnitFrame = null;
 
 	private JMenuItem removeSoftwareUnitItem = new JMenuItem();
 	private JScrollPane softwareUnitsPane;
@@ -102,45 +103,47 @@ Observer, IServiceListener {
 
 	private void addSoftwareUnit() {
 		if (DefinitionController.getInstance().isAnalysed()) {
-			if (DefinitionController.getInstance().isAnalysed() || ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-				long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			if (DefinitionController.getInstance().isAnalysed()
+					|| ServiceProvider.getInstance().getControlService()
+							.isPreAnalysed()) {
+				long moduleId = DefinitionController.getInstance()
+						.getSelectedModuleId();
 				if (moduleId != -1) {
-					SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(
-							moduleId);
-					DialogUtils.alignCenter(softwareUnitFrame);
-					softwareUnitFrame.setVisible(true);
-				} else {
+					if (softwareUnitFrame == null) {
+						softwareUnitFrame = new SoftwareUnitJDialog(
+								DefinitionController.getInstance()
+										.getSelectedModuleId());
+						DialogUtils.alignCenter(softwareUnitFrame);
+						softwareUnitFrame.setVisible(true);
+					} else if (!softwareUnitFrame.isVisible()) {
+						DialogUtils.alignCenter(softwareUnitFrame);
+						softwareUnitFrame.setVisible(true);
+					}
+				}
+
+				else {
 					JOptionPane
-					.showMessageDialog(
-							this,
-							ServiceProvider
-							.getInstance()
-							.getLocaleService()
-							.getTranslatedString(
-									"NotAnalysedYet"),
+							.showMessageDialog(
+									this,
 									ServiceProvider
-									.getInstance()
-									.getLocaleService()
-									.getTranslatedString(
-											"NotAnalysedYetTitle"),
-											JOptionPane.ERROR_MESSAGE);
+											.getInstance()
+											.getLocaleService()
+											.getTranslatedString(
+													"NotAnalysedYet"),
+									ServiceProvider
+											.getInstance()
+											.getLocaleService()
+											.getTranslatedString(
+													"NotAnalysedYetTitle"),
+									JOptionPane.ERROR_MESSAGE);
 				}
 			}
-		}else{
-			JOptionPane
-			.showMessageDialog(
-					this,
-					ServiceProvider
-					.getInstance()
-					.getLocaleService()
-					.getTranslatedString(
-							"NotAnalysedYet"),
-							ServiceProvider
-							.getInstance()
-							.getLocaleService()
-							.getTranslatedString(
-									"NotAnalysedYetTitle"),
-									JOptionPane.ERROR_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance()
+					.getLocaleService().getTranslatedString("NotAnalysedYet"),
+					ServiceProvider.getInstance().getLocaleService()
+							.getTranslatedString("NotAnalysedYetTitle"),
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
@@ -148,9 +151,10 @@ Observer, IServiceListener {
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
-	
+
 		softwareUnitsTable.setDragEnabled(true);
-		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(softwareUnitsTable);
+		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(
+				softwareUnitsTable);
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -230,9 +234,9 @@ Observer, IServiceListener {
 		} else {
 			JOptionPane.showMessageDialog(this,
 					ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("SoftwareunitSelectionError"),
+							.getTranslatedString("SoftwareunitSelectionError"),
 					ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("WrongSelectionTitle"),
+							.getTranslatedString("WrongSelectionTitle"),
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -258,10 +262,6 @@ Observer, IServiceListener {
 		removeSoftwareUnitButton.setEnabled(true);
 		removeSoftwareUnitItem.setEnabled(true);
 	}
-    
-
-  
-
 
 	public TableModel getModel() {
 		return softwareUnitsTable.getModel();
@@ -275,7 +275,7 @@ Observer, IServiceListener {
 	 * Creating Gui
 	 */
 	public void initGui() {
-		try{
+		try {
 			DefinitionController.getInstance().addObserver(this);
 			BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 			setLayout(softwareUnitsPanelLayout);
@@ -285,10 +285,10 @@ Observer, IServiceListener {
 			this.add(addSoftwareUnitsTable(), BorderLayout.CENTER);
 			this.add(addButtonPanel(), BorderLayout.EAST);
 			ServiceProvider.getInstance().getLocaleService()
-			.addServiceListener(this);
+					.addServiceListener(this);
 			createPopupMenu();
 			setButtonEnableState();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -314,14 +314,15 @@ Observer, IServiceListener {
 				selectedModules.add(softwareUnitName);
 				types.add(type);
 			}
-			DomainGateway.getInstance().removeSoftwareUnits(selectedModules, types);
+			DomainGateway.getInstance().removeSoftwareUnits(selectedModules,
+					types);
 
 		} else {
 			JOptionPane.showMessageDialog(this,
 					ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("SoftwareunitSelectionError"),
+							.getTranslatedString("SoftwareunitSelectionError"),
 					ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("WrongSelectionTitle"),
+							.getTranslatedString("WrongSelectionTitle"),
 					JOptionPane.ERROR_MESSAGE);
 
 		}
@@ -380,7 +381,7 @@ Observer, IServiceListener {
 					.getSelectedModuleId();
 			JPanelStatus.getInstance(
 					ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("UpdatingRules")).start();
+							.getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all components from the service
@@ -418,6 +419,6 @@ Observer, IServiceListener {
 			JPanelStatus.getInstance().stop();
 		}
 
-}
+	}
 
-		}
+}
