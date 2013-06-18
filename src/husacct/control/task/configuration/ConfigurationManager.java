@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class ConfigurationManager {
 
 	private final static Properties properties = loadProperties();
+	private final static ArrayList<IConfigEvent> listeners = new ArrayList<IConfigEvent>();
 	
 	public static String getProperty(String key) {
 		if(properties.containsKey(key))
@@ -54,5 +56,14 @@ public class ConfigurationManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void notifyListeners() {
+		for(IConfigEvent event : listeners)
+			event.onConfigUpdate();
+	}
+	
+	public void addListener(IConfigEvent event) {
+		listeners.add(event);
 	}
 }
