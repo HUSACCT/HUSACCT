@@ -82,12 +82,19 @@ public class ModuleDropTarget implements DropTargetListener{
 			AnalyzedModuleTree palo = (AnalyzedModuleTree)arg.getTransferable().getTransferData(ModuleTrasferhandler.moduleFlavours[0]);
 			ArrayList<AnalyzedModuleComponent> tobesaved = new ArrayList<AnalyzedModuleComponent>();
 			for (TreePath pathe : palo.getSelectionPaths()) {
+				
 				AnalyzedModuleComponent top= (AnalyzedModuleComponent)pathe.getLastPathComponent();
+				String type = top.getType().toLowerCase();
+				
+				if (!type.equals("root")||!type.equals("application")||!type.equals("externalpackage")) {
+					
+				
 				AnalyzedModuleComponent referencedUnit=	StateService.instance().getAnalyzedSoftWareUnit(top.getUniqueName());
 				if (!referencedUnit.isMapped()) {
 					tobesaved.add(referencedUnit);
 				}
 				
+			}
 			}
 			
 			SoftwareUnitController controller = new SoftwareUnitController(selectedNode.getModuleId());

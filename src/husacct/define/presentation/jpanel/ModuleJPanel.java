@@ -33,12 +33,14 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -296,7 +298,19 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 
     public void removeModule() {
 	long moduleId = getSelectedModuleId();
-	if (moduleId != -1 && moduleId != 0) {
+	HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
+	if(moduleDetails.get("type").equals("Facade")) {
+		boolean confirm = UiDialogs.confirmDialog(this,
+			    ServiceProvider.getInstance().getLocaleService()
+				    .getTranslatedString("RemoveConfirm"),
+			    ServiceProvider.getInstance().getLocaleService()
+				    .getTranslatedString("RemovePopupTitle"));
+		    if (confirm) {
+		    	JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultModule"),  "Message", JOptionPane.WARNING_MESSAGE);
+		    	return;
+		    }
+	}
+	else if (moduleId != -1 && moduleId != 0) {
 	    boolean confirm = UiDialogs.confirmDialog(this,
 		    ServiceProvider.getInstance().getLocaleService()
 			    .getTranslatedString("RemoveConfirm"),

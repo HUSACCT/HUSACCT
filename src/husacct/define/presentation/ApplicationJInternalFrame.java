@@ -127,7 +127,8 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 	}
 
 	private void setButtonsVisability(JButton undo, JButton redo) {
-		boolean[] statuses= StateService.instance().getRedoAndUndoStates();
+		// StateService.instance().getRedoAndUndoStates();
+		boolean[] statuses={false,false};
 		
 		undo.setEnabled(statuses[0]);
 		redo.setEnabled(statuses[1]);
@@ -182,9 +183,9 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 
 	@Override
 	public void update() {
-
-     setButtonsVisability(undoButton,redoButton);
-     DefinitionController.getInstance().notifyObservers();
+//some minor testing before release
+     //setButtonsVisability(undoButton,redoButton);
+     //DefinitionController.getInstance().notifyObservers();
 
 
 }

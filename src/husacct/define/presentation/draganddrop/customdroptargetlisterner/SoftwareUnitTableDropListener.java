@@ -46,6 +46,7 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 	public void dragOver(DropTargetDragEvent arg) {
 		try {
 			AnalyzedModuleTree palo = (AnalyzedModuleTree)arg.getTransferable().getTransferData(ModuleTrasferhandler.moduleFlavours[0]);
+		
 			if (palo!=null) {
 				arg.acceptDrag(1);
 			} else {
@@ -73,13 +74,16 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 			for (TreePath pathe : palo.getSelectionPaths()) {
 				AnalyzedModuleComponent top= (AnalyzedModuleComponent)pathe.getLastPathComponent();
 				//hot fix if have time will be better implemented 
+				String type = top.getType().toLowerCase().trim();
+				System.out.println(type+" >>>>");
+				if (!type.equals("root")||!type.equals("application")||!type.equals("externalpackage")) {
 			AnalyzedModuleComponent referencedUnit=	StateService.instance().getAnalyzedSoftWareUnit(top.getUniqueName());
 				if (!referencedUnit.isMapped()) {
 					tobesaved.add(referencedUnit);
 				}
 				
 			}
-			
+			}
 			
 	
 			long selectedModuleID =DefinitionController.getInstance().getSelectedModuleId();

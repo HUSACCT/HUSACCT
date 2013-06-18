@@ -230,7 +230,11 @@ public void restoreTreeItems(ModuleStrategy module) {
 }
 
 public void restoreTreeItem(List<String> softwareUnitNames, List<String> types) {
-	// TODO Auto-generated method stub
+	for (String uniqname : softwareUnitNames) {
+		AnalyzedModuleComponent tobeRestored= StateService.instance().getAnalyzedSoftWareUnit(uniqname);
+		tree.restoreTreeItem(tobeRestored);
+		tree.repaint();
+	}
 	
 }
 

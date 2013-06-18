@@ -9,6 +9,7 @@ import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTras
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.presentation.utils.ExpressionEngine;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
@@ -316,7 +317,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
-		
+		_moduleId=DefinitionController.getInstance().getSelectedModuleId();
 		boolean canclose= false;
 		if(regExMappingPanel != null) {
 			ExpressionEngine expressionEngine = new ExpressionEngine();
