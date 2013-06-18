@@ -104,6 +104,8 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 
 	@Override
 	public String getTranslatedString(String key){
+		if(key == null)
+			return "NULL POINTER EXCEPTION";
 		try {
 			key = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){

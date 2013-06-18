@@ -113,7 +113,7 @@ public class HistoryLogger {
 							}
 						}
 					} else {
-						Node workspace = workspaces.item(workspaceList.indexOf(workspaceName)).getFirstChild();
+						Node workspace = workspaces.item(workspaceList.indexOf(workspaceName));
 						Node tempApplication = getApplicationElement(adto);
 						for(Element project : getProjectElement(adto)) {
 							tempApplication.appendChild(project);

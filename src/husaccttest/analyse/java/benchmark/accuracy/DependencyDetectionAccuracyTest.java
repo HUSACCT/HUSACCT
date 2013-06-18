@@ -1,6 +1,5 @@
 package husaccttest.analyse.java.benchmark.accuracy;
 
-
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -8,11 +7,10 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
 import husaccttest.analyse.TestProjectFinder;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -26,37 +24,43 @@ public class DependencyDetectionAccuracyTest {
 	private static boolean isAnalysed = false;
 	private static Logger logger;
 	private static DependencyDTO[] allDependencies = null;
-	private static String path = new File(TestProjectFinder.lookupProject("java", "benchmark"+File.separator+"accuracy-test-2013-04-17")).getAbsolutePath();
+	private static String path = new File(TestProjectFinder.lookupProject("java", "accuracy")).getAbsolutePath();
 	private static String language = "Java";
 	
-	@SuppressWarnings("static-access")
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			ArrayList<ProjectDTO> projects = createProjectDTOs();
 			
+			ArrayList<ProjectDTO> projects = createProjectDTOs();
+
 			ServiceProvider.getInstance().getDefineService().createApplication(language+" test", projects, "1.0");
 			service = ServiceProvider.getInstance().getAnalyseService();
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+			//The next line is to fix the nullpointer on the workspace. But if we enable it the tests won't run.
+			//ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
 			ctrlS.getMainController().getApplicationController().analyseApplication();
+			
 			logger.debug("PROJECT LOADED");
 			//analyse is in a different Thread, and needs some time
+			
 			while(!isAnalysed){
 				try {
-					Thread.currentThread().sleep((long)10);
+					Thread.sleep((long)10);
 				} catch (InterruptedException e) {}
 				isAnalysed = service.isAnalysed();
 			}
+			
 			allDependencies = service.getAllDependencies();
 			//for testing only
 			printDependencies();
 		} catch (Exception e){
-			String errorMessage =  "We're sorry. You need to have a Java project 'benchmark_accuracy'. Or you have the wrong version of the benchmark_accuracy.";
+			String errorMessage =  "We're sorry. You need to have a Java project 'Accuracy'. Or you have the wrong version of the Accuracy Test.";
 			logger.warn(errorMessage);
 			System.exit(0);
 		}
 	}
+	
 	@AfterClass
 	public static void tearDown(){
 		allDependencies = null;
@@ -211,7 +215,7 @@ public class DependencyDetectionAccuracyTest {
 	public void javaAccessClassVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessClassVariable";
-		for(DependencyDTO dependency : allDependencies){
+		for(DependencyDTO dependency : allDependencies){ 
 			String from = getClass(dependency.from);
 			if(toTestFrom.equals(from)){
 				found = true;
@@ -879,8 +883,6 @@ public class DependencyDetectionAccuracyTest {
 		Assert.assertTrue(found);
 	}
 	
-	
-	
 	//
 	//private helpers
 	//
@@ -893,22 +895,21 @@ public class DependencyDetectionAccuracyTest {
 		projects.add(project);
 		return projects;
 	}
+	
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/husacct.properties");
+		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
+	
 	private static void printDependencies() {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
-		Set<String> uniqueDependencies = new HashSet<String>();
 		for(DependencyDTO d : allDependencies){
-			uniqueDependencies.add("\n"+d.type);
-			//logger.info(d.type);
-			//logger.info(getClass(d.from));
+			logger.info(d.toString());
 		}
-		logger.info(uniqueDependencies);
 	}
+	
 	private static String getClass(String fromPath){
 		return (String) fromPath.subSequence(fromPath.lastIndexOf('.')+1, fromPath.length());
 	}

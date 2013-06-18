@@ -7,11 +7,11 @@ import org.antlr.runtime.tree.Tree;
 public class JavaInvocationGenerator extends JavaGenerator {
 
     private String from;
-    private String to;
+    private String to = "";
     private int lineNumber;
     private String invocationName;
     private String belongsToMethod;
-    private String nameOfInstance;
+    private String nameOfInstance = "";
     private boolean invocationNameFound;
     private boolean constructorInMethodInvocationFound = false;
     private boolean foundAllMethodInvocInfo = false;
