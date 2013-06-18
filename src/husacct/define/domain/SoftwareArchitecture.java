@@ -12,6 +12,7 @@ import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
@@ -701,6 +702,30 @@ for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 	@Override
 	public void layerDown(long moduleID) {
 	 moveLayerDown(moduleID);
+		
+	}
+
+	@Override
+	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
+		ModuleStrategy module = getModuleById(moduleId);
+		module.addSUDefinition(expression);
+		
+	}
+
+	@Override
+	public void removeExpression(long moduleId,
+			ExpressionUnitDefinition expression) {
+		ModuleStrategy module = getModuleById(moduleId);
+		module.removeSUDefintion(expression);
+		
+	}
+
+	@Override
+	public void editExpression(long moduleId,
+			ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
+		ModuleStrategy module = getModuleById(moduleId);
+		module.removeSUDefintion(oldExpresion);
+		module.addSUDefinition(newExpression);
 		
 	}
 

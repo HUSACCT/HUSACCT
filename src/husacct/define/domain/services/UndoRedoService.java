@@ -9,6 +9,7 @@ import husacct.define.domain.seperatedinterfaces.IAppliedRuleSeperatedInterface;
 import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.seperatedinterfaces.IseparatedDefinition;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitSeperatedInterface,IAppliedRuleSeperatedInterface{
@@ -164,10 +165,47 @@ public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitS
 
 	public void registerObserver(IseparatedDefinition observer) {
 		
-				observers.add(observer);System.out.println("Registerd");
-			System.out.println("Registerd"+observers.size());
+				observers.add(observer);
 	
 		
+		
+	}
+
+
+
+
+
+	@Override
+	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
+		for (Object observer : getSeperatedSofwareUnitInterfacess(ISofwareUnitSeperatedInterface.class)) {
+			((ISofwareUnitSeperatedInterface)observer).addExpression(moduleId, expression);
+		}
+		
+	}
+
+
+
+
+
+	@Override
+	public void removeExpression(long moduleId,
+			ExpressionUnitDefinition expression) {
+		for (Object observer : getSeperatedSofwareUnitInterfacess(ISofwareUnitSeperatedInterface.class)) {
+			((ISofwareUnitSeperatedInterface)observer).removeExpression(moduleId, expression);
+		}
+		
+	}
+
+
+
+
+
+	@Override
+	public void editExpression(long moduleId,
+			ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
+		for (Object observer : getSeperatedSofwareUnitInterfacess(ISofwareUnitSeperatedInterface.class)) {
+			((ISofwareUnitSeperatedInterface)observer).editExpression(moduleId, oldExpresion, newExpression);
+		}
 		
 	}
 

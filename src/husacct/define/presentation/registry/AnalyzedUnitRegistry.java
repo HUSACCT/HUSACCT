@@ -4,6 +4,7 @@ import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.warningmessages.CustomWarningMessage;
 import husacct.define.domain.warningmessages.NotmappedWarningMessage;
@@ -136,5 +137,25 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	   
 	    ((CustomWarningMessage)notMapped.getvalue()).setDecription( notMapped.getAllWarningsCount());
 		return notMapped;
+	}
+
+	@Override
+	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeExpression(long moduleId,
+			ExpressionUnitDefinition expression) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editExpression(long moduleId,
+			ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
+		// TODO Auto-generated method stub
+		
 	}
 }

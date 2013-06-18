@@ -18,6 +18,7 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.tree.TreePath;
@@ -277,6 +278,29 @@ public RegexComponent createRegexRepresentation(String editingRegEx,
 		expresion.addChild(unit);
 	}
 	return expresion;
+}
+
+@Override
+public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
+	for (SoftwareUnitDefinition unit : expression.getExpressionValues()) {
+		AnalyzedModuleComponent result = StateService.instance().getAnalyzedSoftWareUnit(unit);
+		result.freeze();
+	}
+	
+}
+
+@Override
+public void removeExpression(long moduleId, ExpressionUnitDefinition expression) {
+	for (SoftwareUnitDefinition unit : expression.getExpressionValues()) {
+		AnalyzedModuleComponent result = StateService.instance().getAnalyzedSoftWareUnit(unit);
+		result.unfreeze();
+	}	
+}
+
+@Override
+public void editExpression(long moduleId, ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
+	// TODO Auto-generated method stub
+	
 }
 
 
