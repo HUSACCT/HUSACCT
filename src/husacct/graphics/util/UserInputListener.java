@@ -48,7 +48,4 @@ public interface UserInputListener {
 	
 	public void useSelectTool();
 
-	public void showExternalSystems();
-
-	public void hideExternalSystems();
 }
