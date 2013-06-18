@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitTableDropListener;
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
@@ -16,20 +17,10 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -46,7 +37,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
-Observer, IServiceListener,DropTargetListener ,Transferable {
+Observer, IServiceListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JButton addSoftwareUnitButton;
@@ -157,8 +148,9 @@ Observer, IServiceListener,DropTargetListener ,Transferable {
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
-		new DropTarget(softwareUnitsPane, DnDConstants.ACTION_COPY_OR_MOVE, this);
+	
 		softwareUnitsTable.setDragEnabled(true);
+		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(softwareUnitsTable);
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -428,52 +420,4 @@ Observer, IServiceListener,DropTargetListener ,Transferable {
 
 }
 
-	@Override
-	public void dragEnter(DropTargetDragEvent dtde) {
-		
-		
-	}
-
-	@Override
-	public void dragExit(DropTargetEvent dte) {
-	
-		
-	}
-
-	@Override
-	public void dragOver(DropTargetDragEvent dtde) {
-		
-		
-	}
-
-	@Override
-	public void drop(DropTargetDropEvent dtde) {
-
-		
-	}
-
-	@Override
-	public void dropActionChanged(DropTargetDragEvent dtde) {
-		
-		
-	}
-
-	@Override
-	public Object getTransferData(DataFlavor flavor)
-			throws UnsupportedFlavorException, IOException {
-		// TODO Auto-generated method stub
-		return  softwareUnitsTable.getSelectedRows();
-	}
-
-	@Override
-	public DataFlavor[] getTransferDataFlavors() {
-	
-		return null;
-	}
-
-	@Override
-	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		
-		return false;
-	}
 		}

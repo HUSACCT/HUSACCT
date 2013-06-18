@@ -122,7 +122,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		if(!subModules.contains(subModule) && !hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-			
+			new  DefaultRuleDomainService().addDefaultRules(subModule);
 		
 			return "";
 		}else{

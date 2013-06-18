@@ -303,6 +303,13 @@ public void editExpression(long moduleId, ExpressionUnitDefinition oldExpresion,
 	
 }
 
+public void removeRegexTreeItem(RegexComponent softwareunit) {
+	for (AbstractCombinedComponent unit : softwareunit.getChildren()) {
+		
+		removeTreeItem((AnalyzedModuleComponent)unit);
+	}
+	
+}
 
 
 }

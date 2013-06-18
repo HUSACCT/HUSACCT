@@ -218,13 +218,15 @@ public class SoftwareUnitDefinitionDomainService {
 			if(softwareunit instanceof RegexComponent)
 			{
 				module.addSUDefinition(unit);
-			
+			   
 				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
+				JtreeController.instance().removeRegexTreeItem((RegexComponent)softwareunit);
+			
 			}else{
 
 				
 				module.addSUDefinition(unit);
-				
+				JtreeController.instance().removeTreeItem(softwareunit);
 				
 
 			}

@@ -148,14 +148,19 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	@Override
 	public void removeExpression(long moduleId,
 			ExpressionUnitDefinition expression) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void editExpression(long moduleId,
 			ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
-		// TODO Auto-generated method stub
+	
+		
+	}
+
+	public AnalyzedModuleComponent getAnalyzedUnit(String uniqueName) {
+		return allAnalyzedUnits.get(uniqueName);
 		
 	}
 }

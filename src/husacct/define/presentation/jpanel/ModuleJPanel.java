@@ -4,33 +4,35 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
-import husacct.define.domain.services.DragAndDropService;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.ModuleDropTarget;
+import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
+import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
-import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.LayerComponent;
-import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -41,13 +43,12 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 public class ModuleJPanel extends JPanel implements ActionListener,
-	TreeSelectionListener, Observer, IServiceListener, KeyListener ,DropTargetListener {
+	TreeSelectionListener, Observer, IServiceListener, KeyListener  {
 
     private static final long serialVersionUID = 6141711414139061921L;
 
@@ -344,7 +345,9 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 	checkLayerComponentIsSelected();
 
 	moduleTree.setDragEnabled(true);
-	new DropTarget(moduleTree, DnDConstants.ACTION_COPY_OR_MOVE, this);
+	ModuleDropTarget moduledroptarget = new ModuleDropTarget(moduleTree);
+	
+	
 moduleTree.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseClicked(MouseEvent event) {
@@ -386,58 +389,5 @@ moduleTree.addMouseListener(new MouseAdapter() {
 	checkLayerComponentIsSelected();
     }
 
-	@Override
-	public void dragEnter(DropTargetDragEvent arg0) {
-	System.out.println("hereeeeeeeee is joohnnyy");
-		
-	}
-
-	@Override
-	public void dragExit(DropTargetEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dragOver(DropTargetDragEvent arg) {
-	Point p = arg.getLocation();
-	 TreePath path = moduleTree.getPathForLocation(p.x, p.y);
-     	
-
-	   
-		
-	}
-
-	@Override
-	public void drop(DropTargetDropEvent arg) {
-		Point p = arg.getLocation();
-		 TreePath path = moduleTree.getPathForLocation(p.x, p.y);
-		
-			 for(DataFlavor f : arg.getTransferable().getTransferDataFlavors())
-		 {
-			 System.out.println(f.getDefaultRepresentationClassAsString()); 
-		 }
-			
-			 DropTarget t =(DropTarget)arg.getSource();
-			 System.out.println(t.getComponent().getClass().getName());
-		//TransferHandler f = arg.getTransferable().getTransferData(flavor)
-		
-			 if(path!=null)
-		{
-			
-			
-			long to =((AbstractDefineComponent)path.getLastPathComponent()).getModuleId();
-			long from = ((AbstractDefineComponent)moduleTree.getSelectionPath().getLastPathComponent()).getModuleId();
-			System.out.println(((AbstractDefineComponent)path.getLastPathComponent()).getName()+"  klopp");
-		DragAndDropService.getInstance().moveToModule(from, to);
-		}
-		
-	}
-
-	@Override
-	public void dropActionChanged(DropTargetDragEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }
