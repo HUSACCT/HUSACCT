@@ -52,6 +52,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private GeneralConfigurationPanel generalConfigurationPanel;
 	private FileController fileController;
 	
+	private Thread eventHandlerThread;
+	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
 		mainController = new MainController();
@@ -61,25 +63,12 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		viewController = mainController.getViewController();
 		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
-		fileController = new FileController(mainController); //TODO put in mainController?
+		fileController = mainController.getFileController();
 		setDefaultSettings();
 	}
 	
 	private void setDefaultSettings() {
-		String OSSpecificAppDataFolderName;
-		switch(OSDetector.getOS()) {
-			case LINUX:
-				OSSpecificAppDataFolderName = ".husacct";
-			break;
-			case MAC:
-				OSSpecificAppDataFolderName = ".husacct";
-			break;
-			default:
-				OSSpecificAppDataFolderName = "HUSACCT";
-			break;
-		}
-		
-		String appDataFolderPath = System.getProperty("user.home") + File.separator + OSSpecificAppDataFolderName + File.separator;
+		String appDataFolderPath = OSDetector.getAppFolder();
 		logger.info("App data folder (platform specific): " + appDataFolderPath);
 		File appDataFolderObject = new File(appDataFolderPath);
 		if(!appDataFolderObject.exists()){
@@ -87,7 +76,10 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		}
 		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
 		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
-		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);	
+		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);
+		ConfigurationManager.setPropertyIfEmpty("ApplicationHistoryXMLFilename", "applicationanalysishistory.xml");
+		ConfigurationManager.setPropertyIfEmpty("ActionLogger", "false");
+		ConfigurationManager.setPropertyIfEmpty("Language", "en");
 	}
 
 	@Override
@@ -221,7 +213,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public ConfigPanel getConfigurationPanel() {
 		if (generalConfigurationPanel == null)
-			generalConfigurationPanel = new GeneralConfigurationPanel();
+			generalConfigurationPanel = new GeneralConfigurationPanel(mainController);
 		return generalConfigurationPanel;
 	}
 	
@@ -238,14 +230,21 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public void addProjectForListening(String path) {
-		
 		try {
 			fileController.addProject(path);
-			fileController.processEvents(); //TODO Execute in thread, will hang application.
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		 
+		eventHandlerThread = new Thread() {
+			public void run() {
+				try {
+					fileController.processEvents();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		eventHandlerThread.start();
 	}
 
 	@Override

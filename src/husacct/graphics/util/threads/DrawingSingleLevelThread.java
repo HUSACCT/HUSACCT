@@ -9,7 +9,6 @@ public class DrawingSingleLevelThread implements Runnable {
 
 	private DrawingController controller;
 	private AbstractDTO[] toDrawModules;
-	private ExternalSystemDTO[] toDrawExtSystems;
 
 	public DrawingSingleLevelThread(DrawingController theController,
 			AbstractDTO[] modules) {
@@ -17,22 +16,11 @@ public class DrawingSingleLevelThread implements Runnable {
 		toDrawModules = modules;
 	}
 	
-	public DrawingSingleLevelThread(DrawingController theController,
-			AbstractDTO[] modules, ExternalSystemDTO[] extSystems) {
-		controller = theController;
-		toDrawModules = modules;
-		toDrawExtSystems = extSystems;
-	}
-
 	@Override
 	public void run() {
 		try {
 			controller.clearDrawing();
-			if(toDrawExtSystems == null){
-				controller.drawSingleLevel(toDrawModules);
-			}else{
-				controller.drawSingleLevel(toDrawModules, toDrawExtSystems);
-			}
+			controller.drawSingleLevel(toDrawModules);
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();

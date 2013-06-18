@@ -1,10 +1,10 @@
 package husacct.define.domain.services.stateservice.state.appliedrule;
 
-import java.util.ArrayList;
-
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
+
+import java.util.ArrayList;
 
 public class AppliedRuleAddCommand  implements Istate{
     private ArrayList<AppliedRuleStrategy>  data;
@@ -14,17 +14,15 @@ public class AppliedRuleAddCommand  implements Istate{
 	
 	@Override
 	public void undo() {
-		for ( AppliedRuleStrategy rule : data) {
-			SoftwareArchitecture.getInstance().removeAppliedRule(rule.getId());
-		}
+		UndoRedoService.getInstance().removeSeperatedAppliedRule(data);
 		
 		
 	}
 
 	@Override
 	public void redo() {
-		for ( AppliedRuleStrategy rule : data) {
-		SoftwareArchitecture.getInstance().addAppliedRule(rule);
-		}
+		UndoRedoService.getInstance().addSeperatedAppliedRule(data);
+	
+	
 	}
 }

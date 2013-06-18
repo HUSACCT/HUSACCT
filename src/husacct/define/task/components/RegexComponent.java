@@ -1,5 +1,10 @@
 package husacct.define.task.components;
 
+import husacct.define.domain.SoftwareUnitRegExDefinition;
+import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+
 import java.util.ArrayList;
 
 public class RegexComponent extends AnalyzedModuleComponent {
@@ -97,5 +102,17 @@ public class RegexComponent extends AnalyzedModuleComponent {
 	setChildren(wrapper.getChildren());
 	this.wrapper = wrapper;
     }
+    
+    public void setRegex(ExpressionUnitDefinition unit )
+    {
+
+    	for (SoftwareUnitDefinition unite : unit.getExpressionValues()) {
+	
+    		addChild(StateService.instance().getAnalyzedSoftWareUnit(unite));
+		}
+    	
+    }
+
+	
 
 }

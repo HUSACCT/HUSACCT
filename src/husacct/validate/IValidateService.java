@@ -65,14 +65,14 @@ public interface IValidateService extends IObservableService {
 	 * 
 	 * @returns an array of RuleType objects
 	 */
-	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type);
+	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String moduleType);
 
 	/**
 	 * Returns a list of supported allowed rule types for a given module
 	 * 
 	 * @returns an array of RuleType objects
 	 */
-	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type);
+	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String moduleType);
 
 	/**
 	 * Export the found violations to a file
@@ -111,4 +111,14 @@ public interface IValidateService extends IObservableService {
 	 * @return returns a JInteralFrame which is the configuration GUI
 	 */
 	public JInternalFrame getConfigurationGUI();
+	
+	/**
+	 * Set the value of a allowed rule of a module
+	 */
+	public void setAllowedRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value);
+	
+	/**
+	 * Set the value of a default rule of a module
+	 */
+	public void setDefaultRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value);
 }

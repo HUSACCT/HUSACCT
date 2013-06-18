@@ -1,20 +1,13 @@
 package husacct.analyse.task.analyser.csharp;
 
-import antlr.Token;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpLexer;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.AbstractAnalyser;
 import husacct.analyse.task.analyser.csharp.generators.buffers.BufferService;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import org.antlr.runtime.ANTLRFileStream;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CharStream;
+import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 
 public class CSharpAnalyser extends AbstractAnalyser {

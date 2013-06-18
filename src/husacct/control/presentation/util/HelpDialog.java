@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.swing.BorderFactory;
@@ -108,7 +109,6 @@ public class HelpDialog extends JDialog {
 		tree.setRootVisible(false);
 
 		ImageIcon leafIcon = new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM));
-		System.out.println(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM));
 		if (leafIcon != null) {
 			DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
 			renderer.setLeafIcon(leafIcon);
@@ -150,12 +150,9 @@ public class HelpDialog extends JDialog {
 				selectedNode = (DefaultMutableTreeNode) tree
 						.getLastSelectedPathComponent();
 				try {
-					String PathToHelpPages = Resource.get(Resource.HELP_PAGES_PATH).toString();
-					
 					String filename = ((HelpTreeNode)selectedNode.getUserObject()).getFilename();
-					
-					File f = new File((PathToHelpPages + filename).replace("file:/", ""));
-					editorpane.setText(hpl.getContent(f));
+					InputStream stream = Resource.getStream(Resource.HELP_PAGES_PATH + filename);
+					editorpane.setText(hpl.getContent(stream));
 
 				} catch (Exception ex) {
 					ex.printStackTrace();

@@ -1,10 +1,16 @@
 package husacct.define.task.components;
 
 import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.tree.TreePath;
+
 public abstract class AbstractCombinedComponent extends Component implements
-	Comparable<AbstractCombinedComponent> {
+	Comparable<AbstractCombinedComponent>, Transferable {
     private static final long serialVersionUID = 1L;
     private int analyzedModuleComponentPosition = 0;
     protected ArrayList<AbstractCombinedComponent> children;
@@ -12,6 +18,8 @@ public abstract class AbstractCombinedComponent extends Component implements
     protected int sizeOfChildren;
     protected String type = "";
     protected String uniqueName = "";
+     static DataFlavor softwareUnitFlavour= new DataFlavor(AbstractCombinedComponent.class, "");
+
 
     public AbstractCombinedComponent() {
 	super();
@@ -88,5 +96,25 @@ public abstract class AbstractCombinedComponent extends Component implements
 	}
 
     }
+    @Override
+    public Object getTransferData(DataFlavor arg0)
+			throws UnsupportedFlavorException, IOException {
+		
+		return this;
+	}
+
+    @Override
+	public DataFlavor[] getTransferDataFlavors() {
+		
+		
+		return new DataFlavor[]{softwareUnitFlavour};
+	}
+
+    @Override
+	public boolean isDataFlavorSupported(DataFlavor arg0) {
+		// TODO Auto-generated method stub t
+		
+    	return true;
+	}
 
 }
