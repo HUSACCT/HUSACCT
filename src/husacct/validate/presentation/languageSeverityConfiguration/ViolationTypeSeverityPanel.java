@@ -241,12 +241,12 @@ class ViolationTypeSeverityPanel extends JPanel {
 				for (ViolationType violationtype : violationtypes) {
 					Severity severity;
 					try {
-						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationtypeKey());
+						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationTypeKey());
 					} catch (Exception e) {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[] {new DataLanguageHelper(violationtype.getViolationtypeKey()), severity});
+					violationtypeModel.addRow(new Object[] {new DataLanguageHelper(violationtype.getViolationTypeKey()), severity});
 				}
 			}
 

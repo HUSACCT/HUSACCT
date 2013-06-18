@@ -138,10 +138,9 @@ public class ValidateTest {
 					ModuleTypes.EXTERNAL_LIBRARY.toString(),
 					ModuleTypes.FACADE.toString()
 			};
-
 			for (String module : modules) {
-				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				System.out.print("\nAllowedRuleTypes for " + module + ": ");
+				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
 					System.out.print(allowedRuleType.getKey() + ", ");
 				}

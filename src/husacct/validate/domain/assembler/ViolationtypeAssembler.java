@@ -19,7 +19,7 @@ public class ViolationtypeAssembler {
 	}
 
 	public ViolationTypeDTO createViolationTypeDTO(ViolationType violationtype) {
-		String key = violationtype.getViolationtypeKey();
+		String key = violationtype.getViolationTypeKey();
 		String description = violationtype.getViolationDescriptionKey();
 		boolean isActive = violationtype.isActive();
 
