@@ -6,32 +6,29 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 public class CSharpNamespaceGenerator extends CSharpGenerator {
-
 	private Stack<String> namespaceStack = new Stack<>();
 
 	public String generateModel(String rootParentNamespace, Tree namespaceTree) {
 		String namespaceName = getNamespaceName(namespaceTree);
 		createPackageModelForEachNamespace(rootParentNamespace); 	
-
 		return namespaceName;
 	}
 
 	private String getNamespaceName(Tree namespaceTree) {
-		for (int i = 0; i < namespaceTree.getChildCount(); i++) {
-			return getQualifiedIdentifiers((CommonTree) namespaceTree.getChild(i));
-		}
-		throw new ParserException();
+		Tree qualifiedIdentierTree = ((CommonTree)namespaceTree).getFirstChildWithType(CSharpParser.QUALIFIED_IDENTIFIER);
+		if (qualifiedIdentierTree == null)
+			throw new ParserException();
+		return getQualifiedIdentifiers((CommonTree)qualifiedIdentierTree);
 	}
 
 	private String getQualifiedIdentifiers(CommonTree tree) {
 		String result = "";
 		if (tree.getType() == CSharpParser.QUALIFIED_IDENTIFIER) {
-			for (int i = 0; i < tree.getChildCount(); i++) {
-
-				result += "." + tree.getChild(i).getText();
-				namespaceStack.push(tree.getChild(i).getText());
-
-			}}
+			for (int child = 0; child < tree.getChildCount(); child++) {
+				result += "." + tree.getChild(child).getText();
+				namespaceStack.push(tree.getChild(child).getText());
+			}
+		}
 		if (result.length() > 0) {
 			result = result.substring(1);
 		}
@@ -43,8 +40,7 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
 		String uniqueName;
 		String parentNamespace;
 
-		for (int i = namespaceStack.size(); i > 0; i--)
-		{
+		for (int i = namespaceStack.size(); i > 0; i--) {
 			namespaceName = namespaceStack.peek();
 			uniqueName = CSharpGeneratorToolkit.getUniqueName(rootNamespace, CSharpGeneratorToolkit.getParentName(namespaceStack));
 
