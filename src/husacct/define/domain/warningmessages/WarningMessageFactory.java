@@ -26,9 +26,9 @@ public class WarningMessageFactory {
 		WarningMessageContainer root = new WarningMessageContainer(new CustomWarningMessage("WARNINGS"));
 		WarningMessageContainer codelevelContainer = new WarningMessageContainer(new CustomWarningMessage("Code Level "));
 		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level("+WarningMessageService.getInstance().warningsCount()+")"));
-		WarningMessageContainer notMapped = new WarningMessageContainer(new CustomWarningMessage("NotMapped("+StateService.instance().getAnalzedModuleRegistry().getUnitsCount()+")"));
+		
 		WarningMessageContainer customContainer = new WarningMessageContainer(new CustomWarningMessage("Custom"));
-		addNotmapped(notMapped);
+	WarningMessageContainer notMapped=	getNotmapped();
 		addNotCodeLevel(codelevelContainer);
 		for (WarningMessage message : WarningMessageService.getInstance().getWarningMessages()) {
 		
@@ -48,30 +48,11 @@ public class WarningMessageFactory {
 	
 	}
 
-	private void addNotmapped(WarningMessageContainer rootOfNotmapped) {
+	private WarningMessageContainer getNotmapped() {
 		
+	return StateService.instance().getNotMappedUnits();
 		
-	List<AnalyzedModuleComponent> classes = new ArrayList<AnalyzedModuleComponent>();
-	List<AnalyzedModuleComponent> packages = new ArrayList<AnalyzedModuleComponent>();
-	List<AnalyzedModuleComponent> enums = new ArrayList<AnalyzedModuleComponent>();
-	List<AnalyzedModuleComponent> interfaces = new ArrayList<AnalyzedModuleComponent>();
-	packages=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("package");
-	classes=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("class");
-	interfaces=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("interface");
-	enums=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("enum");
-	WarningMessageContainer classesroot = new WarningMessageContainer(new CustomWarningMessage("Class("+classes.size()+")"));
-	WarningMessageContainer packagesroot = new WarningMessageContainer(new CustomWarningMessage("Package("+packages.size()+")"));
-	WarningMessageContainer interfaceroot = new WarningMessageContainer(new CustomWarningMessage("Interface("+interfaces.size()+")"));
-	WarningMessageContainer enumroot = new WarningMessageContainer(new CustomWarningMessage("Enum("+enums.size()+")"));
-	packagesroot.addChildrens(packages);	
-	classesroot.addChildrens(classes);
-	interfaceroot.addChildrens(interfaces);
-	enumroot.addChildrens(enums);
-	
-	rootOfNotmapped.addChild(packagesroot);
-	rootOfNotmapped.addChild(classesroot);
-	rootOfNotmapped.addChild(interfaceroot);
-	rootOfNotmapped.addChild(enumroot);
+          
 	
 		
 		
