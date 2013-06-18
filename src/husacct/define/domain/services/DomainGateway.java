@@ -115,8 +115,7 @@ public class DomainGateway {
 
 	public void addException(HashMap<String, Object> ruleDetails) {
      long moduleId =(long) ruleDetails.get("moduleFromId");
-		//appliedRuleController= new AppliedRuleController(, ruleDetails.get(""))
-		
+     //appliedruleController = new AppliedRuleController(ruleDetails.get("rule"), moduleId);
 	}
 
 	public void removeRules(List<Long> selectedRules) {
