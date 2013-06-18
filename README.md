@@ -3,18 +3,18 @@
 What does HUSACCT Stand for?
 
 It stands for: Software Architecture Comformance Checking Tool  
-HU stands for: [Hogeschool Utrecht](http://international.hu.nl/) (HU University of Applied Sciences Utrecht, The Netherlands. The school at which this project is taken place.)
+HU stands for: [Hogeschool Utrecht](http://international.hu.nl/) (HU University of Applied Sciences Utrecht, The Netherlands. The school at which this project is taking place.)
 
 ## What is a Software Architecture Conformance Checking Tool?
 
 When building new software, software architects design an architecture for the application. The programmers are tasked with realizing the application based on the designed architecture.
 
-To see if the realized architecture is really the designed architecture we can use a SACC-Tool. The following steps are taken to confirm this.
+To see if the realized architecture is conforms to the designed architecture we can use a SACC-Tool. The following steps are taken to do this.
 
 ### Analyse an architecture
 
-By analyzing the built application we can breakdown the structure of the application. That way we can use the physical entities that are detected to define an architecture.  
-It also allows architects and programmers to view a graphical representation of the realized software architecture, but that is not good enough. We want to be able to check the analyzed software architecture against an architectural model.
+By analyzing the built application we can break down the structure of the application. That way we can use the physical entities that are detected to define an architecture.  
+This also allows architects and programmers to view a graphical representation of the realized software architecture, but that is not good enough. We want to be able to check the analyzed software architecture against an architectural model.
 
 ### Define an architecture
 
@@ -31,7 +31,7 @@ _(not actual syntax/code used in the tool)_
 
 ### Mapping the defined architecture
 
-We then map the physical entities we found, by analyzing, to the defined logical modules. That way the tool knows which physical entities (such as namespaces, packages, classes, interfaces, etc.) are present in which logical module.
+We then map the physical entities we found by analyzing to the defined logical modules. That way the tool knows which physical entities (such as namespaces, packages, classes, interfaces, etc.) are present in which logical module.
 
 Examples:
 
@@ -43,20 +43,20 @@ _(not actual syntax/code used in the tool)_
 
 ### Executing a conformance check
 
-By executing a conformance check we can see if any of the specified rules are broken. A SACC-Tool automates the process of checking whether or not these rules are broken. The reports from this conformance check will list/graphically display the violations that occur between entities.
+By executing a conformance check we can see if any of the specified rules are broken. A SACC-Tool automates the process of checking whether or not these rules are broken. The reports from this conformance check will list/display the violations that occur between entities.
 
-Using the results from this conformance check programmers and architects can evaluate their realized software architecture. If there are serious issues they can improve it by changing the program so that it follows the specified rules. That way they are making it the software it was meant to be.
+Using the results from this conformance check programmers and architects can evaluate their realized software architecture. If there are serious issues they can improve it by changing the program so that it follows the specified rules. That way they are making the software as it was meant to be.
 
 ## Why build a Software Architecture Conformance Checking Tool?
 
-After conducting research into other SACC-tools we found out that the tools not always are as user friendly and accurate as we had expected. We were then assigned to create our own SACC-tool and improve on some concept we found lacking in others. 
+After conducting research into other SACC-tools we found out that the tools not always are as user friendly and/or as accurate as we had expected. We were then assigned to create our own SACC-tool and improve on some concepts we found lacking in others. 
 
 The application we were instructed to build is meant to be a contribution to the field of Software Architecture analysis and evaluation.
 
 ## Support
 
 The tool itself is written in Java.  
-Currently there is (only) support for the following **languages**:
+Currently there is support for the following **languages**:
 
 - Java _(Using Antlr)_
 - .NET C# _(Using Antlr)_
@@ -90,27 +90,26 @@ Also we will try to support the following **violation types**:
 - Import
 - Exception
 
-
 The architecture should allow for expansions to support more languages and rule types.
 
 ## Plugins
 
 ### Eclipse IDE
 
-We have also made this an [Eclipse](http://www.eclipse.org/) plugin. ([Eclipse plugin repository](https://github.com/HUSACCT/HUSACCT-Plugin))
+An [Eclipse](http://www.eclipse.org/) plugin is available. ([Eclipse plugin repository](https://github.com/HUSACCT/HUSACCT-Plugin))
 
 ### Maven
 
-We have also made this a [Maven](http://maven.apache.org/) plugin. ([Maven plugin repository](https://github.com/HUSACCT/HUSACCT-Maven))
+A [Maven](http://maven.apache.org/) plugin is also available. ([Maven plugin repository](https://github.com/HUSACCT/HUSACCT-Maven))
 
 ## Testing
 
-There are JUnit tests available in this repository, but we also manually test this application.  
-For testing we use the [Java benchmark](https://github.com/HUSACCT/HUSACCT-BenchmarkApplication) application, the [C# benchmark](https://github.com/HUSACCT/HUSACCT-CsharpBenchmarkApplication) application, the [Recognition test repository](https://github.com/HUSACCT/HUSACCT-RecognitionTest) and this project itself.
+There are JUnit tests available in this repository, to complement manual tests.
+For testing we use the [Java benchmark](https://github.com/HUSACCT/HUSACCT-BenchmarkApplication) application, the [C# benchmark](https://github.com/HUSACCT/HUSACCT-CsharpBenchmarkApplication) application, the [Recognition test repository](https://github.com/HUSACCT/HUSACCT-RecognitionTest) and this project.
 
 ## Build team
 
-This project involves six teams from one class (Bachelor Computer Science Informatics 2011-2012); around 4 to 5 people a team. Each team is responsible for a different service (control, analyze (Java and .NET), define, validate and architecture graphics).
+This project involves six teams from two classes in their third year (Bachelor Computer Science Informatics) over the course of two years (2011-2012 and 2012-2013), with 4 to 5 people a team. Each team is responsible for a different service (control, analyze (Java and .NET), define, validate and architecture graphics).
 
 ## Conclusion
 

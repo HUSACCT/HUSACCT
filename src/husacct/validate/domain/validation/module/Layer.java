@@ -6,6 +6,7 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.ArrayList;
 
 public class Layer extends AbstractModule {
+	
 	public Layer(List<RuleType> ruleTypes) {
 		super(ruleTypes);
 	}

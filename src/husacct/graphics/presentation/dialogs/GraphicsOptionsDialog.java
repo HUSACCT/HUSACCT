@@ -43,7 +43,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			exportToImageButton, hideFiguresButton, showFiguresButton,
 			okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu,
-			smartLinesOptionMenu, showExternalSystemsOptionsMenu;
+			smartLinesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
@@ -97,7 +97,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		interfaceElements.add(exportToImageButton);
 		interfaceElements.add(showDependenciesOptionMenu);
 		interfaceElements.add(showViolationsOptionMenu);
-		interfaceElements.add(showExternalSystemsOptionsMenu);
 		interfaceElements.add(smartLinesOptionMenu);
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
@@ -202,13 +201,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		showViolationsOptionMenu = new JCheckBox();
 		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(showViolationsOptionMenu);
-
-		showExternalSystemsOptionsMenu = new JCheckBox();
-		showExternalSystemsOptionsMenu.setPreferredSize(new Dimension(40,
-				menuItemMaxHeight));
-		showExternalSystemsOptionsMenu.setMaximumSize(new Dimension(40,
-				menuItemMaxHeight));
-		optionsPanel.add(showExternalSystemsOptionsMenu);
 		
 		smartLinesOptionMenu = new JCheckBox();
 		smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
@@ -306,13 +298,6 @@ public class GraphicsOptionsDialog extends JDialog {
 				currentSettings.put("violations", true);
 				listener.hideViolations();
 			}
-			if(showExternalSystemsOptionsMenu.isSelected()){
-				currentSettings.put("externalsystems", true);
-				listener.showExternalSystems();
-			}else{
-				currentSettings.put("externalsystems", false);
-				listener.hideExternalSystems();
-			}
 			if (smartLinesOptionMenu.isSelected()) {
 				currentSettings.put("smartLines", true);
 				listener.showSmartLines();
@@ -340,8 +325,6 @@ public class GraphicsOptionsDialog extends JDialog {
 				.get("violations"));
 		smartLinesOptionMenu.setSelected((Boolean) currentSettings
 				.get("smartLines"));
-		showExternalSystemsOptionsMenu.setSelected((Boolean) currentSettings
-				.get("externalsystems"));
 		layoutStrategyOptions.setSelectedItem(localeService
 				.getTranslatedString(currentSettings.get("layoutStrategy")
 						.toString()));
@@ -391,8 +374,6 @@ public class GraphicsOptionsDialog extends JDialog {
 					.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale
 					.get("ShowViolations"));
-			showExternalSystemsOptionsMenu.setText(menuBarLocale
-					.get("ShowExternalSystems"));
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
@@ -431,16 +412,6 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void setViolationsUIToInactive() {
 		currentSettings.put("violations", false);
 		showViolationsOptionMenu.setSelected(false);
-	}
-	
-	public void setExternalSystemsUIToActive() {
-		currentSettings.put("externalsystems", true);
-		showExternalSystemsOptionsMenu.setSelected(true);
-	}
-	
-	public void setExternalSystemsUIToInactive() {
-		currentSettings.put("externalsystems", false);
-		showExternalSystemsOptionsMenu.setSelected(false);
 	}
 
 	public void setZoomValue(int value) {
