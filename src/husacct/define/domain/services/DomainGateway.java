@@ -102,7 +102,7 @@ public class DomainGateway {
 	}
 
 	public long getSelectedModuleId() {
-		// TODO Auto-generated method stub
+		
 		return DefinitionController.getInstance().getSelectedModuleId();
 	}
 
@@ -125,5 +125,16 @@ public class DomainGateway {
 
 	public AnalyzedModuleComponent treeModel() {
 		return JtreeController.instance().getRootOfModel();
+	}
+
+
+
+
+
+
+	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,
+			String editingRegEx) {
+		new SoftwareUnitController(getSelectedModuleId()).editRegEx(components, editingRegEx);
+		
 	}
 }

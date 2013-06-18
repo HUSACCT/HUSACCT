@@ -7,6 +7,7 @@ import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
@@ -164,15 +165,19 @@ public void setModuleTree(ModuleTree moduleTree) {
 public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	
 	RegexComponent  result = new RegexComponent("root","editRegex","SEARCH","public");
-
+result.setRegex(new SoftwareUnitDefinitionDomainService().getExpressionByName(DefinitionController.getInstance().getSelectedModuleId(),editingRegEx));
 	editTree = new AnalyzedModuleTree(result);
-	result.setRegex(new SoftwareUnitDefinitionDomainService().getRegExSoftwareUnitByName(editingRegEx));
+	
 	return editTree;
 }
 
-public  void restoreRegexWrapper(String name) {
+public  void restoreRegexWrapper(ExpressionUnitDefinition unit) {
 	   
+for (SoftwareUnitDefinition result : unit.getExpressionValues()) {
+AnalyzedModuleComponent unitToBeRestored=	StateService.instance().getAnalyzedSoftWareUnit(result);
+unitToBeRestored.unfreeze();
 
+}
 		
 	
 	
@@ -186,13 +191,6 @@ public AbstractCombinedComponent getMappedunits() {
 	return (AbstractCombinedComponent) instance.getTree().getModel().getRoot();
 }
 
-public void editRegex(long moduleId,ArrayList<AnalyzedModuleComponent> components,
-		String editingRegEx) {
-	
-	
-	
-	
-}
 
 public void restoreTreeItem(AnalyzedModuleComponent analyzeModuleTobeRestored) {
 	tree.restoreTreeItem(analyzeModuleTobeRestored);
@@ -270,6 +268,15 @@ public List<AbstractCombinedComponent> getRootprojectsModules()
 
 
 return returnList;
+}
+
+public RegexComponent createRegexRepresentation(String editingRegEx,
+		ArrayList<AnalyzedModuleComponent> components) {
+	RegexComponent expresion = new RegexComponent(editingRegEx,"root","REGEX","public");
+	for (AnalyzedModuleComponent unit : components) {
+		expresion.addChild(unit);
+	}
+	return expresion;
 }
 
 

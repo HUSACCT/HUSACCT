@@ -24,20 +24,29 @@ public class SoftwareUnitDefinitionDomainService {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 
 		try {
-			Type type = Type.valueOf(softwareunit.getType());
-			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(
-					softwareunit.getUniqueName(), type);
+			
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info(
 					"cheking if regex wrapper " + softwareunit.getType()
 					+ "ok " + softwareunit.getUniqueName());
 			if (softwareunit instanceof RegexComponent) {
 				ExpressionUnitDefinition ex = new ExpressionUnitDefinition(softwareunit.getUniqueName(),SoftwareUnitDefinition.Type.REGEX);
+				for (AbstractCombinedComponent ir : ((RegexComponent) softwareunit).getChildren()) {
+					Type typet = Type.valueOf(ir.getType());
+					SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(
+							ir.getUniqueName(), typet);
+					ex.addSoftwareUnit(unitt);
+				}
+				
+				
+				
 				module.addSUDefinition(ex);
-				RegisterRegixSoftwareUnits((RegexComponent) softwareunit,
-						module, unit);
+			
 				
 				
 			} else {
+				Type type = Type.valueOf(softwareunit.getType());
+				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(
+						softwareunit.getUniqueName(), type);
 				module.addSUDefinition(unit);
 				JtreeController.instance().getTree().removeTreeItem(softwareunit);
 			}
@@ -168,22 +177,20 @@ public class SoftwareUnitDefinitionDomainService {
 
 	}
 
-	public void removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
+	public ExpressionUnitDefinition removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 				moduleId);
-		// TODO: Why is this here? Can this be resolved?
-		// thread problems
-		// SoftwareUnitRegExDefinition unit =
-		// getRegExSoftwareUnitByName(softwareUnit);
 
-		Type type = Type.valueOf("regex".toUpperCase());
-		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit,
-				type);
+	
+		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
-
-		JtreeController.instance().restoreRegexWrapper(softwareUnit);
+		WarningMessageService.getInstance().processModule(module);
+		//StateService.instance().removeSoftwareUnit(module, unit);
+		JtreeController.instance().restoreRegexWrapper((ExpressionUnitDefinition)unit);
+		
 		ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();
+		return (ExpressionUnitDefinition)unit;
 	}
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
@@ -252,5 +259,19 @@ public class SoftwareUnitDefinitionDomainService {
 			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		}
 
+	}
+	public ExpressionUnitDefinition getExpressionByName(long ModuleId,String name)
+	{
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(ModuleId);
+		return  (ExpressionUnitDefinition) module.getSoftwareUnitByName(name); 
+		
+	}
+
+	public void editRegex(long selectedModuleId,
+			ArrayList<AnalyzedModuleComponent> components, String editingRegEx) {
+	       removeRegExSoftwareUnit(selectedModuleId, editingRegEx);
+	     RegexComponent tobesaved=  JtreeController.instance().createRegexRepresentation(editingRegEx,components);
+	     addSoftwareUnit(selectedModuleId, tobesaved);
+		
 	}
 }

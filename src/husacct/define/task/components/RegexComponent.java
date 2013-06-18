@@ -105,15 +105,14 @@ public class RegexComponent extends AnalyzedModuleComponent {
     
     public void setRegex(ExpressionUnitDefinition unit )
     {
+
     	for (SoftwareUnitDefinition unite : unit.getExpressionValues()) {
-			addChild(StateService.instance().getAnalyzedSoftWareUnit(unite));
+	
+    		addChild(StateService.instance().getAnalyzedSoftWareUnit(unite));
 		}
     	
     }
 
-	public void setRegex(SoftwareUnitRegExDefinition regExSoftwareUnitByName) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }
