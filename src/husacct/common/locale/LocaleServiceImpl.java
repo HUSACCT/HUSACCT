@@ -2,6 +2,7 @@ package husacct.common.locale;
 
 import husacct.common.Resource;
 import husacct.common.services.ObservableService;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,11 +28,11 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 	
 	public static Locale english = Locale.ENGLISH;
 	public static Locale dutch = new Locale("nl", "NL");
-	private static Locale defaultLocale = english;
 	
 	private String bundleLocation = Resource.LOCALE_PATH;
 	private String bundlePrefix = "husacct";
 	private String bundleSuffix = ".properties";
+	private Locale defaultLocale;
 	
 	private ResourceBundle resourceBundle;
 	private Locale currentLocale;
@@ -40,6 +41,8 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 
 	public LocaleServiceImpl(){
 		detectLocales();
+		String locale = ConfigurationManager.getProperty("Language");
+		defaultLocale = new Locale(locale, locale);
 		setLocale(defaultLocale);
 	}
 
@@ -56,7 +59,7 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 				}
 			}
 		} catch (Exception e) {
-			logger.debug("Unable to find locales dynamically. falling back to EN");
+			logger.debug("Unable to find locales dynamically.");
 			availableLocales.add(defaultLocale);
 		}
 	}
