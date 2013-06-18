@@ -34,9 +34,8 @@ public class ConfigurationManager {
 		Properties props = new Properties();
 		try {
 			File file = new File(OSDetector.getAppFolder() + File.separator + "config.properties");
-			if(!file.isFile()) {
+			if(!file.isFile())
 				file.createNewFile();
-			}
 			props.load(new FileInputStream(file));
 		} catch (IOException e) {
 			e.printStackTrace();
