@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class StateDefineController {
 	private int currentIndex = -1;
-	private boolean islocked = false;
+
 	private boolean undo = true;
 	private boolean redu = true;
 
@@ -14,8 +14,6 @@ public class StateDefineController {
 
 	public boolean undo() {
 
-		islocked = true;
-	
 		redu = true;
 		states.get(currentIndex).undo();
 		currentIndex--;
@@ -29,30 +27,27 @@ public class StateDefineController {
 
 	public boolean redo() {
 		int size = states.size();
-       undo= true;
-		islocked = true;
-	    if (currentIndex+2  == size) {
+		undo = true;
+
+		if (currentIndex + 2 == size) {
 			redu = false;
-			}
-		
+		}
+
 		currentIndex++;
 		states.get(currentIndex).redo();
-		
-		
-	
 
 		return true;
 
 	}
 
 	public void insertCommand(Istate sate) {
-		if (!islocked && currentIndex + 1 != states.size()) {
+		if (currentIndex + 1 != states.size()) {
 			removeStates();
 			currentIndex++;
 			registerState(sate);
-		} else if (!islocked) {
+		} else {
 			registerState(sate);
-			
+
 		}
 
 	}
@@ -60,13 +55,13 @@ public class StateDefineController {
 	private void registerState(Istate sate) {
 		if (states.size() == 5) {
 			states.remove(0);
-			
+
 			states.add(sate);
-			} else {
-				System.out.println();
-				currentIndex++;
-				
-				states.add(sate);
+		} else {
+			System.out.println();
+			currentIndex++;
+
+			states.add(sate);
 		}
 
 	}
@@ -79,18 +74,11 @@ public class StateDefineController {
 
 	}
 
-	public void unlock() {
-		islocked = false;
-
-	}
-
 	public boolean[] getStatesStatus() {
-			if (!islocked) {
-			if (states.size() > 0) {
-				undo = true;
-				redu = false;
-			}
 
+		if (states.size() > 0) {
+			undo = true;
+			redu = false;
 		}
 
 		return new boolean[] { undo, redu };

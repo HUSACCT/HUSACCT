@@ -173,9 +173,8 @@ public class SoftwareUnitController extends PopUpController {
 
 	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,
 			String editingRegEx) {
-
-		JtreeController.instance().editRegex(getModuleId(), components,
-				editingRegEx);
+		softwareUnitDefinitionDomainService.editRegex(DefinitionController.getInstance().getSelectedModuleId(),components,editingRegEx);
+		
 
 	}
 
