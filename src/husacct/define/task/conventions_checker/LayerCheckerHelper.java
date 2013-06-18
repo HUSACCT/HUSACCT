@@ -7,7 +7,7 @@ import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.ModuleDomainService;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 public class LayerCheckerHelper {
 
@@ -38,34 +38,38 @@ public class LayerCheckerHelper {
 	    }
 	}
     }
-
-    public ArrayList<Layer> getBackCallLayers(Long moduleFromId) {
-	ArrayList<Layer> backCallLayers = new ArrayList<Layer>();
-	Long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
-	if (firstBackCallLayerId != -1L) {
-	    for (Layer layer : layers) {
-		backCallLayers.add(layer);
-		if (layer.getId() == firstBackCallLayerId) {
-		    break;
-		}
-	    }
-	}
-	return backCallLayers;
-    }
+    
+    public ArrayList<ModuleStrategy> getBackCallLayers(Long moduleFromId) {
+    	ArrayList<ModuleStrategy> backCallLayers = new ArrayList<ModuleStrategy>();
+    	Long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
+    	if (firstBackCallLayerId != -1L) {
+    	    for (Layer layer : layers) {
+    		backCallLayers.add(layer);
+    		ArrayList<ModuleStrategy> subModules = layer.getSubModules();
+    		for(ModuleStrategy module : subModules) {
+    			backCallLayers.add(module);
+    		}
+    		if (layer.getId() == firstBackCallLayerId) {
+    		    break;
+    		}
+    	    }
+    	}
+    	return backCallLayers;
+        }
 
     private ArrayList<ModuleStrategy> getCurrentModules(ModuleStrategy moduleFrom) {
 	
     	ModuleDomainService moduleService =new  ModuleDomainService();
 	
     	Long parentId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(1L);
-    	System.out.println("oppp "+parentId);
+    	
     	parentId=-1L;
 	if (parentId != -1) {
 		try{
 		
 		}catch(Exception e)
 		{
-			System.out.println("<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>"+moduleFrom==null ?  "klop":moduleFrom.getName());e.getStackTrace();
+			
 		}
 		ModuleStrategy parentModule = moduleService.getModuleById(parentId);
 	    moduleService.sortModuleChildren(parentModule);
@@ -123,8 +127,8 @@ public class LayerCheckerHelper {
 	return -1L;
     }
 
-    public ArrayList<Layer> getSkipCallLayers(Long moduleFromId) {
-	ArrayList<Layer> skipCallLayers = new ArrayList<Layer>();
+    public ArrayList<ModuleStrategy> getSkipCallLayers(Long moduleFromId) {
+	ArrayList<ModuleStrategy> skipCallLayers = new ArrayList<ModuleStrategy>();
 	Long firstSkipCallLayerId = getFirstSkipCallLayer(moduleFromId);
 	boolean getLayers = false;
 	for (Layer layer : layers) {
@@ -133,6 +137,10 @@ public class LayerCheckerHelper {
 	    }
 	    if (getLayers) {
 		skipCallLayers.add(layer);
+		ArrayList<ModuleStrategy> subModules = layer.getSubModules();
+		for(ModuleStrategy module : subModules) {
+			skipCallLayers.add(module);
+		}
 	    }
 	}
 	return skipCallLayers;

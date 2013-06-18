@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.tables.JTableException;
@@ -121,10 +121,11 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 
 	private void createAppliedRuleKeyValueComboBox() {
 		this.appliedRuleKeyValueComboBox = new KeyValueComboBox();
-		this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
-
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)){
+			this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox, true);
 			this.appliedRuleKeyValueComboBox.setEnabled(false);
+		}else{
+			this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
 		}
 	}
 

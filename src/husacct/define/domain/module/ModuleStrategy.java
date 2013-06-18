@@ -1,14 +1,15 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
@@ -118,13 +119,11 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public String addSubModule(ModuleStrategy subModule){
-		if(!subModules.contains(subModule) && !moduleAlreadyExistentWithinSystem(subModule.getName())) {
+		if(!subModules.contains(subModule) && !hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-			DefaultRuleDomainService service = new DefaultRuleDomainService();
-			service.addDefaultRules(subModule);
-			StateService.instance().addModule(subModule);
-			WarningMessageService.getInstance().processModule(subModule);
+			new  DefaultRuleDomainService().addDefaultRules(subModule);
+		
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
@@ -151,14 +150,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	public boolean hasSubModules(){
 		return subModules.isEmpty();	
-	}
-
-	public boolean moduleAlreadyExistentWithinSystem(String name) {
-		ModuleStrategy parentWalker = this;
-		while (parentWalker.parent != null && !(parentWalker instanceof Layer)) {
-			parentWalker = parentWalker.parent;
-		}
-		return parentWalker.hasSubModule(name);
 	}
 
 	public boolean hasSubModule(String name){
@@ -329,6 +320,25 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		this.parent=moduleParent;
 		
 	}
+
+
+	public void addSUDefinition(List<SoftwareUnitDefinition> units) {
+		for (SoftwareUnitDefinition softwareUnitDefinition : units) {
+			addSUDefinition(softwareUnitDefinition);
+		}
+		
+	}
+
+
+	public void removeSUDefintion(List<SoftwareUnitDefinition> units) {
+		for (SoftwareUnitDefinition softwareUnitDefinition : units) {
+			removeSUDefintion(softwareUnitDefinition);
+		}
+		
+	}
+
+
+
 	
 
 }
