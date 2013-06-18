@@ -1,12 +1,13 @@
 package husacct.common;
 
+import java.io.InputStream;
 import java.net.URL;
 
 import common.Logger;
 
 public class Resource {
 	private static Logger logger = Logger.getLogger(Resource.class);
-	
+
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
 	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
 	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
@@ -15,9 +16,10 @@ public class Resource {
 	public static final String CREDITS_PATH = RESOURCE_PATH +"credits/";
 	public static final String HELP_PATH = RESOURCE_PATH +"help/";
 	public static final String HELP_PAGES_PATH = HELP_PATH +"pages/";
-	
+	public static final String HELP_IMAGE_PATH = HELP_PATH +"image/";
+
 	public static final String test_page = HELP_PAGES_PATH + "about.html";
-	
+
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
 	public static final String DEFINE_WORKFLOW = IMAGE_PATH + "define_workflow.png";
@@ -27,7 +29,7 @@ public class Resource {
 	public static final String GIT_FORK_2 = IMAGE_PATH +"fork_2.png";
 	public static final String GIT_FORK_3 = IMAGE_PATH +"fork_3.png";
 	public static final String GIT_FORK_4 = IMAGE_PATH +"fork_4.png";
-	
+
 	public static final String SMALL_YOUTUBE_LOGO = IMAGE_PATH + "yt-brand-standard-logo-95px.png";
 	public static final String ICON_BACK = ICONSET_PATH + "back.png";
 	public static final String ICON_ANALYSED_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "analysed-architecture-diagram.png";
@@ -83,14 +85,22 @@ public class Resource {
 	public static final String ICON_SELECT_TOOL = ICONSET_PATH
 			+ "mouse-cursor-icon.jpg";
 	public static String ICON_FACADE = ICONSET_PATH + "define-facade.png";
-	
+
 	public static URL get(String path){
 		URL resourceUrl = null;
 		try {
 			resourceUrl = Resource.class.getResource(path);
 		} catch (Exception exception){
+			path = path.substring(1);
+			resourceUrl = Resource.class.getResource(path);
 			logger.error(String.format("Unable to find resource %s: %s", path, exception.getMessage()));
 		}
 		return resourceUrl;
 	}
+	
+	public static InputStream getStream(String path) {
+		
+		return Resource.class.getResourceAsStream(path);
+	}
+
 }
