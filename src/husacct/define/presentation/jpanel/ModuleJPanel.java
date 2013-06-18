@@ -4,22 +4,35 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.ModuleDropTarget;
+import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
+import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.LayerComponent;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,7 +48,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 public class ModuleJPanel extends JPanel implements ActionListener,
-	TreeSelectionListener, Observer, IServiceListener, KeyListener {
+	TreeSelectionListener, Observer, IServiceListener, KeyListener  {
 
     private static final long serialVersionUID = 6141711414139061921L;
 
@@ -331,7 +344,11 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 	moduleTree.addTreeSelectionListener(this);
 	checkLayerComponentIsSelected();
 
-	moduleTree.addMouseListener(new MouseAdapter() {
+	moduleTree.setDragEnabled(true);
+	ModuleDropTarget moduledroptarget = new ModuleDropTarget(moduleTree);
+	
+	
+moduleTree.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseClicked(MouseEvent event) {
 		createPopup(event);
@@ -372,4 +389,5 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 	checkLayerComponentIsSelected();
     }
 
+	
 }

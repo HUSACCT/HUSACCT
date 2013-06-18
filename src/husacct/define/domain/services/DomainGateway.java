@@ -1,17 +1,16 @@
 package husacct.define.domain.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import husacct.define.domain.SoftwareArchitecture;
-
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DomainGateway {
 
@@ -29,10 +28,20 @@ public class DomainGateway {
 		
 	}
 	
-	public boolean addModule(String name,String description,String type){
-		StateService.instance().fromGui();
-		DefinitionController.getInstance().addModule( name, description,type);		
-		return true;		
+
+	
+	
+	
+	
+	public boolean addModule(String name,String description,String type)
+	{
+	
+		DefinitionController.getInstance().addModule( name, description,type);
+		
+		
+		return true;
+		
+		
 	}
 	
 	public void moveLayerUp(long layerId)
@@ -93,7 +102,7 @@ public class DomainGateway {
 	}
 
 	public long getSelectedModuleId() {
-		// TODO Auto-generated method stub
+		
 		return DefinitionController.getInstance().getSelectedModuleId();
 	}
 
@@ -116,5 +125,16 @@ public class DomainGateway {
 
 	public AnalyzedModuleComponent treeModel() {
 		return JtreeController.instance().getRootOfModel();
+	}
+
+
+
+
+
+
+	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,
+			String editingRegEx) {
+		new SoftwareUnitController(getSelectedModuleId()).editRegEx(components, editingRegEx);
+		
 	}
 }

@@ -27,6 +27,7 @@ import org.jdom2.Element;
  * 
  */
 public class PersistentDomain implements ISaveable {
+
 	public enum DomainElement {
 		APPLICATION, LOGICAL, PHYSICAL
 	}
@@ -109,4 +110,5 @@ public class PersistentDomain implements ISaveable {
 	public void setXMLDomain(XMLDomain xd) {
 		XMLParser = xd;
 	}
+
 }

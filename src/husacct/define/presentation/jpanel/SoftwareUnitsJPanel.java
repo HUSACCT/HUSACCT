@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitTableDropListener;
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
@@ -147,6 +148,9 @@ Observer, IServiceListener {
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
+	
+		softwareUnitsTable.setDragEnabled(true);
+		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(softwareUnitsTable);
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -254,6 +258,10 @@ Observer, IServiceListener {
 		removeSoftwareUnitButton.setEnabled(true);
 		removeSoftwareUnitItem.setEnabled(true);
 	}
+    
+
+  
+
 
 	public TableModel getModel() {
 		return softwareUnitsTable.getModel();
@@ -315,6 +323,7 @@ Observer, IServiceListener {
 					ServiceProvider.getInstance().getLocaleService()
 					.getTranslatedString("WrongSelectionTitle"),
 					JOptionPane.ERROR_MESSAGE);
+
 		}
 	}
 
@@ -408,5 +417,7 @@ Observer, IServiceListener {
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
-	}
+
 }
+
+		}

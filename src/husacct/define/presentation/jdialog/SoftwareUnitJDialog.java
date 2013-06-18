@@ -4,18 +4,16 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.define.domain.services.DomainGateway;
-import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitDropListerner;
+import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
-
-import husacct.define.task.JtreeController;
-
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.presentation.utils.ExpressionEngine;
-
-import husacct.define.task.JtreeStateEngine;
+import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
+
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -73,7 +71,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private long _moduleId;
 	
 	public SoftwareUnitJDialog(long moduleId) {
-		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), false);
 		_moduleId=moduleId;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
@@ -96,6 +94,9 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			UIMapping.setEnabled(false);
 			this.setResizable(false);
 			this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
+		
+		
+			
 		
 			this.setSize(650, 300);
 			this.pack();
@@ -223,6 +224,10 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	private void getSoftwareDefinationTree() {
 	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
+	this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
+	 SoftwareUnitDropListerner  dropListener = new SoftwareUnitDropListerner (softwareDefinitionTree);
+	this.softwareDefinitionTree.setDragEnabled(true);
+	
 	
 		
 	}
@@ -317,7 +322,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			ExpressionEngine expressionEngine = new ExpressionEngine();
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
-					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
+					
 					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
 							expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC");
@@ -370,8 +375,12 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = softwareDefinitionTree.getSelectionModel();
 			boolean isButtonAddEnabled =true;
 			for (TreePath path : paths.getSelectionPaths()){
+				
+			
+				
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")) {
+				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")
+						||selectedComponent.getType().toLowerCase().equals("externalpackage")) {
 					isButtonAddEnabled=false;
 				}
 			}
@@ -381,4 +390,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 
 	
 	};
+
+
+
+	
+
+
+	
 }

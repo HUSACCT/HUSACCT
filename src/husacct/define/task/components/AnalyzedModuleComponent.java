@@ -1,5 +1,8 @@
 package husacct.define.task.components;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AnalyzedModuleComponent extends AbstractCombinedComponent {
@@ -134,5 +137,31 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	isfrozen = false;
 
     }
+
+	public boolean isAncestorsMapped() {
+		boolean result = false;
+		AnalyzedModuleComponent buffer =null;
+		String type = this.getType().toLowerCase();
+		buffer = (AnalyzedModuleComponent) this.getParentofChild();
+		while (!type.equals("application")) {
+		if (buffer.isMapped()) {
+			result =true;
+		    break;
+		
+		
+		}else{	
+		type=buffer.getParentofChild().getType().toLowerCase();
+		buffer=buffer.getParentofChild();
+		}
+		}
+		
+		
+		
+		
+		return result;
+	}
+
+	
+	
 
 }
