@@ -18,6 +18,8 @@ public abstract class AbstractCombinedComponent extends Component implements
     protected int sizeOfChildren;
     protected String type = "";
     protected String uniqueName = "";
+     static DataFlavor softwareUnitFlavour= new DataFlavor(AbstractCombinedComponent.class, "");
+
 
     public AbstractCombinedComponent() {
 	super();
@@ -98,22 +100,21 @@ public abstract class AbstractCombinedComponent extends Component implements
     public Object getTransferData(DataFlavor arg0)
 			throws UnsupportedFlavorException, IOException {
 		
-		return null ;
+		return this;
 	}
 
     @Override
 	public DataFlavor[] getTransferDataFlavors() {
-		DataFlavor softwareUnitFlavour= new DataFlavor(AnalyzedModuleComponent.class, "");
-		DataFlavor layerFlavour= new DataFlavor(LayerComponent.class, "");
-		DataFlavor subsystemFlavour= new DataFlavor(SubSystemComponent.class, "");
 		
-		return new DataFlavor[]{softwareUnitFlavour,layerFlavour,subsystemFlavour};
+		
+		return new DataFlavor[]{softwareUnitFlavour};
 	}
 
     @Override
 	public boolean isDataFlavorSupported(DataFlavor arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		// TODO Auto-generated method stub t
+		
+    	return true;
 	}
 
 }

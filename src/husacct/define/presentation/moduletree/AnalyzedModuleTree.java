@@ -36,7 +36,7 @@ public class AnalyzedModuleTree extends JTree {
 	}
 
 	public void removeTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent) {
-	
+
 		analyzedsoftwarecomponent.freeze();
 
 	}

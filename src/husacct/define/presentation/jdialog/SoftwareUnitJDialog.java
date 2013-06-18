@@ -4,7 +4,8 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.define.domain.services.DomainGateway;
-import husacct.define.presentation.draganddrop.ModuleTrasferhandler;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitDropListerner;
+import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.presentation.utils.ExpressionEngine;
@@ -19,12 +20,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -51,7 +46,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener,DropTargetListener {
+public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	
@@ -99,8 +94,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			UIMapping.setEnabled(false);
 			this.setResizable(false);
 			this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
-			softwareDefinitionTree.setDragEnabled(true);
-			new DropTarget(softwareDefinitionTree, DnDConstants.ACTION_COPY_OR_MOVE, this);
+		
+		
 			
 		
 			this.setSize(650, 300);
@@ -230,7 +225,9 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void getSoftwareDefinationTree() {
 	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
 	this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
+	 SoftwareUnitDropListerner  dropListener = new SoftwareUnitDropListerner (softwareDefinitionTree);
 	this.softwareDefinitionTree.setDragEnabled(true);
+	
 	
 		
 	}
@@ -394,35 +391,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	};
 
-	@Override
-	public void dragEnter(DropTargetDragEvent dtde) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void dragExit(DropTargetEvent dte) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dragOver(DropTargetDragEvent dtde) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void drop(DropTargetDropEvent dtde) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dropActionChanged(DropTargetDragEvent dtde) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	
 

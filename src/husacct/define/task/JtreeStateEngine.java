@@ -197,6 +197,11 @@ return	allUnitsRegistry.getNotMappedUnits();
 	
 	}
 
+	public AnalyzedModuleComponent getAnalyzedSoftWareUnit(String uniqueName) {
+		return  allUnitsRegistry.getAnalyzedUnit(uniqueName);
+		
+	}
+
 
 
 

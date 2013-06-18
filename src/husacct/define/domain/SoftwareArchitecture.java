@@ -9,6 +9,7 @@ import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.seperatedinterfaces.IAppliedRuleSeperatedInterface;
 import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
+import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
@@ -80,6 +81,9 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		if (!hasModule(module.getName())) {
 			rootModule.addSubModule(module);
 			modules.add(module);
+			StateService.instance().addModule(module);
+		//	DefaultRuleDomainService.getInstance().addDefaultRules(module);
+			WarningMessageService.getInstance().processModule(module);
 			moduleId = module.getId();
 		} else {
 			throw new RuntimeException(ServiceProvider.getInstance()
@@ -92,6 +96,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		StateService.instance().addModule(module);
+	
 		modules.add(module);
 		WarningMessageService.getInstance().processModule(module);
 		return parentModule.addSubModule(module);
@@ -681,7 +686,7 @@ for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 	@Override
 	public void addSeperatedModule(ModuleStrategy module) {
 	 
-		System.out.println(module.getparent().getName()+" >>>>>>??????");
+		
 		module.getparent().addSubModule(module);
 		
 	}
