@@ -1,5 +1,7 @@
 package husacct.define.domain;
 
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+
 import java.util.ArrayList;
 
 public class SoftwareUnitRegExDefinition {

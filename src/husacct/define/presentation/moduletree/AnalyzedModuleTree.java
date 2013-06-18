@@ -5,6 +5,7 @@ import java.util.Collections;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
+import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import javax.swing.JTree;
@@ -20,6 +21,8 @@ public class AnalyzedModuleTree extends JTree {
 		this.setCellRenderer(moduleCellRenderer);
 		this.setDefaultSettings();
 	}
+
+	
 
 	public void setDefaultSettings() {
 		this.getSelectionModel().setSelectionMode(

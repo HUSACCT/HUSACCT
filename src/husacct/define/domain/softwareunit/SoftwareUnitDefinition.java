@@ -1,4 +1,4 @@
-package husacct.define.domain;
+package husacct.define.domain.softwareunit;
 
 public class SoftwareUnitDefinition {
 

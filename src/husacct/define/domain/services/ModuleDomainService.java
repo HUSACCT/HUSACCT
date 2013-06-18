@@ -2,20 +2,27 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.ModuleComparator;
+import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ModuleDomainService {
-	private DefaultRuleDomainService service = new DefaultRuleDomainService();
+
+	private ModuleFactory factory = new ModuleFactory();
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+
+		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
+				.getModuleById(parentModuleId);
+		StateService.instance().addModule(module);
+		WarningMessageService.getInstance().processModule(module);
+
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
 
@@ -23,16 +30,33 @@ public class ModuleDomainService {
 		return moduleId;
 	}
 
-	public String addModuleToRoot(ModuleStrategy module) {
-		ModuleStrategy rootModule = SoftwareArchitecture.getInstance().getModuleById(0);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();		
-		return rootModule.addSubModule(module);
+
+	public long addModuleToRoot(ModuleStrategy module) {
+	
+		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+	
+		StateService.instance().addModule(module);
+		WarningMessageService.getInstance().processModule(module);
+	
+		
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		return moduleId;
 	}
 
-	public String addNewModuleToParent(long parentModuleId,	ModuleStrategy module) {
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		return parentModule.addSubModule(module);
+	public String addNewModuleToParent(long parentModuleId,
+			ModuleStrategy module) {
+		
+		
+		ServiceProvider.getInstance().getDefineService()
+				.notifyServiceListeners();
+	
+		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
+	}
+	
+	public ModuleStrategy createNewModule(String type)
+	{
+		return factory.createModule(type);
+		
 	}
 
 	public ModuleStrategy getModuleById(long moduleId) {
@@ -217,4 +241,6 @@ public class ModuleDomainService {
 				.notifyServiceListeners();
 
 	}
+	
+	
 }

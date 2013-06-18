@@ -28,8 +28,7 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public class DefineServiceImpl extends ObservableService implements
-IDefineService {
+public class DefineServiceImpl extends ObservableService implements IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
 	private DomainParser domainParser = new DomainParser();
@@ -202,4 +201,5 @@ IDefineService {
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());
 	}
+
 }

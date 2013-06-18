@@ -18,40 +18,49 @@ import org.jdom2.Element;
 
 public class XMLDomain {
 
-	private Element workspace;
-	private Application application;
-	private SoftwareArchitecture softwareArchitecture;
-	private AppliedRuleDomainService ruleService = new AppliedRuleDomainService();
-	private ModuleDomainService moduleService = new ModuleDomainService();
-	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
-	private ArrayList<AppliedRuleStrategy> appliedRules;
 
-	public XMLDomain(Element workspaceData) {
-		workspace = workspaceData;
-		softwareArchitecture = SoftwareArchitecture.getInstance();
+    private Element workspace;
+    private Application application;
+    private SoftwareArchitecture softwareArchitecture;
+    private AppliedRuleDomainService ruleService = new AppliedRuleDomainService();
+    private ModuleDomainService moduleService = new ModuleDomainService();
+    private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
+   
+
+    public XMLDomain(Element workspaceData) {
+	workspace = workspaceData;
+	softwareArchitecture = SoftwareArchitecture.getInstance();
+    }
+
+    public Application createApplication(){
+	try{
+    	List<Element> applicationProperties = workspace.getChildren();
+
+	Element name = applicationProperties.get(0);
+	Element version = applicationProperties.get(1);
+	Element projects = applicationProperties.get(2);
+	Element architecture = applicationProperties.get(3);
+	ArrayList<Project> projectsList = getProjectsFromElement(projects);
+
+	application = new Application(name.getValue(), projectsList, version.getValue());
+	application.setArchitecture(createArchitectureFromElement(architecture));
+	}catch(Exception exe){System.out.println("XMLDOMAIN :86 nill");}
+	return application;
+    }
+
+    private ArrayList<Project> getProjectsFromElement(Element XMLElement){
+	ArrayList<Project> projects = new ArrayList<Project>();
+	for(Element project : XMLElement.getChildren("Project")){
+	    projects.add(getProjectFromElement(project));
 	}
+	return projects;
+    }
 
-	public Application createApplication(){
-		List<Element> applicationProperties = workspace.getChildren();
 
-		Element name = applicationProperties.get(0);
-		Element version = applicationProperties.get(1);
-		Element projects = applicationProperties.get(2);
-		Element architecture = applicationProperties.get(3);
-		ArrayList<Project> projectsList = getProjectsFromElement(projects);
 
-		application = new Application(name.getValue(), projectsList, version.getValue());
-		application.setArchitecture(createArchitectureFromElement(architecture));
-		return application;
-	}
 
-	private ArrayList<Project> getProjectsFromElement(Element XMLElement){
-		ArrayList<Project> projects = new ArrayList<Project>();
-		for(Element project : XMLElement.getChildren("Project")){
-			projects.add(getProjectFromElement(project));
-		}
-		return projects;
-	}
+
+	
 
 	private Project getProjectFromElement(Element XMLElement){
 		Project project = new Project();
@@ -70,6 +79,55 @@ public class XMLDomain {
 		return project;
 	}
 
+
+
+
+    private void createModulesFromXML(long parentId, Element XMLElement){
+	for(Element module : XMLElement.getChildren()){
+	    ModuleStrategy newModule;
+	    ModuleFactory factory = new ModuleFactory();
+	    String moduleType		 = module.getChildText("type");
+	    String moduleDescription	 = module.getChildText("description");
+	    int moduleId 		 = Integer.parseInt(module.getChildText("id"));
+	    String moduleName 		 = module.getChildText("name");
+
+	    // TODO: When modules change to factory, this should be revised
+	    switch(moduleType){
+
+	    case "ExternalLibrary"	: newModule = moduleService.createNewModule("ExternalLibrary"); break;
+	    case "Component" 		: newModule =  moduleService.createNewModule("Component"); break;
+
+	    case "SubSystem"		: newModule =  moduleService.createNewModule("SubSystem"); break;
+	    case "Layer"		    : newModule =  moduleService.createNewModule("Layer");                   
+	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
+	    	                      ((Layer)newModule).setHierarchicalLevel(HierarchicalLevel); break;
+	    default			        : newModule = factory.createDummy("Empty"); break;	    	
+
+	    }
+	    newModule.set(moduleName, moduleDescription);
+	    newModule.setId(moduleId);
+	
+
+	    // Add to Software Unit
+	    if(parentId == 0){
+	    	try{
+	    	
+	    	moduleService.addModuleToRoot(newModule);
+	    	}catch(Exception e)
+	    	{e.printStackTrace();}
+	    }else{
+		
+	    	moduleService.addModuleToParent(parentId, newModule);
+	
+	    }
+
+	    // Add submodules
+	    if(hasSubmodules(module)){
+		createModulesFromXML(newModule.getId(), module.getChild("SubModules"));
+	    }
+	}
+    }
+
 	private SoftwareArchitecture createArchitectureFromElement(Element XMLElement){
 		softwareArchitecture.setName(XMLElement.getChild("name").getValue());
 		softwareArchitecture.setDescription(XMLElement.getChild("description").getValue());
@@ -87,30 +145,7 @@ public class XMLDomain {
 		return softwareArchitecture;
 	}
 
-	private void createModulesFromXML(long parentId, Element XMLElement){
-		for(Element module : XMLElement.getChildren()){
-			ModuleStrategy newModule;
-			ModuleFactory factory 		= new ModuleFactory();
-			String moduleType		 	= module.getChildText("type");
-			String moduleDescription	= module.getChildText("description");
-			int moduleId 		 		= Integer.parseInt(module.getChildText("id"));
-			String moduleName 		 	= module.getChildText("name");
 
-			newModule = factory.createModule(moduleType);
-			if(newModule.getType().equalsIgnoreCase("Layer")){
-				((Layer)newModule).setHierarchicalLevel(Integer.parseInt((module.getChildText("HierarchicalLevel"))));
-			}
-
-			newModule.set(moduleName, moduleDescription);
-			newModule.setId(moduleId);
-			moduleService.addModuleToParent(parentId, newModule);
-
-			// Add submodules
-			if(hasSubmodules(module)){
-				createModulesFromXML(newModule.getId(), module.getChild("SubModules"));
-			}
-		}
-	}
 
 	private boolean hasSubmodules(Element XMLElement){
 		if(XMLElement.getChildren("SubModules").size() > 0){

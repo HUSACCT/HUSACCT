@@ -6,7 +6,14 @@ import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.seperatedinterfaces.IAppliedRuleSeperatedInterface;
+import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
+import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
+import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 
@@ -14,10 +21,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SoftwareArchitecture {
 
-	private ModuleFactory factory = new ModuleFactory();
-	private static SoftwareArchitecture instance = null;
+
+public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedRuleSeperatedInterface,ISofwareUnitSeperatedInterface {
+
+
+    private static SoftwareArchitecture instance = null;
 
 	public static SoftwareArchitecture getInstance() {
 		return instance == null ? (instance = new SoftwareArchitecture())
@@ -29,6 +38,7 @@ public class SoftwareArchitecture {
 	}
 
 	private ArrayList<AppliedRuleStrategy> appliedRules;
+	private ArrayList<ModuleStrategy> modules = new ArrayList<ModuleStrategy>();
 
 	private ModuleStrategy rootModule;
 
@@ -46,11 +56,12 @@ public class SoftwareArchitecture {
 	public SoftwareArchitecture(String name, String description,
 			ArrayList<ModuleStrategy> modules,
 			ArrayList<AppliedRuleStrategy> rules) {
-		rootModule = factory.createModule("Root");
-
+		rootModule = new ModuleDomainService().createNewModule("Root");
 		rootModule.set(name, description);
 		setModules(modules);
 		setAppliedRules(rules);
+		this.modules.add(rootModule);
+	
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
@@ -64,25 +75,26 @@ public class SoftwareArchitecture {
 	}
 
 	public long addModule(ModuleStrategy module) {
-		long moduleId;
+		long moduleId= module.getId();
+		try{
 		if (!hasModule(module.getName())) {
 			rootModule.addSubModule(module);
+			modules.add(module);
 			moduleId = module.getId();
 		} else {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService().getTranslatedString("SameNameModule"));
 		}
+		}catch(Exception rt){rt.printStackTrace();}
 		return moduleId;
 	}
 
-	public String addNewModule(ModuleStrategy module) {
-		if (hasModule(module.getName())) {
-			return ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("SameNameModule");
-		} else {
-			rootModule.addSubModule(module);
-		}
-		return "";
+	public String addModule(long parentModuleId, ModuleStrategy module) {
+		ModuleStrategy parentModule = getModuleById(parentModuleId);
+		StateService.instance().addModule(module);
+		modules.add(module);
+		WarningMessageService.getInstance().processModule(module);
+		return parentModule.addSubModule(module);
 	}
 
 	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
@@ -137,10 +149,11 @@ public class SoftwareArchitecture {
 		return enabledRuleList;
 	}
 
+	//TODO: will be deleted in the next 2 days
 	public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
 		return null; // TODO: Has to get an implementation
 	}
-
+//	// TODO: will be deleted in the next 2 days
 	public ArrayList<Layer> getLayersBelow(Layer layer) {
 		ArrayList<Layer> returnList = new ArrayList<Layer>();
 		Layer underlyingLayer = getTheFirstLayerBelow(layer);
@@ -237,8 +250,18 @@ public class SoftwareArchitecture {
 
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
 		ModuleStrategy currentModule = null;
-	currentModule= StateService.instance().getModulebySoftwareUnitUniqName(softwareUnitName);
-		if (currentModule == null) {
+
+		
+	for (ModuleStrategy moduleResult : modules) {
+	for (SoftwareUnitDefinition softwareUnitResult : moduleResult.getUnits()) {
+		if (softwareUnitResult.getName().toLowerCase().equals(softwareUnitName.toLowerCase())) {
+			currentModule=moduleResult;
+			break;
+		}
+	}
+	}
+	
+	if (currentModule == null) {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService()
 					.getTranslatedString("SoftwareUnitNotMapped"));
@@ -492,6 +515,7 @@ public class SoftwareArchitecture {
 			DefinitionController.getInstance().setSelectedModuleId(0);
 			parent.getSubModules().remove(index);
 			toBeSaved.add(new Object[]{module,moduleRules});
+			WarningMessageService.getInstance().removeImplementationWarning(module);
 		}
 
 		boolean moduleFound = true;
@@ -603,4 +627,107 @@ public class SoftwareArchitecture {
 
 		return result;
 	}
+
+	@Override
+	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleID) {
+	ModuleStrategy module=	getModuleById(moduleID);
+		module.addSUDefinition(units);
+	}
+
+	@Override
+	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
+		ModuleStrategy module=	getModuleById(moduleId);
+		module.removeSUDefintion(units);
+		
+	}
+
+	@Override
+	public void addSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			addAppliedRule(appliedRuleStrategy);
+		}
+		
+	}
+
+	@Override
+	public void removeSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
+for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			
+			removeAppliedRule(appliedRuleStrategy.getId());
+		}
+		
+	}
+
+	@Override
+	public void addSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
+		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			
+			parent.addException(appliedRuleStrategy);
+		}
+		
+	}
+
+	@Override
+	public void removeSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
+		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+			
+			parent.removeException(appliedRuleStrategy);
+		}
+		
+	}
+
+	@Override
+	public void addSeperatedModule(ModuleStrategy module) {
+	 
+		System.out.println(module.getparent().getName()+" >>>>>>??????");
+		module.getparent().addSubModule(module);
+		
+	}
+
+	@Override
+	public void removeSeperatedModule(ModuleStrategy module) {
+		
+		module.getparent().removeSubModule(module);
+		
+	}
+
+	@Override
+	public void layerUp(long moduleID) {
+		moveLayerUp(moduleID);
+		
+	}
+
+	@Override
+	public void layerDown(long moduleID) {
+	 moveLayerDown(moduleID);
+		
+	}
+
+	@Override
+	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
+		ModuleStrategy module = getModuleById(moduleId);
+		module.addSUDefinition(expression);
+		
+	}
+
+	@Override
+	public void removeExpression(long moduleId,
+			ExpressionUnitDefinition expression) {
+		ModuleStrategy module = getModuleById(moduleId);
+		module.removeSUDefintion(expression);
+		
+	}
+
+	@Override
+	public void editExpression(long moduleId,
+			ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
+		ModuleStrategy module = getModuleById(moduleId);
+		module.removeSUDefintion(oldExpresion);
+		module.addSUDefinition(newExpression);
+		
+	}
+
+	
 }
