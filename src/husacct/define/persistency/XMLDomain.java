@@ -76,10 +76,10 @@ public class XMLDomain {
 	private void createModulesFromXML(long parentId, Element XMLElement){
 		for(Element module : XMLElement.getChildren()){
 			ModuleStrategy newModule;
-			ModuleFactory factory = new ModuleFactory();
+			ModuleFactory factory	 = new ModuleFactory();
 			String moduleType		 = module.getChildText("type");
-			String moduleDescription	 = module.getChildText("description");
-			int moduleId 		 = Integer.parseInt(module.getChildText("id"));
+			String moduleDescription = module.getChildText("description");
+			int moduleId 		 	 = Integer.parseInt(module.getChildText("id"));
 			String moduleName 		 = module.getChildText("name");
 
 			// TODO: When modules change to factory, this should be revised
@@ -97,17 +97,14 @@ public class XMLDomain {
 			newModule.setId(moduleId);
 
 			// Add to Software Unit
-			System.out.println("Adding type: "+newModule.getType());
 			if(parentId == 0){
 				try{
-
 					moduleService.addModuleToRoot(newModule);
-				}catch(Exception e)
-				{e.printStackTrace();}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			}else{
-
 				moduleService.addModuleToParent(parentId, newModule);
-
 			}
 
 			// Add submodules

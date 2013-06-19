@@ -22,12 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+public class SoftwareArchitecture implements IModuleSeperatedInterface,
+		IAppliedRuleSeperatedInterface, ISofwareUnitSeperatedInterface {
 
-
-public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedRuleSeperatedInterface,ISofwareUnitSeperatedInterface {
-
-
-    private static SoftwareArchitecture instance = null;
+	private static SoftwareArchitecture instance = null;
 
 	public static SoftwareArchitecture getInstance() {
 		return instance == null ? (instance = new SoftwareArchitecture())
@@ -62,7 +60,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		setModules(modules);
 		setAppliedRules(rules);
 		this.modules.add(rootModule);
-	
+
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
@@ -76,30 +74,33 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 	}
 
 	public long addModule(ModuleStrategy module) {
-		long moduleId= module.getId();
-		try{
-		if (!hasModule(module.getName())) {
-			rootModule.addSubModule(module);
-			modules.add(module);
-			StateService.instance().addModule(module);
-		//	DefaultRuleDomainService.getInstance().addDefaultRules(module);
-			//WarningMessageService.getInstance().processModule(module);
-			updateWarnings();
-			moduleId = module.getId();
-		} else {
-			throw new RuntimeException(ServiceProvider.getInstance()
-					.getLocaleService().getTranslatedString("SameNameModule"));
+		long moduleId = module.getId();
+		try {
+			if (!hasModule(module.getName())) {
+				rootModule.addSubModule(module);
+				modules.add(module);
+				StateService.instance().addModule(module);
+				// DefaultRuleDomainService.getInstance().addDefaultRules(module);
+				// WarningMessageService.getInstance().processModule(module);
+				updateWarnings();
+				moduleId = module.getId();
+			} else {
+				throw new RuntimeException(ServiceProvider.getInstance()
+						.getLocaleService()
+						.getTranslatedString("SameNameModule"));
+			}
+		} catch (Exception rt) {
+			rt.printStackTrace();
 		}
-		}catch(Exception rt){rt.printStackTrace();}
 		return moduleId;
 	}
 
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		StateService.instance().addModule(module);
-	
+
 		modules.add(module);
-		//WarningMessageService.getInstance().processModule(module);
+		// WarningMessageService.getInstance().processModule(module);
 		return parentModule.addSubModule(module);
 	}
 
@@ -155,11 +156,12 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		return enabledRuleList;
 	}
 
-	//TODO: will be deleted in the next 2 days
+	// TODO: will be deleted in the next 2 days
 	public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
 		return null; // TODO: Has to get an implementation
 	}
-//	// TODO: will be deleted in the next 2 days
+
+	// // TODO: will be deleted in the next 2 days
 	public ArrayList<Layer> getLayersBelow(Layer layer) {
 		ArrayList<Layer> returnList = new ArrayList<Layer>();
 		Layer underlyingLayer = getTheFirstLayerBelow(layer);
@@ -191,10 +193,10 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		}
 		return currentModule;
 	}
-	
-	public ModuleStrategy getModuleByName(String name){
-		for(ModuleStrategy module : rootModule.getSubModules()){
-			if(module.getName().equalsIgnoreCase(name)){
+
+	public ModuleStrategy getModuleByName(String name) {
+		for (ModuleStrategy module : rootModule.getSubModules()) {
+			if (module.getName().equalsIgnoreCase(name)) {
 				return module;
 			}
 		}
@@ -257,17 +259,18 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
 		ModuleStrategy currentModule = null;
 
-		
-	for (ModuleStrategy moduleResult : modules) {
-	for (SoftwareUnitDefinition softwareUnitResult : moduleResult.getUnits()) {
-		if (softwareUnitResult.getName().toLowerCase().equals(softwareUnitName.toLowerCase())) {
-			currentModule=moduleResult;
-			break;
+		for (ModuleStrategy moduleResult : modules) {
+			for (SoftwareUnitDefinition softwareUnitResult : moduleResult
+					.getUnits()) {
+				if (softwareUnitResult.getName().toLowerCase()
+						.equals(softwareUnitName.toLowerCase())) {
+					currentModule = moduleResult;
+					break;
+				}
+			}
 		}
-	}
-	}
-	
-	if (currentModule == null) {
+
+		if (currentModule == null) {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService()
 					.getTranslatedString("SoftwareUnitNotMapped"));
@@ -359,7 +362,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 				}
 			}
 		}
-	
+
 		return parentModuleId;
 	}
 
@@ -423,7 +426,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 				ruleFound = true;
 			}
 		}
-		
+
 		return ruleFound;
 	}
 
@@ -468,7 +471,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 
 	public void removeAllModules() {
 		rootModule.setSubModules(new ArrayList<ModuleStrategy>());
-		modules= new ArrayList<ModuleStrategy>();
+		modules = new ArrayList<ModuleStrategy>();
 	}
 
 	public void removeAppliedRule(long appliedRuleId) {
@@ -521,22 +524,21 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 			int index = parent.getSubModules().indexOf(module);
 			DefinitionController.getInstance().setSelectedModuleId(0);
 			removeFromRegistry(module);
-			
+
 			parent.getSubModules().remove(index);
-			toBeSaved.add(new Object[]{module,moduleRules});
-			WarningMessageService.getInstance().removeImplementationWarning(module);
+			toBeSaved.add(new Object[] { module, moduleRules });
+			WarningMessageService.getInstance().removeImplementationWarning(
+					module);
 		}
 
 		boolean moduleFound = true;
-        StateService.instance().removeModule(toBeSaved);
-		
+		StateService.instance().removeModule(toBeSaved);
+
 		if (!moduleFound) {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService().getTranslatedString("NoModule"));
 		}
 	}
-
-	
 
 	private void removeRecursively(ModuleStrategy module,
 			ArrayList<ModuleStrategy> childrens) {
@@ -554,22 +556,25 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		}
 
 	}
+
 	private void removeFromRegistry(ModuleStrategy module) {
-		try{
-		int index = modules.indexOf(module);
-		modules.remove(index);
-		updateWarnings();
-		}catch(Exception r){r.printStackTrace();}
-		
+		try {
+			int index = modules.indexOf(module);
+			modules.remove(index);
+			updateWarnings();
+		} catch (Exception r) {
+			r.printStackTrace();
+		}
+
 	}
 
 	public void updateWarnings() {
 		WarningMessageService.getInstance().clearImplementationLevelWarnings();
 		for (ModuleStrategy module : modules) {
-			
+
 			WarningMessageService.getInstance().processModule(module);
 		}
-		
+
 	}
 
 	private ArrayList<AppliedRuleStrategy> removeRelatedRules(
@@ -657,16 +662,18 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 	}
 
 	@Override
-	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleID) {
-	ModuleStrategy module=	getModuleById(moduleID);
+	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
+			long moduleID) {
+		ModuleStrategy module = getModuleById(moduleID);
 		module.addSUDefinition(units);
 	}
 
 	@Override
-	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
-		ModuleStrategy module=	getModuleById(moduleId);
+	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
+			long moduleId) {
+		ModuleStrategy module = getModuleById(moduleId);
 		module.removeSUDefintion(units);
-		
+
 	}
 
 	@Override
@@ -674,70 +681,71 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 			addAppliedRule(appliedRuleStrategy);
 		}
-		
+
 	}
 
 	@Override
 	public void removeSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
-for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-			
+		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
+
 			removeAppliedRule(appliedRuleStrategy.getId());
 		}
-		
+
 	}
 
 	@Override
-	public void addSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
+	public void addSeperatedExeptionRule(long parentRuleID,
+			List<AppliedRuleStrategy> rules) {
 		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
 		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-			
+
 			parent.addException(appliedRuleStrategy);
 		}
-		
+
 	}
 
 	@Override
-	public void removeSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules) {
+	public void removeSeperatedExeptionRule(long parentRuleID,
+			List<AppliedRuleStrategy> rules) {
 		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
 		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-			
+
 			parent.removeException(appliedRuleStrategy);
 		}
-		
+
 	}
 
 	@Override
 	public void addSeperatedModule(ModuleStrategy module) {
-	 
-		
+
 		module.getparent().addSubModule(module);
-		
+
 	}
 
 	@Override
 	public void removeSeperatedModule(ModuleStrategy module) {
-		
+
 		module.getparent().removeSubModule(module);
-		
+
 	}
 
 	@Override
 	public void layerUp(long moduleID) {
 		moveLayerUp(moduleID);
-		
+
 	}
 
 	@Override
 	public void layerDown(long moduleID) {
-	 moveLayerDown(moduleID);
-		
+		moveLayerDown(moduleID);
+
 	}
 
 	@Override
 	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
 		ModuleStrategy module = getModuleById(moduleId);
 		module.addSUDefinition(expression);
-		
+
 	}
 
 	@Override
@@ -745,17 +753,17 @@ for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 			ExpressionUnitDefinition expression) {
 		ModuleStrategy module = getModuleById(moduleId);
 		module.removeSUDefintion(expression);
-		
+
 	}
 
 	@Override
 	public void editExpression(long moduleId,
-			ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
+			ExpressionUnitDefinition oldExpresion,
+			ExpressionUnitDefinition newExpression) {
 		ModuleStrategy module = getModuleById(moduleId);
 		module.removeSUDefintion(oldExpresion);
 		module.addSUDefinition(newExpression);
-		
+
 	}
 
-	
 }
