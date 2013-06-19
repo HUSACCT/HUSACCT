@@ -115,6 +115,7 @@ public class ConfigurationDialog extends JDialog {
 					configPanel.SaveSettings();
 				}
 				ConfigurationManager.storeProperties();
+				ConfigurationManager.notifyListeners();
 				configDialog.setVisible(false);
 			}
 		});
