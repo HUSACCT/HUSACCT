@@ -59,7 +59,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		setVisible(false);
 		frameTotalWidth = getWidth();
 		
-		ROOT_LEVEL = localeService.getTranslatedString("ProjectsLabel");
+		ROOT_LEVEL = localeService.getTranslatedString("Root");
 		resetCurrentPaths();
 		
 		drawingView = givenDrawingView;
@@ -279,7 +279,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
 
-		ROOT_LEVEL = localeService.getTranslatedString("ProjectsLabel");
+		ROOT_LEVEL = localeService.getTranslatedString("Root");
 		locationBar.setLocale(ROOT_LEVEL);
 	}
 
@@ -440,19 +440,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		for (UserInputListener l : listeners)
 			l.showViolations();
 	}
-	
-	@Override
-	public void showExternalSystems() {
-		for (UserInputListener l : listeners)
-			l.showExternalSystems();
-		
-	}
-
-	@Override
-	public void hideExternalSystems() {
-		for (UserInputListener l : listeners)
-			l.hideExternalSystems();
-	}
 
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
 		showProperties();
@@ -472,10 +459,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar.setViolationsUIToInactive();
 	}
 
-	public void turnOffExternalSystems() {
-		menuBar.setExternalSystemsUIToInactive();
-	}
-
 	public void turnOnDependencies() {
 		menuBar.setDependeciesUIToActive();
 	}
@@ -486,10 +469,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	
 	public void turnOnViolations() {
 		menuBar.setViolationsUIToActive();
-	}
-	
-	public void turnOnExternalSystems() {
-		menuBar.setExternalSystemsUIToActive();
 	}
 
 	public void updateGUI() {

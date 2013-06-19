@@ -62,8 +62,7 @@ public class DefinedController extends DrawingController {
 		else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
-				AbstractDTO[] children = defineService
-						.getChildrenFromModule(parentName);
+				AbstractDTO[] children = defineService.getChildrenFromModule(parentName);
 				if (parentName.equals("") || parentName.equals("**")) {
 					drawArchitecture(getCurrentDrawingDetail());
 					continue;
@@ -73,8 +72,7 @@ public class DefinedController extends DrawingController {
 						knownChildren.add(child);
 					allChildren.put(parentName, knownChildren);
 				} else {
-					AbstractDTO value = getFigureMap().getModuleDTO(
-							definedFigures.get(parentName));
+					AbstractDTO value = getFigureMap().getModuleDTO(definedFigures.get(parentName));
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
@@ -219,12 +217,6 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(String zoomType) {
-		// Unused, does not need implementation
-	}
-
-	@Override
-	protected ExternalSystemDTO[] getToShowExternalSystems(ExternalSystemDTO[] extSystems, BaseFigure[] shownFigures) {
-		// Unused, does not need implementation
-		return null;
+		// Unused, does not need implementation. AnalyseController has implementation
 	}
 }

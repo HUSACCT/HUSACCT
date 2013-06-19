@@ -10,8 +10,8 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	private String methodName;
 	private String packageAndClassName;
-	Stack<Argument> arguments = new Stack<>();
-	int lineNumber;
+	private Stack<Argument> arguments = new Stack<>();
+	private int lineNumber;
 
 	public Stack<String> generateParameterObjects(CommonTree argumentTree, String name, String classUniqueName) {
 		packageAndClassName = classUniqueName;
@@ -58,9 +58,8 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 	}
 
 	private String getNameSpaceOrTypePart(CommonTree typeTree) {
-		if (typeTree == null) {
+		if (typeTree == null) 
 			return null;
-		}
 		return typeTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 	}
 
@@ -104,10 +103,9 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 	}
 
 	private Stack<String> getArgumentTypes(Stack<Argument> arguments) {
-		Stack<String> result = new Stack();
-		for (Argument arg : arguments) {
+		Stack<String> result = new Stack<>();
+		for (Argument arg : arguments) 
 			result.push(arg.type);
-		}
 		return result;
 	}
 
@@ -115,9 +113,9 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 		final String name;
 		final String type;
-		final List genericType;
+		final List<String> genericType;
 
-		public Argument(String name, String type, List generic) {
+		public Argument(String name, String type, List<String> generic) {
 			this.name = name;
 			this.type = type;
 			this.genericType = generic;

@@ -3,10 +3,8 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-
 
 public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGenerator {
 	private CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator;
@@ -32,7 +30,6 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 			checkForArguments(tree);
 			saveInvocationToDomain();
 		}
-		
   	}
 	
 	private void deleteTrainWreck(CommonTree tree) {
@@ -84,11 +81,17 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 		this.nameOfInstance = this.to;	
 	}
 
-	private void createMethodInvocationDetails(CommonTree treeNode) {
-		this.invocationName = treeNode.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		CommonTree toChild = (CommonTree)treeNode.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
-		this.to = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+	private void createMethodInvocationDetails(CommonTree tree) {
+		try {
+			this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+			this.to = setToName(tree);
+			
+			CommonTree accessToClass = getAccessToClassTree(tree);
+			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();	
+		} catch (Exception e) {
+			System.out.println("Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
+			new TreePrinter(tree, this.getClass().getName());
+		}
 	}
 	
 	@Override

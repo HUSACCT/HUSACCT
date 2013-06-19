@@ -1,5 +1,6 @@
 package husacct.analyse.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,11 +38,15 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     @Override
     public AnalysedModuleDTO[] getRootModules() {
         List<AnalysedModuleDTO> rootModuleList = queryService.getRootModules();
-        AnalysedModuleDTO[] rootModules = new AnalysedModuleDTO[rootModuleList.size()];
-        for (int i = 0; i < rootModuleList.size(); i++) {
-            rootModules[i] = rootModuleList.get(i);
+        ExternalSystemDTO[] externalSystems = queryService.getExternalSystems();
+        List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
+        for (AnalysedModuleDTO rootModule : rootModuleList) {
+            rootModules.add(rootModule);
         }
-        return rootModules;
+        for (ExternalSystemDTO eSystem : externalSystems){
+        	rootModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
+        }
+        return rootModules.toArray(new AnalysedModuleDTO[rootModules.size()]);
     }
 
     @Override
