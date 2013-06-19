@@ -1,6 +1,8 @@
 package husacct.validate.domain.factory.violationtype;
 
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.validation.Severity;
@@ -80,34 +82,34 @@ public abstract class AbstractViolationType {
 	}
 
 	public ViolationType createViolationType(String ruleTypeKey, String violationTypeKey) {
-//		List<String> violationKeysToLower = new ArrayList<String>();
-//		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
-//			System.err.println("ADD key: " + violationtype.getKey() + " - category: " + violationtype.getCategory());
-//			violationKeysToLower.add(violationtype.getKey().toLowerCase());
-//		}
-//
-//		System.err.println("CREATE " + violationTypeKey.toLowerCase());
-//		if (violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
-//			try {
-//		System.out.println("GIVEN ruleTypeKey: " + ruleTypeKey + " violationTypeKey: " + violationTypeKey);
-		final Severity severity = createSeverity(languageName, violationTypeKey);
-		boolean enabled = configuration.isViolationEnabled(languageName, ruleTypeKey, violationTypeKey);
-		return new ViolationType(violationTypeKey, enabled, severity);
-//			} catch (ProgrammingLanguageNotFoundException e) {
-//				logger.warn(String.format("ProgrammingLanguage %s not found", languageName));
-//			} catch (RuleTypeNotFoundException e) {
-//				logger.warn(String.format("RuleTypeKey: %s not found", ruleTypeKey));
-//			} catch (ViolationTypeNotFoundException e) {
-//				logger.warn(String.format("ViolationTypeKey: %s not found", violationTypeKey));
-//			}
-//		} else {
-//			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
-//		}
-//		
-//		//Verbeteren
-//		//return new ViolationType("", false, new Severity("", Color.GREEN));
-//		throw new ViolationTypeNotFoundException(); //TODO: Onaangekondige dependencyTypes ondersteunen (van team Define)
+		List<String> violationKeysToLower = new ArrayList<String>();
+		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
+			//System.err.println("ADD key: " + violationtype.getKey() + " - category: " + violationtype.getCategory());
+			violationKeysToLower.add(violationtype.getKey().toLowerCase());
 		}
+
+		//System.err.println("CREATE " + violationTypeKey.toLowerCase());
+		if (violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
+			try {
+				//System.out.println("GIVEN ruleTypeKey: " + ruleTypeKey + " violationTypeKey: " + violationTypeKey);
+				final Severity severity = createSeverity(languageName, violationTypeKey);
+				boolean enabled = configuration.isViolationEnabled(languageName, ruleTypeKey, violationTypeKey);
+				return new ViolationType(violationTypeKey, enabled, severity);
+			} catch (ProgrammingLanguageNotFoundException e) {
+				logger.warn(String.format("ProgrammingLanguage %s not found", languageName));
+			} catch (RuleTypeNotFoundException e) {
+				logger.warn(String.format("RuleTypeKey: %s not found", ruleTypeKey));
+			} catch (ViolationTypeNotFoundException e) {
+				logger.warn(String.format("ViolationTypeKey: %s not found", violationTypeKey));
+			}
+		} else {
+			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
+		}
+
+		//		//Verbeteren
+		//return new ViolationType("", false, new Severity("", Color.GREEN));
+		throw new ViolationTypeNotFoundException(); //TODO: Onaangekondige dependencyTypes ondersteunen (van team Define)
+	}
 
 	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue) {
 		final Severity severity = createSeverity(languageName, enumValue.toString());

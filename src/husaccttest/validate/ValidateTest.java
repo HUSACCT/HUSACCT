@@ -52,6 +52,14 @@ public class ValidateTest {
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	
+	@Test
+	public void getFirstProjectLanguage() {
+		ProjectDTO project = define.getApplicationDetails().projects.get(0);
+		assertNotNull(project);
+		
+		String language = project.programmingLanguage;
+		assertEquals("java", language);
+	}
 	
 	@Test
 	public void getBrowseViolationsGUI() {
