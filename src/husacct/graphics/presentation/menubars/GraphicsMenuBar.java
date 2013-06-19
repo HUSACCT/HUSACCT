@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -252,29 +253,26 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				useSelectTool();
-				selectToolButton.setBackground(Color.BLUE);
-				panToolButton.setBackground(Color.GRAY);
+				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 			}
 		});
-		selectToolButton.setOpaque(true);
-		selectToolButton.setBackground(Color.BLUE);
 		add(selectToolButton);
+		selectToolButton.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		setButtonIcon(selectToolButton, "selectTool");
 		
-		// icons.put("panTool", Resource.ICON_PAN_TOOL);
 		panToolButton = new JButton();
 		panToolButton.setSize(50, menuItemMaxHeight);
 		panToolButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				usePanTool();
-				selectToolButton.setBackground(Color.GRAY);
-				panToolButton.setBackground(Color.BLUE);
+				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+				panToolButton.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 			}
 		});
-		panToolButton.setOpaque(true);
-		panToolButton.setBackground(Color.GRAY);
 		add(panToolButton);
+		panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		setButtonIcon(panToolButton, "panTool");
 		
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
