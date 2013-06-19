@@ -1,6 +1,5 @@
 package husacct.define.presentation.draganddrop.customdroptargetlisterner;
 
-import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
@@ -75,8 +74,10 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 				AnalyzedModuleComponent top= (AnalyzedModuleComponent)pathe.getLastPathComponent();
 				//hot fix if have time will be better implemented 
 				String type = top.getType().toLowerCase().trim();
-				System.out.println(type+" >>>>");
-				if (!type.equals("root")||!type.equals("application")||!type.equals("externalpackage")) {
+				boolean res =((!type.equals("root")&&!type.equals("application")&&!type.equals("externalpackage")));
+				
+				
+				if (res) {
 			AnalyzedModuleComponent referencedUnit=	StateService.instance().getAnalyzedSoftWareUnit(top.getUniqueName());
 				if (!referencedUnit.isMapped()) {
 					tobesaved.add(referencedUnit);
