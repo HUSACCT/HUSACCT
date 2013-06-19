@@ -73,7 +73,6 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		analysisTableModel.addColumn(localeService.getTranslatedString("Classes"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Interfaces"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Dependencies"));
-		analysisTableModel.addColumn(localeService.getTranslatedString("Violations"));
 		
 		analysisTable.getTableHeader().setReorderingAllowed(false);
 		analysisTable.getTableHeader().setResizingAllowed(true);
@@ -93,8 +92,7 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		    		analysisData.get("packages"), 
 		    		analysisData.get("classes"), 
 		    		analysisData.get("interfaces"), 
-		    		analysisData.get("dependencies"), 
-		    		analysisData.get("violations")
+		    		analysisData.get("dependencies")
 		    });
 		}
 		

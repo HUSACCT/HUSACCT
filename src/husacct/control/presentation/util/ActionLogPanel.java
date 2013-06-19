@@ -2,6 +2,7 @@ package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigurationManager;
 
@@ -42,6 +43,12 @@ public class ActionLogPanel extends JPanel{
 		this.setVisible(showActionLog);
 		
 		refreshActionLogPanel();
+		
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				refreshActionLogPanel();
+			}
+		});
 	}
 	
 	@SuppressWarnings("serial")
@@ -80,4 +87,6 @@ public class ActionLogPanel extends JPanel{
 		this.validate();
 		this.repaint();
 	}
+	
+	
 }
