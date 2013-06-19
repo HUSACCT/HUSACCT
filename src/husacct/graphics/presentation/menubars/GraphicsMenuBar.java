@@ -253,12 +253,14 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				useSelectTool();
-				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				selectToolButton.setBorder(BorderFactory
+						.createLineBorder(Color.MAGENTA));
 				panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 			}
 		});
 		add(selectToolButton);
-		selectToolButton.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		selectToolButton.setBorder(BorderFactory
+				.createLineBorder(Color.MAGENTA));
 		setButtonIcon(selectToolButton, "selectTool");
 		
 		panToolButton = new JButton();
@@ -268,7 +270,8 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			public void actionPerformed(ActionEvent e) {
 				usePanTool();
 				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-				panToolButton.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				panToolButton.setBorder(BorderFactory
+						.createLineBorder(Color.MAGENTA));
 			}
 		});
 		add(panToolButton);
