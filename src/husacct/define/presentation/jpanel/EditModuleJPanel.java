@@ -19,6 +19,7 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DropMode;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -94,6 +95,7 @@ IServiceListener {
 				.getTranslatedString("ModuleName"));
 
 		nameTextfield = new JTextField();
+		nameTextfield.setDropMode(DropMode.USE_SELECTION);
 		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
 		this.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START,

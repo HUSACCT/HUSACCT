@@ -21,7 +21,7 @@ public class ModuleDomainService {
 		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
 				.getModuleById(parentModuleId);
 		StateService.instance().addModule(module);
-		WarningMessageService.getInstance().processModule(module);
+		
 
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
@@ -36,7 +36,7 @@ public class ModuleDomainService {
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
 	
 		StateService.instance().addModule(module);
-		WarningMessageService.getInstance().processModule(module);
+	
 	
 		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
