@@ -31,7 +31,6 @@ import org.apache.log4j.Logger;
 
 public abstract class JtreeStateEngine {
 	private Logger logger;
-
 	private StateDefineController stateController = new StateDefineController();
 	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();

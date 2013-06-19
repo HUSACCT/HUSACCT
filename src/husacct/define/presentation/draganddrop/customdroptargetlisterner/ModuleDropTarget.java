@@ -36,8 +36,8 @@ public class ModuleDropTarget implements DropTargetListener{
 	
 	
 	@Override
-	public void dragEnter(DropTargetDragEvent arg0) {
-		// TODO Auto-generated method stub
+	public void dragEnter(DropTargetDragEvent arg) {
+	arg.rejectDrag();
 		
 	}
 

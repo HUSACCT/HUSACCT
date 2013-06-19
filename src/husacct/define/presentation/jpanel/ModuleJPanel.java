@@ -355,7 +355,7 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 		moduleTree.addTreeSelectionListener(this);
 		checkLayerComponentIsSelected();
 
-		moduleTree.setDragEnabled(true);
+		
 		ModuleDropTarget moduledroptarget = new ModuleDropTarget(moduleTree);
 
 		moduleTree.addMouseListener(new MouseAdapter() {
