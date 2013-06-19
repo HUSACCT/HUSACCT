@@ -22,8 +22,6 @@ public class PanTool extends AbstractTool {
 	private Point startPt = new Point();
 	
 	public PanTool(JViewport vport, JComponent comp) {
-		log.debug("pantool: init");
-		
 		this.vport = vport;
 		this.comp = comp;
 		dc = comp.getCursor();
