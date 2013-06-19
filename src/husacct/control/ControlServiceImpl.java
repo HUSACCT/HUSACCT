@@ -25,7 +25,6 @@ import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,10 +69,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private void setDefaultSettings() {
 		String appDataFolderPath = OSDetector.getAppFolder();
 		logger.info("App data folder (platform specific): " + appDataFolderPath);
-		File appDataFolderObject = new File(appDataFolderPath);
-		if(!appDataFolderObject.exists()){
-			appDataFolderObject.mkdir();
-		}
+		
 		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
 		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
 		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);
@@ -250,7 +246,5 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void addFileChangeListener(IFileChangeListener listener) {
 		fileController.addFileChangeListener(listener);
-	}
-
-	
+	}	
 }

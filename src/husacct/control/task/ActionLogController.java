@@ -1,22 +1,21 @@
 package husacct.control.task;
 
-import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.task.configuration.IConfigListener;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class ActionLogController {
+public class ActionLogController implements IConfigListener {
 	private ArrayList<HashMap<String, String>> loggedActions = new ArrayList<HashMap<String, String>>();
 	private int maxActions = 10;
 	private MainController mainController;
 	
 	public ActionLogController(MainController mainController){
 		this.mainController = mainController;
+		ConfigurationManager.addListener(this);
 	}
 	
 	public void addAction(String message){
@@ -58,6 +57,12 @@ public class ActionLogController {
 	
 	public void setActionLogVisibility(boolean isVisible){
 		mainController.getMainGui().getActionLogPanel().setVisible(isVisible);
+	}
+
+	@Override
+	public void onConfigUpdate() {
+		boolean visible = Boolean.parseBoolean(ConfigurationManager.getProperty("ActionLogger"));
+		setActionLogVisibility(visible);
 	}
 	
 }
