@@ -1,6 +1,7 @@
 package husacct.define.domain.services.stateservice.state.appliedrule;
 
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 
 import java.util.ArrayList;
@@ -17,18 +18,18 @@ public class ExceptionRemoveRuleCommand implements Istate {
 	
 	@Override
 	public void undo() {
-	for (AppliedRuleStrategy rule : data) {
-		parent.addException(rule);
-	}
+	UndoRedoService.getInstance().addSeperatedExeptionRule(parent.getId(),
+				data);
+
 
 	}
 
 	@Override
 	public void redo() {
-		for (AppliedRuleStrategy rule : data) {
-			rule.removeException(rule);
-		}
-
+		
+		UndoRedoService.getInstance().removeSeperatedExeptionRule(
+				parent.getId(), data);
+	
 	}
 
 }

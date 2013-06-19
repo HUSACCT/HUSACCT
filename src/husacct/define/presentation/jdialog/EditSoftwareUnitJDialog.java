@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
@@ -137,7 +138,9 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 	for (TreePath path : paths.getSelectionPaths()){
 	    components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 	}
-	this.softwareUnitController.editRegEx(components, editingRegEx);
+	//this.softwareUnitController.editRegEx(components, editingRegEx);
+	DomainGateway.getInstance().editRegEx(components, editingRegEx);
+	
 	this.dispose();
     }
 

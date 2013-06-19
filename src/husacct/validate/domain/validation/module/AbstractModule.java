@@ -1,29 +1,57 @@
 package husacct.validate.domain.validation.module;
 
+import java.util.List;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
-import java.util.List;
-
-public abstract class AbstractModule implements IModule {
-	private List<RuleType> defaultModuleRuleTypes;
-	private List<RuleType> allowedModuleRuleTypes;
+abstract class AbstractModule {
+	abstract List<RuleType> initAllowedModuleRuleTypes();
+	abstract List<RuleType> initDefaultModuleRuleTypes();
+	
 	protected List<RuleType> ruleTypes;
-
-	public abstract List<RuleType> initDefaultModuleRuleTypes();
-
-	public abstract List<RuleType> initAllowedModuleRuleTypes();
-
+	protected List<RuleType> allowedRuleTypes;
+	protected List<RuleType> defaultRuleTypes;
+	
 	public AbstractModule(List<RuleType> ruleTypes) {
 		this.ruleTypes = ruleTypes;
-		this.defaultModuleRuleTypes = this.initDefaultModuleRuleTypes();
-		this.allowedModuleRuleTypes = this.initAllowedModuleRuleTypes();
+		this.allowedRuleTypes = initAllowedModuleRuleTypes();
+		this.defaultRuleTypes = initDefaultModuleRuleTypes();
 	}
 
-	public List<RuleType> getDefaultModuleruleTypes() {
-		return this.defaultModuleRuleTypes;
+	public List<RuleType> getAllowedRuleTypes() {
+		return this.allowedRuleTypes;
+	}
+	
+	public List<RuleType> getDefaultRuleTypes() {
+		return this.defaultRuleTypes;
+	}
+	
+	public RuleType getRuleType(String ruleTypeKey) {
+		RuleType ruleType = null;
+		for (RuleType ruleTypeObj : ruleTypes) {
+			if (ruleTypeObj.getKey().equals(ruleTypeKey)) {
+				ruleType = ruleTypeObj;
+			}
+		}
+		return ruleType;
+	}	
+
+	public void setAllowedRuleType(String ruleTypeKey, boolean value) {
+		RuleType ruleType = getRuleType(ruleTypeKey);
+		
+		if (!allowedRuleTypes.contains(ruleType) && value) {
+			allowedRuleTypes.add(ruleType);
+		} else if (allowedRuleTypes.contains(ruleType) && !value) {
+			allowedRuleTypes.remove(ruleType);
+		}
 	}
 
-	public List<RuleType> getAllowedModuleruleTypes() {
-		return this.allowedModuleRuleTypes;
+	public void setDefaultRuleType(String ruleTypeKey, boolean value) {
+		RuleType ruleType = getRuleType(ruleTypeKey);
+		
+		if (!defaultRuleTypes.contains(ruleType) && value) {
+			defaultRuleTypes.add(ruleType);
+		} else if (defaultRuleTypes.contains(ruleType) && !value) {
+			defaultRuleTypes.remove(ruleType);
+		}
 	}
 }

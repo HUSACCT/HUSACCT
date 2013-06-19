@@ -2,7 +2,6 @@ package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.define.IDefineService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
@@ -21,7 +20,7 @@ import org.apache.log4j.Logger;
 class ActiveViolationTypesRepository {
 
 	private final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
-	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+//	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private final RuleTypesFactory ruletypesfactory;
 	private final Map<String, List<ActiveRuleType>> startupViolationTypes;
 	private Map<String, List<ActiveRuleType>> currentActiveViolationTypes;
@@ -41,7 +40,6 @@ class ActiveViolationTypesRepository {
 			activeViolationTypes.put(programmingLanguage, activeRuleTypes);
 
 			for (List<RuleType> ruleTypes : ruletypesfactory.getRuleTypes(programmingLanguage).values()) {
-
 				for (RuleType ruleType : ruleTypes) {
 					ActiveRuleType activeRuleType = initializeActiveViolationTypes(ruleType);
 					activeRuleTypes.add(activeRuleType);
@@ -73,7 +71,7 @@ class ActiveViolationTypesRepository {
 		List<ActiveViolationType> initialActiveViolationTypes = new ArrayList<ActiveViolationType>();
 
 		for (ViolationType violationType : ruleType.getViolationTypes()) {
-			final String violationTypeKey = violationType.getViolationtypeKey();
+			final String violationTypeKey = violationType.getViolationTypeKey();
 			boolean enabled = violationType.isActive();
 			ActiveViolationType activeViolationType = new ActiveViolationType(violationTypeKey, enabled);
 			initialActiveViolationTypes.add(activeViolationType);

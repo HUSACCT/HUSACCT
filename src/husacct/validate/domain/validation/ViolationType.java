@@ -1,32 +1,31 @@
 package husacct.validate.domain.validation;
 
 public class ViolationType {
-	private String violationtypeKey;
+	private String violationTypeKey;
 	private String violationDescriptionKey;
 	private boolean isActive;
 	private Severity severity;
 
-	public ViolationType(String violationtypeKey, Severity severity) {
-		this.violationtypeKey = violationtypeKey;
-		this.violationDescriptionKey = violationtypeKey + "Description";
+	public ViolationType(String violationTypeKey, Severity severity) {
+		this.violationTypeKey = violationTypeKey;
+		this.violationDescriptionKey = violationTypeKey + "Description";
 		this.isActive = true;
 		this.setSeverity(severity);
 	}
 
-	public ViolationType(String violationtypeKey, boolean isActive,
-			Severity severity) {
-		this.violationtypeKey = violationtypeKey;
-		this.violationDescriptionKey = violationtypeKey + "Description";
+	public ViolationType(String violationTypeKey, boolean isActive,	Severity severity) {
+		this.violationTypeKey = violationTypeKey;
+		this.violationDescriptionKey = violationTypeKey + "Description";
 		this.isActive = isActive;
 		this.setSeverity(severity);
 	}
 
-	public String getViolationtypeKey() {
-		return violationtypeKey;
+	public String getViolationTypeKey() {
+		return violationTypeKey;
 	}
 
-	public void setViolationtypeKey(String violationtypeKey) {
-		this.violationtypeKey = violationtypeKey;
+	public void setViolationTypeKey(String violationTypeKey) {
+		this.violationTypeKey = violationTypeKey;
 	}
 
 	public boolean isActive() {
