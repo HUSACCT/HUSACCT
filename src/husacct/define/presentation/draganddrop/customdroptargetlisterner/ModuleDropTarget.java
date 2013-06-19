@@ -85,8 +85,8 @@ public class ModuleDropTarget implements DropTargetListener{
 				
 				AnalyzedModuleComponent top= (AnalyzedModuleComponent)pathe.getLastPathComponent();
 				String type = top.getType().toLowerCase();
-				
-				if (!type.equals("root")||!type.equals("application")||!type.equals("externalpackage")) {
+				boolean res =((!type.equals("root")&&!type.equals("application")&&!type.equals("externalpackage")));
+				if (res) {
 					
 				
 				AnalyzedModuleComponent referencedUnit=	StateService.instance().getAnalyzedSoftWareUnit(top.getUniqueName());

@@ -37,13 +37,18 @@ public class SoftwareUnitDropListerner  implements DropTargetListener{
 	@Override
 	public void dragEnter(DropTargetDragEvent arg) {
 		
-		 Point p = arg.getLocation();
+		try{
+		Point p = arg.getLocation();
 		 TreePath path = tree.getPathForLocation(p.x, p.y);
 		 AnalyzedModuleComponent check = (AnalyzedModuleComponent)path.getLastPathComponent();
 		 String type = check.getType().toLowerCase();
 		 if (type.equals("root")||type.equals("application")||type.equals("externalpackage")) {
 			arg.rejectDrag();
 		 }
+		}
+		 catch(Exception e) {
+			arg.rejectDrag();
+		}
 		
 	}
 
