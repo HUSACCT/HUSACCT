@@ -6,6 +6,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -251,11 +252,15 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				useSelectTool();
+				selectToolButton.setBackground(Color.BLUE);
+				panToolButton.setBackground(Color.GRAY);
 			}
 		});
+		selectToolButton.setOpaque(true);
+		selectToolButton.setBackground(Color.BLUE);
 		add(selectToolButton);
 		setButtonIcon(selectToolButton, "selectTool");
-
+		
 		// icons.put("panTool", Resource.ICON_PAN_TOOL);
 		panToolButton = new JButton();
 		panToolButton.setSize(50, menuItemMaxHeight);
@@ -263,8 +268,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				usePanTool();
+				selectToolButton.setBackground(Color.GRAY);
+				panToolButton.setBackground(Color.BLUE);
 			}
 		});
+		panToolButton.setOpaque(true);
+		panToolButton.setBackground(Color.GRAY);
 		add(panToolButton);
 		setButtonIcon(panToolButton, "panTool");
 		
