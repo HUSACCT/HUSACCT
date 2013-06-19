@@ -40,8 +40,6 @@ public class PanTool extends AbstractTool {
 		Rectangle vr = vport.getViewRect();
 		vr.setRect(vr.x - dx, vr.y - dy, vr.width, vr.height);
 		vport.scrollRectToVisible(vr);
-		
-		log.debug("moved " + dx + ", " + dy + " coords, to " + vr.toString());
 	}
 	
 	@Override
