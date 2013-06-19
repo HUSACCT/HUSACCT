@@ -83,7 +83,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 			modules.add(module);
 			StateService.instance().addModule(module);
 		//	DefaultRuleDomainService.getInstance().addDefaultRules(module);
-			WarningMessageService.getInstance().processModule(module);
+			//WarningMessageService.getInstance().processModule(module);
+			updateWarnings();
 			moduleId = module.getId();
 		} else {
 			throw new RuntimeException(ServiceProvider.getInstance()
@@ -98,7 +99,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 		StateService.instance().addModule(module);
 	
 		modules.add(module);
-		WarningMessageService.getInstance().processModule(module);
+		//WarningMessageService.getInstance().processModule(module);
 		return parentModule.addSubModule(module);
 	}
 
@@ -467,6 +468,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 
 	public void removeAllModules() {
 		rootModule.setSubModules(new ArrayList<ModuleStrategy>());
+		modules= new ArrayList<ModuleStrategy>();
 	}
 
 	public void removeAppliedRule(long appliedRuleId) {
@@ -518,6 +520,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 			ArrayList<AppliedRuleStrategy> moduleRules = removeRelatedRules(module);
 			int index = parent.getSubModules().indexOf(module);
 			DefinitionController.getInstance().setSelectedModuleId(0);
+			removeFromRegistry(module);
+			
 			parent.getSubModules().remove(index);
 			toBeSaved.add(new Object[]{module,moduleRules});
 			WarningMessageService.getInstance().removeImplementationWarning(module);
@@ -531,6 +535,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 					.getLocaleService().getTranslatedString("NoModule"));
 		}
 	}
+
+	
 
 	private void removeRecursively(ModuleStrategy module,
 			ArrayList<ModuleStrategy> childrens) {
@@ -547,6 +553,23 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,IAppliedR
 
 		}
 
+	}
+	private void removeFromRegistry(ModuleStrategy module) {
+		try{
+		int index = modules.indexOf(module);
+		modules.remove(index);
+		updateWarnings();
+		}catch(Exception r){r.printStackTrace();}
+		
+	}
+
+	public void updateWarnings() {
+		WarningMessageService.getInstance().clearImplementationLevelWarnings();
+		for (ModuleStrategy module : modules) {
+			
+			WarningMessageService.getInstance().processModule(module);
+		}
+		
 	}
 
 	private ArrayList<AppliedRuleStrategy> removeRelatedRules(

@@ -111,11 +111,14 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	public void processModule(ModuleStrategy module)
 	{
 		
+		if (module.getId()!=0) {
 		if (module.isMapped()) {
 			removeImplementationWarning(module);
 		} else {
 			createModuleWarning(module);
+		}	
 		}
+		
 	}
 
 
@@ -294,6 +297,11 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	public void layerDown(long moduleID) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void clearImplementationLevelWarnings() {
+		
+		warnings = new ArrayList<WarningMessage>();
 	}
 	
 	
