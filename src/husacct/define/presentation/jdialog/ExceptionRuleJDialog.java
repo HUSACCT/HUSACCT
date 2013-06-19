@@ -183,7 +183,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			ruleDetails.put("ruleTypeKey", ruleTypeKey);	
-			DomainGateway.getInstance().addException(ruleDetails);
+			appliedRuleController.addException(ruleDetails);
 			this.appliedRuleFrame.updateExceptionTable();
 			this.dispose();
 		} else {
