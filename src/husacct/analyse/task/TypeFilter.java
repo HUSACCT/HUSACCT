@@ -15,9 +15,9 @@ public class TypeFilter {
 	private static final List<String> DICTIONARY_KEYS;
 	
 	static {
-		TYPE_DICTIONARY.put("Inheritance", Arrays.asList(new String[] {"Extends", "Implements"}));
+		TYPE_DICTIONARY.put("Inheritance", Arrays.asList(new String[] {"Extends", "Implements", "Inheritance"}));
 		TYPE_DICTIONARY.put("Import", Arrays.asList(new String[] {"Import"} ));
-		TYPE_DICTIONARY.put("Call", Arrays.asList(new String[] {"Invoc"} ));
+		TYPE_DICTIONARY.put("Call", Arrays.asList(new String[] {"Invoc", "Call"} ));
 		TYPE_DICTIONARY.put("Annotation", Arrays.asList(new String[] { "Annotation" }));
 		TYPE_DICTIONARY.put("Access", Arrays.asList(new String[] { "Access" }));
 		TYPE_DICTIONARY.put("Declaration", Arrays.asList(new String[] { "Exception", "Declaration" }));
@@ -59,10 +59,14 @@ public class TypeFilter {
 	}
 
 	private static String getSimpleType(String complexType) throws NoSimpleTypeFoundException {
-		for (String simpleTypeAsKey : DICTIONARY_KEYS)
-			for (String subcat : TYPE_DICTIONARY.get(simpleTypeAsKey))
-				if (complexType.startsWith(subcat))
+		complexType = complexType.toLowerCase();
+		for (String simpleTypeAsKey : DICTIONARY_KEYS){
+			for (String subcat : TYPE_DICTIONARY.get(simpleTypeAsKey)){
+				if (complexType.startsWith(subcat.toLowerCase())){
 					return simpleTypeAsKey;
+				}
+			}
+		}
 		throw new NoSimpleTypeFoundException("No simple type found for " + complexType);
 	}
 	
