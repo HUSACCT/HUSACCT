@@ -3,6 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.define.domain.services.DomainGateway;
+import husacct.define.presentation.draganddrop.customdroptargetlisterner.EditpanelDropListener;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
@@ -37,6 +38,7 @@ IServiceListener {
 	private JTextArea descriptionTextArea;
 	private String[] facadeType = { "Facade" };
 	private JComboBox<?> moduleTypeComboBox;
+	private EditpanelDropListener listener = new EditpanelDropListener(this);
 	ActionListener moduleTypeComboboxOnChangeListener = new ActionListener() {
 
 		@Override
@@ -95,7 +97,7 @@ IServiceListener {
 				.getTranslatedString("ModuleName"));
 
 		nameTextfield = new JTextField();
-		nameTextfield.setDropMode(DropMode.USE_SELECTION);
+		listener.addTarget(nameTextfield);
 		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
 		this.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START,
@@ -121,6 +123,7 @@ IServiceListener {
 
 	private JTextArea createModuleDescriptionTextArea() {
 		descriptionTextArea = new JTextArea();
+		listener.addTarget(descriptionTextArea);
 		descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
 		descriptionTextArea
 		.setToolTipText(DefaultMessages.TIP_MODULEDESCRIPTION);

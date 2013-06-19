@@ -357,8 +357,8 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 	moduleTreeScrollPane.setViewportView(moduleTree);
 	moduleTree.addTreeSelectionListener(this);
 	checkLayerComponentIsSelected();
-
-	moduleTree.setDragEnabled(true);
+//this can be used for future drag power
+	//moduleTree.setDragEnabled(true);
 	ModuleDropTarget moduledroptarget = new ModuleDropTarget(moduleTree);
 	
 	
