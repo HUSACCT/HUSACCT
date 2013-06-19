@@ -151,11 +151,8 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (zoomOptionsMenu.canZoomModule()){ 
-					moduleZoom("zoom");
-				} else if (zoomOptionsMenu.canZoomModuleContext()){
-					moduleZoom();
-				}
+				if (zoomOptionsMenu.canZoomModule()) moduleZoom("zoom");
+				else if (zoomOptionsMenu.canZoomModuleContext()) moduleZoom();
 			}
 		});
 		zoomInButton.addMouseListener(new MouseListener() {
@@ -248,6 +245,17 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		add(exportToImageButton);
 		setButtonIcon(exportToImageButton, "save");
 		
+		selectToolButton = new JButton();
+		selectToolButton.setSize(50, menuItemMaxHeight);
+		selectToolButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				useSelectTool();
+			}
+		});
+		add(selectToolButton);
+		setButtonIcon(selectToolButton, "selectTool");
+
 		// icons.put("panTool", Resource.ICON_PAN_TOOL);
 		panToolButton = new JButton();
 		panToolButton.setSize(50, menuItemMaxHeight);
@@ -259,18 +267,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		});
 		add(panToolButton);
 		setButtonIcon(panToolButton, "panTool");
-		
-		// icons.put("selectTool", Resource.ICON_SELECT_TOOL);
-		selectToolButton = new JButton();
-		selectToolButton.setSize(50, menuItemMaxHeight);
-		selectToolButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				useSelectTool();
-			}
-		});
-		add(selectToolButton);
-		setButtonIcon(selectToolButton, "selectTool");
 		
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
 		graphicsOptionsDialog.addListener(this);
@@ -438,7 +434,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		.setToolTipText(menuBarLocale.get("ShowViolations"));
 		graphicsOptionsDialog.setViolationsUIToInactive();
 	}
-
+	
 	@Override
 	public void setZoomSlider(double zoomFactor) {
 		int value = (int) (zoomFactor * 100);
