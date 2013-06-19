@@ -48,10 +48,12 @@ public class AnalyzedUnitComparator {
 
 			if (unittoberemoved.isMapped()) {
 
-				ModuleStrategy module = StateService.instance().getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
-				WarningMessageService.getInstance().addCodeLevelWarning(module.getId(), unittoberemoved);
+				ModuleStrategy module = StateService.instance()
+						.getModulebySoftwareUnitUniqName(
+								unittoberemoved.getUniqueName());
+				WarningMessageService.getInstance().addCodeLevelWarning(
+						module.getId(), unittoberemoved);
 			}
-
 
 			AbstractCombinedComponent parent = remove.getParentofChild();
 
@@ -61,9 +63,11 @@ public class AnalyzedUnitComparator {
 
 		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAaded) {
 
-			if (WarningMessageService.getInstance().hasCodeLevelWarning((AnalyzedModuleComponent) newAbstractCombinedComponent)) {
+			if (WarningMessageService.getInstance().hasCodeLevelWarning(
+					(AnalyzedModuleComponent) newAbstractCombinedComponent)) {
 
-				((AnalyzedModuleComponent) newAbstractCombinedComponent).freeze();
+				((AnalyzedModuleComponent) newAbstractCombinedComponent)
+						.freeze();
 				left.addChild(newAbstractCombinedComponent);
 
 			} else {
@@ -213,7 +217,6 @@ public class AnalyzedUnitComparator {
 			this.addChildComponents(childComponent, subModule);
 		}
 
-
 		parentComponent.addChild(childComponent);
 		parentComponent.registerchildrenSize();
 	}
@@ -222,37 +225,40 @@ public class AnalyzedUnitComparator {
 		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent(
 				"external library", "External Systems", "externalpackage",
 				"public");
-		
+
 		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance()
 				.getAnalyseService().getExternalSystems();
 		for (ExternalSystemDTO exe : externalSystems) {
-			
-				AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
-						exe.systemPackage, exe.systemName, "externallibrary",
-						"public");
-				rootOfExterexternalLibrary.addChild(javalib);
-			
-				
-			}
 
-		
+			AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
+					exe.systemPackage, exe.systemName, "externallibrary",
+					"public");
+			rootOfExterexternalLibrary.addChild(javalib);
+
+		}
 
 		root.addChild(rootOfExterexternalLibrary);
 
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		if (!JtreeController.instance().isLoaded()|| !ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+		if (!JtreeController.instance().isLoaded()
+				|| !ServiceProvider.getInstance().getControlService()
+						.isPreAnalysed()) {
 
-			if(!ServiceProvider.getInstance().getControlService().isPreAnalysed())
-			{
-				AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
-				WarningMessageService.getInstance().registerNotMappedUnits(root);
+			if (!ServiceProvider.getInstance().getControlService()
+					.isPreAnalysed()) {
+				AnalyzedModuleComponent root = JtreeController.instance()
+						.getRootOfModel();
+				WarningMessageService.getInstance()
+						.registerNotMappedUnits(root);
 				return root;
 			}
 			JtreeController.instance().setLoadState(true);
-			JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
-			AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
+			JtreeController.instance().setCurrentTree(
+					new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
+			AnalyzedModuleComponent root = JtreeController.instance()
+					.getRootOfModel();
 			WarningMessageService.getInstance().registerNotMappedUnits(root);
 			return root;
 

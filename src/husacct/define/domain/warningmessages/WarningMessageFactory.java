@@ -1,13 +1,8 @@
 package husacct.define.domain.warningmessages;
 
-import java.util.ArrayList;
-
-
-import java.util.List;
-
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.task.components.AnalyzedModuleComponent;
 
 public class WarningMessageFactory {
 
@@ -25,19 +20,13 @@ public class WarningMessageFactory {
 		WarningMessageService.getInstance().updateWarnings();
 		WarningMessageContainer root = new WarningMessageContainer(new CustomWarningMessage("WARNINGS"));
 		WarningMessageContainer codelevelContainer = new WarningMessageContainer(new CustomWarningMessage("Code Level "));
-		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level("+WarningMessageService.getInstance().warningsCount()+")"));
+		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level"));
 		
 		WarningMessageContainer customContainer = new WarningMessageContainer(new CustomWarningMessage("Custom"));
 	WarningMessageContainer notMapped=	getNotmapped();
 		addNotCodeLevel(codelevelContainer);
-		for (WarningMessage message : WarningMessageService.getInstance().getWarningMessages()) {
-		
-			 if (message instanceof ImplementationLevelWarning) {
-				
-				implevelContainer.addChild(new WarningMessageContainer(message));
-			}
-		
-		}
+		addNotMappedModule(implevelContainer);
+	
 		
 		root.addChild(implevelContainer);
 		root.addChild(codelevelContainer);
@@ -48,13 +37,23 @@ public class WarningMessageFactory {
 	
 	}
 
+	
+
 	private WarningMessageContainer getNotmapped() {
 		
 	return StateService.instance().getNotMappedUnits();
-		
-          
+}
 	
+	private void addNotMappedModule(WarningMessageContainer implevelContainer) {
+		SoftwareArchitecture.getInstance().updateWarnings();
+		for (WarningMessage message : WarningMessageService.getInstance().getWarningMessages()) {
+			
+			 if (message instanceof ImplementationLevelWarning) {
+				
+				implevelContainer.addChild(new WarningMessageContainer(message));
+			}
 		
+		}
 		
 	}
 	
