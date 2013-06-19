@@ -25,11 +25,11 @@ public class FacadeConventionRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> mappingsFrom = mappings.getMappingFrom();
-		List<Violation> allViolations = new ArrayList<>();
+		List<Violation> allViolations = new ArrayList<Violation>();
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		Mapping componentMapping = null;
-		Mapping facadeMapping = null;
+		List<Mapping> facadeMappings = new ArrayList<Mapping>();
 
 		for (Mapping mappingFrom : mappingsFrom) {
 			if(mappingFrom.getLogicalPathType().toLowerCase().equals("component")) {
@@ -43,37 +43,52 @@ public class FacadeConventionRule extends RuleType {
 				}
 			}
 			else if(mappingFrom.getLogicalPathType().toLowerCase().equals("facade")) {
-				facadeMapping = mappingFrom;
+				boolean existingMapping = false;
+				for(Mapping facadeMapping: facadeMappings) {
+					if(facadeMapping.getLogicalPath().equals(mappingFrom.getLogicalPath())) {
+						existingMapping = true;
+					}
+				}
+				
+				if(!existingMapping) {
+					facadeMappings.add(mappingFrom);
+				}
 			}
 		}
 
-		if(facadeMapping != null) {
+		if(facadeMappings.size() > 0) {
 			//TIJDELIJK
-//			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
-//					+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
-//					+ facadeMapping.getLogicalPathType() + "\n================");
+			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
+					+ componentMapping.getLogicalPathType());
+			System.out.println("FACADE mappings: ");
+			for(Mapping facadeMapping: facadeMappings) {
+				System.out.println("=> " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
+					+ facadeMapping.getLogicalPathType() + "\n================");
+			}
 			//EINDE
 
 			for (DependencyDTO dependency : dependencies) {
 				if (dependency.to.contains(componentMapping.getPhysicalPath())) {
 					if (!dependency.from.contains(componentMapping.getPhysicalPath())) {
-						if (!dependency.to.contains(facadeMapping.getPhysicalPath())) {
-							Mapping fromMapping = new Mapping(dependency.from, new String[0]);
-							Mapping toMapping = new Mapping(dependency.to, new String[0]);
-
-							for(Mapping theMapping: mappingsFrom) {
-								if(theMapping.getPhysicalPath().equals(fromMapping.getPhysicalPath())) {
-									fromMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
-										fromMapping.getPhysicalPath(), theMapping.getViolationTypes());
+						for(Mapping facadeMapping: facadeMappings) {
+							if (!dependency.to.contains(facadeMapping.getPhysicalPath())) {
+								Mapping fromMapping = new Mapping(dependency.from, new String[0]);
+								Mapping toMapping = new Mapping(dependency.to, new String[0]);
+	
+								for(Mapping theMapping: mappingsFrom) {
+									if(theMapping.getPhysicalPath().equals(fromMapping.getPhysicalPath())) {
+										fromMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
+											fromMapping.getPhysicalPath(), theMapping.getViolationTypes());
+									}
+									else if(theMapping.getPhysicalPath().equals(toMapping.getPhysicalPath())) {
+										toMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
+											toMapping.getPhysicalPath(), theMapping.getViolationTypes());
+									}
 								}
-								else if(theMapping.getPhysicalPath().equals(toMapping.getPhysicalPath())) {
-									toMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
-										toMapping.getPhysicalPath(), theMapping.getViolationTypes());
-								}
+	
+								Violation violation = createViolation(rootRule, fromMapping, toMapping, dependency, configuration);
+								allViolations.add(violation);
 							}
-
-							Violation violation = createViolation(rootRule, fromMapping, toMapping, dependency, configuration);
-							allViolations.add(violation);;
 						}
 					}
 				}
