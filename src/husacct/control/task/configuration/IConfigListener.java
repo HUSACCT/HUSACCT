@@ -1,5 +1,5 @@
 package husacct.control.task.configuration;
 
-public interface IConfigEvent {
+public interface IConfigListener {
 	public void onConfigUpdate();
 }
