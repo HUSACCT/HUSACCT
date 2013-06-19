@@ -18,9 +18,6 @@ import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreePath;
 
-import org.eclipse.swt.events.GestureEvent;
-import org.eclipse.swt.events.GestureListener;
-
 public class ModuleTrasferhandler  extends  TransferHandler implements Transferable,DropTargetListener{
 
 	public static DataFlavor[] moduleFlavours= {new DataFlavor(AbstractCombinedComponent.class, "mainComponent")};
