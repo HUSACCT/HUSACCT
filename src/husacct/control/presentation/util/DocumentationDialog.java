@@ -3,6 +3,7 @@ package husacct.control.presentation.util;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.locale.ILocaleService;
+import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 
 import java.awt.Color;
@@ -42,10 +43,12 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.apache.log4j.Logger;
+
 public class DocumentationDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
-
+	private Logger logger = Logger.getLogger(DocumentationDialog.class);
 	private JTree tree;
 	private JScrollPane treeView;
 	private JButton openButton;
@@ -70,9 +73,12 @@ public class DocumentationDialog extends JDialog{
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 		try {
-			File root = new File("doc");
+			File root = new File("doc/user");
 			tree = new JTree(getTreeModel(root));
+			tree.setRootVisible(false);
+			
 			treeView = new JScrollPane(tree);
+			
 			treeView.setPreferredSize(new Dimension(420,280));
 			add(treeView);
 		}
@@ -87,6 +93,7 @@ public class DocumentationDialog extends JDialog{
 
 	private MutableTreeNode getTreeModel(File root) {
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode(root.getName());
+		
 		if(root.list() != null) {
 			for(int i = 0; i < root.list().length ; i++ ) {
 				parent.add(getTreeModel(new File(root.getAbsolutePath() + "\\"+root.list()[i])));

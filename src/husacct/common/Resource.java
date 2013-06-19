@@ -17,7 +17,6 @@ public class Resource {
 	public static final String HELP_PATH = RESOURCE_PATH +"help/";
 	public static final String HELP_PAGES_PATH = HELP_PATH +"pages/";
 	public static final String HELP_IMAGE_PATH = HELP_PATH +"image/";
-
 	public static final String test_page = HELP_PAGES_PATH + "about.html";
 
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
