@@ -113,7 +113,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private GridBagLayout createMainPanelLayout() {
 		GridBagLayout mainPanelLayout = new GridBagLayout();
 		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0 };
-		mainPanelLayout.rowHeights = new int[] { 30, 300, 90};//30 500 90
+		mainPanelLayout.rowHeights = new int[] { 30, 200, 90};//30 500 90
 		mainPanelLayout.columnWeights = new double[] { 0.0, 0.0 };
 		mainPanelLayout.columnWidths = new int[] { 130, 660 };
 		return mainPanelLayout;

@@ -54,11 +54,13 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements
     @Override
     public Object getValue() {
 	Object returnObject;
-	if (!isException) {
-	    returnObject = appliedRuleController.getCurrentModuleId();
-	} else {
-	    returnObject = moduleFromTree.getSelectedTreeValue();
-	}
+	returnObject = appliedRuleController.getCurrentModuleId();
+	//	To go back to Module selector add this :
+	//	if (!isException) {
+	//		returnObject = appliedRuleController.getCurrentModuleId();
+	//	} else {
+	//		returnObject = moduleFromTree.getSelectedTreeValue();
+	//	}
 	return returnObject;
     }
 
@@ -80,12 +82,15 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements
 	this.add(moduleFromJLabel, gridBagConstraints);
 	gridBagConstraints.gridx++;
 	gridBagConstraints.fill = GridBagConstraints.BOTH;
-	if (!isException) {
-	    createFromModuleJLabel();
-	    this.add(moduleFromJLabel, gridBagConstraints);
-	} else {
-	    this.add(createFromModuleScrollPane(), gridBagConstraints);
-	}
+	createFromModuleJLabel();
+    this.add(moduleFromJLabel, gridBagConstraints);
+	//	To go back to Module selector add this:
+	//	if (!isException) {
+	//	    createFromModuleJLabel();
+	//	    this.add(moduleFromJLabel, gridBagConstraints);
+	//	} else {
+	//	    this.add(createFromModuleScrollPane(), gridBagConstraints);
+	//	}
     }
 
     @Override
@@ -98,12 +103,10 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements
     protected void setLayout() {
 	GridBagLayout ruleDetailsLayout = new GridBagLayout();
 	ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0 };
+	ruleDetailsLayout.rowHeights = new int[] { 0, 0 };
 	// max total height = 290
-	if (!isException) {
-	    ruleDetailsLayout.rowHeights = new int[] { 30, 30 };
-	} else {
-	    ruleDetailsLayout.rowHeights = new int[] { 120, 30 };
-	}
+	//	To go back to Module selector add this as !isException clause:
+	//	ruleDetailsLayout.rowHeights = new int[] { 120, 30 };
 	ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.0 };
 	ruleDetailsLayout.columnWidths = new int[] { 130, 660 };
 	this.setLayout(ruleDetailsLayout);

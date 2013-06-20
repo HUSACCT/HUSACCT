@@ -28,7 +28,8 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public class DefineServiceImpl extends ObservableService implements IDefineService {
+public class DefineServiceImpl extends ObservableService implements
+		IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
 	private DomainParser domainParser = new DomainParser();
@@ -70,7 +71,8 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		if (logicalPath.equals("**")) {
 			childModuleDTOs = getRootModules();
 		} else {
-			ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
+			ModuleStrategy module = moduleService
+					.getModuleByLogicalPath(logicalPath);
 			ModuleDTO moduleDTO = domainParser.parseModule(module);
 			childModuleDTOs = moduleDTO.subModules;
 		}
@@ -143,7 +145,8 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public Element getWorkspaceData() {
-		PersistentDomain pd = new PersistentDomain(defineDomainService,moduleService, appliedRuleService, exceptionService);
+		PersistentDomain pd = new PersistentDomain(defineDomainService,
+				moduleService, appliedRuleService, exceptionService);
 		return pd.getWorkspaceData();
 	}
 
