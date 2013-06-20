@@ -20,12 +20,8 @@ public class PanTool extends AbstractTool {
 	private final JComponent comp;
 	private final JViewport vport;
 	private Point startPt = new Point();
-	private Point move = new Point();
-	private Rectangle rect = new Rectangle();
 	
 	public PanTool(JViewport vport, JComponent comp) {
-		log.debug("pantool: init");
-		
 		this.vport = vport;
 		this.comp = comp;
 		dc = comp.getCursor();
@@ -40,8 +36,6 @@ public class PanTool extends AbstractTool {
 		Rectangle vr = vport.getViewRect();
 		vr.setRect(vr.x - dx, vr.y - dy, vr.width, vr.height);
 		vport.scrollRectToVisible(vr);
-		
-		log.debug("moved " + dx + ", " + dy + " coords, to " + vr.toString());
 	}
 	
 	@Override

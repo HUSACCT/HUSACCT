@@ -6,6 +6,7 @@ import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
+import husacct.analyse.task.TypeFilter;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
@@ -47,6 +48,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         super.notifyServiceListeners();
     }
 
+	@Override
     public void analyseApplication(ProjectDTO project) {
         service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
         this.analyseInternalFrame = new AnalyseInternalFrame();
@@ -94,37 +96,37 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
     @Override
     public DependencyDTO[] getAllDependencies() {
-        return service.getAllDependencies();
+        return TypeFilter.filterDependencies(service.getAllDependencies());
     }
 
     @Override
     public DependencyDTO[] getDependencies(String from, String to) {
-        return service.getDependencies(from, to);
+        return TypeFilter.filterDependencies(service.getDependencies(from, to));
     }
 
     @Override
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
-        return service.getDependencies(from, to, dependencyFilter);
+        return TypeFilter.filterDependencies(service.getDependencies(from, to, dependencyFilter));
     }
 
     @Override
     public DependencyDTO[] getDependenciesFrom(String from) {
-        return service.getDependenciesFrom(from);
+        return TypeFilter.filterDependencies(service.getDependenciesFrom(from));
     }
 
     @Override
     public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
-        return service.getDependenciesFrom(from, dependencyFilter);
+        return TypeFilter.filterDependencies(service.getDependenciesFrom(from, dependencyFilter));
     }
 
     @Override
     public DependencyDTO[] getDependenciesTo(String to) {
-        return service.getDependenciesTo(to);
+        return TypeFilter.filterDependencies(service.getDependenciesTo(to));
     }
 
     @Override
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
-        return service.getDependenciesTo(to, dependencyFilter);
+        return TypeFilter.filterDependencies(service.getDependenciesTo(to, dependencyFilter));
     }
 
     @Override
@@ -134,7 +136,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     
     @Override
 	public ExternalSystemDTO[] getExternalSystems(){
-		return service.getExternalSystems();
+		return TypeFilter.filterExternalSystems(service.getExternalSystems());
 	}
 
 	@Override
@@ -154,18 +156,22 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		historyLogger.logHistory(applicationDTO, workspaceName);
 	}
 	
+	@Override
 	public int getAmountOfDependencies() {
     	return service.getAmountOfDependencies();
     }
     
+	@Override
     public int getAmountOfInterfaces() {
     	return service.getAmountOfInterfaces();
     }
     
+	@Override
     public int getAmountOfPackages() {
     	return service.getAmountOfPackages();
     }
     
+	@Override
     public int getAmountOfClasses() {
     	return service.getAmountOfClasses();
     }

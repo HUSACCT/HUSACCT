@@ -63,7 +63,7 @@ public class SeverityPerTypeRepository {
 		if (violationtypefactory != null) {
 			for (Entry<String, List<ViolationType>> violationTypeCategory : violationtypefactory.getAllViolationTypes().entrySet()) {
 				for (ViolationType violationType : violationTypeCategory.getValue()) {
-					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
+					severityPerType.put(violationType.getViolationTypeKey(), violationType.getSeverity());
 				}
 			}
 		} else {

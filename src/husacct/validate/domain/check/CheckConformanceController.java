@@ -51,15 +51,13 @@ public class CheckConformanceController {
 				List<Violation> violationList = new ArrayList<Violation>();
 				appliedRulesHandled = 0;
 				for (RuleDTO appliedRule : appliedRules) {
-
-					//Added by Team 1 General GUI & Control
-					//needed for interrupting this thread
+					
+					// On violation abort, abort.
 					if (!ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)) {
 						break;
 					}
-					//calculating percentage for progress bar
+					// Call for an validation progress update
 					ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100) / appliedRules.length);
-					//end adding by Team 1
 
 					try {
 						RuleType rule = getRuleType(appliedRule.ruleTypeKey);

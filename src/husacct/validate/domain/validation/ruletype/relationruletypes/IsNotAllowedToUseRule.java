@@ -10,8 +10,6 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;

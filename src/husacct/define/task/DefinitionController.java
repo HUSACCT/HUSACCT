@@ -3,6 +3,8 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Component;
+import husacct.define.domain.module.modules.Facade;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -442,6 +444,10 @@ import org.apache.log4j.Logger;
 			module.set(name, description);
 			
 			this.passModuleToService(getSelectedModuleId(), module);
-
+			
+			//Dirty way of ensuring that the facade will be put as submodule of the component.
+			if(module instanceof Component) {
+				setSelectedModuleId(module.getId());
+			}
 		}
 	}

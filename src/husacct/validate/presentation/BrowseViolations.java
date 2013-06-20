@@ -324,7 +324,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	private void loadViolationsTableModel() {
-		String[] columnNames = {localeService.getTranslatedString("Source"), localeService.getTranslatedString("Rule"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("Severity")};
+		String[] columnNames = {localeService.getTranslatedString("Source"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("Rule"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Direct") + "/" + localeService.getTranslatedString("Indirect"), localeService.getTranslatedString("Severity")};
 
 		violationsTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 7993526243751581611L;
@@ -380,15 +380,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		clearViolationsTableModelRows();
 		shownViolations = violations;
 		for (Violation violation : violations) {
-			String violationtypeString = "";
-			if (!violation.getViolationtypeKey().isEmpty()) {
-				if (!violation.getViolationtypeKey().equals("VisibilityConvention")) {
-					violationtypeString = localeService.getTranslatedString(violation.getViolationtypeKey()) + ", " + (violation.isIndirect() ? "Indirect" : "Direct");
-				} else {
-					violationtypeString = localeService.getTranslatedString(violation.getViolationtypeKey());
-				}
-			}
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), localeService.getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
+			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), violation.getClassPathTo(), localeService.getTranslatedString(violation.getRuletypeKey()), localeService.getTranslatedString(violation.getViolationtypeKey()), (violation.isIndirect() ? localeService.getTranslatedString("Indirect") : localeService.getTranslatedString("Direct")), violation.getSeverity().toString()});
 			violationsTable.revalidate();
 		}
 		violationsTable.setAutoCreateRowSorter(true);

@@ -1,5 +1,8 @@
 .idea*
 out/
+husacct.xml
+husacct.properties
+module_husacct.xml
 HUSACCT.iml
 bin
 build.xml

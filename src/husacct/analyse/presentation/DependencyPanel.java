@@ -84,6 +84,14 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
             rootFrom.add(fromNode);
             fillNode(fromNode);
         }
+        for(AnalysedModuleDTO eSystem : dataControl.listAllExternalSystems()){
+        	DefaultMutableTreeNode toNode = new DefaultMutableTreeNode(eSystem);
+        	DefaultMutableTreeNode fromNode = new DefaultMutableTreeNode(eSystem);
+        	rootTo.add(toNode);
+        	fillNode(toNode);
+        	rootFrom.add(fromNode);
+        	fillNode(fromNode);
+        }
         this.expandLeaf(toModuleTree, 1);
         this.expandLeaf(fromModuleTree, 1);
 

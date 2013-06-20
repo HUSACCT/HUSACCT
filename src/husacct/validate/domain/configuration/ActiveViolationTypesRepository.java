@@ -2,7 +2,6 @@ package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.define.IDefineService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
@@ -21,7 +20,7 @@ import org.apache.log4j.Logger;
 class ActiveViolationTypesRepository {
 
 	private final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
-	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+//	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private final RuleTypesFactory ruletypesfactory;
 	private final Map<String, List<ActiveRuleType>> startupViolationTypes;
 	private Map<String, List<ActiveRuleType>> currentActiveViolationTypes;
@@ -41,7 +40,6 @@ class ActiveViolationTypesRepository {
 			activeViolationTypes.put(programmingLanguage, activeRuleTypes);
 
 			for (List<RuleType> ruleTypes : ruletypesfactory.getRuleTypes(programmingLanguage).values()) {
-
 				for (RuleType ruleType : ruleTypes) {
 					ActiveRuleType activeRuleType = initializeActiveViolationTypes(ruleType);
 					activeRuleTypes.add(activeRuleType);
@@ -73,7 +71,7 @@ class ActiveViolationTypesRepository {
 		List<ActiveViolationType> initialActiveViolationTypes = new ArrayList<ActiveViolationType>();
 
 		for (ViolationType violationType : ruleType.getViolationTypes()) {
-			final String violationTypeKey = violationType.getViolationtypeKey();
+			final String violationTypeKey = violationType.getViolationTypeKey();
 			boolean enabled = violationType.isActive();
 			ActiveViolationType activeViolationType = new ActiveViolationType(violationTypeKey, enabled);
 			initialActiveViolationTypes.add(activeViolationType);
@@ -83,7 +81,7 @@ class ActiveViolationTypesRepository {
 		return activeRuleType;
 	}
 
-	boolean isEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey) {
+	public boolean isEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey) {
 		List<ActiveRuleType> activeRuleTypes = this.currentActiveViolationTypes.get(programmingLanguage);
 		if (activeRuleTypes != null) {
 			for (ActiveRuleType activeRuleType : activeRuleTypes) {
@@ -106,11 +104,11 @@ class ActiveViolationTypesRepository {
 		return false;
 	}
 
-	Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
+	public Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
 		return currentActiveViolationTypes;
 	}
 
-	void setActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
+	public void setActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
 		for (Entry<String, List<ActiveRuleType>> activeViolationTypeSet : activeViolationTypes.entrySet()) {
 			if (programmingLanguageExists(activeViolationTypeSet.getKey())) {
 				setActiveViolationTypes(activeViolationTypeSet.getKey(), activeViolationTypes.get(activeViolationTypeSet.getKey()));
@@ -118,7 +116,7 @@ class ActiveViolationTypesRepository {
 		}
 	}
 
-	void setActiveViolationTypes(String programmingLanguage, List<ActiveRuleType> newActiveViolationTypes) {
+	public void setActiveViolationTypes(String programmingLanguage, List<ActiveRuleType> newActiveViolationTypes) {
 		if (programmingLanguageExists(programmingLanguage)) {
 			List<ActiveRuleType> checkedNewActiveViolationTypes = checkNewActiveViolationTypes(programmingLanguage, newActiveViolationTypes);
 

@@ -118,7 +118,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	private void setDeclareType(Tree typeNode) {
 		CommonTree typeTree = (CommonTree) typeNode;
 		if(declareType == null || !SkippableTypes.isSkippable(declareType))	declareType = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree); 
-		addTypeNameIfNotSkippable(typeTree);
+		
 		addArgumentListTypes(typeTree);
 	}
 

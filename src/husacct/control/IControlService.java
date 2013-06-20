@@ -2,6 +2,7 @@ package husacct.control;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.services.IObservableService;
+import husacct.control.task.IFileChangeListener;
 import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Severity;
@@ -38,5 +39,6 @@ public interface IControlService extends IObservableService{
 	
 	public void showHelpDialog(Component component);
 	
-	
+	public void addProjectForListening(String path);
+	public void addFileChangeListener(IFileChangeListener listener);
 }

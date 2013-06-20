@@ -5,20 +5,18 @@ import husacct.analyse.task.analyser.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyser.java.JavaAnalyser;
 
 class AnalyserBuilder {
-	enum language {
-		Java, CSharp, Clojure
-	}
 
     public AbstractAnalyser getAnalyser(String language) {
-    	switch (language)
-    	{
-    case "Java":
-    	return new JavaAnalyser();
-    case "CSharp":
-    	return new CSharpAnalyser();
-    case "Clojure":
-    	return new ClojureAnalyser();
-    	}
-    	return null;
-    	}
+        AbstractAnalyser applicationAnalyser;
+        if (language.equals(new JavaAnalyser().getProgrammingLanguage())) {
+            applicationAnalyser = new JavaAnalyser();
+        } else if (language.equals(new CSharpAnalyser().getProgrammingLanguage())) {
+            applicationAnalyser = new CSharpAnalyser();
+        } else if (language.equals(new ClojureAnalyser().getProgrammingLanguage())) {
+            applicationAnalyser = new ClojureAnalyser();
+        } else {
+            applicationAnalyser = null;
+        }
+        return applicationAnalyser;
     }
+}

@@ -1,7 +1,6 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.getFirstDescendantWithType;
-
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import org.antlr.runtime.tree.CommonTree;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.csharp.generators.AbstractCSharpInvocationGenerator;
@@ -48,10 +47,15 @@ public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvo
 	}
 
 	private void createPropertyOrFieldInvocationDetails(CommonTree tree) {
-		CommonTree toChild = (CommonTree)tree.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
-		this.to = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		try {
+			this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+			this.to = setToName(tree);
+			
+			CommonTree accessToClass = getAccessToClassTree(tree);
+			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		} catch (Exception e) {
+			System.out.println("Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
+		}
 	}
 
 	@Override

@@ -12,8 +12,6 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
