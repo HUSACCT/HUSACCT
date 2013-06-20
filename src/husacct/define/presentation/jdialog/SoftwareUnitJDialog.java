@@ -94,7 +94,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			
 			UIMapping.setEnabled(false);
 			this.setResizable(false);
-			this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
+			
 		
 		
 			
@@ -226,7 +226,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void getSoftwareDefinationTree() {
 	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
 	this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
-	 SoftwareUnitDropListerner  dropListener = new SoftwareUnitDropListerner (softwareDefinitionTree);
+	this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
+	SoftwareUnitDropListerner  dropListener = new SoftwareUnitDropListerner (softwareDefinitionTree);
 	this.softwareDefinitionTree.setDragEnabled(true);
 	
 	

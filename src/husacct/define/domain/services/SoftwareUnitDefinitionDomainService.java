@@ -35,9 +35,10 @@ public class SoftwareUnitDefinitionDomainService {
 					SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(
 							ir.getUniqueName(), typet);
 					ex.addSoftwareUnit(unitt);
+					
 				}
 				
-				
+				StateService.instance().registerAnalyzedUnit(softwareunit);
 				
 				module.addSUDefinition(ex);
 			
@@ -84,18 +85,10 @@ public class SoftwareUnitDefinitionDomainService {
 
 	public void addSoftwareUnitToRegex(long moduleId,
 			ArrayList<AnalyzedModuleComponent> softwareUnits, String regExName) {
-		SoftwareUnitRegExDefinition regExDefinition = new SoftwareUnitRegExDefinition(
-				regExName);
 		
 		
 		try {
-			for (AnalyzedModuleComponent softwareUnit : softwareUnits) {
-				Type type = Type.valueOf(softwareUnit.getType());
-				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(
-						softwareUnit.getUniqueName(), type);
-			
-				regExDefinition.addSoftwareUnitDefinition(unit);
-			}
+		
 			RegexComponent regixwrapper = JtreeController.instance()
 					.registerRegix(regExName);
 			addSoftwareUnit(moduleId, regixwrapper);
@@ -140,8 +133,10 @@ public class SoftwareUnitDefinitionDomainService {
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance()
 				.getModuleBySoftwareUnit(softwareUnitName);
+		System.out.println(">>>>>>>>>>>  "+module.getName());
 		SoftwareUnitDefinition softwareUnit = module
 				.getSoftwareUnitByName(softwareUnitName);
+		
 		return softwareUnit;
 	}
 
@@ -184,8 +179,8 @@ public class SoftwareUnitDefinitionDomainService {
 	
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
-		WarningMessageService.getInstance().processModule(module);
-		//StateService.instance().removeSoftwareUnit(module, unit);
+		
+		
 		JtreeController.instance().restoreRegexWrapper((ExpressionUnitDefinition)unit);
 		
 		ServiceProvider.getInstance().getDefineService()
@@ -196,7 +191,7 @@ public class SoftwareUnitDefinitionDomainService {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
-		WarningMessageService.getInstance().processModule(module);
+		
 		StateService.instance().removeSoftwareUnit(module, unit);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
