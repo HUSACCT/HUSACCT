@@ -116,7 +116,7 @@ import javax.swing.tree.TreePath;
 
 	public AnalyzedModuleTree getResultTree() 
 	{
-		RegexComponent root = new RegexComponent("root","Regix results","SEARCH","public");
+		RegexComponent root = new RegexComponent("Found results:","Nothing found","SEARCH","public");
 
 		resultTree= new AnalyzedModuleTree(root);
        

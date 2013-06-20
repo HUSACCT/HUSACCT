@@ -44,7 +44,7 @@ KeyListener {
 	private void init() {
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 380));
+		this.setSize(new Dimension(1200, 500));
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(createTreeTable(), BorderLayout.CENTER);
 		this.setTitle(localeService.getTranslatedString("Warnings"));
@@ -52,7 +52,7 @@ KeyListener {
 		setIconImage(new ImageIcon(Resource.get(Resource.ICON_VALIDATE)).getImage());
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation( d.width / 2 - 512, d.height/2 - 384 );
-		setSize( 600, 300 );
+		
 	}
 
 	public JTabbedPane createTreeTable()
