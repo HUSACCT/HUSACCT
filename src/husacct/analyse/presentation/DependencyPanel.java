@@ -1,16 +1,28 @@
 package husacct.analyse.presentation;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.validate.domain.validation.Severity;
+
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
@@ -18,13 +30,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JCheckBox;
-import java.awt.ComponentOrientation;
-import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 class DependencyPanel extends JPanel implements TreeSelectionListener, ActionListener {
 
@@ -57,6 +62,29 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         dependencyScrollPane.setViewportView(dependencyTable);
         dependencyTable.setBackground(PANELBACKGROUND);
         dependencyTable.setAutoCreateRowSorter(true);
+        
+        dependencyTable.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(arg0.getClickCount() >= 2){
+					int row = dependencyTable.getSelectedRow();
+					
+					System.out.println(dependencyTable.getModel().getValueAt(row, 0) + " at row " + dependencyTable.getModel().getValueAt(row, 3));
+					String cls = dependencyTable.getModel().getValueAt(row, 0).toString();
+					int lineNumber = (int) dependencyTable.getModel().getValueAt(row, 3);
+					dataControl.getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.RED));
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+    	});
+        
         initialiseTrees();
 
         setLayout(theLayout);

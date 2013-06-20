@@ -78,6 +78,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public AnalysedModuleDTO[] getRootModules() {
         return service.getRootModules();
     }
+    
+    @Override
+    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
+    	return service.getRootModulesWithExternalSystems();
+    }
 
     @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {

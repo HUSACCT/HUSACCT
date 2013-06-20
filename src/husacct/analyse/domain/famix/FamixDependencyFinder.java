@@ -85,17 +85,6 @@ class FamixDependencyFinder extends FamixFinder {
 			dto.fromDependencies = (ArrayList<DependencyDTO>) getDependenciesTo(dto.systemPackage);
 		}
 		
-		List<FamixAssociation> externalSystemsInAssociation = new ArrayList<FamixAssociation>();
-		
-		for(FamixAssociation fa : theModel.associations)
-			for(ExternalSystemDTO dto : externalSystems)
-				if(fa.to.equals(dto.systemPackage))
-					if(!externalSystemsInAssociation.contains(fa))
-						externalSystemsInAssociation.add(fa);
-		
-//		System.out.println(externalSystemsInAssociation.toString());
-//		System.out.println("Found " + externalSystemsInAssociation.size() + " dependencies");
-		
 		externalSystemCache = externalSystems;
 		
 		return externalSystemCache;

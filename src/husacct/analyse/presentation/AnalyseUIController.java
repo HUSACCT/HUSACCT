@@ -4,8 +4,8 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.locale.ILocaleService;
+import husacct.control.IControlService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ public class AnalyseUIController {
 
     private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
     private IAnalyseService analyseTaskService = ServiceProvider.getInstance().getAnalyseService();
+    private IControlService controlService = ServiceProvider.getInstance().getControlService();
 
     public AnalyseUIController() {
     }
@@ -24,7 +25,7 @@ public class AnalyseUIController {
 
     public List<AnalysedModuleDTO> getRootModules() {
         List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
-        for (AnalysedModuleDTO analysedModule : analyseTaskService.getRootModules()) {
+        for (AnalysedModuleDTO analysedModule : analyseTaskService.getRootModulesWithExternalSystems()) {
             rootModules.add(analysedModule);
         }
         return rootModules;
@@ -83,5 +84,9 @@ public class AnalyseUIController {
 
     public void exportDependencies(String path) {
         analyseTaskService.exportDependencies(path);
+    }
+    
+    public IControlService getControlService(){
+    	return this.controlService;
     }
 }

@@ -248,6 +248,11 @@ public class AnalyseServiceStub implements IAnalyseService {
 
         return returnModules;
     }
+    
+    @Override
+    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
+    	return null;
+    }
 
     @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
