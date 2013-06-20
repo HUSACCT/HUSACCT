@@ -59,17 +59,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		rootModule.set(name, description);
 		setModules(modules);
 		setAppliedRules(rules);
-		
-		registerModule(rootModule);
+		this.modules.add(rootModule);
 
-	}
-
-	private void registerModule(ModuleStrategy module) {
-		modules.add(module);
-		if (module instanceof Component) {
-			modules.add( module.getSubModules().get(0));
-		}
-		
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
@@ -87,7 +78,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		try {
 			if (!hasModule(module.getName())) {
 				rootModule.addSubModule(module);
-				registerModule(module);
+				modules.add(module);
 				StateService.instance().addModule(module);
 				// DefaultRuleDomainService.getInstance().addDefaultRules(module);
 				// WarningMessageService.getInstance().processModule(module);
@@ -108,7 +99,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		StateService.instance().addModule(module);
 
-		registerModule(module);
+		modules.add(module);
 		// WarningMessageService.getInstance().processModule(module);
 		return parentModule.addSubModule(module);
 	}
