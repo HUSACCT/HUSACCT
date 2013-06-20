@@ -15,11 +15,11 @@ public class HelpTreeNode {
 		return filename;
 	}
 	
-	public String getviewname() {
+	public String getViewName() {
 		return viewname;
 	}
 	
-	public String getcomponentname() {
+	public String getComponentName() {
 		return componentname;
 	}
 	@Override

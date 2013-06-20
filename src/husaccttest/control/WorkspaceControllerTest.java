@@ -117,6 +117,9 @@ public class WorkspaceControllerTest {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		HashMap<String, Object> config = new HashMap<String, Object>();
 		data.put("file", testFile);
+		config.put("doCompress", false);
+		config.put("doPasswordProtection", false);
+		
 		workspaceController.saveWorkspace("xml", data,config);
 		assertTrue(testFile.exists());
 	}

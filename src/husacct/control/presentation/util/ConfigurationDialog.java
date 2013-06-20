@@ -38,7 +38,6 @@ public class ConfigurationDialog extends JDialog {
 	private JButton save = new JButton(), reset = new JButton(), cancel = new JButton();
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
 	private JList<String> list;
-	
 	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<String, ConfigPanel>();
 	
 	public ConfigurationDialog(MainController mainController) {
@@ -116,8 +115,9 @@ public class ConfigurationDialog extends JDialog {
 					configPanel.SaveSettings();
 				}
 				ConfigurationManager.storeProperties();
+				ConfigurationManager.notifyListeners();
 				configDialog.setVisible(false);
-			}	
+			}
 		});
 		
 		buttonPanel.add(reset);
