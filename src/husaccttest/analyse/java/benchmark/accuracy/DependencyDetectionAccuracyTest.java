@@ -8,7 +8,6 @@ import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
 import husaccttest.analyse.TestProjectFinder;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class DependencyDetectionAccuracyTest {
 	private static boolean isAnalysed = false;
 	private static Logger logger;
 	private static DependencyDTO[] allDependencies = null;
-	private static String path = new File(TestProjectFinder.lookupProject("java", "accuracy")).getAbsolutePath();
+	private static String path = TestProjectFinder.lookupProject("java", "accuracy");
 	private static String language = "Java";
 	
 	@BeforeClass
@@ -33,17 +32,16 @@ public class DependencyDetectionAccuracyTest {
 			setLog4jConfiguration();
 			
 			ArrayList<ProjectDTO> projects = createProjectDTOs();
-
-			ServiceProvider.getInstance().getDefineService().createApplication(language+" test", projects, "1.0");
-			service = ServiceProvider.getInstance().getAnalyseService();
+			
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-			//The next line is to fix the nullpointer on the workspace. But if we enable it the tests won't run.
-			//ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
+			ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
+			ServiceProvider.getInstance().getDefineService().createApplication(language+" test", projects, "1.0");
 			ctrlS.getMainController().getApplicationController().analyseApplication();
+			service = ServiceProvider.getInstance().getAnalyseService();
 			
 			logger.debug("PROJECT LOADED");
+		
 			//analyse is in a different Thread, and needs some time
-			
 			while(!isAnalysed){
 				try {
 					Thread.sleep((long)10);
@@ -53,7 +51,7 @@ public class DependencyDetectionAccuracyTest {
 			
 			allDependencies = service.getAllDependencies();
 			//for testing only
-			printDependencies();
+			//printDependencies();
 		} catch (Exception e){
 			String errorMessage =  "We're sorry. You need to have a Java project 'Accuracy'. Or you have the wrong version of the Accuracy Test.";
 			logger.warn(errorMessage);
@@ -891,7 +889,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(path);
 		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
-		ProjectDTO project = new ProjectDTO("TestAccuracy", paths, language, "version0", "for testing purposes", analysedModules);
+		ProjectDTO project = new ProjectDTO("TestAccuracy", paths, language, "1", "for testing purposes", analysedModules);
 		projects.add(project);
 		return projects;
 	}
@@ -902,6 +900,7 @@ public class DependencyDetectionAccuracyTest {
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
 	
+	@SuppressWarnings("unused")
 	private static void printDependencies() {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
