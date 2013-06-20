@@ -99,6 +99,9 @@ public class DefineServiceImpl extends ObservableService implements
 	public RuleDTO[] getDefinedRules() {
 		AppliedRuleStrategy[] rules = appliedRuleService.getAppliedRules();
 		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
+		for (RuleDTO ruleDTO : ruleDTOs) {
+			System.out.println(ruleDTO.ruleTypeKey);
+		}
 		return ruleDTOs;
 	}
 

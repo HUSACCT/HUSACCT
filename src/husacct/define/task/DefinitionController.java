@@ -334,7 +334,7 @@ import org.apache.log4j.Logger;
 						ServiceProvider.getInstance().getLocaleService()
 						.getTranslatedString("ConfirmRemoveSoftwareUnit"),
 						"Remove?");
-				JtreeController.instance().restoreTreeItem(softwareUnitNames,types);
+			
 				for (String softwareUnit : softwareUnitNames) {
 					String type = types.get(location);
 					logger.info("Removing software unit " + softwareUnit);
@@ -342,15 +342,10 @@ import org.apache.log4j.Logger;
 							&& !softwareUnit.equals("")) {
 						if (confirm) {
 							logger.info("getting type:" + type);
-
+                         JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
 							JPanelStatus.getInstance("Removing software unit")
 							.start();
-							if (type.toUpperCase().equals("REGEX")) {
-								softwareUnitDefinitionDomainService
-								.removeRegExSoftwareUnit(moduleId,
-										softwareUnit);
-								this.notifyObservers();
-							} else {
+							
 								boolean chekHasCodelevelWarning = WarningMessageService
 										.getInstance().isCodeLevelWarning(
 												softwareUnit);
@@ -372,7 +367,7 @@ import org.apache.log4j.Logger;
 								}
 								this.notifyObservers();
 							}
-						}
+						
 					}
 					location++;
 				}

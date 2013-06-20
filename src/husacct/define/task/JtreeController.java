@@ -152,8 +152,10 @@ public void setModuleTree(ModuleTree moduleTree) {
 	 RegexComponent regixwrapper = new RegexComponent(); 
 	 TreePath[] paths = instance.resultTree.getSelectionPaths();
 	 for (TreePath treePath : paths) {
+		AnalyzedModuleComponent op = (AnalyzedModuleComponent)treePath.getLastPathComponent();
+		removeTreeItem(StateService.instance().getAnalyzedSoftWareUnit(op.getUniqueName().toLowerCase()));
 		
-		regixwrapper.addChild((AnalyzedModuleComponent)treePath.getLastPathComponent());
+		regixwrapper.addChild(op);
 	}
 	regixwrapper.setName(regExName);
 	regixwrapper.setType("regex");
@@ -229,12 +231,27 @@ public void restoreTreeItems(ModuleStrategy module) {
 	
 }
 
-public void restoreTreeItem(List<String> softwareUnitNames, List<String> types) {
+public void restoreTreeItemm(List<String> softwareUnitNames, List<String> types) {
 	for (String uniqname : softwareUnitNames) {
 		AnalyzedModuleComponent tobeRestored= StateService.instance().getAnalyzedSoftWareUnit(uniqname);
-		tree.restoreTreeItem(tobeRestored);
+		if (tobeRestored instanceof RegexComponent) {
+			restoreRegex((RegexComponent)tobeRestored);
+		}else{
+		System.out.println("normal restore");
+			tree.restoreTreeItem(tobeRestored);
 		tree.repaint();
-	}
+		}
+		}
+	
+}
+
+private void restoreRegex(RegexComponent tobeRestored) {
+for (AbstractCombinedComponent unit : tobeRestored.getChildren()) {
+	AnalyzedModuleComponent referenceditem = StateService.instance().getAnalyzedSoftWareUnit(unit.getUniqueName());
+	System.out.println("normal paloo");
+	tree.restoreTreeItem(referenceditem);
+	tree.repaint();
+}
 	
 }
 
