@@ -41,7 +41,6 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	private Logger logger = Logger.getLogger(GeneralConfigurationPanel.class);
-	private MainController mainController;
 	
 	private ButtonGroup languageGroup = new ButtonGroup();
 	private GridBagConstraints constraints = new GridBagConstraints();
@@ -50,7 +49,6 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	public GeneralConfigurationPanel(MainController mainController) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.mainController = mainController;
 		initialiseLanguage();
 		initialiseCodeviewer();
 		initialiseActionLogger();
@@ -199,7 +197,6 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 		
 		boolean showActionLogger = enableActionLogger.isSelected();
 		ConfigurationManager.setProperty("ActionLogger", String.valueOf(showActionLogger));
-		mainController.getActionLogController().setActionLogVisibility(showActionLogger);
 		
 		setLocaleFromString(language);
 	}

@@ -79,7 +79,7 @@ public class CreditsDialog extends JDialog {
 
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 300));
+		this.setSize(new Dimension(500, 400));
 		this.setLayout(new FlowLayout());
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
@@ -103,9 +103,9 @@ public class CreditsDialog extends JDialog {
 		studentLabel = new JTextArea(getCreditsStudents());
 		studentLabel.setLineWrap(true);
 		studentLabel.setWrapStyleWord(true);
-		studentLabel.setPreferredSize(new Dimension(400, 200));
+		studentLabel.setPreferredSize(new Dimension(400, 300));
 		studentLabel.setOpaque(false);
-		studentLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+		studentLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 		studentLabel.setEditable(false);
 		textPanel.add(teacherLabelDescription, getConstraint(0,1, 6,1));
 		textPanel.add(teacherLabel,getConstraint(0, 2,6,6));
