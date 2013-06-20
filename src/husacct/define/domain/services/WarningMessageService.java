@@ -6,7 +6,6 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
-import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -111,11 +110,14 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	public void processModule(ModuleStrategy module)
 	{
 		
+		if (module.getId()!=0) {
 		if (module.isMapped()) {
 			removeImplementationWarning(module);
 		} else {
 			createModuleWarning(module);
+		}	
 		}
+		
 	}
 
 
@@ -294,6 +296,11 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	public void layerDown(long moduleID) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void clearImplementationLevelWarnings() {
+		
+		warnings = new ArrayList<WarningMessage>();
 	}
 	
 	
