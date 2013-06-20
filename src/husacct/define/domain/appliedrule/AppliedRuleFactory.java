@@ -1,7 +1,7 @@
 package husacct.define.domain.appliedrule;
 
-import java.util.HashMap;
-
+import husacct.ServiceProvider;
+import husacct.common.dto.CategoryDTO;
 import husacct.define.domain.appliedrule.propertyrules.FacadeConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.InterfaceConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionExceptionRule;
@@ -17,6 +17,8 @@ import husacct.define.domain.appliedrule.relationrules.IsOnlyAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.IsOnlyModuleAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.MustUseRule;
 import husacct.define.domain.services.ModuleDomainService;
+
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
@@ -59,27 +61,8 @@ public class AppliedRuleFactory {
 		FacadeConventionRule.class
 	};
 	
-	private static final String[][] categories = new String[][]{
-		new String[]{ 
-				"IsNotAllowedToUse",
-				"IsNotAllowedToMakeBackCall",
-				"IsNotAllowedToMakeSkipCall",
-				"IsAllowedToUse",
-				"IsOnlyAllowedToUse",
-				"IsOnlyModuleAllowedToUse",
-				"MustUse"
-				},
-		new String[]{ 
-				"NamingConvention",
-				"VisibilityConvention",
-				"InterfaceConvention",
-				"SubClassConvention",
-				"FacadeConvention"
-		}
-	};
-	
-	public String[][] getCategories(){
-		return categories;
+	public CategoryDTO[] getCategories(){
+		return ServiceProvider.getInstance().getValidateService().getCategories();
 	}
 
 	public String[] getRuletypeOptions(){

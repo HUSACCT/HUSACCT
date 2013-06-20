@@ -81,7 +81,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 //			this.setResizable(false);
 			this.pack();
-			this.setSize(820, 620);
+			this.setSize(820, 560);
 		} catch (Exception e) {
 			// add your error handling code here
 			e.printStackTrace();
@@ -183,7 +183,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			ruleDetails.put("ruleTypeKey", ruleTypeKey);	
-			DomainGateway.getInstance().addException(ruleDetails);
+			appliedRuleController.addException(ruleDetails);
 			this.appliedRuleFrame.updateExceptionTable();
 			this.dispose();
 		} else {

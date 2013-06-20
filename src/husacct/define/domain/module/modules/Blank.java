@@ -2,9 +2,9 @@ package husacct.define.domain.module.modules;
 
 import java.util.ArrayList;
 
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 public class Blank extends ModuleStrategy{
 

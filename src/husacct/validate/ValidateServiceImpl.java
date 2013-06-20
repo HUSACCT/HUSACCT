@@ -219,4 +219,14 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		HashMap<String, ConfigPanel> subItems = new HashMap<String, ConfigPanel>();
 		return subItems;
 	}
+
+	@Override
+	public void setAllowedRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value) {
+		domain.setAllowedRuleTypeOfModule(moduleType, ruleTypeKey, value);
+	}
+
+	@Override
+	public void setDefaultRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value) {
+		domain.setDefaultRuleTypeOfModule(moduleType, ruleTypeKey, value);
+	}
 }

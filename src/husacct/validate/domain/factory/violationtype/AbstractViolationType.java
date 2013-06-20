@@ -11,7 +11,6 @@ import husacct.validate.domain.validation.internaltransferobjects.CategoryKeySev
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -85,11 +84,14 @@ public abstract class AbstractViolationType {
 	public ViolationType createViolationType(String ruleTypeKey, String violationTypeKey) {
 		List<String> violationKeysToLower = new ArrayList<String>();
 		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
+			//System.err.println("ADD key: " + violationtype.getKey() + " - category: " + violationtype.getCategory());
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
 		}
 
+		//System.err.println("CREATE " + violationTypeKey.toLowerCase());
 		if (violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
 			try {
+				//System.out.println("GIVEN ruleTypeKey: " + ruleTypeKey + " violationTypeKey: " + violationTypeKey);
 				final Severity severity = createSeverity(languageName, violationTypeKey);
 				boolean enabled = configuration.isViolationEnabled(languageName, ruleTypeKey, violationTypeKey);
 				return new ViolationType(violationTypeKey, enabled, severity);
@@ -103,11 +105,11 @@ public abstract class AbstractViolationType {
 		} else {
 			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
 		}
-		
-		//Verbeteren
-		return new ViolationType("", false, new Severity("", Color.GREEN));
-		//throw new ViolationTypeNotFoundException(); TODO: Onaangekondige ViolationTypes ondersteunen (van team Define)
-		}
+
+		//		//Verbeteren
+		//return new ViolationType("", false, new Severity("", Color.GREEN));
+		throw new ViolationTypeNotFoundException(); //TODO: Onaangekondige dependencyTypes ondersteunen (van team Define)
+	}
 
 	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue) {
 		final Severity severity = createSeverity(languageName, enumValue.toString());

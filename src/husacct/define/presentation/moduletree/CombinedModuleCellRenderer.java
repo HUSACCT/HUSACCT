@@ -90,7 +90,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	    } else {
 		icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
 	    }
-
+	  
 	} else if (component.getType().equals("EXTERNALLIBRARY")) {
 	    if (component.isMapped()) {
 		icon = new ImageIcon(

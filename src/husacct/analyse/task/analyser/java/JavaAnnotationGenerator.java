@@ -6,7 +6,7 @@ import org.antlr.runtime.tree.CommonTree;
 class JavaAnnotationGenerator extends JavaGenerator {
 
     private String name;
-    private String uniqueName;
+    private String uniqueName = "";
     private String belongsToPackage;
     private int lineNumber = 0;
 

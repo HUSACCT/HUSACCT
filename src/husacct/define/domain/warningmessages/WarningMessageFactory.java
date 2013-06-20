@@ -1,13 +1,8 @@
 package husacct.define.domain.warningmessages;
 
-import java.util.ArrayList;
-
-
-import java.util.List;
-
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.task.components.AnalyzedModuleComponent;
 
 public class WarningMessageFactory {
 
@@ -25,19 +20,13 @@ public class WarningMessageFactory {
 		WarningMessageService.getInstance().updateWarnings();
 		WarningMessageContainer root = new WarningMessageContainer(new CustomWarningMessage("WARNINGS"));
 		WarningMessageContainer codelevelContainer = new WarningMessageContainer(new CustomWarningMessage("Code Level "));
-		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level("+WarningMessageService.getInstance().warningsCount()+")"));
-		WarningMessageContainer notMapped = new WarningMessageContainer(new CustomWarningMessage("NotMapped("+StateService.instance().getAnalzedModuleRegistry().getUnitsCount()+")"));
+		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level"));
+		
 		WarningMessageContainer customContainer = new WarningMessageContainer(new CustomWarningMessage("Custom"));
-		addNotmapped(notMapped);
+	WarningMessageContainer notMapped=	getNotmapped();
 		addNotCodeLevel(codelevelContainer);
-		for (WarningMessage message : WarningMessageService.getInstance().getWarningMessages()) {
-		
-			 if (message instanceof ImplementationLevelWarning) {
-				
-				implevelContainer.addChild(new WarningMessageContainer(message));
-			}
-		
-		}
+		addNotMappedModule(implevelContainer);
+	
 		
 		root.addChild(implevelContainer);
 		root.addChild(codelevelContainer);
@@ -48,32 +37,23 @@ public class WarningMessageFactory {
 	
 	}
 
-	private void addNotmapped(WarningMessageContainer rootOfNotmapped) {
-		
-		
-	List<AnalyzedModuleComponent> classes = new ArrayList<AnalyzedModuleComponent>();
-	List<AnalyzedModuleComponent> packages = new ArrayList<AnalyzedModuleComponent>();
-	List<AnalyzedModuleComponent> enums = new ArrayList<AnalyzedModuleComponent>();
-	List<AnalyzedModuleComponent> interfaces = new ArrayList<AnalyzedModuleComponent>();
-	packages=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("package");
-	classes=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("class");
-	interfaces=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("interface");
-	enums=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("enum");
-	WarningMessageContainer classesroot = new WarningMessageContainer(new CustomWarningMessage("Class("+classes.size()+")"));
-	WarningMessageContainer packagesroot = new WarningMessageContainer(new CustomWarningMessage("Package("+packages.size()+")"));
-	WarningMessageContainer interfaceroot = new WarningMessageContainer(new CustomWarningMessage("Interface("+interfaces.size()+")"));
-	WarningMessageContainer enumroot = new WarningMessageContainer(new CustomWarningMessage("Enum("+enums.size()+")"));
-	packagesroot.addChildrens(packages);	
-	classesroot.addChildrens(classes);
-	interfaceroot.addChildrens(interfaces);
-	enumroot.addChildrens(enums);
 	
-	rootOfNotmapped.addChild(packagesroot);
-	rootOfNotmapped.addChild(classesroot);
-	rootOfNotmapped.addChild(interfaceroot);
-	rootOfNotmapped.addChild(enumroot);
-	
+
+	private WarningMessageContainer getNotmapped() {
 		
+	return StateService.instance().getNotMappedUnits();
+}
+	
+	private void addNotMappedModule(WarningMessageContainer implevelContainer) {
+		SoftwareArchitecture.getInstance().updateWarnings();
+		for (WarningMessage message : WarningMessageService.getInstance().getWarningMessages()) {
+			
+			 if (message instanceof ImplementationLevelWarning) {
+				
+				implevelContainer.addChild(new WarningMessageContainer(message));
+			}
+		
+		}
 		
 	}
 	

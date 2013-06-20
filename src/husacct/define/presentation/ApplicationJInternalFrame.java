@@ -92,6 +92,8 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 		d.width = 150;
 		warningButton.setMinimumSize(new Dimension(50, 50));
 		warningButton.setMaximumSize(d);
+		Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
+		warningButton.setIcon(icon);
 		undoButton= new JButton("<");
 		redoButton= new JButton(">");
 		setButtonsVisability(undoButton,redoButton);
@@ -125,7 +127,8 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 	}
 
 	private void setButtonsVisability(JButton undo, JButton redo) {
-		boolean[] statuses= StateService.instance().getRedoAndUndoStates();
+		// StateService.instance().getRedoAndUndoStates();
+		boolean[] statuses={false,false};
 		
 		undo.setEnabled(statuses[0]);
 		redo.setEnabled(statuses[1]);
@@ -146,8 +149,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == warningButton) {
-				Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
-				warningButton.setIcon(icon);
+				
 			  warnings.refresh();
 				warnings.setVisible(true);
 			}
@@ -181,9 +183,9 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 
 	@Override
 	public void update() {
-
-     setButtonsVisability(undoButton,redoButton);
-     DefinitionController.getInstance().notifyObservers();
+//some minor testing before release
+     //setButtonsVisability(undoButton,redoButton);
+     //DefinitionController.getInstance().notifyObservers();
 
 
 }

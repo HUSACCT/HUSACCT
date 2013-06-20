@@ -45,6 +45,7 @@ public class ApplicationAnalyser {
         String[] availableLanguages = new String[]{
             new JavaAnalyser().getProgrammingLanguage(),
             new CSharpAnalyser().getProgrammingLanguage()
+            
         };
         return availableLanguages;
     }

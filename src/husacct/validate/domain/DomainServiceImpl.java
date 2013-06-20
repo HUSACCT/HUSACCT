@@ -13,7 +13,6 @@ import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.module.AbstractModule;
 import husacct.validate.domain.validation.module.ModuleFactory;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
@@ -25,24 +24,23 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class DomainServiceImpl {
-
 	private Logger logger = Logger.getLogger(DomainServiceImpl.class);
-	private RuleTypesFactory ruletypefactory;
-	private ModuleFactory modulefactory;
-	private ViolationTypeFactory violationtypefactory;
+	private RuleTypesFactory ruleTypeFactory;
+	private ModuleFactory moduleFactory = null;
+	private ViolationTypeFactory violationTypeFactory;
 	private final Messagebuilder messagebuilder;
 	private final CheckConformanceController checkConformanceController;
 	private final ConfigurationServiceImpl configuration;
 
 	public DomainServiceImpl(ConfigurationServiceImpl configuration) {
 		this.configuration = configuration;
-		this.ruletypefactory = configuration.getRuleTypesFactory();
-		this.checkConformanceController = new CheckConformanceController(configuration, ruletypefactory);
+		this.ruleTypeFactory = configuration.getRuleTypesFactory();
+		this.checkConformanceController = new CheckConformanceController(configuration, ruleTypeFactory);
 		this.messagebuilder = new Messagebuilder();
 	}
 
 	public HashMap<String, List<RuleType>> getAllRuleTypes(String programmingLanguage) {
-		return ruletypefactory.getRuleTypes(programmingLanguage);
+		return ruleTypeFactory.getRuleTypes(programmingLanguage);
 	}
 
 	/**
@@ -54,7 +52,7 @@ public class DomainServiceImpl {
 	public Map<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage) {
 		initializeViolationtypeFactory();
 
-		AbstractViolationType violationtypefactory = this.violationtypefactory.getViolationTypeFactory(programmingLanguage, configuration);
+		AbstractViolationType violationtypefactory = this.violationTypeFactory.getViolationTypeFactory(programmingLanguage, configuration);
 		if (violationtypefactory != null) {
 			return violationtypefactory.getAllViolationTypes();
 		} else {
@@ -64,8 +62,8 @@ public class DomainServiceImpl {
 	}
 
 	private void initializeViolationtypeFactory() {
-		if (violationtypefactory == null) {
-			this.violationtypefactory = new ViolationTypeFactory();
+		if (violationTypeFactory == null) {
+			this.violationTypeFactory = new ViolationTypeFactory();
 		}
 	}
 
@@ -74,12 +72,12 @@ public class DomainServiceImpl {
 	}
 
 	public CategoryDTO[] getCategories() {
-		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
+		List<RuleType> ruleTypes = ruleTypeFactory.getRuleTypes();
 		return new AssemblerController().createCategoryDTO(ruleTypes);
 	}
 
 	public RuleTypesFactory getRuleTypesFactory() {
-		return ruletypefactory;
+		return ruleTypeFactory;
 	}
 
 	public String getMessage(Message message, Violation violation) {
@@ -87,22 +85,30 @@ public class DomainServiceImpl {
 	}
 
 	public RuleTypeDTO[] getDefaultRuleTypeOfModule(String moduleType) {
-		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
-
-		modulefactory = new ModuleFactory();
-		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
-		List<RuleType> moduleRuleTypes = module.getDefaultModuleruleTypes();
-
+		checkModuleTypeFactoryInstance();
+		List<RuleType> moduleRuleTypes = moduleFactory.getDefaultRuleTypesOfModule(moduleType);
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
 	}
 
 	public RuleTypeDTO[] getAllowedRuleTypeOfModule(String moduleType) {
-		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
-
-		modulefactory = new ModuleFactory();
-		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
-		List<RuleType> moduleRuleTypes = module.getAllowedModuleruleTypes();
-
+		checkModuleTypeFactoryInstance();
+		List<RuleType> moduleRuleTypes = moduleFactory.getAllowedRuleTypesOfModule(moduleType);
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
+	}
+	
+	public void setDefaultRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value) {
+		checkModuleTypeFactoryInstance();
+		moduleFactory.setDefaultRuleTypeOfModule(moduleType, ruleTypeKey, value);
+	}
+
+	public void setAllowedRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value) {
+		checkModuleTypeFactoryInstance();
+		moduleFactory.setAllowedRuleTypeOfModule(moduleType, ruleTypeKey, value);
+	}
+	
+	public void checkModuleTypeFactoryInstance() {
+		if (this.moduleFactory == null) {
+			this.moduleFactory = new ModuleFactory(ruleTypeFactory.getRuleTypes());
+		}
 	}
 }

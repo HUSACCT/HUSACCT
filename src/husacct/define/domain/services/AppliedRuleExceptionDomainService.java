@@ -6,11 +6,8 @@ import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
-
-import com.sun.xml.internal.ws.api.server.Module;
 
 public class AppliedRuleExceptionDomainService {
 

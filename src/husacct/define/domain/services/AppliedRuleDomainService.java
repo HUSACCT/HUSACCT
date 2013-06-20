@@ -1,6 +1,7 @@
 package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.CategoryDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
@@ -152,8 +153,8 @@ public class AppliedRuleDomainService {
 		.notifyServiceListeners();
     }
 
-    public String[][] getCategories() {
-	return ruleFactory.getCategories();
+    public CategoryDTO[] getCategories() {
+    	return ruleFactory.getCategories();
     }
 
     public boolean isMandatory(String ruleTypeKey, ModuleStrategy moduleFrom) {

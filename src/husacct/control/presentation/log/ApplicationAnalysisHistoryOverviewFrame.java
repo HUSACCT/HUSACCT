@@ -67,14 +67,12 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		};
 
 		analysisTableModel.addColumn(localeService.getTranslatedString("Application"));
-		analysisTableModel.addColumn(localeService.getTranslatedString("Project"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Path"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("DateTime"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Packages"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Classes"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Interfaces"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Dependencies"));
-		analysisTableModel.addColumn(localeService.getTranslatedString("Violations"));
 		
 		analysisTable.getTableHeader().setReorderingAllowed(false);
 		analysisTable.getTableHeader().setResizingAllowed(true);
@@ -89,14 +87,12 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		    HashMap<String, String> analysisData = entry.getValue();
 		    analysisTableModel.addRow(new Object[]{
 		    		analysisData.get("application"), 
-		    		analysisData.get("project"), 
 		    		analysisData.get("path"), 
 		    		analysisTimestampFormat.format(analysisTimestampDate),
 		    		analysisData.get("packages"), 
 		    		analysisData.get("classes"), 
 		    		analysisData.get("interfaces"), 
-		    		analysisData.get("dependencies"), 
-		    		analysisData.get("violations")
+		    		analysisData.get("dependencies")
 		    });
 		}
 		
