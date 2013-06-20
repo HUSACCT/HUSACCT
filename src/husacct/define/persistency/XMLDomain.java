@@ -86,6 +86,7 @@ public class XMLDomain {
 			switch(moduleType){
 			case "ExternalLibrary"	: newModule = moduleService.createNewModule("ExternalLibrary"); break;
 			case "Component" 		: newModule =  moduleService.createNewModule("Component"); break;
+			case "Facade" 		: newModule =  moduleService.createNewModule("Facade"); break;
 			case "SubSystem"		: newModule =  moduleService.createNewModule("SubSystem"); break;
 			case "Layer"		    : newModule =  moduleService.createNewModule("Layer");                   
 			int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
