@@ -94,10 +94,6 @@ class JavaTreeConvertController {
             this.warnNotSupportedClassType(typeid, classTree);
         }
     }
-
-    private void warnNotSupportedClassType(int typeId) {
-        warnNotSupportedClassType(typeId, null);
-    }
     
     private void warnNotSupportedClassType(int typeId, CommonTree classTree){
     	String warnMessage = "Detected a non-supported type";
