@@ -3,9 +3,7 @@ package husacct.define.domain.module.modules;
 
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
-import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ public class Component extends ModuleStrategy {
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
+		
 	}
 	
 	public void copyValuestoNewCompont(ModuleStrategy newModule){ 
@@ -28,7 +27,10 @@ public class Component extends ModuleStrategy {
 		newModule.setName(this.getName());
 		newModule.setDescription(this.getDescription());
 		newModule.setParent(this.getparent());
-		this.subModules.remove(0);
+		ModuleStrategy facade = subModules.get(0);
+	
+		//can be bettter implemented :TODO
+		SoftwareArchitecture.getInstance().removeModule(facade);
 		newModule.setSubModules(this.getSubModules());
 		newModule.setRegExUnits(this.getRegExUnits());
 		newModule.setUnits(this.getUnits());		

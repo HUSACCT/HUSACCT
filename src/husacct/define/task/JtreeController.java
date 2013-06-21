@@ -201,9 +201,12 @@ public void restoreTreeItem(AnalyzedModuleComponent analyzeModuleTobeRestored) {
 }
 
 public void removeTreeItem(AnalyzedModuleComponent unitToBeinserted) {
+	if (unitToBeinserted instanceof RegexComponent) {
+		restoreRegex((RegexComponent) unitToBeinserted);
+	}else{
 	tree.removeTreeItem(unitToBeinserted);
 	tree.repaint();
-	
+	}
 }
 
 public void setTreeModel(AnalyzedModuleComponent root) {
@@ -218,12 +221,9 @@ public void setTreeModel(AnalyzedModuleComponent root) {
 }
 
 public void restoreTreeItems(ModuleStrategy module) {
-	for (SoftwareUnitDefinition def : module.getUnits()) {
-		StateService.instance().removeSoftwareUnit(module, def);
-		
-	}
-	for (ModuleStrategy mod : module.getSubModules()) {
-		restoreTreeItems(mod);
+	for (SoftwareUnitDefinition unit : module.getUnits()) {
+		AnalyzedModuleComponent anal = StateService.instance().getAnalyzedSoftWareUnit(unit);
+		restoreTreeItem(anal);
 	}
 	
 	
@@ -237,7 +237,7 @@ public void restoreTreeItemm(List<String> softwareUnitNames, List<String> types)
 		if (tobeRestored instanceof RegexComponent) {
 			restoreRegex((RegexComponent)tobeRestored);
 		}else{
-		System.out.println("normal restore");
+		
 			tree.restoreTreeItem(tobeRestored);
 		tree.repaint();
 		}
@@ -247,9 +247,8 @@ public void restoreTreeItemm(List<String> softwareUnitNames, List<String> types)
 
 private void restoreRegex(RegexComponent tobeRestored) {
 for (AbstractCombinedComponent unit : tobeRestored.getChildren()) {
-	AnalyzedModuleComponent referenceditem = StateService.instance().getAnalyzedSoftWareUnit(unit.getUniqueName());
-	System.out.println("normal paloo");
-	tree.restoreTreeItem(referenceditem);
+	AnalyzedModuleComponent referenceditem = StateService.instance().getAnalyzedSoftWareUnit(unit.getUniqueName().toLowerCase());
+	tree.removeTreeItem(referenceditem);
 	tree.repaint();
 }
 	

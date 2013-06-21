@@ -442,12 +442,15 @@ import org.apache.log4j.Logger;
 		public void addModule(String name, String description, String type) {
 			ModuleStrategy module= moduleService.createNewModule(type);
 			module.set(name, description);
+			if (module instanceof Component) {
+			
+				ModuleStrategy facade=	moduleService.createNewModule("facade");
+				facade.set("Facade<"+name+">", "this is the Facade of your Component");
+				module.addSubModule(facade);
+			}
 			
 			this.passModuleToService(getSelectedModuleId(), module);
 			
-			//Dirty way of ensuring that the facade will be put as submodule of the component.
-			if(module instanceof Component) {
-				setSelectedModuleId(module.getId());
-			}
+			
 		}
 	}

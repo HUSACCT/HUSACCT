@@ -4,20 +4,16 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.domain.module.ModuleFactory;
-import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.ValueInputController;
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Locale;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -208,10 +204,8 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			
 			boolean hasBeenAdded = DomainGateway.getInstance().addModule(moduleName, moduleDescription, moduleType);
 			if (hasBeenAdded){
-				//Dirty fix to add facade to the component, logic should be moved elsewhere
-				if(moduleType.equals("Component")) {
-				    DomainGateway.getInstance().addModule("Facade<"+moduleName+">", "this is the Facade of your Component", "Facade");
-				}
+			
+				
 				this.modulePanel.updateModuleTree();
 				this.dispose();
 			}
@@ -237,5 +231,6 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
 	}
 	
-
+	
+	
 }

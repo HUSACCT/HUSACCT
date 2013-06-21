@@ -3,7 +3,6 @@ package husacct.define.presentation.registry;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.UndoRedoService;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.warningmessages.CustomWarningMessage;
@@ -11,7 +10,6 @@ import husacct.define.domain.warningmessages.NotmappedWarningMessage;
 import husacct.define.domain.warningmessages.WarningMessageContainer;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
-import husacct.define.task.components.RegexComponent;
 
 import java.util.LinkedHashMap;
 import java.util.List;
