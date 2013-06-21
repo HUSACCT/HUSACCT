@@ -73,7 +73,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "AccessClassVariable";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -87,7 +87,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "AccessVariableClassConstant";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -102,7 +102,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "AccessVariableClassInterface";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -116,7 +116,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "AccessEnumeration";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -130,7 +130,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "AccessVariableInstanceRead";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -144,7 +144,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "AccessVariableInstanceConstant";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -158,7 +158,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "AccessObjectReferenceParameter";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -172,7 +172,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "AccessObjectReferenceWithinStatement";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -186,7 +186,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "AnnotationDependency";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -200,7 +200,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallClassMethod";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -214,7 +214,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallConstructor";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -228,7 +228,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallConstructorClassLibrary";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -242,7 +242,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallInstance";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -256,7 +256,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallMethodInstanceInnerClass";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -270,7 +270,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallInstanceInterface";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -284,7 +284,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallInstanceClassLibrary";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -298,7 +298,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallSuperInstanceClass";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -312,7 +312,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "CallSuperInstanceSuperClass";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -326,7 +326,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationExceptionThrows";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -340,7 +340,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationParameter";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -354,7 +354,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationReturnType";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -368,7 +368,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationCastType";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -382,7 +382,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationCastOfArgumentType";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -396,7 +396,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationVariableInstance";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -410,7 +410,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationVariableLocal";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -424,7 +424,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "DeclarationStaticVariable";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -438,7 +438,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "ImportDependencyUnused";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -451,7 +451,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "InheritanceExtends";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -464,7 +464,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "InheritanceExtendsAbstractClass";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -477,7 +477,7 @@ public class DependencyDetectionAccuracyTest {
 			boolean found = false;
 			String toTestFrom = "InheritanceImplementsInterface";
 			for(DependencyDTO dependency : allDependencies){
-				String from = getClass(dependency.from);
+				String from = dependency.type.toString();
 				if(toTestFrom.equals(from)){
 					found = true;
 					break;
@@ -493,7 +493,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "InheritanceExtendsExtendsIndirect";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -507,7 +507,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "InheritanceExtendsImplementsIndirect";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -521,7 +521,7 @@ public class DependencyDetectionAccuracyTest {
 		boolean found = false;
 		String toTestFrom = "InheritanceImplementsExtendsIndirect";
 		for(DependencyDTO dependency : allDependencies){
-			String from = getClass(dependency.from);
+			String from = dependency.type.toString();
 			if(toTestFrom.equals(from)){
 				found = true;
 				break;
@@ -552,11 +552,7 @@ public class DependencyDetectionAccuracyTest {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
 		for(DependencyDTO d : allDependencies){
-			logger.info(d.type.toString());
+			logger.info(d.from + " " + d.type.toString());
 		}
-	}
-	
-	private static String getClass(String fromPath){
-		return (String) fromPath.subSequence(fromPath.lastIndexOf('.')+1, fromPath.length());
 	}
 }
