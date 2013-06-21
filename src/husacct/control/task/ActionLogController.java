@@ -1,5 +1,6 @@
 package husacct.control.task;
 
+import husacct.control.presentation.MainGui;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.configuration.IConfigListener;
 
@@ -40,7 +41,10 @@ public class ActionLogController implements IConfigListener {
 		loggedMethodInfo.put("message", message);
 		loggedActions.add(loggedMethodInfo);
 		
-		mainController.getMainGui().getActionLogPanel().refreshActionLogPanel();
+		MainGui gui = mainController.getMainGui();
+		if (gui != null){
+			gui.getActionLogPanel().refreshActionLogPanel();
+		}
 	}
 	
 	private boolean maxNumberOfActionsAreLogged(){

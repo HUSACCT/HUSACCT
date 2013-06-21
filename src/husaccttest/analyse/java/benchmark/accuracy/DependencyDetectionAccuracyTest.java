@@ -35,7 +35,6 @@ public class DependencyDetectionAccuracyTest {
 			ArrayList<ProjectDTO> projects = createProjectDTOs();
 
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-			ctrlS.getMainController().startGui();
 			ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
 			ServiceProvider.getInstance().getDefineService().createApplication(language+" test", projects, "1.0");
 			ctrlS.getMainController().getWorkspaceController().getCurrentWorkspace().setApplicationData(ServiceProvider.getInstance().getDefineService().getApplicationDetails());
