@@ -528,25 +528,26 @@ public class AnalyseServiceStub implements IAnalyseService {
 
 	@Override
 	public int getAmountOfDependencies() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public int getAmountOfInterfaces() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public int getAmountOfPackages() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public int getAmountOfClasses() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
+	}
+
+	@Override
+	public DependencyDTO[] getAllUnfilteredDependencies() {
+		return this.getDependencies("", "");
 	}
 }

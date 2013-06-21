@@ -22,6 +22,8 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     //The following function has been inserted due to performance issues. The function enables
     //function-users to use cache-mechanisms and special search-algorithms
     public DependencyDTO[] getAllDependencies();
+    
+    public DependencyDTO[] getAllUnfilteredDependencies();
 
     public DependencyDTO[] getDependencies(String from, String to);
 

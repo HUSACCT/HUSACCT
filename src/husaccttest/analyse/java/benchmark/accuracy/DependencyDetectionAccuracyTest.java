@@ -34,8 +34,10 @@ public class DependencyDetectionAccuracyTest {
 			ArrayList<ProjectDTO> projects = createProjectDTOs();
 			
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+			ctrlS.getMainController().startGui();
 			ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
 			ServiceProvider.getInstance().getDefineService().createApplication(language+" test", projects, "1.0");
+			ctrlS.getMainController().getWorkspaceController().getCurrentWorkspace().setApplicationData(ServiceProvider.getInstance().getDefineService().getApplicationDetails());
 			ctrlS.getMainController().getApplicationController().analyseApplication();
 			service = ServiceProvider.getInstance().getAnalyseService();
 			
@@ -48,10 +50,9 @@ public class DependencyDetectionAccuracyTest {
 				} catch (InterruptedException e) {}
 				isAnalysed = service.isAnalysed();
 			}
-			
-			allDependencies = service.getAllDependencies();
+			allDependencies = service.getAllUnfilteredDependencies();
 			//for testing only
-			//printDependencies();
+			printDependencies();
 		} catch (Exception e){
 			String errorMessage =  "We're sorry. You need to have a Java project 'Accuracy'. Or you have the wrong version of the Accuracy Test.";
 			logger.warn(errorMessage);
@@ -535,8 +536,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(path);
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
-		ProjectDTO project = new ProjectDTO("TestAccuracy", paths, language, "1", "for testing purposes", analysedModules);
+		ProjectDTO project = new ProjectDTO("TestAccuracy", paths, language, "1", "for testing purposes", new ArrayList<AnalysedModuleDTO>());
 		projects.add(project);
 		return projects;
 	}
@@ -552,7 +552,7 @@ public class DependencyDetectionAccuracyTest {
 		logger.info("application is analysed");
 		logger.info("found dependencies = "+allDependencies.length);
 		for(DependencyDTO d : allDependencies){
-			logger.info(d.toString());
+			logger.info(d.type.toString());
 		}
 	}
 	
