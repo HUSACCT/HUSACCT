@@ -25,14 +25,14 @@ public class DependencyDetectionAccuracyTest {
 	private static DependencyDTO[] allDependencies = null;
 	private static String path = TestProjectFinder.lookupProject("java", "accuracy");
 	private static String language = "Java";
-	
+
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			
+
 			ArrayList<ProjectDTO> projects = createProjectDTOs();
-			
+
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			ctrlS.getMainController().startGui();
 			ctrlS.getMainController().getWorkspaceController().createWorkspace("JavaAnalyseTestWorkspace");
@@ -40,9 +40,9 @@ public class DependencyDetectionAccuracyTest {
 			ctrlS.getMainController().getWorkspaceController().getCurrentWorkspace().setApplicationData(ServiceProvider.getInstance().getDefineService().getApplicationDetails());
 			ctrlS.getMainController().getApplicationController().analyseApplication();
 			service = ServiceProvider.getInstance().getAnalyseService();
-			
+
 			logger.debug("PROJECT LOADED");
-		
+
 			//analyse is in a different Thread, and needs some time
 			while(!isAnalysed){
 				try {
@@ -59,7 +59,7 @@ public class DependencyDetectionAccuracyTest {
 			System.exit(0);
 		}
 	}
-	
+
 	@AfterClass
 	public static void tearDown(){
 		allDependencies = null;
@@ -67,468 +67,1544 @@ public class DependencyDetectionAccuracyTest {
 	//TESTS
 	//
 	//DIRECT
-	
+
 	@Test
 	public void AccessClassVariable(){
-		boolean found = false;
-		String toTestFrom = "AccessClassVariable";
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessClassVariable";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("AccessPropertyOrField");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
 
 	@Test
 	public void AccessClassVariableConstant(){
-		boolean found = false;
-		String toTestFrom = "AccessVariableClassConstant";
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessClassVariableConstant";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("AccessPropertyOrField");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
 
-	
 	@Test
 	public void AccessClassVariableInterface(){
-		boolean found = false;
-		String toTestFrom = "AccessVariableClassInterface";
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessClassVariableInterface";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("AccessPropertyOrField");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
-	
+
 	@Test
 	public void AccessEnumeration(){
-		boolean found = false;
-		String toTestFrom = "AccessEnumeration";
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessEnumeration";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("AccessPropertyOrField");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
-	
-		@Test
-		public void AccessInstanceVariableRead(){
-			boolean found = false;
-			String toTestFrom = "AccessVariableInstanceRead";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
 
-		@Test
-		public void AccessInstanceVariableConstant(){
-			boolean found = false;
-			String toTestFrom = "AccessVariableInstanceConstant";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void AccessObjectReferenceAsParameter(){
-			boolean found = false;
-			String toTestFrom = "AccessObjectReferenceParameter";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-
-		@Test
-		public void AccessObjectReferenceWithinIfStatement(){
-			boolean found = false;
-			String toTestFrom = "AccessObjectReferenceWithinStatement";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void AnnotationDependency(){
-			boolean found = false;
-			String toTestFrom = "AnnotationDependency";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallClassMethod(){
-			boolean found = false;
-			String toTestFrom = "CallClassMethod";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallConstructor(){
-			boolean found = false;
-			String toTestFrom = "CallConstructor";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallConstructorLibraryClass(){
-			boolean found = false;
-			String toTestFrom = "CallConstructorClassLibrary";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallInstance(){
-			boolean found = false;
-			String toTestFrom = "CallInstance";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallMethodInstanceInnerClass(){
-			boolean found = false;
-			String toTestFrom = "CallMethodInstanceInnerClass";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallInstanceInterface(){
-			boolean found = false;
-			String toTestFrom = "CallInstanceInterface";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallInstanceLibraryClass(){
-			boolean found = false;
-			String toTestFrom = "CallInstanceClassLibrary";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallInstanceSuperClass(){
-			boolean found = false;
-			String toTestFrom = "CallSuperInstanceClass";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void CallInstanceSuperSuperClass(){
-			boolean found = false;
-			String toTestFrom = "CallSuperInstanceSuperClass";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationExceptionThrows(){
-			boolean found = false;
-			String toTestFrom = "DeclarationExceptionThrows";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationParameter(){
-			boolean found = false;
-			String toTestFrom = "DeclarationParameter";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationReturnType(){
-			boolean found = false;
-			String toTestFrom = "DeclarationReturnType";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationTypeCast(){
-			boolean found = false;
-			String toTestFrom = "DeclarationCastType";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationTypeCastOfArgument(){
-			boolean found = false;
-			String toTestFrom = "DeclarationCastOfArgumentType";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationVariableInstance(){
-			boolean found = false;
-			String toTestFrom = "DeclarationVariableInstance";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationVariableLocal(){
-			boolean found = false;
-			String toTestFrom = "DeclarationVariableLocal";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void DeclarationVariableStatic(){
-			boolean found = false;
-			String toTestFrom = "DeclarationStaticVariable";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		
-		@Test
-		public void ImportDependencyUnused(){
-			boolean found = false;
-			String toTestFrom = "ImportDependencyUnused";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		@Test
-		public void InheritanceExtends(){
-			boolean found = false;
-			String toTestFrom = "InheritanceExtends";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		@Test
-		public void InheritanceExtendsAbstractClass(){
-			boolean found = false;
-			String toTestFrom = "InheritanceExtendsAbstractClass";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-		@Test
-		public void InheritanceImplementsInterface(){
-			boolean found = false;
-			String toTestFrom = "InheritanceImplementsInterface";
-			for(DependencyDTO dependency : allDependencies){
-				String from = dependency.type.toString();
-				if(toTestFrom.equals(from)){
-					found = true;
-					break;
-				}
-			}
-			Assert.assertTrue(found);
-		}
-	//TESTS
-	
-	//INDIRECT
 	@Test
-	public void javaIInheritenceExtendsTest(){
-		boolean found = false;
-		String toTestFrom = "InheritanceExtendsExtendsIndirect";
+	public void AccessInstanceVariable(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessInstanceVariable";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
 
+	@Test
+	public void AccessInstanceVariableConstant(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessVariableInstanceConstant";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void AccessObjectReferenceAsParameter(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessObjectReferenceParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void AccessObjectReferenceWithinIfStatement(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessObjectReferenceWithinStatement";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void AnnotationDependency(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AnnotationDependency";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("Annotation");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallClassMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallClassMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("InvocMethod");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallConstructor(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallConstructor";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("InvocConstructor");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallConstructorLibraryClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallConstructorLibraryClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("InvocConstructor");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallInstance(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstance";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallInstanceInnerClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceInnerClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallInstanceInterface(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceInterface";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallInstanceLibraryClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceLibraryClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallInstanceSuperClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceSuperClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void CallInstanceSuperSuperClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceSuperSuperClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationExceptionThrows(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationExceptionThrows";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("Exception");
+		typesToFind.add("Exception");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationParameter(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("DeclarationParameter");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationReturnType(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationReturnType";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("DeclarationReturnType");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationTypeCast(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationTypeCast";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationTypeCastOfArgument(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationTypeCastOfArgument";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationVariableInstance(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationVariableInstance";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("DeclarationInstanceVariable");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationVariableStatic(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationVariableStatic";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("DeclarationInstanceVariable");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void DeclarationVariableWithinMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "DeclarationVariableWithinMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("DeclarationInstanceVariable");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void ImportDependencyUnused(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "ImportDependencyUnused";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void InheritanceExtends(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "InheritanceExtends";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsConcrete");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void InheritanceExtendsAbstractClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "InheritanceExtendsAbstractClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("ExtendsAbstract");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+
+	@Test
+	public void InheritanceImplementsInterface(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "InheritanceImplementsInterface";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		typesToFind.add("Implements");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	//TESTS
+	//INDIRECT
+	
+	@Test
+	public void AccessInstanceVariableIndirect_MethodVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessInstanceVariableIndirect_MethodVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessInstanceVariableIndirect_VarVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessInstanceVariableIndirect_VarVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessInstanceVariableIndirect_VarVarToString(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessInstanceVariableIndirect_VarVarToString";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessInstanceVariableIndirectIndirect_MethVarVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessInstanceVariableIndirectIndirect_MethVarVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessInstanceVariableIndirectIndirect_VarVarVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessInstanceVariableIndirectIndirect_VarVarVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessObjectReferenceIndirect_AsParameter_POI(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessObjectReferenceIndirect_AsParameter_POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessObjectReferenceIndirect_AsParameter(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessObjectReferenceIndirect_AsParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessObjectReferenceIndirect_WithinIfStament_POI(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessObjectReferenceIndirect_WithinIfStament_POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessObjectReferenceIndirect_WithinIfStament(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessObjectReferenceIndirect_WithinIfStament";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessStaticVariableIndirect_MethodVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessStaticVariableIndirect_MethodVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessStaticVariableIndirect_VarVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessStaticVariableIndirect_VarVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessStaticVariableIndirect_VarVarToString(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessStaticVariableIndirect_VarVarToString";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessStaticVariableIndirectIndirect_MethodVarVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessStaticVariableIndirect_VarVarToString";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void AccessStaticVariableIndirectIndirect_VarVarVar(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "AccessStaticVariableIndirectIndirect_VarVarVar";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_MethodMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_MethodMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_MethodMethodToString(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_MethodMethodToString";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_MethodMethod_ViaConstructor(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_StaticMethodInstanceMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_StaticMethodInstanceMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_SuperClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_SuperClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_SuperSuperClass(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_SuperSuperClass";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirect_VarMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirect_VarMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirectIndirect_MethodVarMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirectIndirect_MethodVarMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallInstanceMethodIndirectIndirect_VarVarMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallInstanceMethodIndirectIndirect_VarVarMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallStaticMethodIndirect_MethodStaticMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallStaticMethodIndirect_MethodStaticMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void CallStaticMethodIndirect_VarStaticMethod(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "CallStaticMethodIndirect_VarStaticMethod";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("undefined");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
+	@Test
+	public void InheritanceExtendsExtendsIndirect(){
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "InheritanceExtendsExtendsIndirect";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("ExtendsConcreteExtendsAbstract");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
+		for(DependencyDTO dependency : allDependencies){
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
+				break;
+			}
+		}
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
+	}
+	
 	@Test
 	public void InheritanceExtendsImplementsIndirect(){
-		boolean found = false;
-		String toTestFrom = "InheritanceExtendsImplementsIndirect";
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "InheritanceExtendsImplementsIndirect";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("ExtendsConcreteImplements");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
-
+	
 	@Test
 	public void InheritanceImplementsExtendsIndirect(){
-		boolean found = false;
-		String toTestFrom = "InheritanceImplementsExtendsIndirect";
+		boolean foundFrom = false;
+		boolean foundTypes = false;
+		String fromToTest = "InheritanceImplementsExtendsIndirect";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("ImplementsExtendsInterface");
+		int foundTypeCount = 0;
+		int amountOfTypes = typesToFind.size();
+
 		for(DependencyDTO dependency : allDependencies){
-			String from = dependency.type.toString();
-			if(toTestFrom.equals(from)){
-				found = true;
+			String from = getClass(dependency.from);
+			String type = dependency.type.toString();
+			if(fromToTest.equals(from) && typesToFind.contains(type)){
+				foundFrom = true;
+				foundTypeCount++;
+			}
+			if(foundTypeCount == amountOfTypes){
+				foundTypes = true;
 				break;
 			}
 		}
-		Assert.assertTrue(found);
+		Assert.assertTrue(foundFrom);
+		Assert.assertTrue(foundTypes);
 	}
+	
 	//
 	//private helpers
 	//
@@ -540,19 +1616,26 @@ public class DependencyDetectionAccuracyTest {
 		projects.add(project);
 		return projects;
 	}
-	
+
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static void printDependencies() {
 		logger.info("application is analysed");
-		logger.info("found dependencies = "+allDependencies.length);
+		logger.info("found dependencies = "+ allDependencies.length);
 		for(DependencyDTO d : allDependencies){
-			logger.info(d.from + " " + d.type.toString());
+			if(d.isIndirect) {
+				logger.info("From: " + getClass(d.from) + " To: " + getClass(d.to) + "Type: " + d.type.toString());
+			}
+			
 		}
+	}
+
+	private static String getClass(String fromPath){
+		return (String) fromPath.subSequence(fromPath.lastIndexOf('.')+1, fromPath.length());
 	}
 }
