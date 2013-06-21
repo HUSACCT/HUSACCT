@@ -68,8 +68,6 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
 			public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() >= 2){
 					int row = dependencyTable.getSelectedRow();
-					
-					System.out.println(dependencyTable.getModel().getValueAt(row, 0) + " at row " + dependencyTable.getModel().getValueAt(row, 3));
 					String cls = dependencyTable.getModel().getValueAt(row, 0).toString();
 					int lineNumber = (int) dependencyTable.getModel().getValueAt(row, 3);
 					dataControl.getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.RED));
