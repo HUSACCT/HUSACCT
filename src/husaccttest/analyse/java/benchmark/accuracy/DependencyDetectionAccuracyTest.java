@@ -25,6 +25,7 @@ public class DependencyDetectionAccuracyTest {
 	private static DependencyDTO[] allDependencies = null;
 	private static String path = TestProjectFinder.lookupProject("java", "accuracy");
 	private static String language = "Java";
+	private static boolean debug = false;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -51,7 +52,7 @@ public class DependencyDetectionAccuracyTest {
 				isAnalysed = service.isAnalysed();
 			}
 			allDependencies = service.getAllUnfilteredDependencies();
-			//for testing only
+
 			printDependencies();
 		} catch (Exception e){
 			String errorMessage =  "We're sorry. You need to have a Java project 'Accuracy'. Or you have the wrong version of the Accuracy Test.";
@@ -82,7 +83,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("AccessPropertyOrField");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -92,7 +93,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("AccessPropertyOrField");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -102,7 +103,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("AccessPropertyOrField");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -111,7 +112,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessInstanceVariable";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -120,7 +121,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessVariableInstanceConstant";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -129,7 +130,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessObjectReferenceParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -138,7 +139,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessObjectReferenceWithinStatement";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -148,7 +149,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("Annotation");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -158,7 +159,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("InvocMethod");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -168,7 +169,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("InvocConstructor");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -178,7 +179,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("InvocConstructor");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -188,7 +189,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -198,7 +199,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -208,7 +209,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -218,7 +219,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -228,7 +229,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -238,7 +239,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -249,7 +250,7 @@ public class DependencyDetectionAccuracyTest {
 		typesToFind.add("Import");
 		typesToFind.add("Exception");
 		typesToFind.add("Exception");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -259,7 +260,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("DeclarationParameter");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -269,7 +270,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("DeclarationReturnType");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -279,7 +280,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -289,7 +290,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -299,7 +300,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("DeclarationInstanceVariable");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -309,7 +310,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("DeclarationInstanceVariable");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -319,7 +320,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("DeclarationInstanceVariable");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -338,7 +339,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsConcrete");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));	}
 
 	@Test
@@ -347,7 +348,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("ExtendsAbstract");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -357,7 +358,7 @@ public class DependencyDetectionAccuracyTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
 		typesToFind.add("Implements");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -369,7 +370,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessInstanceVariableIndirect_MethodVar";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -378,7 +379,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessInstanceVariableIndirect_VarVar";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -387,7 +388,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessInstanceVariableIndirect_VarVarToString";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -396,7 +397,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessInstanceVariableIndirectIndirect_MethVarVar";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -405,7 +406,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessInstanceVariableIndirectIndirect_VarVarVar";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -414,7 +415,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessObjectReferenceIndirect_AsParameter_POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -423,7 +424,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessObjectReferenceIndirect_AsParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -432,7 +433,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessObjectReferenceIndirect_WithinIfStament_POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -441,7 +442,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessObjectReferenceIndirect_WithinIfStament";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -459,7 +460,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessStaticVariableIndirect_VarVar";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -468,7 +469,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessStaticVariableIndirect_VarVarToString";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -477,7 +478,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessStaticVariableIndirect_VarVarToString";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -495,7 +496,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_MethodMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -504,7 +505,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_MethodMethodToString";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -513,7 +514,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -522,7 +523,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_StaticMethodInstanceMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -531,7 +532,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_SuperClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -540,7 +541,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_SuperSuperClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -549,7 +550,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirect_VarMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -558,7 +559,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirectIndirect_MethodVarMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -567,7 +568,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceMethodIndirectIndirect_VarVarMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -576,7 +577,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallStaticMethodIndirect_MethodStaticMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -585,7 +586,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallStaticMethodIndirect_VarStaticMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("undefined");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -594,7 +595,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "InheritanceExtendsExtendsIndirect";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("ExtendsConcreteExtendsAbstract");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -603,7 +604,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "InheritanceExtendsImplementsIndirect";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("ExtendsConcreteImplements");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -612,7 +613,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "InheritanceImplementsExtendsIndirect";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("ImplementsExtendsInterface");
-		
+
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
 
@@ -634,13 +635,15 @@ public class DependencyDetectionAccuracyTest {
 		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
 
-	@SuppressWarnings("unused")
 	private static void printDependencies() {
-		logger.info("application is analysed");
-		logger.info("found dependencies = "+ allDependencies.length);
-		for(DependencyDTO d : allDependencies){
-			logger.info("From: " + getClass(d.from) + " To: " + getClass(d.to) + "Type: " + d.type.toString());
+		if(debug) {
+			logger.info("application is analysed");
+			logger.info("found dependencies = "+ allDependencies.length);
+			for(DependencyDTO d : allDependencies){
+				logger.info("From: " + getClass(d.from) + " To: " + getClass(d.to) + "Type: " + d.type.toString());
+			}	
 		}
+
 	}
 
 	private static String getClass(String fromPath){
