@@ -55,7 +55,11 @@ public class ModuleDomainService {
 	
 	public ModuleStrategy createNewModule(String type)
 	{
-		return factory.createModule(type);
+	ModuleStrategy result=	factory.createModule(type);
+	
+
+		
+		return result;
 		
 	}
 

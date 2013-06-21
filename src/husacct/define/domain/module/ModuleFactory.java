@@ -1,5 +1,6 @@
 package husacct.define.domain.module;
 
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.modules.Blank;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.ExternalLibrary;
@@ -74,6 +75,7 @@ public class ModuleFactory {
 			ModuleStrategy facade=	this.createModule("Facade");
 			facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
 			newModule.addSubModule(0, facade);
+			
 		}	
 		return newModule;		
 	}

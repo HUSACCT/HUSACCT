@@ -45,6 +45,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -398,5 +400,7 @@ public class ModuleJPanel extends JPanel implements ActionListener,
 		}
 		checkLayerComponentIsSelected();
 	}
+	
+
 
 }

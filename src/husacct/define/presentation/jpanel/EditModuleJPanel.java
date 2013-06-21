@@ -12,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -27,12 +29,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 		IServiceListener {
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private int currentSelection;
+	private String _type;
 	private JLabel descriptionLabel;
 	private JScrollPane descriptionScrollPane;
 	private JTextArea descriptionTextArea;
@@ -43,15 +48,18 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JComboBox selectedCombobox = (JComboBox) e.getSource();
-			if (currentSelection != selectedCombobox.getSelectedIndex()) {
+			
+			String type_ = (String) moduleTypeComboBox.getSelectedItem();
+			if (!_type.equals(type_) &&!type_.toLowerCase().equals("facade")) {
 				String moduleName = nameTextfield.getText();
 				String moduleDescription = descriptionTextArea.getText();
-				String type = (String) selectedCombobox
-						.getItemAt(selectedCombobox.getSelectedIndex());
-
-				DefinitionController.getInstance().updateModule(moduleName,
-						moduleDescription, type);
+				String type = (String) moduleTypeComboBox
+						.getItemAt(moduleTypeComboBox.getSelectedIndex());
+          
+				
+				DomainGateway.getInstance().updateModule(moduleName, moduleDescription, type);
+				//DefinitionController.getInstance().updateModule(moduleName,
+			//			moduleDescription, type);
 			}
 
 		}
@@ -138,9 +146,11 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
 				moduleTypes);
 		moduleTypeComboBox.setModel(defaultModel);
+		_type= type;
 		for (int i = 0; i < moduleTypes.length; i++) {
 			if (type.equalsIgnoreCase(moduleTypes[i])) {
 				currentSelection = i;
+				
 				return i;
 			}
 		}
@@ -233,4 +243,6 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 			DomainGateway.getInstance().updateFacade(moduleName);
 		}
 	}
+	
+	
 }
