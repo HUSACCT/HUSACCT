@@ -238,7 +238,7 @@ public void restoreTreeItemm(List<String> softwareUnitNames, List<String> types)
 			restoreRegex((RegexComponent)tobeRestored);
 		}else{
 		
-			tree.restoreTreeItem(tobeRestored);
+		tree.restoreTreeItem(tobeRestored);
 		tree.repaint();
 		}
 		}

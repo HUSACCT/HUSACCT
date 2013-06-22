@@ -29,8 +29,18 @@ public class AnalyzedUnitComparator {
 		int rightsize = right.getChildren().size();
 		Collections.sort(left.getChildren());
 		Collections.sort(right.getChildren());
+		
+	
+		//for (AbstractCombinedComponent a : right.getChildren()) {
+		//	System.out.println(a.getUniqueName()+" >>>>>>>>>>>>>>>>>>>right");
+		//}
 		if (leftsize == rightsize) {
-
+for (AbstractCombinedComponent ab : left.getChildren()) {
+			System.out.println(ab.getUniqueName()+" <<<<<<<<<<<<left");
+		}
+			
+			
+			
 			isequal(left, right, toBeDeleted, toBeAaded);
 		} else if (leftsize > rightsize) {
 			isLessEqual(left, right, toBeDeleted, toBeAaded);
@@ -191,8 +201,8 @@ public class AnalyzedUnitComparator {
 		for (ProjectDTO project : application.projects) {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
 					project.name, project.name, "root", "public");
-			for (AnalysedModuleDTO module : project.analysedModules) {
-
+			for (AnalysedModuleDTO module : ServiceProvider.getInstance().getAnalyseService().getRootModules()) {
+            
 				this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
@@ -263,11 +273,19 @@ public class AnalyzedUnitComparator {
 			return root;
 
 		} else {
-			AnalyzedModuleComponent left = JtreeController.instance()
-					.getRootOfModel();
+		
+			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
+			for (AbstractCombinedComponent leftt : left.getChildren()) {
+				System.out.println("<<<<<<< >>>>>>>> "+leftt.getUniqueName());
+			}
+			
 			AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
+			for (AbstractCombinedComponent rightt : right.getChildren()) {
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+rightt.getUniqueName());
+			}
+			
 			calucalteChanges(left, right);
-			WarningMessageService.getInstance().registerNotMappedUnits(left);
+			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();
 			return left;
 		}
