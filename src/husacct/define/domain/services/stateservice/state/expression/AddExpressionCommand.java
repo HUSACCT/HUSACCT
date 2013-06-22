@@ -27,7 +27,7 @@ public class AddExpressionCommand implements Istate {
 	@Override
 	public void redo() {
 		UndoRedoService.getInstance().addExpression(moduleId, data);
-		
+		UndoRedoService.getInstance().removeExpression(moduleId, data);
 	}
 
 }

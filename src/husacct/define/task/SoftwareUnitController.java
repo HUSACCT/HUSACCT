@@ -119,4 +119,11 @@ public class SoftwareUnitController extends PopUpController {
 		}
 
 	}
+	public void changeSoftwareUnit(long toModuleId, ArrayList<String> names) {
+		long from = DefinitionController.getInstance().getSelectedModuleId();
+		long to = toModuleId;
+		
+		softwareUnitDefinitionDomainService.changeSoftwareUnit(from,to,names);
+		
+	}
 }

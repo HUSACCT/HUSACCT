@@ -168,12 +168,14 @@ public class ModuleDomainService {
 	}
 
 	public void moveLayerDown(long layerId) {
+		StateService.instance().layerDown(layerId);
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 	}
 
 	public void moveLayerUp(long layerId) {
+		StateService.instance().layerUp(layerId);
 		SoftwareArchitecture.getInstance().moveLayerUp(layerId);
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();

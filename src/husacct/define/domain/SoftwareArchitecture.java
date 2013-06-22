@@ -805,4 +805,20 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		
 	}
 
+	public void changeSoftwareUnit(long from, long to, ArrayList<String> names) {
+		ModuleStrategy fromModule= getModuleById(from);
+		ModuleStrategy toModule = getModuleById(to);
+	ArrayList<SoftwareUnitDefinition> units=	fromModule.getAndRemoveSoftwareUnits(names);
+	
+	toModule.addSUDefinition(units);
+		
+	}
+
+	@Override
+	public void switchSoftwareUnitLocation(long fromModule, long toModule,
+			List<String> uniqNames) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

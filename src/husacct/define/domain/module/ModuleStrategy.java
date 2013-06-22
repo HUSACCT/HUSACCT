@@ -9,6 +9,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
@@ -335,6 +336,27 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			removeSUDefintion(softwareUnitDefinition);
 		}
 		
+	}
+
+
+	public ArrayList<SoftwareUnitDefinition> getAndRemoveSoftwareUnits(
+			ArrayList<String> names) {
+		ArrayList<SoftwareUnitDefinition> units = new ArrayList<SoftwareUnitDefinition>();
+		Iterator<SoftwareUnitDefinition> loop = getUnits().iterator();
+		while(loop.hasNext())
+		{
+			for (String uniqName : names) {
+				SoftwareUnitDefinition buffer = loop.next();
+				if (uniqName.toLowerCase().equals(buffer.getName().toLowerCase())){
+					units.add(buffer);
+					loop.remove();
+				}
+			}
+		}
+		
+	
+	
+		return units;
 	}
 
 
