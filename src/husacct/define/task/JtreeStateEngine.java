@@ -34,6 +34,7 @@ public abstract class JtreeStateEngine {
 	private StateDefineController stateController = new StateDefineController();
 	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
+	
 
 	public JtreeStateEngine() {
 		logger = Logger.getLogger(JtreeStateEngine.class);
@@ -209,6 +210,22 @@ return	allUnitsRegistry.getNotMappedUnits();
 
 	public void removeRules(List<Long> selectedRules) {
 	
+		
+	}
+
+	public void registerImportedUnit(SoftwareUnitDefinition unit) {
+		allUnitsRegistry.registerImportedUnit(unit);
+		
+	}
+
+	public void registerImportedData() {
+       for (String unigNames : allUnitsRegistry.getimportedUnits()) {
+		AnalyzedModuleComponent result = allUnitsRegistry.getAnalyzedUnit(unigNames.toLowerCase());
+		if (result!=null) {
+			result.freeze();
+		}
+		
+	}
 		
 	}
 
