@@ -268,6 +268,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		ModuleStrategy currentModule = null;
 
 		for (ModuleStrategy moduleResult : modules) {
+
 			for (SoftwareUnitDefinition softwareUnitResult : moduleResult
 					.getUnits()) {
 				if (softwareUnitResult.getName().toLowerCase()

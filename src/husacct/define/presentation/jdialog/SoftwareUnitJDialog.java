@@ -7,6 +7,8 @@ import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitDropListerner;
 import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.presentation.moduletree.CombinedModuleTree;
+import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.presentation.utils.ExpressionEngine;
 import husacct.define.task.DefinitionController;
@@ -26,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -39,6 +43,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -47,7 +52,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
+public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener,Observer {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	
@@ -63,7 +68,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private JTextField regExTextField;
 	
 	private JLabel dynamicRegExLabel;
-	
+	private JScrollPane softwareUnitScrollPane;
 	private JCheckBox packageCheckBox;
 	private JCheckBox classCheckBox;
 	
@@ -87,7 +92,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
 			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
-			
+			DefinitionController.getInstance().addObserver(this);
 			this.getContentPane().add(this.createTypeSelectionPanel(), BorderLayout.NORTH);
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
@@ -158,7 +163,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 	
 	private JScrollPane getUIMappingScrollPane() {
-		JScrollPane softwareUnitScrollPane = new JScrollPane();
+		softwareUnitScrollPane = new JScrollPane();
 		softwareUnitScrollPane.setSize(400, 220);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
 		getSoftwareDefinationTree();
@@ -392,6 +397,23 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 
 	
 	};
+
+	@Override
+	public void update(Observable o, Object arg) {
+     if (arg instanceof String) {
+		if ("updateSoftwareTree".equals((String)arg)) {
+			getSoftwareDefinationTree();
+			softwareUnitScrollPane.setViewportView(softwareDefinitionTree);
+			SwingUtilities.getWindowAncestor( softwareUnitScrollPane ).repaint();
+		}
+	}
+	
+		
+
+	
+	
+		
+	}
 
 
 

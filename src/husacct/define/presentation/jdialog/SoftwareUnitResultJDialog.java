@@ -6,6 +6,7 @@ import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -53,6 +54,7 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 	
 	private void initUI() {
 		try {
+		
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ResultsTitle"));
 			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());

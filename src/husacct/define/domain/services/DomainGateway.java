@@ -63,7 +63,7 @@ public class DomainGateway {
 
 	public AnalyzedModuleComponent getRootModel() {
 		AnalyzedModuleComponent root = StateService.instance().getRootModel();
-		JtreeController.instance().setTreeModel(root);
+		
 		return root;
 	}
 

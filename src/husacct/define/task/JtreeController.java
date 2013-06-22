@@ -216,6 +216,7 @@ public void setTreeModel(AnalyzedModuleComponent root) {
 	}else
 	{
 		tree.setModel(new CombinedModuleTreeModel(root));
+		tree.repaint();
 	}
 	
 }

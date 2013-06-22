@@ -10,6 +10,7 @@ import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.AnalysedModuleComparator;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -29,15 +30,8 @@ public class AnalyzedUnitComparator {
 		int rightsize = right.getChildren().size();
 		Collections.sort(left.getChildren());
 		Collections.sort(right.getChildren());
-		
-	
-		//for (AbstractCombinedComponent a : right.getChildren()) {
-		//	System.out.println(a.getUniqueName()+" >>>>>>>>>>>>>>>>>>>right");
-		//}
 		if (leftsize == rightsize) {
-for (AbstractCombinedComponent ab : left.getChildren()) {
-			System.out.println(ab.getUniqueName()+" <<<<<<<<<<<<left");
-		}
+
 			
 			
 			
@@ -59,8 +53,7 @@ for (AbstractCombinedComponent ab : left.getChildren()) {
 			if (unittoberemoved.isMapped()) {
 
 				ModuleStrategy module = StateService.instance()
-						.getModulebySoftwareUnitUniqName(
-								unittoberemoved.getUniqueName());
+						.getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
 				WarningMessageService.getInstance().addCodeLevelWarning(
 						module.getId(), unittoberemoved);
 			}
@@ -193,7 +186,7 @@ for (AbstractCombinedComponent ab : left.getChildren()) {
 		JtreeController.instance().setLoadState(true);
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
 				"root", "Application", "application", "public");
-		addExternalComponents(rootComponent);
+		//addExternalComponents(rootComponent);
 
 		ApplicationDTO application = ServiceProvider.getInstance()
 				.getControlService().getApplicationDTO();
@@ -275,14 +268,8 @@ for (AbstractCombinedComponent ab : left.getChildren()) {
 		} else {
 		
 			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
-			for (AbstractCombinedComponent leftt : left.getChildren()) {
-				System.out.println("<<<<<<< >>>>>>>> "+leftt.getUniqueName());
-			}
-			
-			AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
-			for (AbstractCombinedComponent rightt : right.getChildren()) {
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+rightt.getUniqueName());
-			}
+		    AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
+		
 			
 			calucalteChanges(left, right);
 			WarningMessageService.getInstance().registerNotMappedUnits(right);

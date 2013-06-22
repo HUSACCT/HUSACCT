@@ -219,6 +219,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 	@Override
 	public void update(Observable o, Object arg) {
 		resetGUI();
+	try{
 		Long moduleId = Long.parseLong(arg.toString());
 		if (moduleId != -1) {
 			HashMap<String, Object> moduleDetails = DefinitionController
@@ -232,6 +233,10 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 			moduleTypeComboBox.setSelectedIndex(getModuleType(type));
 		}
 		this.repaint();
+	}catch(NumberFormatException e)
+	{
+		
+	}
 	}
 
 	private void updateModule() {
