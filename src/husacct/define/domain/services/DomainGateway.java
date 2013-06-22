@@ -112,6 +112,7 @@ public class DomainGateway {
 	}
 
 	public void removeRules(List<Long> selectedRules) {
+	
 		SoftwareArchitecture.getInstance().removeAppliedRule(selectedRules);
 	}
 

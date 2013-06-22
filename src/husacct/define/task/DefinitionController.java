@@ -10,6 +10,7 @@ import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
@@ -239,6 +240,7 @@ import org.apache.log4j.Logger;
 
 		public void passModuleToService(long selectedModuleId, ModuleStrategy module) {
 			String ExceptionMessage = "";
+			StateService.instance().addModule(module);
 			if (selectedModuleId == -1) {
 				moduleService.addModuleToRoot(module);
 			} else {

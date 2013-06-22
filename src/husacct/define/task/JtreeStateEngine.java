@@ -206,6 +206,11 @@ return	allUnitsRegistry.getNotMappedUnits();
 		
 	}
 
+	public void removeRules(List<Long> selectedRules) {
+	
+		
+	}
+
 
 
 

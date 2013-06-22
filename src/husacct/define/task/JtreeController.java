@@ -248,7 +248,7 @@ public void restoreTreeItemm(List<String> softwareUnitNames, List<String> types)
 private void restoreRegex(RegexComponent tobeRestored) {
 for (AbstractCombinedComponent unit : tobeRestored.getChildren()) {
 	AnalyzedModuleComponent referenceditem = StateService.instance().getAnalyzedSoftWareUnit(unit.getUniqueName().toLowerCase());
-	tree.removeTreeItem(referenceditem);
+	tree.restoreTreeItem(referenceditem);
 	tree.repaint();
 }
 	
