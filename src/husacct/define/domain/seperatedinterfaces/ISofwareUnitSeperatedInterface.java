@@ -11,4 +11,5 @@ public interface ISofwareUnitSeperatedInterface extends IseparatedDefinition {
 	public void addExpression(long moduleId,ExpressionUnitDefinition expression);
 	public void removeExpression(long moduleId,ExpressionUnitDefinition expression);
 	public void editExpression(long moduleId,ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression);
+	public void switchSoftwareUnitLocation(long fromModule,long toModule,List<String> uniqNames);
 }

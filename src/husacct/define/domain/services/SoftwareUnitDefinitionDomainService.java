@@ -8,6 +8,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -278,5 +279,11 @@ public class SoftwareUnitDefinitionDomainService {
 				.createRegexRepresentation(editingRegEx, components);
 		addSoftwareUnit(selectedModuleId, tobesaved);
 
+	}
+
+	public void changeSoftwareUnit(long from, long to, ArrayList<String> names) {
+	SoftwareArchitecture.getInstance().changeSoftwareUnit(from,to,names);
+	DefinitionController.getInstance().notifyObservers();
+		
 	}
 }

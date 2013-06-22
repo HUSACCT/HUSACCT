@@ -11,6 +11,7 @@ import husacct.define.domain.warningmessages.WarningMessageContainer;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,5 +177,21 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	public AnalyzedModuleComponent getAnalyzedUnit(String uniqueName) {
 		return allAnalyzedUnits.get(uniqueName);
 		
+	}
+
+	@Override
+	public void switchSoftwareUnitLocation(long fromModule, long toModule,
+			List<String> uniqNames) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<AnalyzedModuleComponent> getAnalyzedUnit(List<String> data) {
+		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
+		for (String uniqNames : data) {
+			units.add(allAnalyzedUnits.get(uniqNames));
+		}
+		
+		return units;
 	}
 }

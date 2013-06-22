@@ -304,17 +304,19 @@ public RegexComponent createRegexRepresentation(String editingRegEx,
 public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
 	for (SoftwareUnitDefinition unit : expression.getExpressionValues()) {
 		AnalyzedModuleComponent result = StateService.instance().getAnalyzedSoftWareUnit(unit);
-		result.freeze();
+		tree.removeTreeItem(result);
 	}
-	
+	tree.repaint();
 }
 
 @Override
 public void removeExpression(long moduleId, ExpressionUnitDefinition expression) {
 	for (SoftwareUnitDefinition unit : expression.getExpressionValues()) {
 		AnalyzedModuleComponent result = StateService.instance().getAnalyzedSoftWareUnit(unit);
-		result.unfreeze();
+		tree.restoreTreeItem(result);
+		
 	}	
+	tree.repaint();
 }
 
 @Override
@@ -328,6 +330,13 @@ public void removeRegexTreeItem(RegexComponent softwareunit) {
 		
 		removeTreeItem((AnalyzedModuleComponent)unit);
 	}
+	
+}
+
+@Override
+public void switchSoftwareUnitLocation(long fromModule, long toModule,
+		List<String> uniqNames) {
+	// TODO Auto-generated method stub
 	
 }
 

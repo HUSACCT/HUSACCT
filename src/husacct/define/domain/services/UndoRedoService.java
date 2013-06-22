@@ -209,4 +209,15 @@ public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitS
 		
 	}
 
+
+
+
+
+	@Override
+	public void switchSoftwareUnitLocation(long fromModule, long toModule,
+			List<String> uniqNames) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

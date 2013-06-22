@@ -71,7 +71,7 @@ public class DomainGateway {
 			List<String> types) {
 		DefinitionController.getInstance().removeSoftwareUnits(selectedModules,
 				types);
-		// StateService.instance().removeSoftwareUnit(selectedModules);
+		 StateService.instance().removeSoftwareUnit(selectedModules);
 
 	}
 
