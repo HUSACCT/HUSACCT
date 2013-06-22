@@ -228,7 +228,13 @@ import org.apache.log4j.Logger;
 				o.update(this, moduleId);
 			}
 		}
-
+		
+		public void notifyAnalyzedObservers() {
+			long moduleId = getSelectedModuleId();
+			for (Observer o : observers) {
+				o.update(this, "updateSoftwareTree");
+			}
+		}
 		/**
 		 * This function will load notify all to update their data
 		 */

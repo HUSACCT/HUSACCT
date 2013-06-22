@@ -123,6 +123,7 @@ public abstract class JtreeStateEngine {
 
 	public void analyze() {
 		getRootModel();
+		DefinitionController.getInstance().notifyAnalyzedObservers();
 	}
 
 	public void registerAnalyzedUnit(AnalyzedModuleComponent unit) {
