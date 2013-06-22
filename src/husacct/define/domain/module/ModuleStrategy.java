@@ -191,6 +191,27 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	public boolean hasRegExSoftwareUnit(String softwareUnitName){
 		return hasRegExSoftwareUnit(softwareUnitName, false);
 	}
+	
+	public int countSoftwareUnits(){
+		int counter = 0;
+		for (int i = 0; i < mappedSUunits.size(); i++){
+			counter++;
+		}
+		if(!this.hasSubModules()){
+			for(ModuleStrategy sub : this.subModules){
+				counter+= sub.countSoftwareUnits();
+			}
+		}
+		return counter;
+	}
+	
+	public HashMap<String, String> getSoftwareUnitNames(){
+		HashMap<String, String> names = new HashMap<String, String>();
+		for(SoftwareUnitDefinition softwareUnit : mappedSUunits){
+			names.put(softwareUnit.getName(), softwareUnit.getType().toString());
+		}
+		return names;
+	}
 
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName){
 		SoftwareUnitDefinition softwareUnit = null;
