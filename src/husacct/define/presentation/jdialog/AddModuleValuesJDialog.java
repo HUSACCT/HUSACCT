@@ -2,29 +2,31 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.ValueInputController;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Locale;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener, ILocaleChangeListener {
+public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListener, ActionListener, ILocaleChangeListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	

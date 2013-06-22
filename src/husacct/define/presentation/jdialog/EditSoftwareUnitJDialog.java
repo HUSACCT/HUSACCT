@@ -2,6 +2,7 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
@@ -20,14 +21,13 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
+public class EditSoftwareUnitJDialog extends HelpableJDialog implements ActionListener {
 
     private static final long serialVersionUID = 1343103981279803047L;
     private SoftwareUnitController softwareUnitController;

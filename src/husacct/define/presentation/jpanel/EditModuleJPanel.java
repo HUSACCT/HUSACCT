@@ -1,6 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.EditpanelDropListener;
@@ -12,8 +13,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -22,17 +21,13 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DropMode;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
-public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
+public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Observer,
 		IServiceListener {
 
 	private static final long serialVersionUID = -9020336576931490389L;
