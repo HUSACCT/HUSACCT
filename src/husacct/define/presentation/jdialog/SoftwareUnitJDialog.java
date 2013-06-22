@@ -2,6 +2,7 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitDropListerner;
@@ -36,7 +37,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -52,7 +52,9 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener,Observer {
+
+public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListener, KeyListener,Observer {
+
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	

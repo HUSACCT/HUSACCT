@@ -2,6 +2,7 @@ package husacct.define.presentation;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.ILocaleChangeListener;
@@ -33,13 +34,12 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-public class ApplicationJInternalFrame extends JInternalFrame implements
+public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 		ILocaleChangeListener, Observer, IServiceListener {
 
 	private static final long serialVersionUID = 6858870868564931134L;
 	private JPanel overviewPanel;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-	private HelpDialog helpDialog;
 	private JButton warningButton;
 	private JButton undoButton;
 	private JButton redoButton;
