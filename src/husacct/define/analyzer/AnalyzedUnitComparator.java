@@ -253,8 +253,9 @@ public class AnalyzedUnitComparator {
 					.isPreAnalysed()) {
 				AnalyzedModuleComponent root = JtreeController.instance()
 						.getRootOfModel();
-				WarningMessageService.getInstance()
-						.registerNotMappedUnits(root);
+				WarningMessageService.getInstance().resetNotAnalyzed();
+				WarningMessageService.getInstance().registerNotMappedUnits(root);
+				StateService.instance().registerImportedData();
 				return root;
 			}
 			JtreeController.instance().setLoadState(true);
@@ -262,7 +263,9 @@ public class AnalyzedUnitComparator {
 					new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
 			AnalyzedModuleComponent root = JtreeController.instance()
 					.getRootOfModel();
+			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(root);
+			StateService.instance().registerImportedData();
 			return root;
 
 		} else {
@@ -272,8 +275,10 @@ public class AnalyzedUnitComparator {
 		
 			
 			calucalteChanges(left, right);
+			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();
+			StateService.instance().registerImportedData();
 			return left;
 		}
 	}

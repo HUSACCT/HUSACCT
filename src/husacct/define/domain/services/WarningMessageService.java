@@ -302,6 +302,11 @@ public class WarningMessageService extends Observable implements Observer,IModul
 		
 		warnings = new ArrayList<WarningMessage>();
 	}
+
+	public void resetNotAnalyzed() {
+	codelevelWarnings = new ArrayList<CodeLevelWarning>();
+		
+	}
 	
 	
 }
