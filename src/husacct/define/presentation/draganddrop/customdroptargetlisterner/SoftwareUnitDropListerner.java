@@ -1,7 +1,9 @@
 package husacct.define.presentation.draganddrop.customdroptargetlisterner;
 
 import husacct.define.domain.services.DomainGateway;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.presentation.utils.DragAndDropHelper;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -77,7 +79,7 @@ public class SoftwareUnitDropListerner implements DropTargetListener {
 		try {
 			String result = ((String) arg.getTransferable().getTransferData(
 					DataFlavor.stringFlavor));
-			Object[] namesAndTypes = filterUnigName(result);
+			Object[] namesAndTypes = DragAndDropHelper.interpretObjects(result);
 			ArrayList<String> names = (ArrayList<String>) namesAndTypes[0];
 			ArrayList<String> types = (ArrayList<String>) namesAndTypes[1];
 			
@@ -88,21 +90,7 @@ public class SoftwareUnitDropListerner implements DropTargetListener {
 
 	}
 
-	private Object[] filterUnigName(String result) {
-		String[] vars = result.split("\\s+");
-		ArrayList<String> names = new ArrayList<String>();
-		ArrayList<String> types = new ArrayList<String>();
-		
-		for (int i =0;i<vars.length;i++) {
-			if (i%2==0) {
-				names.add(vars[i].trim());
-			} else {
-				types.add(vars[i].trim());
-			}
-		}
-		return new Object[]{names,types};
-
-	}
+	
 
 	@Override
 	public void dropActionChanged(DropTargetDragEvent arg0) {
