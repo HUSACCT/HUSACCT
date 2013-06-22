@@ -6,7 +6,7 @@ import husacct.define.domain.appliedrule.propertyrules.FacadeConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.InterfaceConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionExceptionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionRule;
-import husacct.define.domain.appliedrule.propertyrules.SubClassConventionRule;
+import husacct.define.domain.appliedrule.propertyrules.SuperClassInheritanceConvention;
 import husacct.define.domain.appliedrule.propertyrules.VisibilityConventionExceptionRule;
 import husacct.define.domain.appliedrule.propertyrules.VisibilityConventionRule;
 import husacct.define.domain.appliedrule.relationrules.IsAllowedToUseRule;
@@ -40,7 +40,7 @@ public class AppliedRuleFactory {
 		"VisibilityConvention",
 		"VisibilityConventionException",
 		"InterfaceConvention",
-		"SubClassConvention",
+		"SuperClassInheritanceConvention",
 		"FacadeConvention"
 	};
 
@@ -57,7 +57,7 @@ public class AppliedRuleFactory {
 		VisibilityConventionRule.class,
 		VisibilityConventionExceptionRule.class,
 		InterfaceConventionRule.class,
-		SubClassConventionRule.class,
+		SuperClassInheritanceConvention.class,
 		FacadeConventionRule.class
 	};
 	
