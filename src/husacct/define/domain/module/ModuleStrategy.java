@@ -9,6 +9,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
