@@ -1,5 +1,7 @@
 package husacct.graphics.presentation.menubars;
 
+import husacct.common.help.presentation.HelpableJPanel;
+
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -11,44 +13,43 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class ZoomLocationBar extends JPanel {
+public class ZoomLocationBar extends HelpableJPanel {
 	private static final long serialVersionUID = 1025962225565217061L;
 	private String rootLocale;
 	private JButton rootLocationButton;
 	private final String LOCATION_COMBINER = "+";
 	private final String LOCATION_SEPERATOR = ".";
-
+	
 	private int menuItemMaxHeight = 45;
-
+	
 	private ArrayList<JButton> buttons;
 	private HashMap<JButton, String[]> buttonPaths = new HashMap<JButton, String[]>();
 	private ArrayList<LocationButtonActionListener> locationButtonPressListener;
-
+	
 	public ZoomLocationBar() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		locationButtonPressListener = new ArrayList<LocationButtonActionListener>();
 	}
-
+	
 	public void addLocationButtonPressListener(
 			LocationButtonActionListener actionListener) {
 		locationButtonPressListener.add(actionListener);
 	}
-
+	
 	private void addLocationSeperator() {
 		add(new JLabel(" " + LOCATION_SEPERATOR + " "));
 	}
-
+	
 	private void createAndAddLocationButton(String levelName, String[] fullPath) {
 		add(createLocationButton(levelName, fullPath));
 	}
-
+	
 	private void createAndAddRootLocationButton() {
 		rootLocationButton = createLocationButton(rootLocale, new String[] {});
 		add(rootLocationButton);
 	}
-
+	
 	private JButton createLocationButton(String levelName, String[] fullPath) {
 		JButton locationStringButton = new JButton(levelName);
 		locationStringButton.setSize(10, menuItemMaxHeight);
@@ -63,7 +64,7 @@ public class ZoomLocationBar extends JPanel {
 		});
 		return locationStringButton;
 	}
-
+	
 	public String[] getSecondLastPath() {
 		try {
 			int secondLastIndex = buttons.size() - 2;
@@ -73,36 +74,36 @@ public class ZoomLocationBar extends JPanel {
 			return new String[] {};
 		}
 	}
-
+	
 	private void pressLocationButton(ActionEvent event) {
 		for (LocationButtonActionListener listener : locationButtonPressListener)
 			listener.actionPerformed(buttonPaths.get(event.getSource()));
 	}
-
+	
 	public void removeLocationButtonPressListener(
 			LocationButtonActionListener actionListener) {
 		locationButtonPressListener.remove(actionListener);
 	}
-
+	
 	public void setLocale(String rootString) {
 		rootLocale = rootString;
 	}
-
+	
 	public void turnOffBar() {
 		for (JButton button : buttons)
 			button.setEnabled(false);
 	}
-
+	
 	public void turnOnBar() {
 		for (JButton button : buttons)
 			button.setEnabled(true);
 	}
-
+	
 	public void updateLocationBar(String[] currentPaths) {
 		removeAll();
 		buttons = new ArrayList<JButton>();
 		createAndAddRootLocationButton();
-
+		
 		HashMap<Integer, HashMap<Integer, String>> multiLevelPath = new HashMap<Integer, HashMap<Integer, String>>();
 		if (currentPaths.length > 0)
 			for (int pathID = 0; pathID < currentPaths.length; pathID++) {
@@ -119,7 +120,7 @@ public class ZoomLocationBar extends JPanel {
 					multiLevelPath.put(pathLevel, tmpAdderHashMap);
 				}
 			}
-
+		
 		if (multiLevelPath.size() > 0) {
 			addLocationSeperator();
 			Integer[] levelKeySet = multiLevelPath.keySet().toArray(
@@ -140,7 +141,7 @@ public class ZoomLocationBar extends JPanel {
 						currentPath.put(pathID, currentValuePath);
 					} else
 						currentValuePath = currentPath.get(pathID)
-								+ LOCATION_SEPERATOR;
+						+ LOCATION_SEPERATOR;
 					currentPath.put(pathID,
 							currentValuePath + levelPath.get(pathID));
 					capturedLevels.add(levelPath.get(pathID));
@@ -150,9 +151,9 @@ public class ZoomLocationBar extends JPanel {
 					entrySetTranformToArray.add(p.getValue());
 				createAndAddLocationButton(
 						visiblePath.replaceFirst("\\" + LOCATION_COMBINER, "")
-								.trim(),
+						.trim(),
 						entrySetTranformToArray.toArray(new String[] {}));
-
+				
 				if (!levelKeySet[levelKeySet.length - 1].equals(level))
 					addLocationSeperator();
 			}
