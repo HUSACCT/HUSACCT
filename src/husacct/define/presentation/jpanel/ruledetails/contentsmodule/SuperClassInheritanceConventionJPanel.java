@@ -13,7 +13,7 @@ import java.awt.Insets;
 import java.util.HashMap;
 
 
-public class SubClassConventionJPanel extends AbstractDetailsJPanel {
+public class SuperClassInheritanceConventionJPanel extends AbstractDetailsJPanel {
     public static final String ruleTypeKey = "SuperClassInheritanceConvention";
     private static final long serialVersionUID = 376037038601799822L;
 
@@ -22,7 +22,7 @@ public class SubClassConventionJPanel extends AbstractDetailsJPanel {
     public ModuleFromPanelComponent moduleFromPanelComponent;
     public ModuleToPanelComponent moduleToPanelComponent;
 
-    public SubClassConventionJPanel(AppliedRuleController appliedRuleController) {
+    public SuperClassInheritanceConventionJPanel(AppliedRuleController appliedRuleController) {
 	super(appliedRuleController);
     }
 
