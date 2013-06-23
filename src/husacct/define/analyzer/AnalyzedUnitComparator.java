@@ -291,6 +291,7 @@ public class AnalyzedUnitComparator {
 		
 			
 			calucalteChanges(left, right);
+			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();
 			StateService.instance().registerImportedData();
