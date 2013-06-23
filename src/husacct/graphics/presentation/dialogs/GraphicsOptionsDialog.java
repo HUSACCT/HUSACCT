@@ -43,7 +43,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			exportToImageButton, hideFiguresButton, showFiguresButton,
 			okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu,
-			smartLinesOptionMenu;
+			smartLinesOptionMenu, showExternalLibraries;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
@@ -63,6 +63,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
 		currentSettings.put("smartLines", true);
+		currentSettings.put("libraries", false);
 		currentSettings.put("layoutStrategy",
 				DrawingLayoutStrategy.BASIC_LAYOUT);
 
@@ -97,6 +98,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		interfaceElements.add(exportToImageButton);
 		interfaceElements.add(showDependenciesOptionMenu);
 		interfaceElements.add(showViolationsOptionMenu);
+		interfaceElements.add(showExternalLibraries);
 		interfaceElements.add(smartLinesOptionMenu);
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
@@ -202,6 +204,10 @@ public class GraphicsOptionsDialog extends JDialog {
 		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(showViolationsOptionMenu);
 		
+		showExternalLibraries = new JCheckBox();
+		showExternalLibraries.setSize(40, menuItemMaxHeight);
+		optionsPanel.add(showExternalLibraries);
+		
 		smartLinesOptionMenu = new JCheckBox();
 		smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(smartLinesOptionMenu);
@@ -291,6 +297,13 @@ public class GraphicsOptionsDialog extends JDialog {
 				currentSettings.put("dependencies", false);
 				listener.hideDependencies();
 			}
+			if (showExternalLibraries.isSelected()) {
+				currentSettings.put("libraries", true);
+				listener.showLibraries();
+			} else {
+				currentSettings.put("libraries", false);
+				listener.hideLibraries();
+			}
 			if (showViolationsOptionMenu.isSelected()) {
 				currentSettings.put("violations", true);
 				listener.showViolations();
@@ -323,6 +336,8 @@ public class GraphicsOptionsDialog extends JDialog {
 				.get("dependencies"));
 		showViolationsOptionMenu.setSelected((Boolean) currentSettings
 				.get("violations"));
+		showExternalLibraries.setSelected((Boolean) currentSettings
+				.get("libraries"));
 		smartLinesOptionMenu.setSelected((Boolean) currentSettings
 				.get("smartLines"));
 		layoutStrategyOptions.setSelectedItem(localeService
@@ -370,18 +385,17 @@ public class GraphicsOptionsDialog extends JDialog {
 			zoomOutButton.setText(menuBarLocale.get("ZoomOut"));
 			refreshButton.setText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
-			showDependenciesOptionMenu.setText(menuBarLocale
-					.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale
-					.get("ShowViolations"));
+			
+			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
+			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
+			showExternalLibraries.setText(menuBarLocale.get("ShowExternalLibraries"));
+			
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
-			smartLinesOptionMenu.setText(menuBarLocale
-					.get("LineContextUpdates"));
+			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
 			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
-			showFiguresButton
-					.setText(menuBarLocale.get("RestoreHiddenModules"));
+			showFiguresButton.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
@@ -412,6 +426,17 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void setViolationsUIToInactive() {
 		currentSettings.put("violations", false);
 		showViolationsOptionMenu.setSelected(false);
+	}
+	
+	//TODO add a button to GraphicsMenuBar to enable libraries
+	public void setLibrariesUIToActive() {
+		currentSettings.put("libraries", true);
+		showExternalLibraries.setSelected(true);
+	}
+	//TODO add a button to GraphicsMenuBar to disable libraries
+	public void setLibrariesUIToInactive() {
+		currentSettings.put("libraries", false);
+		showExternalLibraries.setSelected(false);
 	}
 
 	public void setZoomValue(int value) {

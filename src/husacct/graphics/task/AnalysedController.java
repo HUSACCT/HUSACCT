@@ -12,6 +12,7 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.util.DrawingDetail;
+import husacct.graphics.util.UserInputListener;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class AnalysedController extends DrawingController {
 	protected IValidateService validateService;
 
 	private ArrayList<BaseFigure> analysedContextFigures;
+	private boolean showLibraries = false;;
 
 	public AnalysedController() {
 		super();
@@ -49,7 +51,15 @@ public class AnalysedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(getCurrentDrawingDetail());
 		super.notifyServiceListeners();
-		AbstractDTO[] modules = analyseService.getRootModules();
+		
+		AbstractDTO[] modules;
+		
+		if(showLibraries){
+			modules = analyseService.getRootModulesWithExternalSystems();
+		}else{
+			modules = analyseService.getRootModules();
+		}
+		
 		resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail)
 			showViolations();
@@ -278,6 +288,21 @@ public class AnalysedController extends DrawingController {
 	public void showViolations() {
 		if (validateService.isValidated())
 			super.showViolations();
+	}
+	
+	
+	@Override
+	public void hideLibraries() {
+		showLibraries = false;
+		refreshDrawing();
+		super.hideLibraries();
+	}
+
+	@Override
+	public void showLibraries() {
+		showLibraries = true;
+		refreshDrawing();
+		super.showLibraries();
 	}
 
 	protected ArrayList<String> sortFiguresBasedOnZoomability(BaseFigure[] figures) {

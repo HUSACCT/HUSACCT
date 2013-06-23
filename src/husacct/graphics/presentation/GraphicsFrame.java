@@ -269,8 +269,8 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("ShowDependencies", localeService.getTranslatedString("ShowDependencies"));
 		menuBarLocale.put("HideViolations", localeService.getTranslatedString("HideViolations"));
 		menuBarLocale.put("ShowViolations", localeService.getTranslatedString("ShowViolations"));
-		menuBarLocale.put("HideExternalSystems", localeService.getTranslatedString("HideExternalSystems"));
-		menuBarLocale.put("ShowExternalSystems", localeService.getTranslatedString("ShowExternalSystems"));
+		menuBarLocale.put("HideExternalLibraries", localeService.getTranslatedString("HideExternalLibraries"));
+		menuBarLocale.put("ShowExternalLibraries", localeService.getTranslatedString("ShowExternalLibraries"));
 		menuBarLocale.put("LineContextUpdates", localeService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", localeService.getTranslatedString("ExportToImage"));
 		menuBarLocale.put("LayoutStrategy", localeService.getTranslatedString("LayoutStrategy"));
@@ -486,5 +486,17 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	public void useSelectTool() {
 		for (UserInputListener l : listeners)
 			l.useSelectTool();
+	}
+
+	@Override
+	public void hideLibraries() {
+		for (UserInputListener l : listeners)
+			l.hideLibraries();
+	}
+
+	@Override
+	public void showLibraries() {
+		for (UserInputListener l : listeners)
+			l.showLibraries();	
 	}
 }
