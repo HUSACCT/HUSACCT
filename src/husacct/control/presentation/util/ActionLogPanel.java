@@ -37,7 +37,7 @@ public class ActionLogPanel extends JPanel{
 		
 		BorderLayout defaultBorderLayout = new BorderLayout();
 		this.setLayout(defaultBorderLayout);
-		Dimension preferredSize = new Dimension(250, 75);
+		Dimension preferredSize = new Dimension(250, 65);
 		this.setPreferredSize(preferredSize);
 		
 		boolean showActionLog = ConfigurationManager.getProperty("ActionLogger").equals("true");
