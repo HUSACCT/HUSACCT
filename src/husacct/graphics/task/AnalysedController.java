@@ -5,14 +5,12 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.util.DrawingDetail;
-import husacct.graphics.util.UserInputListener;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -35,18 +33,6 @@ public class AnalysedController extends DrawingController {
 		initializeServices();
 	}
 
-	private void initializeServices() {
-		controlService = ServiceProvider.getInstance().getControlService();
-
-		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		analyseService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				AnalysedController.this.refreshDrawing();
-			}
-		}); 
-	}
-
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(getCurrentDrawingDetail());
@@ -54,11 +40,10 @@ public class AnalysedController extends DrawingController {
 		
 		AbstractDTO[] modules;
 		
-		if(showLibraries){
-			modules = analyseService.getRootModulesWithExternalSystems();
-		}else{
+		if(showLibraries) //modules = analyseService.getRootModulesWithExternalSystems();
+		modules = analyseService.getRootModules();
+		else
 			modules = analyseService.getRootModules();
-		}
 		
 		resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail)
@@ -85,9 +70,8 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0){
-			drawArchitecture(getCurrentDrawingDetail());
-		}else {
+		if (parentNames.length == 0) drawArchitecture(getCurrentDrawingDetail());
+		else {
 
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			ArrayList<String> compoundedNames = new ArrayList<String>();
@@ -127,9 +111,8 @@ public class AnalysedController extends DrawingController {
 				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
 
 				this.drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
-			} else {
+			} else
 				this.drawModulesAndLines(allChildren);
-			}
 		}
 	}
 
@@ -144,10 +127,9 @@ public class AnalysedController extends DrawingController {
 			knownChildren = new ArrayList<AbstractDTO>();
 			for (AbstractDTO child : children)
 				knownChildren.add(child);
-		} else {
+		} else
 			logger.warn("Tried to draw modules for \"" + parentName
 					+ "\", but it has no children.");
-		}
 		return knownChildren;
 	}
 
@@ -164,9 +146,28 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figureTo);
-		return this.validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
+	}
+
+	@Override
+	public void hideLibraries() {
+		showLibraries = false;
+		refreshDrawing();
+		super.hideLibraries();
+	}
+
+	private void initializeServices() {
+		controlService = ServiceProvider.getInstance().getControlService();
+
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		analyseService.addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				AnalysedController.this.refreshDrawing();
+			}
+		}); 
 	}
 
 	@Override
@@ -178,21 +179,6 @@ public class AnalysedController extends DrawingController {
 			drawArchitecture(getCurrentDrawingDetail());
 		else
 			this.getAndDrawModulesIn(paths);
-	}
-
-	@Override
-	public void moduleZoom(String zoomType){
-
-		BaseFigure[] selection = super.getSelectedFigures();
-
-		super.notifyServiceListeners();
-		resetContextFigures();
-		ArrayList<String> parentNames = sortFiguresBasedOnZoomability(selection);
-
-		if (parentNames.size() > 0) {
-			saveSingleLevelFigurePositions();
-			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
-		}
 	}
 
 	@Override
@@ -243,11 +229,19 @@ public class AnalysedController extends DrawingController {
 	
 	*/
 	
-	//TODO Breadcrumbs; Needs to be removed as soon as uniqueName of a AnalysedDTO contains a project
-	private void setCurrentPathsForProjects(BaseFigure[] figures){
-		String[] paths = new String[1];
-		paths[0] = figures[0].getName();
-		super.setCurrentPaths(paths);
+	@Override
+	public void moduleZoom(String zoomType){
+
+		BaseFigure[] selection = super.getSelectedFigures();
+
+		super.notifyServiceListeners();
+		resetContextFigures();
+		ArrayList<String> parentNames = sortFiguresBasedOnZoomability(selection);
+
+		if (parentNames.size() > 0) {
+			saveSingleLevelFigurePositions();
+			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
+		}
 	}
 
 	@Override
@@ -267,13 +261,6 @@ public class AnalysedController extends DrawingController {
 			zoomOutFailed();
 	}
 
-	public void zoomOutFailed(){
-		this.logger.warn("Tried to zoom out from \"" + this.getCurrentPaths()
-				+ "\", but it has no parent (could be root if it's an empty string).");
-		this.logger.debug("Reverting to the root of the application.");
-		this.drawArchitecture(this.getCurrentDrawingDetail());
-	}
-
 	@Override
 	public void refreshDrawing() {
 		super.notifyServiceListeners();
@@ -284,18 +271,11 @@ public class AnalysedController extends DrawingController {
 		analysedContextFigures = new ArrayList<BaseFigure>();
 	}
 
-	@Override
-	public void showViolations() {
-		if (validateService.isValidated())
-			super.showViolations();
-	}
-	
-	
-	@Override
-	public void hideLibraries() {
-		showLibraries = false;
-		refreshDrawing();
-		super.hideLibraries();
+	//TODO Breadcrumbs; Needs to be removed as soon as uniqueName of a AnalysedDTO contains a project
+	private void setCurrentPathsForProjects(BaseFigure[] figures){
+		String[] paths = new String[1];
+		paths[0] = figures[0].getName();
+		super.setCurrentPaths(paths);
 	}
 
 	@Override
@@ -303,6 +283,13 @@ public class AnalysedController extends DrawingController {
 		showLibraries = true;
 		refreshDrawing();
 		super.showLibraries();
+	}
+	
+	
+	@Override
+	public void showViolations() {
+		if (validateService.isValidated())
+			super.showViolations();
 	}
 
 	protected ArrayList<String> sortFiguresBasedOnZoomability(BaseFigure[] figures) {
@@ -312,7 +299,7 @@ public class AnalysedController extends DrawingController {
 				try {
 					if(!(figure instanceof ProjectFigure)){
 
-						AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figure);
+						AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
 
 						parentNames.add(parentDTO.uniqueName);
 					}
@@ -331,5 +318,12 @@ public class AnalysedController extends DrawingController {
 						+ figure.getName() + ". Not a module to zoom on.");
 
 		return parentNames;
+	}
+
+	public void zoomOutFailed(){
+		logger.warn("Tried to zoom out from \"" + getCurrentPaths()
+				+ "\", but it has no parent (could be root if it's an empty string).");
+		logger.debug("Reverting to the root of the application.");
+		drawArchitecture(getCurrentDrawingDetail());
 	}
 }
