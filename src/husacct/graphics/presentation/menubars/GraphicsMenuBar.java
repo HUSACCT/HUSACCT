@@ -495,4 +495,16 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		for (UserInputListener l : listeners)
 			l.useSelectTool();
 	}
+
+	@Override
+	public void showLibraries() {
+		for (UserInputListener l : listeners)
+			l.showLibraries();
+	}
+
+	@Override
+	public void hideLibraries() {
+		for (UserInputListener l : listeners)
+			l.hideLibraries();
+	}
 }
