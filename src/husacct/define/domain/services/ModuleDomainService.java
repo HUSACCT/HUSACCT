@@ -18,12 +18,12 @@ public class ModuleDomainService {
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
 
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
-				.getModuleById(parentModuleId);
+		
+        SoftwareArchitecture.getInstance().addModule(parentModuleId, module);
 		StateService.instance().addModule(module);
 		
 
-		parentModule.addSubModule(module);
+		
 		long moduleId = module.getId();
 
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();

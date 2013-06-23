@@ -228,5 +228,23 @@ return	allUnitsRegistry.getNotMappedUnits();
 
 	}
 
+	public void addAppliedRule(AppliedRuleStrategy rule) {
+		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+		rules.add(rule);
+		stateController.insertCommand(new AppliedRuleAddCommand(rules));
+		
+	}
+
+	public void removeAppliedRule(AppliedRuleStrategy appliedRuleById) {
+		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+		stateController.insertCommand(new RemoveAppliedRuleCommand(rules) );
+		
+	}
+
+	public void editAppliedRule(AppliedRuleStrategy rule, Object[] objects) {
+		stateController.insertCommand(new )
+		
+	}
+
 
 }
