@@ -2,6 +2,7 @@ package husacct.analyse.presentation;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.help.presentation.HelpableJPanel;
 import husacct.validate.domain.validation.Severity;
 
 import java.awt.Color;
@@ -31,7 +32,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-class DependencyPanel extends JPanel implements TreeSelectionListener, ActionListener {
+class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");

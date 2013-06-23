@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manuals>  	
-  <AboutDialog filename = "about.html" viewname = "About">  </AboutDialog>
-  <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
-  <MainGui filename = "maingui.html" viewname = "General"></MainGui>
-  <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+  <MainAnalyseDialog filename="mainanalyse.html" viewname= "Main Analyse"> </MainAnalyseDialog>
+  <SourceOverviewDialog filename="sourceoverview.html" viewname= "Source Overview"> </SourceOverviewDialog>
+  <DependencyOverviewDialog filename="depoverview.html" viewname= "Dependency Overview"> </DependencyOverviewDialog>
+  <DependencyFilterDialog filename="depfilter.html" viewname= "Dependency Filter"> </DependencyFilterDialog>
+  <FoundDependenciesDialog filename="founddependencies.html" viewname= "Found Dependencies"> </FoundDependenciesDialog>
+  <ExportDependenciesDialog filename="exportdependencies.html" viewname= "Export Dependencies"> </ExportDependenciesDialog>
 </manuals>

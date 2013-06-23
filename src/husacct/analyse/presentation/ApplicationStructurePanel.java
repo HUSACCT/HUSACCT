@@ -1,6 +1,8 @@
 package husacct.analyse.presentation;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.help.presentation.HelpableJPanel;
+
 import java.awt.Color;
 import java.util.List;
 import javax.swing.JPanel;
@@ -15,7 +17,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.UIManager;
 
-class ApplicationStructurePanel extends JPanel implements TreeSelectionListener {
+class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionListener {
 
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");

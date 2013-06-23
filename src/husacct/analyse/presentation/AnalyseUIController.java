@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 
@@ -12,7 +13,11 @@ import java.util.List;
 
 public class AnalyseUIController {
 
-    private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
     private IAnalyseService analyseTaskService = ServiceProvider.getInstance().getAnalyseService();
     private IControlService controlService = ServiceProvider.getInstance().getControlService();
 
