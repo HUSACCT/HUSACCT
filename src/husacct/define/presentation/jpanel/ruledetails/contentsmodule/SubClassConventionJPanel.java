@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 
 public class SubClassConventionJPanel extends AbstractDetailsJPanel {
-    public static final String ruleTypeKey = "SubClassConvention";
+    public static final String ruleTypeKey = "SuperClassInheritanceConvention";
     private static final long serialVersionUID = 376037038601799822L;
 
     public DescriptionPanelComponent descriptionPanelComponent;
