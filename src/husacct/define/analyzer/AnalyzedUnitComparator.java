@@ -270,7 +270,7 @@ public class AnalyzedUnitComparator {
 						.getRootOfModel();
 				WarningMessageService.getInstance().resetNotAnalyzed();
 				WarningMessageService.getInstance().registerNotMappedUnits(root);
-				//StateService.instance().registerImportedData();
+				StateService.instance().registerImportedData();
 				return root;
 			}
 			JtreeController.instance().setLoadState(true);
@@ -280,7 +280,7 @@ public class AnalyzedUnitComparator {
 					.getRootOfModel();
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(root);
-		//	StateService.instance().registerImportedData();
+			StateService.instance().registerImportedData();
 			return root;
 
 		} else {
@@ -293,7 +293,7 @@ public class AnalyzedUnitComparator {
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();
-		//	StateService.instance().registerImportedData();
+			StateService.instance().registerImportedData();
 			return left;
 		}
 	}
