@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	.ruletype {
+		text-decoration: underline;
+	}
+		
+	.keyword {
+		font-style: italic;
+	}
+		
+	.regex-false {
+		color: red;
+	}
+		
+	.regex-true {
+		color: green;
+	}
+		
+	.caption {
+		color: blue;
+	}
+		
+	.caption-explanation {
+		font-style: italic;
+	}
+	</style>
+</head>
+<body>
+	<h1>Supported rules</h1>
+	<p>
+		The following rules are provided in the HUSACCT applications and
+		can be validated. For each rule, the possible exceptions and the
+		possible violation types will be given.
+	</p>
+	<br />
+	<h2>Property rule types</h2>
+	<span class="ruletype">Interface convention</span>
+	<br />
+	<p>
+		Each class in the specified module must implement the specified
+		interface. An exception on this rule will exclude certain classes or
+		packages from this rule.
+	</p>
+	<br />
+	<span class="ruletype">Fa&ccedil;ade</span>
+	<br />
+	<p>
+		Each class in the specified module must only communicate to
+		classes outside the module via the fa&ccedil;ade.</p>
+	<br />
+	<span class=ruletype>SuperClassInheritance convention</span>
+	<br />
+	<p>
+		Each class in the specified module must extend the specified
+		class. An exception on this rule will exclude certain classes or
+		packages from this rule.</p>
+	<br />
+	<span class="ruletype">Naming convention</span>
+	<br />
+	<p>
+		All the classes and/or packages in the specified module must meet to
+		the specified <span class="keyword">Regular Expression</span> (see table 1). The <span class="keyword">regular
+		expressions</span> are case-sensitive. An exception on this rule will
+		exclude certain classes or packages from this rule.
+	</p>
+	<br />
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Regex</th>
+				<th>Validates</th>
+				<th>True/false</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Friends</td>
+				<td>
+					<span class="regex-true">domain.locationbased.latitude.Friends</span>
+					<br />
+					<span class="regex-false">domain.locationbased.foursquare.MyAccount</span>
+				</td>
+				<td>
+					true
+					<br />
+					false
+				</td>
+			</tr>
+			<tr>
+				<td>*Friends*</td>
+				<td>
+					<span class="regex-false">domain.locationbased.foursquare.History</span>
+					<br />
+					<span class="regex-true">domain.locationbased.latitude.Friends</span>
+					<br />
+					<span class="regex-true">infrastructure.socialmedia.locationbased.foursquare.FriendsDAO</span>
+					<br />
+					<span class="regex-true">infrastructure.socialmedia.locationbased.foursquare.MyFriendsDAO</span>
+					<br />
+				</td>
+				<td>
+					false
+					<br />
+					true
+					<br />
+					true
+					<br />
+					true
+					<br />
+				</td>
+			</tr>
+			<tr>
+				<td>*Account</td>
+				<td>
+					<span class="regex-true">domain.locationbased.foursquare.MyAccount</span>
+					<br />
+					<span class="regex-false">domain.locationbased.latitude.Map</span>
+					<br />
+					<span class="regex-false">infrastructure.socialmedia.locationbased.foursquare.AccountDAO </span>
+					<br />
+				</td>
+				<td>
+					true
+					<br />
+					false
+					<br />
+					false
+					<br />
+				</td>
+			</tr>
+			<tr>
+				<td>DAO*</td>
+				<td>
+					<span class="regex-true">infrastructure.socialmedia.locationbased.foursquare.DAOFourSquare</span>
+					<br />
+					<span class="regex-false">infrastructure.socialmedia.locationbased.foursquare.IMap</span>
+					<br />
+					<span class="regex-false">domain.locationbased.foursquare.History</span>
+					<br />
+				</td>
+				<td>
+					true
+					<br />
+					false
+					<br />
+					false
+					<br />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="caption">Table 1<span class="caption-explanation">&nbsp;overview of possible regexes for the naming convention rule type</span></p>
+	<br />
+	<span>The first regex enforces that a class/package must contain the word ‘Friends’ in the name.</span>
+	<br />
+	<span>The second regex enforces that a class/package must contain the word ‘Friends anywhere in the name.</span>
+	<br />
+	<span>The third regex enforces that a class/package must end with the word ‘Account’.</span>
+	<br /> 
+	<span>The fourth regex enforces that all the classes and/or packages must start with the word ‘DAO’.</span>
+	<br />
+	<br />
+	<span class="ruletype">Visibilty convention</span>
+	<br />
+	<p>
+		All the classes and/or packages in the specified module must have the specified visibility or lower.
+		The possible exceptions are:
+	</p>
+	<ul>
+		<li>possibility to exclude classes/packages;</li>
+		<li>add another visibility convention for classes/packages that were specified in the main rule.</li>
+	</ul>
+	<br />
+	<h2>Relation rule types</h2>
+	<span class="ruletype">Is allowed to use</span>
+	<br />
+	<p>
+		This rule can only be defined as exception rule. All the classes/packages between two logical modules are allowed to have a dependency.
+		This is normally the case, so it can only be defined as an exception rule.
+	</p>
+	<br />
+	<span class="ruletype">Is not allowed to use</span>
+	<br />
+	<p>
+		This rule can only be defined as exception rule. All the classes/packages between two logical modules are allowed to have a dependency.
+		This is normally the case, so it can only be defined as an exception rule.
+	</p>
+	<br />
+	<span class="ruletype">Is only allowed to use</span>
+	<br />
+	<p>
+		One defined logical module is only allowed to have dependencies with another defined logical module. 
+		The possible exception is to define is a ‘is allowed to use’ rule.
+	</p>
+	<br />
+	<span class="ruletype">Is only module allowed to use</span>
+	<br />
+	<p>
+		Of all defined logical modules, only one logical module may have dependencies with another specified logical module.
+		There are no possible exception rules.
+	</p>
+	<br />
+	<span class="ruletype">Must use</span>
+	<br />
+	<p>
+		At least one class/package between two logical modules must have a dependency with each other.
+		The possible exception is to define a ‘is allowed to use’ or a ‘is not allowed to use’ rule.
+	</p>
+	<br />
+	<span class="ruletype">Is not allowed to make back-call</span>
+	<br />
+	<p>
+		This rule can only be applied on modules of type layer (see for more information the manual of the define component). A layer may not have dependency with layers that are defined with a higher hierarchal level then the layer on which the rule is applied to.
+		The possible exception is to define a ‘is allowed to use’ rule.  
+	</p>
+	<br />
+	<span class="ruletype">Is not allowed to make skip-call</span>
+	<br />
+	<p>
+		This rule can only be applied on modules of type layer (see for more information the manual of the define component). A layer may not have dependency with layers that are defined with a lower hierarchal level then the layer on which the rule is applied to, except for the layer that is directly under the layer on which the rule is applied to.
+		The possible exception is to define a ‘is allowed to use’ rule.
+	</p>
+</body>
+</html>

@@ -4,4 +4,11 @@
   <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
   <MainGui filename = "maingui.html" viewname = "General"></MainGui>
   <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+  <ValidateIntro filename="/validate/introduction.html" viewname="Validate - introduction"></ValidateIntro>
+  <ValidateTerminology filename="/validate/terminology.html" viewname="Validate - terminology"></ValidateTerminology>
+  <ValidateSupportedRules filename="/validate/supportedrules.html" viewname="Validate - supported rules"></ValidateSupportedRules>
+  <ValidateBrowseViolations filename="/validate/browseviolations.html" viewname="Validate - browse violations"></ValidateBrowseViolations>
+  <ValidateFilterDialog filename="validate/filterdialog.html" viewname="Validate - filter dialog"></ValidateFilterDialog>
+  <ValidateCodeViewer filename="validate/codeviewer.html" viewname="Validate - code viewer"></ValidateCodeViewer>
+  <ValidateReportExport filename="validate/reportexport.html" viewname="Validate - report export"></ValidateReportExport>
 </manuals>
