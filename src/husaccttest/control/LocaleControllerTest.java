@@ -5,6 +5,7 @@ import static org.junit.Assert.assertSame;
 import husacct.common.locale.ILocaleService;
 import husacct.common.locale.LocaleServiceImpl;
 import husacct.common.services.IServiceListener;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -33,6 +34,13 @@ public class LocaleControllerTest {
 			}
 		});
 		localeService.notifyServiceListeners();
+	}
+	
+	@Test
+	public void testConfigLocale() {
+		Locale configLocale = new Locale(ConfigurationManager.getProperty("Language"), ConfigurationManager.getProperty("Language"));
+		Locale currentLocale = localeService.getLocale();
+		assertSame(configLocale.getDisplayLanguage(), currentLocale.getDisplayLanguage());
 	}
 	
 	@Test
