@@ -1,348 +1,300 @@
-package husacct.define.domain.services;
+package husacct.define.analyzer;
 
+import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ExternalSystemDTO;
+import husacct.common.dto.ProjectDTO;
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.domain.warningmessages.CodeLevelWarning;
-import husacct.define.domain.warningmessages.ImplementationLevelWarning;
-import husacct.define.domain.warningmessages.WarningMessage;
+import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.task.AnalysedModuleComparator;
+import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Arrays;
+import java.util.Collections;
 
-public class WarningMessageService extends Observable implements Observer,IModuleSeperatedInterface {
-   private  ArrayList<WarningMessage> warnings= new ArrayList<WarningMessage>();
-  private ArrayList<Observer> observers = new ArrayList<Observer>();
-   private static WarningMessageService instance=null;
-   private ArrayList<CodeLevelWarning> codelevelWarnings = new ArrayList<CodeLevelWarning>();
-	
+public class AnalyzedUnitComparator {
+	public AnalyzedModuleComponent calucalteChanges(
+			AbstractCombinedComponent left, AbstractCombinedComponent right) {
 
-	public static WarningMessageService getInstance()
-	{
-		if(instance==null)
-		{
+		ArrayList<AbstractCombinedComponent> toBeDeleted = new ArrayList<AbstractCombinedComponent>();
+		ArrayList<AbstractCombinedComponent> toBeAaded = new ArrayList<AbstractCombinedComponent>();
+		int leftsize = left.getChildren().size();
+		int rightsize = right.getChildren().size();
+		Collections.sort(left.getChildren());
+		Collections.sort(right.getChildren());
+		if (leftsize == rightsize) {
+
 			
-			return instance =new WarningMessageService();
 			
-		}else{
-			return instance;
+			
+			isequal(left, right, toBeDeleted, toBeAaded);
+		} else if (leftsize > rightsize) {
+			isLessEqual(left, right, toBeDeleted, toBeAaded);
+
+		} else if (leftsize < rightsize) {
+			isequal(left, right, toBeDeleted, toBeAaded);
+			isMoreEqual(left, right, toBeDeleted, toBeAaded);
+
 		}
-	}
-	
-	public WarningMessageService()
-	{
-		UndoRedoService.getInstance().registerObserver(this);
-		
-	}
-	
 
-	
-	public void removeWarning(WarningMessage warning)
-	{
-		int index = warnings.indexOf(warning);
-		warnings.remove(index);
-		observers.remove(warning);
-		notifyAllObservers(this,"warningremoved");
 		
-	}
-	
-	public ArrayList<WarningMessage> getWarningMessages()
-	{
-	
-		return warnings;
-	}
-
-
-	public boolean hasWarnings() {
-	return warnings.size()+codelevelWarnings.size()==0;
 		
-	}
-	public boolean hasCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek)
-	{
-
-		boolean haswarning=false;
-		Iterator<CodeLevelWarning> it = codelevelWarnings.iterator();
 		
-		while (it.hasNext()) {
-			AnalyzedModuleComponent analyzedModule =  it.next().getNotCodeLevelModule();
+		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAaded) {
+
+		
 			
-			String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
-			String rightUniqName = analyzedModuleToChek.getUniqueName().toLowerCase();
-			if(leftUniqName.equals(rightUniqName))
-			{
-				
 			
+			AnalyzedModuleComponent result = (AnalyzedModuleComponent)newAbstractCombinedComponent;
+			if (WarningMessageService.getInstance().hasCodeLevelWarning(result)) {
+
+			
+				result.freeze();
+				left.addChild(result);
 				
-				haswarning=true;
-				it.remove();
-				break;
+
+			} else {
+
+				left.addChild(result);
 			}
-			
-			
 		}
 		
 		
+		
+		
+		
+		
+		for (AbstractCombinedComponent remove : toBeDeleted) {
 
+			AnalyzedModuleComponent unittoberemoved = ((AnalyzedModuleComponent) remove);
 		
-		
-		
-		return haswarning;
-	}
-	
-
-		
-		
-	
-	
-	public void processModule(ModuleStrategy module)
-	{
-		
-		if (module.getId()!=0) {
-		if (module.isMapped()) {
-			removeImplementationWarning(module);
-		} else {
-			createModuleWarning(module);
-		}	
-		}
-		
-	}
-
-
-	public void removeImplementationWarning(ModuleStrategy module) {
-		for (WarningMessage warning : warnings) {
 			
-			if(warning instanceof ImplementationLevelWarning)
-			{
-				Long idOfWarningModule = ((ImplementationLevelWarning)warning).getModule().getId();
-				if(module.getId()==idOfWarningModule)
-				{
-					int index= warnings.indexOf(warning);
-					warnings.remove(index);
+		
+           WarningMessageService.getInstance().addCodeLevelWarning((AnalyzedModuleComponent)unittoberemoved);
+			
+			
+
+			AbstractCombinedComponent parent = remove.getParentofChild();
+
+			int index = parent.getChildren().indexOf(remove);
+			parent.getChildren().remove(index);	
+			unittoberemoved.removeChildFromParent();
+		}
+
+	
+		return (AnalyzedModuleComponent) left;
+	}
+
+
+
+
+
+
+	private void isequal(AbstractCombinedComponent left,
+			AbstractCombinedComponent right,
+			ArrayList<AbstractCombinedComponent> toBeDeleted,
+			ArrayList<AbstractCombinedComponent> toBeAaded) {
+
+		for (int i = 0; i < left.getChildren().size(); i++) {
+			compareAbstractCombinedComponent(left.getChildren().get(i), right
+					.getChildren().get(i), toBeDeleted, toBeAaded);
+			calucalteChanges(left.getChildren().get(i), right.getChildren()
+					.get(i));
+		}
+		Collections.sort(left.getChildren());
+		Collections.sort(right.getChildren());
+	}
+
+	private void isLessEqual(AbstractCombinedComponent left,
+			AbstractCombinedComponent right,
+			ArrayList<AbstractCombinedComponent> toBeDeleted,
+			ArrayList<AbstractCombinedComponent> toBeAaded) {
+		int leftindex = left.getChildren().size();
+		int rightindex = right.getChildren().size() - 1;
+		Collections.sort(left.getChildren());
+		Collections.sort(right.getChildren());
+		for (int i = 0; i < leftindex; i++) {
+
+			if (rightindex >= i) {
+
+				if (left.getChildren().get(i).getUniqueName()
+						.equals(right.getChildren().get(i).getUniqueName())) {
+					ChekifTypeChanged(left, right);
+				} else {
+					toBeDeleted.add(left.getChildren().get(i));
+					toBeAaded.add(right.getChildren().get(i));
+				}
+
+			} else {
+				toBeDeleted.add(left.getChildren().get(i));
+			}
+
+		}
+
+	}
+
+	private void isMoreEqual(AbstractCombinedComponent left,
+			AbstractCombinedComponent right,
+			ArrayList<AbstractCombinedComponent> toBeDeleted,
+			ArrayList<AbstractCombinedComponent> toBeAaded) {
+
+		int leftsize = left.getChildren().size();
+		int rightsize = right.getChildren().size();
+
+		for (int i = (rightsize - (rightsize - (leftsize))); i < rightsize; i++) {
+
+			boolean isfound = false;
+			for (AbstractCombinedComponent u : toBeDeleted) {
+				if (u.getUniqueName().equals(right.getChildren().get(i).getUniqueName())) {
+					isfound = true;
 					break;
 				}
 			}
-			
-		}
-		notifyAllObservers(this, "removedModule");
-	}
+			if (!isfound) {
 
-
-	private void createModuleWarning(ModuleStrategy module) {
-		ImplementationLevelWarning warning = new ImplementationLevelWarning(module);
-	
-		this.warnings.add(warning);
-		addObserver(warning);
-		notifyAllObservers(this,"createModule");
-	}
-
-
-
-	public void addObserver(Observer o)
-	{
-		observers.add(o);
-	}
-	
-	public void notifyAllObservers(Observable o, Object arg) {
-		for (Observer observer : observers) {
-			observer.update(this, arg);
-		}
-	}
-
-
-	public boolean isCodeLevelWarning(String uniqname) {
-		
-	    
-		boolean haswarning=false;
-	    
-			 for (WarningMessage message : warnings) {
-			     if (message instanceof CodeLevelWarning) {
-				 AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
-				 String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
-				 String rightUniqName =uniqname ;
-				 if(leftUniqName.equals(rightUniqName)){
-					haswarning=true;
-					break;
-				   }
-			     }
-			    }
-	   return haswarning;
-	}
-
-
-	public void addCodeLevelWarning(
-			AnalyzedModuleComponent unitTobeRestored) {
-		
-ArrayList<AbstractCombinedComponent> list =new ArrayList<AbstractCombinedComponent>();
-
-list.addAll(getnestedValues(unitTobeRestored));
-if (unitTobeRestored.isMapped()) {
-	  codelevelWarnings.add(new CodeLevelWarning(unitTobeRestored));
-}	
-for (AbstractCombinedComponent ab : list) {
-     
-	
-	codelevelWarnings.add(new CodeLevelWarning((AnalyzedModuleComponent) ab));
-
-}
-
-		
-		
-	}
-
-
-
-
-	private ArrayList<AbstractCombinedComponent> getnestedValues(AnalyzedModuleComponent an) {
-		
-		ArrayList<AbstractCombinedComponent> mapped = new ArrayList<AbstractCombinedComponent>();
-		for (AbstractCombinedComponent  unit : an.getChildren()) {
-			 mapped=(searchWithTailRecursive(unit,mapped));
-		}
-		
-		
-		
-		
-		return mapped;
-	}
-
-	private ArrayList<AbstractCombinedComponent> searchWithTailRecursive(
-			AbstractCombinedComponent unit,
-			ArrayList<AbstractCombinedComponent> mapped) {
-	AnalyzedModuleComponent io = (AnalyzedModuleComponent)unit;
-	
-	if (io.isMapped()) {
-			mapped.add(io);
-		}
-	for (AbstractCombinedComponent ab : io.getChildren()) {
-	searchWithTailRecursive(ab, mapped);
-	}
-	
-		
-		return mapped;
-	}
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-
-		
-	}
-
-
-	public void removeCodeLevelWarningss(String softwareUnit) {
-		for (Iterator<CodeLevelWarning> warning = codelevelWarnings.iterator(); warning.hasNext();) {
-			CodeLevelWarning message =  warning.next();
-			if (message instanceof CodeLevelWarning) {
-			AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
-			String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
-			String rightUniqName =softwareUnit ;
-			if(leftUniqName.equals(rightUniqName)){
-				int index = warnings.indexOf(message);
-				warnings.remove(index);
-				break;
-			   }
+				toBeAaded.add(right.getChildren().get(i));
 			}
-		} 
-	}
-
-	
-
-	public void notifyAllObservers() {
-		notifyAllObservers(this, new Object());
-		
-	}
-	
-	public Object[] getvalueat(int index)
-	{
-		
-	return warnings.get(index).getValue();
-	}
-
-
-	public ArrayList<CodeLevelWarning> getNotCodeLevelWarnings() {
-		System.out.println(codelevelWarnings.size() +"pulll meee");
-		return codelevelWarnings;
-	}
-
-
-	public void updateWarnings() {
-		
-		
-	}
-
-
-	public void registerNotMappedUnits(AnalyzedModuleComponent root) {
-	
-		for (AbstractCombinedComponent unit : root.getChildren()) {
-			
-			StateService.instance().getAnalzedModuleRegistry().registerAnalyzedUnit((AnalyzedModuleComponent)unit);
-			
-			registerNotMappedUnits((AnalyzedModuleComponent)unit);
-			
-			
 		}
-		
-		
-		/*for (AbstractCombinedComponent unit : StateService.instance().getmappedUnits()) {
-			
-			//JtreeController.instance().removeTreeItem((AnalyzedModuleComponent)unit);
-			//StateService.instance().getAnalzedModuleRegistry().removeAnalyzedUnit((AnalyzedModuleComponent)unit);
+
+	}
+
+	private void compareAbstractCombinedComponent(
+			AbstractCombinedComponent left, AbstractCombinedComponent right,
+			ArrayList<AbstractCombinedComponent> toBeDeleted,
+			ArrayList<AbstractCombinedComponent> toBeAaded) {
+
+		String AbstractCombinedComponentL = left.getUniqueName();
+		String AbstractCombinedComponentR = right.getUniqueName();
+
+		if (AbstractCombinedComponentL.equals(AbstractCombinedComponentR)) {
+
+			ChekifTypeChanged(left, right);
+
+		} else if (!AbstractCombinedComponentL
+				.equals(AbstractCombinedComponentR)) {
+			toBeDeleted.add(left);
+			toBeAaded.add(right);
 		}
-		*/
-		
-		
-		
+		Collections.sort(left.getChildren());
+		Collections.sort(right.getChildren());
 	}
 
+	private void ChekifTypeChanged(AbstractCombinedComponent left,
+			AbstractCombinedComponent right) {
 
-	public String warningsCount() {
-		// TODO Auto-generated method stub
-		return warnings.size()+codelevelWarnings.size()+"";
+		if (!left.getType().equals(right.getType())) {
+
+			left.setType(right.getType());
+		}
+
 	}
 
+	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
+		StateService.instance().getAnalzedModuleRegistry().reset();
+		JtreeController.instance().setLoadState(true);
+		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
+				"root", "Application", "application", "public");
+		//addExternalComponents(rootComponent);
 
-	@Override
-	public void addSeperatedModule(ModuleStrategy module) {
-		processModule(module);
+		ApplicationDTO application = ServiceProvider.getInstance()
+				.getControlService().getApplicationDTO();
+
+		for (ProjectDTO project : application.projects) {
+			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
+					project.name, project.name, "root", "public");
+			for (AnalysedModuleDTO module : ServiceProvider.getInstance().getAnalyseService().getRootModules()) {
+            
+				this.addChildComponents(projectComponent, module);
+			}
+			rootComponent.addChild(projectComponent);
+		}
+
+		Collections.sort(rootComponent.getChildren());
+
+		return rootComponent;
+	}
+
+	private void addChildComponents(AnalyzedModuleComponent parentComponent,
+			AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(
+				module.uniqueName, module.name, module.type, module.visibility);
+
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance()
+				.getAnalyseService().getChildModulesInModule(module.uniqueName);
+		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
+		Arrays.sort(children, comparator);
+		for (AnalysedModuleDTO subModule : children) {
+
+			this.addChildComponents(childComponent, subModule);
+		}
+
+		parentComponent.addChild(childComponent);
+		parentComponent.registerchildrenSize();
+	}
+
+	private void addExternalComponents(AnalyzedModuleComponent root) {
+		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent(
+				"external library", "External Systems", "externalpackage",
+				"public");
+
+		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance()
+				.getAnalyseService().getExternalSystems();
+		for (ExternalSystemDTO exe : externalSystems) {
+
+			AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
+					exe.systemPackage, exe.systemName, "externallibrary",
+					"public");
+			rootOfExterexternalLibrary.addChild(javalib);
+
+		}
+
+		root.addChild(rootOfExterexternalLibrary);
+
+	}
+
+	public AnalyzedModuleComponent getRootModel() {
+		if (!JtreeController.instance().isLoaded()
+				|| !ServiceProvider.getInstance().getControlService()
+						.isPreAnalysed()) {
+
+			if (!ServiceProvider.getInstance().getControlService()
+					.isPreAnalysed()) {
+				AnalyzedModuleComponent root = JtreeController.instance()
+						.getRootOfModel();
+				WarningMessageService.getInstance().resetNotAnalyzed();
+				WarningMessageService.getInstance()
+						.registerNotMappedUnits(root);
+				StateService.instance().registerImportedData();
+				return root;
+			}
+			JtreeController.instance().setLoadState(true);
+			JtreeController.instance().setCurrentTree(
+					new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
+			AnalyzedModuleComponent root = JtreeController.instance()
+					.getRootOfModel();
+			WarningMessageService.getInstance().resetNotAnalyzed();
+			WarningMessageService.getInstance().registerNotMappedUnits(root);
+			StateService.instance().registerImportedData();
+			return root;
+
+		} else {
 		
-	}
-
-
-	@Override
-	public void removeSeperatedModule(ModuleStrategy module) {
-		removeImplementationWarning(module);
+			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
+		    AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
 		
+			
+			calucalteChanges(left, right);
+			WarningMessageService.getInstance().registerNotMappedUnits(right);
+			WarningMessageService.getInstance().updateWarnings();
+			StateService.instance().registerImportedData();
+			return left;
+		}
 	}
-
-
-	@Override
-	public void layerUp(long moduleID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void layerDown(long moduleID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void clearImplementationLevelWarnings() {
-		
-		warnings = new ArrayList<WarningMessage>();
-	}
-
-
-	public void resetNotAnalyzed() {
-	codelevelWarnings = new ArrayList<CodeLevelWarning>();
-		
-	}
-
-
-	
-	
 }
