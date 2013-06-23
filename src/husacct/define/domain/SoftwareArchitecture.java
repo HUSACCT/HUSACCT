@@ -822,15 +822,4 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		
 	}
 
-	public void registerImportedValues() {
-		for (ModuleStrategy module : modules) {
-			for (SoftwareUnitDefinition unit : module.getUnits()) {
-				StateService.instance().registerImportedUnit(unit);
-			}
-			
-			
-		}
-		
-	}
-
 }

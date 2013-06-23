@@ -77,7 +77,7 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 
 	private void addToolBar() {
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setDividerLocation(300);
+		splitPane.setDividerLocation(365);
 		splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
 		JToolBar toolBar = new JToolBar();
