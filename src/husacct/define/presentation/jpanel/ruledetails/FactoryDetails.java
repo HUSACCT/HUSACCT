@@ -4,7 +4,7 @@ import husacct.define.presentation.jpanel.ruledetails.contentsmodule.FacadeConve
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.InterfaceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionJPanel;
-import husacct.define.presentation.jpanel.ruledetails.contentsmodule.SubClassConventionJPanel;
+import husacct.define.presentation.jpanel.ruledetails.contentsmodule.SuperClassInheritanceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.VisibilityConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.VisibilityConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.CyclesBetweenModulesExceptionJPanel;
@@ -38,7 +38,7 @@ public class FactoryDetails {
     private NamingConventionExceptionJPanel namingConventionExceptionJPanel;
     private NamingConventionJPanel namingConventionJPanel;
     private SkipCallJPanel skipCallJPanel;
-    private SubClassConventionJPanel subClassConventionJPanel;
+    private SuperClassInheritanceConventionJPanel superClassInheritanceConventionJPanel;
     private VisibilityConventionExceptionJPanel visibilityConventionExceptionJPanel;
     private VisibilityConventionJPanel visibilityConventionJPanel;
 
@@ -49,10 +49,10 @@ public class FactoryDetails {
 	    interfaceConventionJPanel = new InterfaceConventionJPanel(
 		    appliedRuleController);
 	    return interfaceConventionJPanel;
-	} else if (ruleTypeKey.equals(SubClassConventionJPanel.ruleTypeKey)) {
-	    subClassConventionJPanel = new SubClassConventionJPanel(
+	} else if (ruleTypeKey.equals(SuperClassInheritanceConventionJPanel.ruleTypeKey)) {
+		superClassInheritanceConventionJPanel = new SuperClassInheritanceConventionJPanel(
 		    appliedRuleController);
-	    return subClassConventionJPanel;
+	    return superClassInheritanceConventionJPanel;
 	} else if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)) {
 	    visibilityConventionJPanel = new VisibilityConventionJPanel(
 		    appliedRuleController);
@@ -142,12 +142,12 @@ public class FactoryDetails {
 			appliedRuleController);
 	    }
 	    return interfaceConventionJPanel;
-	} else if (ruleTypeKey.equals(SubClassConventionJPanel.ruleTypeKey)) {
-	    if (subClassConventionJPanel == null) {
-		subClassConventionJPanel = new SubClassConventionJPanel(
+	} else if (ruleTypeKey.equals(SuperClassInheritanceConventionJPanel.ruleTypeKey)) {
+	    if (superClassInheritanceConventionJPanel == null) {
+	    	superClassInheritanceConventionJPanel = new SuperClassInheritanceConventionJPanel(
 			appliedRuleController);
 	    }
-	    return subClassConventionJPanel;
+	    return superClassInheritanceConventionJPanel;
 	} else if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)) {
 	    if (visibilityConventionJPanel == null) {
 		visibilityConventionJPanel = new VisibilityConventionJPanel(
