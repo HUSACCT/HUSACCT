@@ -81,7 +81,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessClassVariableConstant";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("AccessPropertyOrField");
+		typesToFind.add("AccessClassVariableConstant");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -91,7 +91,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "AccessClassVariableInterface";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("AccessPropertyOrField");
+		typesToFind.add("AccessClassVariableInterface");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -110,7 +110,7 @@ public class DependencyDetectionAccuracyTest {
 	public void AccessInstanceVariable(){
 		String fromToTest = "AccessInstanceVariable";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("undefined");
+		typesToFind.add("AccessInstanceVariable");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -119,7 +119,7 @@ public class DependencyDetectionAccuracyTest {
 	public void AccessInstanceVariableConstant(){
 		String fromToTest = "AccessVariableInstanceConstant";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("undefined");
+		typesToFind.add("AccessVariableInstanceConstant");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -128,7 +128,7 @@ public class DependencyDetectionAccuracyTest {
 	public void AccessObjectReferenceAsParameter(){
 		String fromToTest = "AccessObjectReferenceParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("undefined");
+		typesToFind.add("AccessObjectReferenceParameter");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -137,7 +137,7 @@ public class DependencyDetectionAccuracyTest {
 	public void AccessObjectReferenceWithinIfStatement(){
 		String fromToTest = "AccessObjectReferenceWithinStatement";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("undefined");
+		typesToFind.add("AccessObjectReferenceWithinStatement");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -217,7 +217,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceLibraryClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("ExtendsConcrete");
+		typesToFind.add("CallInstanceLibraryClass");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -227,7 +227,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceSuperClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("ExtendsConcrete");
+		typesToFind.add("CallInstanceSuperClass");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -237,7 +237,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "CallInstanceSuperSuperClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("ExtendsConcrete");
+		typesToFind.add("CallInstanceSuperSuperClass");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -278,7 +278,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "DeclarationTypeCast";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("undefined");
+		typesToFind.add("DeclarationTypeCast");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -288,7 +288,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "DeclarationTypeCastOfArgument";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("undefined");
+		typesToFind.add("DeclarationTypeCastOfArgument");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
@@ -318,7 +318,7 @@ public class DependencyDetectionAccuracyTest {
 		String fromToTest = "DeclarationVariableWithinMethod";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		typesToFind.add("DeclarationInstanceVariable");
+		typesToFind.add("DeclarationVariableWithinMethod");
 
 		Assert.assertTrue(searchDependencies(fromToTest, typesToFind));
 	}
