@@ -105,7 +105,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
-		StateService.instance().addModule(module);
+	
 
 	registerModule(module);
 		
@@ -831,6 +831,13 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			
 			
 		}
+		
+	}
+
+	@Override
+	public void editAppliedRule(long ruleid, Object[] oldvalues,
+			Object[] newValues) {
+		// TODO Auto-generated method stub
 		
 	}
 
