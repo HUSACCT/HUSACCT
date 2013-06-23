@@ -1,6 +1,5 @@
 package husacct.define.task.components;
 
-import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -112,6 +111,8 @@ public class RegexComponent extends AnalyzedModuleComponent {
 		}
     	
     }
+    
+  
 
 	
 

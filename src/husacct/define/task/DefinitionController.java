@@ -10,6 +10,7 @@ import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
@@ -227,7 +228,13 @@ import org.apache.log4j.Logger;
 				o.update(this, moduleId);
 			}
 		}
-
+		
+		public void notifyAnalyzedObservers() {
+			long moduleId = getSelectedModuleId();
+			for (Observer o : observers) {
+				o.update(this, "updateSoftwareTree");
+			}
+		}
 		/**
 		 * This function will load notify all to update their data
 		 */
@@ -239,6 +246,7 @@ import org.apache.log4j.Logger;
 
 		public void passModuleToService(long selectedModuleId, ModuleStrategy module) {
 			String ExceptionMessage = "";
+			StateService.instance().addModule(module);
 			if (selectedModuleId == -1) {
 				moduleService.addModuleToRoot(module);
 			} else {
@@ -336,7 +344,7 @@ import org.apache.log4j.Logger;
 						ServiceProvider.getInstance().getLocaleService()
 						.getTranslatedString("ConfirmRemoveSoftwareUnit"),
 						"Remove?");
-				JtreeController.instance().restoreTreeItem(softwareUnitNames,types);
+			
 				for (String softwareUnit : softwareUnitNames) {
 					String type = types.get(location);
 					logger.info("Removing software unit " + softwareUnit);
@@ -344,15 +352,10 @@ import org.apache.log4j.Logger;
 							&& !softwareUnit.equals("")) {
 						if (confirm) {
 							logger.info("getting type:" + type);
-
+                         JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
 							JPanelStatus.getInstance("Removing software unit")
 							.start();
-							if (type.toUpperCase().equals("REGEX")) {
-								softwareUnitDefinitionDomainService
-								.removeRegExSoftwareUnit(moduleId,
-										softwareUnit);
-								this.notifyObservers();
-							} else {
+							
 								boolean chekHasCodelevelWarning = WarningMessageService
 										.getInstance().isCodeLevelWarning(
 												softwareUnit);
@@ -374,7 +377,7 @@ import org.apache.log4j.Logger;
 								}
 								this.notifyObservers();
 							}
-						}
+						
 					}
 					location++;
 				}
@@ -447,12 +450,15 @@ import org.apache.log4j.Logger;
 		public void addModule(String name, String description, String type) {
 			ModuleStrategy module= moduleService.createNewModule(type);
 			module.set(name, description);
+			if (module instanceof Component) {
+			
+				ModuleStrategy facade=	moduleService.createNewModule("facade");
+				facade.set("Facade<"+name+">", "this is the Facade of your Component");
+				module.addSubModule(facade);
+			}
 			
 			this.passModuleToService(getSelectedModuleId(), module);
 			
-			//Dirty way of ensuring that the facade will be put as submodule of the component.
-			if(module instanceof Component) {
-				setSelectedModuleId(module.getId());
-			}
+			
 		}
 	}

@@ -4,4 +4,13 @@
   <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
   <MainGui filename = "maingui.html" viewname = "General"></MainGui>
   <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+  <ModuleJPanel filename="modules.html" viewname="Module hierarchy"></ModuleJPanel>
+  <EditModuleJPanel filename="moduleProps.html" viewname="Module Properties"></EditModuleJPanel>
+  <SoftwareUnitsJPanel filename="softwareunits.html" viewname="Software Units"></SoftwareUnitsJPanel>
+  <AppliedRulesJPanel filename="appliedrules.html" viewname="Applied Rules"></AppliedRulesJPanel>
+  <AddModuleValuesJDialog filename="addmoduledialog.html" viewname="Add Module"></AddModuleValuesJDialog>
+  <AppliedRuleJDialog filename="addruledialog.html" viewname="Add Applied Rule"></AppliedRuleJDialog>
+  <EditSoftwareUnitJDialog filename="editsoftwareunit.html" viewname="Edit Software Unit"></EditSoftwareUnitJDialog>
+  <ExceptionRuleJDialog filename="addexception.html" viewname="Add Exception"></ExceptionRuleJDialog>
+  <SoftwareUnitJDialog filename="addsoftwareunit.html" viewname="Add Software Unit"></SoftwareUnitJDialog>
 </manuals>

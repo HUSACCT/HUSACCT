@@ -2,10 +2,9 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.domain.module.ModuleFactory;
-import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
@@ -22,13 +21,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener, ILocaleChangeListener {
+public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListener, ActionListener, ILocaleChangeListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	
@@ -208,10 +206,8 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			
 			boolean hasBeenAdded = DomainGateway.getInstance().addModule(moduleName, moduleDescription, moduleType);
 			if (hasBeenAdded){
-				//Dirty fix to add facade to the component, logic should be moved elsewhere
-				if(moduleType.equals("Component")) {
-				    DomainGateway.getInstance().addModule("Facade<"+moduleName+">", "this is the Facade of your Component", "Facade");
-				}
+			
+				
 				this.modulePanel.updateModuleTree();
 				this.dispose();
 			}
@@ -237,5 +233,6 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
 	}
 	
-
+	
+	
 }

@@ -63,7 +63,7 @@ public class DomainGateway {
 
 	public AnalyzedModuleComponent getRootModel() {
 		AnalyzedModuleComponent root = StateService.instance().getRootModel();
-		JtreeController.instance().setTreeModel(root);
+		
 		return root;
 	}
 
@@ -71,7 +71,7 @@ public class DomainGateway {
 			List<String> types) {
 		DefinitionController.getInstance().removeSoftwareUnits(selectedModules,
 				types);
-		// StateService.instance().removeSoftwareUnit(selectedModules);
+		 StateService.instance().removeSoftwareUnit(selectedModules);
 
 	}
 
@@ -112,6 +112,7 @@ public class DomainGateway {
 	}
 
 	public void removeRules(List<Long> selectedRules) {
+	
 		SoftwareArchitecture.getInstance().removeAppliedRule(selectedRules);
 	}
 

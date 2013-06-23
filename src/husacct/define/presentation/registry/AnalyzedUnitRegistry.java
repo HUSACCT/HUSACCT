@@ -3,7 +3,6 @@ package husacct.define.presentation.registry;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.UndoRedoService;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.warningmessages.CustomWarningMessage;
@@ -12,6 +11,7 @@ import husacct.define.domain.warningmessages.WarningMessageContainer;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,18 +99,31 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 		WarningMessageContainer enumroot = new WarningMessageContainer(new CustomWarningMessage("Enum"));
 		
 		for (AnalyzedModuleComponent  unit :  allAnalyzedUnits.values()) {
-			if(!unit.isMapped()&& !unit.isAncestorsMapped()){
-			String type = unit.getType().toLowerCase();
-
+			
+			if (unit.getType().equalsIgnoreCase("regex")) {
+			
+		
+		
+		
+		}else{
+			
+			if((!unit.isMapped()&& !unit.isAncestorsMapped())){
+				String type = unit.getType().toLowerCase();
+			
+		
+			
 			switch (type) {
 			case "class":
+				
 				classesroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
 				break;
 
 			case "package":
+				
 				packagesroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
 				break;
 			case "interface":
+				
 				interfaceroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
 				break;
 			case "enum":
@@ -122,6 +135,7 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 			}
 			
 			}
+		}
 		}
 		WarningMessageContainer notMapped = new WarningMessageContainer(new CustomWarningMessage("NotMapped"));
 	
@@ -136,7 +150,8 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 		notMapped.addChild(enumroot);
 	   
 	    ((CustomWarningMessage)notMapped.getvalue()).setDecription( notMapped.getAllWarningsCount());
-		return notMapped;
+		
+	    return notMapped;
 	}
 
 	@Override
@@ -162,5 +177,21 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	public AnalyzedModuleComponent getAnalyzedUnit(String uniqueName) {
 		return allAnalyzedUnits.get(uniqueName);
 		
+	}
+
+	@Override
+	public void switchSoftwareUnitLocation(long fromModule, long toModule,
+			List<String> uniqNames) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<AnalyzedModuleComponent> getAnalyzedUnit(List<String> data) {
+		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
+		for (String uniqNames : data) {
+			units.add(allAnalyzedUnits.get(uniqNames));
+		}
+		
+		return units;
 	}
 }
