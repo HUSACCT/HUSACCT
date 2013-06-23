@@ -20,6 +20,7 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 
 	private Map<String,AnalyzedModuleComponent> allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
 	private Map<Long,AbstractDefineComponent> allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
+	private Map<String,String> importedUniqnames  =  new LinkedHashMap<String, String>();
     
 	
 
@@ -194,4 +195,28 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 		
 		return units;
 	}
+
+	public void registerImportedUnit(SoftwareUnitDefinition unit) {
+		
+		
+		
+			importedUniqnames.put(unit.getName(), unit.getName());
+		
+		
+	}
+
+	public List<String> getimportedUnits() {
+		List<String> unignames= new ArrayList<String>();
+		for (String name : importedUniqnames.values()) {
+			unignames.add(name);
+		}
+             
+		importedUniqnames= new LinkedHashMap<String, String>();
+	
+         return unignames;
+		}
+		
+	
+	
+	
 }
