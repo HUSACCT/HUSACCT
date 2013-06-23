@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +37,7 @@ public class ActionLogPanel extends JPanel{
 		
 		BorderLayout defaultBorderLayout = new BorderLayout();
 		this.setLayout(defaultBorderLayout);
-		Dimension preferredSize = new Dimension(250, 212);
+		Dimension preferredSize = new Dimension(250, 75);
 		this.setPreferredSize(preferredSize);
 		
 		boolean showActionLog = ConfigurationManager.getProperty("ActionLogger").equals("true");
@@ -67,15 +68,13 @@ public class ActionLogPanel extends JPanel{
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
 
 		ArrayList<HashMap<String, String>> loggedActions = mainController.getActionLogController().getLoggedActionsArrayList();
-		int i = 1;
 		for(HashMap<String, String> loggedUserAction : loggedActions){
-			logTableModel.addRow(new Object[]{i + ": " + loggedUserAction.get("message")});
-			i++;
+			logTableModel.addRow(new Object[]{loggedUserAction.get("message")});
 		}
 		
 		JScrollPane output = new JScrollPane(logTable);
 		output.setOpaque(false);
-		Dimension preferredSize = new Dimension(250, 212);
+		Dimension preferredSize = new Dimension(250, 65);
 		output.setPreferredSize(preferredSize);
 		
 		return output;
@@ -83,10 +82,12 @@ public class ActionLogPanel extends JPanel{
 	
 	public void refreshActionLogPanel(){
 		this.removeAll();
-		this.add(getActionsDialogScrollPaneContents(), BorderLayout.SOUTH);
+		JScrollPane scrollPane = getActionsDialogScrollPaneContents();
+		this.add(scrollPane, BorderLayout.SOUTH);
 		this.validate();
 		this.repaint();
+		
+		JScrollBar vertical = scrollPane.getVerticalScrollBar();
+		vertical.setValue(vertical.getMaximum()+20);
 	}
-	
-	
 }
