@@ -167,7 +167,10 @@ public class SoftwareUnitDefinitionDomainService {
 
 	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,
 			ModuleStrategy parent, SoftwareUnitDefinition rootunit) {
-		
+		// TODO: Is this one still needed:
+		// Regexmodule regex = new Regexmodule()
+		JtreeController.instance().getTree()
+				.removeRegexTreeItem(parent.getId(), softwareunit);
 
 	}
 

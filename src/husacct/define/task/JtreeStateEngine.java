@@ -211,7 +211,6 @@ return	allUnitsRegistry.getNotMappedUnits();
 	
 		
 	}
-	
 	public void registerImportedData() {
 	       for (String unigNames : allUnitsRegistry.getimportedUnits()) {
 			AnalyzedModuleComponent result = allUnitsRegistry.getAnalyzedUnit(unigNames.toLowerCase());
@@ -228,6 +227,7 @@ return	allUnitsRegistry.getNotMappedUnits();
 
 	}
 
+
 	public void addAppliedRule(AppliedRuleStrategy rule) {
 		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
 		rules.add(rule);
@@ -242,7 +242,7 @@ return	allUnitsRegistry.getNotMappedUnits();
 	}
 
 	public void editAppliedRule(AppliedRuleStrategy rule, Object[] objects) {
-		stateController.insertCommand(new )
+		//stateController.insertCommand(new )
 		
 	}
 

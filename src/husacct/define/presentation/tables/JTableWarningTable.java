@@ -83,11 +83,11 @@ public class JTableWarningTable extends AbstractJTable implements
 	for (int i = 0; i < getColumnCount(); i++) {
 	    column = getColumnModel().getColumn(i);
 	    if (i == 0) {
-		column.setPreferredWidth(400);
+		column.setPreferredWidth(250);
 	    } else if (i == 1) {
-		column.setPreferredWidth(400);
+		column.setPreferredWidth(250);
 	    } else if (i == 2) {
-		column.setPreferredWidth(400);
+		column.setPreferredWidth(250);
 	    }
 	}
     }

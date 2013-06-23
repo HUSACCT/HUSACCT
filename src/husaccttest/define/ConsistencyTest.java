@@ -54,8 +54,8 @@ public class ConsistencyTest {
 		softwareunit13.addChild(softwareunit14);
 		softwareunit13.addChild(softwareunit15);
 		JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(rootComponent));
-	//	URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
-		//PropertyConfigurator.configure(propertiesFile);
+		URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
+		PropertyConfigurator.configure(propertiesFile);
 		rootComponent.addChild(softwareunit6);
 		rootComponent.addChild(softwareunit1);
 		
@@ -169,10 +169,6 @@ public class ConsistencyTest {
 	
 	
 	}
-	
-	
-	
-	
 	
 	
 	
