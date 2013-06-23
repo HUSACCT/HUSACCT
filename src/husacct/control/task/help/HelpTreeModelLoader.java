@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -48,28 +49,6 @@ public class HelpTreeModelLoader {
 		catch (Exception ex) {
 			logger.error(ex.getMessage());
 		}
-
-		/*URL url = Resource.get(manualXmlPath);
-
-
-
-
-		String path = url.getPath();
-		path = path.replace("file:", "");
-
-		File manualDescriptionFile = new File(path);
-
-		SAXBuilder sax = new SAXBuilder();
-		Document doc = new Document();
-		try {
-			sax.build();
-			doc = sax.build(manualDescriptionFile);
-		}
-		catch (Exception ex) {
-			logger.error(ex.getMessage());
-		}
-
-		 */
 		return doc;
 	}
 
@@ -80,21 +59,38 @@ public class HelpTreeModelLoader {
 
 		Element root = getXmlDocument().getRootElement();
 
-		DefaultMutableTreeNode parent = new DefaultMutableTreeNode(root.getName());
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(root.getName());
 		for(Element child : root.getChildren()) {
-			HelpTreeNode HelpNode = new HelpTreeNode(child.getAttributeValue("filename"), child.getAttributeValue("viewname"), child.getName());
+			HelpTreeNode HelpNode = new HelpTreeNode(child.getAttributeValue("filename"), child.getAttributeValue("viewname"), child.getName() ,"html");
 			DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(HelpNode);
-			parent.add(childNode);
+			if(HelpNode.getParent() == null) {
+				rootNode.add(childNode);
+			}
+			else {
+				DefaultMutableTreeNode ParentNode = new DefaultMutableTreeNode(new HelpTreeNode(HelpNode.parent,HelpNode.parent,HelpNode.parent, "folder"));
+				ParentNode = checkIfParentAlreadyExists(rootNode, ParentNode);
+				
+				ParentNode.add(childNode);
+				rootNode.add(ParentNode);
+				//parent.add(new DefaultMutableTreeNode(new HelpTreeNode ("Test1", "Test2", "Test3")).add(childNode));
+			}
 			HelpTreeNodeList.add(HelpNode);
 		}
 
-		return parent;
-
-
-
-
+		return rootNode;
 	}
 
+	public DefaultMutableTreeNode checkIfParentAlreadyExists(DefaultMutableTreeNode root, DefaultMutableTreeNode Child) {
+		String nameOfNode = ((HelpTreeNode)Child.getUserObject()).getViewName();
+		List<DefaultMutableTreeNode> list = Collections.list(root.children());
+		for(int i = 0; i < list.size(); i++) {
+			HelpTreeNode treeNode = (HelpTreeNode)list.get(i).getUserObject();
+			if(treeNode.getViewName().equals(nameOfNode)) {
+				return list.get(i);
+			}
+		}
+		return Child;
+	}
 	public String getContent(InputStream stream) {		
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String line;
