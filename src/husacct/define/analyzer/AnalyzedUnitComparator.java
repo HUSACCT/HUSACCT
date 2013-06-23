@@ -5,12 +5,12 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.AnalysedModuleComparator;
-import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class AnalyzedUnitComparator {
-
 	public AnalyzedModuleComponent calucalteChanges(
 			AbstractCombinedComponent left, AbstractCombinedComponent right) {
 
@@ -45,41 +44,58 @@ public class AnalyzedUnitComparator {
 
 		}
 
+		
+		
+		
+		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAaded) {
+
+		
+			
+			
+			AnalyzedModuleComponent result = (AnalyzedModuleComponent)newAbstractCombinedComponent;
+			if (WarningMessageService.getInstance().hasCodeLevelWarning(result)) {
+
+			
+				result.freeze();
+				left.addChild(result);
+				
+
+			} else {
+
+				left.addChild(result);
+			}
+		}
+		
+		
+		
+		
+		
+		
 		for (AbstractCombinedComponent remove : toBeDeleted) {
 
 			AnalyzedModuleComponent unittoberemoved = ((AnalyzedModuleComponent) remove);
-			unittoberemoved.removeChildFromParent();
-
-			if (unittoberemoved.isMapped()) {
-
-				ModuleStrategy module = StateService.instance()
-						.getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
-				WarningMessageService.getInstance().addCodeLevelWarning(
-						module.getId(), unittoberemoved);
-			}
+		
+			
+		
+           WarningMessageService.getInstance().addCodeLevelWarning((AnalyzedModuleComponent)unittoberemoved);
+			
+			
 
 			AbstractCombinedComponent parent = remove.getParentofChild();
 
 			int index = parent.getChildren().indexOf(remove);
-			parent.getChildren().remove(index);
+			parent.getChildren().remove(index);	
+			unittoberemoved.removeChildFromParent();
 		}
 
-		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAaded) {
-
-			if (WarningMessageService.getInstance().hasCodeLevelWarning(
-					(AnalyzedModuleComponent) newAbstractCombinedComponent)) {
-
-				((AnalyzedModuleComponent) newAbstractCombinedComponent)
-						.freeze();
-				left.addChild(newAbstractCombinedComponent);
-
-			} else {
-
-				left.addChild(newAbstractCombinedComponent);
-			}
-		}
+	
 		return (AnalyzedModuleComponent) left;
 	}
+
+
+
+
+
 
 	private void isequal(AbstractCombinedComponent left,
 			AbstractCombinedComponent right,
@@ -132,12 +148,11 @@ public class AnalyzedUnitComparator {
 		int leftsize = left.getChildren().size();
 		int rightsize = right.getChildren().size();
 
-		for (int i = (rightsize - (rightsize - leftsize)); i < rightsize; i++) {
+		for (int i = (rightsize - (rightsize - (leftsize))); i < rightsize; i++) {
 
 			boolean isfound = false;
 			for (AbstractCombinedComponent u : toBeDeleted) {
-				if (u.getUniqueName().equals(
-						right.getChildren().get(i).getUniqueName())) {
+				if (u.getUniqueName().equals(right.getChildren().get(i).getUniqueName())) {
 					isfound = true;
 					break;
 				}
@@ -255,7 +270,7 @@ public class AnalyzedUnitComparator {
 						.getRootOfModel();
 				WarningMessageService.getInstance().resetNotAnalyzed();
 				WarningMessageService.getInstance().registerNotMappedUnits(root);
-				StateService.instance().registerImportedData();
+				//StateService.instance().registerImportedData();
 				return root;
 			}
 			JtreeController.instance().setLoadState(true);
@@ -265,7 +280,7 @@ public class AnalyzedUnitComparator {
 					.getRootOfModel();
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(root);
-			StateService.instance().registerImportedData();
+		//	StateService.instance().registerImportedData();
 			return root;
 
 		} else {
@@ -278,7 +293,7 @@ public class AnalyzedUnitComparator {
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();
-			StateService.instance().registerImportedData();
+		//	StateService.instance().registerImportedData();
 			return left;
 		}
 	}

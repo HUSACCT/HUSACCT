@@ -24,7 +24,8 @@ public class WarningMessageFactory {
 		
 		WarningMessageContainer customContainer = new WarningMessageContainer(new CustomWarningMessage("Custom"));
 	WarningMessageContainer notMapped=	getNotmapped();
-		addNotCodeLevel(codelevelContainer);
+	System.out.println("hheeyy hooooo");	
+	addNotCodeLevel(codelevelContainer);
 		addNotMappedModule(implevelContainer);
 	
 		
@@ -59,8 +60,9 @@ public class WarningMessageFactory {
 	
 	private void addNotCodeLevel(WarningMessageContainer rootOfNotmapped)
 	{
+		System.out.println("refreshhhhhhhh 1");
 		for (CodeLevelWarning code: WarningMessageService.getInstance().getNotCodeLevelWarnings()){
-			
+			System.out.println("refreshhhhhhhh ");
 			rootOfNotmapped.addChild(new WarningMessageContainer(code));
 		}
 		

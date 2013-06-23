@@ -148,8 +148,6 @@ public class XMLDomain {
 						module.getChild("SubModules"));
 			}
 		}
-		
-		SoftwareArchitecture.getInstance().registerImportedValues();
 	}
 
 	public SoftwareUnitDefinition getSoftwareUnitDefinitionFromXML(Element e) {

@@ -106,15 +106,6 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	    } else {
 		icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA));
 	    }
-	}
-	    else if (component.getType().equals("LIBRARY")) {
-		    if (component.isMapped()) {
-			icon = new ImageIcon(
-				Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
-		    } else {
-			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB));
-		    }
-
 
 	} else if (component.getType().equals("ROOT")) {
 	    icon = new ImageIcon(Resource.get(Resource.ICON_ROOT));
