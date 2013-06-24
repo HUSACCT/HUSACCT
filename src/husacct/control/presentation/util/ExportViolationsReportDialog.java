@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.ExportController;
@@ -22,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class ExportViolationsReportDialog extends JDialog{
+public class ExportViolationsReportDialog extends HelpableJDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JLabel pathLabel;

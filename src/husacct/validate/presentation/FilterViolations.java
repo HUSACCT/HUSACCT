@@ -1,6 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
@@ -25,7 +26,7 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
-public final class FilterViolations extends JDialog {
+public final class FilterViolations extends HelpableJDialog {
 
 	private static final long serialVersionUID = -6295611607558238501L;
 	@SuppressWarnings("unused")
