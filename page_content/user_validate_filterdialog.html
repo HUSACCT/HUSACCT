@@ -1,0 +1,105 @@
+<h1>Filter dialog</h1>
+<p>
+	The violations table can also be filtered. This screen provides
+	an easy to use way to filter the violations. During filtering can be
+	chosen to show or hide the selected values. There are two tabs in this
+	screen. In the first tab only the rule types and violation types are
+	shown. In the second tab there is a possibility to filter on the
+	source path of the violations.
+</p>
+<img src="./images/validate/validate-filter-dialog-filter-violations.png">
+<p class="caption">Figure 2<span class="caption-explanation">&nbsp;Filter Dialog tab for filtering rule- and/or violation types</span></p>
+<ol>
+	<li>In this table the rule types that will be filtered can be selected.</li>
+	<li>In this table the violation types that will be filtered can be selected.</li>
+	<li>The option to choose if the filtered values must be shown or must be hidden.</li>
+	<li>When this button is pressed, the violations will be filtered.</li>
+	<li>When this button is pressed, the screen will be closed.</li>
+</ol>
+<img src="./images/validate/validate-filter-dialog-filter-paths.png">
+<p class="caption">Figure 3<span class="caption-explanation">&nbsp;Filter dialog tab for filtering classpaths</span></p>
+<ol>
+	<li>This table shows all the paths are added to filter. The physical paths can be filtered with a regex; the possibilities will be explained in table 2.</li>
+	<li>When this button is pressed, the system will add an empty field to area 1.</li>
+	<li>When this button is pressed, the system will remove the selected row from area 1.</li>
+	<li>The option to choose if the filtered values must be shown or must be hidden.</li>
+	<li>When this button is pressed, the violations will be filtered.</li>
+	<li>When this button is pressed, the screen will be closed.</li>
+</ol>
+<table border="1">
+	<thead>
+		<tr>
+			<th>Your Input Example</th>
+			<th>Path Input Example</th>
+			<th>Output Example</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>java.St*</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake
+				com.class.String
+			</td>
+			<td>
+				java.String
+				java.StringBuffer
+			</td>
+		</tr>
+		<tr>
+			<td>java.St**</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake
+				com.class.String
+			</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake	
+			</td>
+		</tr>
+		<tr>
+			<td>*.String</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake
+				com.class.String
+			</td>
+			<td>java.String</td>
+		</tr>
+		<tr>
+			<td>**.String</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake
+				com.class.String
+			</td>
+			<td>
+				java.String
+				com.class.String
+			</td>
+		</tr>
+		<tr>
+			<td>**Stri**</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake
+				com.class.String
+			</td>
+			<td>
+				java.String
+				java.StringBuffer
+				java.String.Fake
+				com.class.String
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p class="caption">Table 2<span class="caption-explanation">&nbsp;overview of possible regexes for filtering</span></p>

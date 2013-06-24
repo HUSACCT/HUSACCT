@@ -46,7 +46,33 @@ a small {
   margin-top:-0.6em;
   display:block;
 }
+#important-notice {
+	font-weight: bold;
+}
 
+.ruletype {
+	text-decoration: underline;
+}
+	
+.keyword {
+	font-style: italic;
+}
+	
+.regex-false {
+	color: red;
+}
+	
+.regex-true {
+	color: green;
+}
+	
+.caption {
+	color: blue;
+}
+	
+.caption-explanation {
+	font-style: italic;
+}
 .wrapper {
   width:860px;
   margin:0 auto;
