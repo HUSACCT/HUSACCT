@@ -72,7 +72,7 @@ public class HelpDialog extends JDialog {
 
 	private void setup() {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(600, 675));
+		this.setSize(new Dimension(1100, 675));
 		this.setLayout(new FlowLayout(0, 0, 0));
 		this.setResizable(false);
 		this.getContentPane().setBackground(Color.WHITE);
@@ -95,10 +95,6 @@ public class HelpDialog extends JDialog {
 	}
 
 	private void addComponents() {
-
-
-
-
 		JSplitPane rootPanel = new JSplitPane();
 		rootPanel.setDividerLocation(200);
 
@@ -150,9 +146,13 @@ public class HelpDialog extends JDialog {
 				selectedNode = (DefaultMutableTreeNode) tree
 						.getLastSelectedPathComponent();
 				try {
-					String filename = ((HelpTreeNode)selectedNode.getUserObject()).getFilename();
-					InputStream stream = Resource.getStream(Resource.HELP_PAGES_PATH + filename);
-					editorpane.setText(hpl.getContent(stream));
+					if(((HelpTreeNode)selectedNode.getUserObject()).getFileType().equals("html")) {
+						
+						String filename = ((HelpTreeNode)selectedNode.getUserObject()).getFilename();
+						InputStream stream = Resource.getStream(Resource.HELP_PAGES_PATH + filename);
+						editorpane.setText(hpl.getContent(stream));
+						editorpane.setCaretPosition(0);
+					}
 
 				} catch (Exception ex) {
 					ex.printStackTrace();

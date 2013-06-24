@@ -2,6 +2,7 @@ package husacct.control.presentation.workspace;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.DialogUtils;
@@ -25,7 +26,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class CreateWorkspaceDialog extends JDialog{
+public class CreateWorkspaceDialog extends HelpableJDialog{
 
 	private static final long serialVersionUID = 1L;
 	private MainController mainController;
