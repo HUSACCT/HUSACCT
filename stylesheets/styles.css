@@ -127,6 +127,7 @@ header {
   width:270px;
   float:left;
   position:fixed;
+  top: 25px;
 }
 #logo{
 	border: none;
@@ -134,9 +135,7 @@ header {
 header #git_menu {
   list-style:none;
   height:40px;
-  
   padding:0;
-  
   background: #eee;
   background: -moz-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
@@ -144,11 +143,11 @@ header #git_menu {
   background: -o-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: -ms-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
-  
   border-radius:5px;
   border:1px solid #d2d2d2;
   box-shadow:inset #fff 0 1px 0, inset rgba(0,0,0,0.03) 0 -1px 0;
   width:270px;
+  margin-bottom: 0px;
 }
 
 header #git_menu li {
@@ -172,7 +171,9 @@ strong {
   color:#222;
   font-weight:700;
 }
-
+header > p{
+	margin-bottom: 0px;
+}
 header #git_menu li + li {
   width:88px;
   border-left:1px solid #fff;
@@ -188,8 +189,12 @@ header #git_menu a strong {
   display:block;
   color:#222;
 }
+header .copyright{
+	text-align: center;
+	margin-top: 15px;
+}
 #pages_menu{
-	
+	padding-left: 20px;
 }
 #pages_menu ul{
 	margin-bottom: 0px;
@@ -294,5 +299,6 @@ footer {
 #PagesHeading{
 	font-size: 18px;
 	padding-bottom: 5px;
+	margin-top: 15px;
 	font-weight: bold;
 }

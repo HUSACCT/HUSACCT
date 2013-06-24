@@ -5,18 +5,18 @@
 
 <p>When building new software, software architects design an architecture for the application. The programmers are tasked with realizing the application based on the designed architecture.</p>
 
-<p>To see if the realized architecture is really the designed architecture we can use a SACC-Tool. The following steps are taken to confirm this.</p>
+<p>To see if the realized architecture really is the same as the designed architecture we can use the SACC-tool. To use such a SACC-tool, the following steps are to be taken.</p>
 
 <h3>
 <a name="analyse-an-architecture" class="anchor" href="#analyse-an-architecture"><span class="octicon octicon-link"></span></a>Analyse an architecture</h3>
 
-<p>By analyzing the built application we can breakdown the structure of the application. That way we can use the physical entities that are detected to define an architecture.<br>
-It also allows architects and programmers to view a graphical representation of the realized software architecture, but that is not good enough. We want to be able to check the analyzed software architecture against an architectural model.</p>
+<p>By analyzing an application, we are able to break down the structure of the given software. By doing this the program detects the physical entities inside the software and defines the architecture used within the application.<br>
+It also allows the architects and the software engineers to get a graphical representation of the detected software architecture. Next to the possibility of getting a detailed graphical overview of the analyzed software, there is the ability to check the analyzed software architecture with an architectural model.</p>
 
 <h3>
 <a name="define-an-architecture" class="anchor" href="#define-an-architecture"><span class="octicon octicon-link"></span></a>Define an architecture</h3>
 
-<p>Within this tool we define the architecture designed by the architects and the rules that apply to it. We create logical modules such as <a href="http://en.wikipedia.org/wiki/Common_layers_in_an_information_system_logical_architecture">Layers</a> and define rules that should be followed. Think of the communication rules present in the <a href="http://en.wikipedia.org/wiki/Model-view-controller">MVC pattern</a>.</p>
+<p>Within the tool we define an architecture and the rules that apply to the analyzed application's architecture. We create logical modules such as <a href="http://en.wikipedia.org/wiki/Common_layers_in_an_information_system_logical_architecture">Layers</a> and define rules that should be followed. The communication rules present in the <a href="http://en.wikipedia.org/wiki/Model-view-controller">MVC pattern</a> could be seen as an example to such rules.</p>
 
 <p>Examples:</p>
 
@@ -35,7 +35,7 @@ It also allows architects and programmers to view a graphical representation of 
 <h3>
 <a name="mapping-the-defined-architecture" class="anchor" href="#mapping-the-defined-architecture"><span class="octicon octicon-link"></span></a>Mapping the defined architecture</h3>
 
-<p>We then map the physical entities we found, by analyzing, to the defined logical modules. That way the tool knows which physical entities (such as namespaces, packages, classes, interfaces, etc.) are present in which logical module.</p>
+<p>We then map the physical entities we found, to the defined logical modules. This way the tool knows which physical entities (such as namespaces, packages, classes, interfaces, etc.) are included in logical modules.</p>
 
 <p>Examples:</p>
 
@@ -48,14 +48,14 @@ It also allows architects and programmers to view a graphical representation of 
 <h3>
 <a name="executing-a-conformance-check" class="anchor" href="#executing-a-conformance-check"><span class="octicon octicon-link"></span></a>Executing a conformance check</h3>
 
-<p>By executing a conformance check we can see if any of the specified rules are broken. A SACC-Tool automates the process of checking whether or not these rules are broken. The reports from this conformance check will list/graphically display the violations that occur between entities.</p>
+<p>By executing a conformance check we can see if any of the specified rules are broken. A SACC-Tool automates the process of checking whether or not these rules are broken. The reports from the conformance checks will list/graphically display the violations that occur between entities.</p>
 
-<p>Using the results from this conformance check programmers and architects can evaluate their realized software architecture. If there are serious issues they can improve it by changing the program so that it follows the specified rules. That way they are making it the software it was meant to be.</p>
+<p>Using the results from this conformance check software-engineers and architects can evaluate their realized software architecture. If any serious issues pops up they can improve the program in such a way, it doesn't violate any rules anymore and into the program the architects meant it to be</p>
 
 <h2>
 <a name="why-build-a-software-architecture-conformance-checking-tool" class="anchor" href="#why-build-a-software-architecture-conformance-checking-tool"><span class="octicon octicon-link"></span></a>Why build a Software Architecture Conformance Checking Tool?</h2>
 
-<p>After conducting research into other SACC-tools we found out that the tools not always are as user friendly and accurate as we had expected. We were then assigned to create our own SACC-tool and improve on some concept we found lacking in others. </p>
+<p>After conducting research into other SACC-tools we found out that the tools aren't always as user friendly and accurate as we had expected them to be. We were then assigned to create our own SACC-tool and improve on some concepts we found lacking in others. </p>
 
 <p>The application we were instructed to build is meant to be a contribution to the field of Software Architecture analysis and evaluation.</p>
 

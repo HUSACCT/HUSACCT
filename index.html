@@ -15,7 +15,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <a href="index.html" title="Home"><img id="logo" src="./images/husacct_logo.png" alt="HUSACCT" /></a>
+        <a href="#home" title="HUSACCT" onclick="show_page('home');"><img id="logo" src="./images/husacct_logo.png" alt="HUSACCT" /></a>
         <p>Hogeschool Utrecht Architecture Compliance Checking Tool</p>
         <div id="PagesHeading">Pages</div>
 		<ul id="pages_menu">
@@ -24,10 +24,23 @@
 			<li><a href="#user_documentation" title="User Documentation" onclick="show_page('user_documentation');">User documentation</a>
 				<ul>
 					<li><a href="#user_general" title="General GUI & Control" onclick="show_page('user_general');">General GUI &amp; Control</a></li>
-					<li>Graphics
+					<li>Analyse
 						<ul>
-							<li><a href="#user_graphics_menubar" title="Menubar" onclick="show_page('user_graphics_menubar');">Menubar</a>
-								<li><a href="#user_graphics_optionsdialog" title="Options dialog" onclick="show_page('user_graphics_optionsdialog');">Options dialog</a>
+							<li><a href="#user_analyse_java" title="Java" onclick="show_page('user_analyse_java');">Java</a></li>
+								<ul>
+									<li><a href="#user_analyse_java_depfilter" title="Dependency Filter" onclick="show_page('user_analyse_java_depfilter');">Dependency filter</a></li>
+									<li><a href="#user_analyse_java_depoverview" title="Dependency overview" onclick="show_page('user_analyse_java_depoverview');">Dependency overview</a></li>
+									<li><a href="#user_analyse_java_exportdependencies" title="Export dependencies" onclick="show_page('user_analyse_java_exportdependencies');">Export dependencies</a></li>
+									<li><a href="#user_analyse_java_founddependencies" title="Found dependencies" onclick="show_page('user_analyse_java_founddependencies');">Found dependencies</a></li>
+									<li><a href="#user_analyse_java_sourceoverview" title="Source overview" onclick="show_page('user_analyse_java_sourceoverview');">Source overview</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li><a href="#user_graphics" title="Graphics" onclick="show_page('user_graphics');">Graphics</a></li>
+						<ul>
+							<li><a href="#user_graphics_menubar" title="Menubar" onclick="show_page('user_graphics_menubar');">Menubar</a></li>
+							<li><a href="#user_graphics_optionsdialog" title="Options dialog" onclick="show_page('user_graphics_optionsdialog');">Options dialog</a></li>
 						</ul>
 					</li>
 					<li><a href="#user_validate" title="Validate" onclick="show_page('user_validate');">Validate</a>
@@ -51,12 +64,10 @@
           <li><a href="https://github.com/HUSACCT/HUSACCT/tarball/master">Download <strong>TAR Ball</strong></a></li>
           <li><a href="https://github.com/HUSACCT/HUSACCT">View On <strong>GitHub</strong></a></li>
         </ul>
+        <p class="copyright">Copyright &copy; Hogeschool Utrecht 2013</p>
       </header>
       <section id="content">
       </section>
-      <footer>
-      	<p>Copyright &copy; Hogeschool Utrecht 2013</p>
-      </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
