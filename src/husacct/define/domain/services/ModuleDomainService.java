@@ -2,44 +2,61 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.ModuleComparator;
+import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ModuleDomainService {
-	private DefaultRuleDomainService service = new DefaultRuleDomainService();
+
+	private ModuleFactory factory = new ModuleFactory();
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
+
 		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
 				.getModuleById(parentModuleId);
+		StateService.instance().addModule(module);
+		
+
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
 
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 
+
 	public long addModuleToRoot(ModuleStrategy module) {
+	
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
-		//service.addDefaultRules(module);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+	
+		StateService.instance().addModule(module);
+	
+	
+		
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 
 	public String addNewModuleToParent(long parentModuleId,
 			ModuleStrategy module) {
-		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
-				.getModuleById(parentModuleId);
+		
+		
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
-		return parentModule.addSubModule(module);
+	
+		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
+	}
+	
+	public ModuleStrategy createNewModule(String type)
+	{
+		return factory.createModule(type);
+		
 	}
 
 	public ModuleStrategy getModuleById(long moduleId) {
@@ -54,6 +71,10 @@ public class ModuleDomainService {
 	public ModuleStrategy getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {
 		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(
 				su.getName());
+	}
+	
+	public ModuleStrategy getModuleByName(String name){
+		return SoftwareArchitecture.getInstance().getModuleByName(name);
 	}
 
 	public String getModuleNameById(long moduleId) {
@@ -194,22 +215,32 @@ public class ModuleDomainService {
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 	}
+	
+	public void updateFacade(long moduleId, String moduleName){
+		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		for(ModuleStrategy subModule : parent.getSubModules()){
+			if(subModule.getType().equals("Facade")){
+				subModule.setName("Facade<"+moduleName+">");
+			}
+		}
+	}
 
 	public void updateModule(long moduleId, String moduleName,
 			String moduleDescription, String newType) {
 
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
-		DefaultRuleDomainService service = new DefaultRuleDomainService();
-		service.removeDefaultRules(module);
-		ModuleStrategy updatedModule = SoftwareArchitecture.getInstance()
-				.updateModuleType(module, newType);
-		service.addDefaultRules(updatedModule);
-		service.updateModuleRules(updatedModule);
-		StateService.instance().addUpdateModule(module, updatedModule);
-
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		if(module.getId() > 0){
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.removeDefaultRules(module);
+			ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(module, newType);
+			service.addDefaultRules(updatedModule);
+			service.updateModuleRules(updatedModule);
+			StateService.instance().addUpdateModule(module, updatedModule);
+		}
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 
 	}
+	
+	
 }

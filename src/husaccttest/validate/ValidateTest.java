@@ -52,6 +52,14 @@ public class ValidateTest {
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	
+	@Test
+	public void getFirstProjectLanguage() {
+		ProjectDTO project = define.getApplicationDetails().projects.get(0);
+		assertNotNull(project);
+		
+		String language = project.programmingLanguage;
+		assertEquals("java", language);
+	}
 	
 	@Test
 	public void getBrowseViolationsGUI() {
@@ -138,10 +146,9 @@ public class ValidateTest {
 					ModuleTypes.EXTERNAL_LIBRARY.toString(),
 					ModuleTypes.FACADE.toString()
 			};
-
 			for (String module : modules) {
-				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				System.out.print("\nAllowedRuleTypes for " + module + ": ");
+				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
 					System.out.print(allowedRuleType.getKey() + ", ");
 				}

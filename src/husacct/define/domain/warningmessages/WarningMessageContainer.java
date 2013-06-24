@@ -13,6 +13,8 @@ public class WarningMessageContainer {
 	private WarningMessage warning;
 	
 	
+	
+	
 	public WarningMessageContainer(WarningMessage msg) {
 		this.warning=msg;
 	}
@@ -46,6 +48,24 @@ public class WarningMessageContainer {
 		for (AnalyzedModuleComponent classs: classes){
 			this.warnings.add(new WarningMessageContainer(new NotmappedWarningMessage(classs)));
 		}
+		
+	}
+	
+	
+	public int getWarningsCount()
+	{
+		
+		return warnings.size();
+	}
+
+
+	public int getAllWarningsCount() {
+		int total =0;
+		for (WarningMessageContainer cont : this.getchildren()) {
+			total+=cont.getchildren().size();
+		}
+		
+		return total;
 		
 	}
 	

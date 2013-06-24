@@ -4,7 +4,7 @@ import husacct.common.help.presentation.HelpableJFrame;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
-import husacct.control.presentation.util.UserActionLogPanel;
+import husacct.control.presentation.util.ActionLogPanel;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
@@ -36,7 +36,7 @@ public class MainGui extends HelpableJFrame{
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
 	private ToolBar toolBar;
-	private UserActionLogPanel userActionLogPanel;
+	private ActionLogPanel actionLogPanel;
 	
 	public MainGui(MainController mainController) {
 		this.mainController = mainController;
@@ -79,10 +79,10 @@ public class MainGui extends HelpableJFrame{
 		JPanel taskBarPane = new JPanel(new GridLayout());
 		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
-		userActionLogPanel = new UserActionLogPanel(mainController);
+		actionLogPanel = new ActionLogPanel(mainController);
 		
 		taskBarPane.add(taskBar);
-		contentPane.add(userActionLogPanel, BorderLayout.EAST);
+		contentPane.add(actionLogPanel, BorderLayout.EAST);
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		add(contentPane);
@@ -118,7 +118,7 @@ public class MainGui extends HelpableJFrame{
 		setTitle("");
 	}
 	
-	public UserActionLogPanel getUserActionLogPanel(){
-		return userActionLogPanel;
+	public ActionLogPanel getActionLogPanel(){
+		return actionLogPanel;
 	}
 }

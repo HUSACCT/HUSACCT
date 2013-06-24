@@ -1,11 +1,11 @@
 package husacct.define.domain.services;
 
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
-import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-public class WarningMessageService extends Observable implements Observer {
+public class WarningMessageService extends Observable implements Observer,IModuleSeperatedInterface {
    private  ArrayList<WarningMessage> warnings= new ArrayList<WarningMessage>();
   private ArrayList<Observer> observers = new ArrayList<Observer>();
    private static WarningMessageService instance;
@@ -31,6 +31,12 @@ public class WarningMessageService extends Observable implements Observer {
 		}else{
 			return instance;
 		}
+	}
+	
+	public WarningMessageService()
+	{
+		UndoRedoService.getInstance().registerObserver(this);
+		
 	}
 	
 	
@@ -104,15 +110,18 @@ public class WarningMessageService extends Observable implements Observer {
 	public void processModule(ModuleStrategy module)
 	{
 		
+		if (module.getId()!=0) {
 		if (module.isMapped()) {
 			removeImplementationWarning(module);
 		} else {
 			createModuleWarning(module);
+		}	
 		}
+		
 	}
 
 
-	private void removeImplementationWarning(ModuleStrategy module) {
+	public void removeImplementationWarning(ModuleStrategy module) {
 		for (WarningMessage warning : warnings) {
 			
 			if(warning instanceof ImplementationLevelWarning)
@@ -244,12 +253,12 @@ public class WarningMessageService extends Observable implements Observer {
 		}
 		
 		
-		for (AbstractCombinedComponent unit : StateService.instance().getmappedUnits()) {
+		/*for (AbstractCombinedComponent unit : StateService.instance().getmappedUnits()) {
 			
-			JtreeController.instance().removeTreeItem((AnalyzedModuleComponent)unit);
-			StateService.instance().getAnalzedModuleRegistry().removeAnalyzedUnit((AnalyzedModuleComponent)unit);
+			//JtreeController.instance().removeTreeItem((AnalyzedModuleComponent)unit);
+			//StateService.instance().getAnalzedModuleRegistry().removeAnalyzedUnit((AnalyzedModuleComponent)unit);
 		}
-		
+		*/
 		
 		
 		
@@ -259,6 +268,39 @@ public class WarningMessageService extends Observable implements Observer {
 	public String warningsCount() {
 		// TODO Auto-generated method stub
 		return warnings.size()+codelevelWarnings.size()+"";
+	}
+
+
+	@Override
+	public void addSeperatedModule(ModuleStrategy module) {
+		processModule(module);
+		
+	}
+
+
+	@Override
+	public void removeSeperatedModule(ModuleStrategy module) {
+		removeImplementationWarning(module);
+		
+	}
+
+
+	@Override
+	public void layerUp(long moduleID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void layerDown(long moduleID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clearImplementationLevelWarnings() {
+		
+		warnings = new ArrayList<WarningMessage>();
 	}
 	
 	

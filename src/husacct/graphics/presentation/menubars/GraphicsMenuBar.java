@@ -6,6 +6,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -152,8 +154,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (zoomOptionsMenu.canZoomModule()) moduleZoom("zoom");
-				else if (zoomOptionsMenu.canZoomModuleContext())
-					moduleZoom();
+				else if (zoomOptionsMenu.canZoomModuleContext()) moduleZoom();
 			}
 		});
 		zoomInButton.addMouseListener(new MouseListener() {
@@ -246,29 +247,36 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		add(exportToImageButton);
 		setButtonIcon(exportToImageButton, "save");
 		
-		// icons.put("panTool", Resource.ICON_PAN_TOOL);
-		panToolButton = new JButton();
-		panToolButton.setSize(50, menuItemMaxHeight);
-		panToolButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				usePanTool();
-			}
-		});
-		add(panToolButton);
-		setButtonIcon(panToolButton, "panTool");
-		
-		// icons.put("selectTool", Resource.ICON_SELECT_TOOL);
 		selectToolButton = new JButton();
 		selectToolButton.setSize(50, menuItemMaxHeight);
 		selectToolButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				useSelectTool();
+				selectToolButton.setBorder(BorderFactory
+						.createLineBorder(Color.MAGENTA));
+				panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 			}
 		});
 		add(selectToolButton);
+		selectToolButton.setBorder(BorderFactory
+				.createLineBorder(Color.MAGENTA));
 		setButtonIcon(selectToolButton, "selectTool");
+		
+		panToolButton = new JButton();
+		panToolButton.setSize(50, menuItemMaxHeight);
+		panToolButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				usePanTool();
+				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+				panToolButton.setBorder(BorderFactory
+						.createLineBorder(Color.MAGENTA));
+			}
+		});
+		add(panToolButton);
+		panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		setButtonIcon(panToolButton, "panTool");
 		
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
 		graphicsOptionsDialog.addListener(this);
@@ -437,13 +445,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		graphicsOptionsDialog.setViolationsUIToInactive();
 	}
 	
-	public void setExternalSystemsUIToInactive() {
-		graphicsOptionsDialog.setExternalSystemsUIToInactive();
-	}
-	public void setExternalSystemsUIToActive() {
-		graphicsOptionsDialog.setExternalSystemsUIToActive();
-	}
-
 	@Override
 	public void setZoomSlider(double zoomFactor) {
 		int value = (int) (zoomFactor * 100);
@@ -467,19 +468,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		for (UserInputListener l : listeners)
 			l.showViolations();
 	}
-
-	@Override
-	public void showExternalSystems() {
-		for (UserInputListener l : listeners)
-			l.showExternalSystems();
-	}
-
-	@Override
-	public void hideExternalSystems() {
-		for (UserInputListener l : listeners)
-			l.hideExternalSystems();
-	}
-
 	public void turnOffBar() {
 		for (JComponent comp : actions)
 			comp.setEnabled(false);

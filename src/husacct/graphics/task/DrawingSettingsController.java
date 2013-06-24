@@ -61,11 +61,6 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void hideViolations() {
 		areViolationsShown = false;
 	}
-	
-	@Override
-	public void hideExternalSystems() {
-		areExternalSystemsShown = false;
-	}
 
 	public void loadDefaultSettings() {
 		showDependencies();
@@ -99,10 +94,5 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	@Override
 	public void showViolations() {
 		areViolationsShown = true;
-	}
-	
-	@Override
-	public void showExternalSystems() {
-		areExternalSystemsShown = true;
 	}
 }
