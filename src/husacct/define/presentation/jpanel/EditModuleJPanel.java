@@ -1,6 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.EditpanelDropListener;
@@ -20,19 +21,18 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DropMode;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
+public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Observer,
 		IServiceListener {
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private int currentSelection;
+	private String _type;
 	private JLabel descriptionLabel;
 	private JScrollPane descriptionScrollPane;
 	private JTextArea descriptionTextArea;
@@ -43,15 +43,18 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JComboBox selectedCombobox = (JComboBox) e.getSource();
-			if (currentSelection != selectedCombobox.getSelectedIndex()) {
+			
+			String type_ = (String) moduleTypeComboBox.getSelectedItem();
+			if (!_type.equals(type_) &&!type_.toLowerCase().equals("facade")) {
 				String moduleName = nameTextfield.getText();
 				String moduleDescription = descriptionTextArea.getText();
-				String type = (String) selectedCombobox
-						.getItemAt(selectedCombobox.getSelectedIndex());
-
-				DefinitionController.getInstance().updateModule(moduleName,
-						moduleDescription, type);
+				String type = (String) moduleTypeComboBox
+						.getItemAt(moduleTypeComboBox.getSelectedIndex());
+          
+				
+				DomainGateway.getInstance().updateModule(moduleName, moduleDescription, type);
+				//DefinitionController.getInstance().updateModule(moduleName,
+			//			moduleDescription, type);
 			}
 
 		}
@@ -138,9 +141,11 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
 				moduleTypes);
 		moduleTypeComboBox.setModel(defaultModel);
+		_type= type;
 		for (int i = 0; i < moduleTypes.length; i++) {
 			if (type.equalsIgnoreCase(moduleTypes[i])) {
 				currentSelection = i;
+				
 				return i;
 			}
 		}
@@ -209,6 +214,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 	@Override
 	public void update(Observable o, Object arg) {
 		resetGUI();
+	try{
 		Long moduleId = Long.parseLong(arg.toString());
 		if (moduleId != -1) {
 			HashMap<String, Object> moduleDetails = DefinitionController
@@ -222,6 +228,10 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 			moduleTypeComboBox.setSelectedIndex(getModuleType(type));
 		}
 		this.repaint();
+	}catch(NumberFormatException e)
+	{
+		
+	}
 	}
 
 	private void updateModule() {
@@ -233,4 +243,6 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 			DomainGateway.getInstance().updateFacade(moduleName);
 		}
 	}
+	
+	
 }

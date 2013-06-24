@@ -2,6 +2,7 @@ package husacct.define.presentation;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.ILocaleChangeListener;
@@ -11,13 +12,14 @@ import husacct.define.presentation.jdialog.HelpDialog;
 import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
-import husacct.define.task.DefinitionController;
+import husacct.define.presentation.utils.ReportToHTML;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,18 +34,17 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-public class ApplicationJInternalFrame extends JInternalFrame implements
+public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 		ILocaleChangeListener, Observer, IServiceListener {
 
 	private static final long serialVersionUID = 6858870868564931134L;
 	private JPanel overviewPanel;
-	private ILocaleService localeService = ServiceProvider.getInstance()
-			.getLocaleService();
-	private HelpDialog helpDialog;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private JButton warningButton;
 	private JButton undoButton;
 	private JButton redoButton;
 	private WarningTableJDialog warnings = new WarningTableJDialog();
+	private ReportToHTML report = new ReportToHTML();
 	public ApplicationJInternalFrame() {
 		super();
 		initUi();
@@ -100,25 +101,24 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 		undoButton.addActionListener(toolbarActionListener);
 		redoButton.addActionListener(toolbarActionListener);
 
-		ImageIcon questionMark = new ImageIcon(Toolkit.getDefaultToolkit()
-				.getImage(Resource.get(Resource.ICON_QUESTIONMARK)));
-		JButton questionButton = new JButton(questionMark);
-		questionButton.setToolTipText(localeService
-				.getTranslatedString("?TooltipDefineArchitecture"));
-		questionButton.addActionListener(new ActionListener() {
+		ImageIcon browserIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.ICON_BROWSER)));
+		JButton reportButton = new JButton(localeService.getTranslatedString("ReportTitle"));
+		reportButton.setIcon(browserIcon);
+		reportButton.setToolTipText(localeService.getTranslatedString("?Report"));
+		reportButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (helpDialog == null) {
-					helpDialog = new HelpDialog();
-				} else {
-					helpDialog.setVisible(true);
+				try {
+					report.createReport();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(warningButton);
-		buttonPanel.add(questionButton);
+		buttonPanel.add(reportButton);
         buttonPanel.add(undoButton);
         buttonPanel.add(redoButton);
 		splitPane.add(buttonPanel, JSplitPane.LEFT);

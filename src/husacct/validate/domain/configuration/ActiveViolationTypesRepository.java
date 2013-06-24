@@ -85,14 +85,14 @@ class ActiveViolationTypesRepository {
 		List<ActiveRuleType> activeRuleTypes = this.currentActiveViolationTypes.get(programmingLanguage);
 		if (activeRuleTypes != null) {
 			for (ActiveRuleType activeRuleType : activeRuleTypes) {
-				if (activeRuleType.getRuleType().toLowerCase().equals(ruleTypeKey.toLowerCase())) {
-
-					if (activeRuleType.getViolationTypes().isEmpty()) {
+				if (activeRuleType.getRuleType().equalsIgnoreCase(ruleTypeKey)) {
+					List<ActiveViolationType> activeViolationTypes = activeRuleType.getViolationTypes();
+					if (activeViolationTypes.isEmpty()) {
 						return false;
 					}
 
-					for (ActiveViolationType activeViolationType : activeRuleType.getViolationTypes()) {
-						if (activeViolationType.getType().toLowerCase().equals(violationTypeKey.toLowerCase())) {
+					for (ActiveViolationType activeViolationType : activeViolationTypes) {
+						if (activeViolationType.getType().equalsIgnoreCase(violationTypeKey)) {
 							return activeViolationType.isEnabled();
 						}
 					}

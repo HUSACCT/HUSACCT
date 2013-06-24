@@ -1,10 +1,5 @@
 package husacct.define.task;
 
-import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ExternalSystemDTO;
-import husacct.common.dto.ProjectDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.stateservice.StateService;
@@ -14,8 +9,6 @@ import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -31,76 +24,7 @@ public class SoftwareUnitController extends PopUpController {
 		setModuleId(moduleId);
 		softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
-
-	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
-		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
-				"root", "Application", "application", "public");
-		addExternalComponents(rootComponent);
-
-		ApplicationDTO application = ServiceProvider.getInstance()
-				.getControlService().getApplicationDTO();
-
-		for (ProjectDTO project : application.projects) {
-			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
-					project.name, project.name, "root", "public");
-			for (AnalysedModuleDTO module : project.analysedModules) {
-				addChildComponents(projectComponent, module);
-			}
-			rootComponent.addChild(projectComponent);
-		}
-
-		Collections.sort(rootComponent.getChildren());
-		rootComponent.updateChilderenPosition();
-		return rootComponent;
-	}
-
-	private void addChildComponents(AnalyzedModuleComponent parentComponent,
-			AnalysedModuleDTO module) {
-		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(
-				module.uniqueName, module.name, module.type, module.visibility);
-		AnalysedModuleDTO[] children = ServiceProvider.getInstance()
-				.getAnalyseService().getChildModulesInModule(module.uniqueName);
-		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
-		Arrays.sort(children, comparator);
-		for (AnalysedModuleDTO subModule : children) {
-			addChildComponents(childComponent, subModule);
-		}
-		parentComponent.addChild(childComponent);
-		parentComponent.registerchildrenSize();
-	}
-
-	public void addExternalComponents(AnalyzedModuleComponent root) {
-		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent(
-				"external library", "externallibrary", "externalpackage",
-				"public");
-		AnalyzedModuleComponent javalibrary = new AnalyzedModuleComponent(
-				"externallibrary", "java library", "externallibrary", "public");
-		AnalyzedModuleComponent externalsubsystem = new AnalyzedModuleComponent(
-				"subsystem", "external subsystem", "subsystem", "public");
-		rootOfExterexternalLibrary.addChild(javalibrary);
-		rootOfExterexternalLibrary.addChild(externalsubsystem);
-		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance()
-				.getAnalyseService().getExternalSystems();
-		for (ExternalSystemDTO exe : externalSystems) {
-			if (exe.systemPackage.startsWith("java.")) {
-				AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
-						exe.systemPackage, exe.systemName, "externallibrary",
-						"public");
-				javalibrary.addChild(javalib);
-			} else {
-				AnalyzedModuleComponent subsystem = new AnalyzedModuleComponent(
-						exe.systemPackage, exe.systemName, "subsystem",
-						"public");
-				externalsubsystem.addChild(subsystem);
-			}
-
-		}
-
-		root.addChild(rootOfExterexternalLibrary);
-
-	}
-
-	public void save(String softwareUnit, String type) {
+    public void save(String softwareUnit, String type) {
 		save(getModuleId(), softwareUnit, type);
 	}
 
@@ -194,5 +118,12 @@ public class SoftwareUnitController extends PopUpController {
 			return false;
 		}
 
+	}
+	public void changeSoftwareUnit(long toModuleId, ArrayList<String> names) {
+		long from = DefinitionController.getInstance().getSelectedModuleId();
+		long to = toModuleId;
+		
+		softwareUnitDefinitionDomainService.changeSoftwareUnit(from,to,names);
+		
 	}
 }

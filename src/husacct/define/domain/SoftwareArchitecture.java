@@ -59,8 +59,17 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		rootModule.set(name, description);
 		setModules(modules);
 		setAppliedRules(rules);
+		registerModule(rootModule);
 		this.modules.add(rootModule);
 
+	}
+
+	private void registerModule(ModuleStrategy module) {
+		modules.add(module);
+		if (module instanceof Component) {
+			modules.add(module.getSubModules().get(0));
+		}
+		
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
@@ -78,10 +87,9 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		try {
 			if (!hasModule(module.getName())) {
 				rootModule.addSubModule(module);
-				modules.add(module);
+                registerModule(module);
 				StateService.instance().addModule(module);
-				// DefaultRuleDomainService.getInstance().addDefaultRules(module);
-				// WarningMessageService.getInstance().processModule(module);
+				
 				updateWarnings();
 				moduleId = module.getId();
 			} else {
@@ -99,8 +107,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		StateService.instance().addModule(module);
 
-		modules.add(module);
-		// WarningMessageService.getInstance().processModule(module);
+	registerModule(module);
+		
 		return parentModule.addSubModule(module);
 	}
 
@@ -260,6 +268,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		ModuleStrategy currentModule = null;
 
 		for (ModuleStrategy moduleResult : modules) {
+
 			for (SoftwareUnitDefinition softwareUnitResult : moduleResult
 					.getUnits()) {
 				if (softwareUnitResult.getName().toLowerCase()
@@ -524,7 +533,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			int index = parent.getSubModules().indexOf(module);
 			DefinitionController.getInstance().setSelectedModuleId(0);
 			removeFromRegistry(module);
-
+            JtreeController.instance().restoreTreeItems(module);
 			parent.getSubModules().remove(index);
 			toBeSaved.add(new Object[] { module, moduleRules });
 			WarningMessageService.getInstance().removeImplementationWarning(
@@ -632,15 +641,40 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,
 			String newType) {
 
-		ModuleStrategy parent = oldModule.getparent();
+		
 
 		int index = oldModule.getparent().getSubModules().indexOf(oldModule);
-		parent.getSubModules().remove(index);
-		ModuleStrategy updatedModule = new ModuleFactory().updateModuleType(
-				oldModule, newType);
-		parent.addSubModule(index, updatedModule);
+		ModuleStrategy updatedModule = new ModuleFactory().updateModuleType(oldModule, newType);
+		updateModule(index,updatedModule);
+		
+		
 
 		return updatedModule;
+	}
+
+	private void updateModule(int index, ModuleStrategy updatedModule) {
+		ModuleStrategy parent = updatedModule.getparent();
+		parent.getSubModules().remove(index);
+		parent.addSubModule(index, updatedModule);
+		updateRegistry(updatedModule);
+		
+	
+	}
+
+	private void updateRegistry(ModuleStrategy updatedModule) {
+		int index=0;
+		for (int i = 0; i < modules.size(); i++) {
+			if (modules.get(i).getId()==updatedModule.getId()) {
+				index=i;
+			}
+			
+		}
+		modules.remove(index);
+		modules.add(index, updatedModule);
+		if (updatedModule instanceof Component) {
+			SoftwareArchitecture.getInstance().addModule(updatedModule.getId(),updatedModule.getSubModules().get(0));
+		}
+		
 	}
 
 	public void removeAppliedRule(List<Long> selectedRules) {
@@ -764,6 +798,28 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		module.removeSUDefintion(oldExpresion);
 		module.addSUDefinition(newExpression);
 
+	}
+
+	public void updateModuleRegistration(ModuleStrategy facade) {
+	 int index=	modules.indexOf(facade.getparent());
+	 
+		
+	}
+
+	public void changeSoftwareUnit(long from, long to, ArrayList<String> names) {
+		ModuleStrategy fromModule= getModuleById(from);
+		ModuleStrategy toModule = getModuleById(to);
+	ArrayList<SoftwareUnitDefinition> units=	fromModule.getAndRemoveSoftwareUnits(names);
+	
+	toModule.addSUDefinition(units);
+		
+	}
+
+	@Override
+	public void switchSoftwareUnitLocation(long fromModule, long toModule,
+			List<String> uniqNames) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

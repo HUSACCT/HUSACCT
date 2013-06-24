@@ -10,16 +10,16 @@ public enum ViolationTypes implements IViolationType {
 	INHERITANCE("Inheritance", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	ANNOTATION("Annotation", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	
-	//TODO Delete if unneccesary (after introduction 6 core dependency types)
-	ACCESS_PROPERTY_OR_FIELD("AccessPropertyOrField", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	EXCEPTION("Exception", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	EXTENDS_CONCRETE("ExtendsConcrete", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	EXTENDS_ABSTRACT("ExtendsAbstract", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	EXTENDS_LIBRARY("ExtendsLibrary", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
-	EXTENDS_INTERFACE("ExtendsInterface", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
-	IMPLEMENTS("Implements", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	INVOC_CONSTRUCTOR("InvocConstructor", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	INVOC_METHOD("InvocMethod", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+	//TODO After introduction 6 core dependency types not needed any more
+//	ACCESS_PROPERTY_OR_FIELD("AccessPropertyOrField", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+//	EXCEPTION("Exception", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+//	EXTENDS_CONCRETE("ExtendsConcrete", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+//	EXTENDS_ABSTRACT("ExtendsAbstract", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+//	EXTENDS_LIBRARY("ExtendsLibrary", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
+//	EXTENDS_INTERFACE("ExtendsInterface", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
+//	IMPLEMENTS("Implements", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+//	INVOC_CONSTRUCTOR("InvocConstructor", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+//	INVOC_METHOD("InvocMethod", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	//END
 	
 	PUBLIC("public", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),

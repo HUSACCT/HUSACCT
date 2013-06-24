@@ -99,8 +99,7 @@ public abstract class JtreeStateEngine {
 		data.add(analyzeModuleTobeRestored);
 		StateService.instance().allUnitsRegistry
 				.registerAnalyzedUnit(analyzeModuleTobeRestored);
-		stateController.insertCommand(new SoftwareUnitRemoveCommand(module,
-				data));
+		
 	}
 
 	public void addSoftwareUnit(ModuleStrategy module,
@@ -124,6 +123,7 @@ public abstract class JtreeStateEngine {
 
 	public void analyze() {
 		getRootModel();
+		DefinitionController.getInstance().notifyAnalyzedObservers();
 	}
 
 	public void registerAnalyzedUnit(AnalyzedModuleComponent unit) {
@@ -166,7 +166,7 @@ public abstract class JtreeStateEngine {
 
 	public void removeSoftwareUnit(List<String> selectedModules) {
 		
-	
+	stateController.insertCommand(new SoftwareUnitRemoveCommand(DefinitionController.getInstance().getSelectedModuleId(), selectedModules));
 
 
 
@@ -198,6 +198,17 @@ return	allUnitsRegistry.getNotMappedUnits();
 
 	public AnalyzedModuleComponent getAnalyzedSoftWareUnit(String uniqueName) {
 		return  allUnitsRegistry.getAnalyzedUnit(uniqueName);
+		
+	}
+
+	public ArrayList<AnalyzedModuleComponent> getAnalyzedSoftWareUnit(
+			List<String> data) {
+		return allUnitsRegistry.getAnalyzedUnit(data);
+		
+	}
+
+	public void removeRules(List<Long> selectedRules) {
+	
 		
 	}
 
