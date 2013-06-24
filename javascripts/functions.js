@@ -1,5 +1,10 @@
 $(document).ready(function() {
-	show_page("home");
+	var anchor = window.location.hash.substring(1);
+	if(anchor == ""){
+		anchor = "home";
+	}
+	
+	show_page(anchor);
 });
 
 function show_page(page_name){
