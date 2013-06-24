@@ -162,7 +162,12 @@ header #git_menu a strong {
   display:block;
   color:#222;
 }
-
+#pages_menu{
+	
+}
+#pages_menu ul{
+	margin-bottom: 0px;
+}
 section {
   width:555px;
   float:right;
