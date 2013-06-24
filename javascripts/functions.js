@@ -23,7 +23,12 @@ function create_page_content_container(page_name){
 }
 
 function load_page_content_into_div(page_name){
-	$("#content .page_content." + page_name).load("page_content/" + page_name + ".html");
+	var domain = window.location.hostname;
+	if($.contains(domain, 'husacct.nl')){
+		$("#content .page_content." + page_name).load("http://husacct.github.io/HUSACCT/page_content/" + page_name + ".html");
+	}else{
+		$("#content .page_content." + page_name).load("page_content/" + page_name + ".html");
+	}
 }
 
 function hide_all_page_content(){
