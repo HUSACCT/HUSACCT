@@ -60,6 +60,8 @@ public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvo
 
 	@Override
 	void saveInvocationToDomain() {
-		modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		if(!SkippableTypes.isSkippable(to)){
+			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		}
 	}
 }
