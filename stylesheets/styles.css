@@ -17,7 +17,9 @@ h1, h2, h3, h4, h5, h6 {
 p, ul, ol, table, pre, dl {
   margin:0 0 20px;
 }
-
+ul{
+	padding-left: 20px;
+}
 h1, h2, h3 {
   line-height:1.1;
 }
@@ -198,6 +200,13 @@ header .copyright{
 }
 #pages_menu ul{
 	margin-bottom: 0px;
+	display: none;
+}
+#pages_menu li.active > a{
+	font-weight: bold;
+}
+#pages_menu li.active > ul{
+	display: block;
 }
 section {
   width:555px;
