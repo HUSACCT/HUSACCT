@@ -40,7 +40,7 @@ public class LocaleControllerTest {
 	public void testConfigLocale() {
 		Locale configLocale = new Locale(ConfigurationManager.getProperty("Language"), ConfigurationManager.getProperty("Language"));
 		Locale currentLocale = localeService.getLocale();
-		assertSame(configLocale.getDisplayLanguage(), currentLocale.getDisplayLanguage());
+		assertEquals(configLocale, currentLocale);
 	}
 	
 	@Test
