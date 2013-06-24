@@ -12,7 +12,7 @@ $(document).ready(function() {
 });
 
 function show_page(page_name){
-	add_active_class(page_name);
+	add_active_classes(page_name);
 	to_show_div = "#content .page_content." + page_name;
 	if($(to_show_div).length < 1){
 		$.when(create_page_content_container(page_name))
@@ -39,7 +39,7 @@ function hide_all_page_content(){
 	$("#content .page_content").fadeOut(250);
 }
 
-function add_active_class(page_name){
+function add_active_classes(page_name){
 	var parentListItem = $('a[href="#' + page_name + '"]').parent("li");
 	parentListItem.parents().addClass("active");
 	parentListItem.siblings("li").removeClass("active");
