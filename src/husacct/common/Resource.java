@@ -84,6 +84,7 @@ public class Resource {
 	public static final String ICON_SELECT_TOOL = ICONSET_PATH
 			+ "mouse-cursor-icon.jpg";
 	public static String ICON_FACADE = ICONSET_PATH + "define-facade.png";
+	public static String WINDOW = IMAGE_PATH + "window.wav";
 
 	public static URL get(String path){
 		URL resourceUrl = null;

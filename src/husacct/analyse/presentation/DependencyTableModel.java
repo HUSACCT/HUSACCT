@@ -1,10 +1,10 @@
 package husacct.analyse.presentation;
 
 import husacct.common.dto.DependencyDTO;
-import husacct.common.help.presentation.HelpableJPanel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 class DependencyTableModel extends AbstractTableModel {
