@@ -73,9 +73,6 @@ public final class FigureFactory {
 		} else if (dto instanceof AnalysedModuleDTO) {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
-		} else if (dto instanceof ExternalSystemDTO) {
-			type = EXTERNALSYSTEM_TYPE;
-			name = ((ExternalSystemDTO) dto).systemPackage;
 		} else if (dto instanceof ProjectDTO){
 			type = PROJECT_TYPE;
 			name = ((ProjectDTO) dto).name;
@@ -100,9 +97,11 @@ public final class FigureFactory {
 			return new PackageFigure(name);
 		else if (type.toLowerCase().equals("subsystem"))
 			return new SubsystemFigure(name);
-		else if (type.toLowerCase().equals("externalsystem"))
-			return new ExternalSystemFigure(name);
+		else if (type.toLowerCase().equals("library"))
+			return new ModuleFigure(name, type);
 		else {
+			
+			//TODO library figure aanmaken
 			logger.debug("Type " + type.toLowerCase()
 					+ " is not supported. Created a ModuleFigure instead.");
 			return new ModuleFigure(name, type);

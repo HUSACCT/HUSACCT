@@ -23,6 +23,7 @@ import husacct.graphics.task.layout.state.DrawingState;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.FigureMap;
+import husacct.graphics.util.UserInputListener;
 import husacct.graphics.util.threads.DrawingLinesThread;
 import husacct.graphics.util.threads.DrawingMultiLevelThread;
 import husacct.graphics.util.threads.DrawingSingleLevelThread;
@@ -326,6 +327,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	public BaseFigure[] getSelectedFigures(){
 		return drawingView.toFigureArray(drawingView.getSelectedFigures());
+	}
+	
+	public BaseFigure[] getAllFigures(){
+		return drawingView.toFigureArray(drawingView.findFigures(drawingView.getBounds()));
 	}
 	
 	protected abstract ViolationDTO[] getViolationsBetween(
