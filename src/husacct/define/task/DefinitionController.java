@@ -353,8 +353,7 @@ import org.apache.log4j.Logger;
 						if (confirm) {
 							logger.info("getting type:" + type);
                          JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
-							JPanelStatus.getInstance("Removing software unit")
-							.start();
+							JPanelStatus.getInstance("Removing software unit").start();
 							
 								boolean chekHasCodelevelWarning = WarningMessageService
 										.getInstance().isCodeLevelWarning(
@@ -376,7 +375,9 @@ import org.apache.log4j.Logger;
 											softwareUnit);
 								}
 								this.notifyObservers();
+								JPanelStatus.getInstance().stop();
 							}
+						
 						
 					}
 					location++;
