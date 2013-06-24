@@ -1,7 +1,5 @@
 package husacct.validate.domain.exception;
 
-import husacct.validate.domain.validation.module.ModuleTypes;
-
 @SuppressWarnings("serial")
 public class ModuleNotFoundException extends RuntimeException {
 	public ModuleNotFoundException() {

@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.task.TaskServiceImpl;
 
-import java.awt.Dimension;
 import java.util.List;
 
 import javax.swing.GroupLayout;
