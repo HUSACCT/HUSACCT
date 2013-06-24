@@ -3,7 +3,7 @@ html{
 	overflow-y: scroll;
 }
 body {
-  padding:50px;
+  padding:15px 50px 50px 50px;
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#777;
   font-weight:300;
@@ -129,7 +129,7 @@ header {
   width:270px;
   float:left;
   position:fixed;
-  top: 25px;
+  top: 27px;
 }
 #logo{
 	border: none;
