@@ -33,7 +33,7 @@ public class ModuleRemoveCommand implements Istate {
 		ArrayList<AppliedRuleStrategy> rules= (ArrayList<AppliedRuleStrategy>)info[1];
 		UndoRedoService.getInstance().addSeperatedModule(module);
 	
-		
+		/*
 		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
 			
 			boolean chek= DefaultRuleDomainService.getInstance().isMandatoryRule(appliedRuleStrategy);
@@ -45,18 +45,13 @@ public class ModuleRemoveCommand implements Istate {
 			}
 			
 		}
+		*/
+		//UndoRedoService.getInstance().addSeperatedAppliedRule(rules);
 		
-		UndoRedoService.getInstance().addSeperatedAppliedRule(rules);
-		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
-		for (SoftwareUnitDefinition unit : module.getUnits()) {
 		
-			units.add(StateService.instance().getAnalyzedSoftWareUnit(unit));
-			
-			
-		}
-		SoftwareUnitController controller = new SoftwareUnitController(module.getId());
-		controller = new SoftwareUnitController(module.getId());
-		controller.save(units);
+	
+		UndoRedoService.getInstance().addSeperatedSoftwareUnit(module.getUnits(), module.getId());
+		
 		
 	}	
 	

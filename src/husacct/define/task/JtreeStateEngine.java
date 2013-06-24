@@ -9,6 +9,7 @@ import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.StateDefineController;
 import husacct.define.domain.services.stateservice.state.appliedrule.AppliedRuleAddCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.EditAppliedRuleCommand;
 import husacct.define.domain.services.stateservice.state.appliedrule.ExceptionAddRuleCommand;
 import husacct.define.domain.services.stateservice.state.appliedrule.RemoveAppliedRuleCommand;
 import husacct.define.domain.services.stateservice.state.module.LayerDownCommand;
@@ -243,8 +244,12 @@ return	allUnitsRegistry.getNotMappedUnits();
 	}
 
 	public void editAppliedRule(AppliedRuleStrategy rule, Object[] objects) {
-		stateController.insertCommand(new )
-		
+		stateController.insertCommand(new EditAppliedRuleCommand(rule,objects) );
+	}
+
+	public void removeAppliedRuleExeption(long parentRuleId,
+			AppliedRuleStrategy exceptionRule) {
+		stateController.insertCommand(new RemoveAppliedRuleExeptionCommand(parentRuleId,exceptionRule));	
 	}
 
 

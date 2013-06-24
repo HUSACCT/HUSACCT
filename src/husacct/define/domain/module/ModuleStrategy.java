@@ -362,7 +362,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 
 	public ArrayList<SoftwareUnitDefinition> getAndRemoveSoftwareUnits(
-			ArrayList<String> names) {
+			List<String> names) {
 		ArrayList<SoftwareUnitDefinition> units = new ArrayList<SoftwareUnitDefinition>();
 		Iterator<SoftwareUnitDefinition> loop = getUnits().iterator();
 		while(loop.hasNext())

@@ -46,7 +46,7 @@ public class ModuleDomainService {
 	public String addNewModuleToParent(long parentModuleId,
 			ModuleStrategy module) {
 		
-		
+		StateService.instance().addModule(module);
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 	
