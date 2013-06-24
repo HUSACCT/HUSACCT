@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>HUSACCT by HUSACCT</title>
+    <title>HUSACCT - Hogeschool Utrecht Software Architecture Compliance Checking Tool</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -15,52 +15,65 @@
   <body>
     <div class="wrapper">
       <header>
-        <a href="#home" title="HUSACCT" onclick="show_page('home');"><img id="logo" src="./images/husacct_logo.png" alt="HUSACCT" /></a>
+        <a href="#home" title="HUSACCT"><img id="logo" src="./images/husacct_logo.png" alt="HUSACCT" /></a>
         <div id="PagesHeading">Pages</div>
 		<ul id="pages_menu">
-			<li><a href="#home" title="HUSACCT" onclick="show_page('home');">Home</a></li>
-			<li><a href="#readme" title="Readme" onclick="show_page('readme');">Readme</a></li>
-			<li><a href="#user_documentation" title="User Documentation" onclick="show_page('user_documentation');">User documentation</a>
+			<li><a href="#home" title="HUSACCT">Home</a></li>
+			<li><a href="#readme" title="Readme">Readme</a></li>
+			<li><a href="#user_documentation" title="User Documentation">User documentation</a>
 				<ul>
-					<li><a href="#user_general" title="General GUI & Control" onclick="show_page('user_general');">General GUI &amp; Control</a></li>
-					<li><a href="#user_analyse" title="Analyse" onclick="show_page('user_analyse');">Analyse</a>
+					<li><a href="#user_general" title="General GUI & Control">General GUI &amp; Control</a></li>
+					<li><a href="#user_analyse" title="Analyse">Analyse</a>
 						<ul>
-							<li><a href="#user_analyse_java" title="Java" onclick="show_page('user_analyse_java');">Java</a>
+							<li><a href="#user_analyse_java" title="Java">Java</a>
 								<ul>
-									<li><a href="#user_analyse_java_sourceoverview" title="Source overview" onclick="show_page('user_analyse_java_sourceoverview');">Source overview</a></li>
-									<li><a href="#user_analyse_java_depoverview" title="Dependency overview" onclick="show_page('user_analyse_java_depoverview');">Dependency overview</a></li>
-									<li><a href="#user_analyse_java_depfilter" title="Dependency Filter" onclick="show_page('user_analyse_java_depfilter');">Dependency filter</a></li>
-									<li><a href="#user_analyse_java_founddependencies" title="Found dependencies" onclick="show_page('user_analyse_java_founddependencies');">Found dependencies</a></li>
-									<li><a href="#user_analyse_java_exportdependencies" title="Export dependencies" onclick="show_page('user_analyse_java_exportdependencies');">Export dependencies</a></li>
+									<li><a href="#user_analyse_java_sourceoverview" title="Source overview">Source overview</a></li>
+									<li><a href="#user_analyse_java_depoverview" title="Dependency overview">Dependency overview</a></li>
+									<li><a href="#user_analyse_java_depfilter" title="Dependency Filter">Dependency filter</a></li>
+									<li><a href="#user_analyse_java_founddependencies" title="Found dependencies">Found dependencies</a></li>
+									<li><a href="#user_analyse_java_exportdependencies" title="Export dependencies">Export dependencies</a></li>
 								</ul>
 							</li>
 						</ul>
 					</li>
-					<li><a href="#user_graphics" title="Graphics" onclick="show_page('user_graphics');">Graphics</a>
+					<li><a href="#user_define" title="Define">Define</a>
 						<ul>
-							<li><a href="#user_graphics_menubar" title="Menubar" onclick="show_page('user_graphics_menubar');">Menubar</a></li>
-							<li><a href="#user_graphics_optionsdialog" title="Options dialog" onclick="show_page('user_graphics_optionsdialog');">Options dialog</a></li>
+							<li><a href="#user_define_addexception" title="Add exception Dialog">Add exception dialog</a></li>
+							<li><a href="#user_define_addmoduledialog" title="Add module dialog">Add module dialog</a></li>
+							<li><a href="#user_define_addruledialog" title="Add rule dialog">Add rule dialog</a></li>
+							<li><a href="#user_define_addsoftwareunit" title="Add software unit dialog">Add software unit dialog</a></li>
+							<li><a href="#user_define_appliedrules" title="Applied Rules">Applied Rules</a></li>
+							<li><a href="#user_define_editsoftwareunit" title="Edit software unit Dialog">Edit software unit dialog</a></li>
+							<li><a href="#user_define_moduleProps" title="Module Properties">Module Properties</a></li>
+							<li><a href="#user_define_modules" title="Modules hierarchy">Modules Hierarchy</a></li>
+							<li><a href="#user_define_softwareunits" title="Software Units">Software Units</a></li>
 						</ul>
 					</li>
-					<li><a href="#user_validate" title="Validate" onclick="show_page('user_validate');">Validate</a>
+					<li><a href="#user_graphics" title="Graphics">Graphics</a>
 						<ul>
-							<li><a href="#user_validate_terminology" title="Terminology" onclick="show_page('user_validate_terminology');">Terminology</a>
-							<li><a href="#user_validate_configurationintro" title="Configuration" onclick="show_page('user_validate_configurationintro');">Configuration</a>
-							<li><a href="#user_validate_configureactiveviolationtypes" title="Configure violation types" onclick="show_page('user_validate_configureactiveviolationtypes');">Configure violation types</a>
-							<li><a href="#user_validate_configuredefaultrules" title="Default rules configuration" onclick="show_page('user_validate_configuredefaultrules');">Default rules configuration</a>
-							<li><a href="#user_validate_configureseverities" title="Configure severities" onclick="show_page('user_validate_configureseverities');">Configure severities</a>
-							<li><a href="#user_validate_configureseveritesperruletypeandviolationtypes" title="Configure specific severities" onclick="show_page('user_validate_configureseveritesperruletypeandviolationtypes');">Configure specific severities</a>
-							<li><a href="#user_validate_browse_violations" title="Browse violations" onclick="show_page('user_validate_browse_violations');">Browse violations</a>
-							<li><a href="#user_validate_codeviewer" title="Codeviewer" onclick="show_page('user_validate_codeviewer');">Codeviewer</a>
-							<li><a href="#user_validate_filterdialog" title="Filterdialog" onclick="show_page('user_validate_filterdialog');">Filterdialog</a>
-							<li><a href="#user_validate_reportexport" title="Exporting a report" onclick="show_page('user_validate_reportexport');">Exporting a report</a>
-							<li><a href="#user_validate_supportedrules" title="Supported rules" onclick="show_page('user_validate_supportedrules');">Supported rules</a>
+							<li><a href="#user_graphics_menubar" title="Menubar">Menubar</a></li>
+							<li><a href="#user_graphics_optionsdialog" title="Options dialog">Options dialog</a></li>
+						</ul>
+					</li>
+					<li><a href="#user_validate" title="Validate">Validate</a>
+						<ul>
+							<li><a href="#user_validate_browse_violations" title="Browse violations">Browse violations</a>
+							<li><a href="#user_validate_codeviewer" title="Codeviewer">Codeviewer</a>
+							<li><a href="#user_validate_configurationintro" title="Configuration">Configuration</a>
+							<li><a href="#user_validate_configureseverities" title="Configure severities">Configure severities</a>
+							<li><a href="#user_validate_configureseveritesperruletypeandviolationtypes" title="Configure specific severities">Configure specific severities</a>
+							<li><a href="#user_validate_configureactiveviolationtypes" title="Configure violation types">Configure violation types</a>
+							<li><a href="#user_validate_configuredefaultrules" title="Default rules configuration">Default rules configuration</a>
+							<li><a href="#user_validate_reportexport" title="Exporting a report">Exporting a report</a>
+							<li><a href="#user_validate_filterdialog" title="Filterdialog">Filterdialog</a>
+							<li><a href="#user_validate_supportedrules" title="Supported rules">Supported rules</a>
+							<li><a href="#user_validate_terminology" title="Terminology">Terminology</a>
 						</ul>
 					</li>
 				</ul>
 			</li>
-			<li><a href="#system_documentation" title="System documentation" onclick="show_page('system_documentation');">System documentation</a></li>
-			<li><a href="#links" title="Links" onclick="show_page('links');">Links</a></li>
+			<li><a href="#system_documentation" title="System documentation">System documentation</a></li>
+			<li><a href="#links" title="Links">Links</a></li>
 		</ul>
 
         <ul id="git_menu">

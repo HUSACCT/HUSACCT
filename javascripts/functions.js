@@ -4,7 +4,13 @@ $(document).ready(function() {
 		anchor = "home";
 	}
 	
+	$(document).on("click", "#pages_menu a", function(){
+		var page_name = $(this).attr("href").replace("#", "");
+		show_page(page_name);
+	});
+	
 	show_page(anchor);
+	
 });
 
 function show_page(page_name){
