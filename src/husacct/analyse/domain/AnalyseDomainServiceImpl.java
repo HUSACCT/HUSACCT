@@ -34,9 +34,15 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
         return queryService.getModuleForUniqueName(uniquename);
     }
+    
+    @Override
+    public AnalysedModuleDTO[] getRootModules(){
+    	List<AnalysedModuleDTO> rootModules = queryService.getRootModules();
+    	return rootModules.toArray(new AnalysedModuleDTO[rootModules.size()]);
+    }
 
     @Override
-    public AnalysedModuleDTO[] getRootModules() {
+    public AnalysedModuleDTO[] getRootModulesWithExternalSystems() {
         List<AnalysedModuleDTO> rootModuleList = queryService.getRootModules();
         ExternalSystemDTO[] externalSystems = queryService.getExternalSystems();
         List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();

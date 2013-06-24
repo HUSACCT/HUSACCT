@@ -78,6 +78,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public AnalysedModuleDTO[] getRootModules() {
         return service.getRootModules();
     }
+    
+    @Override
+    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
+    	return service.getRootModulesWithExternalSystems();
+    }
 
     @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
@@ -98,6 +103,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public DependencyDTO[] getAllDependencies() {
         return TypeFilter.filterDependencies(service.getAllDependencies());
     }
+    
+    @Override
+	public DependencyDTO[] getAllUnfilteredDependencies() {
+		return service.getAllDependencies();
+	}
 
     @Override
     public DependencyDTO[] getDependencies(String from, String to) {

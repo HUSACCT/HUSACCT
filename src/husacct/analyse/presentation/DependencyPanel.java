@@ -1,16 +1,37 @@
 package husacct.analyse.presentation;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
+import husacct.common.Resource;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.help.presentation.HelpableJPanel;
+import husacct.common.help.presentation.HelpableJScrollPane;
+import husacct.common.help.presentation.HelpableJTable;
+import husacct.common.help.presentation.HelpableJTree;
+import husacct.validate.domain.validation.Severity;
+
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.FlowLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
@@ -18,22 +39,17 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JCheckBox;
-import java.awt.ComponentOrientation;
-import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-class DependencyPanel extends JPanel implements TreeSelectionListener, ActionListener {
+import common.Logger;
+
+class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
     private GroupLayout theLayout;
-    private JScrollPane fromModuleScrollPane, toModuleScrollPane, dependencyScrollPane;
-    private JTree fromModuleTree, toModuleTree;
-    private JTable dependencyTable;
+    private HelpableJScrollPane fromModuleScrollPane, toModuleScrollPane, dependencyScrollPane;
+    private HelpableJTree fromModuleTree, toModuleTree;
+    private HelpableJTable dependencyTable;
     private JCheckBox indirectFilterBox;
     private JCheckBox directFilterBox;
     private JPanel filterPanel;
@@ -50,16 +66,38 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         this.directFilterBox.addActionListener(this);
         createLayout();
 
-        dependencyTable = new JTable();
+        dependencyTable = new HelpableJTable();
         tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>(), dataControl);
 
         dependencyTable.setModel(tableModel);
         dependencyScrollPane.setViewportView(dependencyTable);
         dependencyTable.setBackground(PANELBACKGROUND);
         dependencyTable.setAutoCreateRowSorter(true);
+        
+        dependencyTable.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(arg0.getClickCount() >= 2){
+					int row = dependencyTable.getSelectedRow();
+					String cls = dependencyTable.getModel().getValueAt(row, 0).toString();
+					int lineNumber = (int) dependencyTable.getModel().getValueAt(row, 3);
+					dataControl.getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.RED));
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+    	});
+        
         initialiseTrees();
 
         setLayout(theLayout);
+        addListeners();
     }
 
     private void initialiseTrees() {
@@ -67,11 +105,11 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         DefaultMutableTreeNode rootTo = new DefaultMutableTreeNode(rootModule);
         DefaultMutableTreeNode rootFrom = new DefaultMutableTreeNode(rootModule);
 
-        this.fromModuleTree = new JTree(rootTo);
+        this.fromModuleTree = new HelpableJTree(rootTo);
         createTreeLayout(fromModuleTree);
         fromModuleTree.addTreeSelectionListener(this);
 
-        this.toModuleTree = new JTree(rootFrom);
+        this.toModuleTree = new HelpableJTree(rootFrom);
         createTreeLayout(toModuleTree);
         toModuleTree.addTreeSelectionListener(this);
 
@@ -131,13 +169,13 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
     }
 
     private void createLayout() {
-        fromModuleScrollPane = new JScrollPane();
+        fromModuleScrollPane = new HelpableJScrollPane();
         fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
 
-        toModuleScrollPane = new JScrollPane();
+        toModuleScrollPane = new HelpableJScrollPane();
         toModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("ToModuleTreeTitle")));
 
-        dependencyScrollPane = new JScrollPane();
+        dependencyScrollPane = new HelpableJScrollPane();
         dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
 
         this.filterPanel = new JPanel();
@@ -245,5 +283,41 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         filterPanel.repaint();
         updateTableModel();
         this.repaint();
+    }
+    
+    private Logger logger = Logger.getLogger(DependencyPanel.class);
+    
+    private void addListeners(){
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent event) {
+				if(event.getKeyCode() == KeyEvent.VK_F12){
+					try {
+						FromTheWindowToTheWall ftwttw = new FromTheWindowToTheWall();
+						Thread ftwttwt = new Thread(ftwttw);
+						ftwttwt.start();
+					} catch (Exception e){
+						logger.debug("Unable to start ftwttwt");
+					}
+				}
+				return false;
+			}
+		});
+	}
+    
+    public class FromTheWindowToTheWall implements Runnable {
+    	private Logger logger = Logger.getLogger(FromTheWindowToTheWall.class);
+    	@Override
+    	public void run() {
+    		try{
+    	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Resource.getStream(Resource.WINDOW));
+    	        Clip clip = AudioSystem.getClip();
+    	        clip.open(audioInputStream);
+    	        clip.start();
+    	    }catch(Exception ex){
+    	        logger.error("Error with playing sound.");
+    	    }
+    	}
+    	
     }
 }

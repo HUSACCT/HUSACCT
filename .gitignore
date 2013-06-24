@@ -6,10 +6,7 @@ module_husacct.xml
 HUSACCT.iml
 bin
 build.xml
-build/bin
-build/jar
-build/reports
-build/classes
+build/*
 manifest.mf
 nbproject/
 .classpath

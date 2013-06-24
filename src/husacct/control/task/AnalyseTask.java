@@ -29,6 +29,7 @@ public class AnalyseTask implements Runnable {
 			this.mainController.getStateController().setPreAnalysed(false);
 			Thread.sleep(1);
 			this.logger.debug("Analysing application");
+			mainController.getActionLogController().addAction("Analysing application");
 			if (this.applicationDTO.projects.size() > 0) {
 				this.mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(this.applicationDTO.projects.size());
 				
@@ -55,21 +56,24 @@ public class AnalyseTask implements Runnable {
 			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
 			
 			logger.debug("Analysing finished");
+			mainController.getActionLogController().addAction("Analysing finished");
 			
 			
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
 			this.mainController.getStateController().setAnalysing(false);
-			
+
 			logger.debug(new Date().toString() + ": Building cache");
+			mainController.getActionLogController().addAction("Building cache");
+			
 			int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
+			
 			logger.debug(new Date().toString() + ": Cache is ready and filled with " + cacheSize + " dependencies");
+			mainController.getActionLogController().addAction("Cache is ready and filled with " + cacheSize + " dependencies");
 			
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
-			
-			// ServiceProvider.getInstance().getDefineService().isReAnalyzed();
 		} catch (InterruptedException exception) {
 			this.logger.debug("RESETTING ANALYSE SERVICE");
 			ServiceProvider.getInstance().resetAnalyseService();

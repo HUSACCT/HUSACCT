@@ -1,6 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;
 
 import java.awt.BorderLayout;
@@ -9,12 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
-public class AnalyseInternalFrame extends JInternalFrame implements ActionListener, IServiceListener {
+public class AnalyseInternalFrame extends HelpableJInternalFrame implements ActionListener, IServiceListener {
 
     private static final long serialVersionUID = 1L;
     private ApplicationStructurePanel treePanel;
