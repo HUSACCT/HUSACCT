@@ -4,4 +4,6 @@
   <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
   <MainGui filename = "maingui.html" viewname = "General"></MainGui>
   <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+  <GraphicsMenuBar filename="graphicsmenubar.html" viewname="Graphics Menu"></GraphicsMenuBar>
+  <GraphicsOptionsDialog filename="GraphicsOptionsDialog.html" viewname="Graphics Options"></GraphicsOptionsDialog>
 </manuals>

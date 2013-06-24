@@ -22,6 +22,8 @@ public interface UserInputListener {
 	
 	public void hideViolations();
 	
+	public void hideLibraries();
+	
 	public void moduleOpen(String[] paths);
 	
 	public void moduleZoom();
@@ -43,6 +45,8 @@ public interface UserInputListener {
 	public void showSmartLines();
 	
 	public void showViolations();
+
+	public void showLibraries();
 	
 	public void usePanTool();
 	
