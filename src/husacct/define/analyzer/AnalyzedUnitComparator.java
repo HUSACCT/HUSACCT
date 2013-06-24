@@ -10,6 +10,7 @@ import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.AnalysedModuleComparator;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -31,6 +32,9 @@ public class AnalyzedUnitComparator {
 		Collections.sort(right.getChildren());
 		if (leftsize == rightsize) {
 
+			
+			
+			
 			isequal(left, right, toBeDeleted, toBeAaded);
 		} else if (leftsize > rightsize) {
 			isLessEqual(left, right, toBeDeleted, toBeAaded);
@@ -49,8 +53,7 @@ public class AnalyzedUnitComparator {
 			if (unittoberemoved.isMapped()) {
 
 				ModuleStrategy module = StateService.instance()
-						.getModulebySoftwareUnitUniqName(
-								unittoberemoved.getUniqueName());
+						.getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
 				WarningMessageService.getInstance().addCodeLevelWarning(
 						module.getId(), unittoberemoved);
 			}
@@ -183,7 +186,7 @@ public class AnalyzedUnitComparator {
 		JtreeController.instance().setLoadState(true);
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
 				"root", "Application", "application", "public");
-		addExternalComponents(rootComponent);
+		//addExternalComponents(rootComponent);
 
 		ApplicationDTO application = ServiceProvider.getInstance()
 				.getControlService().getApplicationDTO();
@@ -191,8 +194,8 @@ public class AnalyzedUnitComparator {
 		for (ProjectDTO project : application.projects) {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
 					project.name, project.name, "root", "public");
-			for (AnalysedModuleDTO module : project.analysedModules) {
-
+			for (AnalysedModuleDTO module : ServiceProvider.getInstance().getAnalyseService().getRootModules()) {
+            
 				this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
@@ -263,11 +266,13 @@ public class AnalyzedUnitComparator {
 			return root;
 
 		} else {
-			AnalyzedModuleComponent left = JtreeController.instance()
-					.getRootOfModel();
-			AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
+		
+			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
+		    AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
+		
+			
 			calucalteChanges(left, right);
-			WarningMessageService.getInstance().registerNotMappedUnits(left);
+			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();
 			return left;
 		}

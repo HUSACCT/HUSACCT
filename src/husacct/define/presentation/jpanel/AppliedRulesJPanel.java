@@ -1,6 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
@@ -36,7 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
-public class AppliedRulesJPanel extends JPanel implements ActionListener,
+public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener,
 		Observer, IServiceListener {
 
 	private static final long serialVersionUID = -2052083182258803790L;

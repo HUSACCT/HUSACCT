@@ -354,6 +354,11 @@ public class AppliedRuleController extends PopUpController {
 	public AbstractCombinedComponent getModuleTreeComponents() {
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 		ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
+		
+		for (ModuleStrategy module : modules) {
+			module.removeAllSUDefintions();
+		}
+		
 		for (ModuleStrategy module : modules) {
 			addDefineModuleChildComponents(rootComponent, module);
 		}

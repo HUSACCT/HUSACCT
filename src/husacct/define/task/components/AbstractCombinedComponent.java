@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import javax.swing.tree.TreePath;
 
 public abstract class AbstractCombinedComponent extends Component implements
-	Comparable<AbstractCombinedComponent>, Transferable {
+	Comparable<AbstractCombinedComponent>{
     private static final long serialVersionUID = 1L;
     private int analyzedModuleComponentPosition = 0;
     protected ArrayList<AbstractCombinedComponent> children;
@@ -96,25 +96,6 @@ public abstract class AbstractCombinedComponent extends Component implements
 	}
 
     }
-    @Override
-    public Object getTransferData(DataFlavor arg0)
-			throws UnsupportedFlavorException, IOException {
-		
-		return this;
-	}
-
-    @Override
-	public DataFlavor[] getTransferDataFlavors() {
-		
-		
-		return new DataFlavor[]{softwareUnitFlavour};
-	}
-
-    @Override
-	public boolean isDataFlavorSupported(DataFlavor arg0) {
-		// TODO Auto-generated method stub t
-		
-    	return true;
-	}
+   
 
 }

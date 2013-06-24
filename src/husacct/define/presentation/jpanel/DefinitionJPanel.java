@@ -1,5 +1,7 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.common.help.presentation.HelpableJPanel;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
@@ -7,7 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-public class DefinitionJPanel extends javax.swing.JPanel {
+public class DefinitionJPanel extends HelpableJPanel {
 
 	private static final long serialVersionUID = 7442552399461704491L;
 	public AppliedRulesJPanel appliedRulesPanel;

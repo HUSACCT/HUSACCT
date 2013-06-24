@@ -2,8 +2,8 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.utils.KeyValueComboBox;
@@ -26,12 +26,11 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class ExceptionRuleJDialog  extends JDialog implements KeyListener, ActionListener, ItemListener{
+public class ExceptionRuleJDialog  extends HelpableJDialog implements KeyListener, ActionListener, ItemListener{
 
 	private static final long serialVersionUID = -3491664038962722000L;
 	

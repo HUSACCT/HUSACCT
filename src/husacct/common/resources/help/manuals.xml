@@ -4,4 +4,27 @@
   <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
   <MainGui filename = "maingui.html" viewname = "General"></MainGui>
   <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+
+  <ModuleJPanel filename="modules.html" viewname="Module hierarchy"></ModuleJPanel>
+  <EditModuleJPanel filename="moduleProps.html" viewname="Module Properties"></EditModuleJPanel>
+  <SoftwareUnitsJPanel filename="softwareunits.html" viewname="Software Units"></SoftwareUnitsJPanel>
+  <AppliedRulesJPanel filename="appliedrules.html" viewname="Applied Rules"></AppliedRulesJPanel>
+  <AddModuleValuesJDialog filename="addmoduledialog.html" viewname="Add Module"></AddModuleValuesJDialog>
+  <AppliedRuleJDialog filename="addruledialog.html" viewname="Add Applied Rule"></AppliedRuleJDialog>
+  <EditSoftwareUnitJDialog filename="editsoftwareunit.html" viewname="Edit Software Unit"></EditSoftwareUnitJDialog>
+  <ExceptionRuleJDialog filename="addexception.html" viewname="Add Exception"></ExceptionRuleJDialog>
+  <SoftwareUnitJDialog filename="addsoftwareunit.html" viewname="Add Software Unit"></SoftwareUnitJDialog>
+
+  <ValidateIntro filename="/validate/introduction.html" viewname="Validate - introduction"></ValidateIntro>
+  <ValidateTerminology filename="/validate/terminology.html" viewname="Validate - terminology"></ValidateTerminology>
+  <SupportedRules filename="/validate/supportedrules.html" viewname="Validate - supported rules"></SupportedRules>
+  <BrowseViolations filename="/validate/browseviolations.html" viewname="Validate - browse violations"></BrowseViolations>
+  <FilterViolations filename="validate/filterdialog.html" viewname="Validate - filter dialog"></FilterViolations>
+  <CodeViewer filename="validate/codeviewer.html" viewname="Validate - code viewer"></CodeViewer>
+  <ExportViolationsReportDialog filename="validate/reportexport.html" viewname="Validate - report export"></ExportViolationsReportDialog>
+  <ConfigurationUI filename="validate/configurationintro.html" viewname="Validate - configuration intro"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureseverities.html" viewname="Validate - configure severities"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureseveriesperruletypeandviolationtypes.html" viewname="Validate - configure sev. per rule and violation type"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureactiveviolationtypes.html" viewname="Validate - configure active violation types"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configuredefaultrules.html" viewname="Validate - configure default rules"></ConfigurationUI>
 </manuals>

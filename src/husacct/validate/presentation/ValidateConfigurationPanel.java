@@ -37,7 +37,7 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
 	private List<Severity> severities;
-	private JButton cancel, applySeverity, restore;
+	private JButton applySeverity, restore;
 	private JTabbedPane tabPanel;
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
@@ -61,7 +61,6 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 		severityNameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		applySeverity = new JButton();
 		restore = new JButton();
-		cancel = new JButton();
 
 		severityNameTable.setFillsViewportHeight(true);
 		severityNameTable.getTableHeader().setReorderingAllowed(false);
@@ -132,15 +131,11 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 
 		GroupLayout.ParallelGroup horizontalGroup = baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		horizontalGroup.addComponent(tabPanel);
-		horizontalGroup.addComponent(cancel);
 
 		baseLayout.setHorizontalGroup(horizontalGroup);
 
 		GroupLayout.SequentialGroup verticalGroup = baseLayout.createSequentialGroup();
 		verticalGroup.addComponent(tabPanel);
-		verticalGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalGroup.addComponent(cancel);
-		verticalGroup.addGap(16, 16, 16);
 
 		baseLayout.setVerticalGroup(verticalGroup);
 
@@ -192,7 +187,6 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 	public void setText() {
 		applySeverity.setText(localeService.getTranslatedString("Apply"));
 		restore.setText(localeService.getTranslatedString("RestoreToDefault"));
-		cancel.setText(localeService.getTranslatedString("Cancel"));
 	}
 
 	private void loadModels() {

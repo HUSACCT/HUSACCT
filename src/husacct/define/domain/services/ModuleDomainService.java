@@ -55,7 +55,11 @@ public class ModuleDomainService {
 	
 	public ModuleStrategy createNewModule(String type)
 	{
-		return factory.createModule(type);
+	ModuleStrategy result=	factory.createModule(type);
+	
+
+		
+		return result;
 		
 	}
 
@@ -164,12 +168,14 @@ public class ModuleDomainService {
 	}
 
 	public void moveLayerDown(long layerId) {
+		StateService.instance().layerDown(layerId);
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 	}
 
 	public void moveLayerUp(long layerId) {
+		StateService.instance().layerUp(layerId);
 		SoftwareArchitecture.getInstance().moveLayerUp(layerId);
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
