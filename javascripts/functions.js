@@ -1,16 +1,14 @@
 $(document).ready(function() {
-	var anchor = window.location.hash.substring(1);
-	if(anchor == ""){
-		anchor = "home";
-	}
-	
 	$(document).on("click", "#pages_menu a", function(){
 		var page_name = $(this).attr("href").replace("#", "");
 		show_page(page_name);
 	});
 	
+	var anchor = window.location.hash.substring(1);
+	if(anchor == ""){
+		anchor = "home";
+	}
 	show_page(anchor);
-	
 });
 
 function show_page(page_name){
