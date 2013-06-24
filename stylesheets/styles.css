@@ -102,8 +102,8 @@ header {
   float:left;
   position:fixed;
 }
-header > a{
-	text-decoration: none;
+#logo{
+	border: none;
 }
 header #git_menu {
   list-style:none;
