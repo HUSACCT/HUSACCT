@@ -17,9 +17,14 @@
 
   <ValidateIntro filename="/validate/introduction.html" viewname="Validate - introduction"></ValidateIntro>
   <ValidateTerminology filename="/validate/terminology.html" viewname="Validate - terminology"></ValidateTerminology>
-  <ValidateSupportedRules filename="/validate/supportedrules.html" viewname="Validate - supported rules"></ValidateSupportedRules>
-  <ValidateBrowseViolations filename="/validate/browseviolations.html" viewname="Validate - browse violations"></ValidateBrowseViolations>
-  <ValidateFilterDialog filename="validate/filterdialog.html" viewname="Validate - filter dialog"></ValidateFilterDialog>
-  <ValidateCodeViewer filename="validate/codeviewer.html" viewname="Validate - code viewer"></ValidateCodeViewer>
-  <ValidateReportExport filename="validate/reportexport.html" viewname="Validate - report export"></ValidateReportExport>
+  <SupportedRules filename="/validate/supportedrules.html" viewname="Validate - supported rules"></SupportedRules>
+  <BrowseViolations filename="/validate/browseviolations.html" viewname="Validate - browse violations"></BrowseViolations>
+  <FilterViolations filename="validate/filterdialog.html" viewname="Validate - filter dialog"></FilterViolations>
+  <CodeViewer filename="validate/codeviewer.html" viewname="Validate - code viewer"></CodeViewer>
+  <ExportViolationsReportDialog filename="validate/reportexport.html" viewname="Validate - report export"></ExportViolationsReportDialog>
+  <ConfigurationUI filename="validate/configurationintro.html" viewname="Validate - configuration intro"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureseverities.html" viewname="Validate - configure severities"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureseveriesperruletypeandviolationtypes.html" viewname="Validate - configure sev. per rule and violation type"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureactiveviolationtypes.html" viewname="Validate - configure active violation types"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configuredefaultrules.html" viewname="Validate - configure default rules"></ConfigurationUI>
 </manuals>

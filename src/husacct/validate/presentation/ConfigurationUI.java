@@ -1,6 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
@@ -29,7 +30,7 @@ import javax.swing.ListSelectionModel;
 
 import org.apache.log4j.Logger;
 
-public final class ConfigurationUI extends JInternalFrame implements Observer {
+public final class ConfigurationUI extends HelpableJInternalFrame implements Observer {
 
 	private static final long serialVersionUID = 7721461596323704063L;
 	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
