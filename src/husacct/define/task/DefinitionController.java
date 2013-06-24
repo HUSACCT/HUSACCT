@@ -453,7 +453,7 @@ import org.apache.log4j.Logger;
 			module.set(name, description);
 			if (module instanceof Component) {
 			
-				ModuleStrategy facade=	moduleService.createNewModule("facade");
+				ModuleStrategy facade=	moduleService.createNewModule("Facade");
 				facade.set("Facade<"+name+">", "this is the Facade of your Component");
 				module.addSubModule(facade);
 			}
