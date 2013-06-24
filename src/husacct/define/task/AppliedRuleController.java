@@ -356,10 +356,6 @@ public class AppliedRuleController extends PopUpController {
 		ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
 		
 		for (ModuleStrategy module : modules) {
-			module.removeAllSUDefintions();
-		}
-		
-		for (ModuleStrategy module : modules) {
 			addDefineModuleChildComponents(rootComponent, module);
 		}
 		return rootComponent;
