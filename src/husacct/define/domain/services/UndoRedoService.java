@@ -216,7 +216,9 @@ public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitS
 	@Override
 	public void switchSoftwareUnitLocation(long fromModule, long toModule,
 			List<String> uniqNames) {
-		// TODO Auto-generated method stub
+		for (Object observer : getSeperatedSofwareUnitInterfacess(ISofwareUnitSeperatedInterface.class)) {
+			((ISofwareUnitSeperatedInterface)observer).switchSoftwareUnitLocation(fromModule, toModule, uniqNames);
+		}
 		
 	}
 
@@ -225,9 +227,12 @@ public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitS
 
 
 	@Override
-	public void editAppliedRule(long ruleid, Object[] oldvalues,
+	public void editAppliedRule(long ruleid,
 			Object[] newValues) {
-		// TODO Auto-generated method stub
+		for (Object observer : getSeperatedSofwareUnitInterfacess(IAppliedRuleSeperatedInterface.class)) {
+			((IAppliedRuleSeperatedInterface)observer).editAppliedRule(ruleid, newValues);
+		}
+		
 		
 	}
 

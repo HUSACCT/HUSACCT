@@ -12,6 +12,7 @@ public class EditAppliedRuleCommand implements Istate {
 	public EditAppliedRuleCommand(AppliedRuleStrategy rule ,Object[] newData) {
 	this.data=rule;
 	this.originalValues=convertOriginalValues(rule);
+	this.newValues=newData;
 	}
 	
 	private Object[] convertOriginalValues(AppliedRuleStrategy rule) {
@@ -30,13 +31,13 @@ public class EditAppliedRuleCommand implements Istate {
 
 	@Override
 	public void undo() {
-		
+		UndoRedoService.getInstance().editAppliedRule(data.getId(),originalValues);
 
 	}
 
 	@Override
 	public void redo() {
-		// TODO Auto-generated method stub
+		UndoRedoService.getInstance().editAppliedRule(data.getId(),newValues);
 
 	}
 

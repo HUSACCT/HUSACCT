@@ -246,7 +246,7 @@ import org.apache.log4j.Logger;
 
 		public void passModuleToService(long selectedModuleId, ModuleStrategy module) {
 			String ExceptionMessage = "";
-			StateService.instance().addModule(module);
+			
 			if (selectedModuleId == -1) {
 				moduleService.addModuleToRoot(module);
 			} else {

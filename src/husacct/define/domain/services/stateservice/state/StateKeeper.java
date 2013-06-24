@@ -49,18 +49,32 @@ public class StateKeeper implements Istate {
 
 	@Override
 	public void redo() {
+
 		myState = State.inAction;
 		Istate result = null;
-
-		_currentIndex = currentIndex;
+		
+		if(_currentIndex==1){
+				result=	states.get(currentIndex);
+		_currentIndex--;
+			
+		}else{
+	
+			
+			_currentIndex=currentIndex;
 		currentIndex++;
-
-		if (sizeoflist == currentIndex) {
-			result = states.get(_currentIndex);
-
+		
+		if (sizeoflist==currentIndex) {
+			result=	states.get(_currentIndex);
+			
 		} else {
-			result = states.get(currentIndex);
+			result=	states.get(currentIndex);
 		}
+		
+		
+		}
+		
+		
+		
 
 		result.redo();
 
@@ -72,8 +86,10 @@ public class StateKeeper implements Istate {
 	}
 
 	public void insertCommand(Istate sate) {
+	upDate();
+		System.out.println("inserted Command :"+sate.getClass().getName() );
 		myState = State.outAction;
-		if (currentIndex + 1 != states.size()) {
+		if ( 6 == states.size()) {
 			removeStates();
 			currentIndex++;
 			registerState(sate);
