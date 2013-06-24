@@ -166,7 +166,9 @@ section {
   float:right;
   padding-bottom:50px;
 }
-
+#content .page_content{
+	display: none;
+}
 small {
   font-size:11px;
 }
