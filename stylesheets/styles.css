@@ -132,7 +132,7 @@ header {
   position:fixed;
   top: 27px;
 }
-#logo{
+#logo img{
 	border: none;
 }
 header #git_menu {

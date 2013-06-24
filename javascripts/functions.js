@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$(document).on("click", "#pages_menu a", function(){
+	$(document).on("click", ".pagelink", function(){
 		var page_name = $(this).attr("href").replace("#", "");
 		show_page(page_name);
 	});
