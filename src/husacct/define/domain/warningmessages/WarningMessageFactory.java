@@ -60,9 +60,8 @@ public class WarningMessageFactory {
 	
 	private void addNotCodeLevel(WarningMessageContainer rootOfNotmapped)
 	{
-		System.out.println("refreshhhhhhhh 1");
+	
 		for (CodeLevelWarning code: WarningMessageService.getInstance().getNotCodeLevelWarnings()){
-			System.out.println("refreshhhhhhhh ");
 			rootOfNotmapped.addChild(new WarningMessageContainer(code));
 		}
 		

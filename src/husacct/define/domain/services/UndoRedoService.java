@@ -220,4 +220,15 @@ public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitS
 		
 	}
 
+
+
+
+
+	@Override
+	public void editAppliedRule(long ruleid, Object[] oldvalues,
+			Object[] newValues) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
