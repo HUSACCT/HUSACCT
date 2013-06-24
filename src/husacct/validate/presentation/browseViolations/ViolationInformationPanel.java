@@ -154,8 +154,6 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 			
 			sourceFile = violation.getClassPathFrom();
 			sourceSeverity = violation.getSeverity();
-			sourceFile = sourceFile.replace(".", File.separator);
-			sourceFile += ".java";
 			sourceLine = violation.getLinenumber();
 			
 			String message = task.getMessage(violation.getMessage(), violation);
