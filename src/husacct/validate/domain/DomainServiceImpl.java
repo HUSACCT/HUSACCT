@@ -107,8 +107,6 @@ public class DomainServiceImpl {
 	}
 	
 	public void checkModuleTypeFactoryInstance() {
-		if (this.moduleFactory == null) {
-			this.moduleFactory = new ModuleFactory(ruleTypeFactory.getRuleTypes());
-		}
+		this.moduleFactory = new ModuleFactory(ruleTypeFactory.getRuleTypes());
 	}
 }

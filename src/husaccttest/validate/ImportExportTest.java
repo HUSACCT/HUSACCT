@@ -66,8 +66,6 @@ public class ImportExportTest {
 		}
 	}
 
-	// TODO assert a programming language is found like
-	// findSeverityPerTypeElement();
 	private void checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(
 			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages,
 			Element severitiesPerTypesPerProgrammingLanguagesElement) {
@@ -174,15 +172,13 @@ public class ImportExportTest {
 	@Test
 	public void testExportingAndImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
 		testImporting();
-		// checkViolationsTheSameAsViolationsElement(validate.getConfiguration().getAllViolations().getValue(),
-		// validate.getWorkspaceData().getChild("violations"));
+		
 		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration()
 				.getAllSeverities(), validate.getWorkspaceData().getChild("severities"));
 		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(
 				validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(),
 				validate.getWorkspaceData().getChild("severitiesPerTypesPerProgrammingLanguages"));
-		// checkViolationHistoriesTheSameAsViolationHistoriesElement(validate.getConfiguration().getViolationHistories(),
-		// validate.getWorkspaceData().getChild("violationHistories"));
+		
 		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate
 				.getConfiguration().getActiveViolationTypes(), validate.getWorkspaceData().getChild("activeViolationTypes"));
 	}

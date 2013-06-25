@@ -135,7 +135,8 @@ public class JavaParameterGenerator extends JavaGenerator {
         this.currentTypes = new ArrayList<String>();
     }
 
-    private void writeParameterToDomain() {
+    @SuppressWarnings("unchecked")
+	private void writeParameterToDomain() {
         for (ArrayList<Object> object : saveParameterQueue) {
             ArrayList<Object> currentParam = object;
             String type = (String) currentParam.get(0);

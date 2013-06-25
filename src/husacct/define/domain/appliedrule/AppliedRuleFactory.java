@@ -6,7 +6,7 @@ import husacct.define.domain.appliedrule.propertyrules.FacadeConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.InterfaceConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionExceptionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionRule;
-import husacct.define.domain.appliedrule.propertyrules.SubClassConventionRule;
+import husacct.define.domain.appliedrule.propertyrules.SuperClassInheritanceConvention;
 import husacct.define.domain.appliedrule.propertyrules.VisibilityConventionExceptionRule;
 import husacct.define.domain.appliedrule.propertyrules.VisibilityConventionRule;
 import husacct.define.domain.appliedrule.relationrules.IsAllowedToUseRule;
@@ -40,7 +40,7 @@ public class AppliedRuleFactory {
 		"VisibilityConvention",
 		"VisibilityConventionException",
 		"InterfaceConvention",
-		"SubClassConvention",
+		"SuperClassInheritanceConvention",
 		"FacadeConvention"
 	};
 
@@ -57,7 +57,7 @@ public class AppliedRuleFactory {
 		VisibilityConventionRule.class,
 		VisibilityConventionExceptionRule.class,
 		InterfaceConventionRule.class,
-		SubClassConventionRule.class,
+		SuperClassInheritanceConvention.class,
 		FacadeConventionRule.class
 	};
 	
@@ -109,7 +109,9 @@ public class AppliedRuleFactory {
 				newRule.setRuleType(""+ruleDetails.get("ruleTypeKey"));
 				newRule.setId(-1);
 				newRule.setModuleFrom(mds.getModuleById((long) ruleDetails.get("moduleFromId")));
-				if(Integer.parseInt(""+ruleDetails.get("moduleToId")) != -1)
+				if(ruleDetails.get("moduleToId").toString().endsWith("PACKAGE") || ruleDetails.get("moduleToId").toString().endsWith("CLASS") || ruleDetails.get("moduleToId").toString().endsWith("INTERFACE") || ruleDetails.get("moduleToId").toString().endsWith("LIBRARY") || ruleDetails.get("moduleToId").toString().endsWith("EXTERNALLIBRARY") || ruleDetails.get("moduleToId").toString().endsWith("REGEX") || ruleDetails.get("moduleToId").toString().endsWith("SUBSYSTEM"))
+					newRule.setModuleTo(mds.getModuleById((long) ruleDetails.get("moduleFromId")));
+				else if(Integer.parseInt(""+ruleDetails.get("moduleToId")) != -1)
 					newRule.setModuleTo(mds.getModuleById((long) ruleDetails.get("moduleToId")));
 				else
 					newRule.setModuleTo(mds.getModuleById((long) ruleDetails.get("moduleFromId")));

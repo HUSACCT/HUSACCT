@@ -2,6 +2,7 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -32,13 +33,12 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
-public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
+public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
 

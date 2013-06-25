@@ -1,25 +1,28 @@
 package husacct.analyse.presentation;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.help.presentation.HelpableJPanel;
+import husacct.common.help.presentation.HelpableJTree;
+
 import java.awt.Color;
 import java.util.List;
-import javax.swing.JPanel;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.UIManager;
 
-class ApplicationStructurePanel extends JPanel implements TreeSelectionListener {
+class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionListener {
 
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
-    private JTree analysedCodeTree;
+    private HelpableJTree analysedCodeTree;
     private JScrollPane jScrollPaneTree;
     private DefaultTreeCellRenderer renderer;
     private AnalyseUIController dataControl;
@@ -34,7 +37,7 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener 
 
         AnalysedModuleDTO rootModule = new AnalysedModuleDTO("", "", "", "");
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootModule);
-        this.analysedCodeTree = new JTree(root);
+        this.analysedCodeTree = new HelpableJTree(root);
         this.createTreeLayout(analysedCodeTree);
 
         List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();

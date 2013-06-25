@@ -44,6 +44,11 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     public AnalysedModuleDTO[] getRootModules() {
         return domainService.getRootModules();
     }
+    
+    @Override
+    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
+    	return domainService.getRootModulesWithExternalSystems();
+    }
 
     @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {

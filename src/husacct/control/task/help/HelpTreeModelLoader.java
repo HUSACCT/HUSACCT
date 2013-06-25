@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -49,27 +50,6 @@ public class HelpTreeModelLoader {
 			logger.error(ex.getMessage());
 		}
 
-		/*URL url = Resource.get(manualXmlPath);
-
-
-
-
-		String path = url.getPath();
-		path = path.replace("file:", "");
-
-		File manualDescriptionFile = new File(path);
-
-		SAXBuilder sax = new SAXBuilder();
-		Document doc = new Document();
-		try {
-			sax.build();
-			doc = sax.build(manualDescriptionFile);
-		}
-		catch (Exception ex) {
-			logger.error(ex.getMessage());
-		}
-
-		 */
 		return doc;
 	}
 
@@ -82,17 +62,31 @@ public class HelpTreeModelLoader {
 
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode(root.getName());
 		for(Element child : root.getChildren()) {
-			HelpTreeNode HelpNode = new HelpTreeNode(child.getAttributeValue("filename"), child.getAttributeValue("viewname"), child.getName());
+			HelpTreeNode HelpNode = new HelpTreeNode(child.getAttributeValue("filename"), child.getAttributeValue("viewname"), child.getName(), "html");
 			DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(HelpNode);
-			parent.add(childNode);
+			if(HelpNode.getParent() == null) {
+				parent.add(childNode);
+			}
+			else {
+				HelpTreeNode parentHelpNode = new HelpTreeNode(HelpNode.getParent(),HelpNode.getParent(),HelpNode.getParent(), "folder");
+				DefaultMutableTreeNode parentNode = findNode(parent, parentHelpNode);
+				parentNode.add(childNode);
+				parent.add(parentNode);
+			}
 			HelpTreeNodeList.add(HelpNode);
 		}
-
 		return parent;
-
-
-
-
+	}
+	
+	private DefaultMutableTreeNode findNode(DefaultMutableTreeNode root, HelpTreeNode node) {
+		List<DefaultMutableTreeNode> Children = Collections.list(root.children());
+		for(int i = 0; i < Children.size(); i++) {
+			if(((HelpTreeNode)Children.get(i).getUserObject()).getFilename().equals(node.getFilename())) {
+				return Children.get(i);
+			}
+		}
+		return new DefaultMutableTreeNode(node);
+		
 	}
 
 	public String getContent(InputStream stream) {		
@@ -105,35 +99,10 @@ public class HelpTreeModelLoader {
 			}	
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			
 		}
 		html = setPath(html);
 		return html;
-	}
-
-
-
-	public String getContent2(File f) throws FileNotFoundException {
-
-		BufferedReader br = new BufferedReader(new FileReader(f));
-
-		String line;
-		String html = "";
-		try {
-			while((line = br.readLine()) != null) {
-				html+=line;
-			}	
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		if(html.contains("RESOURCE.GET")) {
-			html = setPath(html);
-		}
-		return html;
-
-
 	}
 	
 	public String setPath(String html) {

@@ -1,6 +1,7 @@
 package husacct.define.domain.appliedrule;
 
 import husacct.ServiceProvider;
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
 
 import java.util.ArrayList;
@@ -130,6 +131,15 @@ public abstract class AppliedRuleStrategy {
 
 	public ArrayList<AppliedRuleStrategy> getExceptions() {
 		return exceptions;
+	}
+	public AppliedRuleStrategy getExeptionByID(long exeptionId)
+	{
+	for (AppliedRuleStrategy result : exceptions) {
+		if (result.getId()==exeptionId) {
+			return result;
+		}
+	}	
+	return null;
 	}
 
 	public void setDependencies(String[] dependencies) {

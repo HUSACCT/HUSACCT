@@ -11,4 +11,5 @@ public interface IAppliedRuleSeperatedInterface extends IseparatedDefinition{
 	public void removeSeperatedAppliedRule(List<AppliedRuleStrategy> rules);
 	public void addSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules);
 	public void removeSeperatedExeptionRule(long parentRuleID,List<AppliedRuleStrategy> rules);
+	public void editAppliedRule(long ruleid,Object[] newValues);
 }

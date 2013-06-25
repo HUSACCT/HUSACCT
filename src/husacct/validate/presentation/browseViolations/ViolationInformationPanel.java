@@ -7,7 +7,6 @@ import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.GroupLayout;
@@ -154,8 +153,6 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 			
 			sourceFile = violation.getClassPathFrom();
 			sourceSeverity = violation.getSeverity();
-			sourceFile = sourceFile.replace(".", File.separator);
-			sourceFile += ".java";
 			sourceLine = violation.getLinenumber();
 			
 			String message = task.getMessage(violation.getMessage(), violation);

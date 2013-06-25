@@ -36,20 +36,35 @@ public class ValidateTest {
 	@Before
 	public void setup() {
 		setLog4jConfiguration();
-		
 		define = ServiceProvider.getInstance().getDefineService();
+		
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
-			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "java", "1.0", 
+			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "Java", "1.0", 
 					"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 		validate = ServiceProvider.getInstance().getValidateService();
 	}
 	
-	private void setLog4jConfiguration(){
+	private void setLog4jConfiguration() {
 		URL propertiesFile = getClass().getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
+	}
+	
+	@Test
+	public void testSetup() {
+		assertNotNull(define);
+		assertNotNull(define.getApplicationDetails());
+		assertNotNull(define.getApplicationDetails().projects.get(0));
+		assertNotNull(define.getApplicationDetails().projects.get(1));
+		assertNotNull(define.getApplicationDetails().projects.get(2));
+		assertNotNull(validate);
+	}
+	
+	@Test
+	public void componentValidateIsNotNull() {
+		assertNotNull(validate);
 	}
 	
 	@Test
@@ -58,7 +73,7 @@ public class ValidateTest {
 		assertNotNull(project);
 		
 		String language = project.programmingLanguage;
-		assertEquals("java", language);
+		assertEquals("Java", language);
 	}
 	
 	@Test
@@ -99,11 +114,10 @@ public class ValidateTest {
 
 		File checkExportFile = new File(fileRelativePath); 
 
-		if(checkExportFile.exists()) {
+		if (checkExportFile.exists()) {
 			checkExportFile.delete();
 			testResult = true;
 		}
-
 		assertTrue(testResult);
 	}
 
@@ -116,7 +130,7 @@ public class ValidateTest {
 		
 		assertArrayEquals(ruleTypeCategories, getCategoryStringArray(dtos));
 	}
-
+	
 	@Test
 	public void getRuleTypes() {
 		CategoryDTO[] dtos = validate.getCategories();
@@ -148,7 +162,9 @@ public class ValidateTest {
 			};
 			for (String module : modules) {
 				System.out.print("\nAllowedRuleTypes for " + module + ": ");
+				
 				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
+				assertNotNull(allowedRuleTypes);
 				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
 					System.out.print(allowedRuleType.getKey() + ", ");
 				}
@@ -170,8 +186,10 @@ public class ValidateTest {
 			};
 			
 			for (String module : modules) {
-				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
 				System.out.print("\nDefaultRuleTypes for " + module + ": ");
+				
+				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
+				assertNotNull(defaultRuleTypes);
 				for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
 					System.out.print(defaultRuleType.getKey() + ", ");
 				}
@@ -184,16 +202,16 @@ public class ValidateTest {
 	@Test
 	public void getViolationTypesJavaLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
-		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
+		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
 		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 
 	@Test
 	public void getViolationTypesCSharpLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
-		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
+		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
 		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 

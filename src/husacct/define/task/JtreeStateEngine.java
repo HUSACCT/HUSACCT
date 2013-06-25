@@ -9,6 +9,7 @@ import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.StateDefineController;
 import husacct.define.domain.services.stateservice.state.appliedrule.AppliedRuleAddCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.EditAppliedRuleCommand;
 import husacct.define.domain.services.stateservice.state.appliedrule.ExceptionAddRuleCommand;
 import husacct.define.domain.services.stateservice.state.appliedrule.RemoveAppliedRuleCommand;
 import husacct.define.domain.services.stateservice.state.module.LayerDownCommand;
@@ -34,6 +35,7 @@ public abstract class JtreeStateEngine {
 	private StateDefineController stateController = new StateDefineController();
 	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
+	
 
 	public JtreeStateEngine() {
 		logger = Logger.getLogger(JtreeStateEngine.class);
@@ -99,8 +101,7 @@ public abstract class JtreeStateEngine {
 		data.add(analyzeModuleTobeRestored);
 		StateService.instance().allUnitsRegistry
 				.registerAnalyzedUnit(analyzeModuleTobeRestored);
-		stateController.insertCommand(new SoftwareUnitRemoveCommand(module,
-				data));
+		
 	}
 
 	public void addSoftwareUnit(ModuleStrategy module,
@@ -124,6 +125,7 @@ public abstract class JtreeStateEngine {
 
 	public void analyze() {
 		getRootModel();
+		DefinitionController.getInstance().notifyAnalyzedObservers();
 	}
 
 	public void registerAnalyzedUnit(AnalyzedModuleComponent unit) {
@@ -166,7 +168,7 @@ public abstract class JtreeStateEngine {
 
 	public void removeSoftwareUnit(List<String> selectedModules) {
 		
-	
+	stateController.insertCommand(new SoftwareUnitRemoveCommand(DefinitionController.getInstance().getSelectedModuleId(), selectedModules));
 
 
 
@@ -201,7 +203,52 @@ return	allUnitsRegistry.getNotMappedUnits();
 		
 	}
 
+	public ArrayList<AnalyzedModuleComponent> getAnalyzedSoftWareUnit(
+			List<String> data) {
+		return allUnitsRegistry.getAnalyzedUnit(data);
+		
+	}
 
+	public void removeRules(List<Long> selectedRules) {
+	
+		
+	}
 
+	public void registerImportedUnit(SoftwareUnitDefinition unit) {
+		allUnitsRegistry.registerImportedUnit(unit);
+		
+	}
 
+	public void registerImportedData() {
+       for (String unigNames : allUnitsRegistry.getimportedUnits()) {
+		AnalyzedModuleComponent result = allUnitsRegistry.getAnalyzedUnit(unigNames.toLowerCase());
+		if (result!=null) {
+			result.freeze();
+		}
+		
+	}
+		
+	}
+
+	public void addAppliedRule(AppliedRuleStrategy rule) {
+		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+		rules.add(rule);
+		stateController.insertCommand(new AppliedRuleAddCommand(rules));
+		
+	}
+
+	public void removeAppliedRule(AppliedRuleStrategy appliedRuleById) {
+		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+		stateController.insertCommand(new RemoveAppliedRuleCommand(rules) );
+		
+	}
+
+	public void editAppliedRule(AppliedRuleStrategy rule, Object[] objects) {
+		stateController.insertCommand(new EditAppliedRuleCommand(rule,objects) );
+	}
+
+	public void removeAppliedRuleExeption(long parentRuleId,
+			AppliedRuleStrategy exceptionRule) {
+		stateController.insertCommand(new RemoveAppliedRuleExeptionCommand(parentRuleId,exceptionRule));	
+	}
 }

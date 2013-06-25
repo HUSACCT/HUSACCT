@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.menubars;
 
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJPanel;
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingLayoutStrategy;
@@ -20,7 +21,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -28,7 +28,8 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsMenuBar extends JPanel implements UserInputListener {
+public class GraphicsMenuBar extends HelpableJPanel implements
+		UserInputListener {
 	private static final long serialVersionUID = -7419378432318031359L;
 	
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
@@ -127,6 +128,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	public void hideDependencies() {
 		for (UserInputListener listener : listeners)
 			listener.hideDependencies();
+	}
+	
+	@Override
+	public void hideLibraries() {
+		for (UserInputListener l : listeners)
+			l.hideLibraries();
 	}
 	
 	@Override
@@ -314,12 +321,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		// Not used from this UI
 	}
 	
+	
 	@Override
 	public void moduleZoom() {
 		for (UserInputListener listener : listeners)
 			listener.moduleZoom();
 	}
-	
 	
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
@@ -458,6 +465,11 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	}
 	
 	@Override
+	public void showLibraries() {
+		for (UserInputListener l : listeners)
+			l.showLibraries();
+	}
+	@Override
 	public void showSmartLines() {
 		for (UserInputListener l : listeners)
 			l.showSmartLines();
@@ -468,6 +480,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		for (UserInputListener l : listeners)
 			l.showViolations();
 	}
+	
 	public void turnOffBar() {
 		for (JComponent comp : actions)
 			comp.setEnabled(false);

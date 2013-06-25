@@ -9,6 +9,8 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
@@ -100,6 +102,10 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			System.out.println("This software unit does not exist!");
 		}
 	}
+	
+	public void removeAllSUDefintions(){
+		mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
+	}
 
 	public void addSURegExDefinition(SoftwareUnitRegExDefinition unit){
 		if(!mappedRegExSUunits.contains(unit)) {
@@ -189,6 +195,27 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	public boolean hasRegExSoftwareUnit(String softwareUnitName){
 		return hasRegExSoftwareUnit(softwareUnitName, false);
+	}
+	
+	public int countSoftwareUnits(){
+		int counter = 0;
+		for (int i = 0; i < mappedSUunits.size(); i++){
+			counter++;
+		}
+		if(!this.hasSubModules()){
+			for(ModuleStrategy sub : this.subModules){
+				counter+= sub.countSoftwareUnits();
+			}
+		}
+		return counter;
+	}
+	
+	public HashMap<String, String> getSoftwareUnitNames(){
+		HashMap<String, String> names = new HashMap<String, String>();
+		for(SoftwareUnitDefinition softwareUnit : mappedSUunits){
+			names.put(softwareUnit.getName(), softwareUnit.getType().toString());
+		}
+		return names;
 	}
 
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName){
@@ -335,6 +362,27 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			removeSUDefintion(softwareUnitDefinition);
 		}
 		
+	}
+
+
+	public ArrayList<SoftwareUnitDefinition> getAndRemoveSoftwareUnits(
+			List<String> names) {
+		ArrayList<SoftwareUnitDefinition> units = new ArrayList<SoftwareUnitDefinition>();
+		Iterator<SoftwareUnitDefinition> loop = getUnits().iterator();
+		while(loop.hasNext())
+		{
+			for (String uniqName : names) {
+				SoftwareUnitDefinition buffer = loop.next();
+				if (uniqName.toLowerCase().equals(buffer.getName().toLowerCase())){
+					units.add(buffer);
+					loop.remove();
+				}
+			}
+		}
+		
+	
+	
+		return units;
 	}
 
 

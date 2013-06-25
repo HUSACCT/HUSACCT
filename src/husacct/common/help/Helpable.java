@@ -17,6 +17,7 @@ public  class Helpable{
 
 		this.component = comp;
 	}
+	
 	public MouseListener getListener() {
 		
 		return new HelpMouseListener(this.component);

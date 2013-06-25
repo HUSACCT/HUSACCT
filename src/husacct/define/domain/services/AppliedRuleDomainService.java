@@ -6,6 +6,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,7 @@ public class AppliedRuleDomainService {
     	if (isDuplicate(rule)) {
     	    return -1;
     	}
+    	StateService.instance().addAppliedRule(rule);
     	SoftwareArchitecture.getInstance().addAppliedRule(rule);
     	ServiceProvider.getInstance().getDefineService()
     		.notifyServiceListeners();
@@ -107,7 +109,8 @@ public class AppliedRuleDomainService {
     }
 
     public void removeAppliedRule(long appliedrule_id) {
-	SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
+	StateService.instance().removeAppliedRule(SoftwareArchitecture.getInstance().getAppliedRuleById(appliedrule_id));
+    	SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();
     }
@@ -142,6 +145,8 @@ public class AppliedRuleDomainService {
 	    ModuleStrategy ModuleStrategyFrom, ModuleStrategy ModuleStrategyTo, boolean enabled) {
 	AppliedRuleStrategy rule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(appliedRuleId);
+	StateService.instance().editAppliedRule(rule,new Object[]{ruleTypeKey,description,dependencies,regex,ModuleStrategyFrom,
+			ModuleStrategyTo,enabled});
 	rule.setRuleType(ruleTypeKey);
 	rule.setDescription(description);
 	rule.setDependencies(dependencies);

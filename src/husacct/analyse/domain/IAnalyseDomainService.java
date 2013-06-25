@@ -29,6 +29,8 @@ public interface IAnalyseDomainService {
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 
     public AnalysedModuleDTO[] getRootModules();
+    
+    public AnalysedModuleDTO[] getRootModulesWithExternalSystems();
 
     public AnalysedModuleDTO[] getChildModulesInModule(String from);
 

@@ -15,6 +15,7 @@ public class Resource {
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
 	public static final String CREDITS_PATH = RESOURCE_PATH +"credits/";
 	public static final String HELP_PATH = RESOURCE_PATH +"help/";
+	public static final String TEMPLATES_PATH = RESOURCE_PATH + "templates/";
 	public static final String HELP_PAGES_PATH = HELP_PATH +"pages/";
 	public static final String HELP_IMAGE_PATH = HELP_PATH +"image/";
 	public static final String test_page = HELP_PAGES_PATH + "about.html";
@@ -23,6 +24,7 @@ public class Resource {
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
 	public static final String DEFINE_WORKFLOW = IMAGE_PATH + "define_workflow.png";
 	public static final String BIG_YOUTUBE_LOGO = IMAGE_PATH + "yt-brand-standard-logo-630px.png";
+	public static final String TEMPLATE_REPORT = TEMPLATES_PATH + "template.html";
 
 	public static final String GIT_FORK_1 = IMAGE_PATH +"fork_1.png";
 	public static final String GIT_FORK_2 = IMAGE_PATH +"fork_2.png";
@@ -79,11 +81,13 @@ public class Resource {
 	public static final String ICON_EXTERNALLIB_GRAY =ICONSET_PATH+"define_externalLib-gray.png";
 	public static final String ICON_SUBSYSTEMJAVA_GRAY = ICONSET_PATH+"define-subsystem-gray.png";
 	public static final String ICON_EXTERNALLIB2_GRAY = ICONSET_PATH+"define-externallib-gray.png";
+	public static final String ICON_BROWSER = ICONSET_PATH+"define-browser.png";
 	public static final String ICON_PAN_TOOL = ICONSET_PATH
 			+ "icon-hand-clean-hi.png";
 	public static final String ICON_SELECT_TOOL = ICONSET_PATH
 			+ "mouse-cursor-icon.jpg";
 	public static String ICON_FACADE = ICONSET_PATH + "define-facade.png";
+	public static String WINDOW = IMAGE_PATH + "window.wav";
 
 	public static URL get(String path){
 		URL resourceUrl = null;

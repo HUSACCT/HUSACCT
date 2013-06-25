@@ -2,6 +2,7 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.domain.services.DomainGateway;
@@ -20,13 +21,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener, ILocaleChangeListener {
+public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListener, ActionListener, ILocaleChangeListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	
@@ -206,6 +206,8 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			
 			boolean hasBeenAdded = DomainGateway.getInstance().addModule(moduleName, moduleDescription, moduleType);
 			if (hasBeenAdded){
+			
+				
 				this.modulePanel.updateModuleTree();
 				this.dispose();
 			}
@@ -231,5 +233,6 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
 	}
 	
-
+	
+	
 }

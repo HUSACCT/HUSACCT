@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.hamcrest.core.IsInstanceOf;
+
 public class DefinedController extends DrawingController {
 	protected IAnalyseService analyseService;
 	protected IDefineService defineService;

@@ -1,7 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manuals>  	
-  <AboutDialog filename = "about.html" viewname = "About">  </AboutDialog>
-  <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
-  <MainGui filename = "maingui.html" viewname = "General"></MainGui>
-  <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+  <MainAnalyseDialog filename="analyse/mainanalyse.html" viewname= "Main Analyse"> </MainAnalyseDialog>
+  <SourceOverviewDialog filename="analyse/sourceoverview.html" viewname= "Source Overview"> </SourceOverviewDialog>
+  <DependencyOverviewDialog filename="analyse/depoverview.html" viewname= "Dependency Overview"> </DependencyOverviewDialog>
+  <DependencyFilterDialog filename="analyse/depfilter.html" viewname= "Dependency Filter"> </DependencyFilterDialog>
+  <FoundDependenciesDialog filename="analyse/founddependencies.html" viewname= "Found Dependencies"> </FoundDependenciesDialog>
+  <ExportDependenciesDialog filename="analyse/exportdependencies.html" viewname= "Export Dependencies"> </ExportDependenciesDialog>
+
+  
+  <GraphicsMenuBar filename="graphics/graphicsmenubar.html" viewname="Graphics Menu"></GraphicsMenuBar>
+  <GraphicsOptionsDialog filename="graphics/GraphicsOptionsDialog.html" viewname="Graphics Options"></GraphicsOptionsDialog>
+  <ApplicationJInternalFrame filename="define/definemain.html" viewname="Define Main GUI"></ApplicationJInternalFrame>
+  <ModuleJPanel filename="define/modules.html" viewname="Module hierarchy"></ModuleJPanel>
+  <EditModuleJPanel filename="define/moduleProps.html" viewname="Module Properties"></EditModuleJPanel>
+  <SoftwareUnitsJPanel filename="define/softwareunits.html" viewname="Software Units"></SoftwareUnitsJPanel>
+  <AppliedRulesJPanel filename="define/appliedrules.html" viewname="Applied Rules"></AppliedRulesJPanel>
+  <AddModuleValuesJDialog filename="define/addmoduledialog.html" viewname="Add Module"></AddModuleValuesJDialog>
+  <AppliedRuleJDialog filename="define/addruledialog.html" viewname="Add Applied Rule"></AppliedRuleJDialog>
+  <EditSoftwareUnitJDialog filename="define/editsoftwareunit.html" viewname="Edit Software Unit"></EditSoftwareUnitJDialog>
+  <ExceptionRuleJDialog filename="define/addexception.html" viewname="Add Exception"></ExceptionRuleJDialog>
+  <SoftwareUnitJDialog filename="define/addsoftwareunit.html" viewname="Add Software Unit"></SoftwareUnitJDialog>
+
+  <ValidateIntro filename="validate/introduction.html" viewname="Validate - introduction"></ValidateIntro>
+  <ValidateTerminology filename="validate/terminology.html" viewname="Validate - terminology"></ValidateTerminology>
+  <SupportedRules filename="validate/supportedrules.html" viewname="Validate - supported rules"></SupportedRules>
+  <BrowseViolations filename="validate/browseviolations.html" viewname="Validate - browse violations"></BrowseViolations>
+  <FilterViolations filename="validate/filterdialog.html" viewname="Validate - filter dialog"></FilterViolations>
+  <CodeViewer filename="validate/codeviewer.html" viewname="Validate - code viewer"></CodeViewer>
+  <ExportViolationsReportDialog filename="validate/reportexport.html" viewname="Validate - report export"></ExportViolationsReportDialog>
+  <ConfigurationUI filename="validate/configurationintro.html" viewname="Validate - configuration intro"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureseverities.html" viewname="Validate - configure severities"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureseveriesperruletypeandviolationtypes.html" viewname="Validate - configure sev. per rule and violation type"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configureactiveviolationtypes.html" viewname="Validate - configure active violation types"></ConfigurationUI>
+  <ConfigurationUI filename="validate/configuredefaultrules.html" viewname="Validate - configure default rules"></ConfigurationUI>
+  <MainGui filename = "control/maingui.html" viewname = "Main GUI"></MainGui>
+  <CreateWorkspaceDialog filename = "control/create-workspace.html" viewname = "Create Workspace"></CreateWorkspaceDialog>
+  <ActionLogPanel filename = "control/user_general_actionlog.html" viewname = "Action Log"></ActionLogPanel>
+  <GettingStarted filename ="control/user_general_gettingstarted.html" viewname = "Getting started"></GettingStarted>
+  <menu-analyse filename = "control/user_general_menu_analyse.html" viewname = "Analyse Menu"></menu-analyse>
+  <menu-define filename = "control/user_general_menu_define.html" viewname = "Define Menu"></menu-define>
+  <menu-file filename = "control/user_general_menu_file.html" viewname = "File Menu"></menu-file>
+  <menu-help filename = "control/user_general_menu_help.html" viewname = "Help Menu"></menu-help>
+  <menu-tools filename = "control/user_general_menu_tools.html" viewname = "Tool Menu"></menu-tools>
+  <menu-validate filename = "control/user_general_menu_validate.html" viewname = "Validate Menu"></menu-validate>
+  <requirements filename = "control/user_general_systemrequirements.html" viewname = "Requirements"></requirements>
+  <toolbar filename = "control/user_general_toolbar.html" viewname = "Toolbar"></toolbar>
+  <taskbar filename = "control/user_general_taskbar.html" viewname = "Taskbar"></taskbar>
+  <general filename = "control/user_general.html" viewname = "General" ></general>
+  
 </manuals>
