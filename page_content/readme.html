@@ -1,22 +1,22 @@
 <h1>Readme</h1>
 
 <h2>
-<a name="what-is-a-software-architecture-copmliance-checking-tool" class="anchor" href="#what-is-a-software-architecture-copmliance-checking-tool"><span class="octicon octicon-link"></span></a>What is a Software Architecture Compliance Checking Tool?</h2>
+<a name="what-is-a-software-architecture-compliance-checking-tool" class="anchor" href="#what-is-a-software-architecture-compliance-checking-tool"><span class="octicon octicon-link"></span></a>What is a Software Architecture Compliance Checking Tool?</h2>
 
 <p>When building new software, software architects design an architecture for the application. The programmers are tasked with realizing the application based on the designed architecture.</p>
 
-<p>To see if the realized architecture really is the same as the designed architecture we can use the SACC-tool. To use such a SACC-tool, the following steps are to be taken.</p>
+<p>To see if the realized architecture is conforms to the designed architecture we can use a SACC-Tool. The following steps are taken to do this.</p>
 
 <h3>
 <a name="analyse-an-architecture" class="anchor" href="#analyse-an-architecture"><span class="octicon octicon-link"></span></a>Analyse an architecture</h3>
 
-<p>By analyzing an application, we are able to break down the structure of the given software. By doing this the program detects the physical entities inside the software and defines the architecture used within the application.<br>
-It also allows the architects and the software engineers to get a graphical representation of the detected software architecture. Next to the possibility of getting a detailed graphical overview of the analyzed software, there is the ability to check the analyzed software architecture with an architectural model.</p>
+<p>By analyzing the built application we can break down the structure of the application. That way we can use the physical entities that are detected to define an architecture.<br>
+This also allows architects and programmers to view a graphical representation of the realized software architecture, but that is not good enough. We want to be able to check the analyzed software architecture against an architectural model.</p>
 
 <h3>
 <a name="define-an-architecture" class="anchor" href="#define-an-architecture"><span class="octicon octicon-link"></span></a>Define an architecture</h3>
 
-<p>Within the tool we define an architecture and the rules that apply to the analyzed application's architecture. We create logical modules such as <a href="http://en.wikipedia.org/wiki/Common_layers_in_an_information_system_logical_architecture" target="_blank">Layers</a> and define rules that should be followed. The communication rules present in the <a href="http://en.wikipedia.org/wiki/Model-view-controller" target="_blank">MVC pattern</a> could be seen as an example to such rules.</p>
+<p>Within this tool we define the architecture designed by the architects and the rules that apply to it. We create logical modules such as <a href="http://en.wikipedia.org/wiki/Common_layers_in_an_information_system_logical_architecture">Layers</a> and define rules that should be followed. Think of the communication rules present in the <a href="http://en.wikipedia.org/wiki/Model-view-controller">MVC pattern</a>.</p>
 
 <p>Examples:</p>
 
@@ -35,7 +35,7 @@ It also allows the architects and the software engineers to get a graphical repr
 <h3>
 <a name="mapping-the-defined-architecture" class="anchor" href="#mapping-the-defined-architecture"><span class="octicon octicon-link"></span></a>Mapping the defined architecture</h3>
 
-<p>We then map the physical entities we found, to the defined logical modules. This way the tool knows which physical entities (such as namespaces, packages, classes, interfaces, etc.) are included in logical modules.</p>
+<p>We then map the physical entities we found by analyzing to the defined logical modules. That way the tool knows which physical entities (such as namespaces, packages, classes, interfaces, etc.) are present in which logical module.</p>
 
 <p>Examples:</p>
 
@@ -46,16 +46,16 @@ It also allows the architects and the software engineers to get a graphical repr
 </ol><p><em>(not actual syntax/code used in the tool)</em>  </p>
 
 <h3>
-<a name="executing-a-copmliance-check" class="anchor" href="#executing-a-copmliance-check"><span class="octicon octicon-link"></span></a>Executing a compliance check</h3>
+<a name="executing-a-compliance-check" class="anchor" href="#executing-a-compliance-check"><span class="octicon octicon-link"></span></a>Executing a compliance check</h3>
 
-<p>By executing a copmliance check we can see if any of the specified rules are broken. A SACC-Tool automates the process of checking whether or not these rules are broken. The reports from the copmliance checks will list/graphically display the violations that occur between entities.</p>
+<p>By executing a compliance check we can see if any of the specified rules are broken. A SACC-Tool automates the process of checking whether or not these rules are broken. The reports from this compliance check will list/display the violations that occur between entities.</p>
 
-<p>Using the results from this copmliance check software-engineers and architects can evaluate their realized software architecture. If any serious issues pops up they can improve the program in such a way, it doesn't violate any rules anymore and into the program the architects meant it to be</p>
+<p>Using the results from this compliance check programmers and architects can evaluate their realized software architecture. If there are serious issues they can improve it by changing the program so that it follows the specified rules. That way they are making the software as it was meant to be.</p>
 
 <h2>
-<a name="why-build-a-software-architecture-copmliance-checking-tool" class="anchor" href="#why-build-a-software-architecture-copmliance-checking-tool"><span class="octicon octicon-link"></span></a>Why build a Software Architecture Compliance Checking Tool?</h2>
+<a name="why-build-a-software-architecture-compliance-checking-tool" class="anchor" href="#why-build-a-software-architecture-compliance-checking-tool"><span class="octicon octicon-link"></span></a>Why build a Software Architecture Compliance Checking Tool?</h2>
 
-<p>After conducting research into other SACC-tools we found out that the tools aren't always as user friendly and accurate as we had expected them to be. We were then assigned to create our own SACC-tool and improve on some concepts we found lacking in others. </p>
+<p>After conducting research into other SACC-tools we found out that the tools not always are as user friendly and/or as accurate as we had expected. We were then assigned to create our own SACC-tool and improve on some concepts we found lacking in others. </p>
 
 <p>The application we were instructed to build is meant to be a contribution to the field of Software Architecture analysis and evaluation.</p>
 
@@ -63,7 +63,7 @@ It also allows the architects and the software engineers to get a graphical repr
 <a name="support" class="anchor" href="#support"><span class="octicon octicon-link"></span></a>Support</h2>
 
 <p>The tool itself is written in Java.<br>
-Currently there is (only) support for the following <strong>languages</strong>:</p>
+Currently there is support for the following <strong>languages</strong>:</p>
 
 <ul>
 <li>Java <em>(Using Antlr)</em>
@@ -115,19 +115,25 @@ Currently there is (only) support for the following <strong>languages</strong>:<
 <h3>
 <a name="eclipse-ide" class="anchor" href="#eclipse-ide"><span class="octicon octicon-link"></span></a>Eclipse IDE</h3>
 
-<p>We have also made this an <a href="http://www.eclipse.org/" target="_blank">Eclipse</a> plugin. (<a href="https://github.com/HUSACCT/Eclipse-plugin" target="_blank">Eclipse plugin repository</a>)</p>
+<p>An <a href="http://www.eclipse.org/">Eclipse</a> plugin is available. (<a href="https://github.com/HUSACCT/HUSACCT-Plugin">Eclipse plugin repository</a>)</p>
 
 <h3>
 <a name="maven" class="anchor" href="#maven"><span class="octicon octicon-link"></span></a>Maven</h3>
 
-<p>We have also made this a <a href="http://maven.apache.org/" target="_blank">Maven</a> plugin. (<a href="https://github.com/HUSACCT/Maven-plugin" target="_blank">Maven plugin repository</a>)</p>
+<p>A <a href="http://maven.apache.org/">Maven</a> plugin is also available. (<a href="https://github.com/HUSACCT/HUSACCT-Maven">Maven plugin repository</a>)</p>
+
+<h2>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>There are JUnit tests available in this repository, to complement manual tests.
+For testing we use the <a href="https://github.com/HUSACCT/HUSACCT-BenchmarkApplication">Java benchmark</a> application, the <a href="https://github.com/HUSACCT/HUSACCT-CsharpBenchmarkApplication">C# benchmark</a> application, the <a href="https://github.com/HUSACCT/HUSACCT-RecognitionTest">Recognition test repository</a> and this project.</p>
 
 <h2>
 <a name="build-team" class="anchor" href="#build-team"><span class="octicon octicon-link"></span></a>Build team</h2>
 
-<p>This project involves six teams from one class (Bachelor Computer Science Informatics 2011-2012 and 2012-2013); around 4 to 5 people a team. Each team is responsible for a different service (control, analyze (Java and .NET), define, validate and architecture graphics).</p>
+<p>This project involves six teams from two classes in their third year (Bachelor Computer Science Informatics) over the course of two years (2011-2012 and 2012-2013), with 4 to 5 people a team. Each team is responsible for a different service (control, analyze (Java and .NET), define, validate and architecture graphics).</p>
 
 <h2>
 <a name="conclusion" class="anchor" href="#conclusion"><span class="octicon octicon-link"></span></a>Conclusion</h2>
 
-<p>The project is ongoing and is meant to be completed around July 2014.</p>
+<p>The project is ongoing and is meant to be completed around July 2013.</p></article>
