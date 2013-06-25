@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manuals>  	
-  <MainAnalyseDialog filename="mainanalyse.html" viewname= "Main Analyse"> </MainAnalyseDialog>
-  <SourceOverviewDialog filename="sourceoverview.html" viewname= "Source Overview"> </SourceOverviewDialog>
-  <DependencyOverviewDialog filename="depoverview.html" viewname= "Dependency Overview"> </DependencyOverviewDialog>
-  <DependencyFilterDialog filename="depfilter.html" viewname= "Dependency Filter"> </DependencyFilterDialog>
-  <FoundDependenciesDialog filename="founddependencies.html" viewname= "Found Dependencies"> </FoundDependenciesDialog>
-  <ExportDependenciesDialog filename="exportdependencies.html" viewname= "Export Dependencies"> </ExportDependenciesDialog>
-  <AboutDialog filename = "about.html" viewname = "About">  </AboutDialog>
-  <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
-  <MainGui filename = "maingui.html" viewname = "General"></MainGui>
-  <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
-  <GraphicsMenuBar filename="graphicsmenubar.html" viewname="Graphics Menu"></GraphicsMenuBar>
-  <GraphicsOptionsDialog filename="GraphicsOptionsDialog.html" viewname="Graphics Options"></GraphicsOptionsDialog>
-  <ApplicationJInternalFrame filename="definemain.html" viewname="Define Main GUI"></ApplicationJInternalFrame>
-  <ModuleJPanel filename="modules.html" viewname="Module hierarchy"></ModuleJPanel>
-  <EditModuleJPanel filename="moduleProps.html" viewname="Module Properties"></EditModuleJPanel>
-  <SoftwareUnitsJPanel filename="softwareunits.html" viewname="Software Units"></SoftwareUnitsJPanel>
-  <AppliedRulesJPanel filename="appliedrules.html" viewname="Applied Rules"></AppliedRulesJPanel>
-  <AddModuleValuesJDialog filename="addmoduledialog.html" viewname="Add Module"></AddModuleValuesJDialog>
-  <AppliedRuleJDialog filename="addruledialog.html" viewname="Add Applied Rule"></AppliedRuleJDialog>
-  <EditSoftwareUnitJDialog filename="editsoftwareunit.html" viewname="Edit Software Unit"></EditSoftwareUnitJDialog>
-  <ExceptionRuleJDialog filename="addexception.html" viewname="Add Exception"></ExceptionRuleJDialog>
-  <SoftwareUnitJDialog filename="addsoftwareunit.html" viewname="Add Software Unit"></SoftwareUnitJDialog>
+  <MainAnalyseDialog filename="analyse/mainanalyse.html" viewname= "Main Analyse"> </MainAnalyseDialog>
+  <SourceOverviewDialog filename="analyse/sourceoverview.html" viewname= "Source Overview"> </SourceOverviewDialog>
+  <DependencyOverviewDialog filename="analyse/depoverview.html" viewname= "Dependency Overview"> </DependencyOverviewDialog>
+  <DependencyFilterDialog filename="analyse/depfilter.html" viewname= "Dependency Filter"> </DependencyFilterDialog>
+  <FoundDependenciesDialog filename="analyse/founddependencies.html" viewname= "Found Dependencies"> </FoundDependenciesDialog>
+  <ExportDependenciesDialog filename="analyse/exportdependencies.html" viewname= "Export Dependencies"> </ExportDependenciesDialog>
 
-  <ValidateIntro filename="/validate/introduction.html" viewname="Validate - introduction"></ValidateIntro>
-  <ValidateTerminology filename="/validate/terminology.html" viewname="Validate - terminology"></ValidateTerminology>
-  <SupportedRules filename="/validate/supportedrules.html" viewname="Validate - supported rules"></SupportedRules>
-  <BrowseViolations filename="/validate/browseviolations.html" viewname="Validate - browse violations"></BrowseViolations>
+  
+  <GraphicsMenuBar filename="graphics/graphicsmenubar.html" viewname="Graphics Menu"></GraphicsMenuBar>
+  <GraphicsOptionsDialog filename="graphics/GraphicsOptionsDialog.html" viewname="Graphics Options"></GraphicsOptionsDialog>
+  <ApplicationJInternalFrame filename="define/definemain.html" viewname="Define Main GUI"></ApplicationJInternalFrame>
+  <ModuleJPanel filename="define/modules.html" viewname="Module hierarchy"></ModuleJPanel>
+  <EditModuleJPanel filename="define/moduleProps.html" viewname="Module Properties"></EditModuleJPanel>
+  <SoftwareUnitsJPanel filename="define/softwareunits.html" viewname="Software Units"></SoftwareUnitsJPanel>
+  <AppliedRulesJPanel filename="define/appliedrules.html" viewname="Applied Rules"></AppliedRulesJPanel>
+  <AddModuleValuesJDialog filename="define/addmoduledialog.html" viewname="Add Module"></AddModuleValuesJDialog>
+  <AppliedRuleJDialog filename="define/addruledialog.html" viewname="Add Applied Rule"></AppliedRuleJDialog>
+  <EditSoftwareUnitJDialog filename="define/editsoftwareunit.html" viewname="Edit Software Unit"></EditSoftwareUnitJDialog>
+  <ExceptionRuleJDialog filename="define/addexception.html" viewname="Add Exception"></ExceptionRuleJDialog>
+  <SoftwareUnitJDialog filename="define/addsoftwareunit.html" viewname="Add Software Unit"></SoftwareUnitJDialog>
+
+  <ValidateIntro filename="validate/introduction.html" viewname="Validate - introduction"></ValidateIntro>
+  <ValidateTerminology filename="validate/terminology.html" viewname="Validate - terminology"></ValidateTerminology>
+  <SupportedRules filename="validate/supportedrules.html" viewname="Validate - supported rules"></SupportedRules>
+  <BrowseViolations filename="validate/browseviolations.html" viewname="Validate - browse violations"></BrowseViolations>
   <FilterViolations filename="validate/filterdialog.html" viewname="Validate - filter dialog"></FilterViolations>
   <CodeViewer filename="validate/codeviewer.html" viewname="Validate - code viewer"></CodeViewer>
   <ExportViolationsReportDialog filename="validate/reportexport.html" viewname="Validate - report export"></ExportViolationsReportDialog>

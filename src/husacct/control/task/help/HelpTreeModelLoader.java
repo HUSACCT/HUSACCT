@@ -49,6 +49,7 @@ public class HelpTreeModelLoader {
 		catch (Exception ex) {
 			logger.error(ex.getMessage());
 		}
+
 		return doc;
 	}
 
@@ -59,38 +60,35 @@ public class HelpTreeModelLoader {
 
 		Element root = getXmlDocument().getRootElement();
 
-		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(root.getName());
+		DefaultMutableTreeNode parent = new DefaultMutableTreeNode(root.getName());
 		for(Element child : root.getChildren()) {
-			HelpTreeNode HelpNode = new HelpTreeNode(child.getAttributeValue("filename"), child.getAttributeValue("viewname"), child.getName() ,"html");
+			HelpTreeNode HelpNode = new HelpTreeNode(child.getAttributeValue("filename"), child.getAttributeValue("viewname"), child.getName(), "html");
 			DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(HelpNode);
 			if(HelpNode.getParent() == null) {
-				rootNode.add(childNode);
+				parent.add(childNode);
 			}
 			else {
-				DefaultMutableTreeNode ParentNode = new DefaultMutableTreeNode(new HelpTreeNode(HelpNode.parent,HelpNode.parent,HelpNode.parent, "folder"));
-				ParentNode = checkIfParentAlreadyExists(rootNode, ParentNode);
-				
-				ParentNode.add(childNode);
-				rootNode.add(ParentNode);
-				//parent.add(new DefaultMutableTreeNode(new HelpTreeNode ("Test1", "Test2", "Test3")).add(childNode));
+				HelpTreeNode parentHelpNode = new HelpTreeNode(HelpNode.getParent(),HelpNode.getParent(),HelpNode.getParent(), "folder");
+				DefaultMutableTreeNode parentNode = findNode(parent, parentHelpNode);
+				parentNode.add(childNode);
+				parent.add(parentNode);
 			}
 			HelpTreeNodeList.add(HelpNode);
 		}
-
-		return rootNode;
+		return parent;
 	}
-
-	public DefaultMutableTreeNode checkIfParentAlreadyExists(DefaultMutableTreeNode root, DefaultMutableTreeNode Child) {
-		String nameOfNode = ((HelpTreeNode)Child.getUserObject()).getViewName();
-		List<DefaultMutableTreeNode> list = Collections.list(root.children());
-		for(int i = 0; i < list.size(); i++) {
-			HelpTreeNode treeNode = (HelpTreeNode)list.get(i).getUserObject();
-			if(treeNode.getViewName().equals(nameOfNode)) {
-				return list.get(i);
+	
+	private DefaultMutableTreeNode findNode(DefaultMutableTreeNode root, HelpTreeNode node) {
+		List<DefaultMutableTreeNode> Children = Collections.list(root.children());
+		for(int i = 0; i < Children.size(); i++) {
+			if(((HelpTreeNode)Children.get(i).getUserObject()).getFilename().equals(node.getFilename())) {
+				return Children.get(i);
 			}
 		}
-		return Child;
+		return new DefaultMutableTreeNode(node);
+		
 	}
+
 	public String getContent(InputStream stream) {		
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String line;
@@ -101,35 +99,10 @@ public class HelpTreeModelLoader {
 			}	
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			
 		}
 		html = setPath(html);
 		return html;
-	}
-
-
-
-	public String getContent2(File f) throws FileNotFoundException {
-
-		BufferedReader br = new BufferedReader(new FileReader(f));
-
-		String line;
-		String html = "";
-		try {
-			while((line = br.readLine()) != null) {
-				html+=line;
-			}	
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		if(html.contains("RESOURCE.GET")) {
-			html = setPath(html);
-		}
-		return html;
-
-
 	}
 	
 	public String setPath(String html) {

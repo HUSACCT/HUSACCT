@@ -1,43 +1,27 @@
 package husacct.control.task.help;
 
-import java.io.File;
-
 public class HelpTreeNode {
-	String filename;
-	String viewname;
-	String componentname;
-	String parent;
-	String filetype;
+	private String filename;
+	private String viewname;
+	private String componentname;
+	private String parent;
+	private String fileType;
 	
 	public HelpTreeNode(String file, String viewname, String componentname, String filetype) {
-		setFile(file);
-		//this.filename = file;
+		
+		this.filename = file;
+		setParent();
 		this.viewname = viewname;
 		this.componentname = componentname;
-		this.filetype = filetype;
-	}
-	
-	public void setFile(String file) {
-		if(file.indexOf('/') > -1 ) {
-			this.parent = file.substring(0, file.indexOf('/'));
-			this.filename = file.substring(file.indexOf('/')+1);
-		}
-		else {
-			this.filename = file;
-		}
-		
-	}
-	
-	public String getParent() {
-		return parent;
+		this.fileType = filetype;
 	}
 	
 	public String getFilename() {
-		if(parent == null) {
+		if(parent==null) {
 			return filename;
 		}
 		else {
-			return parent +"/" + filename;
+			return parent+filename;
 		}
 	}
 	
@@ -49,9 +33,24 @@ public class HelpTreeNode {
 		return componentname;
 	}
 	
-	public String getFileType() {
-		return filetype;
+	public void setParent() {
+		if(filename.indexOf("/") > -1) {
+			this.parent = filename.substring(0, filename.indexOf("/"));
+			this.filename = filename.substring(filename.indexOf("/"));
+		}
+		else {
+			this.parent = null;
+		}
 	}
+	
+	public String getParent() {
+		return this.parent;
+	}
+	
+	public String getFileType() {
+		return this.fileType;
+	}
+	
 	@Override
 	public String toString() {
 		return this.viewname;
