@@ -82,7 +82,7 @@ public class MainGui extends HelpableJFrame{
 		actionLogPanel = new ActionLogPanel(mainController);
 		
 		taskBarPane.add(taskBar);
-		contentPane.add(actionLogPanel, BorderLayout.EAST);
+		contentPane.add(actionLogPanel, BorderLayout.SOUTH);
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		add(contentPane);

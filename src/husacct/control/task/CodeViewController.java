@@ -44,13 +44,26 @@ public class CodeViewController {
 	}
 
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
-		if(controlService == null)
-			controlService = ServiceProvider.getInstance().getControlService();
+		String path = findFilePath(fileName);
+		setCurrentCodeviewer();
+		currentCodeviewer.displayErrorsInFile(path, errors);
+	}
+	
+	//TODO Multiple project support
+	//TODO Better solution language
+	public String findFilePath(String fileName) {
 		ApplicationDTO application = controlService.getApplicationDTO();
 		ProjectDTO project = application.projects.get(0);
-		fileName = project.paths.get(0) + File.separator + fileName;
-		setCurrentCodeviewer();
-		currentCodeviewer.displayErrorsInFile(fileName, errors);
+		fileName = project.paths.get(0) + File.separator + fileName.replace(".", File.separator);
+		switch(project.programmingLanguage) {
+			case "Java":
+				fileName += ".java";
+				break;
+			case "C#":
+				fileName += ".cs";
+				break;
+		}
 		
+		return fileName;
 	}
 }

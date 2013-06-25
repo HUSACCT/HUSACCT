@@ -35,4 +35,6 @@
   <ConfigurationUI filename="validate/configureseveriesperruletypeandviolationtypes.html" viewname="Validate - configure sev. per rule and violation type"></ConfigurationUI>
   <ConfigurationUI filename="validate/configureactiveviolationtypes.html" viewname="Validate - configure active violation types"></ConfigurationUI>
   <ConfigurationUI filename="validate/configuredefaultrules.html" viewname="Validate - configure default rules"></ConfigurationUI>
+  <MainGui filename = "control/maingui.html" viewname = "General"></MainGui>
+  <CreateWorkspaceDialog filename = "control/create-workspace.html" viewname = "Create Workspace"></CreateWorkspaceDialog>
 </manuals>
