@@ -7,7 +7,6 @@ import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.GroupLayout;
