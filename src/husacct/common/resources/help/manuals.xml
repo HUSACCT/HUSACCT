@@ -33,6 +33,19 @@
   <ConfigurationUI filename="validate/configureseveriesperruletypeandviolationtypes.html" viewname="Validate - configure sev. per rule and violation type"></ConfigurationUI>
   <ConfigurationUI filename="validate/configureactiveviolationtypes.html" viewname="Validate - configure active violation types"></ConfigurationUI>
   <ConfigurationUI filename="validate/configuredefaultrules.html" viewname="Validate - configure default rules"></ConfigurationUI>
-  <MainGui filename = "control/maingui.html" viewname = "General"></MainGui>
+  <MainGui filename = "control/maingui.html" viewname = "Main GUI"></MainGui>
   <CreateWorkspaceDialog filename = "control/create-workspace.html" viewname = "Create Workspace"></CreateWorkspaceDialog>
+  <ActionLogPanel filename = "control/user_general_actionlog.html" viewname = "Action Log"></ActionLogPanel>
+  <GettingStarted filename ="control/user_general_gettingstarted.html" viewname = "Getting started"></GettingStarted>
+  <menu-analyse filename = "control/user_general_menu_analyse.html" viewname = "Analyse Menu"></menu-analyse>
+  <menu-define filename = "control/user_general_menu_define.html" viewname = "Define Menu"></menu-define>
+  <menu-file filename = "control/user_general_menu_file.html" viewname = "File Menu"></menu-file>
+  <menu-help filename = "control/user_general_menu_help.html" viewname = "Help Menu"></menu-help>
+  <menu-tools filename = "control/user_general_menu_tools.html" viewname = "Tool Menu"></menu-tools>
+  <menu-validate filename = "control/user_general_menu_validate.html" viewname = "Validate Menu"></menu-validate>
+  <requirements filename = "control/user_general_systemrequirements.html" viewname = "Requirements"></requirements>
+  <toolbar filename = "control/user_general_toolbar.html" viewname = "Toolbar"></toolbar>
+  <taskbar filename = "control/user_general_taskbar.html" viewname = "Taskbar"></taskbar>
+  <general filename = "control/user_general.html" viewname = "General" ></general>
+  
 </manuals>
