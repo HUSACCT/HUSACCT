@@ -41,7 +41,7 @@ function hide_all_page_content(){
 
 function add_active_classes(page_name){
 	var parentListItem = $('a[href="#' + page_name + '"]').parent("li");
-	parentListItem.parents().addClass("active");
+	parentListItem.parents("li").addClass("active");
 	parentListItem.siblings("li").removeClass("active");
 	parentListItem.find("li").removeClass("active");
 	if(!parentListItem.hasClass("active")){
