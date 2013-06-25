@@ -96,16 +96,11 @@ The architecture should allow for expansions to support more languages and rule 
 
 ### Eclipse IDE
 
-An [Eclipse](http://www.eclipse.org/) plugin is available. ([Eclipse plugin repository](https://github.com/HUSACCT/HUSACCT-Plugin))
+An [Eclipse](http://www.eclipse.org/) plugin is available. ([Eclipse plugin repository](https://github.com/HUSACCT/Eclipse-plugin))
 
 ### Maven
 
-A [Maven](http://maven.apache.org/) plugin is also available. ([Maven plugin repository](https://github.com/HUSACCT/HUSACCT-Maven))
-
-## Testing
-
-There are JUnit tests available in this repository, to complement manual tests.
-For testing we use the [Java benchmark](https://github.com/HUSACCT/HUSACCT-BenchmarkApplication) application, the [C# benchmark](https://github.com/HUSACCT/HUSACCT-CsharpBenchmarkApplication) application, the [Recognition test repository](https://github.com/HUSACCT/HUSACCT-RecognitionTest) and this project.
+A [Maven](http://maven.apache.org/) plugin is also available. ([Maven plugin repository](https://github.com/HUSACCT/Maven-plugin))
 
 ## Build team
 
