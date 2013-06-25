@@ -246,7 +246,7 @@ import org.apache.log4j.Logger;
 
 		public void passModuleToService(long selectedModuleId, ModuleStrategy module) {
 			String ExceptionMessage = "";
-			StateService.instance().addModule(module);
+			
 			if (selectedModuleId == -1) {
 				moduleService.addModuleToRoot(module);
 			} else {
@@ -353,8 +353,7 @@ import org.apache.log4j.Logger;
 						if (confirm) {
 							logger.info("getting type:" + type);
                          JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
-							JPanelStatus.getInstance("Removing software unit")
-							.start();
+							JPanelStatus.getInstance("Removing software unit").start();
 							
 								boolean chekHasCodelevelWarning = WarningMessageService
 										.getInstance().isCodeLevelWarning(
@@ -376,7 +375,9 @@ import org.apache.log4j.Logger;
 											softwareUnit);
 								}
 								this.notifyObservers();
+								JPanelStatus.getInstance().stop();
 							}
+						
 						
 					}
 					location++;
@@ -452,7 +453,7 @@ import org.apache.log4j.Logger;
 			module.set(name, description);
 			if (module instanceof Component) {
 			
-				ModuleStrategy facade=	moduleService.createNewModule("facade");
+				ModuleStrategy facade=	moduleService.createNewModule("Facade");
 				facade.set("Facade<"+name+">", "this is the Facade of your Component");
 				module.addSubModule(facade);
 			}

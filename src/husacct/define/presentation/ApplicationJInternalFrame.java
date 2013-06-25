@@ -77,7 +77,7 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 
 	private void addToolBar() {
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setDividerLocation(300);
+		splitPane.setDividerLocation(365);
 		splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
 		JToolBar toolBar = new JToolBar();
@@ -127,8 +127,8 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 	}
 
 	private void setButtonsVisability(JButton undo, JButton redo) {
-		// StateService.instance().getRedoAndUndoStates();
-		boolean[] statuses={false,false};
+		
+		boolean[] statuses= StateService.instance().getRedoAndUndoStates();
 		
 		undo.setEnabled(statuses[0]);
 		redo.setEnabled(statuses[1]);
@@ -169,7 +169,7 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 	@Override
 	public void update(Observable o, Object arg) {
 		
-	
+		 setButtonsVisability(undoButton,redoButton);
 		if (WarningMessageService.getInstance().hasWarnings()) {
 			Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 			warningButton.setIcon(icon);
@@ -183,8 +183,8 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 
 	@Override
 	public void update() {
-//some minor testing before release
-     //setButtonsVisability(undoButton,redoButton);
+
+     setButtonsVisability(undoButton,redoButton);
      //DefinitionController.getInstance().notifyObservers();
 
 

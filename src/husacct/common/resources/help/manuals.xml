@@ -6,17 +6,13 @@
   <DependencyFilterDialog filename="depfilter.html" viewname= "Dependency Filter"> </DependencyFilterDialog>
   <FoundDependenciesDialog filename="founddependencies.html" viewname= "Found Dependencies"> </FoundDependenciesDialog>
   <ExportDependenciesDialog filename="exportdependencies.html" viewname= "Export Dependencies"> </ExportDependenciesDialog>
-=======
   <AboutDialog filename = "about.html" viewname = "About">  </AboutDialog>
   <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
   <MainGui filename = "maingui.html" viewname = "General"></MainGui>
   <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
-
   <GraphicsMenuBar filename="graphicsmenubar.html" viewname="Graphics Menu"></GraphicsMenuBar>
   <GraphicsOptionsDialog filename="GraphicsOptionsDialog.html" viewname="Graphics Options"></GraphicsOptionsDialog>
-
-=======
-
+  <ApplicationJInternalFrame filename="definemain.html" viewname="Define Main GUI"></ApplicationJInternalFrame>
   <ModuleJPanel filename="modules.html" viewname="Module hierarchy"></ModuleJPanel>
   <EditModuleJPanel filename="moduleProps.html" viewname="Module Properties"></EditModuleJPanel>
   <SoftwareUnitsJPanel filename="softwareunits.html" viewname="Software Units"></SoftwareUnitsJPanel>

@@ -3,7 +3,7 @@ package husacct.define.domain.softwareunit;
 public class SoftwareUnitDefinition {
 
     public enum Type {
-	CLASS, EXTERNALLIBRARY, INTERFACE, PACKAGE, REGEX, SUBSYSTEM
+    	CLASS, EXTERNALLIBRARY, INTERFACE, PACKAGE, REGEX, SUBSYSTEM, LIBRARY
     }
 
     private String name;

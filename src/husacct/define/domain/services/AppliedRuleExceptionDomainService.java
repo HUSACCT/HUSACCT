@@ -6,6 +6,7 @@ import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,9 @@ public class AppliedRuleExceptionDomainService {
 
 	AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(parentRuleId);
+	ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+	rules.add(exceptionRule);
+	StateService.instance().addExceptionRule(parentRule, rules);
 	parentRule.addException(exceptionRule);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();
@@ -72,6 +76,7 @@ public class AppliedRuleExceptionDomainService {
 	    long exceptionRuleId) {
 	AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(parentRuleId);
+	StateService.instance().removeAppliedRuleExeption(parentRuleId,parentRule.getExeptionByID(exceptionRuleId));
 	parentRule.removeExceptionById(exceptionRuleId);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();

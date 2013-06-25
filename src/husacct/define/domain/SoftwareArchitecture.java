@@ -88,7 +88,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			if (!hasModule(module.getName())) {
 				rootModule.addSubModule(module);
                 registerModule(module);
-				StateService.instance().addModule(module);
+			
 				
 				updateWarnings();
 				moduleId = module.getId();
@@ -105,7 +105,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
-		StateService.instance().addModule(module);
+	
 
 	registerModule(module);
 		
@@ -751,7 +751,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	@Override
 	public void addSeperatedModule(ModuleStrategy module) {
-
+		System.out.println("Adding : "+module.getName());
 		module.getparent().addSubModule(module);
 
 	}
@@ -759,7 +759,10 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	@Override
 	public void removeSeperatedModule(ModuleStrategy module) {
 
-		module.getparent().removeSubModule(module);
+		System.out.println("Removing : "+module.getName());
+		int index = module.getparent().getSubModules().indexOf(module);
+		module.getparent().getSubModules().remove(index);
+		new DefaultRuleDomainService().removeDefaultRules(module);
 
 	}
 
@@ -818,8 +821,42 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	@Override
 	public void switchSoftwareUnitLocation(long fromModule, long toModule,
 			List<String> uniqNames) {
-		// TODO Auto-generated method stub
+		ModuleStrategy from = getModuleById(fromModule);
+		ModuleStrategy to = getModuleById(toModule);
+		
+	ArrayList<SoftwareUnitDefinition> units=	from.getAndRemoveSoftwareUnits(uniqNames);
+		to.addSUDefinition(units);
 		
 	}
 
+	public void registerImportedValues() {
+		for (ModuleStrategy module : modules) {
+			for (SoftwareUnitDefinition unit : module.getUnits()) {
+				StateService.instance().registerImportedUnit(unit);
+			}
+			
+			
+		}
+	}
+
+	@Override
+	public void editAppliedRule(long ruleid,
+			Object[] newValues) {
+		String ruleTypeKey = (String)newValues[0];
+	    String description=(String)newValues[1];
+	    String[] dependencies =(String[])newValues[2];
+	    String regex=(String)newValues[3];
+	    ModuleStrategy ModuleStrategyFrom = (ModuleStrategy)newValues[4];
+	    ModuleStrategy ModuleStrategyTo =(ModuleStrategy)newValues[5];
+	    boolean enabled = (boolean)newValues[6];
+		
+		AppliedRuleStrategy result= getAppliedRuleById(ruleid);
+		result.setRuleType(ruleTypeKey);
+		result.setDescription(description);
+		result.setDependencies(dependencies);
+		result.setModuleFrom(ModuleStrategyFrom);
+		result.setRegex(regex);
+		result.setModuleTo(ModuleStrategyTo);
+		result.setEnabled(enabled);
+	}
 }
