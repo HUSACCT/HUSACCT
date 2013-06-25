@@ -60,14 +60,8 @@ public class WarningMessageFactory {
 	
 	private void addNotCodeLevel(WarningMessageContainer rootOfNotmapped)
 	{
-	
 		for (CodeLevelWarning code: WarningMessageService.getInstance().getNotCodeLevelWarnings()){
 			rootOfNotmapped.addChild(new WarningMessageContainer(code));
 		}
-		
 	}
-
-
-
-
 }

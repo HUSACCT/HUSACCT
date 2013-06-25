@@ -337,10 +337,8 @@ for (AbstractCombinedComponent ab : list) {
 	}
 
 	public void resetNotAnalyzed() {
-	//codelevelWarnings = new ArrayList<CodeLevelWarning>();
+	codelevelWarnings = new ArrayList<CodeLevelWarning>();
 		
 	}
-
-	
 	
 }

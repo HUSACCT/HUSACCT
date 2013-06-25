@@ -102,6 +102,10 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			System.out.println("This software unit does not exist!");
 		}
 	}
+	
+	public void removeAllSUDefintions(){
+		mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
+	}
 
 	public void addSURegExDefinition(SoftwareUnitRegExDefinition unit){
 		if(!mappedRegExSUunits.contains(unit)) {

@@ -34,8 +34,4 @@ public class AnalyzedModuleTree extends JTree {
 		analyzedsoftwarecomponent.freeze();
 
 	}
-
-	
-
-	
 }

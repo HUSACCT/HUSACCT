@@ -837,7 +837,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			
 			
 		}
-		
 	}
 
 	@Override
@@ -860,5 +859,4 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		result.setModuleTo(ModuleStrategyTo);
 		result.setEnabled(enabled);
 	}
-
 }

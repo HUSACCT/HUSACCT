@@ -251,8 +251,4 @@ return	allUnitsRegistry.getNotMappedUnits();
 			AppliedRuleStrategy exceptionRule) {
 		stateController.insertCommand(new RemoveAppliedRuleExeptionCommand(parentRuleId,exceptionRule));	
 	}
-
-
-
-
 }
