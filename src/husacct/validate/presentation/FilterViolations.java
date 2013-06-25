@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 public final class FilterViolations extends HelpableJDialog {
 
 	private static final long serialVersionUID = -6295611607558238501L;
+	@SuppressWarnings("unused")
 	private boolean selectedFilterValues = true;
 	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;

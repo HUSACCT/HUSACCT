@@ -53,12 +53,17 @@ public class ValidateTest {
 	}
 	
 	@Test
-	public void defineIsNotNull() {
+	public void testSetup() {
 		assertNotNull(define);
+		assertNotNull(define.getApplicationDetails());
+		assertNotNull(define.getApplicationDetails().projects.get(0));
+		assertNotNull(define.getApplicationDetails().projects.get(1));
+		assertNotNull(define.getApplicationDetails().projects.get(2));
+		assertNotNull(validate);
 	}
 	
 	@Test
-	public void validateIsNotNull() {
+	public void componentValidateIsNotNull() {
 		assertNotNull(validate);
 	}
 	
@@ -113,7 +118,6 @@ public class ValidateTest {
 			checkExportFile.delete();
 			testResult = true;
 		}
-
 		assertTrue(testResult);
 	}
 
@@ -126,7 +130,7 @@ public class ValidateTest {
 		
 		assertArrayEquals(ruleTypeCategories, getCategoryStringArray(dtos));
 	}
-
+	
 	@Test
 	public void getRuleTypes() {
 		CategoryDTO[] dtos = validate.getCategories();
