@@ -5,10 +5,11 @@ import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.UserInputListener;
 
 public abstract class DrawingSettingsController implements UserInputListener {
-	protected boolean areSmartLinesOn = true;
-	protected boolean areDependenciesShown, areViolationsShown, areExternalLibrariesShown;
-
-	protected String[] currentPaths = new String[] {};
+	protected boolean	areSmartLinesOn	= true;
+	protected boolean	areDependenciesShown, areViolationsShown,
+			areExternalLibrariesShown;
+	
+	protected String[]	currentPaths	= new String[] {};
 	
 	public DrawingSettingsController() {
 	}
@@ -28,11 +29,10 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public boolean areExternalLibrariesShown() {
 		return areExternalLibrariesShown;
 	}
-
+	
 	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (areViolationsShown())
-			detail = DrawingDetail.WITH_VIOLATIONS;
+		if (areViolationsShown()) detail = DrawingDetail.WITH_VIOLATIONS;
 		return detail;
 	}
 	
@@ -61,7 +61,7 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void hideViolations() {
 		areViolationsShown = false;
 	}
-
+	
 	public void loadDefaultSettings() {
 		showDependencies();
 		hideViolations();
@@ -70,7 +70,7 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	
 	public void notifyServiceListeners() {
 		ServiceProvider.getInstance().getGraphicsService()
-		.notifyServiceListeners();
+				.notifyServiceListeners();
 	}
 	
 	public void resetCurrentPaths() {
@@ -96,12 +96,11 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		areViolationsShown = true;
 	}
 	
-	
 	@Override
 	public void hideLibraries() {
 		areExternalLibrariesShown = false;
 	}
-
+	
 	@Override
 	public void showLibraries() {
 		areExternalLibrariesShown = true;

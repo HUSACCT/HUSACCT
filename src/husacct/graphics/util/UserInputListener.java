@@ -45,11 +45,11 @@ public interface UserInputListener {
 	public void showSmartLines();
 	
 	public void showViolations();
-
+	
 	public void showLibraries();
 	
 	public void usePanTool();
 	
 	public void useSelectTool();
-
+	
 }

@@ -35,15 +35,15 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	
 	private JPanel mainPanel, settingsPanel, globalActionsPanel,
-	figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
+			figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
 	
 	private int menuItemMaxHeight = 45;
 	
 	private JButton zoomInButton, zoomOutButton, refreshButton,
-	exportToImageButton, hideFiguresButton, showFiguresButton,
-	okButton, applyButton, cancelButton;
+			exportToImageButton, hideFiguresButton, showFiguresButton,
+			okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu,
-	smartLinesOptionMenu, showExternalLibraries;
+			smartLinesOptionMenu, showExternalLibraries;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
@@ -51,7 +51,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private HashMap<String, Object> currentSettings;
 	
 	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth,
-	elementHeight;
+			elementHeight;
 	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 	private String[] layoutStrategyItems;
 	private ILocaleService localeService = ServiceProvider.getInstance()
@@ -217,7 +217,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(2, 2));
 		settingsPanel
-		.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
+				.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 		
 		layoutStrategyPanel = new JPanel();
 		layoutStrategyPanel.setSize(getWidth(), getHeight());
@@ -377,13 +377,13 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		}
 	}
 	
-	//TODO add a button to GraphicsMenuBar to enable libraries
+	// TODO add a button to GraphicsMenuBar to enable libraries
 	public void setLibrariesUIToActive() {
 		currentSettings.put("libraries", true);
 		showExternalLibraries.setSelected(true);
 	}
 	
-	//TODO add a button to GraphicsMenuBar to disable libraries
+	// TODO add a button to GraphicsMenuBar to disable libraries
 	public void setLibrariesUIToInactive() {
 		currentSettings.put("libraries", false);
 		showExternalLibraries.setSelected(false);
@@ -398,16 +398,21 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			refreshButton.setText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			
-			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
-			showExternalLibraries.setText(menuBarLocale.get("ShowExternalLibraries"));
+			showDependenciesOptionMenu.setText(menuBarLocale
+					.get("ShowDependencies"));
+			showViolationsOptionMenu.setText(menuBarLocale
+					.get("ShowViolations"));
+			showExternalLibraries.setText(menuBarLocale
+					.get("ShowExternalLibraries"));
 			
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
-			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			smartLinesOptionMenu.setText(menuBarLocale
+					.get("LineContextUpdates"));
 			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
-			showFiguresButton.setText(menuBarLocale.get("RestoreHiddenModules"));
+			showFiguresButton
+					.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
@@ -434,6 +439,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("violations", true);
 		showViolationsOptionMenu.setSelected(true);
 	}
+	
 	public void setViolationsUIToInactive() {
 		currentSettings.put("violations", false);
 		showViolationsOptionMenu.setSelected(false);

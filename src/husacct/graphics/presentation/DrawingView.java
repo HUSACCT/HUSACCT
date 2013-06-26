@@ -29,21 +29,21 @@ import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
 	
-	private static final long serialVersionUID = 7276696509798039409L;
-	private static final int LeftMouseButton = MouseEvent.BUTTON1;
-	private static final int RightMouseButton = MouseEvent.BUTTON3;
-	private static final int DoubleClick = 2;
-	private static final int ScrollSpeed = 10;
+	private static final long					serialVersionUID	= 7276696509798039409L;
+	private static final int					LeftMouseButton		= MouseEvent.BUTTON1;
+	private static final int					RightMouseButton	= MouseEvent.BUTTON3;
+	private static final int					DoubleClick			= 2;
+	private static final int					ScrollSpeed			= 10;
 	
-	private final Drawing drawing;
-	private final DefaultDrawingEditor editor;
-	private final ContextMenu contextMenu;
-	protected AbstractTool panTool;
-	protected AbstractTool selectTool;
-	private boolean isCtrlPressed = false;
+	private final Drawing						drawing;
+	private final DefaultDrawingEditor			editor;
+	private final ContextMenu					contextMenu;
+	protected AbstractTool						panTool;
+	protected AbstractTool						selectTool;
+	private boolean								isCtrlPressed		= false;
 	
-	private final ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
-	private final HashSet<Figure> previousSelection = new HashSet<Figure>();
+	private final ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
+	private final HashSet<Figure>				previousSelection	= new HashSet<Figure>();
 	
 	public DrawingView(Drawing givenDrawing) {
 		drawing = givenDrawing;
@@ -97,8 +97,7 @@ public class DrawingView extends DefaultDrawingView {
 		Set<Figure> selection = getSelectedFigures();
 		
 		for (Figure f : previousSelection)
-			if (!selection.contains(f))
-				deltaSelection.add(f);
+			if (!selection.contains(f)) deltaSelection.add(f);
 		return Collections.unmodifiableSet(deltaSelection);
 	}
 	
@@ -129,8 +128,7 @@ public class DrawingView extends DefaultDrawingView {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == 17)
-					isCtrlPressed = true;
+				if (e.getKeyCode() == 17) isCtrlPressed = true;
 			}
 			
 			@Override
@@ -188,13 +186,12 @@ public class DrawingView extends DefaultDrawingView {
 		if (mouseButton == LeftMouseButton && hasSelection()) {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
 			
-			if (mouseClicks == DoubleClick)
-				moduleZoom(selection);
+			if (mouseClicks == DoubleClick) moduleZoom(selection);
 			else
 				for (BaseFigure figure : selection)
 					figure.raiseLayer();
-		} else if (mouseButton == RightMouseButton)
-			contextMenu.show(this, e.getX(), e.getY());
+		} else if (mouseButton == RightMouseButton) contextMenu.show(this,
+				e.getX(), e.getY());
 		
 		previousSelection.clear();
 		previousSelection.addAll(getSelectedFigures());

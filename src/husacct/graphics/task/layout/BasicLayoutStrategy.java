@@ -14,10 +14,10 @@ import org.jhotdraw.draw.Figure;
 
 public class BasicLayoutStrategy implements LayoutStrategy {
 	
-	private static final double VERT_ITEM_SPACING = 40.0;
-	private static final double HORZ_ITEM_SPACING = 50.0;
+	private static final double		VERT_ITEM_SPACING	= 40.0;
+	private static final double		HORZ_ITEM_SPACING	= 50.0;
 	
-	private AbstractCompositeFigure drawing = null;
+	private AbstractCompositeFigure	drawing				= null;
 	
 	public BasicLayoutStrategy(AbstractCompositeFigure theDrawing) {
 		drawing = theDrawing;
@@ -28,8 +28,7 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isInContainer() && !bf.isLine())
-				count++;
+			if (!bf.isInContainer() && !bf.isLine()) count++;
 		}
 		
 		return count;
@@ -86,7 +85,8 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 	// need to discuss this kind of
 	// code. It's ugly and unneccessary I think.
 	private boolean isConnector(Figure figure) {
-		return figure instanceof ConnectionFigure ||
-				figure instanceof BaseFigure && figure instanceof RelationFigure;
+		return figure instanceof ConnectionFigure
+				|| figure instanceof BaseFigure
+				&& figure instanceof RelationFigure;
 	}
 }

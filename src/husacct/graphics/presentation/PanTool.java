@@ -14,12 +14,12 @@ import common.Logger;
 
 @SuppressWarnings("serial")
 public class PanTool extends AbstractTool {
-	private Logger log = Logger.getLogger(PanTool.class);
-	private final Cursor dc;
-	private final Cursor hc = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-	private final JComponent comp;
-	private final JViewport vport;
-	private Point startPt = new Point();
+	private Logger				log		= Logger.getLogger(PanTool.class);
+	private final Cursor		dc;
+	private final Cursor		hc		= Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	private final JComponent	comp;
+	private final JViewport		vport;
+	private Point				startPt	= new Point();
 	
 	public PanTool(JViewport vport, JComponent comp) {
 		this.vport = vport;
