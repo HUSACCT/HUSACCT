@@ -35,32 +35,32 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private ArrayList<UserInputListener>			listeners			= new ArrayList<UserInputListener>();
 	
 	private JPanel									mainPanel, settingsPanel,
-			globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel,
-			layoutStrategyPanel;
+	globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel,
+	layoutStrategyPanel;
 	
 	private int										menuItemMaxHeight	= 45;
 	
 	private JButton									zoomInButton,
-			zoomOutButton, refreshButton, exportToImageButton,
-			hideFiguresButton, showFiguresButton, okButton, applyButton,
-			cancelButton;
+	zoomOutButton, refreshButton, exportToImageButton,
+	hideFiguresButton, showFiguresButton, okButton, applyButton,
+	cancelButton;
 	private JCheckBox								showDependenciesOptionMenu,
-			showViolationsOptionMenu, smartLinesOptionMenu,
-			showExternalLibraries;
-	private JComboBox								layoutStrategyOptions;
+	showViolationsOptionMenu, smartLinesOptionMenu,
+	showExternalLibraries;
+	private JComboBox<String>						layoutStrategyOptions;
 	private JSlider									zoomSlider;
 	private JLabel									layoutStrategyLabel,
-			zoomLabel;
+	zoomLabel;
 	private ArrayList<JComponent>					interfaceElements;
 	private HashMap<String, Object>					currentSettings;
 	
 	private int										totalWidth, totalHeight,
-			paddingSize, labelWidth, elementWidth, elementHeight;
+	paddingSize, labelWidth, elementWidth, elementHeight;
 	private HashMap<String, DrawingLayoutStrategy>	layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
 	private ILocaleService							localeService		= ServiceProvider
-																				.getInstance()
-																				.getLocaleService();
+			.getInstance()
+			.getLocaleService();
 	
 	public GraphicsOptionsDialog() {
 		super((GraphicsOptionsDialog) null, true);
@@ -222,7 +222,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(2, 2));
 		settingsPanel
-				.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
+		.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 		
 		layoutStrategyPanel = new JPanel();
 		layoutStrategyPanel.setSize(getWidth(), getHeight());
@@ -417,7 +417,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 					.get("LineContextUpdates"));
 			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
 			showFiguresButton
-					.setText(menuBarLocale.get("RestoreHiddenModules"));
+			.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
