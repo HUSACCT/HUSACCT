@@ -232,7 +232,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				elementHeight));
 		layoutStrategyPanel.add(layoutStrategyLabel);
 		
-		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
+		layoutStrategyOptions = new JComboBox<String>(layoutStrategyItems);
 		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth,
 				elementHeight));
 		layoutStrategyPanel.add(layoutStrategyOptions);
