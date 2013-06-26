@@ -30,32 +30,37 @@ import javax.swing.event.ChangeListener;
 import org.apache.log4j.Logger;
 
 public class GraphicsOptionsDialog extends HelpableJDialog {
-	private static final long serialVersionUID = 4794939901459687332L;
-	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
-	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
+	private static final long						serialVersionUID	= 4794939901459687332L;
+	protected Logger								logger				= Logger.getLogger(GraphicsOptionsDialog.class);
+	private ArrayList<UserInputListener>			listeners			= new ArrayList<UserInputListener>();
 	
-	private JPanel mainPanel, settingsPanel, globalActionsPanel,
-			figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
+	private JPanel									mainPanel, settingsPanel,
+			globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel,
+			layoutStrategyPanel;
 	
-	private int menuItemMaxHeight = 45;
+	private int										menuItemMaxHeight	= 45;
 	
-	private JButton zoomInButton, zoomOutButton, refreshButton,
-			exportToImageButton, hideFiguresButton, showFiguresButton,
-			okButton, applyButton, cancelButton;
-	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu,
-			smartLinesOptionMenu, showExternalLibraries;
-	private JComboBox layoutStrategyOptions;
-	private JSlider zoomSlider;
-	private JLabel layoutStrategyLabel, zoomLabel;
-	private ArrayList<JComponent> interfaceElements;
-	private HashMap<String, Object> currentSettings;
+	private JButton									zoomInButton,
+			zoomOutButton, refreshButton, exportToImageButton,
+			hideFiguresButton, showFiguresButton, okButton, applyButton,
+			cancelButton;
+	private JCheckBox								showDependenciesOptionMenu,
+			showViolationsOptionMenu, smartLinesOptionMenu,
+			showExternalLibraries;
+	private JComboBox								layoutStrategyOptions;
+	private JSlider									zoomSlider;
+	private JLabel									layoutStrategyLabel,
+			zoomLabel;
+	private ArrayList<JComponent>					interfaceElements;
+	private HashMap<String, Object>					currentSettings;
 	
-	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth,
-			elementHeight;
-	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
-	private String[] layoutStrategyItems;
-	private ILocaleService localeService = ServiceProvider.getInstance()
-			.getLocaleService();
+	private int										totalWidth, totalHeight,
+			paddingSize, labelWidth, elementWidth, elementHeight;
+	private HashMap<String, DrawingLayoutStrategy>	layoutStrategiesTranslations;
+	private String[]								layoutStrategyItems;
+	private ILocaleService							localeService		= ServiceProvider
+																				.getInstance()
+																				.getLocaleService();
 	
 	public GraphicsOptionsDialog() {
 		super((GraphicsOptionsDialog) null, true);
