@@ -26,7 +26,6 @@ public class ContextMenu extends JPopupMenu {
 	private JMenuItem						zoomOut;
 	private JMenuItem						hide;
 	private JMenuItem						restore;
-	private JMenuItem						help;
 	
 	private boolean							hasSelection		= false;
 	private boolean							hasHiddenFigures	= false;
