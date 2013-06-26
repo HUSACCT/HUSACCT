@@ -1,11 +1,11 @@
 package husacct.validate.presentation;
 
-import java.util.HashMap;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.module.ModuleTypes;
+
+import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -40,15 +40,13 @@ public class ManageDefaultRulesPanel extends JPanel {
 		componentScrollpane = new JScrollPane();
 		components = new JList<DataLanguageHelper>();
 		rtsComponentModel = new DefaultListModel<DataLanguageHelper>();
-		for(ModuleTypes modules : ModuleTypes.values()){
+		for(ModuleTypes modules : ModuleTypes.values())
 			rtsComponentModel.addElement(new DataLanguageHelper(modules.toString()));
-		}
 		
 		ListSelectionListener listSelectionListener = new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent listSelectionEvent) {
-				if(listSelectionEvent.getValueIsAdjusting()){
-					loadTable(components.getSelectedIndex());
-				}
+				if(listSelectionEvent.getValueIsAdjusting()) loadTable(components.getSelectedIndex());
 	    	}
 		};
 	    components.addListSelectionListener(listSelectionListener);
@@ -62,31 +60,20 @@ public class ManageDefaultRulesPanel extends JPanel {
 		tableModel.addColumn(localeService.getTranslatedString("Rule"));
 		tableModel.addColumn(localeService.getTranslatedString("RuleIsDefault"));
 		tableModel.addTableModelListener(new TableModelListener() {
+			@Override
 			public void tableChanged(TableModelEvent e) {
 				if(e.getColumn() == 1){
 					System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
-					ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), (Boolean)(tableModel.getValueAt(e.getFirstRow(), 1)));
+					ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), (Boolean)tableModel.getValueAt(e.getFirstRow(), 1));
 				}
 			}
 		});
 		ruleTable = new JTable(tableModel){
 			private static final long serialVersionUID = 1L;
-
-			@Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return String.class;
-                    case 1:
-                        return Boolean.class;
-                    default:
-                        return String.class;
-                }
-            }
 			
 		    @Override
 		    public boolean isCellEditable(int row, int column) {
-		        return (column == 1);
+		        return column == 1;
 		    }
 		};
 		ruleTable.getColumnModel().getColumn(1).setMaxWidth(100);
@@ -108,7 +95,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 					.addComponent(rulesScrollpane)
 			)
 		);
-		this.setLayout(layout);
+		setLayout(layout);
 	}
 	
 	private void loadTable(int listItem){
