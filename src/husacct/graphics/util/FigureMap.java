@@ -112,24 +112,18 @@ public class FigureMap {
 	public void linkModule(BaseFigure figure, AbstractDTO dto) {
 		moduleFigureDTOMap.put(figure, dto);
 		
-		// TODO: Re-factor this into a more clean design. Perhaps turn into a
-		// dictionary?
-		// NOTE: There should not be a difference in performance between a
-		// dictionary and a hashmap,
-		// but them being the same thing, why on earth would it be better
-		// design?
 		if (dto instanceof ModuleDTO) {
 			ModuleDTO md = (ModuleDTO) dto;
 			moduleFiguresByName.put(md.logicalPath, figure);
 		} else if (dto instanceof AnalysedModuleDTO) {
 			AnalysedModuleDTO md = (AnalysedModuleDTO) dto;
-			this.moduleFiguresByName.put(md.uniqueName, figure);
+			moduleFiguresByName.put(md.uniqueName, figure);
 		} else if (dto instanceof ExternalSystemDTO) {
 			ExternalSystemDTO es = (ExternalSystemDTO) dto;
-			this.moduleFiguresByName.put(es.systemPackage, figure);
+			moduleFiguresByName.put(es.systemPackage, figure);
 		} else if (dto instanceof ProjectDTO) {
 			ProjectDTO pd = (ProjectDTO) dto;
-			this.moduleFiguresByName.put(pd.name, figure);
+			moduleFiguresByName.put(pd.name, figure);
 		}
 	}
 	

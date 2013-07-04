@@ -388,6 +388,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			for (BaseFigure f : figures)
 				f.setContext(false); // minimising potential side effects
 			
+			drawingView.clearSelection();
 			drawingView.selectAll();
 			List<BaseFigure> allFigures = Arrays.asList(drawingView
 					.getSelectedFigures().toArray(new BaseFigure[0]));
@@ -542,12 +543,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected void updateLayout() {
 		String currentPaths = getCurrentPathsToString();
 		
-		// if (hasSavedFigureStates(currentPaths))
-		// restoreFigurePositions(currentPaths);
-		// else {
 		layoutStrategy.doLayout();
 		drawingView.setHasHiddenFigures(false);
-		// }
 		
 		drawing.updateLines();
 	}
