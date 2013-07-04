@@ -66,6 +66,11 @@ public class CodeViewController {
 		}
 	}
 	
+	private boolean fileExists(String file){
+		File f = new File(file);
+		return f.exists();
+	}
+	
 	//TODO Multiple project support
 	//TODO Better solution language
 	public String findFilePath(String classPath) {
@@ -77,18 +82,22 @@ public class CodeViewController {
 		String filePath = "";
 		logger.info("Trying to find file path for class path: " + classPath);
 		
-		/*
+		// Grab root path
 		ApplicationDTO application = controlService.getApplicationDTO();
 		ProjectDTO project = application.projects.get(0);
-		fileName = project.paths.get(0) + File.separator + fileName.replace(".", File.separator);
+		String rootPath = project.paths.get(0) + File.separator;
+		
+		// Check default convertion
+		String fileName = classPath;
+		fileName = rootPath + fileName.replace(".", File.separator);
 		switch(project.programmingLanguage) {
-			case "Java":
-				fileName += ".java";
-				break;
-			case "C#":
-				fileName += ".cs";
-				break;
-		}*/
+			case "Java": fileName += ".java"; break;
+			case "C#": fileName += ".cs"; break;
+		}
+		if(fileExists(fileName)){
+			logger.info("Basic path converter found the path: " + fileName);
+			filePath = fileName;
+		}
 		
 		// If not found log
 		if(filePath == "")
