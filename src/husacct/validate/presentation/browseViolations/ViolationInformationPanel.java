@@ -150,7 +150,8 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
-			
+
+			//sourceClassPath = violation.getClassPathFrom();
 			sourceClassPath = violation.getClassPathFrom();
 			sourceSeverity = violation.getSeverity();
 			sourceLine = violation.getLinenumber();
