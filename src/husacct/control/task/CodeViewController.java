@@ -14,10 +14,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+
 public class CodeViewController {
 	
 	private IControlService controlService;
 	private CodeviewerService currentCodeviewer;
+	private static Logger logger = Logger.getLogger(ServiceProvider.class);
 	
 	public CodeViewController(MainController mainController) {
 		controlService = ServiceProvider.getInstance().getControlService();
@@ -45,15 +50,34 @@ public class CodeViewController {
 
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
 		String path = findFilePath(fileName);
-		setCurrentCodeviewer();
-		currentCodeviewer.displayErrorsInFile(path, errors);
+		// Check if the path was converted
+		if(path != ""){
+			setCurrentCodeviewer();
+			currentCodeviewer.displayErrorsInFile(path, errors);
+		}
+		else{
+			// Path empty, thus not found, show error.
+			JOptionPane.showMessageDialog(
+				null,
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("CodeViewerNoSourceMsg"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("CodeViewerNoSource"),
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
 	}
 	
 	//TODO Multiple project support
 	//TODO Better solution language
-	public String findFilePath(String fileName) {
+	public String findFilePath(String classPath) {
+		// Init control service if not set
 		if(controlService == null)
 			controlService = ServiceProvider.getInstance().getControlService();
+		
+		// Convert classPath to filePath
+		String filePath = "";
+		logger.info("Trying to find file path for class path: " + classPath);
+		
+		/*
 		ApplicationDTO application = controlService.getApplicationDTO();
 		ProjectDTO project = application.projects.get(0);
 		fileName = project.paths.get(0) + File.separator + fileName.replace(".", File.separator);
@@ -64,8 +88,13 @@ public class CodeViewController {
 			case "C#":
 				fileName += ".cs";
 				break;
-		}
+		}*/
 		
-		return fileName;
+		// If not found log
+		if(filePath == "")
+			logger.info("No valid file path could be found.");
+		
+		// Return path, empty if not found.
+		return filePath;
 	}
 }
