@@ -48,8 +48,12 @@ public class CodeViewController {
 		}
 	}
 
-	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
-		String path = findFilePath(fileName);
+	// ====================================
+	// Display errors in file (by ClassPath)
+	// classPath, <linenumber , severity>
+	// ====================================
+	public void displayErrorsInFile(String classPath, HashMap<Integer, Severity> errors) {
+		String path = findFilePath(classPath);
 		// Check if the path was converted
 		if(path != ""){
 			setCurrentCodeviewer();
@@ -66,13 +70,27 @@ public class CodeViewController {
 		}
 	}
 	
+	// ====================================
+	// Check if file exists.
+	// ====================================
 	private boolean fileExists(String file){
 		File f = new File(file);
 		return f.exists();
 	}
 	
-	//TODO Multiple project support
-	//TODO Better solution language
+	// ====================================
+	// Check if path is dir.
+	// ====================================
+	private boolean isDir(String file){
+		File f = new File(file);
+		return f.isDirectory();
+	}
+
+	// ====================================
+	// Find file path by the class path
+	// ====================================
+	// TODO Multiple project support
+	// TODO Better solution language
 	public String findFilePath(String classPath) {
 		// Init control service if not set
 		if(controlService == null)
@@ -87,16 +105,40 @@ public class CodeViewController {
 		ProjectDTO project = application.projects.get(0);
 		String rootPath = project.paths.get(0) + File.separator;
 		
-		// Check default convertion
-		String fileName = classPath;
-		fileName = rootPath + fileName.replace(".", File.separator);
+		// Final extension
+		String extension = "";
 		switch(project.programmingLanguage) {
-			case "Java": fileName += ".java"; break;
-			case "C#": fileName += ".cs"; break;
+			case "Java": extension = ".java"; break;
+			case "C#": extension = ".cs"; break;
 		}
+		
+		// Check default conversion
+		String fileName = classPath;
+		fileName = rootPath + fileName.replace(".", File.separator) + extension;
 		if(fileExists(fileName)){
 			logger.info("Basic path converter found the path: " + fileName);
 			filePath = fileName;
+		}
+		
+		// Check if the folder names contain dots
+		if(filePath == ""){
+			String[] classParts = classPath.split(".");
+			String winPath = rootPath;
+			
+			for(String pathPart : classParts){
+				if(fileExists(winPath + extension))
+					break;
+				if(isDir(winPath + pathPart))
+					winPath += pathPart + File.separator;
+				else
+					winPath += pathPart + ".";
+			}
+			winPath += extension;
+			
+			if(fileExists(winPath)){
+				filePath = winPath;
+				logger.info("Advanced folder explorer found the path: " + fileName);
+			}
 		}
 		
 		// If not found log
