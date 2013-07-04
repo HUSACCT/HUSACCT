@@ -261,23 +261,28 @@ public abstract class DrawingController extends DrawingSettingsController {
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
 		if (drawingView.getSelectionCount() == 0) graphicsFrame
-				.hideProperties();
+		.hideProperties();
 	}
 	
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
 		if (figureMap.isViolatedFigure(selectedFigure)) graphicsFrame
-				.showViolationsProperties(figureMap
-						.getViolatedDTOs(selectedFigure));
+		.showViolationsProperties(figureMap
+				.getViolatedDTOs(selectedFigure));
 		else if (figureMap.isViolationLine(selectedFigure)) graphicsFrame
-				.showViolationsProperties(figureMap
-						.getViolationDTOs(selectedFigure));
+		.showViolationsProperties(figureMap
+				.getViolationDTOs(selectedFigure));
 		else if (figureMap.isDependencyLine(selectedFigure)) graphicsFrame
-				.showDependenciesProperties(figureMap
-						.getDependencyDTOs(selectedFigure));
+		.showDependenciesProperties(figureMap
+				.getDependencyDTOs(selectedFigure));
 		else
 			graphicsFrame.hideProperties();
+	}
+	
+	public BaseFigure[] getAllFigures() {
+		return drawingView.toFigureArray(drawingView.findFigures(drawingView
+				.getBounds()));
 	}
 	
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom,
@@ -321,11 +326,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	public BaseFigure[] getSelectedFigures() {
 		return drawingView.toFigureArray(drawingView.getSelectedFigures());
-	}
-	
-	public BaseFigure[] getAllFigures() {
-		return drawingView.toFigureArray(drawingView.findFigures(drawingView
-				.getBounds()));
 	}
 	
 	protected abstract ViolationDTO[] getViolationsBetween(
@@ -542,11 +542,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected void updateLayout() {
 		String currentPaths = getCurrentPathsToString();
 		
-		if (hasSavedFigureStates(currentPaths)) restoreFigurePositions(currentPaths);
-		else {
-			layoutStrategy.doLayout();
-			drawingView.setHasHiddenFigures(false);
-		}
+		// if (hasSavedFigureStates(currentPaths))
+		// restoreFigurePositions(currentPaths);
+		// else {
+		layoutStrategy.doLayout();
+		drawingView.setHasHiddenFigures(false);
+		// }
 		
 		drawing.updateLines();
 	}
