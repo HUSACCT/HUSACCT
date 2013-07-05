@@ -10,6 +10,7 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -27,24 +28,22 @@ public class InterfaceConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		violations.clear();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
-
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			int interfaceCounter = 0;
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)) {
-						interfaceCounter++;
+					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
+							dependency.to.equals(classPathTo.getPhysicalPath()) &&
+							isInterface(dependency.to)) {
+						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+						violations.add(violation);
 					}
 				}
-			}
-			if (interfaceCounter == 0 && !physicalClasspathsTo.isEmpty()) {
-				Violation violation = createViolation(rootRule, classPathFrom, configuration);
-				violations.add(violation);
 			}
 		}
 		return violations;

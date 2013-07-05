@@ -37,16 +37,22 @@ public class NamingConventionRule extends RuleType {
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
 		mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
-
-		final String regex = Regex.makeRegexString(currentRule.regex);
-
+		String regex = Regex.makeRegexString(currentRule.regex);
+		
+		int counter = 0;
 		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
+			if (analysedModule.type.toLowerCase().equals("package")) {
+				counter++;
+			} else {
+				System.err.println("package.analyzed.type : " + analysedModule.type.toLowerCase());
+			}
 			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
 		}
+		System.err.println("package.counter : " + counter);
 		return violations;
 	}
 
@@ -55,14 +61,20 @@ public class NamingConventionRule extends RuleType {
 		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
-
+		int counter = 0;
 		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
-			if (!Regex.matchRegex(regex, analysedModule.name) && !analysedModule.type.toLowerCase().equals("package")) {
+			if (analysedModule.type.toLowerCase().equals("class")) {
+				counter++;
+			} else {
+				System.err.println("class.analyzed.type : " + analysedModule.type.toLowerCase());
+			}
+			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("class")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
 		}
+		System.err.println("class.counter : " + counter);
 		return violations;
 	}
 

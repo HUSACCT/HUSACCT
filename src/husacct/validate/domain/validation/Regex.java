@@ -5,7 +5,16 @@ import java.util.regex.Pattern;
 
 public class Regex {
 	public static String makeRegexString(String regexpath) {
-		if (regexpath.endsWith("**")) {
+		if (regexpath.startsWith("*")) {
+			return regexpath.substring(1) + "$";
+		} else if (regexpath.endsWith("*")) {
+			return "^" + regexpath.substring(0,  regexpath.length() - 1);
+		} else if (regexpath.startsWith("*") && regexpath.endsWith("*")) {
+			return "^((?!" + regexpath.substring(1, regexpath.length() - 1) + ").*)$)";
+		} else {
+			return "^" + regexpath.replaceAll("\\.", "\\\\.") + "$";
+		}
+		/*if (regexpath.endsWith("**")) {
 			return "^"
 					+ regexpath.replaceAll("\\.", "\\\\.").replaceAll("\\*\\*",
 							".*") + "$";
@@ -38,7 +47,7 @@ public class Regex {
 			return regexpath.replaceAll("\\.", "\\\\.");
 		} else {
 			return "^" + regexpath.replaceAll("\\.", "\\\\.") + "$";
-		}
+		}*/
 	}
 
 	public static boolean matchRegex(String regex, String value) {

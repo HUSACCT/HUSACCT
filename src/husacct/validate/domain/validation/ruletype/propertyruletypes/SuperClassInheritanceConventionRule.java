@@ -10,12 +10,10 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
 public class SuperClassInheritanceConventionRule extends RuleType {
-
 	private final static EnumSet<RuleTypes> superClassInheritanceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
 	public SuperClassInheritanceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
@@ -24,26 +22,21 @@ public class SuperClassInheritanceConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		violations.clear();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
-
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			int dependencyCounter = 0;
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
 					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
-                            dependency.to.equals(classPathTo.getPhysicalPath()) &&
-                            Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-                        dependencyCounter++;
-                    }
+							dependency.to.equals(classPathTo.getPhysicalPath())) {
+						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+						violations.add(violation);
+					}
 				}
-			}
-			if (dependencyCounter == 0 && !physicalClasspathsTo.isEmpty()) {
-				Violation violation = createViolation(rootRule, classPathFrom, configuration);
-				violations.add(violation);
 			}
 		}
 		return violations;
