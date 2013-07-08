@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.check.util.CheckConformanceUtilPackage;
@@ -23,6 +24,7 @@ public class NamingConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		violations.clear();
 		if (arrayContainsValue(currentRule.violationTypeKeys, "package")) {
 			checkPackageConvention(currentRule, rootRule, configuration);
 		}
@@ -30,52 +32,54 @@ public class NamingConventionRule extends RuleType {
 		if (arrayContainsValue(currentRule.violationTypeKeys, "class")) {
 			checkClassConvention(currentRule, rootRule, configuration);
 		}
-
 		return violations;
 	}
 
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
 		mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
+		PhysicalPathDTO[] pathDTOs = currentRule.moduleFrom.physicalPathDTOs;
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		String regex = Regex.makeRegexString(currentRule.regex);
-		
-		int counter = 0;
+		System.out.println("REGEX used : " + regex);
+
 		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
-			if (analysedModule.type.toLowerCase().equals("package")) {
-				counter++;
-			} else {
-				System.err.println("package.analyzed.type : " + analysedModule.type.toLowerCase());
-			}
-			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")) {
+			if (!pathDTOarrayContainsValue(pathDTOs, physicalClasspathFrom.getPhysicalPath()) &&
+					!Regex.matchRegex(regex, analysedModule.name) &&
+					analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
 		}
-		System.err.println("package.counter : " + counter);
 		return violations;
 	}
 
 	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		PhysicalPathDTO[] pathDTOs = currentRule.moduleFrom.physicalPathDTOs;
 		physicalClasspathsFrom = mappings.getMappingFrom();
-
-		final String regex = Regex.makeRegexString(currentRule.regex);
-		int counter = 0;
+		String regex = Regex.makeRegexString(currentRule.regex);
+		System.out.println("REGEX used : " + regex);
+		
 		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
-			if (analysedModule.type.toLowerCase().equals("class")) {
-				counter++;
-			} else {
-				System.err.println("class.analyzed.type : " + analysedModule.type.toLowerCase());
-			}
-			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("class")) {
+			if (!pathDTOarrayContainsValue(pathDTOs, physicalClasspathFrom.getPhysicalPath()) &&
+					!Regex.matchRegex(regex, analysedModule.name) &&
+					analysedModule.type.toLowerCase().equals("class")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
 		}
-		System.err.println("class.counter : " + counter);
 		return violations;
+	}
+	
+	private boolean pathDTOarrayContainsValue(PhysicalPathDTO[] array, String value) {
+		for (PhysicalPathDTO arrayValue : array) {
+			if (arrayValue.path.toLowerCase().equals(value.toLowerCase())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean arrayContainsValue(String[] array, String value) {
