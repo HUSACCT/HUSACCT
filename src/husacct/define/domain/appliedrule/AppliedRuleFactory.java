@@ -3,7 +3,7 @@ package husacct.define.domain.appliedrule;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.define.domain.appliedrule.propertyrules.FacadeConventionRule;
-import husacct.define.domain.appliedrule.propertyrules.InterfaceConventionRule;
+import husacct.define.domain.appliedrule.propertyrules.InterfaceInheritanceConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionExceptionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.SuperClassInheritanceConvention;
@@ -39,7 +39,7 @@ public class AppliedRuleFactory {
 		"NamingConventionException",
 		"VisibilityConvention",
 		"VisibilityConventionException",
-		"InterfaceConvention",
+		"InterfaceInheritanceConvention",
 		"SuperClassInheritanceConvention",
 		"FacadeConvention"
 	};
@@ -56,7 +56,7 @@ public class AppliedRuleFactory {
 		NamingConventionExceptionRule.class,
 		VisibilityConventionRule.class,
 		VisibilityConventionExceptionRule.class,
-		InterfaceConventionRule.class,
+		InterfaceInheritanceConventionRule.class,
 		SuperClassInheritanceConvention.class,
 		FacadeConventionRule.class
 	};

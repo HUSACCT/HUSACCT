@@ -12,8 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
 
-public class InterfaceConventionJPanel extends AbstractDetailsJPanel {
-    public static final String ruleTypeKey = "InterfaceConvention";
+public class InterfaceInheritanceConventionJPanel extends AbstractDetailsJPanel {
+    public static final String ruleTypeKey = "InterfaceInheritanceConvention";
     private static final long serialVersionUID = 376037038601799822L;
 
     public DescriptionPanelComponent descriptionPanelComponent;
@@ -21,7 +21,7 @@ public class InterfaceConventionJPanel extends AbstractDetailsJPanel {
     public ModuleFromPanelComponent moduleFromPanelComponent;
     public ModuleToPanelComponent moduleToPanelComponent;
 
-    public InterfaceConventionJPanel(AppliedRuleController appliedRuleController) {
+    public InterfaceInheritanceConventionJPanel(AppliedRuleController appliedRuleController) {
 	super(appliedRuleController);
     }
 

@@ -141,8 +141,8 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected boolean isInterfaceConvention(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)) {
+	protected boolean isInterfaceInheritanceConvention(String ruleTypeKey) {
+		if (ruleTypeKey.equals(RuleTypes.INTERFACEINHERITANCE_CONVENTION)) {
 			return true;
 		} else {
 			return false;

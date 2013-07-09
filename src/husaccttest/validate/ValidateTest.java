@@ -136,7 +136,7 @@ public class ValidateTest {
 		CategoryDTO[] dtos = validate.getCategories();
 		final String[] currentRuletypes = new String[]{
                 RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString(),
-                RuleTypes.INTERFACE_CONVENTION.toString(),
+                RuleTypes.INTERFACEINHERITANCE_CONVENTION.toString(),
 				RuleTypes.NAMING_CONVENTION.toString(), 
 				RuleTypes.FACADE_CONVENTION.toString(),
 				RuleTypes.VISIBILITY_CONVENTION.toString(), 

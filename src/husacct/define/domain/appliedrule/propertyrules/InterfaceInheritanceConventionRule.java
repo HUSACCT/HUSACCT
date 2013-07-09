@@ -8,7 +8,7 @@ import husacct.define.task.conventions_checker.ModuleCheckerHelper;
 
 import java.util.ArrayList;
 
-public class InterfaceConventionRule extends AppliedRuleStrategy{
+public class InterfaceInheritanceConventionRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;
 	private LayerCheckerHelper layerCheckerHelper;
 

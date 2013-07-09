@@ -63,7 +63,7 @@ public class Messagebuilder {
 		} else if (message.getRuleKey().toLowerCase().equals(RuleTypes.NAMING_CONVENTION.toString().toLowerCase())) {
 			return generateNamingConventionMessage(message);
 		} else if (message.getRuleKey().toLowerCase().equals(RuleTypes.VISIBILITY_CONVENTION.toString().toLowerCase())) {
-			return generateInterfaceConventionMessage(message);
+			return generateVisibilityConventionMessage(message);
 		} else {
 			final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 			final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
@@ -84,7 +84,7 @@ public class Messagebuilder {
 		return message.getRegex();
 	}
 
-	private String generateInterfaceConventionMessage(Message message) {
+	private String generateVisibilityConventionMessage(Message message) {
 		List<String> violationTypeKeys = message.getViolationTypeKeys();
 
 		StringBuilder sb = new StringBuilder();
@@ -96,7 +96,7 @@ public class Messagebuilder {
 				if (iterator == violationTypeKeys.size() - 2) {
 					sb.append(whiteSpace);
 					sb.append(localeService.getTranslatedString("OrMessage"));
-					sb.append("whiteSpace");
+					sb.append(whiteSpace);
 				} else {
 					sb.append(seperationCharacter);
 				}

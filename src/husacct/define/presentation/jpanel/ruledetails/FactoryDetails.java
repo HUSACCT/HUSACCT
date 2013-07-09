@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.FacadeConventionRuleJPanel;
-import husacct.define.presentation.jpanel.ruledetails.contentsmodule.InterfaceConventionJPanel;
+import husacct.define.presentation.jpanel.ruledetails.contentsmodule.InterfaceInheritanceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.SuperClassInheritanceConventionJPanel;
@@ -28,7 +28,7 @@ public class FactoryDetails {
     private CyclesBetweenModulesExceptionJPanel cyclesBetweenModulesExceptionJPanel;
     private FacadeConventionRuleJPanel facadeConventionJPanel;
     // Rules on the Contents of a module
-    private InterfaceConventionJPanel interfaceConventionJPanel;
+    private InterfaceInheritanceConventionJPanel interfaceInheritanceConventionJPanel;
     private IsAllowedToUseJPanel isAllowedToUseJPanel;
     // Rules of the Legality of Dependency
     private IsNotAllowedToUseJPanel isNotAllowedToUseJPanel;
@@ -45,10 +45,10 @@ public class FactoryDetails {
     public AbstractDetailsJPanel create(
 	    AppliedRuleController appliedRuleController, String ruleTypeKey) {
 	// Rules on the Contents of a module
-	if (ruleTypeKey.equals(InterfaceConventionJPanel.ruleTypeKey)) {
-	    interfaceConventionJPanel = new InterfaceConventionJPanel(
+	if (ruleTypeKey.equals(InterfaceInheritanceConventionJPanel.ruleTypeKey)) {
+	    interfaceInheritanceConventionJPanel = new InterfaceInheritanceConventionJPanel(
 		    appliedRuleController);
-	    return interfaceConventionJPanel;
+	    return interfaceInheritanceConventionJPanel;
 	} else if (ruleTypeKey.equals(SuperClassInheritanceConventionJPanel.ruleTypeKey)) {
 		superClassInheritanceConventionJPanel = new SuperClassInheritanceConventionJPanel(
 		    appliedRuleController);
@@ -136,12 +136,12 @@ public class FactoryDetails {
     public AbstractDetailsJPanel get(
 	    AppliedRuleController appliedRuleController, String ruleTypeKey) {
 	// Rules on the Contents of a module
-	if (ruleTypeKey.equals(InterfaceConventionJPanel.ruleTypeKey)) {
-	    if (interfaceConventionJPanel == null) {
-		interfaceConventionJPanel = new InterfaceConventionJPanel(
+	if (ruleTypeKey.equals(InterfaceInheritanceConventionJPanel.ruleTypeKey)) {
+	    if (interfaceInheritanceConventionJPanel == null) {
+		interfaceInheritanceConventionJPanel = new InterfaceInheritanceConventionJPanel(
 			appliedRuleController);
 	    }
-	    return interfaceConventionJPanel;
+	    return interfaceInheritanceConventionJPanel;
 	} else if (ruleTypeKey.equals(SuperClassInheritanceConventionJPanel.ruleTypeKey)) {
 	    if (superClassInheritanceConventionJPanel == null) {
 	    	superClassInheritanceConventionJPanel = new SuperClassInheritanceConventionJPanel(

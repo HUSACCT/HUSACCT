@@ -15,12 +15,12 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 
-public class InterfaceConventionRule extends RuleType {
+public class InterfaceInheritanceConventionRule extends RuleType {
 
 	private HashSet<String> interfaceCache;
 	private HashSet<String> noInterfaceCache;
 
-	public InterfaceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+	public InterfaceInheritanceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 		interfaceCache = new HashSet<>();
 		noInterfaceCache = new HashSet<>();
