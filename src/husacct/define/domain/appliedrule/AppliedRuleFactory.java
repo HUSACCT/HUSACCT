@@ -14,7 +14,7 @@ import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToMakeBackCal
 import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToMakeSkipCallRule;
 import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.IsOnlyAllowedToUseRule;
-import husacct.define.domain.appliedrule.relationrules.IsOnlyModuleAllowedToUseRule;
+import husacct.define.domain.appliedrule.relationrules.IsTheOnlyModuleAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.MustUseRule;
 import husacct.define.domain.services.ModuleDomainService;
 
@@ -33,7 +33,7 @@ public class AppliedRuleFactory {
 		"IsNotAllowedToMakeSkipCall",
 		"IsAllowedToUse",
 		"IsOnlyAllowedToUse",
-		"IsOnlyModuleAllowedToUse",
+		"IsTheOnlyModuleAllowedToUse",
 		"MustUse",
 		"NamingConvention",
 		"NamingConventionException",
@@ -50,7 +50,7 @@ public class AppliedRuleFactory {
 		IsNotAllowedToMakeSkipCallRule.class,
 		IsAllowedToUseRule.class,
 		IsOnlyAllowedToUseRule.class,
-		IsOnlyModuleAllowedToUseRule.class,
+		IsTheOnlyModuleAllowedToUseRule.class,
 		MustUseRule.class,
 		NamingConventionRule.class,
 		NamingConventionExceptionRule.class,

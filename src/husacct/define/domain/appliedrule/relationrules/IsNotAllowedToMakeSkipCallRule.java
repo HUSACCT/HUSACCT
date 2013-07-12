@@ -41,7 +41,7 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 		if (isNotAllowedToUseSucces) {
 			isNotAllowedToUseSucces = moduleCheckerHelper
 					.checkRuleTypeAlreadyFromThisToSelected(
-							"IsOnlyModuleAllowedToUse", this.getModuleFrom(), this.getModuleTo());
+							"IsTheOnlyModuleAllowedToUse", this.getModuleFrom(), this.getModuleTo());
 		}
 		if (isNotAllowedToUseSucces) {
 			isNotAllowedToUseSucces = moduleCheckerHelper

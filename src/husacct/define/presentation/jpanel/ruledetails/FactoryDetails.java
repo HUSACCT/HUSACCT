@@ -13,7 +13,7 @@ import husacct.define.presentation.jpanel.ruledetails.legalitydependency.BackCal
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsAllowedToUseJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsNotAllowedToUseJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsOnlyAllowedToUseJPanel;
-import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsOnlyModuleAllowedToUseJPanel;
+import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsTheOnlyModuleAllowedToUseJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.MustUseJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.SkipCallJPanel;
 import husacct.define.task.AppliedRuleController;
@@ -33,7 +33,7 @@ public class FactoryDetails {
     // Rules of the Legality of Dependency
     private IsNotAllowedToUseJPanel isNotAllowedToUseJPanel;
     private IsOnlyAllowedToUseJPanel isOnlyAllowedToUseJPanel;
-    private IsOnlyModuleAllowedToUseJPanel isOnlyModuleAllowedToUseJPanel;
+    private IsTheOnlyModuleAllowedToUseJPanel isTheOnlyModuleAllowedToUseJPanel;
     private MustUseJPanel mustUseJPanel;
     private NamingConventionExceptionJPanel namingConventionExceptionJPanel;
     private NamingConventionJPanel namingConventionJPanel;
@@ -85,10 +85,10 @@ public class FactoryDetails {
 		    appliedRuleController);
 	    return isOnlyAllowedToUseJPanel;
 	} else if (ruleTypeKey
-		.equals(IsOnlyModuleAllowedToUseJPanel.ruleTypeKey)) {
-	    isOnlyModuleAllowedToUseJPanel = new IsOnlyModuleAllowedToUseJPanel(
+		.equals(IsTheOnlyModuleAllowedToUseJPanel.ruleTypeKey)) {
+	    isTheOnlyModuleAllowedToUseJPanel = new IsTheOnlyModuleAllowedToUseJPanel(
 		    appliedRuleController);
-	    return isOnlyModuleAllowedToUseJPanel;
+	    return isTheOnlyModuleAllowedToUseJPanel;
 	} else if (ruleTypeKey.equals(MustUseJPanel.ruleTypeKey)) {
 	    mustUseJPanel = new MustUseJPanel(appliedRuleController);
 	    return mustUseJPanel;
@@ -194,12 +194,12 @@ public class FactoryDetails {
 	    }
 	    return isOnlyAllowedToUseJPanel;
 	} else if (ruleTypeKey
-		.equals(IsOnlyModuleAllowedToUseJPanel.ruleTypeKey)) {
-	    if (isOnlyModuleAllowedToUseJPanel == null) {
-		isOnlyModuleAllowedToUseJPanel = new IsOnlyModuleAllowedToUseJPanel(
+		.equals(IsTheOnlyModuleAllowedToUseJPanel.ruleTypeKey)) {
+	    if (isTheOnlyModuleAllowedToUseJPanel == null) {
+		isTheOnlyModuleAllowedToUseJPanel = new IsTheOnlyModuleAllowedToUseJPanel(
 			appliedRuleController);
 	    }
-	    return isOnlyModuleAllowedToUseJPanel;
+	    return isTheOnlyModuleAllowedToUseJPanel;
 	} else if (ruleTypeKey.equals(MustUseJPanel.ruleTypeKey)) {
 	    if (mustUseJPanel == null) {
 		mustUseJPanel = new MustUseJPanel(appliedRuleController);

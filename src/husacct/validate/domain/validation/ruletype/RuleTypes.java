@@ -10,7 +10,7 @@ public enum RuleTypes {
 	IS_NOT_ALLOWED_SKIP_CALL("IsNotAllowedToMakeSkipCall", DefaultSeverities.LOW),
 	IS_ALLOWED_TO_USE("IsAllowedToUse", DefaultSeverities.LOW),
 	IS_ONLY_ALLOWED_TO_USE("IsOnlyAllowedToUse", DefaultSeverities.LOW),
-	IS_ONLY_MODULE_ALLOWED_TO_USE("IsOnlyModuleAllowedToUse", DefaultSeverities.MEDIUM),
+	IS_THE_ONLY_MODULE_ALLOWED_TO_USE("IsTheOnlyModuleAllowedToUse", DefaultSeverities.MEDIUM),
 	MUST_USE("MustUse", DefaultSeverities.MEDIUM),
 	NAMING_CONVENTION("NamingConvention", DefaultSeverities.MEDIUM),
 	NAMING_CONVENTION_EXCEPTION("NamingConventionException", DefaultSeverities.MEDIUM),
@@ -22,7 +22,7 @@ public enum RuleTypes {
 	
 	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(
 			FACADE_CONVENTION, SUPERCLASSINHERITANCE_CONVENTION, INTERFACEINHERITANCE_CONVENTION, IS_NOT_ALLOWED_TO_USE, IS_ONLY_ALLOWED_TO_USE,
-			IS_ONLY_MODULE_ALLOWED_TO_USE, MUST_USE, IS_NOT_ALLOWED_BACK_CALL, IS_NOT_ALLOWED_SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION);
+			IS_THE_ONLY_MODULE_ALLOWED_TO_USE, MUST_USE, IS_NOT_ALLOWED_BACK_CALL, IS_NOT_ALLOWED_SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION);
 	private final String key;
 	private final DefaultSeverities defaultSeverity;
 
