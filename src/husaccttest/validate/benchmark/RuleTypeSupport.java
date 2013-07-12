@@ -43,7 +43,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 public class RuleTypeSupport {
-	private final static String projectSourcePath = "D:\\Dropbox\\Themaopdracht ASE\\Benchmark test\\3 - Benchmark test Constructie\\SacctTestCode SRMA 2013-04-15\\SacctTestCode SRMA 2013-04-15\\src";
+	private final static String projectSourcePath = "testprojects\\java\\srma";
+			//"D:\\Dropbox\\Themaopdracht ASE\\Benchmark test\\3 - Benchmark test Constructie\\SacctTestCode SRMA 2013-04-15\\SacctTestCode SRMA 2013-04-15\\src";
 	private final static String applicationName = "HUSACCT_BENCHMARK_SRMA_TEST";
 	private final static String programLanguage = "Java";
 	private final static String programVersion = "1.0";
@@ -178,7 +179,7 @@ public class RuleTypeSupport {
 		component1.addSUDefinition(component1_sud);
 		
 		ModuleStrategy componentFacade1 = new Facade();
-		component1.set("ComponentFacade", "This is a façade");
+		component1.set("ComponentFacade", "This is a facade");
 		SoftwareUnitDefinition componentFacade1_sud1 = new SoftwareUnitDefinition("technology.propertyrules.component.ComponentInterface", Type.CLASS);
 		SoftwareUnitDefinition componentFacade1_sud2 = new SoftwareUnitDefinition("technology.propertyrules.component.ComponentDTO", Type.CLASS);
 		ArrayList<SoftwareUnitDefinition> componentFacade1_suds = new ArrayList<SoftwareUnitDefinition>();
@@ -304,7 +305,7 @@ public class RuleTypeSupport {
 		AppliedRuleStrategy rulePropertyRulesVisibility = ruleFactory.createDummyRule("VisibilityConvention");
 		rulePropertyRulesVisibility.setAppliedRule("All classes in package technology.propertyrules.component have visibility package or lower.", component1, component1);
 		AppliedRuleStrategy rulePropertyRulesFacade = ruleFactory.createDummyRule("FacadeConvention");
-		rulePropertyRulesFacade.setAppliedRule("Access to the classes in package technology.propertyrules.component is only allowed via its façade: ComponentInterface.", component1, component1);
+		rulePropertyRulesFacade.setAppliedRule("Access to the classes in package technology.propertyrules.component is only allowed via its facade: ComponentInterface.", component1, component1);
 		AppliedRuleStrategy rulePropertyRulesSuperClass = ruleFactory.createDummyRule("SuperClassInheritanceConvention");
 		rulePropertyRulesSuperClass.setAppliedRule("All classes in package technology.propertyrules.superclass_inheritance must extend technology. propertyrules.Datasource", subModuleSuperClassInheritance, subModuleDatasource);
 		AppliedRuleStrategy rulePropertyRulesInterface = ruleFactory.createDummyRule("InterfaceInheritanceConvention");
