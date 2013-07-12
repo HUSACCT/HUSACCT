@@ -29,8 +29,8 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingTo();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
-
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+		
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (List<Mapping> physicalClasspathsTo : modulesTo) {
 				for (Mapping classPathTo : physicalClasspathsTo) {
