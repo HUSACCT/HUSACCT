@@ -16,12 +16,12 @@ import org.junit.Test;
 public class DefineServiceTests {
 	private SoftwareArchitecture sA = SoftwareArchitecture.getInstance();
 	private DefineServiceImpl defineService = new DefineServiceImpl();
-	private ModuleFactory facotry= new ModuleFactory();
+	private ModuleFactory factory= new ModuleFactory();
 	@Before
 	public void setUp(){
 		sA = new SoftwareArchitecture("Test architecture", "This architecture is used for testing purposes");
 		SoftwareArchitecture.setInstance(sA);
-		ModuleStrategy module1 = facotry.createModule("externalsystem").set(name, description)("SubSystem 1", "This is subsystem 1");
+		ModuleStrategy module1 = factory.createModule("externalsystem").set(name, description)("SubSystem 1", "This is subsystem 1");
 		ModuleStrategy module2 = new SubSystem("SubSystem 2", "This is subsystem 2");
 		ModuleStrategy module3 = new SubSystem("SubSystem 3", "This is subsystem 3");
 

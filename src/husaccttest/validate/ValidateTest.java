@@ -143,7 +143,7 @@ public class ValidateTest {
 				RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), 
 				RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString(), 
 				RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString(), 
-				RuleTypes.IS_ONLY_MODULE_ALLOWED_TO_USE.toString(), 
+				RuleTypes.IS_THE_ONLY_MODULE_ALLOWED_TO_USE.toString(), 
 				RuleTypes.MUST_USE.toString(),
 				RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()
 		};

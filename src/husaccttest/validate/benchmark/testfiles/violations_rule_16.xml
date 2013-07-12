@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<violations>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>3</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Import</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>6</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Declaration</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>9</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Access</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>9</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Call</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingAccess_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>3</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Import</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingAccess_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>6</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Declaration</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingAccess_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>8</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Access</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingExtend_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>3</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Import</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingExtend_2
+		</source>
+		<target>technology.relationrules.notallowed.allowed.ASocialNetwork2
+		</target>
+		<lineNr>6</lineNr>
+		<severity>High</severity>
+		<ruleType>SubSystem Domain.Relationrules.Is_not_allowed_to_use is not
+			allowed to use SubSystem Technology.Relationrules.Notallowed_1
+		</ruleType>
+		<dependencyKind>Inheritance</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
+</violations>
