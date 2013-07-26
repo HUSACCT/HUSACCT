@@ -299,9 +299,9 @@ public class RuleTypeSupport {
     	AppliedRuleStrategy rulePropertyRulesNamingPrefix = ruleFactory.createDummyRule("NamingConvention");
     	rulePropertyRulesNamingPrefix.setAppliedRule("All classes/files/ packages within technology.propertyrules.naming_prefix must have prefix MDB.", new String[]{}, "MDB*", subModuleNamingPrefix, subModuleNamingPrefix, true);
     	AppliedRuleStrategy rulePropertyRulesNamingPostfix = ruleFactory.createDummyRule("NamingConvention");
-    	rulePropertyRulesNamingPostfix.setAppliedRule("All classes/files/ packages within technology.propertyrules.naming_postfix must have postfix “MDB”.", new String[]{}, "*MDB", subModuleNamingPostfix, subModuleNamingPostfix, true);
+    	rulePropertyRulesNamingPostfix.setAppliedRule("All classes/files/ packages within technology.propertyrules.naming_postfix must have postfix 'MDB'.", new String[]{}, "*MDB", subModuleNamingPostfix, subModuleNamingPostfix, true);
     	AppliedRuleStrategy rulePropertyRulesNamingMid = ruleFactory.createDummyRule("NamingConvention");
-    	rulePropertyRulesNamingMid.setAppliedRule("All classes/files/ packages within technology.propertyrules.naming_mid must have “MDB” in the name.", new String[]{}, "*MDB*", subModuleNamingMid, subModuleNamingMid, true);
+    	rulePropertyRulesNamingMid.setAppliedRule("All classes/files/ packages within technology.propertyrules.naming_mid must have 'MDB' in the name.", new String[]{}, "*MDB*", subModuleNamingMid, subModuleNamingMid, true);
 		AppliedRuleStrategy rulePropertyRulesVisibility = ruleFactory.createDummyRule("VisibilityConvention");
 		rulePropertyRulesVisibility.setAppliedRule("All classes in package technology.propertyrules.component have visibility package or lower.", component1, component1);
 		AppliedRuleStrategy rulePropertyRulesFacade = ruleFactory.createDummyRule("FacadeConvention");
@@ -744,7 +744,7 @@ public class RuleTypeSupport {
 		appliedRules[7] = rule8;
 		//Geef visibility package, default, public en protected mee.
 		
-		//RULE 9: FaçadeConvention (PR4_1)
+		//RULE 9: FacadeConvention (PR4_1)
 		RuleDTO rule9 = new RuleDTO(RuleTypes.FACADE_CONVENTION.toString(), false, moduleTechRelationAllowed, rule8en9_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.FACADE_CONVENTION.toString()), "", new RuleDTO[] {});
 		appliedRules[8] = rule9;
