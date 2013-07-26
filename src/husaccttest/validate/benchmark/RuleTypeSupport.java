@@ -312,6 +312,8 @@ public class RuleTypeSupport {
 		rulePropertyRulesInterface.setAppliedRule("All classes in package technology.propertyrules.interface_inheritance must implement interface technology.propertyrules.IDatasource", subModuleInterfaceInheritance, subModuleIDatasource);
 		
 		//> RELATION RULE TYPES
+		AppliedRuleStrategy ruleRelationIsAllowedToUse = ruleFactory.createDummyRule("IsAllowedToUse");
+		ruleRelationIsAllowedToUse.setAppliedRule("Package domain.relationrules.is_allowed_to_use is only allowed to use package technology.relationrules.allowed.", subModuleDomainIsAllowedToUse, subModuleTechAllowed);
 		AppliedRuleStrategy ruleRelationIsOnlyAllowedToUse = ruleFactory.createDummyRule("IsOnlyAllowedToUse");
 		ruleRelationIsOnlyAllowedToUse.setAppliedRule("Package domain.relationrules.is_only_allowed_to_use is only allowed to use package technology.relationrules.allowed.", subModuleDomainIsOnlyAllowedToUse, subModuleTechAllowed);
 		AppliedRuleStrategy ruleRelationIsTheOnlyModuleAllowedToUse_1 = ruleFactory.createDummyRule("IsTheOnlyModuleAllowedToUse");
@@ -337,6 +339,7 @@ public class RuleTypeSupport {
 		softwareArchitecture.addAppliedRule(rulePropertyRulesFacade);
 		softwareArchitecture.addAppliedRule(rulePropertyRulesSuperClass);
 		softwareArchitecture.addAppliedRule(rulePropertyRulesInterface);
+		softwareArchitecture.addAppliedRule(ruleRelationIsAllowedToUse);
 		softwareArchitecture.addAppliedRule(ruleRelationIsOnlyAllowedToUse);
 		softwareArchitecture.addAppliedRule(ruleRelationIsTheOnlyModuleAllowedToUse_1);
 		softwareArchitecture.addAppliedRule(ruleRelationMustUseCorrect);

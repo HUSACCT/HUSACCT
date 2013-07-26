@@ -1,1 +1,10 @@
+<!-- 
+	RULE 8:		All classes in package technology.propertyrules.component have visibility package or lower.
+	RULETYPE:	VisibilityConvention
+	COUNT: 		0 violations
+-->
+
 <?xml version="1.0" encoding="UTF-8"?>
+<violations>
+
+</violations>

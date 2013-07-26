@@ -1,1 +1,10 @@
+<!-- 
+	RULE 2:		Layer Technology is not allowed to make back call to Layer Domain
+	RULETYPE:	IsNotAllowedToMakeBackCall
+	COUNT: 		0 violations
+-->
+
 <?xml version="1.0" encoding="UTF-8"?>
+<violations>
+
+</violations>
