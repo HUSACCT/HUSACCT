@@ -1,5 +1,7 @@
 package husaccttest.validate.benchmark.testfiles;
 
+import husacct.validate.domain.validation.DefaultSeverities;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 
 import java.io.File;
@@ -43,17 +45,36 @@ public class ViolationsRuleXML {
 		// Use the factory to create a builder
 		DocumentBuilder builder;
 		try {
-			builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(filePath);
+			builder = factory.newDocumentBuilder(); System.err.println("PATH: " + filePath);
+			Document xmlDocument = builder.parse(filePath);
 
 			// Get a list of all elements in the document
-			NodeList list = doc.getElementsByTagName("*");
-			System.out.println("=> XML Elements: ");
-
-			for (int counter = 0; counter < list.getLength(); counter++) {
+			NodeList elementList = xmlDocument.getElementsByTagName("violation");
+			System.out.println("=> XML Elements: " + ((Element)elementList.item(0)).getNodeName()
+					+ "\nLengte: " + elementList.getLength());
+			
+			for (int counter = 0; counter < elementList.getLength(); counter++) { System.out.println(counter);
 				// Get element
-				Element element = (Element)list.item(counter);
-				System.out.println(element.getNodeName());
+				Violation xmlViolation = new Violation();
+				Element element = (Element)elementList.item(counter);
+				
+				System.out.println(">> Name: " + element.getNodeName() + " - value: " + element.getNodeValue()
+						+ "\n Lengte child: " + element.getChildNodes().getLength());
+				//getElementsByTagName("firstname").item(0).getTextContent()
+				
+				xmlViolation.setClassPathFrom(element.getAttribute("source"));
+				xmlViolation.setClassPathTo(element.getAttribute("target"));
+				xmlViolation.setLineNumber(Integer.parseInt(element.getAttribute("lineNr")));
+				Severity violationSeverity = new Severity(
+						DefaultSeverities.valueOf(element.getAttribute("severity").toUpperCase()).toString(), 
+						DefaultSeverities.valueOf(element.getAttribute("severity").toUpperCase()).getColor());
+				xmlViolation.setSeverity(violationSeverity);
+				xmlViolation.setRuletypeKey(element.getAttribute("ruleType"));
+				xmlViolation.setViolationTypeKey(element.getAttribute("dependencyKind"));
+				String booleanString = element.getAttribute("isDirect");
+				booleanString = booleanString.substring(0, 1).toUpperCase() + booleanString.substring(1).toLowerCase();
+				xmlViolation.setInDirect(Boolean.valueOf(booleanString));
+				xmlViolations.add(xmlViolation);
 			}
 		}
 		catch (ParserConfigurationException | SAXException | IOException e) {
