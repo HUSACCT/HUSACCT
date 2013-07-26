@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 	RULE 13:	Package domain.relationrules.is_only_allowed_to_use is only allowed to use package technology.relationrules.allowed.
 	RULETYPE:	IsOnlyAllowedToUse
 	COUNT: 		9 violations
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <violations>
 	<violation>
 		<source>domain.relationrules.is_only_allowed_to_use.ViolatingCall_1_1

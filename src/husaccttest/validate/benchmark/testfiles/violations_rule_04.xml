@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 	RULE 4: 	Layer Presentation is not allowed to make skip call to Layer Technology 
 	RULETYPE: 	IsNotAllowedToMakeSkipCall 
 	COUNT: 		9 violations 
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <violations>
 	<violation>
 		<source>presentation.relationrules.skip_call_ban.ViolatingCall_2_2

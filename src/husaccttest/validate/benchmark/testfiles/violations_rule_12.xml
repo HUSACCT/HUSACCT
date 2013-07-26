@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 	RULE 12:	Package domain.relationrules.is_allowed_to_use is allowed to use package technology.relationrules.allowed.
 	RULETYPE:	IsAllowedToUse
 	COUNT: 		0 violations
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <violations>
 
 </violations>

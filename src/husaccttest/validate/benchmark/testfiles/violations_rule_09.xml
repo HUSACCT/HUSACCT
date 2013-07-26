@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 	RULE 9:		Access to the classes in package technology.propertyrules.component is only allowed via its facade: ComponentInterface.
 	RULETYPE:	FacadeConvention
 	COUNT: 		6 violations
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <violations>
 	<violation>
 		<source>technology.propertyrules.facade_convention.IlLegalAccess

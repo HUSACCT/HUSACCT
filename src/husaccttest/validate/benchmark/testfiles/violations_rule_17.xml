@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 	RULE 17:	Package domain.relationrules.is_not_allowed_to_use is not allowed to use package technology.relationrules.notallowed.
 	RULETYPE:	IsNotAllowedToUse
 	COUNT: 		18 violations
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <violations>
 	<violation>
 		<source>domain.relationrules.is_not_allowed_to_use.violating.ViolatingAccess_2

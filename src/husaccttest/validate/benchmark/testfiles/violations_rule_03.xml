@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 	RULE 3:		Layer Technology is not allowed to make back call to Layer Presentation
 	RULETYPE:	IsNotAllowedToMakeBackCall
 	COUNT: 		0 violations
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <violations>
 
 </violations>
