@@ -119,7 +119,7 @@ public abstract class RuleType {
 				.setLineNumber(dependency.lineNumber)
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setViolationtypeKey(dependency.type)
+				.setViolationTypeKey(dependency.type)
 				.setClassPathFrom(dependency.from)
 				.setClassPathTo(dependency.to)
 				.setInDirect(dependency.isIndirect)
@@ -179,7 +179,7 @@ public abstract class RuleType {
 		newViolation = newViolation
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setViolationtypeKey(violationTypeKey)
+				.setViolationTypeKey(violationTypeKey)
 				.setClassPathFrom(classPathFrom.getPhysicalPath())
 				.setInDirect(false)
 				.setMessage(message)

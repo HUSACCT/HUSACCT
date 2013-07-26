@@ -381,7 +381,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		clearViolationsTableModelRows();
 		shownViolations = violations;
 		for (Violation violation : violations) {
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), violation.getClassPathTo(), localeService.getTranslatedString(violation.getRuletypeKey()), localeService.getTranslatedString(violation.getViolationtypeKey()), (violation.isIndirect() ? localeService.getTranslatedString("Indirect") : localeService.getTranslatedString("Direct")), violation.getSeverity().toString()});
+			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), violation.getClassPathTo(), localeService.getTranslatedString(violation.getRuletypeKey()), localeService.getTranslatedString(violation.getViolationTypeKey()), (violation.isIndirect() ? localeService.getTranslatedString("Indirect") : localeService.getTranslatedString("Direct")), violation.getSeverity().toString()});
 			violationsTable.revalidate();
 		}
 		violationsTable.setAutoCreateRowSorter(true);
