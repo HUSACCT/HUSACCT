@@ -8,16 +8,16 @@
 
 <violations>
 	<violation>
-	<source>technology.propertyrules.interface_inheritance.IndirectInheritanceInterface
-	</source>
-	<target>technology.propertyrules.IDatasource</target>
-	<lineNr>3</lineNr>
-	<severity>Medium</severity>
-	<ruleType>SubSystem Technology.Propertyrules.Interface_inheritance
-		must implement SubSystem Technology.Propertyrules.IDatasource
-	</ruleType>
-	<dependencyKind>Inheritance</dependencyKind>
-	<isDirect>true</isDirect>
+		<source>technology.propertyrules.interface_inheritance.IndirectInheritanceInterface
+		</source>
+		<target>technology.propertyrules.IDatasource</target>
+		<lineNr>3</lineNr>
+		<severity>Medium</severity>
+		<ruleType>SubSystem Technology.Propertyrules.Interface_inheritance
+			must implement SubSystem Technology.Propertyrules.IDatasource
+		</ruleType>
+		<dependencyKind>Inheritance</dependencyKind>
+		<isDirect>true</isDirect>
 	</violation>
 	<violation>
 		<source>technology.propertyrules.interface_inheritance.DirectInheritanceInterface
@@ -31,13 +31,16 @@
 		<dependencyKind>Import</dependencyKind>
 		<isDirect>false</isDirect>
 	</violation>
-    <violation>
-      <source>technology.propertyrules.interface_inheritance.DirectInheritanceInterface</source>
-      <target>technology.propertyrules.IDatasource</target>
-      <lineNr>5</lineNr>
-      <severity>Medium</severity>
-      <ruleType>SubSystem Technology.Propertyrules.Interface_inheritance must implement SubSystem Technology.Propertyrules.IDatasource</ruleType>
-      <dependencyKind>Inheritance</dependencyKind>
-      <isDirect>false</isDirect>
-    </violation>
+	<violation>
+		<source>technology.propertyrules.interface_inheritance.DirectInheritanceInterface
+		</source>
+		<target>technology.propertyrules.IDatasource</target>
+		<lineNr>5</lineNr>
+		<severity>Medium</severity>
+		<ruleType>SubSystem Technology.Propertyrules.Interface_inheritance
+			must implement SubSystem Technology.Propertyrules.IDatasource
+		</ruleType>
+		<dependencyKind>Inheritance</dependencyKind>
+		<isDirect>false</isDirect>
+	</violation>
 </violations>
