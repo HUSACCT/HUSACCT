@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-	RULE 5: 	All classes/files/ packages within technology.propertyrules.naming_prefix must have prefix MDB.
+	RULE 5: 	All classes/files/packages within technology.propertyrules.naming_prefix must have prefix MDB.
 	REGEX:		MDB*
 	RULETYPE: 	NamingConvention 
 	COUNT: 		2 violations 

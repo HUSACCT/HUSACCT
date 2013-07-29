@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-	RULE 6: 	All classes/files/ packages within technology.propertyrules.naming_postfix must have postfix MDB.
+	RULE 6: 	All classes/files/packages within technology.propertyrules.naming_postfix must have postfix MDB.
 	REGEX:		*MDB
 	RULETYPE: 	NamingConvention 
 	COUNT: 		2 violations 

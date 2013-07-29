@@ -24,7 +24,6 @@ import husacct.define.domain.module.modules.SubSystem;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
-import husacct.define.task.DefinitionController;
 import husacct.validate.IValidateService;
 import husacct.validate.ValidateServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
@@ -63,7 +62,7 @@ public class RuleTypeSupport {
 	private IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private IValidateService validateService = ServiceProvider.getInstance().getValidateService();
-	private DefinitionController definitionController = new DefinitionController();
+	//private DefinitionController definitionController = new DefinitionController();
 	
 	private static boolean isAnalysed = false;
 	
@@ -127,7 +126,7 @@ public class RuleTypeSupport {
 	}
 	
 	public void setUpSoftwareArchitecture() {
-		definitionController = new DefinitionController();
+		//definitionController = new DefinitionController();
 		
 		softwareArchitecture = new SoftwareArchitecture("SoftwareArchitecture", "This architecture is used for testing purposes");
 		SoftwareArchitecture.setInstance(softwareArchitecture);

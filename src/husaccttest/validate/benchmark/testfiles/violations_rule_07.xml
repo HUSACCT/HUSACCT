@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-	RULE 7: 	All classes/files/ packages within technology.propertyrules.naming_mid must have MDB in the name.
+	RULE 7: 	All classes/files/packages within technology.propertyrules.naming_mid must have MDB in the name.
 	REGEX:		*MDB*
 	RULETYPE: 	NamingConvention 
 	COUNT: 		2 violations 

@@ -3,7 +3,6 @@ package husaccttest.validate.benchmark;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
@@ -19,7 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,17 +25,19 @@ import org.junit.Test;
 
 public class RuleTypeSupportTest {
 	private static RuleTypeSupport srmaTest;
-	private static Messagebuilder violationMessageBuilder;
-	private static Logger logger;
+	//private static Messagebuilder violationMessageBuilder;
+	//private static Logger logger;
 	
 	@BeforeClass
 	public static void beforeClass() {
 		setLog4jConfiguration();
 		
-		violationMessageBuilder = new Messagebuilder();
+		//violationMessageBuilder = new Messagebuilder();
 		
 		srmaTest = new RuleTypeSupport();
 		srmaTest.setUpSRMATest();
+		
+		giveReviewGeneratedViolations();
 	}
 	
 	@AfterClass
@@ -50,10 +50,10 @@ public class RuleTypeSupportTest {
 		ApplicationDTO applicationDTO = srmaTest.getDefineService().getApplicationDetails();
 		ProjectDTO projectDTO = applicationDTO.projects.get(0);
 		
-		assertEquals(applicationDTO.name, srmaTest.getApplicationName());
-		assertEquals(projectDTO.paths.get(0), srmaTest.getProjectSourcePath());
-		assertEquals(projectDTO.programmingLanguage, srmaTest.getProgramLanguage());
-		assertEquals(applicationDTO.version, srmaTest.getProgramVersion());
+		assertEquals(applicationDTO.name, RuleTypeSupport.getApplicationName());
+		assertEquals(projectDTO.paths.get(0), RuleTypeSupport.getProjectSourcePath());
+		assertEquals(projectDTO.programmingLanguage, RuleTypeSupport.getProgramLanguage());
+		assertEquals(applicationDTO.version, RuleTypeSupport.getProgramVersion());
 	}
 	
 	@Test
@@ -187,10 +187,11 @@ public class RuleTypeSupportTest {
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
-		logger = Logger.getLogger(RuleTypeSupportTest.class);
+		//logger = Logger.getLogger(RuleTypeSupportTest.class);
 	}
 	
 	private boolean checkOverallOperationRuleType(int ruleTypeNumber, RuleTypes ruleType) {
+		System.out.println("=====================");
 		ArrayList<Violation> xmlViolations = giveRelatedViolationsFromXMLFile(ruleTypeNumber);
 		TreeSet<String> classPathsFrom = new TreeSet<String>();
 		TreeSet<String> classPathsTo = new TreeSet<String>();
@@ -198,19 +199,28 @@ public class RuleTypeSupportTest {
 			classPathsFrom.add(xmlViolation.getClassPathFrom());
 			classPathsTo.add(xmlViolation.getClassPathTo());
 		}
+		
 		ArrayList<Violation> generatedViolations = giveRelatedViolationsFromExecutedTest(ruleType, classPathsFrom, classPathsTo);
 		
 		return checkConformityDifferentViolationSources(xmlViolations, generatedViolations);
 	}
 	
 	private boolean checkConformityDifferentViolationSources(ArrayList<Violation> xmlViolations, ArrayList<Violation> generatedViolations) {
+		System.err.println(">> SIZES: xml: " + xmlViolations.size() + " - generated: " + generatedViolations.size());
 		if(xmlViolations.size() == generatedViolations.size()) {
+			if(xmlViolations.size() == 0) {
+				return true;
+			}
+			
 			for(int counter = 0; counter < xmlViolations.size(); counter++) {
 				Violation xmlViolation = xmlViolations.get(counter);
-				Violation generatedViolation = generatedViolations.get(counter);
 				
-				if(checkConformityTwoViolations(xmlViolation, generatedViolation)) {
-					return true;
+				for(int counter2 = 0; counter2 < generatedViolations.size(); counter2++) {
+					Violation generatedViolation = generatedViolations.get(counter);
+					
+					if(checkConformityTwoViolations(xmlViolation, generatedViolation)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -219,6 +229,23 @@ public class RuleTypeSupportTest {
 	}
 	
 	private boolean checkConformityTwoViolations(Violation violation1, Violation violation2) {	
+//		System.out.println("\n> VIOLATION 1 v.s. 2: " 
+//				+ "\n-1 Classpath from: " + violation1.getClassPathFrom().trim()
+//				+ "\n-2 Classpath from: " + violation2.getClassPathFrom().trim()
+//				+ "\n-1 Classpath to: " + violation1.getClassPathTo().trim()
+//				+ "\n-2 Classpath to: " + violation2.getClassPathTo().trim()
+//				+ "\n-1 Linenumber: " + violation1.getLinenumber()
+//				+ "\n-2 Linenumber: " + violation2.getLinenumber()
+//				+ "\n-1 SeverityKey: " + violation1.getSeverity().getSeverityKey().trim()
+//				+ "\n-2 SeverityKey: " + violation2.getSeverity().getSeverityKey().trim()
+//				+ "\n-1 RuleTypeKey: " + violation1.getRuletypeKey().trim()
+//				+ "\n-2 RuleTypeKey: " + violation2.getRuletypeKey().trim()
+//				+ "\n-1 ViolationTypeKey: " + violation1.getViolationTypeKey().trim()
+//				+ "\n-2 ViolationTypeKey: " + violation2.getViolationTypeKey().trim()
+//				+ "\n-1 IsIndirect: " + violation1.isIndirect()
+//				+ "\n-2 IsIndirect: " + violation2.isIndirect());
+//		
+//		
 		if(violation1.getClassPathFrom().toLowerCase().equals(violation2.getClassPathFrom().toLowerCase())) {
 			if(violation1.getClassPathTo().toLowerCase().equals(violation2.getClassPathTo().toLowerCase())) {
 				if(violation1.getLinenumber() == violation2.getLinenumber()) {
@@ -235,19 +262,25 @@ public class RuleTypeSupportTest {
 	private ArrayList<Violation> giveRelatedViolationsFromXMLFile(int fileNumber) {
 		ViolationsRuleXML violationRuleFromXML = new ViolationsRuleXML();
 		
+		//System.err.println("[VOOR IMPORTEREN NR. " + fileNumber + "]");
 		ArrayList<Violation> foundedViolations = violationRuleFromXML.giveViolationsOutXMLFile(fileNumber);
+		//System.err.println("[NA IMPORTEREN NR. " + fileNumber + " - size: " + foundedViolations.size());
 		return foundedViolations;
 	}
 		
 	private ArrayList<Violation> giveRelatedViolationsFromExecutedTest(RuleTypes ruleType, TreeSet<String> classPathsFrom, TreeSet<String> classPathsTo) {
-		//RuleTypes.>
+		//System.out.println("TEST OUTPUT verwerken: " + ruleType.name() + " - from size: " + classPathsFrom.size() + " - to size: " + classPathsTo.size() + " - generated size: " + srmaTest.getAllViolations().size());
 		ArrayList<Violation> generatedViolations = new ArrayList<Violation>();
 		for(Violation theViolation: srmaTest.getAllViolations()) {
-			if(theViolation.getRuletypeKey().toLowerCase().equals(ruleType.name().toLowerCase())) {
+			//System.out.println("[1] " + theViolation.getRuletypeKey() + " <> " + ruleType.toString());
+			if(theViolation.getRuletypeKey().toLowerCase().equals(ruleType.toString().toLowerCase())) { 
 				for(String classPathFrom: classPathsFrom) {
-					if(theViolation.getClassPathFrom().toLowerCase().equals(classPathFrom)) {
+				//	System.out.println("[2] From: \n- " + theViolation.getClassPathFrom().length() + " - <" + theViolation.getClassPathFrom() + ">"
+				//			+ "\n- " + classPathFrom.length() + " - <" + classPathFrom + ">");
+					if(theViolation.getClassPathFrom().toLowerCase().equals(classPathFrom.toLowerCase())) {   
 						for(String classPathTo: classPathsTo) {
-							if(theViolation.getClassPathTo().toLowerCase().equals(classPathTo)) {
+					//		System.out.println("[3] To: \n- <" + theViolation.getClassPathTo() + ">\n- <" + classPathTo + ">");
+							if(theViolation.getClassPathTo().toLowerCase().equals(classPathTo.toLowerCase())) {   
 								generatedViolations.add(theViolation);
 							}
 						}
@@ -259,30 +292,30 @@ public class RuleTypeSupportTest {
 		return generatedViolations;
 	}
 	
-	private void giveReviewGeneratedViolations() {
+	private static void giveReviewGeneratedViolations() {
 		int counter = 0;
 		Messagebuilder testBuilder;
 		for(Violation theViolation: srmaTest.getAllViolations()) {
 			counter++;
 			testBuilder = new Messagebuilder();
 			
-			System.out.println(testBuilder.createMessage(theViolation));
-			
-			
 			StringBuilder violationString = new StringBuilder();
 			violationString.append(counter);
 			violationString.append(" > ");
-			violationString.append(theViolation.getViolationTypeKey());
-			violationString.append(" - ");
 			violationString.append(theViolation.getRuletypeKey());
+			violationString.append(" - ");
+			violationString.append(theViolation.getViolationTypeKey());
 			violationString.append(" - ");
 			violationString.append(theViolation.getLinenumber());
 			violationString.append(" - ");
 			violationString.append(theViolation.getClassPathFrom());
 			violationString.append(" - ");
 			violationString.append(theViolation.getClassPathTo());
+			violationString.append("\n   ");
+			violationString.append(testBuilder.createMessage(theViolation));
+			violationString.append("\n");
 			
-			System.err.println(violationString.toString());
+			System.out.println(violationString.toString());
 		}
 	}
 }
