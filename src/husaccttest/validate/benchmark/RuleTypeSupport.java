@@ -570,7 +570,7 @@ public class RuleTypeSupport {
 		appliedRules[3] = rule4;
 		
 		
-		//RULE 5: NamingConvention (PR1_1) - Naming_prefix
+		//RULE 6: NamingConvention (PR1_1) - Naming_postfix
 		PhysicalPathDTO rule5_physModuleFrom_1 = new PhysicalPathDTO("technology.propertyrules.naming_postfix.MDB_AbstractDefaultClass", "class");
 		ModuleDTO rule5_moduleFrom_1 = new ModuleDTO("Technology Layer.Propertyrules.naming_postfix.MDB_AbstractDefaultClass", new PhysicalPathDTO[] { rule5_physModuleFrom_1 }, "class", new ModuleDTO[] {});
 		
@@ -610,10 +610,10 @@ public class RuleTypeSupport {
 		 
 		RuleDTO rule5 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), false, rule5_moduleFrom, rule5_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.NAMING_CONVENTION.toString()), "MDB*", new RuleDTO[] {});
-		appliedRules[4] = rule5;
+		appliedRules[5] = rule5;
 		
 		
-		//RULE 6: NamingConvention (PR1_2) - Naming_postfix
+		//RULE 5: NamingConvention (PR1_2) - Naming_prefix
 		PhysicalPathDTO rule6_physModuleFrom_1 = new PhysicalPathDTO("technology.propertyrules.naming_prefix.AbstractDefaultClass_MDB", "class");
 		ModuleDTO rule6_moduleFrom_1 = new ModuleDTO("Technology Layer.Propertyrules.naming_prefix.AbstractDefaultClass_MDB", new PhysicalPathDTO[] { rule6_physModuleFrom_1 }, "class", new ModuleDTO[] {});
 		
@@ -653,7 +653,7 @@ public class RuleTypeSupport {
 		 
 		RuleDTO rule6 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), false, rule6_moduleFrom, rule6_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.NAMING_CONVENTION.toString()), "*MDB", new RuleDTO[] {});
-		appliedRules[5] = rule6;
+		appliedRules[4] = rule6;
 		
 		
 		//RULE 7: NamingConvention (PR1_3) - Naming_mid
