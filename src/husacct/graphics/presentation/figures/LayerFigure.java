@@ -21,8 +21,6 @@ public class LayerFigure extends BaseFigure {
 	private static final long	serialVersionUID	= 101138923385231941L;
 	private RectangleFigure		body;
 	private TextFigure			text;
-	private BufferedImage		compIcon;
-	private ImageFigure			compIconFig;
 	
 	public int					MIN_WIDTH			= 150;
 	public int					MIN_HEIGHT			= 50;
@@ -35,22 +33,6 @@ public class LayerFigure extends BaseFigure {
 		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(body);
 		children.add(text);
-		
-		compIconFig = new ImageFigure();
-		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
-		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
-		
-		try {
-			// TODO There needs to be a icon for Projects
-			URL componentImageURL = Resource.get(Resource.ICON_LAYER);
-			compIcon = ImageIO.read(componentImageURL);
-			compIconFig.setImage(null, compIcon);
-			children.add(compIconFig);
-		} catch (Exception e) {
-			compIconFig = null;
-			Logger.getLogger(this.getClass()).warn(
-					"failed to load component icon image file");
-		}
 		
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 	}
@@ -75,14 +57,6 @@ public class LayerFigure extends BaseFigure {
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
 		
-		if (compIconFig != null) {
-			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
-			double iconAnchorY = anchor.y + 6;
-			double iconLeadX = iconAnchorX + compIcon.getWidth();
-			double iconLeadY = iconAnchorY + compIcon.getHeight();
-			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY),
-					new Point2D.Double(iconLeadX, iconLeadY));
-		}
 		
 		invalidate();
 	}
@@ -93,14 +67,11 @@ public class LayerFigure extends BaseFigure {
 		LayerFigure other = (LayerFigure) super.clone();
 		other.body = body.clone();
 		other.text = text.clone();
-		other.compIconFig = compIconFig.clone();
 		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.body);
 		other.children.add(other.text);
-		if (compIconFig != null) {
-			other.children.add(other.compIconFig);
-		}
+		
 		return other;
 	}
 	
