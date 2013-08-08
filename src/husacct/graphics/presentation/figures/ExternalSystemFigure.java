@@ -24,8 +24,6 @@ public class ExternalSystemFigure extends BaseFigure {
 	private RectangleFigure		top;
 	private RectangleFigure		body;
 	private TextFigure			text;
-	private BufferedImage		compIcon;
-	private ImageFigure			compIconFig;
 	
 	private int					MIN_WIDTH					= 100;
 	private int					MIN_HEIGHT					= 80;
@@ -46,21 +44,6 @@ public class ExternalSystemFigure extends BaseFigure {
 		
 		top.set(AttributeKeys.FILL_COLOR, ExternalLibBackgroundColor);
 		body.set(AttributeKeys.FILL_COLOR, ExternalLibBackgroundColor);
-		
-		compIconFig = new ImageFigure();
-		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
-		compIconFig.set(AttributeKeys.FILL_COLOR, ExternalLibBackgroundColor);
-		
-		try {
-			URL componentImageURL = Resource.get(Resource.ICON_LIBRARY);
-			compIcon = ImageIO.read(componentImageURL);
-			compIconFig.setImage(null, compIcon);
-			children.add(compIconFig);
-		} catch (Exception e) {
-			compIconFig = null;
-			Logger.getLogger(this.getClass()).warn(
-					"failed to load component icon image file");
-		}
 	}
 	
 	@Override
@@ -106,15 +89,6 @@ public class ExternalSystemFigure extends BaseFigure {
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
-		
-		if (compIconFig != null) {
-			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
-			double iconAnchorY = anchor.y + 6;
-			double iconLeadX = iconAnchorX + compIcon.getWidth();
-			double iconLeadY = iconAnchorY + compIcon.getHeight();
-			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY),
-					new Point2D.Double(iconLeadX, iconLeadY));
-		}
 		
 		invalidate();
 	}

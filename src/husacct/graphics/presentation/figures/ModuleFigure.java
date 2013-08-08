@@ -22,8 +22,6 @@ public class ModuleFigure extends BaseFigure {
 	private RectangleFigure		body;
 	private TextFigure			moduleText;
 	private TextFigure			text;
-	private BufferedImage		compIcon;
-	private ImageFigure			compIconFig;
 	
 	public int					MIN_WIDTH			= 50;
 	public int					MIN_HEIGHT			= 50;
@@ -38,21 +36,6 @@ public class ModuleFigure extends BaseFigure {
 		
 		text = new TextFigure(name);
 		text.set(AttributeKeys.FONT_BOLD, true);
-		
-		compIconFig = new ImageFigure();
-		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
-		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
-		
-		try {
-			URL componentImageURL = Resource.get(Resource.ICON_MODULE);
-			compIcon = ImageIO.read(componentImageURL);
-			compIconFig.setImage(null, compIcon);
-			children.add(compIconFig);
-		} catch (Exception e) {
-			compIconFig = null;
-			Logger.getLogger(this.getClass()).warn(
-					"failed to load component icon image file");
-		}
 		
 		children.add(body);
 		children.add(moduleText);
@@ -93,15 +76,6 @@ public class ModuleFigure extends BaseFigure {
 		textAnchor.y += plusY + moduleText.getBounds().height;
 		text.setBounds(textAnchor, null);
 		
-		if (compIconFig != null) {
-			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
-			double iconAnchorY = anchor.y + 6;
-			double iconLeadX = iconAnchorX + compIcon.getWidth();
-			double iconLeadY = iconAnchorY + compIcon.getHeight();
-			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY),
-					new Point2D.Double(iconLeadX, iconLeadY));
-		}
-		
 		invalidate();
 	}
 	
@@ -111,15 +85,12 @@ public class ModuleFigure extends BaseFigure {
 		other.body = body.clone();
 		other.text = text.clone();
 		other.moduleText = moduleText.clone();
-		other.compIconFig = compIconFig.clone();
 		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.body);
 		other.children.add(other.text);
 		other.children.add(other.moduleText);
-		if (compIconFig != null) {
-			other.children.add(other.compIconFig);
-		}
+		
 		return other;
 	}
 	
