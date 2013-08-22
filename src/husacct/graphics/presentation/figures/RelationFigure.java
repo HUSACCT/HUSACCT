@@ -97,7 +97,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
+		ArrowTip arrowTip = new ArrowTip(0.5, 7, 3.0);
 		set(AttributeKeys.END_DECORATION, arrowTip);
 		
 		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
