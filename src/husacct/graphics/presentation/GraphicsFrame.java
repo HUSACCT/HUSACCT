@@ -514,4 +514,16 @@ public class GraphicsFrame extends HelpableJInternalFrame implements
 		for (UserInputListener l : listeners)
 			l.useSelectTool();
 	}
+
+	@Override
+	public void disableThickLines() {
+		for (UserInputListener l : listeners)
+			l.disableThickLines();
+	}
+
+	@Override
+	public void enableThickLines() {
+		for (UserInputListener l : listeners)
+			l.enableThickLines();
+	}
 }

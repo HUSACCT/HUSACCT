@@ -8,6 +8,10 @@ public interface UserInputListener {
 	
 	public void drawingZoomChanged(double zoomFactor);
 	
+	public void disableThickLines();
+	
+	public void enableThickLines();
+	
 	public void exportToImage();
 	
 	public void figureDeselected(BaseFigure[] figures);

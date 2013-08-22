@@ -7,7 +7,7 @@ import husacct.graphics.util.UserInputListener;
 public abstract class DrawingSettingsController implements UserInputListener {
 	protected boolean	areSmartLinesOn	= true;
 	protected boolean	areDependenciesShown, areViolationsShown,
-			areExternalLibrariesShown;
+			areExternalLibrariesShown, areLinesThick;
 	
 	protected String[]	currentPaths	= new String[] {};
 	
@@ -28,6 +28,10 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	
 	public boolean areExternalLibrariesShown() {
 		return areExternalLibrariesShown;
+	}
+	
+	public boolean areLinesThick(){
+		return areLinesThick;
 	}
 	
 	protected DrawingDetail getCurrentDrawingDetail() {
@@ -104,5 +108,15 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	@Override
 	public void showLibraries() {
 		areExternalLibrariesShown = true;
+	}
+	
+	@Override
+	public void enableThickLines(){
+		areLinesThick = true;
+	}
+	
+	@Override
+	public void disableThickLines(){
+		areLinesThick = false;
 	}
 }
