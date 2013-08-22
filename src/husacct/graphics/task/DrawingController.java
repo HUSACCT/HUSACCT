@@ -139,6 +139,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		if (areDependenciesShown()) drawDependenciesForShownModules();
 		if (areViolationsShown()) drawViolationsForShownModules();
 		if (areSmartLinesOn()) drawing.updateLineFigureToContext();
+		if (areLinesThick()) drawing.updateLineFigureThicknesses();
 	}
 	
 	protected void drawLinesBasedOnSettingInTask() {

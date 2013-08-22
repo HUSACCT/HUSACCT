@@ -46,7 +46,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	cancelButton;
 	private JCheckBox								showDependenciesOptionMenu,
 	showViolationsOptionMenu, smartLinesOptionMenu,
-	showExternalLibraries;
+	showExternalLibraries, enableThickLines;
 	private JComboBox<String>						layoutStrategyOptions;
 	private JSlider									zoomSlider;
 	private JLabel									layoutStrategyLabel,
@@ -104,6 +104,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		interfaceElements.add(showDependenciesOptionMenu);
 		interfaceElements.add(showViolationsOptionMenu);
 		interfaceElements.add(showExternalLibraries);
+		interfaceElements.add(enableThickLines);
 		interfaceElements.add(smartLinesOptionMenu);
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
@@ -213,6 +214,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		showExternalLibraries.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(showExternalLibraries);
 		
+		enableThickLines = new JCheckBox();
+		enableThickLines.setSize(40, menuItemMaxHeight);
+		optionsPanel.add(enableThickLines);
+		
 		smartLinesOptionMenu = new JCheckBox();
 		smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(smartLinesOptionMenu);
@@ -309,6 +314,13 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				currentSettings.put("libraries", false);
 				listener.hideLibraries();
 			}
+			if (enableThickLines.isSelected()) {
+				currentSettings.put("thickLines", true);
+				listener.enableThickLines();
+			} else {
+				currentSettings.put("thickLines", false);
+				listener.disableThickLines();
+			}
 			if (showViolationsOptionMenu.isSelected()) {
 				currentSettings.put("violations", true);
 				listener.showViolations();
@@ -343,6 +355,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				.get("violations"));
 		showExternalLibraries.setSelected((Boolean) currentSettings
 				.get("libraries"));
+		enableThickLines.setSelected((Boolean) currentSettings
+				.get("thickLines"));
 		smartLinesOptionMenu.setSelected((Boolean) currentSettings
 				.get("smartLines"));
 		layoutStrategyOptions.setSelectedItem(localeService
@@ -394,6 +408,16 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		showExternalLibraries.setSelected(false);
 	}
 	
+	public void setThickLinesUIToActive() {
+		currentSettings.put("thickLines", true);
+		enableThickLines.setSelected(true);
+	}
+	
+	public void setThickLinesUIToInactive() {
+		currentSettings.put("thickLines", false);
+		enableThickLines.setSelected(false);
+	}
+	
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
 			zoomLabel.setText(menuBarLocale.get("Zoom"));
@@ -409,6 +433,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 					.get("ShowViolations"));
 			showExternalLibraries.setText(menuBarLocale
 					.get("ShowExternalLibraries"));
+			//TODO name for checkbox 
+			enableThickLines.setText("Thick lines");
 			
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
