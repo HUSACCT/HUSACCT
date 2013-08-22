@@ -213,7 +213,7 @@ public class DrawingView extends DefaultDrawingView {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
 			for (BaseFigure selectedFig : selection){
 				drawing.bringToFront(selectedFig);
-				//This little fucker right here causes some packages to dissappear.
+				//TODO When two figures have the same name, sometimes one or multiple will dissappear when selected.
 			}
 			figureSelected(selection);
 		}
