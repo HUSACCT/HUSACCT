@@ -118,6 +118,7 @@ public class AnalysedController extends DrawingController {
 						.toArray(new AbstractDTO[] {}));
 			} else
 				this.drawModulesAndLines(allChildren);
+			
 		}
 	}
 	
@@ -146,8 +147,9 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
 				.getModuleDTO(figureTo);
 		
-		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) return analyseService
-				.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
+		if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null&& dtoTo != null){ 
+			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
+		}
 		return new DependencyDTO[] {};
 	}
 	
@@ -294,7 +296,7 @@ public class AnalysedController extends DrawingController {
 	protected ArrayList<String> sortFiguresBasedOnZoomability(
 			BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
-		for (BaseFigure figure : figures)
+		for (BaseFigure figure : figures){
 			if (figure.isModule() && !figure.isContext()) try {
 				if (!(figure instanceof ProjectFigure)) {
 					
@@ -315,7 +317,8 @@ public class AnalysedController extends DrawingController {
 			} else
 				logger.warn("Could not zoom on this object: "
 						+ figure.getName() + ". Not a module to zoom on.");
-		
+			
+	}
 		return parentNames;
 	}
 	

@@ -211,8 +211,10 @@ public class DrawingView extends DefaultDrawingView {
 		handleDeselect();
 		if (hasSelection()) {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
-			for (BaseFigure selectedFig : selection)
+			for (BaseFigure selectedFig : selection){
 				drawing.bringToFront(selectedFig);
+				//This little fucker right here causes some packages to dissappear.
+			}
 			figureSelected(selection);
 		}
 		contextMenu.setHasSelection(hasSelection());
