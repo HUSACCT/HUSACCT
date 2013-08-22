@@ -4,7 +4,6 @@ import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToo
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import java.util.*;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 public class CSharpParameterGenerator extends CSharpGenerator {
 
@@ -46,21 +45,9 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	private String getFormalParameter(CommonTree childTree) {
 		if (childTree.getType() == CSharpParser.FIXED_PARAMETER) {
-			CommonTree typetree = (CommonTree) childTree;
-			return getType(typetree.getFirstChildWithType(CSharpParser.TYPE));
-		}
+			return getTypeNameAndParts((CommonTree) childTree.getChild(0));
+			}
 		return null;
-	}
-
-	private String getType(Tree tree) {
-		CommonTree ctree = (CommonTree) tree;
-		return getNameSpaceOrTypePart((CommonTree) ctree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME));
-	}
-
-	private String getNameSpaceOrTypePart(CommonTree typeTree) {
-		if (typeTree == null) 
-			return null;
-		return typeTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 	}
 
 	private String getArgumentName(CommonTree child) {
