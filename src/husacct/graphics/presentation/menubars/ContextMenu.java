@@ -15,21 +15,21 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 public class ContextMenu extends JPopupMenu {
-	private static final long serialVersionUID = -6033808567664371902L;
-	protected ILocaleService localeService = ServiceProvider.getInstance()
-			.getLocaleService();
+	private static final long				serialVersionUID	= -6033808567664371902L;
+	protected ILocaleService				localeService		= ServiceProvider
+																		.getInstance()
+																		.getLocaleService();
 	
-	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
+	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
 	
-	private JMenuItem zoomIn;
-	private JMenuItem zoomOut;
-	private JMenuItem hide;
-	private JMenuItem restore;
-	private JMenuItem help;
+	private JMenuItem						zoomIn;
+	private JMenuItem						zoomOut;
+	private JMenuItem						hide;
+	private JMenuItem						restore;
 	
-	private boolean hasSelection = false;
-	private boolean hasHiddenFigures = false;
-	private boolean canZoomout = false;
+	private boolean							hasSelection		= false;
+	private boolean							hasHiddenFigures	= false;
+	private boolean							canZoomout			= false;
 	
 	public ContextMenu() {
 		
