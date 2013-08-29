@@ -27,7 +27,7 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 	private final TaskServiceImpl task;
 	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 	private JButton detailShowErrorBtn;
-	private String sourceFile = "";
+	private String sourceClassPath = "";
 	private int sourceLine = 1;
 	private Severity sourceSeverity;
 	private static Logger logger = Logger.getLogger(ServiceProvider.class);
@@ -150,8 +150,9 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
-			
-			sourceFile = violation.getClassPathFrom();
+
+			//sourceClassPath = violation.getClassPathFrom();
+			sourceClassPath = violation.getClassPathFrom();
 			sourceSeverity = violation.getSeverity();
 			sourceLine = violation.getLinenumber();
 			
@@ -168,9 +169,9 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(!sourceFile.equals("") && !sourceFile.equals(".java")){
-			logger.info("Opening code viewer: " + sourceFile + " at line " + sourceLine);
-			ServiceProvider.getInstance().getControlService().displayErrorInFile(sourceFile, sourceLine, sourceSeverity);
+		if(!sourceClassPath.equals("") && !sourceClassPath.equals(".java")){
+			logger.info("Opening code viewer: " + sourceClassPath + " at line " + sourceLine);
+			ServiceProvider.getInstance().getControlService().displayErrorInFile(sourceClassPath, sourceLine, sourceSeverity);
 		}
 	}
 }

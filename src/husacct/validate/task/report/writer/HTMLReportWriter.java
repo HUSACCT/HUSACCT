@@ -150,8 +150,8 @@ public class HTMLReportWriter extends ReportWriter {
 			}
 
 			// Dependency Kind
-			if (violation.getViolationtypeKey() != null) {
-				createColumn(getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()));
+			if (violation.getViolationTypeKey() != null) {
+				createColumn(getDependencyKindValue(violation.getViolationTypeKey(), violation.isIndirect()));
 			} else {
 				createColumn("");
 			}

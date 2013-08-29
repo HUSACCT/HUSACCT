@@ -34,7 +34,7 @@ public class ConcreteViolationTypeFactory extends AbstractViolationType {
 			return generateViolationTypes(ruleTypeKey, defaultAccess);
 		} else if (isNamingConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, defaultPackaging);
-		} else if (isInterfaceConvention(ruleTypeKey)) {
+		} else if (isInterfaceInheritanceConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(ViolationTypes.class));
 		} else if (isSuperClassInheritanceConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.of(ViolationTypes.INHERITANCE));

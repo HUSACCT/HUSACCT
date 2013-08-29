@@ -139,8 +139,8 @@ public class PDFReportWriter extends ReportWriter {
 			}
 
 			// DependencyKind
-			if (violation.getViolationtypeKey() != null) {
-				addCellToTable(pdfTable, getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()), BaseColor.WHITE, false);
+			if (violation.getViolationTypeKey() != null) {
+				addCellToTable(pdfTable, getDependencyKindValue(violation.getViolationTypeKey(), violation.isIndirect()), BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
