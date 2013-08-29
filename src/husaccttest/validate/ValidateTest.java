@@ -136,14 +136,14 @@ public class ValidateTest {
 		CategoryDTO[] dtos = validate.getCategories();
 		final String[] currentRuletypes = new String[]{
                 RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString(),
-                RuleTypes.INTERFACE_CONVENTION.toString(),
+                RuleTypes.INTERFACEINHERITANCE_CONVENTION.toString(),
 				RuleTypes.NAMING_CONVENTION.toString(), 
 				RuleTypes.FACADE_CONVENTION.toString(),
 				RuleTypes.VISIBILITY_CONVENTION.toString(), 
 				RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), 
 				RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString(), 
 				RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString(), 
-				RuleTypes.IS_ONLY_MODULE_ALLOWED_TO_USE.toString(), 
+				RuleTypes.IS_THE_ONLY_MODULE_ALLOWED_TO_USE.toString(), 
 				RuleTypes.MUST_USE.toString(),
 				RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()
 		};

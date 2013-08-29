@@ -44,7 +44,7 @@ public class ImportViolations extends XmlImportUtils {
 				.setLineNumber(lineNumber)
 				.setSeverity(violationSeverity)
 				.setRuletypeKey(ruleTypeKey)
-				.setViolationtypeKey(violationTypeKey)
+				.setViolationTypeKey(violationTypeKey)
 				.setClassPathFrom(classPathFrom)
 				.setClassPathTo(classPathTo)
 				.setInDirect(isIndirect)

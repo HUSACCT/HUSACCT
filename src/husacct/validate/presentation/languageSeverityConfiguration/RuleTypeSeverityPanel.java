@@ -227,7 +227,9 @@ class RuleTypeSeverityPanel extends JPanel {
 			} catch (Exception e) {
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
-			ruletypeModel.addRow(new Object[] {new DataLanguageHelper(ruletype.getKey()), severity});
+			if (!ruletype.getKey().contains("Exception")) {
+				ruletypeModel.addRow(new Object[] {new DataLanguageHelper(ruletype.getKey()), severity});
+			}
 		}
 		ruletypeModel.checkValuesAreValid();
 	}

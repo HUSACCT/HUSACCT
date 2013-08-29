@@ -68,7 +68,7 @@ public class ImportViolationsHistory extends XmlImportUtils {
 								.setLineNumber(lineNumber)
 								.setSeverity(severity.clone())
 								.setRuletypeKey(ruleTypeKey)
-								.setViolationtypeKey(violationTypeKey)
+								.setViolationTypeKey(violationTypeKey)
 								.setClassPathFrom(classPathFrom)
 								.setClassPathTo(classPathTo)
 								.setInDirect(isIndirect)

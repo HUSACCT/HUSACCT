@@ -51,9 +51,9 @@ public class FilterController {
 	public ArrayList<Violation> filterViolations(List<Violation> violations) {
 		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
 		for (Violation violation : violations) {
-			if (hidefilter && (!ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()))) {
+			if (hidefilter && (!ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey())) && !paths.contains(violation.getClassPathFrom()))) {
 				filteredViolations.add(violation);
-			} else if ((!hidefilter) && (ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()))) {
+			} else if ((!hidefilter) && (ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey())) || paths.contains(violation.getClassPathFrom()))) {
 				filteredViolations.add(violation);
 			}
 		}
@@ -76,8 +76,8 @@ public class FilterController {
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-			if (!appliedViolationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey()))) {
-				appliedViolationtypes.add(localeService.getTranslatedString(violation.getViolationtypeKey()));
+			if (!appliedViolationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey()))) {
+				appliedViolationtypes.add(localeService.getTranslatedString(violation.getViolationTypeKey()));
 			}
 		}
 		return appliedViolationtypes;

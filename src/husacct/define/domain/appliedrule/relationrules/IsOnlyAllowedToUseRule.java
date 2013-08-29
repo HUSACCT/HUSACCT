@@ -31,7 +31,7 @@ public class IsOnlyAllowedToUseRule extends AppliedRuleStrategy{
 			if (conventionSuccess) {
 				conventionSuccess = moduleCheckerHelper
 				    .checkRuleTypeAlreadyFromOtherToSelected(
-					    "IsOnlyModuleAllowedToUse", this.getModuleFrom(), this.getModuleTo());
+					    "IsTheOnlyModuleAllowedToUse", this.getModuleFrom(), this.getModuleTo());
 			}
 			if (conventionSuccess) {
 			    conventionSuccess = moduleCheckerHelper

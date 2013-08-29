@@ -42,6 +42,7 @@ class RuleTypesGenerator {
 		return keyClasses;
 	}
 
+	@SuppressWarnings("unchecked")
 	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		List<Class<?>> ruleClasses = getRuleClasses(EnumSet.allOf(RuleTypes.class));
