@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+	RULE 5: 	All classes/files/packages within technology.propertyrules.naming_prefix must have prefix MDB.
+	REGEX:		MDB*
+	RULETYPE: 	NamingConvention 
+	COUNT: 		2 violations 
+-->
+
+<violations>
+	<violation>
+		<source>technology.propertyrules.naming_prefix.sub_notok_class_ok
+		</source>
+		<target />
+		<lineNr>0</lineNr>
+		<severity>Medium</severity>
+		<ruleType>SubSystem Technology.Propertyrules.Naming_prefix must comply with expression: MDB*</ruleType>
+		<dependencyKind />
+		<isDirect>false</isDirect>
+	</violation>
+	<violation>
+		<source>technology.propertyrules.naming_prefix.MDB_sub_ok_class_notok.AbstractDefaultClass3
+		</source>
+		<target />
+		<lineNr>0</lineNr>
+		<severity>Medium</severity>
+		<ruleType>SubSystem Technology.Propertyrules.Naming_prefix must comply with expression: MDB*</ruleType>
+		<dependencyKind />
+		<isDirect>false</isDirect>
+	</violation>
+</violations>

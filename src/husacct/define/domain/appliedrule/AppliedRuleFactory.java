@@ -3,7 +3,7 @@ package husacct.define.domain.appliedrule;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.define.domain.appliedrule.propertyrules.FacadeConventionRule;
-import husacct.define.domain.appliedrule.propertyrules.InterfaceConventionRule;
+import husacct.define.domain.appliedrule.propertyrules.InterfaceInheritanceConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionExceptionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.SuperClassInheritanceConvention;
@@ -14,7 +14,7 @@ import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToMakeBackCal
 import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToMakeSkipCallRule;
 import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.IsOnlyAllowedToUseRule;
-import husacct.define.domain.appliedrule.relationrules.IsOnlyModuleAllowedToUseRule;
+import husacct.define.domain.appliedrule.relationrules.IsTheOnlyModuleAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.MustUseRule;
 import husacct.define.domain.services.ModuleDomainService;
 
@@ -33,13 +33,13 @@ public class AppliedRuleFactory {
 		"IsNotAllowedToMakeSkipCall",
 		"IsAllowedToUse",
 		"IsOnlyAllowedToUse",
-		"IsOnlyModuleAllowedToUse",
+		"IsTheOnlyModuleAllowedToUse",
 		"MustUse",
 		"NamingConvention",
 		"NamingConventionException",
 		"VisibilityConvention",
 		"VisibilityConventionException",
-		"InterfaceConvention",
+		"InterfaceInheritanceConvention",
 		"SuperClassInheritanceConvention",
 		"FacadeConvention"
 	};
@@ -50,13 +50,13 @@ public class AppliedRuleFactory {
 		IsNotAllowedToMakeSkipCallRule.class,
 		IsAllowedToUseRule.class,
 		IsOnlyAllowedToUseRule.class,
-		IsOnlyModuleAllowedToUseRule.class,
+		IsTheOnlyModuleAllowedToUseRule.class,
 		MustUseRule.class,
 		NamingConventionRule.class,
 		NamingConventionExceptionRule.class,
 		VisibilityConventionRule.class,
 		VisibilityConventionExceptionRule.class,
-		InterfaceConventionRule.class,
+		InterfaceInheritanceConventionRule.class,
 		SuperClassInheritanceConvention.class,
 		FacadeConventionRule.class
 	};

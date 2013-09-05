@@ -78,7 +78,7 @@ public class XMLReportWriter extends ReportWriter {
 				String message = new Messagebuilder().createMessage(messageObject,violation);
 				ruleType.setText(message);
 			}
-			dependencyKind.setText(violation.getViolationtypeKey());
+			dependencyKind.setText(violation.getViolationTypeKey());
 			isDirect.setText("" + violation.isIndirect());
 
 			xmlViolation.addContent(source);

@@ -30,31 +30,36 @@ import javax.swing.event.ChangeListener;
 import org.apache.log4j.Logger;
 
 public class GraphicsOptionsDialog extends HelpableJDialog {
-	private static final long serialVersionUID = 4794939901459687332L;
-	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
-	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
+	private static final long						serialVersionUID	= 4794939901459687332L;
+	protected Logger								logger				= Logger.getLogger(GraphicsOptionsDialog.class);
+	private ArrayList<UserInputListener>			listeners			= new ArrayList<UserInputListener>();
 	
-	private JPanel mainPanel, settingsPanel, globalActionsPanel,
-	figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
+	private JPanel									mainPanel, settingsPanel,
+	globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel,
+	layoutStrategyPanel;
 	
-	private int menuItemMaxHeight = 45;
+	private int										menuItemMaxHeight	= 45;
 	
-	private JButton zoomInButton, zoomOutButton, refreshButton,
-	exportToImageButton, hideFiguresButton, showFiguresButton,
-	okButton, applyButton, cancelButton;
-	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu,
-	smartLinesOptionMenu, showExternalLibraries;
-	private JComboBox layoutStrategyOptions;
-	private JSlider zoomSlider;
-	private JLabel layoutStrategyLabel, zoomLabel;
-	private ArrayList<JComponent> interfaceElements;
-	private HashMap<String, Object> currentSettings;
+	private JButton									zoomInButton,
+	zoomOutButton, refreshButton, exportToImageButton,
+	hideFiguresButton, showFiguresButton, okButton, applyButton,
+	cancelButton;
+	private JCheckBox								showDependenciesOptionMenu,
+	showViolationsOptionMenu, smartLinesOptionMenu,
+	showExternalLibraries, enableThickLines;
+	private JComboBox<String>						layoutStrategyOptions;
+	private JSlider									zoomSlider;
+	private JLabel									layoutStrategyLabel,
+	zoomLabel;
+	private ArrayList<JComponent>					interfaceElements;
+	private HashMap<String, Object>					currentSettings;
 	
-	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth,
-	elementHeight;
-	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
-	private String[] layoutStrategyItems;
-	private ILocaleService localeService = ServiceProvider.getInstance()
+	private int										totalWidth, totalHeight,
+	paddingSize, labelWidth, elementWidth, elementHeight;
+	private HashMap<String, DrawingLayoutStrategy>	layoutStrategiesTranslations;
+	private String[]								layoutStrategyItems;
+	private ILocaleService							localeService		= ServiceProvider
+			.getInstance()
 			.getLocaleService();
 	
 	public GraphicsOptionsDialog() {
@@ -99,6 +104,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		interfaceElements.add(showDependenciesOptionMenu);
 		interfaceElements.add(showViolationsOptionMenu);
 		interfaceElements.add(showExternalLibraries);
+		interfaceElements.add(enableThickLines);
 		interfaceElements.add(smartLinesOptionMenu);
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
@@ -208,6 +214,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		showExternalLibraries.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(showExternalLibraries);
 		
+		enableThickLines = new JCheckBox();
+		enableThickLines.setSize(40, menuItemMaxHeight);
+		optionsPanel.add(enableThickLines);
+		
 		smartLinesOptionMenu = new JCheckBox();
 		smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
 		optionsPanel.add(smartLinesOptionMenu);
@@ -227,7 +237,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				elementHeight));
 		layoutStrategyPanel.add(layoutStrategyLabel);
 		
-		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
+		layoutStrategyOptions = new JComboBox<String>(layoutStrategyItems);
 		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth,
 				elementHeight));
 		layoutStrategyPanel.add(layoutStrategyOptions);
@@ -304,6 +314,13 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				currentSettings.put("libraries", false);
 				listener.hideLibraries();
 			}
+			if (enableThickLines.isSelected()) {
+				currentSettings.put("thickLines", true);
+				listener.enableThickLines();
+			} else {
+				currentSettings.put("thickLines", false);
+				listener.disableThickLines();
+			}
 			if (showViolationsOptionMenu.isSelected()) {
 				currentSettings.put("violations", true);
 				listener.showViolations();
@@ -338,6 +355,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				.get("violations"));
 		showExternalLibraries.setSelected((Boolean) currentSettings
 				.get("libraries"));
+		enableThickLines.setSelected((Boolean) currentSettings
+				.get("thickLines"));
 		smartLinesOptionMenu.setSelected((Boolean) currentSettings
 				.get("smartLines"));
 		layoutStrategyOptions.setSelectedItem(localeService
@@ -377,16 +396,26 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		}
 	}
 	
-	//TODO add a button to GraphicsMenuBar to enable libraries
+	// TODO add a button to GraphicsMenuBar to enable libraries
 	public void setLibrariesUIToActive() {
 		currentSettings.put("libraries", true);
 		showExternalLibraries.setSelected(true);
 	}
 	
-	//TODO add a button to GraphicsMenuBar to disable libraries
+	// TODO add a button to GraphicsMenuBar to disable libraries
 	public void setLibrariesUIToInactive() {
 		currentSettings.put("libraries", false);
 		showExternalLibraries.setSelected(false);
+	}
+	
+	public void setThickLinesUIToActive() {
+		currentSettings.put("thickLines", true);
+		enableThickLines.setSelected(true);
+	}
+	
+	public void setThickLinesUIToInactive() {
+		currentSettings.put("thickLines", false);
+		enableThickLines.setSelected(false);
 	}
 	
 	public void setLocale(HashMap<String, String> menuBarLocale) {
@@ -398,16 +427,23 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			refreshButton.setText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			
-			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
-			showExternalLibraries.setText(menuBarLocale.get("ShowExternalLibraries"));
+			showDependenciesOptionMenu.setText(menuBarLocale
+					.get("ShowDependencies"));
+			showViolationsOptionMenu.setText(menuBarLocale
+					.get("ShowViolations"));
+			showExternalLibraries.setText(menuBarLocale
+					.get("ShowExternalLibraries"));
+			//TODO name for checkbox 
+			enableThickLines.setText("Thick lines");
 			
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
-			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			smartLinesOptionMenu.setText(menuBarLocale
+					.get("LineContextUpdates"));
 			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
-			showFiguresButton.setText(menuBarLocale.get("RestoreHiddenModules"));
+			showFiguresButton
+			.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
@@ -434,6 +470,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("violations", true);
 		showViolationsOptionMenu.setSelected(true);
 	}
+	
 	public void setViolationsUIToInactive() {
 		currentSettings.put("violations", false);
 		showViolationsOptionMenu.setSelected(false);

@@ -12,7 +12,7 @@ public class Violation {
 	private int linenumber;
 	private Severity severity;
 	private String ruletypeKey;
-	private String violationtypeKey;
+	private String violationTypeKey;
 	private String classPathFrom;
 	private String classPathTo;
 	private LogicalModules logicalModules;
@@ -32,7 +32,7 @@ public class Violation {
 		this.linenumber = 0;
 		this.severity = null;
 		this.ruletypeKey = "";
-		this.violationtypeKey = "";
+		this.violationTypeKey = "";
 		this.classPathFrom = "";
 		this.classPathTo = "";
 		this.inDirect = false;
@@ -59,8 +59,8 @@ public class Violation {
 		return this;
 	}
 	
-	public Violation setViolationtypeKey(String violationtypeKey){
-		this.violationtypeKey = violationtypeKey;
+	public Violation setViolationTypeKey(String violationTypeKey){
+		this.violationTypeKey = violationTypeKey;
 		return this;
 	}
 	
@@ -103,8 +103,8 @@ public class Violation {
 		return linenumber;
 	}
 
-	public String getViolationtypeKey() {
-		return violationtypeKey;
+	public String getViolationTypeKey() {
+		return violationTypeKey;
 	}
 
 	public String getClassPathFrom() {

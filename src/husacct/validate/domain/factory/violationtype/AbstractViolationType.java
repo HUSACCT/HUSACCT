@@ -118,7 +118,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.MUST_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
+		if (ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_THE_ONLY_MODULE_ALLOWED_TO_USE.toString()) || ruleTypeKey.equals(RuleTypes.MUST_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
 			return true;
 		} else {
 			return false;
@@ -141,8 +141,8 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected boolean isInterfaceConvention(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)) {
+	protected boolean isInterfaceInheritanceConvention(String ruleTypeKey) {
+		if (ruleTypeKey.equals(RuleTypes.INTERFACEINHERITANCE_CONVENTION)) {
 			return true;
 		} else {
 			return false;

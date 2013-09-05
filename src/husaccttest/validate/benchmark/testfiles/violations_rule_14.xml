@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+	RULE 14:	Package domain.relationrules.must_use_correct must use package technology.relationrules.allowed.
+	RULETYPE:	MustUse
+	COUNT: 		0 violations (expected)
+-->
+
+<violations>
+
+</violations>
