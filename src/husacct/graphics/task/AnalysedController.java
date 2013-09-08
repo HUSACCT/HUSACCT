@@ -90,11 +90,27 @@ public class AnalysedController extends DrawingController {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : analysedContextFigures)
 					if (!figure.isLine() && !figure.isParent()) {
-
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
-						if (null != dto) tmp.add(dto);
-						else
-							logger.debug(figure.getName() + " -> " + figure);
+						if(dto instanceof AnalysedModuleDTO){
+							AnalysedModuleDTO moduleDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
+							
+							for (String parentName : parentNames) {
+								//A check to see if the current figure is part of the parents children.
+								String[] partParentName = parentName.split("\\.");
+								String[] partModuleParentName = moduleDTO.uniqueName.split("\\.");
+								
+								if(!allChildren.containsKey(partModuleParentName[0])){
+									if(!partParentName[0].equals(partModuleParentName[0])){
+										if (dto != null){ 
+											tmp.add(dto); 
+											break;
+										}else{
+											logger.debug(figure.getName() + " -> " + figure);
+										}
+									}
+								}
+							}
+						}
 					} else if (!figure.isLine() && !figure.isModule()) {
 						// NOTE: Pretty sure selected stuff that is both not a
 						// module and not a line
