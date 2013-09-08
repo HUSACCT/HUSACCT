@@ -272,11 +272,14 @@ public class AnalysedController extends DrawingController {
 				zoomOutFailed();
 		} else
 			zoomOutFailed();
+		
+		super.restoreModules();
 	}
 
 	@Override
 	public void refreshDrawing() {
 		super.notifyServiceListeners();
+		super.refreshDrawing();
 		this.getAndDrawModulesIn(getCurrentPaths());
 	}
 

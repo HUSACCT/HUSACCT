@@ -425,8 +425,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 	}
 	
-	@Override
-	public abstract void refreshDrawing();
+	public void refreshDrawing(){
+		drawing.restoreHiddenFigures();
+	}
 	
 	public void refreshFrame() {
 		graphicsFrame.refreshFrame();
