@@ -307,13 +307,6 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				currentSettings.put("dependencies", false);
 				listener.hideDependencies();
 			}
-			if (showExternalLibraries.isSelected()) {
-				currentSettings.put("libraries", true);
-				listener.showLibraries();
-			} else {
-				currentSettings.put("libraries", false);
-				listener.hideLibraries();
-			}
 			if (enableThickLines.isSelected()) {
 				currentSettings.put("thickLines", true);
 				listener.enableThickLines();
@@ -335,6 +328,14 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				currentSettings.put("smartLines", false);
 				listener.hideSmartLines();
 			}
+			if (showExternalLibraries.isSelected()) {
+				currentSettings.put("libraries", true);
+				listener.showLibraries();
+			} else {
+				currentSettings.put("libraries", false);
+				listener.hideLibraries();
+			}
+			System.out.println(showViolationsOptionMenu.isSelected());
 			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
 			if (null != selectedStrategy) {
 				currentSettings.put("layoutStrategy", selectedStrategy);
