@@ -18,11 +18,11 @@ import org.lambda.functions.implementations.F1;
 import org.lambda.functions.implementations.S1;
 
 public class LayeredLayoutStrategy implements LayoutStrategy {
-	private static final double VERT_ITEM_SPACING = 40.0;
-	private static final double HORZ_ITEM_SPACING = 35.0;
+	private static final double	VERT_ITEM_SPACING	= 40.0;
+	private static final double	HORZ_ITEM_SPACING	= 35.0;
 	
-	private static final int INTERFACE_LEVEL = 0;
-	private static final int ROOT_LEVEL = 1;
+	private static final int	INTERFACE_LEVEL		= 0;
+	private static final int	ROOT_LEVEL			= 1;
 	
 	private static boolean inContainer(Figure a) {
 		return ((BaseFigure) a).isInContainer();
@@ -39,24 +39,26 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 				|| figure instanceof AbstractClassFigure;
 	}
 	
-	private AbstractCompositeFigure drawing;
-	private SortedNodeList nodes = new SortedNodeList();
+	private AbstractCompositeFigure				drawing;
+	private SortedNodeList						nodes			= new SortedNodeList();
 	
-	List<Figure> connectors = null;
+	List<Figure>								connectors		= null;
 	
-	private static final F1<Node, Boolean> rootLambda = new F1<Node, Boolean>(
-			new Node(null)) {
-		{
-			ret(a.getLevel() == ROOT_LEVEL || a.getLevel() == INTERFACE_LEVEL);
-		}
-	};
+	private static final F1<Node, Boolean>		rootLambda		= new F1<Node, Boolean>(
+																		new Node(
+																				null)) {
+																	{
+																		ret(a.getLevel() == ROOT_LEVEL
+																				|| a.getLevel() == INTERFACE_LEVEL);
+																	}
+																};
 	
-	private static final F1<Figure, Boolean> connectorLambda = new F1<Figure, Boolean>(
-			null) {
-		{
-			ret(isConnector(a));
-		}
-	};
+	private static final F1<Figure, Boolean>	connectorLambda	= new F1<Figure, Boolean>(
+																		null) {
+																	{
+																		ret(isConnector(a));
+																	}
+																};
 	
 	private static boolean isInterface(Node node) {
 		return isInterface(node.getFigure());
@@ -93,16 +95,15 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 				endNode.addParent(startNode);
 				
 				updateNodes(startNode, endNode);
-			} else if (startNode.getLevel() == Node.UNINITIALIZED)
-				startNode.setLevel(ROOT_LEVEL);
+			} else if (startNode.getLevel() == Node.UNINITIALIZED) startNode
+					.setLevel(ROOT_LEVEL);
 		}
 		
 		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = new S1<Figure>(null, compareList) {
 			{
 				if (a != null && !isConnector(a) && !compareList.contains(a)
-						&& !inContainer(a))
-					getNode(a);
+						&& !inContainer(a)) getNode(a);
 			}
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
@@ -116,9 +117,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		for (Node child : connections)
 			lowestLevel = Math.min(child.getLevel(), lowestLevel);
 		
-		if (lowestLevel != Integer.MAX_VALUE && lowestLevel > 1)
-			retVal.y += (lowestLevel - 1)
-			* (node.getHeight() + VERT_ITEM_SPACING);
+		if (lowestLevel != Integer.MAX_VALUE && lowestLevel > 1) retVal.y += (lowestLevel - 1)
+				* (node.getHeight() + VERT_ITEM_SPACING);
 		
 		return retVal;
 	}
@@ -134,15 +134,14 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		int level = Node.UNINITIALIZED;
 		
 		for (Node parent : node.getParents())
-			if (parent.getLevel() != INTERFACE_LEVEL)
-				level = Math.max(level, parent.getLevel());
+			if (parent.getLevel() != INTERFACE_LEVEL) level = Math.max(level,
+					parent.getLevel());
 		
 		return level;
 	}
 	
 	private Node getNode(Figure figure) {
-		if (nodes.contains(figure))
-			return nodes.getByFigure(figure);
+		if (nodes.contains(figure)) return nodes.getByFigure(figure);
 		else {
 			Node node = new Node(figure);
 			nodes.add(node);
@@ -158,8 +157,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		if (startLevel == Node.UNINITIALIZED && endLevel == Node.UNINITIALIZED) {
 			// Both levels are uninitialized, so make the nodes ROOT_LEVEL and
 			// ROOT_LEVEL + 1
-			if (isInterface(startNode))
-				startLevel = INTERFACE_LEVEL;
+			if (isInterface(startNode)) startLevel = INTERFACE_LEVEL;
 			else
 				startLevel = ROOT_LEVEL;
 			
@@ -167,19 +165,17 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		} else if (startLevel != Node.UNINITIALIZED
 				&& endLevel == Node.UNINITIALIZED) {
 			// endLevel = startLevel + 1
-			if (isInterface(endNode))
-				endLevel = INTERFACE_LEVEL;
+			if (isInterface(endNode)) endLevel = INTERFACE_LEVEL;
 			else
 				endLevel = startLevel + 1;
 		} else if (startLevel == Node.UNINITIALIZED
-				&& endLevel != Node.UNINITIALIZED)
-			if (startNode.isParentOf(endNode) && endNode.isParentOf(startNode)
-					|| endNode.isParentOf(startNode))
-				startLevel = endLevel + 1;
-			else if (endLevel > ROOT_LEVEL)
-				startLevel = endLevel - 1;
-			else
-				startLevel = endLevel;
+				&& endLevel != Node.UNINITIALIZED) if (startNode
+				.isParentOf(endNode)
+				&& endNode.isParentOf(startNode)
+				|| endNode.isParentOf(startNode)) startLevel = endLevel + 1;
+		else if (endLevel > ROOT_LEVEL) startLevel = endLevel - 1;
+		else
+			startLevel = endLevel;
 		
 		startNode.setLevel(startLevel);
 		endNode.setLevel(endLevel);
@@ -200,8 +196,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		Figure figure = node.getFigure();
 		double columnWidth = 0;
 		
-		if (node.getLevel() == 0)
-			position = calculateStartPosition(node, startPoint);
+		if (node.getLevel() == 0) position = calculateStartPosition(node,
+				startPoint);
 		
 		updatePosition(figure, position);
 		node.setPositionUpdated(true);
@@ -232,10 +228,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			int startParent = getLowestParentLevel(startNode);
 			int endParent = getLowestParentLevel(endNode);
 			
-			if (startParent == Node.UNINITIALIZED)
-				startLevel = endParent + 1;
-			else if (endParent == Node.UNINITIALIZED)
-				endLevel = startParent + 1;
+			if (startParent == Node.UNINITIALIZED) startLevel = endParent + 1;
+			else if (endParent == Node.UNINITIALIZED) endLevel = startParent + 1;
 			else if (startParent < endParent) {
 				startLevel = startParent + 1;
 				endLevel = startParent + 2;
@@ -248,10 +242,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		if (endLevel == startLevel) {
 			updateNodesOnEqualLevel(startNode, endNode);
 			return;
-		} else if (endLevel == 0)
-			endLevel = startLevel + 1;
-		else if (startLevel == 0 && deltaLevel >= 2)
-			startLevel = endLevel - 1;
+		} else if (endLevel == 0) endLevel = startLevel + 1;
+		else if (startLevel == 0 && deltaLevel >= 2) startLevel = endLevel - 1;
 		
 		startNode.setLevel(startLevel);
 		endNode.setLevel(endLevel);
@@ -261,8 +253,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		int startLevel = startNode.getLevel();
 		int endLevel = endNode.getLevel();
 		
-		if (startLevel == Node.UNINITIALIZED || endLevel == Node.UNINITIALIZED)
-			initializeNodes(startNode, endNode);
+		if (startLevel == Node.UNINITIALIZED || endLevel == Node.UNINITIALIZED) initializeNodes(
+				startNode, endNode);
 		else
 			rebalanceNodes(startNode, endNode);
 	}

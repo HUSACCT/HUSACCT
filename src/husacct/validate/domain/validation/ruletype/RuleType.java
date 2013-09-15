@@ -82,6 +82,28 @@ public abstract class RuleType {
 
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
 
+	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, ConfigurationServiceImpl configuration) {
+		initializeViolationTypeFactory(configuration);
+		Message message = new Message(rootRule);
+
+		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
+		LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
+		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+
+		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
+
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setSeverity(severity.clone())
+				.setRuletypeKey(this.key)
+				.setClassPathFrom(classPathFrom.getPhysicalPath())
+				.setClassPathTo(classPathTo.getPhysicalPath())
+				.setInDirect(false)
+				.setMessage(message)
+				.setLogicalModules(logicalModules);
+		return newViolation;
+	}
+	
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, DependencyDTO dependency, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
@@ -97,7 +119,7 @@ public abstract class RuleType {
 				.setLineNumber(dependency.lineNumber)
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setViolationtypeKey(dependency.type)
+				.setViolationTypeKey(dependency.type)
 				.setClassPathFrom(dependency.from)
 				.setClassPathTo(dependency.to)
 				.setInDirect(dependency.isIndirect)
@@ -113,6 +135,8 @@ public abstract class RuleType {
 
 		Violation newViolation = new Violation();
 		newViolation = newViolation
+				.setClassPathFrom(logicalModules.getLogicalModuleFrom().getLogicalModulePath())
+				.setClassPathTo(logicalModules.getLogicalModuleTo().getLogicalModulePath())
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
 				.setInDirect(false)
@@ -155,7 +179,7 @@ public abstract class RuleType {
 		newViolation = newViolation
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setViolationtypeKey(violationTypeKey)
+				.setViolationTypeKey(violationTypeKey)
 				.setClassPathFrom(classPathFrom.getPhysicalPath())
 				.setInDirect(false)
 				.setMessage(message)
