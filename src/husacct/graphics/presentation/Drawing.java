@@ -107,8 +107,9 @@ public class Drawing extends QuadTreeDrawing {
 	}
 	
 	public void restoreHiddenFigures() {
-		for (BaseFigure figure : hiddenFigures)
+		for (BaseFigure figure : hiddenFigures){
 			figure.setEnabled(true);
+		}
 		hiddenFigures.clear();
 	}
 	
@@ -181,9 +182,10 @@ public class Drawing extends QuadTreeDrawing {
 				selectedFile = fileChooser.getSelectedFile();
 				filemanager.setFile(selectedFile);
 				filemanager.createOutputStream();
-				QuadTreeDrawing cloneDrawing = clone();
-				for (BaseFigure bf : hiddenFigures)
-					cloneDrawing.remove(bf);
+				QuadTreeDrawing cloneDrawing = this.clone();
+				for (BaseFigure bf : hiddenFigures){
+					cloneDrawing.remove(bf);					
+				}
 				imageoutputformat.write(filemanager.getOutputStream(),
 						cloneDrawing);
 				filemanager.closeOutputStream();
