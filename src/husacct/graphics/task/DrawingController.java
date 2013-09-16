@@ -2,6 +2,7 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
@@ -288,10 +289,18 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom,
 			BaseFigure figureTo) {
-		DependencyDTO[] dependencies = getDependenciesBetween(figureFrom,
-				figureTo);
-		if (dependencies.length > 0) drawDependenciesBetween(dependencies,
-				figureFrom, figureTo);
+		
+		AnalysedModuleDTO moduleFromDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		
+		AnalysedModuleDTO moduleToDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		
+		if(!moduleFromDTO.uniqueName.equals(moduleToDTO.uniqueName)){
+			DependencyDTO[] dependencies = getDependenciesBetween(figureFrom,
+					figureTo);
+			if (dependencies.length > 0) drawDependenciesBetween(dependencies,
+					figureFrom, figureTo);
+		}
+
 	}
 	
 	private void getAndDrawViolationsBetween(BaseFigure figureFrom,
@@ -425,8 +434,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 	}
 	
-	@Override
-	public abstract void refreshDrawing();
+	public void refreshDrawing(){
+		drawing.restoreHiddenFigures();
+	}
 	
 	public void refreshFrame() {
 		graphicsFrame.refreshFrame();

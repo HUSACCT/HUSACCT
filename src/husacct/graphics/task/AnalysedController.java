@@ -90,11 +90,28 @@ public class AnalysedController extends DrawingController {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : analysedContextFigures)
 					if (!figure.isLine() && !figure.isParent()) {
-
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
-						if (null != dto) tmp.add(dto);
-						else
-							logger.debug(figure.getName() + " -> " + figure);
+						if(dto instanceof AnalysedModuleDTO){
+							
+							AnalysedModuleDTO moduleDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
+							
+							for (String parentName : parentNames) {
+								//NOTE: A check to see if the current figure is part of the parents children.
+								String[] partParentName = parentName.split("\\.");
+								String[] partModuleParentName = moduleDTO.uniqueName.split("\\.");
+								
+								if(!allChildren.containsKey(partModuleParentName[0])){
+									if(!partParentName[0].equals(partModuleParentName[0])){
+										if (dto != null){ 
+											tmp.add(dto); 
+											break;
+										}else{
+											logger.debug(figure.getName() + " -> " + figure);
+										}
+									}
+								}
+							}
+						}
 					} else if (!figure.isLine() && !figure.isModule()) {
 						// NOTE: Pretty sure selected stuff that is both not a
 						// module and not a line
@@ -151,6 +168,32 @@ public class AnalysedController extends DrawingController {
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};
+	}
+	
+	protected boolean hasDependencyBetween(BaseFigure figureFrom,
+			BaseFigure figureTo){
+		boolean b = false;
+		//TODO This will always return a stacktrace of a nullpointerexception if there isn't a dependency, 
+		//This needs to be cleaner but we couldn't find a method in time.
+		try{
+			AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
+					.getModuleDTO(figureFrom);
+			AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
+					.getModuleDTO(figureTo);
+
+			if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null&& dtoTo != null){ 
+				
+				if(analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0){
+					b = true;
+				}
+			}
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.warn("dto was null, but that is ok");
+		}
+		return b;		
 	}
 
 	@Override
@@ -272,11 +315,14 @@ public class AnalysedController extends DrawingController {
 				zoomOutFailed();
 		} else
 			zoomOutFailed();
+		
+		super.restoreModules();
 	}
 
 	@Override
 	public void refreshDrawing() {
 		super.notifyServiceListeners();
+		super.refreshDrawing();
 		this.getAndDrawModulesIn(getCurrentPaths());
 	}
 
@@ -308,13 +354,36 @@ public class AnalysedController extends DrawingController {
 			BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures){
-			if (figure.isModule() && !figure.isContext()) try {
+			if (figure.isModule() && !figure.isContext()) try {				
 				if (!(figure instanceof ProjectFigure)) {
 
 					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap()
 							.getModuleDTO(figure);
-
-					parentNames.add(parentDTO.uniqueName);
+					
+					/*
+					 * This part is for when you are zoomed in 1 level(For example: 
+					 * Domain.x where x is a child of Domain) and you want to zoom in further,
+					 * all the other modules and packages that _don't_ have a dependency 
+					 * to/from the selected figure, are not displayed. The new method HasdependecyBetween
+					 * was made for this but isn't really clean since it gives a nullpointer is no
+					 * dependencies are found.
+					 * 
+					 * Saved the code for future development. Feel free to edit.
+					 * 
+					 * String[] partModuleParentName = parentDTO.uniqueName.split("\\.");
+					
+					if(partModuleParentName.length > 1){
+						for (BaseFigure figureTo : figures){
+							if(hasDependencyBetween(figure, figureTo)){
+								analysedContextFigures.add(figureTo);
+								logger.warn("Figure: " + figure.getName()
+										+ " is accepted as context for multizoom on second level.");
+							}
+						}
+						parentNames.add(parentDTO.uniqueName);
+						break;
+					}*/
+						parentNames.add(parentDTO.uniqueName);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
