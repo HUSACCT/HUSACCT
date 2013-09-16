@@ -55,16 +55,30 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 		for (int i = 0; i < methodTree.getChildCount(); i++) {
 			if (methodTree.getChild(i).getType() == CSharpParser.TYPE) {
 				CommonTree typeTree = (CommonTree) methodTree.getChild(i);
-				for (int j = 0; j < typeTree.getChildCount(); j++) {
+				for(int j = 0  ; j < typeTree.getChildCount(); j++) {
 					if (typeTree.getChild(j).getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
 						returnTypes.add(typeTree.getChild(j).getChild(0).getText());
 					}
 				}
-				if (returnTypes.isEmpty()) {
+				
+				if(typeTree.getChild(0) != null && typeTree.getChild(0).getChildCount() >= 2) {
+					for(int k = 1 ; k < typeTree.getChild(0).getChildCount() ; k++) {
+						returnTypes.add(typeTree.getChild(0).getChild(k).getChild(0).getText());
+					}
+				}
+				if(returnTypes.isEmpty()) {
 					returnTypes.add("");
 				}
 			}
 		}
+		
+		String fullPathString = "";
+		for(String dir : returnTypes) {
+			fullPathString += dir += ".";
+		}
+		
+		returnTypes.clear();
+		returnTypes.add(fullPathString.substring(0, fullPathString.length() - 1));
 	}
 
 	private String getMethodName(CommonTree methodTree) {

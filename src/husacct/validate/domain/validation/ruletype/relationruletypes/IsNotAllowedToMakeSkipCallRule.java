@@ -25,19 +25,18 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		violations.clear();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingTo();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
-
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-
+		
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (List<Mapping> physicalClasspathsTo : modulesTo) {
 				for (Mapping classPathTo : physicalClasspathsTo) {
 					for (DependencyDTO dependency : dependencies) {
 						if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
-                                dependency.to.equals(classPathTo.getPhysicalPath()) &&
-                                Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                                dependency.to.equals(classPathTo.getPhysicalPath())) {
                             Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                             violations.add(violation);
                         }

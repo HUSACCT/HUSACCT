@@ -97,8 +97,8 @@ public class BenchmarkTests {
 		sA.addSeperatedModule(externalLibrary1);
 		
 		//Rules
-//		AppliedRule rule1 = new AppliedRule("IsOnlyModuleAllowedToUse", "Only the classes in package infrastructure.socialmedia are only allowed to use the JDBC library (derbyclient.jar)", 
-//				getViolationTypeByRuleType("IsOnlyModuleAllowedToUse"),	"", module25, externalLibrary1, true);
+//		AppliedRule rule1 = new AppliedRule("IsTheOnlyModuleAllowedToUse", "Only the classes in package infrastructure.socialmedia are only allowed to use the JDBC library (derbyclient.jar)", 
+//				getViolationTypeByRuleType("IsTheOnlyModuleAllowedToUse"),	"", module25, externalLibrary1, true);
 		
 		//sA.addAppliedRule(rule1);
 	}

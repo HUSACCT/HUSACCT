@@ -19,10 +19,10 @@ import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public class DrawingState {
-	private Drawing drawing;
-	private HashMap<String, FigureState> savedPositions;
-	private FigureMap figureMap = null;
-	private boolean hasHiddenFigures = false;
+	private Drawing							drawing;
+	private HashMap<String, FigureState>	savedPositions;
+	private FigureMap						figureMap			= null;
+	private boolean							hasHiddenFigures	= false;
 	
 	public DrawingState(Drawing theDrawing) {
 		drawing = theDrawing;
@@ -40,7 +40,7 @@ public class DrawingState {
 		if (dto instanceof ModuleDTO) {
 			ModuleDTO moduleDto = (ModuleDTO) dto;
 			return moduleDto.logicalPath;
-		}else if (dto instanceof ExternalSystemDTO) {
+		} else if (dto instanceof ExternalSystemDTO) {
 			ExternalSystemDTO extSystemDTO = (ExternalSystemDTO) dto;
 			return extSystemDTO.systemPackage;
 		} else {
@@ -76,8 +76,7 @@ public class DrawingState {
 				bf.willChange();
 				bf.setBounds(anchor, lead);
 				bf.changed();
-				if (!savedState.enabled)
-					bf.setEnabled(false);
+				if (!savedState.enabled) bf.setEnabled(false);
 			}
 		}
 	}
@@ -90,8 +89,8 @@ public class DrawingState {
 				Figure start = cf.getStartFigure();
 				Figure end = cf.getEndFigure();
 				
-				if (!start.isVisible() || !end.isVisible())
-					bf.setEnabled(false);
+				if (!start.isVisible() || !end.isVisible()) bf
+						.setEnabled(false);
 			}
 		}
 	}
@@ -106,8 +105,7 @@ public class DrawingState {
 			if (!bf.isLine() && shouldSaveState(bf)) {
 				FigureState state = saveFigureState(bf);
 				savedPositions.put(state.path, state);
-				if (!state.enabled)
-					hasHiddenFigures = true;
+				if (!state.enabled) hasHiddenFigures = true;
 			}
 		}
 	}
