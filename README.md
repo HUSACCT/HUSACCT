@@ -1,6 +1,6 @@
 # HUSACCT project
 
-HUSACCT means: HU Software Architecture Compliance Checking Tool, where HU stands for: <a href="http://international.hu.nl/" title="HU" target="_blank">HU University of Applied Sciences Utrecht
+HUSACCT means: HU Software Architecture Compliance Checking Tool, where HU stands for: <a href="http://international.hu.nl/" title="HU" target="_blank">HU University of Applied Sciences Utrecht</a>.
 The HUSACCT project is conducted at the Institute for ICT, located in Utrecht, The Netherlands. Students of the specialization "Advanced Software Architecture" have participated actively during the spring semesters of 2011-2013. 
 Six teams, with four to five students per team, worked concurrently on the tool during the spring semesters of 2012 and 2013. Each team was responsible for a different service: 1) Control; 2) Analyze Java; 3) Analyze .NET; 4) Define; 5) Validate; and 6) Graphics.
 
