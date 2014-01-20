@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AnalyseUIController {
 	private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
-    private IAnalyseService analyseTaskService = ServiceProvider.getInstance().getAnalyseService();
+    private IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
     private IControlService controlService = ServiceProvider.getInstance().getControlService();
 
     public AnalyseUIController() {
@@ -24,7 +24,9 @@ public class AnalyseUIController {
 
     public List<AnalysedModuleDTO> getRootModules() {
         List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
-        for (AnalysedModuleDTO analysedModule : analyseTaskService.getRootModulesWithExternalSystems()) {
+
+        //for (AnalysedModuleDTO analysedModule : analyseService.getRootModulesWithExternalSystems()) {
+        for (AnalysedModuleDTO analysedModule : analyseService.getRootModules()) {
             rootModules.add(analysedModule);
         }
         return rootModules;
@@ -32,7 +34,7 @@ public class AnalyseUIController {
 
     public List<AnalysedModuleDTO> getModulesInModules(String currentModule) {
         List<AnalysedModuleDTO> childModules = new ArrayList<AnalysedModuleDTO>();
-        for (AnalysedModuleDTO child : analyseTaskService.getChildModulesInModule(currentModule)) {
+        for (AnalysedModuleDTO child : analyseService.getChildModulesInModule(currentModule)) {
             childModules.add(child);
         }
         return childModules;
@@ -62,7 +64,7 @@ public class AnalyseUIController {
     
     public List<AnalysedModuleDTO> listAllExternalSystems(){
     	List<AnalysedModuleDTO> allModules = new ArrayList<AnalysedModuleDTO>();
-//    	for(ExternalSystemDTO eSystem : analyseTaskService.getExternalSystems())
+//    	for(ExternalSystemDTO eSystem : analyseService.getExternalSystems())
 //    		allModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
     	return allModules;
     }
@@ -71,7 +73,7 @@ public class AnalyseUIController {
         List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
         for (AnalysedModuleDTO fromModule : from) {
             for (AnalysedModuleDTO toModule : to) {
-                for (DependencyDTO dependency : analyseTaskService.getDependencies(fromModule.uniqueName, toModule.uniqueName)) {
+                for (DependencyDTO dependency : analyseService.getDependencies(fromModule.uniqueName, toModule.uniqueName)) {
                     if (!dependencies.contains(dependency)) {
                         dependencies.add(dependency);
                     }
@@ -82,7 +84,7 @@ public class AnalyseUIController {
     }
 
     public void exportDependencies(String path) {
-        analyseTaskService.exportDependencies(path);
+        analyseService.exportDependencies(path);
     }
     
     public IControlService getControlService(){

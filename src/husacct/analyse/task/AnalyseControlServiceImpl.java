@@ -9,13 +9,13 @@ import husacct.common.dto.ExternalSystemDTO;
 
 import org.jdom2.Element;
 
-public class AnalyseControlerServiceImpl implements IAnalyseControlService {
+public class AnalyseControlServiceImpl implements IAnalyseControlService {
 
     private ApplicationAnalyser analyserService;
     private IAnalyseDomainService domainService;
     private DependencyExportController exportController;
 
-    public AnalyseControlerServiceImpl() {
+    public AnalyseControlServiceImpl() {
         this.domainService = new AnalyseDomainServiceImpl();
         this.analyserService = new ApplicationAnalyser();
         this.exportController = new DependencyExportController(domainService);

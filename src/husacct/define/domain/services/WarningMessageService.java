@@ -263,7 +263,7 @@ for (AbstractCombinedComponent ab : list) {
 
 
 	public ArrayList<CodeLevelWarning> getNotCodeLevelWarnings() {
-		System.out.println(codelevelWarnings.size() +"pulll meee");
+		System.out.println(codelevelWarnings.size() +" codeLevelWarnings in define.domain.module.ModuleStrategy");
 		return codelevelWarnings;
 	}
 

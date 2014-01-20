@@ -15,6 +15,7 @@ import husacct.control.task.threading.ThreadWithLoader;
 import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -52,15 +53,15 @@ public class ApplicationController {
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 		ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
-
+		
 		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(mainController,applicationDTO));
 		currentLoader = analyseThread.getLoader();
 		currentThread = analyseThread.getThread();
+		logger.debug(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
 		currentLoader.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {		
 				mainController.getStateController().setAnalysing(false);
-
 				logger.debug("Stopping Thread");				
 			}			
 		});	

@@ -114,7 +114,7 @@ public class MainController {
 				             localeService.getTranslatedString("Cancel") };
 		int clickedOption = JOptionPane.showOptionDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 		if(clickedOption == JOptionPane.YES_OPTION){
-			logger.debug("Close HUSACCT");
+			logger.debug("Close HUSACCT" + "\n");
 			System.exit(0);
 		} else if (clickedOption == JOptionPane.NO_OPTION) {
 			workspaceController.showSaveWorkspaceGui();

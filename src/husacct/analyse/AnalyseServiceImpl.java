@@ -1,9 +1,11 @@
 package husacct.analyse;
 
+import java.util.Date;
+
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
-import husacct.analyse.task.AnalyseControlerServiceImpl;
+import husacct.analyse.task.AnalyseControlServiceImpl;
 import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.TypeFilter;
@@ -17,6 +19,7 @@ import husacct.common.services.ObservableService;
 
 import javax.swing.JInternalFrame;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable {
@@ -25,10 +28,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     private IModelPersistencyService persistService;
     private AnalyseInternalFrame analyseInternalFrame;
     private HistoryLogger historyLogger;
+    private final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
     private boolean isAnalysed;
 
     public AnalyseServiceImpl() {
-        this.service = new AnalyseControlerServiceImpl();
+        this.service = new AnalyseControlServiceImpl();
         this.persistService = new FamixPersistencyServiceImpl();
         this.historyLogger = new HistoryLogger();
         this.analyseInternalFrame = null;
@@ -51,9 +55,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
     public void analyseApplication(ProjectDTO project) {
         service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
+        this.logger.debug(new Date().toString() + " Finished: IAnalyseControlService.analyseApplication()");
         this.analyseInternalFrame = new AnalyseInternalFrame();
+        this.logger.debug(new Date().toString() + " Finished: creation analyseInternalFrame");
         this.isAnalysed = true;
         super.notifyServiceListeners();
+        this.logger.debug(new Date().toString() + " Finished: notifying ServiceListeners; this.isAnalysed = true");
     }
 
     @Override

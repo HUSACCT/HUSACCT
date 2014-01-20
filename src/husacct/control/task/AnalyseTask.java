@@ -28,8 +28,6 @@ public class AnalyseTask implements Runnable {
 			this.mainController.getStateController().setAnalysing(true);
 			this.mainController.getStateController().setPreAnalysed(false);
 			Thread.sleep(1);
-			this.logger.debug("Analysing application");
-			mainController.getActionLogController().addAction("Analysing application");
 			if (this.applicationDTO.projects.size() > 0) {
 				this.mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(this.applicationDTO.projects.size());
 				
@@ -38,6 +36,10 @@ public class AnalyseTask implements Runnable {
 					this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
 					
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
+					
+					this.logger.debug(new Date().toString() + " Starting: Analysing project " + currentProject);
+					mainController.getActionLogController().addAction("Analysing project " + currentProject);
+					
 					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
 					
 					// Add analysed root modules to project
@@ -55,21 +57,21 @@ public class AnalyseTask implements Runnable {
 			
 			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
 			
-			logger.debug("Analysing finished");
-			mainController.getActionLogController().addAction("Analysing finished");
-			
-			
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
 			this.mainController.getStateController().setAnalysing(false);
+			logger.debug(new Date().toString() + " Finished: Analyse application; state isAnalyzing=false");
+			logger.debug(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces");
+			logger.debug(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
+			mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
 
-			logger.debug(new Date().toString() + ": Building cache");
+			logger.debug(new Date().toString() + " Starting: Building cache");
 			mainController.getActionLogController().addAction("Building cache");
 			
 			int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
 			
-			logger.debug(new Date().toString() + ": Cache is ready and filled with " + cacheSize + " dependencies");
+			logger.debug(new Date().toString() + " Finished: Building cache; filled with " + cacheSize + " dependencies");
 			mainController.getActionLogController().addAction("Cache is ready and filled with " + cacheSize + " dependencies");
 			
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();

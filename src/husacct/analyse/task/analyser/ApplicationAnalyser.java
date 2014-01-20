@@ -4,11 +4,17 @@ import husacct.ServiceProvider;
 import husacct.analyse.task.analyser.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyser.java.JavaAnalyser;
 import husacct.control.task.States;
+
+import java.util.Date;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 public class ApplicationAnalyser {
 
     private AnalyserBuilder builder;
+    
+    private final Logger logger = Logger.getLogger(ApplicationAnalyser.class);
 
     public ApplicationAnalyser() {
         this.builder = new AnalyserBuilder();
@@ -32,9 +38,13 @@ public class ApplicationAnalyser {
             }
         }
 
+        
         ServiceProvider.getInstance().getControlService().finishPreAnalysing();
+        this.logger.debug(new Date().toString() + " Finished: Model generated from sourcefile; state = PREANALYSED");
         analyser.connectDependencies();
-        analyser.clearLambdaBuffers(); //required for clearing the buffers after analisation is finished
+        this.logger.debug(new Date().toString() + " Finished: Connecting dependencies");
+        analyser.clearLambdaBuffers(); //required for clearing the buffers after analysis is finished
+        this.logger.debug(new Date().toString() + " Finished: Clearing LambdaBuffers");
     }
 
     public boolean isZip(String path) {

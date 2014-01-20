@@ -44,8 +44,9 @@ class JavaTreeConvertController {
 	            delegateASTToGenerators(compilationUnitTree);
 	        } 
     	}
-    	catch (Exception E) {
-    		
+    	catch (Exception e) {
+    		// javaParser.compilationUnit() throws an exception, currently.
+    		// e.printStackTrace();
     	}
     }
 

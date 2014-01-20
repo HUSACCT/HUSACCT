@@ -21,7 +21,7 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	public int buildCache(){
 		int amountOfDependencies = getAllDependencies().size();
-		getExternalSystems().size();
+		//getExternalSystems().size();
 		return amountOfDependencies;
 	}
 	
