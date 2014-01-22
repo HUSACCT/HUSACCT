@@ -87,7 +87,6 @@ public class StateKeeper implements Istate {
 
 	public void insertCommand(Istate sate) {
 	upDate();
-		System.out.println("inserted Command :"+sate.getClass().getName() );
 		myState = State.outAction;
 		if ( 6 == states.size()) {
 			removeStates();

@@ -4,14 +4,18 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 class FamixDependencyFinder extends FamixFinder {
 	private static enum FinderFunction { FROM, TO, BOTH, ALL };
 	private static enum DependencyType { DIRECT, INDIRECT, EXTERNAL };
     private List<DependencyDTO> dependencyCache;
     private List<ExternalSystemDTO> externalSystemCache;
+    private final Logger logger = Logger.getLogger(FamixDependencyFinder.class);
     
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
@@ -128,13 +132,16 @@ class FamixDependencyFinder extends FamixFinder {
 							extendingDirectDependency.to = extendingDirectDependency.to;
 							if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
 								result.add(extendingDirectDependency);
+							this.logger.debug(new Date().toString() + " Direct dependencies added: " + result.size());
 						}
 					}
 				}
 			}
 		}
+		this.logger.debug(new Date().toString() + " Direct dependencies added: " + result.size());
 		//if(!preventRecursion)
-		result.addAll(findIndirectDependencies(from, to, applyFilter));
+		//result.addAll(findIndirectDependencies(from, to, applyFilter));
+		this.logger.debug(new Date().toString() + " Inclusion of Indirect dependencies disabled");
 		return result;
 	}
 

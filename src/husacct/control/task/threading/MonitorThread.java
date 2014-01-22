@@ -27,7 +27,6 @@ public class MonitorThread extends Thread implements Runnable {
 			ServiceProvider.getInstance().getControlService().finishPreAnalysing();
 			logger.debug(new Date().toString() + " Starting: getDefineService().analyze()");
 			ServiceProvider.getInstance().getDefineService().analyze();
-			logger.debug(new Date().toString() + " Finished: getDefineService().analyze()");
 			logger.debug(new Date().toString() + String.format(" Finished: thread [%s], removed loader", taskThread.getName()));
 		} catch (InterruptedException exception){
 			taskThread.interrupt();
