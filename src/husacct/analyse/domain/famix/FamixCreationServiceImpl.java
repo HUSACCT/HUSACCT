@@ -1,15 +1,20 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
+
+import org.apache.log4j.Logger;
+
 import husacct.analyse.domain.IModelCreationService;
 
 public class FamixCreationServiceImpl implements IModelCreationService {
 
     private FamixModel model;
     private FamixDependencyConnector dependencyConnector;
+    private final Logger logger = Logger.getLogger(FamixCreationServiceImpl.class);
 
     public FamixCreationServiceImpl() {
         model = FamixModel.getInstance();
@@ -382,7 +387,9 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     @Override
     public void connectDependencies() {
         dependencyConnector.connectStructuralDependecies();
+        this.logger.debug(new Date().toString() + " Finished: connectStructuralDependencies()");
         dependencyConnector.connectAssociationDependencies();
+        this.logger.debug(new Date().toString() + " Finished: connectSAssociationDependencies()");
     }
 
     private boolean addToModel(FamixObject newObject) {

@@ -210,10 +210,7 @@ public class SoftwareUnitDefinitionDomainService {
 				Type type = Type.valueOf(softwareunit.getType());
 				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(
 						softwareunit.getUniqueName(), type);
-				Logger.getLogger(SoftwareUnitDefinitionDomainService.class)
-						.info("cheking if regex wrapper "
-								+ softwareunit.getType() + "ok "
-								+ softwareunit.getUniqueName());
+				//Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper " + softwareunit.getType() + "ok " + softwareunit.getUniqueName());
 				if (softwareunit instanceof RegexComponent) {
 					module.addSUDefinition(unit);
 

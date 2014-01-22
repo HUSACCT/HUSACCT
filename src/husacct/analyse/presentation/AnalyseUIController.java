@@ -25,8 +25,7 @@ public class AnalyseUIController {
     public List<AnalysedModuleDTO> getRootModules() {
         List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
 
-        //for (AnalysedModuleDTO analysedModule : analyseService.getRootModulesWithExternalSystems()) {
-        for (AnalysedModuleDTO analysedModule : analyseService.getRootModules()) {
+        for (AnalysedModuleDTO analysedModule : analyseService.getRootModulesWithExternalSystems()) {
             rootModules.add(analysedModule);
         }
         return rootModules;

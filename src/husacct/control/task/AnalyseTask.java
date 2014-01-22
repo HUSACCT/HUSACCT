@@ -66,13 +66,13 @@ public class AnalyseTask implements Runnable {
 			logger.debug(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
 			mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
 
-			logger.debug(new Date().toString() + " Starting: Building cache");
-			mainController.getActionLogController().addAction("Building cache");
+			//logger.debug(new Date().toString() + " Starting: Building cache");
+			//mainController.getActionLogController().addAction("Building cache");
 			
-			int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
+			//int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
 			
-			logger.debug(new Date().toString() + " Finished: Building cache; filled with " + cacheSize + " dependencies");
-			mainController.getActionLogController().addAction("Cache is ready and filled with " + cacheSize + " dependencies");
+			//logger.debug(new Date().toString() + " Finished: Building cache; filled with " + cacheSize + " dependencies");
+			//mainController.getActionLogController().addAction("Cache is ready and filled with " + cacheSize + " dependencies");
 			
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);

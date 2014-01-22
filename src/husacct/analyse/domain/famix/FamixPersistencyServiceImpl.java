@@ -23,10 +23,17 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
 
     @Override
     public Element saveModel() {
-        theModel = FamixModel.getInstance();
+        Element analysedProject = new Element("EmptyAnalysedApplication");
+    	//2014-01-21 Decision: Saving and loading analysed data is not useful
+    	boolean saveAnalysedData = false; 
+    	if (!saveAnalysedData)
+    		return analysedProject;
+    	else {
+         theModel = FamixModel.getInstance();
         initiateNodes();
         loadObjects();
         return createXml();
+    	}
     }
 
     //Note - Reset was called in saveModel. Change the reset before implementing it, because the
@@ -138,128 +145,134 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
 
     @Override
     public void loadModel(Element analyseElement) {
-        theModel = FamixModel.getInstance();
+    	//2014-01-21 Decision: Saving and loading analysed data is not useful
+    	boolean saveAnalysedData = false; 
+    	if (!saveAnalysedData)
+    		return;
+    	else {
+    		theModel = FamixModel.getInstance();
+    		
+    		for (Element rootElem : analyseElement.getChildren()) {
+    			for (Element rootChild1Elem : rootElem.getChildren()) {
+    				if (rootChild1Elem.getName().equalsIgnoreCase("Package")) {
+    					FamixPackage famTempPackage = new FamixPackage();
+    					for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
+    						if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
+    							famTempPackage.uniqueName = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
+    							famTempPackage.name = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("BelongsToPackage")) {
+    							famTempPackage.belongsToPackage = rootChild1Attrs.getText();
+    						}
+    					}
+    					try {
+    						theModel.addObject(famTempPackage);
+    					} catch (InvalidAttributesException e) {
+    						e.printStackTrace();
+    					}
+    				}
+    				if (rootChild1Elem.getName().equalsIgnoreCase("Class")) {
+    					FamixClass famTempClass = new FamixClass();
+    					for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
 
-        for (Element rootElem : analyseElement.getChildren()) {
-            for (Element rootChild1Elem : rootElem.getChildren()) {
-                if (rootChild1Elem.getName().equalsIgnoreCase("Package")) {
-                    FamixPackage famTempPackage = new FamixPackage();
-                    for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
-                        if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
-                            famTempPackage.uniqueName = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
-                            famTempPackage.name = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("BelongsToPackage")) {
-                            famTempPackage.belongsToPackage = rootChild1Attrs.getText();
-                        }
-                    }
-                    try {
-                        theModel.addObject(famTempPackage);
-                    } catch (InvalidAttributesException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (rootChild1Elem.getName().equalsIgnoreCase("Class")) {
-                    FamixClass famTempClass = new FamixClass();
-                    for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
+    						if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
+    							famTempClass.uniqueName = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
+    							famTempClass.name = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("BelongsToPackage")) {
+    							famTempClass.belongsToPackage = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("IsAbstract")) {
 
-                        if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
-                            famTempClass.uniqueName = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
-                            famTempClass.name = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("BelongsToPackage")) {
-                            famTempClass.belongsToPackage = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("IsAbstract")) {
+    							if (rootChild1Attrs.getText().equalsIgnoreCase("true")) {
+    								famTempClass.isAbstract = true;
+    							} else {
+    								famTempClass.isAbstract = false;
+    							}
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("IsInnerClass")) {
+    							if (rootChild1Attrs.getText().equalsIgnoreCase("true")) {
+    								famTempClass.isInnerClass = true;
+    							} else {
+    								famTempClass.isInnerClass = false;
+    							}
+    						}
+    					}
+    					try {
+    						theModel.addObject(famTempClass);
+    					} catch (InvalidAttributesException e) {
+    						e.printStackTrace();
+    					}
+    				}
+    				if (rootChild1Elem.getName().equalsIgnoreCase("Method")) {
+    					FamixMethod famixMethod = new FamixMethod();
+    					for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
 
-                            if (rootChild1Attrs.getText().equalsIgnoreCase("true")) {
-                                famTempClass.isAbstract = true;
-                            } else {
-                                famTempClass.isAbstract = false;
-                            }
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("IsInnerClass")) {
-                            if (rootChild1Attrs.getText().equalsIgnoreCase("true")) {
-                                famTempClass.isInnerClass = true;
-                            } else {
-                                famTempClass.isInnerClass = false;
-                            }
-                        }
-                    }
-                    try {
-                        theModel.addObject(famTempClass);
-                    } catch (InvalidAttributesException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (rootChild1Elem.getName().equalsIgnoreCase("Method")) {
-                    FamixMethod famixMethod = new FamixMethod();
-                    for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
+    						famixMethod.isPureAccessor = false;
+    						famixMethod.belongsToClass = "";
+    						famixMethod.isConstructor = false;
+    						famixMethod.isAbstract = false;
+    						famixMethod.hasClassScope = false;
 
-                        famixMethod.isPureAccessor = false;
-                        famixMethod.belongsToClass = "";
-                        famixMethod.isConstructor = false;
-                        famixMethod.isAbstract = false;
-                        famixMethod.hasClassScope = false;
+    						if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
+    							famixMethod.name = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
+    							famixMethod.uniqueName = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("accessControlQualifier")) {
+    							famixMethod.accessControlQualifier = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("signature")) {
+    							famixMethod.signature = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("declaredReturnType")) {
+    							famixMethod.declaredReturnType = rootChild1Attrs.getText();
+    						}
+    					}
+    					try {
+    						theModel.addObject(famixMethod);
+    					} catch (InvalidAttributesException e) {
+    						e.printStackTrace();
+    					}
+    				}
+    				if (rootChild1Elem.getName().equalsIgnoreCase("Variable")) {
 
-                        if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
-                            famixMethod.name = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
-                            famixMethod.uniqueName = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("accessControlQualifier")) {
-                            famixMethod.accessControlQualifier = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("signature")) {
-                            famixMethod.signature = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("declaredReturnType")) {
-                            famixMethod.declaredReturnType = rootChild1Attrs.getText();
-                        }
-                    }
-                    try {
-                        theModel.addObject(famixMethod);
-                    } catch (InvalidAttributesException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (rootChild1Elem.getName().equalsIgnoreCase("Variable")) {
+    					FamixAttribute famTempVariable = new FamixAttribute();
+    					for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
 
-                    FamixAttribute famTempVariable = new FamixAttribute();
-                    for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
+    						if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
+    							famTempVariable.uniqueName = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
+    							famTempVariable.name = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("BelongsToClass")) {
+    							famTempVariable.belongsToClass = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("declareType")) {
+    							famTempVariable.declareType = rootChild1Attrs.getText();
+    						}
+    					}
+    					try {
+    						theModel.addObject(famTempVariable);
+    					} catch (InvalidAttributesException e) {
+    						e.printStackTrace();
+    					}
 
-                        if (rootChild1Attrs.getName().equalsIgnoreCase("UniqueName")) {
-                            famTempVariable.uniqueName = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("Name")) {
-                            famTempVariable.name = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("BelongsToClass")) {
-                            famTempVariable.belongsToClass = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("declareType")) {
-                            famTempVariable.declareType = rootChild1Attrs.getText();
-                        }
-                    }
-                    try {
-                        theModel.addObject(famTempVariable);
-                    } catch (InvalidAttributesException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                if (rootChild1Elem.getName().equalsIgnoreCase("Association")) {
-                    FamixAssociation famTempAssociation = new FamixAssociation();
-                    for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
-                        if (rootChild1Attrs.getName().equalsIgnoreCase("From")) {
-                            famTempAssociation.from = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("Type")) {
-                            famTempAssociation.type = rootChild1Attrs.getText();
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("linenumber")) {
-                            famTempAssociation.lineNumber = Integer.parseInt(rootChild1Attrs.getText());
-                        } else if (rootChild1Attrs.getName().equalsIgnoreCase("To")) {
-                            famTempAssociation.to = rootChild1Attrs.getText();
-                        }
-                    }
-                    try {
-                        theModel.addObject(famTempAssociation);
-                    } catch (InvalidAttributesException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+    				}
+    				if (rootChild1Elem.getName().equalsIgnoreCase("Association")) {
+    					FamixAssociation famTempAssociation = new FamixAssociation();
+    					for (Element rootChild1Attrs : rootChild1Elem.getChildren()) {
+    						if (rootChild1Attrs.getName().equalsIgnoreCase("From")) {
+    							famTempAssociation.from = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("Type")) {
+    							famTempAssociation.type = rootChild1Attrs.getText();
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("linenumber")) {
+    							famTempAssociation.lineNumber = Integer.parseInt(rootChild1Attrs.getText());
+    						} else if (rootChild1Attrs.getName().equalsIgnoreCase("To")) {
+    							famTempAssociation.to = rootChild1Attrs.getText();
+    						}
+    					}
+    					try {
+    						theModel.addObject(famTempAssociation);
+    					} catch (InvalidAttributesException e) {
+    						e.printStackTrace();
+    					}
+    				}
+    			}
+    		}
+    	}
     }
 }

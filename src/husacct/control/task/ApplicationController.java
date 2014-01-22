@@ -62,6 +62,7 @@ public class ApplicationController {
 			@Override
 			public void windowClosing(WindowEvent e) {		
 				mainController.getStateController().setAnalysing(false);
+				
 				logger.debug("Stopping Thread");				
 			}			
 		});	
