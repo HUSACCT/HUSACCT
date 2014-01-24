@@ -41,7 +41,7 @@ public class AboutDialog extends JDialog{
 	private JPanel logoPanel, textPanel, gitForkPanel;
 	private JLabel forkLabel,pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
 	private JButton okButton, creditsButton;
-	private String versionNumber = "2.0";
+	private String versionNumber = "2.1";
 	private MainController mainController;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private JPanel forkLabelPanel;
