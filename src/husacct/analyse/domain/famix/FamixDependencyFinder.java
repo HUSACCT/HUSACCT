@@ -110,6 +110,7 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
+		this.logger.debug(new Date().toString() + " Starting: findDependenciesRaw()");
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
 		for(FamixAssociation association : allAssociations){

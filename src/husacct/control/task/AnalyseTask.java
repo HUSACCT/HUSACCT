@@ -63,7 +63,8 @@ public class AnalyseTask implements Runnable {
 			this.mainController.getStateController().setAnalysing(false);
 			logger.debug(new Date().toString() + " Finished: Analyse application; state isAnalyzing=false");
 			logger.debug(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces");
-			logger.debug(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
+			int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
+			logger.debug(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
 			mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
 
 			//logger.debug(new Date().toString() + " Starting: Building cache");
