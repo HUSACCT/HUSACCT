@@ -111,39 +111,66 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
 		this.logger.debug(new Date().toString() + " Starting: findDependenciesRaw()");
-		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
+	    HashMap<String, DependencyDTO> result = new HashMap<String, DependencyDTO>();
+		List<DependencyDTO> resultToReturn = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
-		for(FamixAssociation association : allAssociations){
-			if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
-				DependencyDTO foundDirectDependency = buildDependencyDTO(association);
-				if(!containsDependency(foundDirectDependency, result)){
-					result.add(foundDirectDependency);
+		int numberOfDuplicateAssociations = 0;
+		int numberOfNotComplyingAssociations = 0;
+		int numberOfExtendsConcrete = 0;
+		try {
+			for(FamixAssociation association : allAssociations){
+				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
+					DependencyDTO foundDirectDependency = buildDependencyDTO(association);
+					String uniqueName = (foundDirectDependency.from + String.valueOf(foundDirectDependency.lineNumber) + foundDirectDependency.to + foundDirectDependency.type); 
+					if (!result.containsKey(uniqueName)){
+						result.put(uniqueName, foundDirectDependency);
+					}
+					else {
+						numberOfDuplicateAssociations ++; }
 				}
-			}
-			if(!preventRecursion){
-				if(association.type == "ExtendsConcrete"){
-					// Pass true to prevent recursion and endless calls!
-					List<DependencyDTO> extendingDirectDependencies = getDependencies(association.to, to, true);
-					for(DependencyDTO extendingDirectDependency : extendingDirectDependencies){
-						if(compliesWithFunction(association, FinderFunction.FROM, from, to) && isTo(extendingDirectDependency, to)){
-							extendingDirectDependency.type = association.type + extendingDirectDependency.type;
-							extendingDirectDependency.isIndirect = typeOfDependency(extendingDirectDependency) == DependencyType.INDIRECT;
-							extendingDirectDependency.from = association.from;
-							extendingDirectDependency.via = association.to;
-							extendingDirectDependency.to = extendingDirectDependency.to;
-							if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
-								result.add(extendingDirectDependency);
-							this.logger.debug(new Date().toString() + " Direct dependencies added: " + result.size());
+				else{
+					numberOfNotComplyingAssociations ++;
+				}
+					
+				if(!preventRecursion){
+					if(association.type == "ExtendsConcrete"){
+						numberOfExtendsConcrete ++;
+						// Pass true to prevent recursion and endless calls!
+						List<DependencyDTO> extendingDirectDependencies = getDependencies(association.to, to, true);
+						for(DependencyDTO extendingDirectDependency : extendingDirectDependencies){
+							if(compliesWithFunction(association, FinderFunction.FROM, from, to) && isTo(extendingDirectDependency, to)){
+								extendingDirectDependency.type = association.type + extendingDirectDependency.type;
+								extendingDirectDependency.isIndirect = typeOfDependency(extendingDirectDependency) == DependencyType.INDIRECT;
+								extendingDirectDependency.from = association.from;
+								extendingDirectDependency.via = association.to;
+								extendingDirectDependency.to = extendingDirectDependency.to;
+								//if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
+								if (result.containsKey(extendingDirectDependency) && !extendingDirectDependency.isIndirect){
+									String uniqueName = (extendingDirectDependency.from + String.valueOf(extendingDirectDependency.lineNumber) + extendingDirectDependency.to + extendingDirectDependency.type); 
+									result.put(uniqueName, extendingDirectDependency);
+									//result.add(extendingDirectDependency);
+								}	
+							}
 						}
 					}
 				}
 			}
-		}
-		this.logger.debug(new Date().toString() + " Direct dependencies added: " + result.size());
+
+		} catch (Exception e) {
+	        this.logger.debug(new Date().toString() + " "  + e);
+	        //e.printStackTrace();
+	    }
+
+		
+		this.logger.debug(new Date().toString() + " Direct dependencies added: " + result.size() + ", Not complying: " + numberOfNotComplyingAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);     
+		this.logger.debug(new Date().toString() + " Inclusion of Indirect dependencies disabled");
+		// Indirect dependency analysis disabled 2014-01-20; improve effectiveness and efficiency before it is enabled again.
 		//if(!preventRecursion)
 		//result.addAll(findIndirectDependencies(from, to, applyFilter));
-		this.logger.debug(new Date().toString() + " Inclusion of Indirect dependencies disabled");
-		return result;
+		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
+		return resultToReturn;
+	
+	
 	}
 
 	public List<DependencyDTO> getAccessClassVariableInterfaceDirectDependencies(){

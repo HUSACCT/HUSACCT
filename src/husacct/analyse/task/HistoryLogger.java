@@ -10,6 +10,7 @@ import husacct.control.task.configuration.ConfigurationManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,6 +22,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,6 +37,8 @@ public class HistoryLogger {
 	private Document doc;
 	private Element rootElement;
 	private String xmlFile = OSDetector.getAppFolder() + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename");
+    private final Logger logger = Logger.getLogger(HistoryLogger.class);
+
 
 
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
@@ -139,7 +143,10 @@ public class HistoryLogger {
 			saxe.printStackTrace();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
+		} catch (Exception e) {
+	        this.logger.debug(new Date().toString() + " "  + e);
 		}
+
 		return true;
 	}
 

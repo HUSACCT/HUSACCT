@@ -45,14 +45,7 @@ class FamixDependencyConnector {
         numberOfWaitingObjects = (theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()); 
 		
         for (FamixStructuralEntity entity : theModel.waitingStructuralEntitys) {
-
-            //Needed to check if Thread is allowed to continue
-            if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
-                break;
-            }
-
             try {
-            	calculateProgress();
             	theClass = entity.belongsToClass;
                 if (!isCompleteTypeDeclaration(entity.declareType)) {
                     classFoundInImports = findClassInImports(theClass, entity.declareType);
@@ -67,6 +60,11 @@ class FamixDependencyConnector {
                     }
                 }
                 addToModel(entity);
+            	calculateProgress();
+                //Needed to check if Thread is allowed to continue
+                if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+                break;
+                }
             } catch (Exception e) {
             	this.logger.debug(new Date().toString() + " Exception:  " + e);
             }
@@ -81,23 +79,12 @@ class FamixDependencyConnector {
 		FamixInvocation theInvocation;
 		
         for (FamixAssociation association : theModel.waitingAssociations) {
-
-            //Added By Team 1 General GUI & Control
-            //Needed to check if Thread is allowed to continue
-            /*
-        	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
-                break;
-            } */
-            //end added by Team 1
-            
-
             try {
             	classFoundInImports = "";
                 boolean connected = false;
                 if (association.to == null || association.from == null || association.to.equals("") || association.from.equals("")) 
                 	numberOfRejectedWaitingAssociations ++;
                 else {
-                    calculateProgress();
                 	theClass = association.from;
                 	if (!isCompleteTypeDeclaration(association.to)) {
 	                    classFoundInImports = findClassInImports(theClass, association.to);
@@ -138,7 +125,12 @@ class FamixDependencyConnector {
 	                }
                     determineType(association);
                     addToModel(association);
-                }
+                    calculateProgress();
+                    //Needed to check if Thread is allowed to continue
+                	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+                        break;
+                    }
+            	}
                 
             } catch (Exception e) {
             	String associationType = association.type;
