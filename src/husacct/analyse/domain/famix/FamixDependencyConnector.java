@@ -24,14 +24,17 @@ class FamixDependencyConnector {
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
     private final Logger logger = Logger.getLogger(FamixDependencyConnector.class);
-
     public int numberOfRejectedWaitingAssociations;
     //Needed for the ProgressBar of the analyse application LoaderDialog 
-    private int amountOfModulesConnected = 0;
+    private int amountOfModulesConnected;
+    private int progressPercentage;
+    private int numberOfWaitingObjects; 
 
     public FamixDependencyConnector() {
         theModel = FamixModel.getInstance();
         numberOfRejectedWaitingAssociations = 0;
+        amountOfModulesConnected = 0;
+        progressPercentage = 0;
     }
 
     void connectStructuralDependecies() {
@@ -39,6 +42,7 @@ class FamixDependencyConnector {
 		String classFoundInImports;                        
 		String belongsToPackage;
 		String to;
+        numberOfWaitingObjects = (theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()); 
 		
         for (FamixStructuralEntity entity : theModel.waitingStructuralEntitys) {
 
@@ -48,7 +52,8 @@ class FamixDependencyConnector {
             }
 
             try {
-                theClass = entity.belongsToClass;
+            	calculateProgress();
+            	theClass = entity.belongsToClass;
                 if (!isCompleteTypeDeclaration(entity.declareType)) {
                     classFoundInImports = findClassInImports(theClass, entity.declareType);
                     if (!classFoundInImports.equals("")) {
@@ -89,53 +94,50 @@ class FamixDependencyConnector {
             try {
             	classFoundInImports = "";
                 boolean connected = false;
-                if (association.to == null || association.from == null) 
+                if (association.to == null || association.from == null || association.to.equals("") || association.from.equals("")) 
                 	numberOfRejectedWaitingAssociations ++;
-                else{
-                    if (association.to.equals("") || association.from.equals(""))
-                	numberOfRejectedWaitingAssociations ++;
-	                else {
-	                    theClass = association.from;
-	                	if (!isCompleteTypeDeclaration(association.to)) {
-		                    classFoundInImports = findClassInImports(theClass, association.to);
-		                    if (!classFoundInImports.equals("")) {
-		                        association.to = classFoundInImports;
-		                        // If association.to does not contain "." AND association.to is an import of association.from
-		                        connected = true;
-		                    } else {
-		                        belongsToPackage = getPackageFromUniqueClassName(association.from);
-		                        to = findClassInPackage(association.to, belongsToPackage);
-		                        if (!to.equals("")) {
-		                            association.to = to;
-		                            // If association.to does not contain "." AND association.to shares the same package as association.from 
-		                            connected = true;
-		                        }
-		                    }
-		                    if (!connected) {
-		                    	
-		                        if (isInvocation(association)) {
-		                            theInvocation = (FamixInvocation) association;
-		                            if (theInvocation.belongsToMethod == null || theInvocation.belongsToMethod.equals("")) {
-		                                //Then it is an attribute
-		                                theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
-		                            } else {
-		                                //checking order now: 1) parameter, 2) localVariable, 3) attribute
-		                                theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
-		                                if (theInvocation.to.equals("")) {
-		                                    //checking if it's a localVariable
-		                                    theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
-		                                }
-		                                if (theInvocation.to.equals("")) {
-		                                    //now it is an attribute
-		                                    theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
-		                                }
-		                            }
-		                        }
-		                    }
-		                }
-	                    determineType(association);
-	                    addToModel(association);
+                else {
+                    calculateProgress();
+                	theClass = association.from;
+                	if (!isCompleteTypeDeclaration(association.to)) {
+	                    classFoundInImports = findClassInImports(theClass, association.to);
+	                    if (!classFoundInImports.equals("")) {
+	                        association.to = classFoundInImports;
+	                        // If association.to does not contain "." AND association.to is an import of association.from
+	                        connected = true;
+	                    } else {
+	                        belongsToPackage = getPackageFromUniqueClassName(association.from);
+	                        to = findClassInPackage(association.to, belongsToPackage);
+	                        if (!to.equals("")) {
+	                            association.to = to;
+	                            // If association.to does not contain "." AND association.to shares the same package as association.from 
+	                            connected = true;
+	                        }
+	                    }
+	                    if (!connected) {
+	                    	
+	                        if (isInvocation(association)) {
+	                            theInvocation = (FamixInvocation) association;
+	                            if (theInvocation.belongsToMethod == null || theInvocation.belongsToMethod.equals("")) {
+	                                //Then it is an attribute
+	                                theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
+	                            } else {
+	                                //checking order now: 1) parameter, 2) localVariable, 3) attribute
+	                                theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+	                                if (theInvocation.to.equals("")) {
+	                                    //checking if it's a localVariable
+	                                    theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+	                                }
+	                                if (theInvocation.to.equals("")) {
+	                                    //now it is an attribute
+	                                    theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
+	                                }
+	                            }
+	                        }
+	                    }
 	                }
+                    determineType(association);
+                    addToModel(association);
                 }
                 
             } catch (Exception e) {
@@ -149,6 +151,14 @@ class FamixDependencyConnector {
     public String getNumberOfRejectedWaitingAssociations() {
     	String number = String.valueOf(numberOfRejectedWaitingAssociations);
     	return number;
+    }
+    
+    private void calculateProgress(){
+    	int currentProgress = (++amountOfModulesConnected * 100) / this.numberOfWaitingObjects; 
+    	if (currentProgress >= this.progressPercentage + 1){
+    		progressPercentage = currentProgress;
+            ServiceProvider.getInstance().getControlService().updateProgress(progressPercentage);
+    	}
     }
     
     private void determineType(FamixAssociation association) {
@@ -288,13 +298,6 @@ class FamixDependencyConnector {
     }
 
     private boolean isCompleteTypeDeclaration(String typeDeclaration) {
-
-
-        //Added By Team 1 General GUI & Control
-        //Is needed for the progressBar
-        //ServiceProvider.getInstance().getControlService().updateProgress((++amountOfModulesConnected * 100) / (1 + theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()));
-        //End added by Team 1 General GUI & Control
-
         return typeDeclaration.contains(".");
     }
 
