@@ -123,8 +123,9 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
     
     @Override
-    public int buildCache(){
-    	return queryService.buildCache();
+    public void buildCache(){
+    	queryService.buildCache();
+    	return;
     }
 
     @Override

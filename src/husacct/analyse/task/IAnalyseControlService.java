@@ -56,5 +56,4 @@ public interface IAnalyseControlService {
     
     public int getAmountOfClasses();
     
-    public int buildCache();
 }

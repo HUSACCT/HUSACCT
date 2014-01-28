@@ -63,5 +63,4 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     
     public int getAmountOfClasses();
     
-    public int buildCache();
 }

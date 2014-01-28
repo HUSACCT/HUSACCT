@@ -23,8 +23,11 @@ class FamixDependencyConnector {
     private static final String EXTENDS_INTERFACE = "ExtendsInterface";
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
+    private HashMap<String, ArrayList<FamixFormalParameter>> parameterPerClassHashMap;
+    private ArrayList<FamixFormalParameter> parametersArrayList;
+    private HashMap<String, FamixStructuralEntity> structuralEntityHashMap;
     private final Logger logger = Logger.getLogger(FamixDependencyConnector.class);
-    public int numberOfRejectedWaitingAssociations;
+    private int numberOfNotConnectedWaitingAssociations;
     //Needed for the ProgressBar of the analyse application LoaderDialog 
     private int amountOfModulesConnected;
     private int progressPercentage;
@@ -32,7 +35,7 @@ class FamixDependencyConnector {
 
     public FamixDependencyConnector() {
         theModel = FamixModel.getInstance();
-        numberOfRejectedWaitingAssociations = 0;
+        numberOfNotConnectedWaitingAssociations = 0;
         amountOfModulesConnected = 0;
         progressPercentage = 0;
     }
@@ -78,37 +81,41 @@ class FamixDependencyConnector {
 		String to;
 		FamixInvocation theInvocation;
 		
+		initializeHashMapsForQueries();
+		
         for (FamixAssociation association : theModel.waitingAssociations) {
             try {
             	classFoundInImports = "";
                 boolean connected = false;
-                if (association.to == null || association.from == null || association.to.equals("") || association.from.equals("")) 
-                	numberOfRejectedWaitingAssociations ++;
+                if (association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){ 
+                	numberOfNotConnectedWaitingAssociations ++;
+                }
                 else {
                 	theClass = association.from;
                 	if (!isCompleteTypeDeclaration(association.to)) {
 	                    classFoundInImports = findClassInImports(theClass, association.to);
 	                    if (!classFoundInImports.equals("")) {
+	                        // So, in case association.to does not contain "." AND association.to is an import of association.from
 	                        association.to = classFoundInImports;
-	                        // If association.to does not contain "." AND association.to is an import of association.from
 	                        connected = true;
 	                    } else {
 	                        belongsToPackage = getPackageFromUniqueClassName(association.from);
 	                        to = findClassInPackage(association.to, belongsToPackage);
 	                        if (!to.equals("")) {
+	                            // So, in case association.to does not contain "." AND association.to shares the same package as association.from 
 	                            association.to = to;
-	                            // If association.to does not contain "." AND association.to shares the same package as association.from 
 	                            connected = true;
 	                        }
 	                    }
 	                    if (!connected) {
-	                    	
 	                        if (isInvocation(association)) {
 	                            theInvocation = (FamixInvocation) association;
 	                            if (theInvocation.belongsToMethod == null || theInvocation.belongsToMethod.equals("")) {
-	                                //Then it is an attribute
+	                                //Then it is an attribute assignment. Example: currentFunction = FinderArguments.ROOT; 
 	                                theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
 	                            } else {
+	                            	// get StructuralEntity on key belongsToClass.line.name on from.line. nameOfInstance
+	                            	// if (declareType != null) to = declareType
 	                                //checking order now: 1) parameter, 2) localVariable, 3) attribute
 	                                theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
 	                                if (theInvocation.to.equals("")) {
@@ -123,14 +130,18 @@ class FamixDependencyConnector {
 	                        }
 	                    }
 	                }
-                    determineType(association);
-                    addToModel(association);
-                    calculateProgress();
-                    //Needed to check if Thread is allowed to continue
-                	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
-                        break;
-                    }
-            	}
+    				if(association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){
+    					numberOfNotConnectedWaitingAssociations ++;
+    				} else {
+	                	determineType(association);
+	                    addToModel(association);
+	                    calculateProgress();
+	                    //Needed to check if Thread is allowed to continue
+	                	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+	                        break;
+	                	}
+    				}
+                }
                 
             } catch (Exception e) {
             	String associationType = association.type;
@@ -141,7 +152,7 @@ class FamixDependencyConnector {
     }
 
     public String getNumberOfRejectedWaitingAssociations() {
-    	String number = String.valueOf(numberOfRejectedWaitingAssociations);
+    	String number = String.valueOf(numberOfNotConnectedWaitingAssociations);
     	return number;
     }
     
@@ -198,12 +209,15 @@ class FamixDependencyConnector {
 
     private String getClassForParameter(String declareClass, String declareMethod, String attributeName) {
         String belongsToMethodFull = declareClass + "." + declareMethod;
-        for (FamixFormalParameter parameter : theModel.getParametersForClass(declareClass)) {
-            if (parameter.belongsToMethod.equals(belongsToMethodFull)) {
-                if (parameter.name.equals(attributeName)) {
-                    return parameter.declareType;
-                }
-            }
+        ArrayList<FamixFormalParameter> paramsPerClass = parameterPerClassHashMap.get(declareClass);
+        if (paramsPerClass != null){     
+        for (FamixFormalParameter parameter : paramsPerClass) {
+	            if (parameter.belongsToMethod.equals(belongsToMethodFull)) {
+	                if (parameter.name.equals(attributeName)) {
+	                    return parameter.declareType;
+	                }
+	            }
+	        }
         }
         return "";
     }
@@ -352,4 +366,36 @@ class FamixDependencyConnector {
         }
     }
 
+    private void initializeHashMapsForQueries() {
+    	parameterPerClassHashMap = new HashMap<String, ArrayList<FamixFormalParameter>>();
+    	structuralEntityHashMap = new HashMap<String, FamixStructuralEntity>();
+    	int nrOfDuplicateStructuralEntities = 0;
+    	for (FamixStructuralEntity entity : theModel.structuralEntities.values()) {
+    		String searchKey = entity.belongsToClass + entity.lineNumber + entity.name;
+            if (structuralEntityHashMap.containsKey(searchKey)){
+            	nrOfDuplicateStructuralEntities ++;
+            }
+            else {
+        		structuralEntityHashMap.put(searchKey, entity);
+            }
+    		if (entity instanceof FamixFormalParameter) {
+            	FamixFormalParameter parameter = new FamixFormalParameter(); 
+                parameter = (FamixFormalParameter) entity;
+                //If parameterPerClassHashMap exists for belongsToClass, put parameter
+                if (parameterPerClassHashMap.containsKey(parameter.belongsToClass)) {
+                	parametersArrayList = parameterPerClassHashMap.get(parameter.belongsToClass);
+                //Else, create new parameterPerClassHashMap first, before put parameter
+                }
+                else {
+                	parametersArrayList = new ArrayList<FamixFormalParameter>();
+                	parameterPerClassHashMap.put(parameter.belongsToClass, parametersArrayList);
+                }
+            	parametersArrayList.add(parameter);
+            }
+        }
+        //this.logger.debug(new Date().toString() + " Finished: initializeHashMapsForQueries(), Nr of duplicate StructuralEntities: "  + String.valueOf(nrOfDuplicateStructuralEntities));
+        return;
+    }
+
+    
 }

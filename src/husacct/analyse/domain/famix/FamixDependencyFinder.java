@@ -16,6 +16,11 @@ class FamixDependencyFinder extends FamixFinder {
     private List<DependencyDTO> dependencyCache;
     private List<ExternalSystemDTO> externalSystemCache;
     private final Logger logger = Logger.getLogger(FamixDependencyFinder.class);
+	protected int numberOfNotComplyingAssociations;
+	protected int numberOfIncompleteAssociations;
+	protected int numberOfDuplicateAssociations;
+	protected int numberOfExtendsConcrete;
+
     
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
@@ -23,10 +28,12 @@ class FamixDependencyFinder extends FamixFinder {
 		this.externalSystemCache = null;
 	}
 	
-	public int buildCache(){
-		int amountOfDependencies = getAllDependencies().size();
+	public void buildCache(){
+		int numberOfDependencies = getAllDependencies().size();
+		this.logger.debug(new Date().toString() + " Direct dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);     
+
 		//getExternalSystems().size();
-		return amountOfDependencies;
+		return;
 	}
 	
 	public List<DependencyDTO> getAllDependencies(){
@@ -110,23 +117,28 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
-		this.logger.debug(new Date().toString() + " Starting: findDependenciesRaw()");
 	    HashMap<String, DependencyDTO> result = new HashMap<String, DependencyDTO>();
 		List<DependencyDTO> resultToReturn = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
-		int numberOfDuplicateAssociations = 0;
-		int numberOfNotComplyingAssociations = 0;
-		int numberOfExtendsConcrete = 0;
+		numberOfNotComplyingAssociations = 0;
+		numberOfIncompleteAssociations = 0;
+		numberOfDuplicateAssociations = 0;
+		numberOfExtendsConcrete = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
 					DependencyDTO foundDirectDependency = buildDependencyDTO(association);
-					String uniqueName = (foundDirectDependency.from + String.valueOf(foundDirectDependency.lineNumber) + foundDirectDependency.to + foundDirectDependency.type); 
-					if (!result.containsKey(uniqueName)){
-						result.put(uniqueName, foundDirectDependency);
+					if (foundDirectDependency.from == null || foundDirectDependency.from.equals("") || foundDirectDependency.to == null || foundDirectDependency.to.equals("") ||foundDirectDependency.lineNumber == 0 || foundDirectDependency.type == null){
+						numberOfIncompleteAssociations ++;
 					}
-					else {
-						numberOfDuplicateAssociations ++; }
+					else{
+					String uniqueName = (foundDirectDependency.from + String.valueOf(foundDirectDependency.lineNumber) + foundDirectDependency.to + foundDirectDependency.type); 
+						if (!result.containsKey(uniqueName)){
+							result.put(uniqueName, foundDirectDependency);
+						}
+						else {
+							numberOfDuplicateAssociations ++; }
+					}
 				}
 				else{
 					numberOfNotComplyingAssociations ++;
@@ -162,8 +174,6 @@ class FamixDependencyFinder extends FamixFinder {
 	    }
 
 		
-		this.logger.debug(new Date().toString() + " Direct dependencies added: " + result.size() + ", Not complying: " + numberOfNotComplyingAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);     
-		this.logger.debug(new Date().toString() + " Inclusion of Indirect dependencies disabled");
 		// Indirect dependency analysis disabled 2014-01-20; improve effectiveness and efficiency before it is enabled again.
 		//if(!preventRecursion)
 		//result.addAll(findIndirectDependencies(from, to, applyFilter));

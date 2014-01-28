@@ -193,8 +193,4 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     	return service.getAmountOfClasses();
     }
     
-	@Override
-	public int buildCache(){
-		return service.buildCache();
-	}
 }

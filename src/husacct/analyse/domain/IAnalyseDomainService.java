@@ -54,5 +54,5 @@ public interface IAnalyseDomainService {
     
     public int getAmountOfClasses();
 
-	public int buildCache();
+	public void buildCache();
 }

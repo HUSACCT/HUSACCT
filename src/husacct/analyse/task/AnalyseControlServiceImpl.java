@@ -29,6 +29,7 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     public void analyseApplication(String[] paths, String programmingLanguage) {
         domainService.clearModel();
         analyserService.analyseApplication(paths, programmingLanguage);
+        domainService.buildCache();
     }
 
     @Override
@@ -134,8 +135,5 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     public int getAmountOfClasses() {
     	return domainService.getAmountOfClasses();
     }
-    @Override
-    public int buildCache(){
-    	return domainService.buildCache();
-    }
+
 }

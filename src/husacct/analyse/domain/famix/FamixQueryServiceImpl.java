@@ -1,7 +1,11 @@
 package husacct.analyse.domain.famix;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -20,8 +24,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
     
     @Override
-    public int buildCache(){
-    	return dependencyFinder.buildCache();
+    public void buildCache(){
+    	dependencyFinder.buildCache();
+    	return;
     }
 
     @Override

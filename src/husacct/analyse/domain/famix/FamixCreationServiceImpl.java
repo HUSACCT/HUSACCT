@@ -391,8 +391,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         this.logger.debug(new Date().toString() + " Finished: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
         dependencyConnector.connectAssociationDependencies();
         int associationsNumber = model.associations.size();
-        this.logger.debug(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", WaitingAssociations = " + model.waitingAssociations.size());
-        this.logger.debug(new Date().toString() + " Number of rejected WaitingAssociations: " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
+        this.logger.debug(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
     }
 
     private boolean addToModel(FamixObject newObject) {

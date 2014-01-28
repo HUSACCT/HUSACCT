@@ -43,8 +43,8 @@ public class ApplicationAnalyser {
         this.logger.debug(new Date().toString() + " Finished: Model generated from sourcefile; state = PREANALYSED");
         analyser.connectDependencies();
         this.logger.debug(new Date().toString() + " Finished: Connecting dependencies");
-        analyser.clearLambdaBuffers(); //required for clearing the buffers after analysis is finished
-        this.logger.debug(new Date().toString() + " Finished: Clearing LambdaBuffers");
+        //required for clearing the buffers after analysis is finished
+        analyser.clearLambdaBuffers();
     }
 
     public boolean isZip(String path) {
