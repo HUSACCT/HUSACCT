@@ -14,7 +14,7 @@ import javax.naming.directory.InvalidAttributesException;
 
 import org.apache.log4j.Logger;
 
-class FamixDependencyConnector {
+class FamixDependencyConnectorNew {
 
     private static final String EXTENDS = "Extends";
     private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
@@ -23,7 +23,7 @@ class FamixDependencyConnector {
     private static final String EXTENDS_INTERFACE = "ExtendsInterface";
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
-    private HashMap<String, ArrayList<FamixFormalParameter>> parameterPerClassHashMap;
+    private HashMap<String, ArrayList<FamixAssociation>> inheritanceAccociationsPerClass;
     private ArrayList<FamixFormalParameter> parametersArrayList;
     private HashMap<String, FamixStructuralEntity> structuralEntityHashMap;
     private final Logger logger = Logger.getLogger(FamixDependencyConnector.class);
@@ -33,7 +33,7 @@ class FamixDependencyConnector {
     private int progressPercentage;
     private int numberOfWaitingObjects; 
 
-    public FamixDependencyConnector() {
+    public FamixDependencyConnectorNew() {
         theModel = FamixModel.getInstance();
         numberOfNotConnectedWaitingAssociations = 0;
         amountOfModulesConnected = 0;
@@ -45,7 +45,9 @@ class FamixDependencyConnector {
 		String classFoundInImports;                        
 		String belongsToPackage;
 		String to;
-        numberOfWaitingObjects = (theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()); 
+        numberOfWaitingObjects = (theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size());
+		initializeHashMapsimportsPerEntity();
+		initializeHashMapstructuralEntityHashMap();
 		
         for (FamixStructuralEntity entity : theModel.waitingStructuralEntitys) {
             try {
@@ -70,6 +72,7 @@ class FamixDependencyConnector {
                 }
             } catch (Exception e) {
             	this.logger.debug(new Date().toString() + " Exception:  " + e);
+            	e.printStackTrace();
             }
         }
     }
@@ -80,8 +83,6 @@ class FamixDependencyConnector {
 		String classFoundInImports;
 		String to;
 		FamixInvocation theInvocation;
-		
-		initializeHashMapsForQueries();
 		
         for (FamixAssociation association : theModel.waitingAssociations) {
             try {
@@ -152,18 +153,6 @@ class FamixDependencyConnector {
 	                            			}
 	                            		}
 	                            	}
-	                            	
-	                            	/*
-	                                //checking order now: 1) parameter, 2) localVariable, 3) attribute
-	                                theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
-	                                if (theInvocation.to.equals("")) {
-	                                    //checking if it's a localVariable
-	                                    theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
-	                                }
-	                                if (theInvocation.to.equals("")) {
-	                                    //now it is an attribute
-	                                    theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
-	                                } */
 	                            }
 	                        }
 	                        if (association instanceof FamixAccess) {
@@ -171,11 +160,13 @@ class FamixDependencyConnector {
 	                        }
 	                    }
 	                }
-    				if(association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){
+    				
+
+                		if(association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){
     					numberOfNotConnectedWaitingAssociations ++;
     				} else {
-	                	determineType(association);
-	                    addToModel(association);
+    					determineSpecificExtendType(association);
+    					addToModel(association);
 	                    calculateProgress();
 	                    //Needed to check if Thread is allowed to continue
 	                	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
@@ -183,13 +174,46 @@ class FamixDependencyConnector {
 	                	}
     				}
                 }
-                
             } catch (Exception e) {
             	String associationType = association.type;
     	        this.logger.debug(new Date().toString() + " "  + e + " " + associationType + " " + association.toString());
     	        e.printStackTrace();
             }
         }
+        addIndirectExtendAssociations();
+    }
+    
+    public void addIndirectExtendAssociations() {
+            try{
+            	//Add indirect inheritance dependencies 
+        		initializeHashMapsinheritanceAccociationsPerClass();
+    	        for (FamixAssociation associationx : theModel.associations) {
+                    if (associationx.to == null || associationx.from == null || associationx.to.equals("") || associationx.from.equals("")){ 
+                    	numberOfNotConnectedWaitingAssociations ++;
+                    }
+                    else 	
+		            	if (associationx.type.equals(EXTENDS_ABSTRACT) || associationx.type.equals(EXTENDS_CONCRETE)){ 
+		    				FamixClass superClass = theModel.classes.get(associationx.to);
+		    				//If there is an association of type FamixInheritanceDefinition with superClass.to
+		    				if (inheritanceAccociationsPerClass.containsKey(associationx.to) ){
+		    					ArrayList<FamixAssociation> foundInheritanceList = inheritanceAccociationsPerClass.get(associationx.to);
+		    					for (FamixAssociation foundInheritance : foundInheritanceList){
+		            				//Create a new association of type FamixInheritanceDefinition from association to superSuperClass
+									FamixAssociation newAssociation = new FamixAssociation();
+									newAssociation.from = associationx.from;
+									newAssociation.to = foundInheritance.to;
+									newAssociation.lineNumber = associationx.lineNumber;
+									newAssociation.type = foundInheritance.type;
+									addToModel(newAssociation);
+	    					}
+	    				}
+	    			}
+	        	}
+                
+            } 	catch (Exception e) {
+    	        this.logger.debug(new Date().toString() + " "  + e);
+    	        e.printStackTrace();
+            }
     }
 
     public String getNumberOfRejectedWaitingAssociations() {
@@ -205,7 +229,7 @@ class FamixDependencyConnector {
     	}
     }
     
-    private void determineType(FamixAssociation association) {
+    private void determineSpecificExtendType(FamixAssociation association) {
         String type = association.type;
         if (type.equals(EXTENDS)) {
             FamixClass theClass = getClassForUniqueName(association.to);
@@ -249,7 +273,8 @@ class FamixDependencyConnector {
     }
 
     private String getClassForParameter(String declareClass, String declareMethod, String attributeName) {
-        String belongsToMethodFull = declareClass + "." + declareMethod;
+        HashMap<String, ArrayList<FamixFormalParameter>> parameterPerClassHashMap = null;
+    	String belongsToMethodFull = declareClass + "." + declareMethod;
         ArrayList<FamixFormalParameter> paramsPerClass = parameterPerClassHashMap.get(declareClass);
         if (paramsPerClass != null){     
         for (FamixFormalParameter parameter : paramsPerClass) {
@@ -307,37 +332,6 @@ class FamixDependencyConnector {
     }
     
     public List<FamixImport> getImportsInClass(String uniqueClassName) {
-		try{
-	    	if(importsPerEntity == null){
-				FamixImport foundImport;
-				ArrayList<FamixImport> foundImportsList;
-				ArrayList<FamixImport>  alreadyIncludedImportsList;
-				importsPerEntity = new HashMap<String, ArrayList<FamixImport>>();
-	    		//Fill the HashMap of Imports per FamixEntity (Class, Interface); key = uniqueName, value = list of imports
-		        for (FamixAssociation association : theModel.associations) {
-		            if (association instanceof FamixImport) {
-			        	alreadyIncludedImportsList = null;
-			        	foundImport = null;
-			        	foundImportsList = new ArrayList<FamixImport>();
-		            	foundImport = (FamixImport) association;
-		            	String uniqueEntityName = association.from;
-		            	if (importsPerEntity.containsKey(uniqueEntityName)){
-		            		alreadyIncludedImportsList = importsPerEntity.get(uniqueEntityName);
-		            		alreadyIncludedImportsList.add(foundImport);
-		            		importsPerEntity.put(uniqueEntityName, alreadyIncludedImportsList);
-		            	}
-		            	else{
-			            	foundImportsList.add(foundImport);
-			            	importsPerEntity.put(uniqueEntityName, foundImportsList);
-		            	}
-		            }
-		        }
-			}
-		} catch(Exception e) {
-	        this.logger.debug(new Date().toString() + "Exception may result in incomplete import list. Exception:  " + e);
-		}
-		
-
     	//Find FamixEntity matching uniqueClassName and return the list of imports  
     	List<FamixImport> importsReturned = new ArrayList<FamixImport>();
     	importsReturned = importsPerEntity.get(uniqueClassName); 
@@ -407,35 +401,105 @@ class FamixDependencyConnector {
         }
     }
 
-    private void initializeHashMapsForQueries() {
-    	parameterPerClassHashMap = new HashMap<String, ArrayList<FamixFormalParameter>>();
+    private void initializeHashMapstructuralEntityHashMap() {
     	structuralEntityHashMap = new HashMap<String, FamixStructuralEntity>();
+
     	int nrOfDuplicateStructuralEntities = 0;
-    	for (FamixStructuralEntity entity : theModel.structuralEntities.values()) {
-    		String searchKey = entity.belongsToClass + entity.lineNumber + entity.name;
-            if (structuralEntityHashMap.containsKey(searchKey)){
-            	nrOfDuplicateStructuralEntities ++;
+
+		try{
+	    	for (FamixStructuralEntity entity : theModel.structuralEntities.values()) {
+	    		String searchKey = entity.belongsToClass + entity.lineNumber + entity.name;
+	            if (structuralEntityHashMap.containsKey(searchKey)){
+	            	nrOfDuplicateStructuralEntities ++;
+	            }
+	            else {
+	        		structuralEntityHashMap.put(searchKey, entity);
+	            }
+	    	}
+	        //this.logger.debug(new Date().toString() + " Finished: initializeHashMapsForQueries(), Number of duplicate StructuralEntities: "  + String.valueOf(nrOfDuplicateStructuralEntities));
+	        
+		} catch(Exception e) {
+	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
+	        e.printStackTrace();
+		}
+    	
+    	return;
+    }
+    
+    private void initializeHashMapsimportsPerEntity() {
+        FamixImport foundImport;
+		ArrayList<FamixImport> foundImportsList;
+		ArrayList<FamixImport>  alreadyIncludedImportsList;
+		importsPerEntity = new HashMap<String, ArrayList<FamixImport>>();
+	    
+		try{
+            //Fill HashMaps importsPerEntity and inheritanceAccociationsPerClass 
+	        for (FamixAssociation association : theModel.associations) {
+            	String uniqueNameFrom = association.from;
+	            if (association instanceof FamixImport) {
+		        	alreadyIncludedImportsList = null;
+		        	foundImport = null;
+	            	foundImport = (FamixImport) association;
+	            	if (importsPerEntity.containsKey(uniqueNameFrom)){
+	            		alreadyIncludedImportsList = importsPerEntity.get(uniqueNameFrom);
+	            		alreadyIncludedImportsList.add(foundImport);
+	            		importsPerEntity.put(uniqueNameFrom, alreadyIncludedImportsList);
+	            	}
+	            	else{
+			        	foundImportsList = new ArrayList<FamixImport>();
+		            	foundImportsList.add(foundImport);
+		            	importsPerEntity.put(uniqueNameFrom, foundImportsList);
+	            	}
+	            }
+	        }
+	        
+	        
+		} catch(Exception e) {
+	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
+	        e.printStackTrace();
+		}
+    	
+    	return;
+    }
+    
+    private void initializeHashMapsinheritanceAccociationsPerClass() {
+		FamixAssociation foundInheritance;
+		ArrayList<FamixAssociation> foundInheritanceList;
+		ArrayList<FamixAssociation>  alreadyIncludedInheritanceList;
+		inheritanceAccociationsPerClass = new HashMap<String, ArrayList<FamixAssociation>>();
+
+		try{
+	        for (FamixAssociation association : theModel.associations) {
+            	String uniqueNameFrom = association.from;
+            	if(uniqueNameFrom.equals("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect")){
+            		String type = association.type;
+            		this.logger.debug(new Date().toString() + " Type: domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect =  " + type);
+            	}
+	            //Fill the HashMaps inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 
+	            if (association.type.equals(EXTENDS_CONCRETE)|| association.type.equals(EXTENDS_ABSTRACT) || association.type.equals(EXTENDS)){
+	            	alreadyIncludedInheritanceList = null;
+	            	foundInheritance = null;
+	            	foundInheritanceList = null;
+	            	alreadyIncludedInheritanceList = null;
+	            	foundInheritance = association;
+	            	if(inheritanceAccociationsPerClass.containsKey(uniqueNameFrom)){
+	            		alreadyIncludedInheritanceList = inheritanceAccociationsPerClass.get(uniqueNameFrom);
+	            		alreadyIncludedInheritanceList.add(foundInheritance);
+	            		inheritanceAccociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
+	            	}
+	            	else{
+		            	foundInheritanceList = new ArrayList<FamixAssociation>();
+		            	foundInheritanceList.add(foundInheritance);
+		            	inheritanceAccociationsPerClass.put(uniqueNameFrom, foundInheritanceList);
+	            	}
+	            }
             }
-            else {
-        		structuralEntityHashMap.put(searchKey, entity);
-            }
-    		if (entity instanceof FamixFormalParameter) {
-            	FamixFormalParameter parameter = new FamixFormalParameter(); 
-                parameter = (FamixFormalParameter) entity;
-                //If parameterPerClassHashMap exists for belongsToClass, put parameter
-                if (parameterPerClassHashMap.containsKey(parameter.belongsToClass)) {
-                	parametersArrayList = parameterPerClassHashMap.get(parameter.belongsToClass);
-                //Else, create new parameterPerClassHashMap first, before put parameter
-                }
-                else {
-                	parametersArrayList = new ArrayList<FamixFormalParameter>();
-                	parameterPerClassHashMap.put(parameter.belongsToClass, parametersArrayList);
-                }
-            	parametersArrayList.add(parameter);
-            }
-        }
-        //this.logger.debug(new Date().toString() + " Finished: initializeHashMapsForQueries(), Nr of duplicate StructuralEntities: "  + String.valueOf(nrOfDuplicateStructuralEntities));
-        return;
+		} catch(Exception e) {
+	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
+	        e.printStackTrace();
+		}
+    	
+    	return;
     }
 
     

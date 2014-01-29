@@ -30,7 +30,7 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	public void buildCache(){
 		int numberOfDependencies = getAllDependencies().size();
-		this.logger.debug(new Date().toString() + " Direct dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);     
+		this.logger.debug(new Date().toString() + " Dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);     
 
 		//getExternalSystems().size();
 		return;
