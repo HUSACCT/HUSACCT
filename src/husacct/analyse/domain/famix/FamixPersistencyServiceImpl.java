@@ -4,6 +4,8 @@ import husacct.analyse.domain.IModelPersistencyService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.Map;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -60,9 +62,11 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     }
 
     private void loadObjects() {
-        this.packagesList = theModel.packages;
+    	Map<String, FamixClass> tempPackageList = (Map) theModel.classes;
+        this.packagesList = (HashMap) tempPackageList;
         this.librarieList = theModel.libraries;
-        this.classList = theModel.classes;
+        Map<String, FamixClass> tempClassList = (Map) theModel.classes;
+        this.classList = (HashMap) tempClassList;
         this.methodsList = theModel.behaviouralEntities;
         this.variablesList = theModel.structuralEntities;
         this.associationList = theModel.associations;

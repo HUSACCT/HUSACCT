@@ -3,8 +3,8 @@ package husacct.analyse.domain.famix;
 class FamixClass extends FamixEntity {
 
     public boolean isInnerClass = false;
-    public boolean isAbstract;
-    public boolean hasInnerClasses;
+    public boolean isAbstract = false;
+    public boolean hasInnerClasses = false;
     public String belongsToPackage;
     public String belongsToClass = null;
 

@@ -122,7 +122,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
     
     public int getAmountOfInterfaces() {
-    	return theModel.imports.size();
+    	return theModel.interfaces.size();
     }
     
     public int getAmountOfPackages() {

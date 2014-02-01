@@ -76,6 +76,7 @@ class FamixDependencyFinder extends FamixFinder {
 		List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
 		List<String> pathsToImports = new ArrayList<String>();
 		List<String> pathsToPackages = new ArrayList<String>();
+		//key of imports is combined 
 		for(String imp : theModel.imports.keySet())
 			if(!pathsToImports.contains(imp))
 				pathsToImports.add(imp);

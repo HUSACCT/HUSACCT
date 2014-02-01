@@ -15,6 +15,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     private FamixModel model;
     private FamixDependencyConnector dependencyConnector;
     private final Logger logger = Logger.getLogger(FamixCreationServiceImpl.class);
+    
 
     public FamixCreationServiceImpl() {
         model = FamixModel.getInstance();
@@ -50,11 +51,11 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     public void createClass(String uniqueName, String name, String belongsToPackage,
             boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility) {
         FamixClass fClass = new FamixClass();
-        fClass.uniqueName = uniqueName;
+        fClass.uniqueName = uniqueName.trim();
         fClass.isAbstract = isAbstract;
-        fClass.belongsToPackage = belongsToPackage;
+        fClass.belongsToPackage = belongsToPackage.trim();
         fClass.isInnerClass = isInnerClass;
-        fClass.name = name;
+        fClass.name = name.trim();
         fClass.belongsToClass = belongsToClass;
         if (visibility.equals("")) {
             fClass.visibility = "default";
@@ -189,7 +190,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         fAssocation.type = "DeclarationInstanceVariable";
         fAssocation.lineNumber = line;
         model.waitingAssociations.add(fAssocation);
-        addToModel(famixAttribute);
+        //addToModel(famixAttribute);
     }
 
     @Override
@@ -219,7 +220,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixLocalVariable.uniqueName = uniqueName;
         famixLocalVariable.lineNumber = lineNumber;
         model.waitingStructuralEntitys.add(famixLocalVariable);
-        addToModel(famixLocalVariable);
+        //addToModel(famixLocalVariable);
         FamixAssociation fAssocation = new FamixAssociation();
 
         fAssocation.from = belongsToClass;
@@ -249,7 +250,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixParameter.name = name;
         famixParameter.uniqueName = uniqueName;
         famixParameter.declaredTypes = declareTypes;
-        addToModel(famixParameter);
+        //addToModel(famixParameter);
         model.waitingStructuralEntitys.add(famixParameter);
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -280,7 +281,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.declareType = declareType;
         famixAttribute.name = name;
         famixAttribute.uniqueName = uniqueName;
-        addToModel(famixAttribute);
+        //addToModel(famixAttribute);
         model.waitingStructuralEntitys.add(famixAttribute);
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -386,19 +387,21 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
     @Override
     public void connectDependencies() {
+        int associationsNumber = model.associations.size();
         this.logger.debug(new Date().toString() + " Starting: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntitys.size());
         dependencyConnector.connectStructuralDependecies();
         this.logger.debug(new Date().toString() + " Finished: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
         dependencyConnector.connectAssociationDependencies();
-        int associationsNumber = model.associations.size();
+        associationsNumber = model.associations.size();
         this.logger.debug(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
     }
 
     private boolean addToModel(FamixObject newObject) {
         try {
-            model.addObject(newObject);
+        	model.addObject(newObject);
             return true;
         } catch (InvalidAttributesException e) {
+        	this.logger.debug(new Date().toString() + e.getMessage());
             return false;
         }
     }

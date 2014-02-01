@@ -45,8 +45,8 @@ class JavaTreeConvertController {
 	        } 
     	}
     	catch (Exception e) {
-    		// javaParser.compilationUnit() throws an exception, currently.
-    		// e.printStackTrace();
+    		//javaParser.compilationUnit() throws an exception, currently.
+    		e.printStackTrace();
     	}
     }
 

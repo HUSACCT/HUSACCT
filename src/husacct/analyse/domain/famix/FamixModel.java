@@ -5,7 +5,9 @@ import husacct.common.dto.ExternalSystemDTO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
+
 import javax.naming.directory.InvalidAttributesException;
 
 class FamixModel extends FamixObject {
@@ -15,8 +17,10 @@ class FamixModel extends FamixObject {
     public List<FamixAssociation> waitingAssociations;
     public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
     public HashMap<String, FamixStructuralEntity> structuralEntities;
-    public HashMap<String, FamixPackage> packages;
-    public HashMap<String, FamixClass> classes;
+    //public HashMap<String, FamixPackage> packages;
+    public TreeMap<String, FamixPackage> packages;
+    //public HashMap<String, FamixClass> classes;
+    public TreeMap<String, FamixClass> classes;
     public HashMap<String, FamixImport> imports;
     public HashMap<String, FamixInterface> interfaces;
     public HashMap<String, FamixLibrary> libraries;
@@ -36,8 +40,10 @@ class FamixModel extends FamixObject {
         waitingAssociations = new ArrayList<FamixAssociation>();
         waitingStructuralEntitys = new ArrayList<FamixStructuralEntity>();
         associations = new ArrayList<FamixAssociation>();
-        classes = new HashMap<String, FamixClass>();
-        packages = new HashMap<String, FamixPackage>();
+        //classes = new HashMap<String, FamixClass>();
+        classes = new TreeMap<String, FamixClass>();
+        //packages = new HashMap<String, FamixPackage>();
+        packages = new TreeMap<String, FamixPackage>();
         imports = new HashMap<String, FamixImport>();
         interfaces = new HashMap<String, FamixInterface>();
         libraries = new HashMap<String, FamixLibrary>();
@@ -56,8 +62,11 @@ class FamixModel extends FamixObject {
         currentInstance = new FamixModel();
     }
 
-    public void addObject(Object e) throws InvalidAttributesException {
-        if (e instanceof FamixEntity) {
+    public void addObject(FamixObject e) throws InvalidAttributesException {
+    	String name = "";
+    	FamixClass returnValue;
+        try{
+    	if (e instanceof FamixEntity) {
             if (e instanceof FamixBehaviouralEntity) {
                 behaviouralEntities.put(((FamixEntity) e).uniqueName, (FamixBehaviouralEntity) e);
             } else if (e instanceof FamixStructuralEntity) {
@@ -65,7 +74,8 @@ class FamixModel extends FamixObject {
             } else if (e instanceof FamixPackage) {
                 packages.put(((FamixEntity) e).uniqueName, (FamixPackage) e);
             } else if (e instanceof FamixClass) {
-                classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
+            	name = ((FamixEntity) e).uniqueName.trim();
+            	classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
             } else if (e instanceof FamixInterface) {
                 interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
             } else if (e instanceof FamixLibrary) {
@@ -73,11 +83,15 @@ class FamixModel extends FamixObject {
             }
         } else if (e instanceof FamixAssociation){
 			if(e instanceof FamixImport){
-				imports.put(((FamixImport) e).completeImportString, (FamixImport)e);
+				String importKey = ((FamixImport)e).importedModule + "." +((FamixImport)e).importingClass;
+				imports.put(importKey, (FamixImport) e);
 			}
 			associations.add((FamixAssociation) e);
 		} else {
             throw new InvalidAttributesException("Wrongtype (not of type entity or association) ");
+        }
+        }catch(Exception e1) {
+	        e1.printStackTrace();
         }
     }
 
