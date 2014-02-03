@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 public class ModuleFactory {
 	private static Logger logger = Logger.getLogger(ModuleFactory.class);
 
-	public static String[] flavors = new String[]{
+	public static String[] moduleTypes = new String[]{
 		"Layer",
 		"Component",
 		"Facade",
@@ -24,7 +24,7 @@ public class ModuleFactory {
 		"Blank"
 	};
 
-	public static Class<?>[] icecreams = new Class[]{
+	public static Class<?>[] moduleTypeClasses = new Class[]{
 		Layer.class,
 		Component.class,
 		Facade.class,
@@ -35,9 +35,9 @@ public class ModuleFactory {
 	};
 
 	public ModuleStrategy createModule(String choice){
-		for(int i = 0; i < flavors.length; i++){
-			if(flavors[i].equalsIgnoreCase(choice)) try{
-				ModuleStrategy newModule = (ModuleStrategy)icecreams[i].newInstance();
+		for(int i = 0; i < moduleTypes.length; i++){
+			if(moduleTypes[i].equalsIgnoreCase(choice)) try{
+				ModuleStrategy newModule = (ModuleStrategy)moduleTypeClasses[i].newInstance();
 				newModule.setType(choice);
 				return newModule;
 			}catch (InstantiationException ex) {
@@ -51,9 +51,9 @@ public class ModuleFactory {
 	}
 
 	public ModuleStrategy createDummy(String choice){
-		for(int i = 0; i < flavors.length; i++){
-			if(flavors[i].equalsIgnoreCase(choice)) try{
-				ModuleStrategy dummyModule = (ModuleStrategy)icecreams[i].newInstance();
+		for(int i = 0; i < moduleTypes.length; i++){
+			if(moduleTypes[i].equalsIgnoreCase(choice)) try{
+				ModuleStrategy dummyModule = (ModuleStrategy)moduleTypeClasses[i].newInstance();
 				dummyModule.setType(choice);
 				dummyModule.setId(-1);
 				return dummyModule;

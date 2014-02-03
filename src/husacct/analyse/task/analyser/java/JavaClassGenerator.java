@@ -58,12 +58,7 @@ class JavaClassGenerator extends JavaGenerator {
     public String generateToModel(CommonTree commonTree, String parentClassName) {
         if (commonTree.getChild(1) != null) {
             this.name = commonTree.getChild(1).toString();
-            if (this.name.equals("Base")){
-            	String SearchedClass = this.name;
-            	System.out.println(SearchedClass);
-            }
-            this.isInnerClass = true;
-            this.isAbstract = isAbstract((CommonTree) commonTree);
+            this.isAbstract = isAbstract(commonTree);
             this.isInnerClass = true;
             this.belongsToClass = parentClassName;
             this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();

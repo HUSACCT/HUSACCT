@@ -69,7 +69,7 @@ import org.apache.log4j.Logger;
 				ModuleStrategy module) {
 			AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
 			for (ModuleStrategy subModule : module.getSubModules()) {
-				logger.debug(module.getName() + "  ]" + module.getType());
+				//logger.debug(module.getName() + "  ]" + module.getType());
 				addChildComponents(childComponent, subModule);
 			}
 			parentComponent.addChild(childComponent);
@@ -250,14 +250,15 @@ import org.apache.log4j.Logger;
 			if (selectedModuleId == -1) {
 				moduleService.addModuleToRoot(module);
 			} else {
-				logger.debug("Adding child");
-				ExceptionMessage = moduleService.addNewModuleToParent(
-						selectedModuleId, module);
+				ExceptionMessage = moduleService.addNewModuleToParent(selectedModuleId, module);
 			}
 			this.notifyObservers();
 
 			if (!ExceptionMessage.isEmpty()) {
 				UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
+			}
+			else {
+				logger.info("Adding module with id and name: " + module.getId() + module.getName());
 			}
 		}
 

@@ -8,6 +8,9 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 
 import java.util.ArrayList;
+import java.util.Date;
+
+import org.apache.log4j.Logger;
 
 public class DefaultRuleDomainService {
 
@@ -16,6 +19,8 @@ public class DefaultRuleDomainService {
 	private ArrayList<AppliedRuleStrategy> defaultRules = new ArrayList<AppliedRuleStrategy>();
 	private AppliedRuleFactory factory = new AppliedRuleFactory();
 	public static DefaultRuleDomainService instance;
+    private final Logger logger = Logger.getLogger(DefaultRuleDomainService.class);
+
 
 	public static DefaultRuleDomainService getInstance() {
 		return (instance == null) ? instance = new DefaultRuleDomainService()
@@ -30,13 +35,19 @@ public class DefaultRuleDomainService {
 	}
 
 	private void retrieveRuleTypeDTOsByModule() {
-		if(!_module.getType().equals("Root")){
-			defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
-			// When not bootstrapping, service returns nothing.
-			if(defaultRuleTypeDTOs.length < 1){
-				defaultRuleTypeDTOs = dirtyHack(_module.getType());
+		try{
+			if(!_module.getType().equals("Root")){
+				defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+				// When not bootstrapping, service returns nothing.
+				if(defaultRuleTypeDTOs.length < 1){
+					defaultRuleTypeDTOs = dirtyHack(_module.getType());
+				}
 			}
-		}		
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " DefaultRuleTypes not retrieved correctly: "  + e );
+	        //e.printStackTrace();
+        }
+
 	}
 
 	public RuleTypeDTO[] dirtyHack(String moduleType) {
@@ -46,26 +57,20 @@ public class DefaultRuleDomainService {
 			;
 			break;
 		case "Layer":
-			returnhack
-					.add(new RuleTypeDTO(
-							"IsNotAllowedToMakeSkipCall",
+			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeSkipCall",
 							"A layer should not access other layers other than the adjectent below",
 							null, null));
-			returnhack
-					.add(new RuleTypeDTO("IsNotAllowedToMakeBackCall",
+			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeBackCall",
 							"A layer should not access other layers above",
 							null, null));
 			break;
 		case "Component":
-			// returnhack.add(new RuleTypeDTO("VisibilityConvention",
-			// "",null,null));
-			// returnhack.add(new RuleTypeDTO("FacadeConvention",
-			// "",null,null));
+			//returnhack.add(new RuleTypeDTO("VisibilityConvention", "",null,null));
+			returnhack.add(new RuleTypeDTO("FacadeConvention", "",null,null));
 			break;
 		case "ExternalLibrary":
-			returnhack.add(new RuleTypeDTO("VisibilityConvention", "", null,
-					null));
-
+			//returnhack.add(new RuleTypeDTO("VisibilityConvention", "", null, null));
+			break;
 		}
 
 		RuleTypeDTO[] _temp = new RuleTypeDTO[returnhack.size()];

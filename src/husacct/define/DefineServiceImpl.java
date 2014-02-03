@@ -32,7 +32,7 @@ public class DefineServiceImpl extends ObservableService implements
 		IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
-	private DomainParser domainParser = new DomainParser();
+	private DomainToDtoParser domainParser = new DomainToDtoParser();
 	private AppliedRuleExceptionDomainService exceptionService = new AppliedRuleExceptionDomainService();
 	private ModuleDomainService moduleService = new ModuleDomainService();
 
@@ -198,7 +198,7 @@ public class DefineServiceImpl extends ObservableService implements
 		defineDomainService = new SoftwareArchitectureDomainService();
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
-		domainParser = new DomainParser();
+		domainParser = new DomainToDtoParser();
 		exceptionService = new AppliedRuleExceptionDomainService();
 
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());

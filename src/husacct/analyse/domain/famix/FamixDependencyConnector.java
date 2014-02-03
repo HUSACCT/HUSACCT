@@ -73,7 +73,7 @@ class FamixDependencyConnector {
                 	break;
                 }
             } catch (Exception e) {
-            	this.logger.debug(new Date().toString() + " Exception:  " + e);
+            	this.logger.error(new Date().toString() + " Exception:  " + e);
             	e.printStackTrace();
             }
         }
@@ -180,7 +180,7 @@ class FamixDependencyConnector {
                 }
             } catch (Exception e) {
             	String associationType = association.type;
-    	        this.logger.debug(new Date().toString() + " "  + e + " " + associationType + " " + association.toString());
+    	        this.logger.error(new Date().toString() + " "  + e + " " + associationType + " " + association.toString());
     	        e.printStackTrace();
             }
         }

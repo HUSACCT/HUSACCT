@@ -103,8 +103,7 @@ public class SoftwareUnitController extends PopUpController {
 	}
 
 	public boolean save(ArrayList<AnalyzedModuleComponent> units) {
-		logger.info("Adding software unit to module with id "
-				+ this.getModuleId());
+		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
 
 			StateService.instance().addSoftwareUnit(SoftwareArchitecture.getInstance().getModuleById(this.getModuleId()), units);

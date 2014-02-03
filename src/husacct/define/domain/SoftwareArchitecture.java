@@ -26,19 +26,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		IAppliedRuleSeperatedInterface, ISofwareUnitSeperatedInterface {
 
 	private static SoftwareArchitecture instance = null;
-
-	public static SoftwareArchitecture getInstance() {
-		return instance == null ? (instance = new SoftwareArchitecture())
-				: instance;
-	}
-
-	public static void setInstance(SoftwareArchitecture sA) {
-		instance = sA;
-	}
-
 	private ArrayList<AppliedRuleStrategy> appliedRules;
 	private ArrayList<ModuleStrategy> modules = new ArrayList<ModuleStrategy>();
-
 	private ModuleStrategy rootModule;
 
 	public SoftwareArchitecture() {
@@ -64,11 +53,21 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	}
 
+	public static SoftwareArchitecture getInstance() {
+		return instance == null ? (instance = new SoftwareArchitecture())
+				: instance;
+	}
+
+	public static void setInstance(SoftwareArchitecture sA) {
+		instance = sA;
+	}
+
+
 	private void registerModule(ModuleStrategy module) {
 		modules.add(module);
-		if (module instanceof Component) {
-			modules.add(module.getSubModules().get(0));
-		}
+		//if (module instanceof Component) {
+		//	modules.add(module.getSubModules().get(0));
+		//}
 		
 	}
 

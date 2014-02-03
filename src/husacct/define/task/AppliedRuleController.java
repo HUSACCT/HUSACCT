@@ -183,8 +183,7 @@ public class AppliedRuleController extends PopUpController {
 		fillRuleTypeComboBox(keyValueComboBoxAppliedRule, false);
 	}
 
-	public void fillRuleTypeComboBox(
-			KeyValueComboBox keyValueComboBoxAppliedRule, boolean update) {
+	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule, boolean update) {
 		ModuleStrategy selectedModule = this.moduleService
 				.getModuleById(DefinitionController.getInstance()
 						.getSelectedModuleId());

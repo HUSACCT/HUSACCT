@@ -14,7 +14,7 @@ import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
 
-public class DomainParser {
+public class DomainToDtoParser {
 
 	/**
 	 * SoftwareUnits

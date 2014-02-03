@@ -14,9 +14,11 @@ import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class XMLDomain {
@@ -27,6 +29,8 @@ public class XMLDomain {
 	private AppliedRuleDomainService ruleService = new AppliedRuleDomainService();
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
+    private final Logger logger = Logger.getLogger(XMLDomain.class);
+
 
 	public XMLDomain(Element workspaceData) {
 		workspace = workspaceData;
@@ -43,10 +47,8 @@ public class XMLDomain {
 			Element architecture = applicationProperties.get(3);
 			ArrayList<Project> projectsList = getProjectsFromElement(projects);
 
-			application = new Application(name.getValue(), projectsList,
-					version.getValue());
-			application
-					.setArchitecture(createArchitectureFromElement(architecture));
+			application = new Application(name.getValue(), projectsList, version.getValue());
+			application.setArchitecture(createArchitectureFromElement(architecture));
 		} catch (Exception exe) {
 			System.out.println("XMLDOMAIN :86 nill");
 		}
@@ -202,22 +204,25 @@ public class XMLDomain {
 
 	private void createAppliedRulesFromXML(Element XMLElement) {
 		for (Element appliedRule : XMLElement.getChildren()) {
-			AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
-
-			if (!ruleService.isMandatory(dummyRule.getRuleType(),
-					dummyRule.getModuleFrom())) {
-				long newID = ruleService.addAppliedRule(
-						dummyRule.getRuleType(), dummyRule.getDescription(),
-						dummyRule.getDependencies(), dummyRule.getRegex(),
-						dummyRule.getModuleFrom(), dummyRule.getModuleTo(),
-						dummyRule.isEnabled());
-				AppliedRuleStrategy newRule = ruleService
-						.getAppliedRuleById(newID);
-				newRule.setId(dummyRule.getId());
-				if (hasExceptions(appliedRule)) {
-					newRule.setExceptions(getExceptionsFromXML(appliedRule));
+			try{
+				AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
+	
+				if (!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())) {
+					long newID = ruleService.addAppliedRule(
+							dummyRule.getRuleType(), dummyRule.getDescription(),
+							dummyRule.getDependencies(), dummyRule.getRegex(),
+							dummyRule.getModuleFrom(), dummyRule.getModuleTo(),
+							dummyRule.isEnabled());
+					AppliedRuleStrategy newRule = ruleService
+							.getAppliedRuleById(newID);
+					newRule.setId(dummyRule.getId());
+					if (hasExceptions(appliedRule)) {
+						newRule.setExceptions(getExceptionsFromXML(appliedRule));
+					}
 				}
-			}
+	        } catch (Exception e) {
+	        	this.logger.debug(new Date().toString() + e.getMessage());
+	        }
 		}
 	}
 
@@ -249,13 +254,11 @@ public class XMLDomain {
 		int moduleToId = Integer.parseInt(appliedRule.getChild("moduleTo")
 				.getChild("ModuleStrategy").getChildText("id"));
 
-		AppliedRuleStrategy dummyRule = ruleFactory
-				.createDummyRule(ruleTypeKey);
+		AppliedRuleStrategy dummyRule = ruleFactory.createDummyRule(ruleTypeKey);
 		ModuleStrategy moduleFrom = moduleService.getModuleById(moduleFromId);
 		ModuleStrategy moduleTo = moduleService.getModuleById(moduleToId);
 
-		dummyRule.setAppliedRule(description, dependencyList, regex,
-				moduleFrom, moduleTo, enabled);
+		dummyRule.setAppliedRule(description, dependencyList, regex, moduleFrom, moduleTo, enabled);
 		dummyRule.setId(ruleId);
 		return dummyRule;
 	}
