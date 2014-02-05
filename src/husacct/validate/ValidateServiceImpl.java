@@ -54,7 +54,8 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	 */
 	@Override
 	public CategoryDTO[] getCategories() {
-		return domain.getCategories();
+		CategoryDTO[] categories = domain.getCategories();
+		return categories;
 	}
 
 	/**

@@ -34,7 +34,6 @@ import org.apache.log4j.Logger;
 
 		private static DefinitionController instance;
 
-
 		public static DefinitionController getInstance() {
 			return instance == null ? (instance = new DefinitionController())
 					: instance;
@@ -75,17 +74,12 @@ import org.apache.log4j.Logger;
 			parentComponent.addChild(childComponent);
 		}
 
-
-
-
 		@Override
 		public void addObserver(Observer o) {
 			if (!observers.contains(o)) {
 				observers.add(o);
 			}
 		}
-
-
 
 		public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
 			return appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
@@ -425,6 +419,13 @@ import org.apache.log4j.Logger;
 			}
 		}
 
+		public void updateModuleType(String moduleName, String moduleDescription,
+				String type) {
+			moduleService.updateModuleType(getSelectedModuleId(), moduleName,
+					moduleDescription, type);
+			this.notifyObservers();
+		}
+
 		public void updateFacade(String moduleName){
 			logger.info("Updating facade " + moduleName +"Facade");
 			try {
@@ -440,13 +441,6 @@ import org.apache.log4j.Logger;
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
-		}
-
-		public void updateModule(String moduleName, String moduleDescription,
-				String type) {
-			moduleService.updateModule(getSelectedModuleId(), moduleName,
-					moduleDescription, type);
-			this.notifyObservers();
 		}
 
 		public void addModule(String name, String description, String type) {

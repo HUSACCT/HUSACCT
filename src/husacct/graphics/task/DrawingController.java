@@ -287,20 +287,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 				.getBounds()));
 	}
 	
-	private void getAndDrawDependenciesBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
+	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		
-		AnalysedModuleDTO moduleFromDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
-		
-		AnalysedModuleDTO moduleToDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
-		
-		if(!moduleFromDTO.uniqueName.equals(moduleToDTO.uniqueName)){
-			DependencyDTO[] dependencies = getDependenciesBetween(figureFrom,
-					figureTo);
-			if (dependencies.length > 0) drawDependenciesBetween(dependencies,
-					figureFrom, figureTo);
-		}
-
+		DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
+				if (dependencies.length > 0) 
+					drawDependenciesBetween(dependencies,figureFrom, figureTo);
 	}
 	
 	private void getAndDrawViolationsBetween(BaseFigure figureFrom,

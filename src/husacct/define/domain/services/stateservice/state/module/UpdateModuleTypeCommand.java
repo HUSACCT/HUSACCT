@@ -17,14 +17,14 @@ private ModuleStrategy newModule;
 	public void undo() {
 	ModuleDomainService service = new ModuleDomainService();
 	
-	service.updateModule(oldModule.getId(), oldModule.getName(), oldModule.getDescription(),oldModule.getType());
+	service.updateModuleType(oldModule.getId(), oldModule.getName(), oldModule.getDescription(),oldModule.getType());
     DefinitionController.getInstance().notifyObservers();
 	}
 
 	@Override
 	public void redo() {
 		ModuleDomainService service = new ModuleDomainService();
-		service.updateModule(newModule.getId(), newModule.getName(), newModule.getDescription(),newModule.getType());
+		service.updateModuleType(newModule.getId(), newModule.getName(), newModule.getDescription(),newModule.getType());
 		DefinitionController.getInstance().notifyObservers();
 	}
 

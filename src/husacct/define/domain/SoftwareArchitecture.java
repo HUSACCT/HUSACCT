@@ -81,14 +81,13 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 	}
 
+	//Only to be used to add child modules (rootmodules) to the top module (root)
 	public long addModule(ModuleStrategy module) {
 		long moduleId = module.getId();
 		try {
 			if (!hasModule(module.getName())) {
 				rootModule.addSubModule(module);
                 registerModule(module);
-			
-				
 				updateWarnings();
 				moduleId = module.getId();
 			} else {
@@ -102,12 +101,10 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return moduleId;
 	}
 
+	//Only to be used to add child modules to the top module 
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
-	
-
-	registerModule(module);
-		
+		registerModule(module);
 		return parentModule.addSubModule(module);
 	}
 
@@ -438,6 +435,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return ruleFound;
 	}
 
+	// Returns true if the received name equals the name of the top module (root) or one of its children  
 	private boolean hasModule(String name) {
 		if (rootModule.getName().equals(name)) {
 			return true;
@@ -637,17 +635,10 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		layerTwo.setHierarchicalLevel(hierarchicalLevelLayerOne);
 	}
 
-	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,
-			String newType) {
-
-		
-
+	public ModuleStrategy updateModuleType(ModuleStrategy oldModule, String newType) {
 		int index = oldModule.getparent().getSubModules().indexOf(oldModule);
 		ModuleStrategy updatedModule = new ModuleFactory().updateModuleType(oldModule, newType);
 		updateModule(index,updatedModule);
-		
-		
-
 		return updatedModule;
 	}
 
@@ -656,8 +647,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		parent.getSubModules().remove(index);
 		parent.addSubModule(index, updatedModule);
 		updateRegistry(updatedModule);
-		
-	
 	}
 
 	private void updateRegistry(ModuleStrategy updatedModule) {

@@ -48,7 +48,7 @@ public class DomainGateway {
 
 	public void updateModule(String moduleName, String moduleDescription,
 			String type) {
-		DefinitionController.getInstance().updateModule(moduleName,
+		DefinitionController.getInstance().updateModuleType(moduleName,
 				moduleDescription, type);
 
 	}

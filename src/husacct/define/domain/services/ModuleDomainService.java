@@ -17,35 +17,22 @@ public class ModuleDomainService {
 	private ModuleFactory factory = new ModuleFactory();
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
-
-		
         SoftwareArchitecture.getInstance().addModule(parentModuleId, module);
 		StateService.instance().addModule(module);
-		
-
-		
 		long moduleId = module.getId();
-
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 
 
 	public long addModuleToRoot(ModuleStrategy module) {
-	
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
-	
 		StateService.instance().addModule(module);
-	
-	
-		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 
-	public String addNewModuleToParent(long parentModuleId,
-			ModuleStrategy module) {
-		
+	public String addNewModuleToParent(long parentModuleId,	ModuleStrategy module) {
 		StateService.instance().addModule(module);
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
@@ -53,14 +40,9 @@ public class ModuleDomainService {
 		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
 	}
 	
-	public ModuleStrategy createNewModule(String type)
-	{
-	ModuleStrategy result=	factory.createModule(type);
-	
-
-		
+	public ModuleStrategy createNewModule(String type) {
+		ModuleStrategy result=	factory.createModule(type);
 		return result;
-		
 	}
 
 	public ModuleStrategy getModuleById(long moduleId) {
@@ -209,8 +191,7 @@ public class ModuleDomainService {
 		}
 	}
 
-	public void updateModule(long moduleId, String moduleName,
-			String moduleDescription) {
+	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance()
 				.getModuleById(moduleId);
 		StateService.instance().addUpdateModule(moduleId,
@@ -222,17 +203,7 @@ public class ModuleDomainService {
 				.notifyServiceListeners();
 	}
 	
-	public void updateFacade(long moduleId, String moduleName){
-		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		for(ModuleStrategy subModule : parent.getSubModules()){
-			if(subModule.getType().equals("Facade")){
-				subModule.setName("Facade<"+moduleName+">");
-			}
-		}
-	}
-
-	public void updateModule(long moduleId, String moduleName,
-			String moduleDescription, String newType) {
+	public void updateModuleType(long moduleId, String moduleName, String moduleDescription, String newType) {
 
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		if(module.getId() > 0){
@@ -248,5 +219,13 @@ public class ModuleDomainService {
 
 	}
 	
+	public void updateFacade(long moduleId, String moduleName){
+		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		for(ModuleStrategy subModule : parent.getSubModules()){
+			if(subModule.getType().equals("Facade")){
+				subModule.setName("Facade<"+moduleName+">");
+			}
+		}
+	}
 	
 }

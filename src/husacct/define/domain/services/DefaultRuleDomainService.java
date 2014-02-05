@@ -6,6 +6,8 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.validate.ValidateServiceImpl;
+import husacct.common.dto.CategoryDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,9 +39,11 @@ public class DefaultRuleDomainService {
 	private void retrieveRuleTypeDTOsByModule() {
 		try{
 			if(!_module.getType().equals("Root")){
-				defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+				String type = _module.getType();
+				defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(type);
 				// When not bootstrapping, service returns nothing.
 				if(defaultRuleTypeDTOs.length < 1){
+			        //this.logger.warn(new Date().toString() + " DefaultRuleTypes not received from Validate component ");
 					defaultRuleTypeDTOs = dirtyHack(_module.getType());
 				}
 			}

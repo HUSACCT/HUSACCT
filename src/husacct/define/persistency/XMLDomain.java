@@ -132,22 +132,18 @@ public class XMLDomain {
 			}
 
 			if (SoftwareUnitDefinitions != null) {
-				List<Element> SoftwareUnitDefinitionsList = SoftwareUnitDefinitions
-						.getChildren("SoftwareUnitDefinition");
+				List<Element> SoftwareUnitDefinitionsList = SoftwareUnitDefinitions.getChildren("SoftwareUnitDefinition");
 				Iterator SUDIterator = SoftwareUnitDefinitionsList.iterator();
 				while (SUDIterator.hasNext()) {
 					Object o = SUDIterator.next();
-
 					if (o instanceof Element) {
-						newModule
-								.addSUDefinition(getSoftwareUnitDefinitionFromXML((Element) o));
+						newModule.addSUDefinition(getSoftwareUnitDefinitionFromXML((Element) o));
 					}
 				}
 			}
 
 			if (hasSubmodules(module)) {
-				createModulesFromXML(newModule.getId(),
-						module.getChild("SubModules"));
+				createModulesFromXML(newModule.getId(),	module.getChild("SubModules"));
 			}
 		}
 		SoftwareArchitecture.getInstance().registerImportedValues();
