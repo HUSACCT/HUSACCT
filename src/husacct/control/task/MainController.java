@@ -53,7 +53,7 @@ public class MainController {
 	}
 
 	private void setAppleProperties(){
-		logger.debug("Setting Mac OS X specific properties");		
+		logger.info("Setting Mac OS X specific properties");		
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Husacct");
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("apple.awt.fileDialogForDirectories", "true");

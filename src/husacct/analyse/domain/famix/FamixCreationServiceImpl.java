@@ -388,12 +388,12 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     @Override
     public void connectDependencies() {
         int associationsNumber = model.associations.size();
-        this.logger.debug(new Date().toString() + " Starting: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntitys.size());
+        this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntitys.size());
         dependencyConnector.connectStructuralDependecies();
-        this.logger.debug(new Date().toString() + " Finished: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
+        this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
         dependencyConnector.connectAssociationDependencies();
         associationsNumber = model.associations.size();
-        this.logger.debug(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
+        this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
     }
 
     private boolean addToModel(FamixObject newObject) {

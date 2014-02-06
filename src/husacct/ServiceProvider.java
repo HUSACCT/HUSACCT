@@ -34,21 +34,21 @@ public final class ServiceProvider {
 			_instance = this;
 			resetServices();
 		} catch (StackOverflowError error) {
-			logger.debug("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
+			logger.error("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
 			System.exit(0);
 		}
 	}
 	
 	public static ServiceProvider getInstance() {
 		if (ServiceProvider._instance == null) {
-			logger.debug("Creating new serviceprovider");
+			logger.info("Creating new serviceprovider");
 			new ServiceProvider();
 		}
 		return ServiceProvider._instance;
 	}
 
 	public void resetServices(){
-		logger.debug("Resetting services");
+		logger.info("Resetting services");
 		if(this.controlService == null) this.controlService = new ControlServiceImpl();
 		if(this.localeService == null) this.localeService = new LocaleServiceImpl();
 		this.analyseService = new AnalyseServiceImpl();

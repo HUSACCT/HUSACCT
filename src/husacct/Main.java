@@ -27,13 +27,8 @@ public class Main {
 		Logger logger = Logger.getLogger(Main.class);
 		Runtime runtime = Runtime.getRuntime();
 		//RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
-		logger.debug("STARTING HUSACCT " + new Date().toString());
-		logger.debug("Processors: " + runtime.availableProcessors() + " Free memory: " + runtime.freeMemory() + " Max memory: " + runtime.maxMemory() + " Total memory: " + runtime.totalMemory() );
-		//logger.debug("Free memory: " + runtime.freeMemory());
-		//logger.debug("Max memory: " + runtime.maxMemory());
-		//logger.debug("Total memory: " + runtime.totalMemory());
-		//logger.debug("Process: " + mxBean.getName());
-		
+		logger.info("STARTING HUSACCT " + new Date().toString());
+		logger.info("Processors: " + runtime.availableProcessors() + " Free memory: " + runtime.freeMemory() + " Max memory: " + runtime.maxMemory() + " Total memory: " + runtime.totalMemory() );
 	}
 	
 	public static void main(String[] commandlineArguments) {

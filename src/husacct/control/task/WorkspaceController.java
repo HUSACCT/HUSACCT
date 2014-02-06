@@ -44,7 +44,7 @@ public class WorkspaceController {
 	}
 	
 	public void createWorkspace(String name){
-		logger.debug("New workspace: " + name);
+		logger.info("New workspace: " + name);
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		currentWorkspace = workspace;

@@ -54,7 +54,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private Thread eventHandlerThread;
 	
 	public ControlServiceImpl(){
-		logger.debug("Starting HUSACCT");
 		mainController = new MainController();
 		workspaceController = mainController.getWorkspaceController();
 		applicationController = mainController.getApplicationController();

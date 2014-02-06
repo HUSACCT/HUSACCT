@@ -57,7 +57,7 @@ public class ApplicationController {
 		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(mainController,applicationDTO));
 		currentLoader = analyseThread.getLoader();
 		currentThread = analyseThread.getThread();
-		logger.debug(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
+		logger.info(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
 		currentLoader.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {		

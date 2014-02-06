@@ -55,12 +55,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
     public void analyseApplication(ProjectDTO project) {
         service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
-        this.logger.debug(new Date().toString() + " Finished: IAnalyseControlService.analyseApplication()");
+        this.logger.info(new Date().toString() + " Finished: IAnalyseControlService.analyseApplication()");
         this.analyseInternalFrame = new AnalyseInternalFrame();
-        this.logger.debug(new Date().toString() + " Finished: creation analyseInternalFrame");
+        this.logger.info(new Date().toString() + " Finished: creation analyseInternalFrame");
         this.isAnalysed = true;
         super.notifyServiceListeners();
-        this.logger.debug(new Date().toString() + " Finished: notifying ServiceListeners; this.isAnalysed = true");
+        this.logger.info(new Date().toString() + " Finished: notifying ServiceListeners; this.isAnalysed = true");
     }
 
     @Override

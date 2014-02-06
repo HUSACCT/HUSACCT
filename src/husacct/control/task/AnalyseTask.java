@@ -37,7 +37,7 @@ public class AnalyseTask implements Runnable {
 					
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
 					
-					this.logger.debug(new Date().toString() + " Starting: Analysing project " + currentProject);
+					this.logger.info(new Date().toString() + " Starting: Analysing project " + currentProject);
 					mainController.getActionLogController().addAction("Analysing project " + currentProject);
 					
 					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
@@ -61,10 +61,10 @@ public class AnalyseTask implements Runnable {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
 			this.mainController.getStateController().setAnalysing(false);
-			logger.debug(new Date().toString() + " Finished: Analyse application; state isAnalyzing=false");
-			logger.debug(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces");
+			logger.info(new Date().toString() + " Finished: Analyse application; state isAnalyzing=false");
+			logger.info(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces");
 			int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
-			logger.debug(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
+			logger.info(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
 			mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
 
 			//logger.debug(new Date().toString() + " Starting: Building cache");
