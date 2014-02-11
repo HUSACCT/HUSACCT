@@ -25,7 +25,7 @@ class FamixDependencyConnector {
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
     private HashMap<String, ArrayList<FamixAssociation>> inheritanceAccociationsPerClass;
     private ArrayList<FamixFormalParameter> parametersArrayList;
-    private HashMap<String, FamixStructuralEntity> structuralEntityHashMap;
+    private HashMap<String, FamixStructuralEntity> structuralEntityHashMapOnClassNameVariableName;
     private final Logger logger = Logger.getLogger(FamixDependencyConnector.class);
     private int numberOfNotConnectedWaitingAssociations;
     //Needed for the ProgressBar of the analyse application LoaderDialog 
@@ -47,7 +47,6 @@ class FamixDependencyConnector {
 		String to;
         numberOfWaitingObjects = (theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size());
 		initializeHashMapsimportsPerEntity();
-		initializeHashMapstructuralEntityHashMap();
 		
         for (FamixStructuralEntity entity : theModel.waitingStructuralEntitys) {
             try {
@@ -77,7 +76,7 @@ class FamixDependencyConnector {
             	e.printStackTrace();
             }
         }
-
+		initializeHashMapstructuralEntityHashMap();
     }
 
     void connectAssociationDependencies() {
@@ -86,12 +85,31 @@ class FamixDependencyConnector {
 		String classFoundInImports;
 		String to;
 		FamixInvocation theInvocation;
+		int numberOfConnectedViaImport = 0;
+		int numberOfConnectedViaPackage = 0;
+		int numberOfConnectedViaAssignment = 0;
+		int numberOfConnectedViaAttribute = 0;
+		int numberOfConnectedViaLocalVariable = 0;
+		int numberOfConnectedAccess = 0;
+
 
 		List<FamixAssociation> allWaitingAssociations  = theModel.waitingAssociations;
         for (FamixAssociation association : allWaitingAssociations) {
             try {
             	classFoundInImports = "";
                 boolean connected = false;
+                theInvocation = null;
+                /*
+                Note: Usefull to select a certain testcase and breakline here with the debugger
+                if (isInvocation(association)) {
+                	theInvocation = (FamixInvocation) association;
+                	if (theInvocation.belongsToMethod.equalsIgnoreCase("CallInstanceMethod()")){
+                		String method = theInvocation.belongsToMethod;
+                		String fromClass = theInvocation.from;
+                	}
+                }
+                */
+                
                 if (association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){ 
                 	numberOfNotConnectedWaitingAssociations ++;
                 }
@@ -103,6 +121,7 @@ class FamixDependencyConnector {
 	                        // So, in case association.to does not contain "." AND association.to is an import of association.from
 	                        association.to = classFoundInImports;
 	                        connected = true;
+	                        numberOfConnectedViaImport ++;
 	                    } else {
 	                        belongsToPackage = getPackageFromUniqueClassName(association.from);
 	                        to = findClassInPackage(association.to, belongsToPackage);
@@ -110,6 +129,7 @@ class FamixDependencyConnector {
 	                            // So, in case association.to does not contain "." AND association.to shares the same package as association.from 
 	                            association.to = to;
 	                            connected = true;
+	                            numberOfConnectedViaPackage ++;
 	                        }
 	                    }
 	                    if (!connected) {
@@ -118,56 +138,46 @@ class FamixDependencyConnector {
 	                            if (theInvocation.belongsToMethod == null || theInvocation.belongsToMethod.equals("")) {
 	                                //Then it is an attribute assignment. Example: currentFunction = FinderArguments.ROOT; 
 	                                theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
+	                                numberOfConnectedViaAssignment ++;
 	                            } else {
-	                            	// get StructuralEntity on key belongsToClass/line/name on from/line/nameOfInstance
-	                            	String searchKey = theInvocation.from + theInvocation.lineNumber + theInvocation.nameOfInstance;
-	                            	if (structuralEntityHashMap.containsKey(searchKey)) {
-	                            		FamixStructuralEntity entity = structuralEntityHashMap.get(searchKey);
+	                            	// If association.type == InvocConstructor, then connected should be true
+	                            	// If association.type == AccessPropertyOrField or InvocMethod, the type of the variable needs to be determined
+	                            	// The variable may be an attribute, local variable, global variable, parameter, ...                             	
+
+	                            	// 1) Attribute: Get StructuralEntity on key ClassName.VariableName
+	                            	String searchKey = theInvocation.from + "." + theInvocation.nameOfInstance;
+	                            	//if (structuralEntityHashMapOnClassNameVariableName.containsKey(searchKey)) {
+	                            		//FamixStructuralEntity entity = structuralEntityHashMapOnClassNameVariableName.get(searchKey);
+	                            	if (theModel.structuralEntities.containsKey(searchKey)) {
+	                            		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
 	                            		if (entity.declareType != null && !entity.declareType.equals("")){
 	                            			theInvocation.to = entity.declareType;
-	                            			if (entity instanceof FamixAttribute){
-	                            				String entityUniqueName = entity.uniqueName;
-	                            				String entityDeclareType = entity.declareType;
-	                            				String invocationTo = theInvocation.to;
-	                            				String invocationFrom = theInvocation.from;
-	                            			}
-	                            			if (entity instanceof FamixLocalVariable){
-	                            				String entityUniqueName = entity.uniqueName;
-	                            				String entityDeclareType = entity.declareType;
-	                            				String invocationTo = theInvocation.to;
-	                            				String invocationFrom = theInvocation.from;
-	                            			}
-	                            			if (entity instanceof FamixImplicitVariable){
-	                            				String entityUniqueName = entity.uniqueName;
-	                            				String entityDeclareType = entity.declareType;
-	                            				String invocationTo = theInvocation.to;
-	                            				String invocationFrom = theInvocation.from;
-	                            			}
-	                            			if (entity instanceof FamixGlobalVariable){
-	                            				String entityUniqueName = entity.uniqueName;
-	                            				String entityDeclareType = entity.declareType;
-	                            				String invocationTo = theInvocation.to;
-	                            				String invocationFrom = theInvocation.from;
-	                            			}
-	                            			if (entity instanceof FamixFormalParameter){
-	                            				String entityUniqueName = entity.uniqueName;
-	                            				String entityDeclareType = entity.declareType;
-	                            				String invocationTo = theInvocation.to;
-	                            				String invocationFrom = theInvocation.from;
-	                            			}
+	                            			numberOfConnectedViaAttribute ++;
 	                            		}
+	                            	} else {
+	                            		// 2) Local variable: Get StructuralEntity on key ClassName.MethodName.VariableName
+	                            		searchKey = theInvocation.from + "." + theInvocation.belongsToMethod + "." + theInvocation.nameOfInstance;
+		                            	if (theModel.structuralEntities.containsKey(searchKey)) {
+		                            		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
+		                            		if (entity.declareType != null && !entity.declareType.equals("")){
+		                            			theInvocation.to = entity.declareType;
+		                            			numberOfConnectedViaLocalVariable ++;
+		                            		}
+		                            	}
 	                            	}
+	                            			
 	                            }
 	                        }
 	                        if (association instanceof FamixAccess) {
 	                            FamixAccess theAccess = (FamixAccess) association;
+	                            numberOfConnectedAccess ++;
 	                        }
 	                    }
 	                }
     				
 
-                		if(association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){
-    					numberOfNotConnectedWaitingAssociations ++;
+            		if(association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){
+            			numberOfNotConnectedWaitingAssociations ++;
     				} else {
     					determineSpecificExtendType(association);
     					addToModel(association);
@@ -184,6 +194,11 @@ class FamixDependencyConnector {
     	        e.printStackTrace();
             }
         }
+
+        this.logger.info(" Connected via 1) Import: " + numberOfConnectedViaImport 
+        		+ ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Assignment: " + numberOfConnectedViaAssignment 
+        		+ ", 4) Attribute: " + numberOfConnectedViaAttribute + ", 5) Local var: " + numberOfConnectedViaLocalVariable 
+        		+ ", 6) Access: " + numberOfConnectedAccess);
     }
     
     
@@ -374,24 +389,26 @@ class FamixDependencyConnector {
     }
 
     private void initializeHashMapstructuralEntityHashMap() {
-    	structuralEntityHashMap = new HashMap<String, FamixStructuralEntity>();
+    	structuralEntityHashMapOnClassNameVariableName = new HashMap<String, FamixStructuralEntity>();
 
     	int nrOfDuplicateStructuralEntities = 0;
+    	int nrOfIndexedStructuralEntities = 0;
 
 		try{
 	    	for (FamixStructuralEntity entity : theModel.structuralEntities.values()) {
-	    		String searchKey = entity.belongsToClass + entity.lineNumber + entity.name;
-	            if (structuralEntityHashMap.containsKey(searchKey)){
+	    		String searchKey = entity.belongsToClass + "." + entity.name;
+	            if (structuralEntityHashMapOnClassNameVariableName.containsKey(searchKey)){
 	            	nrOfDuplicateStructuralEntities ++;
 	            }
 	            else {
-	        		structuralEntityHashMap.put(searchKey, entity);
+	        		structuralEntityHashMapOnClassNameVariableName.put(searchKey, entity);
+	        		nrOfIndexedStructuralEntities ++;
 	            }
 	    	}
-	        //this.logger.debug(new Date().toString() + " Finished: initializeHashMapsForQueries(), Number of duplicate StructuralEntities: "  + String.valueOf(nrOfDuplicateStructuralEntities));
+	        this.logger.info(new Date().toString() + " Finished: initializeHashMapsForQueries(), Number of duplicate StructuralEntities: "  + String.valueOf(nrOfDuplicateStructuralEntities));
 	        
 		} catch(Exception e) {
-	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
+	        this.logger.error(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
 	        e.printStackTrace();
 		}
     	

@@ -92,7 +92,7 @@ public class DocumentationDialog extends JDialog{
 	private void addComponents() {
 		
 		JLabel textLabel = new JLabel(localeService.getTranslatedString("clickLinkForDocumentation"));
-		hyperLinkLabel = new JLabel("http://husacct.github.io/HUSACCT/#user_general");
+		hyperLinkLabel = new JLabel("http://husacct.github.io/HUSACCT/#user_documentation");
 		hyperLinkLabel.setForeground(Color.BLUE);
 		
 		hyperLinkLabel.addMouseListener(new MouseAdapter()  
