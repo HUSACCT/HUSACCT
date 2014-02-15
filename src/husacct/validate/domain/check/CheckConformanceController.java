@@ -15,6 +15,7 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,8 @@ public class CheckConformanceController {
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules) {
+		this.logger.info(new Date().toString() + " Start ConformanceCheck");
+
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
 
 		for (ProjectDTO project : applicationDetails.projects) {
@@ -58,7 +61,7 @@ public class CheckConformanceController {
 					}
 					// Call for an validation progress update
 					ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100) / appliedRules.length);
-
+					
 					try {
 						RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 						List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
@@ -74,7 +77,11 @@ public class CheckConformanceController {
 					}
 				}
 				configuration.addViolations(violationList);
+				configuration.filterAndSortAllViolations();
+				this.logger.info(new Date().toString() + " Finished ConformanceCheck");
+
 			} else {
+				logger.error(String.format(" Programming language not found for project: " + project.name));
 				throw new ProgrammingLanguageNotFoundException();
 			}
 		}

@@ -76,7 +76,8 @@ class FamixDependencyConnector {
             	e.printStackTrace();
             }
         }
-		initializeHashMapstructuralEntityHashMap();
+		// Not needed (any more/currently)to connect waitingAssociations
+        //initializeHashMapstructuralEntityHashMap();
     }
 
     void connectAssociationDependencies() {

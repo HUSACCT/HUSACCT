@@ -67,6 +67,10 @@ public final class ConfigurationServiceImpl extends Observable {
 		notifyObservers();
 		notifyServiceListeners();
 	}
+	
+	public void filterAndSortAllViolations(){
+		violationRepository.filterAndSortAllViolations();
+	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
 		return severityPerTypeRepository.getSeveritiesPerTypePerProgrammingLanguage();
