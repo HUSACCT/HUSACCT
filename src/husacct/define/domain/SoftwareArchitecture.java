@@ -112,6 +112,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		if (hasAppliedRule(appliedRuleId)) {
 			for (AppliedRuleStrategy rule : appliedRules) {
 				if (rule.getId() == appliedRuleId) {
+					long id = rule.getId();
 					return rule;
 				}
 			}

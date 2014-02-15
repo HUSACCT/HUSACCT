@@ -207,12 +207,14 @@ public class ModuleDomainService {
 
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		if(module.getId() > 0){
-			DefaultRuleDomainService service = new DefaultRuleDomainService();
-			service.removeDefaultRules(module);
-			ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(module, newType);
-			service.addDefaultRules(updatedModule);
-			service.updateModuleRules(updatedModule);
-			StateService.instance().addUpdateModule(module, updatedModule);
+			if (module.getType() != newType){
+				DefaultRuleDomainService service = new DefaultRuleDomainService();
+				service.removeDefaultRules(module);
+				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(module, newType);
+				service.addDefaultRules(updatedModule);
+				service.updateModuleRules(updatedModule);
+				StateService.instance().addUpdateModule(module, updatedModule);
+			}
 		}
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();

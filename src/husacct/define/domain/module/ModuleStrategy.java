@@ -24,7 +24,14 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
 	protected ArrayList<ModuleStrategy> subModules;
 	protected ModuleStrategy parent;
+	// fromStorage == true, if the object is restored from persistency; false, if new
+	protected boolean fromStorage = false; 
 
+	public void set (String name, String description, boolean stored){
+		this.fromStorage = stored;
+		set(name, description);
+	}
+	
 	public void set(String name, String description){
 		this.id = STATIC_ID;
 		STATIC_ID++;
@@ -58,6 +65,10 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public boolean getFromStorage() {
+		return fromStorage;
 	}
 
 	public ArrayList<SoftwareUnitDefinition> getUnits() {
@@ -128,8 +139,9 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		if(!subModules.contains(subModule) && !hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-			new DefaultRuleDomainService().addDefaultRules(subModule);
-		
+			if (!subModule.fromStorage){
+				new DefaultRuleDomainService().addDefaultRules(subModule);
+			}
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
@@ -339,13 +351,11 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		newModule.setSubModules(this.getSubModules());
 		newModule.setRegExUnits(this.getRegExUnits());
 		newModule.setUnits(this.getUnits());
-		
-		
+		newModule.fromStorage=(this.getFromStorage());
 	}
 
 	public void setParent(ModuleStrategy moduleParent) {
 		this.parent=moduleParent;
-		
 	}
 
 

@@ -21,8 +21,7 @@ public class ApplicationController {
 	jframe = new ApplicationJInternalFrame();
 
 	// This method sets the definition jpanel in the jframe.
-	DefinitionController definitionController = DefinitionController
-		.getInstance();
+	DefinitionController definitionController = DefinitionController.getInstance();
 	definitionController.initSettings();
 	jframe.setContentView(definitionController.initUi());
 	jframe.setIconifiable(true);

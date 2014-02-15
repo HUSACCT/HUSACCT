@@ -273,8 +273,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 		this.add(addButtonPanel(), BorderLayout.EAST);
 		createPopupMenu();
 		setButtonEnableState();
-		ServiceProvider.getInstance().getLocaleService()
-				.addServiceListener(this);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 	}
 
 	private void removeRules() {
@@ -332,48 +331,36 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 
 	public void updateAppliedRuleTable() {
 		try {
-			JTableTableModel atm = (JTableTableModel) appliedRulesTable
-					.getModel();
+			JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
 			atm.getDataVector().removeAllElements();
 
-			long moduleId = DefinitionController.getInstance()
-					.getSelectedModuleId();
-			JPanelStatus.getInstance(
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("UpdatingRules")).start();
+			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
-				ArrayList<Long> appliedRulesIds = DefinitionController
-						.getInstance().getAppliedRuleIdsBySelectedModule();
+				ArrayList<Long> appliedRulesIds = DefinitionController.getInstance().getAppliedRuleIdsBySelectedModule();
 
 				if (appliedRulesIds != null) {
 					for (long appliedRuleId : appliedRulesIds) {
 
-						HashMap<String, Object> ruleDetails = DefinitionController
-								.getInstance().getRuleDetailsByAppliedRuleId(
-										appliedRuleId);
-						String ruleTypeKey = (String) ruleDetails
-								.get("ruleTypeKey");
+						HashMap<String, Object> ruleDetails = DefinitionController.getInstance().getRuleDetailsByAppliedRuleId(appliedRuleId);
+						String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
 						// SetDataHelper to help retrieve the applied Rule id
 						// through the ruleTypeKey
 						DataHelper datahelperRuleType = new DataHelper();
 						datahelperRuleType.setId(appliedRuleId);
 						datahelperRuleType.setValue(ruleTypeKey);
 
-						String moduleToName = (String) ruleDetails
-								.get("moduleToName");
-						boolean appliedRuleIsEnabled = (Boolean) ruleDetails
-								.get("enabled");
+						String moduleToName = (String) ruleDetails.get("moduleToName");
+						boolean appliedRuleIsEnabled = (Boolean) ruleDetails.get("enabled");
 						String enabled = "Off";
 						if (appliedRuleIsEnabled) {
 							enabled = "On";
 						}
-						int numberofexceptions = (Integer) ruleDetails
-								.get("numberofexceptions");
+						int numberofexceptions = (Integer) ruleDetails.get("numberofexceptions");
 
-						Object rowdata[] = { datahelperRuleType, moduleToName,
-								enabled, numberofexceptions };
+						Object rowdata[] = { datahelperRuleType, moduleToName, enabled, numberofexceptions };
 
 						atm.addRow(rowdata);
 					}

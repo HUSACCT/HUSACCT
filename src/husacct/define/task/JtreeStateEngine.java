@@ -222,12 +222,10 @@ return	allUnitsRegistry.getNotMappedUnits();
 	public void registerImportedData() {
        for (String unigNames : allUnitsRegistry.getimportedUnits()) {
 		AnalyzedModuleComponent result = allUnitsRegistry.getAnalyzedUnit(unigNames.toLowerCase());
-		if (result!=null) {
-			result.freeze();
+			if (result!=null) {
+				result.freeze();
+			}
 		}
-		
-	}
-		
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {

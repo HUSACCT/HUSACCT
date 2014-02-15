@@ -117,7 +117,8 @@ public class XMLDomain {
 				break;
 
 			}
-			newModule.set(moduleName, moduleDescription);
+			boolean fromStorage = true;
+			newModule.set(moduleName, moduleDescription, fromStorage);
 			newModule.setId(moduleId);
 
 			// Add to Software Unit
@@ -203,19 +204,17 @@ public class XMLDomain {
 			try{
 				AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
 	
-				if (!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())) {
-					long newID = ruleService.addAppliedRule(
-							dummyRule.getRuleType(), dummyRule.getDescription(),
+				//if (!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())) {
+					long newID = ruleService.addAppliedRule(dummyRule.getRuleType(), dummyRule.getDescription(),
 							dummyRule.getDependencies(), dummyRule.getRegex(),
 							dummyRule.getModuleFrom(), dummyRule.getModuleTo(),
 							dummyRule.isEnabled());
-					AppliedRuleStrategy newRule = ruleService
-							.getAppliedRuleById(newID);
+					AppliedRuleStrategy newRule = ruleService.getAppliedRuleById(newID);
 					newRule.setId(dummyRule.getId());
 					if (hasExceptions(appliedRule)) {
 						newRule.setExceptions(getExceptionsFromXML(appliedRule));
 					}
-				}
+				//}
 	        } catch (Exception e) {
 	        	this.logger.debug(new Date().toString() + e.getMessage());
 	        }

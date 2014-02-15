@@ -14,9 +14,8 @@ public class AppliedRuleDomainService {
 
 	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
 
-	public long addAppliedRule(String ruleTypeKey, String description,
-			String[] dependencies, String regex, long ModuleStrategyFromId,
-			long ModuleStrategyToId, boolean enabled) {
+	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies, String regex, 
+			long ModuleStrategyFromId, long ModuleStrategyToId, boolean enabled) {
 		ModuleStrategy ModuleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(
 				ModuleStrategyFromId);
 		ModuleStrategy ModuleStrategyTo;
@@ -42,8 +41,7 @@ public class AppliedRuleDomainService {
 		}
 		StateService.instance().addAppliedRule(rule);
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
-		ServiceProvider.getInstance().getDefineService()
-		.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 
 		return rule.getId();
 	}
