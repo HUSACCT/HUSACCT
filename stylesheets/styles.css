@@ -137,7 +137,7 @@ header {
 }
 header #git_menu {
   list-style:none;
-  height:40px;
+  height:60px;
   padding:0;
   background: #eee;
   background: -moz-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
@@ -147,17 +147,17 @@ header #git_menu {
   background: -ms-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   border-radius:5px;
-  border:1px solid #d2d2d2;
+  border:2px solid #d2d2d2;
   box-shadow:inset #fff 0 1px 0, inset rgba(0,0,0,0.03) 0 -1px 0;
-  width:270px;
+  width:205px;
   margin-bottom: 0px;
 }
 
 header #git_menu li {
-  width:89px;
+  width:100px;
   float:left;
-  border-right:1px solid #d2d2d2;
-  height:40px;
+  border-right:2px solid #d2d2d2;
+  height:60px;
 }
 
 header #git_menu a {
@@ -167,7 +167,7 @@ header #git_menu a {
   display:block;
   text-align:center;
   padding-top:6px;
-  height:40px;
+  height:60px;
 }
 
 strong {
@@ -178,12 +178,12 @@ header > p{
 	margin-bottom: 0px;
 }
 header #git_menu li + li {
-  width:88px;
+  width:100px;
   border-left:1px solid #fff;
 }
 header #git_menu li + li + li {
   border-right:none;
-  width:89px;
+  width:101px;
 }
 header #git_menu a strong {
   font-size:14px;
