@@ -62,15 +62,20 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == addSoftwareUnitButton
-				|| action.getSource() == addSoftwareUnitItem) {
-			addSoftwareUnit();
-		} else if (action.getSource() == removeSoftwareUnitButton
-				|| action.getSource() == removeSoftwareUnitItem) {
-			removeSoftwareUnits();
-		} else if (action.getSource() == editSoftwareUnitButton
-				|| action.getSource() == editSoftwareUnitItem) {
-			editSoftwareUnit();
+		if (!DefinitionController.getInstance().isAnalysed()) {
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"),
+					ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			if (action.getSource() == addSoftwareUnitButton	|| action.getSource() == addSoftwareUnitItem) {
+				addSoftwareUnit(); 
+			} else if (action.getSource() == removeSoftwareUnitButton
+					|| action.getSource() == removeSoftwareUnitItem) {
+				removeSoftwareUnits();
+			} else if (action.getSource() == editSoftwareUnitButton
+					|| action.getSource() == editSoftwareUnitItem) {
+				editSoftwareUnit();
+			}
 		}
 	}
 
@@ -103,50 +108,19 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	}
 
 	private void addSoftwareUnit() {
-		if (DefinitionController.getInstance().isAnalysed()) {
-			if (DefinitionController.getInstance().isAnalysed()
-					|| ServiceProvider.getInstance().getControlService()
-							.isPreAnalysed()) {
-				long moduleId = DefinitionController.getInstance()
-						.getSelectedModuleId();
-				if (moduleId != -1) {
-					if (softwareUnitFrame == null) {
-						softwareUnitFrame = new SoftwareUnitJDialog(
-								DefinitionController.getInstance()
-										.getSelectedModuleId());
-						DialogUtils.alignCenter(softwareUnitFrame);
-						softwareUnitFrame.setVisible(true);
-					} else if (!softwareUnitFrame.isVisible()) {
-						DialogUtils.alignCenter(softwareUnitFrame);
-						softwareUnitFrame.setVisible(true);
-					}
-				}
-
-				else {
-					JOptionPane
-							.showMessageDialog(
-									this,
-									ServiceProvider
-											.getInstance()
-											.getLocaleService()
-											.getTranslatedString(
-													"NotAnalysedYet"),
-									ServiceProvider
-											.getInstance()
-											.getLocaleService()
-											.getTranslatedString(
-													"NotAnalysedYetTitle"),
-									JOptionPane.ERROR_MESSAGE);
-				}
+		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+		if (moduleId != -1) {
+			if (softwareUnitFrame == null) {
+				softwareUnitFrame = new SoftwareUnitJDialog(
+						DefinitionController.getInstance()
+								.getSelectedModuleId());
+				DialogUtils.alignCenter(softwareUnitFrame);
+				softwareUnitFrame.setVisible(true);
+			} else if (!softwareUnitFrame.isVisible()) {
+				DialogUtils.alignCenter(softwareUnitFrame);
+				softwareUnitFrame.setVisible(true);
 			}
-		} else {
-			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance()
-					.getLocaleService().getTranslatedString("NotAnalysedYet"),
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("NotAnalysedYetTitle"),
-					JOptionPane.ERROR_MESSAGE);
 		}
-
 	}
 
 	private JScrollPane addSoftwareUnitsTable() {
@@ -308,22 +282,16 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 			List<String> selectedModules = new ArrayList<String>();
 			List<String> types = new ArrayList<String>();
 			for (int selectedRow : softwareUnitsTable.getSelectedRows()) {
-				String softwareUnitName = (String) softwareUnitsTable
-						.getValueAt(selectedRow, 0);
-				String type = (String) softwareUnitsTable.getValueAt(
-						selectedRow, 1);
+				String softwareUnitName = (String) softwareUnitsTable.getValueAt(selectedRow, 0);
+				String type = (String) softwareUnitsTable.getValueAt(selectedRow, 1);
 				selectedModules.add(softwareUnitName);
 				types.add(type);
 			}
-			DomainGateway.getInstance().removeSoftwareUnits(selectedModules,
-					types);
+			DomainGateway.getInstance().removeSoftwareUnits(selectedModules, types);
 
 		} else {
-			JOptionPane.showMessageDialog(this,
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("SoftwareunitSelectionError"),
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("WrongSelectionTitle"),
+			JOptionPane.showMessageDialog(this,ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"),
+					ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"),
 					JOptionPane.ERROR_MESSAGE);
 
 		}

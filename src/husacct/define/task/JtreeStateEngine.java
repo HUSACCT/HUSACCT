@@ -187,6 +187,7 @@ return allUnitsRegistry.getAnalyzedUnit(unit);
 		
 	}
 
+	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public ModuleStrategy getModulebySoftwareUnitUniqName(String uniqueName) {
 		
 		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(uniqueName);

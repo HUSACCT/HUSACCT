@@ -105,12 +105,13 @@ public class SoftwareUnitDefinitionDomainService {
 				.notifyServiceListeners();
 	}
 
-	public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(
-			String softwareUnitName) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleByRegExSoftwareUnit(softwareUnitName);
-		SoftwareUnitRegExDefinition softwareUnit = module
-				.getRegExSoftwareUnitByName(softwareUnitName);
+	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
+	public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(String softwareUnitName) {
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleByRegExSoftwareUnit(softwareUnitName);
+		SoftwareUnitRegExDefinition softwareUnit = null;
+		if (module != null){
+			softwareUnit = module.getRegExSoftwareUnitByName(softwareUnitName);
+		}
 		return softwareUnit;
 	}
 
@@ -127,19 +128,18 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 
 	public ArrayList<SoftwareUnitDefinition> getSoftwareUnit(long moduleId) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
 		return softwareUnits;
 	}
 
+	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleBySoftwareUnit(softwareUnitName);
-
-		SoftwareUnitDefinition softwareUnit = module
-				.getSoftwareUnitByName(softwareUnitName);
-
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(softwareUnitName);
+		SoftwareUnitDefinition softwareUnit = null;
+		if (module != null){
+			softwareUnit = module.getSoftwareUnitByName(softwareUnitName);
+		}	
 		return softwareUnit;
 	}
 
@@ -159,9 +159,13 @@ public class SoftwareUnitDefinitionDomainService {
 		return softwareUnitNames;
 	}
 
+	// Returns "", if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public String getSoftwareUnitType(String softwareUnitName) {
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnitName);
-		String softwareUnitType = unit.getType().toString();
+		String softwareUnitType = "";
+		if (unit != null){
+			softwareUnitType = unit.getType().toString();
+		}
 		return softwareUnitType;
 	}
 
@@ -171,31 +175,27 @@ public class SoftwareUnitDefinitionDomainService {
 
 	}
 
-	public ExpressionUnitDefinition removeRegExSoftwareUnit(long moduleId,
-			String softwareUnit) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
+	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
+	public ExpressionUnitDefinition removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
-		module.removeSUDefintion(unit);
-
-		JtreeController.instance().restoreRegexWrapper(
-				(ExpressionUnitDefinition) unit);
-
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		if(unit != null){
+			module.removeSUDefintion(unit);
+			JtreeController.instance().restoreRegexWrapper((ExpressionUnitDefinition) unit);
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		}
 		return (ExpressionUnitDefinition) unit;
 	}
 
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
-		module.removeSUDefintion(unit);
-
-		StateService.instance().removeSoftwareUnit(module, unit);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		if (unit != null){
+			module.removeSUDefintion(unit);
+			StateService.instance().removeSoftwareUnit(module, unit);
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		}
 	}
 
 	public void addSoftwareUnit(long moduleId,
@@ -240,20 +240,18 @@ public class SoftwareUnitDefinitionDomainService {
 
 	}
 
-	public void removeSoftwareUnit(long moduleId,
-			ArrayList<AnalyzedModuleComponent> data) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
+	public void removeSoftwareUnit(long moduleId, ArrayList<AnalyzedModuleComponent> data) {
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 
 		for (AnalyzedModuleComponent units : data) {
 
-			SoftwareUnitDefinition unit = getSoftwareUnitByName(units
-					.getUniqueName());
-			module.removeSUDefintion(unit);
-			WarningMessageService.getInstance().processModule(module);
-			StateService.instance().removeSoftwareUnit(module, unit);
-			ServiceProvider.getInstance().getDefineService()
-					.notifyServiceListeners();
+			SoftwareUnitDefinition unit = getSoftwareUnitByName(units.getUniqueName());
+			if(unit != null){
+				module.removeSUDefintion(unit);
+				WarningMessageService.getInstance().processModule(module);
+				StateService.instance().removeSoftwareUnit(module, unit);
+				ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+			}
 		}
 
 	}

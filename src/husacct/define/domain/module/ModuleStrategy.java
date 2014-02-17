@@ -167,7 +167,14 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public boolean hasSubModules(){
-		return subModules.isEmpty();	
+		boolean returnValue;
+		if (subModules.isEmpty()){
+			returnValue = false;
+		}
+		else{
+			returnValue = true;
+		}
+		return returnValue;	
 	}
 
 	public boolean hasSubModule(String name){
@@ -209,12 +216,13 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return hasRegExSoftwareUnit(softwareUnitName, false);
 	}
 	
+	// Gives reliable results only if there are no subsubmodules, subsubsubmodles ...!!!
 	public int countSoftwareUnits(){
 		int counter = 0;
 		for (int i = 0; i < mappedSUunits.size(); i++){
 			counter++;
 		}
-		if(!this.hasSubModules()){
+		if(this.hasSubModules()){
 			for(ModuleStrategy sub : this.subModules){
 				counter+= sub.countSoftwareUnits();
 			}
@@ -242,8 +250,12 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
 		}
-		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
-		return softwareUnit;
+		if (softwareUnit == null){ 
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));
+			}
+		else{
+			return softwareUnit;
+		}
 	}
 
 	public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(String softwareUnitName){

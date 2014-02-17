@@ -76,8 +76,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		if (!appliedRules.contains(rule) && !hasAppliedRule(rule.getId())) {
 			appliedRules.add(rule);
 		} else {
-			throw new RuntimeException(ServiceProvider.getInstance()
-					.getLocaleService().getTranslatedString("RuleAlreadyAdded"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleAlreadyAdded"));
 		}
 	}
 
@@ -91,9 +90,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 				updateWarnings();
 				moduleId = module.getId();
 			} else {
-				throw new RuntimeException(ServiceProvider.getInstance()
-						.getLocaleService()
-						.getTranslatedString("SameNameModule"));
+				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"));
 			}
 		} catch (Exception rt) {
 			rt.printStackTrace();
@@ -185,8 +182,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			currentModule = rootModule;
 			while (currentModule.getId() != moduleId) {
 				for (ModuleStrategy subModule : currentModule.getSubModules()) {
-					if (subModule.getId() == moduleId
-							|| subModule.hasSubModule(moduleId)) {
+					if (subModule.getId() == moduleId || subModule.hasSubModule(moduleId)) {
 						currentModule = subModule;
 					}
 				}
@@ -240,12 +236,12 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return currentModule;
 	}
 
+	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public ModuleStrategy getModuleByRegExSoftwareUnit(String softwareUnitName) {
 		ModuleStrategy currentModule = null;
 		if (rootModule.hasRegExSoftwareUnit(softwareUnitName)) {
 			currentModule = rootModule;
-			while (!currentModule
-					.hasRegExSoftwareUnitDirectly(softwareUnitName)) {
+			while (!currentModule.hasRegExSoftwareUnitDirectly(softwareUnitName)) {
 				for (ModuleStrategy subModule : currentModule.getSubModules()) {
 					if (subModule.hasRegExSoftwareUnit(softwareUnitName)) {
 						currentModule = subModule;
@@ -254,35 +250,42 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			}
 		}
 		if (currentModule == null) {
-			throw new RuntimeException(ServiceProvider.getInstance()
-					.getLocaleService()
-					.getTranslatedString("SoftwareUnitNotMapped"));
+			//throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));
 		}
 		return currentModule;
 	}
 
+	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
-		ModuleStrategy currentModule = null;
+		ModuleStrategy moduleMappedToSU = null;
 
-		for (ModuleStrategy moduleResult : modules) {
-
-			for (SoftwareUnitDefinition softwareUnitResult : moduleResult
-					.getUnits()) {
-				if (softwareUnitResult.getName().toLowerCase()
-						.equals(softwareUnitName.toLowerCase())) {
-					currentModule = moduleResult;
-					break;
-				}
+		for (ModuleStrategy module : modules) {
+			moduleMappedToSU = getModuleMappedToSoftwareUnitName(module, softwareUnitName);
+			if (moduleMappedToSU != null) {
+				break;
 			}
 		}
-
-		if (currentModule == null) {
-			throw new RuntimeException(ServiceProvider.getInstance()
-					.getLocaleService()
-					.getTranslatedString("SoftwareUnitNotMapped"));
+		if (moduleMappedToSU == null) {
+			//throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));
 		}
-		return currentModule;
+		return moduleMappedToSU;
 	}
+
+	private ModuleStrategy getModuleMappedToSoftwareUnitName(ModuleStrategy module, String softwareUnitName){
+		ModuleStrategy moduleMappedToSU = null;
+
+		for (SoftwareUnitDefinition softwareUnitResult : module.getUnits()) {
+			if (softwareUnitResult.getName().toLowerCase().equals(softwareUnitName.toLowerCase())) {
+				moduleMappedToSU = module;
+				return moduleMappedToSU;
+			}
+		}
+		for (ModuleStrategy mod : module.getSubModules()){
+			moduleMappedToSU = getModuleMappedToSoftwareUnitName(mod, softwareUnitName);
+		}
+		return moduleMappedToSU;
+	}
+	
 
 	public ArrayList<ModuleStrategy> getModules() {
 		return rootModule.getSubModules();

@@ -77,7 +77,7 @@ public class ReportToHTML {
 	// Recursively search all modules
 	private int countModules(ModuleStrategy module){
 		int counter = 1;
-		if(!module.hasSubModules()){
+		if(module.hasSubModules()){
 			for(ModuleStrategy submodule : module.getSubModules()){
 				counter += countModules(submodule);
 			}
@@ -108,7 +108,7 @@ public class ReportToHTML {
 			content.append(makeTableRow(moduleName, softwareUnits, appliedRules));
 			int parentId = ID;
 			ID++;
-			if(!rootModules[i].hasSubModules()){
+			if(rootModules[i].hasSubModules()){
 				content.append(makeChildRow(parentId, rootModules[i].getSubModules()));
 			}
 		}
@@ -157,7 +157,7 @@ public class ReportToHTML {
 			row.append("</tr>");
 			int thisId = ID;
 			ID++;
-			if(!sub.hasSubModules()){
+			if(sub.hasSubModules()){
 				row.append(makeChildRow(thisId, sub.getSubModules()));
 			}
 		}

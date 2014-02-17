@@ -335,45 +335,32 @@ import org.apache.log4j.Logger;
 			try {
 				long moduleId = getSelectedModuleId();
 				int location = 0;
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel,
-						ServiceProvider.getInstance().getLocaleService()
-						.getTranslatedString("ConfirmRemoveSoftwareUnit"),
-						"Remove?");
+				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService()
+						.getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
 			
 				for (String softwareUnit : softwareUnitNames) {
 					String type = types.get(location);
 					logger.info("Removing software unit " + softwareUnit);
-					if (moduleId != -1 && softwareUnit != null
-							&& !softwareUnit.equals("")) {
+					if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 						if (confirm) {
 							logger.info("getting type:" + type);
-                         JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
+							JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
 							JPanelStatus.getInstance("Removing software unit").start();
 							
-								boolean chekHasCodelevelWarning = WarningMessageService
-										.getInstance().isCodeLevelWarning(
-												softwareUnit);
-								if (chekHasCodelevelWarning) {
-									boolean confirm2 = UiDialogs
-											.confirmDialog(
-													definitionJPanel,
-													"Your about to remove an software unit that does exist at code level",
-													"Remove?");
-									if (confirm2) {
-										softwareUnitDefinitionDomainService
-										.removeSoftwareUnit(moduleId,
-												softwareUnit);
-									}
-								} else {
-									softwareUnitDefinitionDomainService
-									.removeSoftwareUnit(moduleId,
-											softwareUnit);
+							boolean chekHasCodelevelWarning = WarningMessageService.getInstance().isCodeLevelWarning(softwareUnit);
+							if (chekHasCodelevelWarning) {
+								boolean confirm2 = UiDialogs.confirmDialog(definitionJPanel,
+												"Your about to remove a software unit that does exist at code level",
+												"Remove?");
+								if (confirm2) {
+									softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId,	softwareUnit);
 								}
-								this.notifyObservers();
-								JPanelStatus.getInstance().stop();
+							} else {
+								softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
 							}
-						
-						
+							this.notifyObservers();
+							JPanelStatus.getInstance().stop();
+						}
 					}
 					location++;
 				}
