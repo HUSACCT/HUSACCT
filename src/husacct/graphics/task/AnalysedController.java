@@ -187,11 +187,9 @@ public class AnalysedController extends DrawingController {
 					b = true;
 				}
 			}
-			
-			
 		}catch (Exception e) {
-			e.printStackTrace();
-			logger.warn("dto was null, but that is ok");
+			logger.warn(" dto was null, but that is ok");
+			//e.printStackTrace();
 		}
 		return b;		
 	}
@@ -386,9 +384,8 @@ public class AnalysedController extends DrawingController {
 						parentNames.add(parentDTO.uniqueName);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				logger.warn("Could not zoom on this object: "
-						+ figure.getName() + ". Expected a different DTO type.");
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+				//e.printStackTrace();
 			}
 			else if (!figure.isLine() || figure.isContext()) {
 				analysedContextFigures.add(figure);

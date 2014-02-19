@@ -1,25 +1,18 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.Resource;
-
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
 public class LayerFigure extends BaseFigure {
 	private static final long	serialVersionUID	= 101138923385231941L;
 	private RectangleFigure		body;
+	private TextFigure			stereoType;
 	private TextFigure			text;
 	
 	public int					MIN_WIDTH			= 150;
@@ -29,36 +22,13 @@ public class LayerFigure extends BaseFigure {
 		super(name);
 		
 		body = new RectangleFigure();
+		stereoType = new TextFigure('\u00AB' + "layer" + '\u00BB');
 		text = new TextFigure(name);
 		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(body);
 		children.add(text);
 		
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
-	}
-	
-	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
-		}
-		
-		body.setBounds(anchor, lead);
-		
-		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
-		
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX;
-		textAnchor.y += plusY;
-		text.setBounds(textAnchor, null);
-		
-		
-		invalidate();
 	}
 	
 	@Override
@@ -78,5 +48,24 @@ public class LayerFigure extends BaseFigure {
 	@Override
 	public boolean isModule() {
 		return true;
+	}
+	
+	@Override
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if ((lead.x - anchor.x) < MIN_WIDTH) lead.x = anchor.x + MIN_WIDTH;
+		if ((lead.y - anchor.y) < MIN_HEIGHT) lead.y = anchor.y + MIN_HEIGHT;
+		
+		body.setBounds(anchor, lead);
+		
+		// textbox centralising
+		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
+		
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
+		
+		invalidate();
 	}
 }

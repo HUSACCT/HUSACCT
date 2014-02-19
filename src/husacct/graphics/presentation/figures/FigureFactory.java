@@ -68,27 +68,16 @@ public final class FigureFactory {
 		
 		// TODO check these values with the define team
 		if (type.toLowerCase().equals("project")) return new ProjectFigure(name);
-		else if (type.toLowerCase().equals("layer")) return new LayerFigure(
-				name);
-		else if (type.toLowerCase().equals("component")) return new ComponentFigure(
-				name);
-		else if (type.toLowerCase().equals("class")) return new ClassFigure(
-				name);
-		else if (type.toLowerCase().equals("abstract")) return new AbstractClassFigure(
-				name);
-		else if (type.toLowerCase().equals("interface")) return new InterfaceFigure(
-				name);
-		else if (type.toLowerCase().equals("package")) return new PackageFigure(
-				name);
-		else if (type.toLowerCase().equals("subsystem")) return new SubsystemFigure(
-				name);
-		else if (type.toLowerCase().equals("library")) return new ModuleFigure(
-				name, type);
-		else {
-			
-			// TODO library figure aanmaken
-			logger.debug("Type " + type.toLowerCase()
-					+ " is not supported. Created a ModuleFigure instead.");
+		//else if (type.toLowerCase().equals("layer")) return new LayerFigure(name);
+		//else if (type.toLowerCase().equals("component")) return new ComponentFigure(name);
+		else if (type.toLowerCase().equals("class")) return new ClassFigure(name);
+		else if (type.toLowerCase().equals("abstract")) return new AbstractClassFigure(name);
+		else if (type.toLowerCase().equals("interface")) return new InterfaceFigure(name);
+		else if (type.toLowerCase().equals("package")) return new PackageFigure(name);
+		//else if (type.toLowerCase().equals("subsystem")) return new SubsystemFigure(name);
+		else if (type.toLowerCase().equals("library")) return new ModuleFigure(name, type);
+		else {			
+			//logger.info("Type " + type.toLowerCase() + " is not specifically supported yet; a ModuleFigure is created instead.");
 			return new ModuleFigure(name, type);
 		}
 	}

@@ -228,8 +228,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
 			drawing.add(violationFigure);
 		} catch (Exception e) {
-			logger.error("Could not create a violation line between figures.",
-					e);
+			logger.error("Could not create a violation line between figures.", e);
 		}
 	}
 	
@@ -248,9 +247,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			figureFrom.addDecorator(figureFactory
 					.createViolationsDecorator(violations));
 		} catch (Exception e) {
-			logger.error(
-					"Could not attach decorator to figure to indicate internal violations.",
-					e);
+			logger.error("Could not attach decorator to figure to indicate internal violations.", e);
 		}
 		figureMap.linkViolatedModule(figureFrom, violations);
 	}

@@ -6,10 +6,14 @@ import husacct.graphics.task.DrawingController;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 public class DrawingMultiLevelThread implements Runnable {
 	
 	private DrawingController						controller;
 	private HashMap<String, ArrayList<AbstractDTO>>	toDrawModules;
+	private Logger logger = Logger.getLogger(DrawingMultiLevelThread.class);
+
 	
 	public DrawingMultiLevelThread(DrawingController theController,
 			HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -25,7 +29,8 @@ public class DrawingMultiLevelThread implements Runnable {
 			
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error(" InterruptedException: ", e);
+			//e.printStackTrace();
 		}
 	}
 }

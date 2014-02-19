@@ -74,8 +74,7 @@ public class DefinedController extends DrawingController {
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
-					logger.warn("Tried to draw modules for \"" + parentName
-							+ "\", but it has no children.");
+					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
 			}
 			setCurrentPaths(parentNames);
@@ -157,13 +156,11 @@ public class DefinedController extends DrawingController {
 				parentNames.add(parentDTO.logicalPath);
 				definedFigures.put(parentDTO.logicalPath, figure);
 			} catch (Exception e) {
-				e.printStackTrace();
-				logger.warn("Could not zoom on this object: "
-						+ figure.getName() + ". Expected a different DTO type.");
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+				//e.printStackTrace();
 			}
 			else
-				logger.warn("Could not zoom on this object: "
-						+ figure.getName() + ". Not a module to zoom on.");
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 		
 		if (parentNames.size() > 0) {
 			saveSingleLevelFigurePositions();
@@ -187,9 +184,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	public void moduleZoomOutFailed() {
-		logger.warn("Tried to zoom out from \""
-				+ getCurrentPaths()
-				+ "\", but it has no parent (could be root if it's an empty string).");
+		//logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
 		logger.debug("Reverting to the root of the application.");
 		drawArchitecture(getCurrentDrawingDetail());
 	}

@@ -335,7 +335,6 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				currentSettings.put("libraries", false);
 				listener.hideLibraries();
 			}
-			System.out.println(showViolationsOptionMenu.isSelected());
 			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
 			if (null != selectedStrategy) {
 				currentSettings.put("layoutStrategy", selectedStrategy);

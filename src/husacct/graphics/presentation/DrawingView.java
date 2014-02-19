@@ -19,6 +19,8 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JViewport;
 
+import org.apache.log4j.Logger;
+
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
@@ -34,6 +36,7 @@ public class DrawingView extends DefaultDrawingView {
 	private static final int					RightMouseButton	= MouseEvent.BUTTON3;
 	private static final int					DoubleClick			= 2;
 	private static final int					ScrollSpeed			= 10;
+	private Logger								logger				= Logger.getLogger(DrawingView.class);
 	
 	private final Drawing						drawing;
 	private final DefaultDrawingEditor			editor;
@@ -173,28 +176,39 @@ public class DrawingView extends DefaultDrawingView {
 	}
 	
 	private void moduleZoom(BaseFigure[] fig) {
-		for (UserInputListener listener : listeners)
-			listener.moduleZoom(fig);
-		this.requestFocus();
+		try{
+			for (UserInputListener listener : listeners)
+				listener.moduleZoom(fig);
+			this.requestFocus();
+		}
+		catch (Exception e){
+			logger.error(" Exception in: " + e + fig.toString());
+			//e.printStackTrace();
+		}
 	}
 	
 	private void onMouseClicked(MouseEvent e) {
 		int mouseButton = e.getButton();
 		int mouseClicks = e.getClickCount();
-		
-		handleDeselect();
-		if (mouseButton == LeftMouseButton && hasSelection()) {
-			BaseFigure[] selection = toFigureArray(getSelectedFigures());
+		try{
+			handleDeselect();
+			if (mouseButton == LeftMouseButton && hasSelection()) {
+				BaseFigure[] selection = toFigureArray(getSelectedFigures());
+				
+				if (mouseClicks == DoubleClick) moduleZoom(selection);
+				else
+					for (BaseFigure figure : selection)
+						figure.raiseLayer();
+			} else if (mouseButton == RightMouseButton) contextMenu.show(this,
+					e.getX(), e.getY());
 			
-			if (mouseClicks == DoubleClick) moduleZoom(selection);
-			else
-				for (BaseFigure figure : selection)
-					figure.raiseLayer();
-		} else if (mouseButton == RightMouseButton) contextMenu.show(this,
-				e.getX(), e.getY());
-		
-		previousSelection.clear();
-		previousSelection.addAll(getSelectedFigures());
+			previousSelection.clear();
+			previousSelection.addAll(getSelectedFigures());
+		}
+		catch (Exception exc){
+			logger.error(" Exception " + exc +" In AWT on button: " + mouseButton + "or click: " + mouseClicks);
+			//exc.printStackTrace();
+		}
 	}
 	
 	private void onMouseScrolled(MouseWheelEvent e) {

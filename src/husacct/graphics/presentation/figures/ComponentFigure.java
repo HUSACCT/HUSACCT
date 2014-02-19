@@ -1,19 +1,11 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.Resource;
-
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
