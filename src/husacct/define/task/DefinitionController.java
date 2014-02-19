@@ -389,7 +389,6 @@ import org.apache.log4j.Logger;
 		 * Function which will save the name and description changes to the module
 		 */
 		public void updateModule(String moduleName, String moduleDescription) {
-			logger.info("Updating module " + moduleName);
 			try {
 				JPanelStatus.getInstance("Updating module").start();
 				long moduleId = getSelectedModuleId();

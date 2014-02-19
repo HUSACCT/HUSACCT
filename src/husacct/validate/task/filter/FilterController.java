@@ -88,9 +88,7 @@ public class FilterController {
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
-				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
-					violations.add(violation);
-				} else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
+				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
 					violations.add(violation);
 				}
 			}
