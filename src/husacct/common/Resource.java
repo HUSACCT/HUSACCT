@@ -49,7 +49,7 @@ public class Resource {
 	public static final String ICON_INTERFACE_PRIVATE = ICONSET_PATH + "interface-private.png";
 	public static final String ICON_INTERFACE_PUBLIC = ICONSET_PATH + "interface-public.png";
 	public static final String ICON_LAYER = ICONSET_PATH + "define-layer.png";
-	public static final String ICON_LIBRARY = ICONSET_PATH + "library.png";
+	public static final String ICON_LIBRARY = ICONSET_PATH + "define-externallib.png";
 	public static final String ICON_MODULE = ICONSET_PATH + "module.png";
 	public static final String ICON_NEW = ICONSET_PATH + "new.png";
 	public static final String ICON_OPEN = ICONSET_PATH + "open.png";
