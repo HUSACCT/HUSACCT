@@ -113,49 +113,49 @@ public class Drawing extends QuadTreeDrawing {
 		hiddenFigures.clear();
 	}
 	
-	private void seperateOverlappingLineFigures(
-			ILineSeparationStrategy strategy, RelationFigure[] figures) {
+	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, RelationFigure[] figures) {
 		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
-		
+
 		for (RelationFigure figure1 : figures) {
 			Figure figure1start = figure1.getStartConnector().getOwner();
 			Figure figure1end = figure1.getEndConnector().getOwner();
-			
+
 			for (RelationFigure figure2 : figures) {
-				if (figure1 == figure2) continue;
-				
+				if (figure1 == figure2) {
+					continue;
+				}
+
 				Figure figure2start = figure2.getStartConnector().getOwner();
 				Figure figure2end = figure2.getEndConnector().getOwner();
-				
-				if (figure1start == figure2start && figure1end == figure2end
-						|| figure1start == figure2end
-						&& figure1end == figure2start) break;
-				
+
+				if (!((figure1start == figure2start && figure1end == figure2end) || (figure1start == figure2end && figure1end == figure2start))) {
+					continue;
+				}
+
 				Set<RelationFigure> addTo;
-				if (overlappingFigureSets.containsKey(figure1)) addTo = overlappingFigureSets
-						.get(figure1);
-				else if (overlappingFigureSets.containsKey(figure2)) addTo = overlappingFigureSets
-						.get(figure2);
-				else {
+				if (overlappingFigureSets.containsKey(figure1)) {
+					addTo = overlappingFigureSets.get(figure1);
+				} else if (overlappingFigureSets.containsKey(figure2)) {
+					addTo = overlappingFigureSets.get(figure2);
+				} else {
 					addTo = new HashSet<RelationFigure>();
 					overlappingFigureSets.put(figure1, addTo);
 				}
-				
+
 				addTo.add(figure1);
 				addTo.add(figure2);
 			}
 		}
-		
+
 		for (RelationFigure keyFigure : overlappingFigureSets.keySet()) {
 			HashSet<RelationFigure> overlappingFigures = new HashSet<RelationFigure>();
 			overlappingFigures.add(keyFigure);
 			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
-			
+
 			strategy.separateLines(overlappingFigures);
 		}
-		
-	}
-	
+
+	}	
 	public void setFigureMap(FigureMap map) {
 		figureMap = map;
 	}

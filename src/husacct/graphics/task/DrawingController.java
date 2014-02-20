@@ -533,6 +533,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 				break;
 			case NO_LAYOUT:
 				layoutStrategy = new NoLayoutStrategy();
+				break;
 			default:
 				layoutStrategy = new BasicLayoutStrategy(drawing);
 				break;

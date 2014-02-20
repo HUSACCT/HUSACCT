@@ -85,10 +85,25 @@ public class FilterController {
 
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
+
+		/*//Start test code
+		String testFrom = "husacct.bootstrap";
+		String testTo = "Define";
+		Boolean testCaseFound = false;
+		//End test code */
+
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
-			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
-				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
+			String violationLogModFrom = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+			String violationLogModTo = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+
+			/*//Start test code
+			if(violationLogModTo.startsWith(testTo) && violation.getClassPathFrom().startsWith(testFrom))
+				testCaseFound = true;
+			//End test code */
+
+			if (violationLogModFrom.startsWith(logicalpathFrom)) {
+				if (violationLogModTo.startsWith(logicalpathTo)) {
 					violations.add(violation);
 				}
 			}
