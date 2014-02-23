@@ -30,8 +30,7 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (DependencyDTO dependency : dependencies) {
-				if (classPathFrom.getPhysicalPath().equals(dependency.from) &&
-                        !containsMapping(mappings, dependency.to) &&
+				if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) && !containsMapping(mappings, dependency.to) &&
                         Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
                     Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
@@ -44,7 +43,7 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 
 	private boolean containsMapping(Mappings mappings, String physicalPath) {
 		for (Mapping mappingFrom : mappings.getMappingFrom()) {
-			if (mappingFrom.getPhysicalPath().equals(physicalPath)) {
+			if (physicalPath.startsWith(mappingFrom.getPhysicalPath())) {
 				return true;
 			}
 		}

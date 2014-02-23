@@ -97,7 +97,6 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         initialiseTrees();
 
         setLayout(theLayout);
-        addListeners();
     }
 
     private void initialiseTrees() {
@@ -287,37 +286,4 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     
     private Logger logger = Logger.getLogger(DependencyPanel.class);
     
-    private void addListeners(){
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			@Override
-			public boolean dispatchKeyEvent(KeyEvent event) {
-				if(event.getKeyCode() == KeyEvent.VK_F12){
-					try {
-						FromTheWindowToTheWall ftwttw = new FromTheWindowToTheWall();
-						Thread ftwttwt = new Thread(ftwttw);
-						ftwttwt.start();
-					} catch (Exception e){
-						logger.debug("Unable to start ftwttwt");
-					}
-				}
-				return false;
-			}
-		});
-	}
-    
-    public class FromTheWindowToTheWall implements Runnable {
-    	private Logger logger = Logger.getLogger(FromTheWindowToTheWall.class);
-    	@Override
-    	public void run() {
-    		try{
-    	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Resource.getStream(Resource.WINDOW));
-    	        Clip clip = AudioSystem.getClip();
-    	        clip.open(audioInputStream);
-    	        clip.start();
-    	    }catch(Exception ex){
-    	        logger.error("Error with playing sound.");
-    	    }
-    	}
-    	
-    }
 }

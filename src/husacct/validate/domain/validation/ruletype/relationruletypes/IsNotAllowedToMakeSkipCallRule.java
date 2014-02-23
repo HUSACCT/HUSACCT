@@ -35,8 +35,8 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 			for (List<Mapping> physicalClasspathsTo : modulesTo) {
 				for (Mapping classPathTo : physicalClasspathsTo) {
 					for (DependencyDTO dependency : dependencies) {
-						if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
-                                dependency.to.equals(classPathTo.getPhysicalPath())) {
+						if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
+                                dependency.to.startsWith(classPathTo.getPhysicalPath())) {
                             Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                             violations.add(violation);
                         }

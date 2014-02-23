@@ -36,7 +36,7 @@ public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
 
 		for (Mapping classPathTo : physicalClasspathsTo) {
 			for (DependencyDTO dependency : dependencies) {
-				if (dependency.to.equals(classPathTo.getPhysicalPath()) &&
+				if (dependency.to.startsWith(classPathTo.getPhysicalPath()) &&
                         !containsMapping(mappings, dependency.from) &&
                         Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0) {
                     Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
@@ -50,7 +50,7 @@ public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
 
 	private boolean containsMapping(Mappings mappings, String physicalPath) {
 		for (Mapping mappingFrom : mappings.getMappingFrom()) {
-			if (mappingFrom.getPhysicalPath().equals(physicalPath)) {
+			if (physicalPath.startsWith(mappingFrom.getPhysicalPath())) {
 				return true;
 			}
 		}

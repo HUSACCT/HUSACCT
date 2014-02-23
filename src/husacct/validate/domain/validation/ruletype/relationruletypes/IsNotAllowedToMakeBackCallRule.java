@@ -33,9 +33,12 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (List<Mapping> moduleTo : modulesTo) {
 				for (Mapping classpathTo : moduleTo) {
+					if (classpathTo.getPhysicalPath().equals("husacct.define.domain.SoftwareUnitDefinition")){
+						String physicalPath = classpathTo.getPhysicalPath();
+					}
 					for (DependencyDTO dependency : dependencies) {
-						if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
-                                dependency.to.equals(classpathTo.getPhysicalPath())) {
+						if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
+                                dependency.to.startsWith(classpathTo.getPhysicalPath())) {
                             Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
                             violations.add(violation);
 						}

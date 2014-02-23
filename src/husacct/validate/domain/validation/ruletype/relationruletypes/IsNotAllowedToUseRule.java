@@ -31,8 +31,8 @@ public class IsNotAllowedToUseRule extends RuleType {
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
-                            dependency.to.equals(classPathTo.getPhysicalPath()) &&
+					if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
+                            dependency.to.startsWith(classPathTo.getPhysicalPath()) &&
                             Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
                         Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                         violations.add(violation);

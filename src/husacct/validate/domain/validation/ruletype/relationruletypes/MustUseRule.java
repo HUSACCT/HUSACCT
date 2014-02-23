@@ -37,8 +37,8 @@ public class MustUseRule extends RuleType {
 			for (Mapping physicalClasspathTo : mappings.getMappingTo()) {
 				for (DependencyDTO dependency : dependencies) {
 					if (!isUsingModule &&
-							dependency.from.equals(physicalClasspathFrom.getPhysicalPath()) &&
-							dependency.to.equals(physicalClasspathTo.getPhysicalPath()) &&
+							dependency.from.startsWith(physicalClasspathFrom.getPhysicalPath()) &&
+							dependency.to.startsWith(physicalClasspathTo.getPhysicalPath()) &&
 							Arrays.binarySearch(physicalClasspathFrom.getViolationTypes(), dependency.type) >= 0) {
 						isUsingModule = true;
 					}
