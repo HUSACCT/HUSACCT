@@ -6,6 +6,7 @@ import husacct.graphics.util.UserInputListener;
 
 public abstract class DrawingSettingsController implements UserInputListener {
 	protected boolean	areSmartLinesOn	= true;
+	protected boolean	isZoomWithContextOn	= false;
 	protected boolean	areDependenciesShown, areViolationsShown,
 			areExternalLibrariesShown, areLinesThick;
 	
@@ -119,4 +120,17 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void disableThickLines(){
 		areLinesThick = false;
 	}
+	
+	@Override
+	public void moduleZoom(String zoomType){
+		if(zoomType.equals("zoom"))
+			isZoomWithContextOn = false;
+		if(zoomType.equals("context"))
+			isZoomWithContextOn = true;
+	}
+	
+	public boolean isZoomWithContextOn(){
+		return isZoomWithContextOn;
+	}
+	
 }

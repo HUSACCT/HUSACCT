@@ -11,8 +11,13 @@ import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ClassFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
+import husacct.graphics.presentation.figures.InterfaceFigure;
+import husacct.graphics.presentation.figures.ModuleFigure;
+import husacct.graphics.presentation.figures.PackageFigure;
 import husacct.graphics.presentation.figures.ParentFigure;
+import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.FigureConnectorStrategy;
@@ -329,6 +334,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected abstract ViolationDTO[] getViolationsBetween(
 			BaseFigure figureFrom, BaseFigure figureTo);
 	
+	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
+	boolean b = false;
+	return b;
+	}	
+	
 	protected boolean hasSavedFigureStates(String paths) {
 		return storedStates.containsKey(paths);
 	}
@@ -384,23 +394,38 @@ public abstract class DrawingController extends DrawingSettingsController {
 					selection.toArray(new BaseFigure[selection.size()]));
 			
 			for (BaseFigure f : figures)
-				f.setContext(false); // minimising potential side effects
+				if(f instanceof ParentFigure)
+					figures.remove(f);
+				else
+					f.setContext(false); // minimizing potential side effects
 			
-			drawingView.clearSelection();
-			drawingView.selectAll();
-			List<BaseFigure> allFigures = Arrays.asList(drawingView
-					.getSelectedFigures().toArray(new BaseFigure[0]));
-			drawingView.clearSelection();
-			drawingView.addToSelection(selection);
+			if(super.isZoomWithContextOn()){
+				drawingView.clearSelection();
+				drawingView.selectAll();
+				List<BaseFigure> allFigures = Arrays.asList(drawingView.getSelectedFigures().toArray(new BaseFigure[0]));
+				List<BaseFigure> contextModules = new ArrayList<BaseFigure>();
+				for(BaseFigure fig : allFigures){
+					if(fig instanceof PackageFigure || fig instanceof ModuleFigure || fig instanceof ClassFigure || fig instanceof InterfaceFigure || fig instanceof ProjectFigure)
+						contextModules.add(fig);
+				}
+				drawingView.clearSelection();
+				drawingView.addToSelection(selection);
+				
+				for(BaseFigure selected : figures){
+					for (BaseFigure module : contextModules){
+						if (!module.equals(selected))
+							if(hasDependencyBetween(selected, module))
+								module.setContext(true);
+					}
+				}
+				
+				for(BaseFigure contextModule : contextModules){
+					if(contextModule.isContext())
+						figures.add(contextModule);
+				}
+			}
 			
-			for (BaseFigure f : allFigures)
-				if (!f.isContext() && !figures.contains(f)) {
-					f.setContext(true);
-					figures.add(f);
-				} else
-					f.setContext(false);
-			BaseFigure[] selectedFigures = figures
-					.toArray(new BaseFigure[figures.size()]);
+			BaseFigure[] selectedFigures = figures.toArray(new BaseFigure[figures.size()]);
 			this.moduleZoom(selectedFigures);
 		}
 	}

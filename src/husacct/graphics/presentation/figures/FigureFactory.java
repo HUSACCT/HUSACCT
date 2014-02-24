@@ -31,10 +31,8 @@ public final class FigureFactory {
 	}
 	
 	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
-		if (dependencyDTOs.length <= 0) throw new RuntimeException(
-				"No dependencies received. Cannot create a dependency figure.");
-		return new RelationFigure("Dependency from " + dependencyDTOs[0].from
-				+ " to " + dependencyDTOs[0].to, false, dependencyDTOs.length);
+		if (dependencyDTOs.length <= 0) throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
+		return new RelationFigure("Dependency from " + dependencyDTOs[0].from + " to " + dependencyDTOs[0].to, false, dependencyDTOs.length);
 	}
 	
 	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {

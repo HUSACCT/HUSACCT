@@ -170,20 +170,17 @@ public class AnalysedController extends DrawingController {
 		return new DependencyDTO[] {};
 	}
 	
-	protected boolean hasDependencyBetween(BaseFigure figureFrom,
-			BaseFigure figureTo){
+	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
 		boolean b = false;
 		//TODO This will always return a stacktrace of a nullpointerexception if there isn't a dependency, 
 		//This needs to be cleaner but we couldn't find a method in time.
 		try{
-			AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
-					.getModuleDTO(figureFrom);
-			AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
-					.getModuleDTO(figureTo);
+			AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+			AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
 
-			if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null&& dtoTo != null){ 
+			if (dtoFrom != null && dtoTo != null && !dtoFrom.uniqueName.equals(dtoTo.uniqueName)){ 
 				
-				if(analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0){
+				if((analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0) || (analyseService.getDependencies(dtoTo.uniqueName, dtoFrom.uniqueName).length > 0)){
 					b = true;
 				}
 			}
@@ -283,6 +280,8 @@ public class AnalysedController extends DrawingController {
 	 * this.getAndDrawModulesIn(parentNames.toArray(new String[] {})); } }
 	 */
 
+	/*
+	 * Disabled 2014-02-24, because it should be used only to set the ZoomType (within DrawingSettingsController)
 	@Override
 	public void moduleZoom(String zoomType) {
 
@@ -297,6 +296,7 @@ public class AnalysedController extends DrawingController {
 			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
 	}
+	*/
 
 	@Override
 	public void moduleZoomOut() {

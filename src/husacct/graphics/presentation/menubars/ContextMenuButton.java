@@ -43,14 +43,12 @@ public class ContextMenuButton extends JPopupMenu {
 		icons.put("zoomInContext", Resource.ICON_ZOOMCONTEXT);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_ZOOMCONTEXT));
-		zoomModuleContext = new JMenuItem(
-				localeService.getTranslatedString("ZoomContext"), icon);
+		zoomModuleContext = new JMenuItem(localeService.getTranslatedString("ZoomContext"), icon);
 		add(zoomModuleContext);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_ZOOM));
-		zoomModule = new JMenuItem(localeService.getTranslatedString("ZoomIn"),
-				icon);
-		zoomModule.setEnabled(false);
+		zoomModule = new JMenuItem(localeService.getTranslatedString("ZoomIn"), icon);
+		zoomModule.setEnabled(true);
 		
 		add(zoomModule);
 		
@@ -76,6 +74,8 @@ public class ContextMenuButton extends JPopupMenu {
 				setButtonIcon(parentZoomButton, "zoomInContext");
 				zoomModuleContext.setEnabled(false);
 				zoomModule.setEnabled(true);
+				for (UserInputListener listener : listeners)
+					listener.moduleZoom("context");
 			}
 		});
 		
@@ -85,6 +85,8 @@ public class ContextMenuButton extends JPopupMenu {
 				setButtonIcon(parentZoomButton, "zoomIn");
 				zoomModuleContext.setEnabled(true);
 				zoomModule.setEnabled(false);
+				for (UserInputListener listener : listeners)
+					listener.moduleZoom("zoom");
 			}
 		});
 	}

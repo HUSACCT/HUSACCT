@@ -160,8 +160,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (zoomOptionsMenu.canZoomModule()) moduleZoom("zoom");
-				else if (zoomOptionsMenu.canZoomModuleContext()) moduleZoom();
+					moduleZoom("");
 			}
 		});
 		zoomInButton.addMouseListener(new MouseListener() {
@@ -335,7 +334,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements
 	@Override
 	public void moduleZoom(String zoomType) {
 		for (UserInputListener listener : listeners)
-			listener.moduleZoom(zoomType);
+			listener.moduleZoom();
 	}
 	
 	@Override
