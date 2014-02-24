@@ -120,7 +120,7 @@ public class AboutDialog extends JDialog{
 		gitForkPanel.add(logoLabelPanel);
 
 		textPanel = new JPanel();
-		husacctLabel = new JLabel("\u00a9 2013 HUSACCT");
+		husacctLabel = new JLabel("\u00a9 2014 HUSACCT (GNU General Public License)");
 		versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 		versionNumberLabel = new JLabel(versionNumber);
 
