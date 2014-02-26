@@ -20,4 +20,23 @@ public class RuleDTO extends AbstractDTO {
 		this.regex = regex;
 		this.exceptionRules = exceptionRules;
 	}
+	
+    public String toString() {
+        String representation = "";
+        representation += "\nRuleTypeKey: " + ruleTypeKey;
+        representation += "\nModuleFrom: " + moduleFrom.logicalPath;
+        representation += "\nModuleTo: " + moduleTo.logicalPath;
+        representation += "\nRegEx: " + regex;
+        representation += "\nIsGenerated: " + isGenerated;
+        representation += "\nExceptionRules: ";
+        for (RuleDTO r : exceptionRules){
+        	representation += "\nRuleTypeKey: " + (r.ruleTypeKey) + ", from: " + (r.moduleFrom.logicalPath) + ", to: " + r.moduleTo.logicalPath;
+        }
+        representation += "\nViolationTypeKeys: ";
+        for (String v : violationTypeKeys){
+        	representation += v + ", ";
+        }
+        representation += "\n";
+        return representation;
+    }
 }

@@ -448,7 +448,5 @@ class FamixDependencyConnector {
 	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
 	        e.printStackTrace();
 		}
-    	
-    	return;
     }
 }

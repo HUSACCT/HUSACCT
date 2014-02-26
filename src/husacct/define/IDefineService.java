@@ -43,16 +43,20 @@ public interface IDefineService extends ISaveable, IObservableService {
 
 	/**
 	 * Gets all the children from a module
-	 * 
-	 * @param logicalPath
-	 *            is the logical path, ** is root module
-	 * @return an array of ModuleDTO's
+	 * @param logicalPath is the logical path, ** is root module
+	 * @return an array of ModuleDTO's. Throws RuntimeException when the module is not found.
 	 */
 	public ModuleDTO[] getChildrenFromModule(String logicalPath);
 
 	/**
+	 * Gets the hierarchical level of a module
+	 * @param logicalPath is the logical path, ** is root module
+	 * @return an int, the hierarchical level. Throws RuntimeException when the module is not found.
+	 */
+	public int getHierarchicalLevelOfLayer(String logicalPath);
+
+	/**
 	 * Gets the GUI from Define
-	 * 
 	 * @return a JInternalFrame from the Define component
 	 */
 	public JInternalFrame getDefinedGUI();

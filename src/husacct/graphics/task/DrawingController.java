@@ -158,8 +158,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		runDrawSingleLevelTask(modules);
 	}
 	
-	protected void drawModulesAndLines(
-			HashMap<String, ArrayList<AbstractDTO>> modules) {
+	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
 		runDrawMultiLevelTask(modules);
 	}
 	

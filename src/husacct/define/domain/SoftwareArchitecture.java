@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		IAppliedRuleSeperatedInterface, ISofwareUnitSeperatedInterface {
 
@@ -29,6 +31,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	private ArrayList<AppliedRuleStrategy> appliedRules;
 	private ArrayList<ModuleStrategy> modules = new ArrayList<ModuleStrategy>();
 	private ModuleStrategy rootModule;
+	
+	private Logger logger = Logger.getLogger(SoftwareArchitecture.class);
 
 	public SoftwareArchitecture() {
 		this("SoftwareArchitecture", "This is the root of the architecture",
@@ -225,11 +229,9 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 					}
 				}
 			}
-			if (currentModule == null
-					|| !currentModule.getName().equals(
-							moduleNames[moduleNames.length - 1])) {
-				throw new RuntimeException(ServiceProvider.getInstance()
-						.getLocaleService()
+			if (currentModule == null || !currentModule.getName().equals(moduleNames[moduleNames.length - 1])) {
+				logger.warn(String.format(" Module not found; logical path: " + logicalPath));
+				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService()
 						.getTranslatedString("ModuleNotFound"));
 			}
 		}

@@ -19,21 +19,32 @@ import java.util.List;
 
 public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 
+	private RuleDTO currentRule;
+	private String logicalPathLayerFrom;
+	
 	public IsNotAllowedToMakeSkipCallRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO rule) {
 		violations.clear();
+		this.currentRule = rule;
+		this.logicalPathLayerFrom = currentRule.moduleFrom.logicalPath;
+
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingTo();
-		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-		
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			for (List<Mapping> physicalClasspathsTo : modulesTo) {
-				for (Mapping classPathTo : physicalClasspathsTo) {
+		List<ModuleDTO> brotherModules = Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(logicalPathLayerFrom)));
+		List<ModuleDTO> potentialLayersToBeSkipped = selectPotentialLayersToBeSkipped(brotherModules);
+		if(potentialLayersToBeSkipped.size() >= 1){
+			List<Mapping> modulesTo = new ArrayList<>();
+			for(ModuleDTO layerTo : potentialLayersToBeSkipped){ 
+				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsFromModule(layerTo, currentRule.violationTypeKeys));
+			}
+			DependencyDTO[] dependencies = analyseService.getAllDependencies();
+			
+			for (Mapping classPathFrom : physicalClasspathsFrom) {
+				for (Mapping classPathTo : modulesTo) {
 					for (DependencyDTO dependency : dependencies) {
 						if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
                                 dependency.to.startsWith(classPathTo.getPhysicalPath())) {
@@ -47,24 +58,18 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 		return violations;
 	}
 
-	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule) {
-		List<List<Mapping>> returnModules = new ArrayList<>();
+	private List<ModuleDTO> selectPotentialLayersToBeSkipped(List<ModuleDTO> allModules) {
+		List<ModuleDTO> returnModules = new ArrayList<>();
+		int hierarchicalLevelModuleFrom = defineService.getHierarchicalLevelOfLayer(logicalPathLayerFrom);
+		int highestSkipLevel = hierarchicalLevelModuleFrom + 2;
 		for (ModuleDTO module : allModules) {
-			if (module.type.toLowerCase().contains("layer") &&
-                    module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
-                returnModules = getModulesTo(allModules, allModules.indexOf(module), currentRule.violationTypeKeys);
+			if (module.type.toLowerCase().equalsIgnoreCase("layer")){
+				int hierarchicalLevel = defineService.getHierarchicalLevelOfLayer(module.logicalPath);
+                    if(hierarchicalLevel >= highestSkipLevel) {
+                    	returnModules.add(module);
+                    }
 			}
 		}
 		return returnModules;
-	}
-
-	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber, String[] violationTypeKeys) {
-		List<List<Mapping>> returnList = new ArrayList<>();
-		for (ModuleDTO module : allModules) {
-			if (allModules.indexOf(module) > moduleFromNumber + 1) {
-				returnList.add(CheckConformanceUtilClass.getAllClasspathsFromModule(allModules.get(allModules.indexOf(module)), violationTypeKeys));
-			}
-		}
-		return returnList;
 	}
 }

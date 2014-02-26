@@ -9,6 +9,7 @@ import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -71,8 +72,7 @@ public class DefineServiceImpl extends ObservableService implements
 		if (logicalPath.equals("**")) {
 			childModuleDTOs = getRootModules();
 		} else {
-			ModuleStrategy module = moduleService
-					.getModuleByLogicalPath(logicalPath);
+			ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
 			ModuleDTO moduleDTO = domainParser.parseModule(module);
 			childModuleDTOs = moduleDTO.subModules;
 		}
@@ -86,6 +86,20 @@ public class DefineServiceImpl extends ObservableService implements
 	}
 
 	@Override
+	// Gets the hierarchical level of a module. Throws RuntimeException when the module is not found.
+	public int getHierarchicalLevelOfLayer(String logicalPath){
+		int hierarchicalLevel = 0;
+		ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
+		if(module != null){
+			if(module.getType().equals("Layer")){
+				Layer layer = (Layer) module;
+				hierarchicalLevel = layer.getHierarchicalLevel();
+			}
+		}
+		return hierarchicalLevel;
+	}
+
+	
 	public JInternalFrame getDefinedGUI() {
 		ApplicationController applicationController = new ApplicationController();
 		applicationController.initUi();

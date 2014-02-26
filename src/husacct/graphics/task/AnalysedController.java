@@ -75,7 +75,7 @@ public class AnalysedController extends DrawingController {
 	private void getAndDrawModulesIn(String[] parentNames) {
 		if (parentNames.length == 0) drawArchitecture(getCurrentDrawingDetail());
 		else {
-
+			// First, find the children of the selected module(s) (in parentnames) and store them in allChildren
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			ArrayList<String> compoundedNames = new ArrayList<String>();
 
@@ -92,9 +92,7 @@ public class AnalysedController extends DrawingController {
 					if (!figure.isLine() && !figure.isParent()) {
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
 						if(dto instanceof AnalysedModuleDTO){
-							
 							AnalysedModuleDTO moduleDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
-							
 							for (String parentName : parentNames) {
 								//NOTE: A check to see if the current figure is part of the parents children.
 								String[] partParentName = parentName.split("\\.");
@@ -113,13 +111,10 @@ public class AnalysedController extends DrawingController {
 							}
 						}
 					} else if (!figure.isLine() && !figure.isModule()) {
-						// NOTE: Pretty sure selected stuff that is both not a
-						// module and not a line
+						// NOTE: Pretty sure selected stuff that is both not a module and not a line
 						// is actually a ParentFigure (blue square thing)
-						ArrayList<AbstractDTO> knownChildren = getChildrenOf(figure
-								.getName());
-						if (knownChildren.size() > 0) allChildren.put(
-								figure.getName(), knownChildren);
+						ArrayList<AbstractDTO> knownChildren = getChildrenOf(figure.getName());
+						if (knownChildren.size() > 0) allChildren.put(figure.getName(), knownChildren);
 					}
 				if (tmp.size() > 0) allChildren.put("", tmp);
 			}
@@ -128,11 +123,8 @@ public class AnalysedController extends DrawingController {
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = allChildren
-						.get(onlyParentModule);
-
-				this.drawModulesAndLines(onlyParentChildren
-						.toArray(new AbstractDTO[] {}));
+				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+				this.drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else
 				this.drawModulesAndLines(allChildren);
 
@@ -280,24 +272,6 @@ public class AnalysedController extends DrawingController {
 	 * this.getAndDrawModulesIn(parentNames.toArray(new String[] {})); } }
 	 */
 
-	/*
-	 * Disabled 2014-02-24, because it should be used only to set the ZoomType (within DrawingSettingsController)
-	@Override
-	public void moduleZoom(String zoomType) {
-
-		BaseFigure[] selection = super.getSelectedFigures();
-
-		super.notifyServiceListeners();
-		resetContextFigures();
-		ArrayList<String> parentNames = sortFiguresBasedOnZoomability(selection);
-
-		if (parentNames.size() > 0) {
-			saveSingleLevelFigurePositions();
-			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
-		}
-	}
-	*/
-
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
@@ -348,53 +322,21 @@ public class AnalysedController extends DrawingController {
 		if (validateService.isValidated()) super.showViolations();
 	}
 
-	protected ArrayList<String> sortFiguresBasedOnZoomability(
-			BaseFigure[] figures) {
+	protected ArrayList<String> sortFiguresBasedOnZoomability(BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures){
-			if (figure.isModule() && !figure.isContext()) try {				
-				if (!(figure instanceof ProjectFigure)) {
-
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap()
-							.getModuleDTO(figure);
-					
-					/*
-					 * This part is for when you are zoomed in 1 level(For example: 
-					 * Domain.x where x is a child of Domain) and you want to zoom in further,
-					 * all the other modules and packages that _don't_ have a dependency 
-					 * to/from the selected figure, are not displayed. The new method HasdependecyBetween
-					 * was made for this but isn't really clean since it gives a nullpointer is no
-					 * dependencies are found.
-					 * 
-					 * Saved the code for future development. Feel free to edit.
-					 * 
-					 * String[] partModuleParentName = parentDTO.uniqueName.split("\\.");
-					
-					if(partModuleParentName.length > 1){
-						for (BaseFigure figureTo : figures){
-							if(hasDependencyBetween(figure, figureTo)){
-								analysedContextFigures.add(figureTo);
-								logger.warn("Figure: " + figure.getName()
-										+ " is accepted as context for multizoom on second level.");
-							}
-						}
-						parentNames.add(parentDTO.uniqueName);
-						break;
-					}*/
-						parentNames.add(parentDTO.uniqueName);
-				}
+			if (figure.isModule() && !(figure.isContext()) &&(!(figure instanceof ProjectFigure))) try {				
+				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
+				parentNames.add(parentDTO.uniqueName);
 			} catch (Exception e) {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				//e.printStackTrace();
 			}
-			else if (!figure.isLine() || figure.isContext()) {
+			else if (figure.isContext() || !figure.isLine()) {
 				analysedContextFigures.add(figure);
-				logger.warn("Figure: " + figure.getName()
-						+ " is accepted as context for multizoom.");
+				//logger.info("Figure: " + figure.getName() + " is accepted as context for multizoom.");
 			} else
-				logger.warn("Could not zoom on this object: "
-						+ figure.getName() + ". Not a module to zoom on.");
-
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 		}
 		return parentNames;
 	}

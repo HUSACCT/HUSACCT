@@ -51,4 +51,16 @@ public class Mapping {
 		}
 		violationTypes = violationTypeList.toArray(new String[] {});
 	}
+	
+    public String toString() {
+        String mappingRepresentation = "";
+        mappingRepresentation += "\nLogicalPath: " + logicalPath;
+        mappingRepresentation += "\nPhysicalPath: " + physicalPath;
+        mappingRepresentation += "\nLogicalPathType: " + logicalPathType;
+        for (String vt : violationTypes){
+        	mappingRepresentation += "\nViolationType: " + vt;
+        }
+        mappingRepresentation += "\n";
+        return mappingRepresentation;
+    }
 }

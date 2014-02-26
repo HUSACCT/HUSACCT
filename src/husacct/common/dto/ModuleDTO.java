@@ -22,4 +22,20 @@ public class ModuleDTO extends AbstractDTO{
 		this.type = type;
 		
 	}
+	
+    public String toString() {
+        String representation = "";
+        representation += "\nLogicalPath: " + logicalPath;
+        representation += "\nType: " + type;
+        representation += "\nSubModules: ";
+        for (ModuleDTO m : subModules){
+        	representation += (m.logicalPath) + ", ";
+        }
+        representation += "\nPhysicalPath: ";
+        for (PhysicalPathDTO p : physicalPathDTOs){
+        	representation += p.path + ", ";
+        }
+        representation += "\n";
+        return representation;
+    }
 }

@@ -29,10 +29,8 @@ public class CheckConformanceController {
 	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
 	private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-	//added by team 1 general gui & control
-	//declaration that keeps the progress
+	//Declaration of variable that holds the progress
 	private int appliedRulesHandled = 0;
-	//end adding by team1
 
 	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory) {
 		this.configuration = configuration;
@@ -49,17 +47,17 @@ public class CheckConformanceController {
 		for (ProjectDTO project : applicationDetails.projects) {
 			if (project.programmingLanguage != null && !project.programmingLanguage.isEmpty()) {
 				configuration.clearViolations();
+				configuration.initializeDependencyHashMap();
 				ruleCache.clear();
 
 				List<Violation> violationList = new ArrayList<Violation>();
 				appliedRulesHandled = 0;
 				for (RuleDTO appliedRule : appliedRules) {
-					
-					// On violation abort, abort.
+					// Abort, when state != VALIDATING
 					if (!ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)) {
 						break;
 					}
-					// Call for an validation progress update
+					// Update progress
 					ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100) / appliedRules.length);
 					
 					try {

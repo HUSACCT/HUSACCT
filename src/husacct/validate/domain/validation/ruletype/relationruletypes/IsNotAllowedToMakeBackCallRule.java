@@ -18,29 +18,39 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class IsNotAllowedToMakeBackCallRule extends RuleType {
+	
+	private RuleDTO currentRule;
+	private String logicalPathLayerFrom;
+
 
 	public IsNotAllowedToMakeBackCallRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO rule) {
+		this.currentRule = rule;
+		this.logicalPathLayerFrom = currentRule.moduleFrom.logicalPath;
 		violations.clear();
+
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingTo();
-		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			for (List<Mapping> moduleTo : modulesTo) {
-				for (Mapping classpathTo : moduleTo) {
-					if (classpathTo.getPhysicalPath().equals("husacct.define.domain.SoftwareUnitDefinition")){
-						String physicalPath = classpathTo.getPhysicalPath();
-					}
-					for (DependencyDTO dependency : dependencies) {
-						if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
-                                dependency.to.startsWith(classpathTo.getPhysicalPath())) {
-                            Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
-                            violations.add(violation);
+		List<ModuleDTO> brotherModules = Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(logicalPathLayerFrom)));
+		List<ModuleDTO> potentialLayersToBeBackCalled = selectPotentialLayersToBeBackCalled(brotherModules);
+		if(potentialLayersToBeBackCalled.size() >= 1){
+			List<Mapping> modulesTo = new ArrayList<>();
+			for(ModuleDTO layerTo : potentialLayersToBeBackCalled){ 
+				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsFromModule(layerTo, currentRule.violationTypeKeys));
+			}
+
+			for (Mapping classPathFrom : physicalClasspathsFrom) {
+				for (Mapping classPathTo : modulesTo) {
+					ArrayList<DependencyDTO> violatingDependencies = configuration.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+					int size = violatingDependencies.size();
+					if(size >= 1){
+						for(DependencyDTO dependency : violatingDependencies){
+							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+	                        violations.add(violation);
 						}
 					}
 				}
@@ -49,24 +59,20 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 		return violations;
 	}
 
-	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule) {
-		List<List<Mapping>> returnModules = new ArrayList<>();
-		int counter = -1;
+	private List<ModuleDTO> selectPotentialLayersToBeBackCalled(List<ModuleDTO> allModules) {
+		List<ModuleDTO> returnModules = new ArrayList<>();
+		int hierarchicalLevelModuleFrom = defineService.getHierarchicalLevelOfLayer(logicalPathLayerFrom);
+		int lowestBackCallLevel = hierarchicalLevelModuleFrom -1;
 		for (ModuleDTO module : allModules) {
-			counter++;
-			if (module.type.toLowerCase().equals("layer") &&
-                    module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
-                returnModules = getModulesTo(allModules, counter, currentRule.violationTypeKeys);
+			if (module.type.toLowerCase().equalsIgnoreCase("layer")){
+				int hierarchicalLevel = defineService.getHierarchicalLevelOfLayer(module.logicalPath);
+                    if(hierarchicalLevel <= lowestBackCallLevel) {
+                    	returnModules.add(module);
+                    }
 			}
 		}
 		return returnModules;
 	}
 
-	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter, String[] violationTypeKeys) {
-		List<List<Mapping>> returnList = new ArrayList<>();
-		for (int i = 0; i < counter; i++) {
-			returnList.add(CheckConformanceUtilClass.getAllClasspathsFromModule(allModules.get(i), violationTypeKeys));
-		}
-		return returnList;
-	}
+
 }

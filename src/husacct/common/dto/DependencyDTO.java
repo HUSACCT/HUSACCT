@@ -37,11 +37,12 @@ public class DependencyDTO extends AbstractDTO{
 	
 	public String toString(){
 		String result = "";
-		result += "From: " + from + ", ";
-		result += "To: " + to + ", ";
-		result += "Type: " + type + " ,";
-		result += "Line: " + lineNumber + ".";
+		result += "\nFrom: " + from;
+		result += "\nTo: " + to;
+		result += "\nType: " + type + ", ";
+		result += "Line: " + lineNumber + ", ";
 		result += "Indirect : " + isIndirect + ".";
+		result += "\n";
 		return result;
 	}
 }

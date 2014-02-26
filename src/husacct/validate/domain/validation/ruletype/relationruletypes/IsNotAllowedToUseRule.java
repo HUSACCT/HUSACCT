@@ -10,6 +10,8 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -26,15 +28,13 @@ public class IsNotAllowedToUseRule extends RuleType {
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
-				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
-                            dependency.to.startsWith(classPathTo.getPhysicalPath()) &&
-                            Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-                        Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+				ArrayList<DependencyDTO> violatingDependencies = configuration.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+				int size = violatingDependencies.size();
+				if(size >= 1){
+					for(DependencyDTO dependency : violatingDependencies){
+						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                         violations.add(violation);
 					}
 				}
