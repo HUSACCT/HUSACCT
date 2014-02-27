@@ -47,7 +47,6 @@ public class CheckConformanceController {
 		for (ProjectDTO project : applicationDetails.projects) {
 			if (project.programmingLanguage != null && !project.programmingLanguage.isEmpty()) {
 				configuration.clearViolations();
-				configuration.initializeDependencyHashMap();
 				ruleCache.clear();
 
 				List<Violation> violationList = new ArrayList<Violation>();

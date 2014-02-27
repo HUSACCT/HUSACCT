@@ -1,7 +1,6 @@
 package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.DependencyDTO;
 import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
@@ -9,18 +8,12 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.apache.log4j.Logger;
 
 public final class ConfigurationServiceImpl extends Observable {
 
@@ -30,13 +23,7 @@ public final class ConfigurationServiceImpl extends Observable {
 	private final RuleTypesFactory ruletypeFactory;
 	private final ViolationHistoryRepository violationHistoryRepository;
 	private final ActiveViolationTypesRepository activeViolationTypesRepository;
-	// TreeMap dependenciesOnFromTo has as first key pathFrom, as second key pathTo, and as value a list of dependencies.
-	// Note: To find inner classes to, make use of tailMap() instead of get(). tailMap() may return a Map of values!
-	private TreeMap<String, TreeMap<String, ArrayList<DependencyDTO>>> dependenciesOnFromTo; 
 	
-	private Logger logger = Logger.getLogger(ConfigurationServiceImpl.class);
-
-
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
@@ -44,7 +31,6 @@ public final class ConfigurationServiceImpl extends Observable {
 		this.activeViolationTypesRepository = new ActiveViolationTypesRepository(this.ruletypeFactory);
 		this.severityPerTypeRepository.initializeDefaultSeverities();
 		this.violationHistoryRepository = new ViolationHistoryRepository();
-		this.dependenciesOnFromTo = new TreeMap<String, TreeMap<String, ArrayList<DependencyDTO>>>();
 	}
 
 	public void clearViolations() {
@@ -183,88 +169,5 @@ public final class ConfigurationServiceImpl extends Observable {
 
 	private void notifyServiceListeners() {
 		ServiceProvider.getInstance().getValidateService().notifyServiceListeners();
-	}
-	
-    // Fill HashMap dependenciesOnFromTo 
-	public void initializeDependencyHashMap(){
-		this.dependenciesOnFromTo = new TreeMap<String, TreeMap<String, ArrayList<DependencyDTO>>>();
-		DependencyDTO[] dependencies = ServiceProvider.getInstance().getAnalyseService(). getAllDependencies();
-		TreeMap<String, ArrayList<DependencyDTO>> toMap;
-		try{
-	        for(DependencyDTO dependency : dependencies) {
-            	String uniqueNameFrom = dependency.from;
-            	String uniqueNameTo = dependency.to;
-            	if(dependenciesOnFromTo.containsKey(uniqueNameFrom)){
-            		toMap = dependenciesOnFromTo.get(uniqueNameFrom);
-            		if(toMap.containsKey(uniqueNameTo)){
-            			// Check if there is a dependency with the same Type and LineNr in the ArrayList
-            			ArrayList<DependencyDTO> matchingDependencies = toMap.get(uniqueNameTo);
-            			boolean found = false;
-            			for(DependencyDTO matchingDependency : matchingDependencies){
-	            			if(matchingDependency.type == dependency.type){
-	            				if(matchingDependency.lineNumber == dependency.lineNumber){
-	            					// Do nothing, dependency already exists
-	            					found = true;
-	            					break;
-	            				}
-            				}
-            			}
-	            		if(!found){
-	            			// The dependency does not exist yet under the from-key and to-key, so add it.
-	            			matchingDependencies.add(dependency);
-            			}
-        			}
-            		else{
-            			// No toMap exists for the to-key, so create it.
-            			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
-            			newList.add(dependency);
-            			toMap.put(uniqueNameTo, newList);
-            		}
-            	}
-            	else{
-            		// No map exists for the from-key, so add it.
-        			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
-        			newList.add(dependency);
-            		toMap = new TreeMap<String, ArrayList<DependencyDTO>>();
-            		toMap.put(uniqueNameTo, newList);            		
-	            	dependenciesOnFromTo.put(uniqueNameFrom, toMap);
-            	}
-	        }
-	        
-	        
-		} catch(Exception e) {
-	        this.logger.warn("Exception may result in incomplete dependency list. Exception:  " + e);
-	        //e.printStackTrace();
-		}
-
-	}
-	
-	public ArrayList<DependencyDTO> getDependenciesFromTo(String classPathFrom, String classPathTo){
-		ArrayList<DependencyDTO> returnValue = new ArrayList<DependencyDTO>();
-		// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
-		TreeMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
-		// Select all dependencies within fromMap whose pathTo starts with classPathTo
-		if(fromMap != null ){	
-			ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
-			if(dependencyList != null){
-				returnValue.addAll(dependencyList);
-			}
-		}	
-		
-		/* Old trial:	
-		// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom starts with classPathFrom
-		SortedMap<String, TreeMap<String, ArrayList<DependencyDTO>>> fromMaps = dependenciesOnFromTo.tailMap(classPathFrom);
-		Set<String> pathFromKeys = fromMaps.keySet();
-		for(String pathFrom : pathFromKeys){
-			TreeMap<String, ArrayList<DependencyDTO>> fromMap = fromMaps.get(pathFrom);
-			// Select all dependencies within fromMap whose pathTo starts with classPathTo
-			SortedMap<String, ArrayList<DependencyDTO>> potentialToMaps = fromMap.tailMap(classPathTo);
-			Set<String> pathToKeys = potentialToMaps.keySet(); 
-			for(String pathTo : pathToKeys){
-				ArrayList<DependencyDTO> dependencyList = potentialToMaps.get(pathTo);
-				returnValue.addAll(dependencyList);
-			}
-			*/
-		return returnValue;
 	}
 }

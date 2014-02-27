@@ -111,6 +111,33 @@ public class AnalyseServiceStub implements IAnalyseService {
         return matchDependency;
     }
 
+
+    @SuppressWarnings("unchecked")
+    @Override
+	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
+        ArrayList<DependencyDTO> allDependencies = new ArrayList<DependencyDTO>();
+
+        for (String s : analysed.keySet()) {
+            if (s.indexOf(classPathFrom) == -1) {
+                continue;
+            }
+
+            ArrayList<Object> currentElement = analysed.get(s);
+            for (DependencyDTO dependency : (ArrayList<DependencyDTO>) currentElement.get(1)) {
+                allDependencies.add(dependency);
+            }
+        }
+
+        DependencyDTO[] matchDependency = new DependencyDTO[allDependencies.size()];
+        int iterator = 0;
+        for (DependencyDTO d : allDependencies) {
+            matchDependency[iterator] = d;
+            iterator++;
+        }
+        return matchDependency;	
+    }
+    
+	
     @SuppressWarnings("unchecked")
     @Override
     public DependencyDTO[] getDependenciesTo(String to) {

@@ -22,6 +22,10 @@ public interface IAnalyseDomainService {
 
     public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
 
+	// Returns a list of dependencies between the fromClass and toClass.
+    // Fast function, based on HashMap get-search. Both class paths should match exactly to a uniqueName of a type! 
+    public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo);
+
     public DependencyDTO[] getDependenciesTo(String to);
 
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);

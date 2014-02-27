@@ -112,6 +112,11 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
 
     @Override
+	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
+		return queryService.getDependenciesFromTo(classPathFrom, classPathTo);
+	}
+	
+    @Override
     public DependencyDTO[] getDependenciesTo(String to) {
         List<DependencyDTO> dependencies = queryService.getDependenciesTo(to);
         return dependencies.toArray(new DependencyDTO[dependencies.size()]);

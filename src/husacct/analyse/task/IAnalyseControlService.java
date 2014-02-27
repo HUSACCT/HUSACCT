@@ -24,6 +24,8 @@ public interface IAnalyseControlService {
 
     public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
 
+    public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo);
+
     public DependencyDTO[] getDependenciesTo(String to);
 
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);

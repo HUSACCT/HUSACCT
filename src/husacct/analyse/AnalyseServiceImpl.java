@@ -137,6 +137,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
 
     @Override
+	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
+		return service.getDependenciesFromTo(classPathFrom, classPathTo);
+	}
+	
+    @Override
     public DependencyDTO[] getDependenciesTo(String to) {
         return TypeFilter.filterDependencies(service.getDependenciesTo(to));
     }

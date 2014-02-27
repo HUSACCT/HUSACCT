@@ -1,5 +1,6 @@
 package husacct.analyse.domain.famix;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +22,9 @@ class FamixDependencyFinder extends FamixFinder {
 	protected int numberOfIncompleteAssociations;
 	protected int numberOfDuplicateAssociations;
 	protected int numberOfExtendsConcrete;
+	// TreeMap dependenciesOnFromTo has as first key classPathFrom, as second key classPathTo, and as value a list of dependencies.
+	// Note: To find inner classes to, make use of tailMap() instead of get(). tailMap() may return a Map of values!
+	private HashMap<String, HashMap<String, ArrayList<DependencyDTO>>> dependenciesOnFromTo; 
 
     
 	public FamixDependencyFinder(FamixModel model) {
@@ -30,7 +35,8 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	public void buildCache(){
 		int numberOfDependencies = getAllDependencies().size();
-		this.logger.info(new Date().toString() + " Dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);     
+		this.logger.info(new Date().toString() + " Dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);
+		initializeDependencyHashMap();
 
 		//getExternalSystems().size();
 		return;
@@ -61,6 +67,26 @@ class FamixDependencyFinder extends FamixFinder {
 	public List<DependencyDTO> getDependenciesFrom(String from, String[] dependencyFilter){
 		return findDependencies(FinderFunction.FROM, from, "", dependencyFilter);
 	}
+	
+	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
+		ArrayList<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
+		// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
+		HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
+		// Select all dependencies within fromMap whose pathTo starts with classPathTo
+		if(fromMap != null ){	
+			ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
+			if(dependencyList != null){
+				foundDependencies.addAll(dependencyList);
+			}
+		}
+        DependencyDTO[] matchDependency = new DependencyDTO[foundDependencies.size()];
+        int iterator = 0;
+        for (DependencyDTO d : foundDependencies) {
+            matchDependency[iterator] = d;
+            iterator++;
+        }
+        return matchDependency;	
+    }
 	
 	public List<DependencyDTO> getDependenciesTo(String to){
 		return getDependenciesTo(to, null);
@@ -352,4 +378,58 @@ class FamixDependencyFinder extends FamixFinder {
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){
 		return new DependencyDTO(association.from, association.to, association.type, association.lineNumber);
 	}
+	
+    // Fill HashMap dependenciesOnFromTo 
+	public void initializeDependencyHashMap(){
+		this.dependenciesOnFromTo = new HashMap<String, HashMap<String, ArrayList<DependencyDTO>>>();
+		DependencyDTO[] dependencies = ServiceProvider.getInstance().getAnalyseService(). getAllDependencies();
+		HashMap<String, ArrayList<DependencyDTO>> toMap;
+		try{
+	        for(DependencyDTO dependency : dependencies) {
+            	String uniqueNameFrom = dependency.from;
+            	String uniqueNameTo = dependency.to;
+            	if(dependenciesOnFromTo.containsKey(uniqueNameFrom)){
+            		toMap = dependenciesOnFromTo.get(uniqueNameFrom);
+            		if(toMap.containsKey(uniqueNameTo)){
+            			// Check if there is a dependency with the same Type and LineNr in the ArrayList
+            			ArrayList<DependencyDTO> matchingDependencies = toMap.get(uniqueNameTo);
+            			boolean found = false;
+            			for(DependencyDTO matchingDependency : matchingDependencies){
+	            			if(matchingDependency.type == dependency.type){
+	            				if(matchingDependency.lineNumber == dependency.lineNumber){
+	            					// Do nothing, dependency already exists
+	            					found = true;
+	            					break;
+	            				}
+            				}
+            			}
+	            		if(!found){
+	            			// The dependency does not exist yet under the from-key and to-key, so add it.
+	            			matchingDependencies.add(dependency);
+            			}
+        			}
+            		else{
+            			// No toMap exists for the to-key, so create it.
+            			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
+            			newList.add(dependency);
+            			toMap.put(uniqueNameTo, newList);
+            		}
+            	}
+            	else{
+            		// No map exists for the from-key, so add it.
+        			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
+        			newList.add(dependency);
+            		toMap = new HashMap<String, ArrayList<DependencyDTO>>();
+            		toMap.put(uniqueNameTo, newList);            		
+	            	dependenciesOnFromTo.put(uniqueNameFrom, toMap);
+            	}
+	        }
+	        
+	        
+		} catch(Exception e) {
+	        this.logger.warn("Exception may result in incomplete dependency list. Exception:  " + e);
+	        //e.printStackTrace();
+		}
+	}
+	
 }

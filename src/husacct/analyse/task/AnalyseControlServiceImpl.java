@@ -77,6 +77,11 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     }
 
     @Override
+	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
+		return domainService.getDependenciesFromTo(classPathFrom, classPathTo);
+	}
+	
+    @Override
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
         return domainService.getDependencies(from, to, dependencyFilter);
     }
