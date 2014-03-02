@@ -25166,15 +25166,11 @@ public class JavaParser extends Parser {
                         // ( switchDefaultLabel )? switchCaseLabels )
                         {
                             CommonTree root_1 = (CommonTree) adaptor.nil();
-                            root_1 = (CommonTree) adaptor.becomeRoot(adaptor
-                                    .create(SWITCH_BLOCK_LABEL_LIST,
-                                    "SWITCH_BLOCK_LABEL_LIST"), root_1);
-	                            adaptor.addChild(root_1,
-	                                    stream_switchCaseLabels.nextTree());
+                            root_1 = (CommonTree) adaptor.becomeRoot(adaptor.create(SWITCH_BLOCK_LABEL_LIST, "SWITCH_BLOCK_LABEL_LIST"), root_1);
+	                        adaptor.addChild(root_1, stream_switchCaseLabels.nextTree());
                             // :801:56: ( switchDefaultLabel )?
                             if (stream_switchDefaultLabel.hasNext()) {
-                                adaptor.addChild(root_1,
-                                        stream_switchDefaultLabel.nextTree());
+                                adaptor.addChild(root_1, stream_switchDefaultLabel.nextTree());
 
                             }
                             stream_switchDefaultLabel.reset();

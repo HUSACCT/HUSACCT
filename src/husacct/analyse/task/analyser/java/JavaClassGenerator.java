@@ -31,7 +31,7 @@ class JavaClassGenerator extends JavaGenerator {
             this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
         }
         CommonTree modifierListTree = (CommonTree) commonTree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
-
+        
         if (modifierListTree.getFirstChildWithType(JavaParser.AT) != null) {
             JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(uniqueName);
             annotationGenerator.generateMethod((CommonTree) modifierListTree.getFirstChildWithType(JavaParser.AT));

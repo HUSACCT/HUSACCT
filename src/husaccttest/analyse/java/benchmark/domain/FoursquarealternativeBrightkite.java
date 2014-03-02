@@ -17,8 +17,8 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightkiteAccount1(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.brightkite.Account1");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.Whrrl", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.Whrrl", super.EXTENDSCONCRETE, 10));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.Whrrl", "domain.foursquarealternative.whrrl.Whrrl", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.Whrrl", "domain.foursquarealternative.whrrl.Whrrl", super.EXTENDSCONCRETE, 10));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -26,8 +26,8 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightKiteAccount2(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.brightkite.Account2");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.IWhrrl", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.IWhrrl", super.IMPLEMENTS, 11));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.Whrrl", "domain.foursquarealternative.whrrl.IWhrrl", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.Whrrl", "domain.foursquarealternative.whrrl.IWhrrl", super.IMPLEMENTS, 11));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -35,10 +35,10 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightKiteCheckCastFrom(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.brightkite.CheckCastFrom");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.SameExtend", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.yelp.CheckCastTo", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.SameExtend", super.EXTENDSCONCRETE, 8));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.SameExtend", super.INVOCCONSTRUCTOR, 12));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.SameExtend", "domain.foursquarealternative.SameExtend", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.yelp.CheckCastTo", "domain.foursquarealternative.yelp.CheckCastTo", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.SameExtend", "domain.foursquarealternative.SameExtend", super.EXTENDSCONCRETE, 8));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.SameExtend", "domain.foursquarealternative.SameExtend", super.INVOCCONSTRUCTOR, 12));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -48,9 +48,9 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	public void testDomainBrightKiteCheckInIndirectAccess1(){
 		
 		TestObject testobject = new TestObject("domain.foursquarealternative.brightkite.CheckInIndirectAccess1");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.BackgroundService", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.BackgroundService", super.DECLARATION, 10));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.BackgroundService", super.INVOCCONSTRUCTOR, 14));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.BackgroundService", "domain.foursquarealternative.whrrl.BackgroundService", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.BackgroundService", "domain.foursquarealternative.whrrl.BackgroundService", super.DECLARATION, 10));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.BackgroundService", "domain.foursquarealternative.whrrl.BackgroundService", super.INVOCCONSTRUCTOR, 14));
 		boolean result = super.testDependencyObject(testobject, true);
 		assertTrue(testobject.getLastError(), result);
 		
@@ -804,8 +804,8 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightkiteCheckOut(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.brightkite.CheckOut");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.MapsService", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.MapsService", super.EXTENDSCONCRETE, 7));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.MapsService", "domain.foursquarealternative.whrrl.MapsService", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.MapsService", "domain.foursquarealternative.whrrl.MapsService", super.EXTENDSCONCRETE, 7));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}

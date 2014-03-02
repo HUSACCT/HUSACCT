@@ -460,13 +460,13 @@ public class AnalyseServiceStub implements IAnalyseService {
         GenerateHashmap(rootElement);
 
 
-        addDependency(new DependencyDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "ExtendsAbstract", 10));
-        addDependency(new DependencyDTO("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", "InvocConstructor", 11));
-        addDependency(new DependencyDTO("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "ExtendsConcrete", 10));
-        addDependency(new DependencyDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "ExtendsAbstract", 10));
-        addDependency(new DependencyDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "InvocConstructor", 10));
-        addDependency(new DependencyDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "ExtendsAbstract", 10));
-        addDependency(new DependencyDTO("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", "Implements", 10));
+        addDependency(new DependencyDTO("domain.locationbased.foursquare.History", "domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "ExtendsAbstract", 10));
+        addDependency(new DependencyDTO("domain.locationbased.latitude.Account","domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", "InvocConstructor", 11));
+        addDependency(new DependencyDTO("domain.locationbased.latitude.Friends", "domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "ExtendsConcrete", 10));
+        addDependency(new DependencyDTO("domain.locationbased.foursquare.Map", "domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "infrastructure.socialmedia.locationbased.foursquare.IMap", "ExtendsAbstract", 10));
+        addDependency(new DependencyDTO("domain.locationbased.foursquare.Account", "domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "InvocConstructor", 10));
+        addDependency(new DependencyDTO("domain.locationbased.foursquare.Friends", "domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "ExtendsAbstract", 10));
+        addDependency(new DependencyDTO("domain.locationbased.latitude.Map", "domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", "infrastructure.socialmedia.locationbased.latitude.IMap", "Implements", 10));
 
     }
 

@@ -14,9 +14,11 @@ class FamixImport extends FamixAssociation {
     public String toString() {
         String importRepresentation = "";
         importRepresentation += "\ntype: " + super.type;
+        importRepresentation += "\nfrom: " + super.from;
+        importRepresentation += "\nto: " + super.to;
+        importRepresentation += "\nlinenumber: " + super.lineNumber;
         importRepresentation += "\nimportingClass: " + this.importingClass;
         importRepresentation += "\nimportedModule: " + this.importedModule;
-        importRepresentation += "\nlinenumber: " + super.lineNumber;
         importRepresentation += "\nisCompletePackage: ";
         if (importsCompletePackage) {
             importRepresentation += "true";

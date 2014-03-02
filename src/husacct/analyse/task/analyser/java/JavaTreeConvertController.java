@@ -46,7 +46,8 @@ class JavaTreeConvertController {
     	}
     	catch (Exception e) {
     		//javaParser.compilationUnit() throws an exception, currently (when analyzing HUSACCT).
-    		//e.printStackTrace();
+    		logger.error("Exception: "+ e);
+    		// e.printStackTrace();
     	}
     }
 
@@ -113,7 +114,7 @@ class JavaTreeConvertController {
                 int nodeType = treeNode.getType();
 
                 switch (nodeType) {
-                    case JavaParser.CLASS:
+                    case JavaParser.CLASS: case JavaParser.ENUM:
                         if (classCount > 0) {
                             CommonTree innerClassTree = (CommonTree) treeNode;
                             this.parentClass = currentClass;

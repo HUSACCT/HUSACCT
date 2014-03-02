@@ -22,6 +22,7 @@ class FamixDependencyFinder extends FamixFinder {
 	protected int numberOfIncompleteAssociations;
 	protected int numberOfDuplicateAssociations;
 	protected int numberOfExtendsConcrete;
+	protected int numberOfAssociationsWithoutToClass;
 	// TreeMap dependenciesOnFromTo has as first key classPathFrom, as second key classPathTo, and as value a list of dependencies.
 	// Note: To find inner classes to, make use of tailMap() instead of get(). tailMap() may return a Map of values!
 	private HashMap<String, HashMap<String, ArrayList<DependencyDTO>>> dependenciesOnFromTo; 
@@ -151,16 +152,37 @@ class FamixDependencyFinder extends FamixFinder {
 		numberOfIncompleteAssociations = 0;
 		numberOfDuplicateAssociations = 0;
 		numberOfExtendsConcrete = 0;
+		numberOfAssociationsWithoutToClass = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
-					DependencyDTO foundDirectDependency = buildDependencyDTO(association);
-					if (foundDirectDependency.from == null || foundDirectDependency.from.equals("") || foundDirectDependency.to == null || foundDirectDependency.to.equals("") ||foundDirectDependency.lineNumber == 0 || foundDirectDependency.type == null){
+					if (association.from == null || association.from.equals("") || association.to == null || association.to.equals("") ||association.lineNumber == 0 || association.type == null){
 						numberOfIncompleteAssociations ++;
 					}
 					else{
-					String uniqueName = (foundDirectDependency.from + String.valueOf(foundDirectDependency.lineNumber) + foundDirectDependency.to + foundDirectDependency.type); 
+						String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type); 
+							
+						// Check if from or to are existing classes. If not, determine parentclass for fromClassPath and toClassPath.
+						if(association.to.startsWith("husacct.define.domain.SoftwareUnitDefinition")){
+							FamixClass outer = theModel.classes.get(association.to);
+							String innerName = "husacct.define.domain.SoftwareUnitDefinition.Type";
+							boolean innerExists = theModel.classes.containsKey(innerName);
+							FamixClass inner = theModel.classes.get(innerName);
+							String top = "top";
+						}
 						if (!result.containsKey(uniqueName)){
+							if((theModel.classes.containsKey(association.to))){
+								FamixClass toClass = theModel.classes.get(association.to);
+								if((toClass != null) && (toClass.isInnerClass)){
+									String uniqueNameParent = toClass.belongsToClass;
+									if(toClass.belongsToClass != null) 
+									association.to = uniqueNameParent;
+								}
+							} else{
+								numberOfAssociationsWithoutToClass ++;
+							}
+
+							DependencyDTO foundDirectDependency = buildDependencyDTO(association);
 							result.put(uniqueName, foundDirectDependency);
 						}
 						else {
@@ -196,8 +218,8 @@ class FamixDependencyFinder extends FamixFinder {
 			}
 
 		} catch (Exception e) {
-	        this.logger.debug(new Date().toString() + " "  + e);
-	        //e.printStackTrace();
+	        this.logger.error(" Exception: "  + e);
+	        e.printStackTrace();
 	    }
 
 		
@@ -205,11 +227,30 @@ class FamixDependencyFinder extends FamixFinder {
 		//if(!preventRecursion)
 		//result.addAll(findIndirectDependencies(from, to, applyFilter));
 		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
+		this.logger.info(" Associations without validated ToClass: " + numberOfAssociationsWithoutToClass);
 		return resultToReturn;
 	
 	
 	}
 
+	private boolean determineParentClass(String toString){
+		boolean returnValue = false;
+		
+		
+		/*
+		while (!returnValue){
+			String[] partNames = toString.split("\\.");
+			int nr = partNames.length;
+			while (nr > 0){
+				String s = partNames[nr];
+				nr --;
+			}
+		}
+		if((theModel.classes.get(toString) == null)){
+		} */
+		return returnValue;
+	}
+	
 	public List<DependencyDTO> getAccessClassVariableInterfaceDirectDependencies(){
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		HashMap<String, FamixInterface> allInterfaces = theModel.interfaces;
@@ -224,7 +265,7 @@ class FamixDependencyFinder extends FamixFinder {
 										"\n To: " + association.to +
 										"\n Type: " + association.type +
 										"\n Line: " + association.lineNumber);*/
-					result.add(new DependencyDTO(association.from, association.to, "AccessClassVariableInterface", false, association.lineNumber));
+					result.add(new DependencyDTO(association.from, association.from, association.to, association.to, "AccessClassVariableInterface", false, association.lineNumber));
 				}
 			}
 		}
@@ -283,7 +324,7 @@ class FamixDependencyFinder extends FamixFinder {
 		for(DependencyDTO dependencyTo : dependenciesTo){
 			for(DependencyDTO dependencyFrom : dependenciesFrom){
 				if(dependencyTo.from.equals(dependencyFrom.to)){
-					DependencyDTO indirectDependency = new DependencyDTO(dependencyFrom.from, dependencyTo.to, dependencyFrom.type + dependencyTo.type, true, dependencyFrom.lineNumber);
+					DependencyDTO indirectDependency = new DependencyDTO(dependencyFrom.from, dependencyFrom.from, dependencyTo.to, dependencyTo.to, dependencyFrom.type + dependencyTo.type, true, dependencyFrom.lineNumber);
 					indirectDependency.via = dependencyFrom.to;
 					if(isValidIndirectDependency(indirectDependency) && !containsDependency(indirectDependency, result))
 						result.add(indirectDependency);
@@ -376,7 +417,7 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){
-		return new DependencyDTO(association.from, association.to, association.type, association.lineNumber);
+		return new DependencyDTO(association.from, association.from, association.to, association.to, association.type, association.lineNumber);
 	}
 	
     // Fill HashMap dependenciesOnFromTo 

@@ -66,8 +66,8 @@ public class Blog extends BenchmarkExtended{
 	@Test
 	public void testDomainBlogWordpressMyBlah(){
 		TestObject testobject = new TestObject("domain.blog.wordpress.MyBlah");
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPLEMENTS, 10));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation",super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation","infrastructure.blog.ILocation", super.IMPLEMENTS, 10));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -76,10 +76,10 @@ public class Blog extends BenchmarkExtended{
 	@Test
 	public void testDomainBlogWordpressMyBlog(){
 		TestObject testobject = new TestObject("domain.blog.wordpress.MyBlog");
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.Blog", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.Blog", super.EXTENDSABSTRACT, 11));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPLEMENTS, 11));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.Blog", "infrastructure.blog.Blog", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.Blog", "infrastructure.blog.Blog", super.EXTENDSABSTRACT, 11));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation", super.IMPLEMENTS, 11));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}	
@@ -87,10 +87,10 @@ public class Blog extends BenchmarkExtended{
 	@Test
 	public void testDomainBlogWordpressMyComment(){
 		TestObject testobject = new TestObject("domain.blog.wordpress.MyComment");
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.Blog", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.Blog", super.EXTENDSABSTRACT, 11));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPLEMENTS, 11));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.Blog", "infrastructure.blog.Blog", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.Blog", "infrastructure.blog.Blog", super.EXTENDSABSTRACT, 11));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation", super.IMPLEMENTS, 11));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}	
@@ -98,10 +98,10 @@ public class Blog extends BenchmarkExtended{
 	@Test
 	public void testDomainBlogWordpressMyStory(){
 		TestObject testobject = new TestObject("domain.blog.wordpress.MyStory");
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.Blog", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPORT, 5));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.Blog", super.EXTENDSABSTRACT, 12));
-		testobject.addDependency(new DependencyDTO("", "infrastructure.blog.ILocation", super.IMPLEMENTS, 12));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.Blog", "infrastructure.blog.Blog", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation", super.IMPORT, 5));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.Blog", "infrastructure.blog.Blog", super.EXTENDSABSTRACT, 12));
+		testobject.addDependency(new DependencyDTO("", "", "infrastructure.blog.ILocation", "infrastructure.blog.ILocation", super.IMPLEMENTS, 12));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}	

@@ -57,16 +57,6 @@ public class FacadeConventionRule extends RuleType {
 		}
 
 		if(facadeMappings.size() > 0) {
-			/* //TIJDELIJK
-			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
-					+ componentMapping.getLogicalPathType());
-			System.out.println("FACADE mappings: ");
-			for(Mapping facadeMapping: facadeMappings) {
-				System.out.println("=> " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
-					+ facadeMapping.getLogicalPathType() + "\n================");
-			}
-			//EINDE */
-
 			for (DependencyDTO dependency : dependencies) {
 				if (dependency.to.contains(componentMapping.getPhysicalPath())) {
 					if (!dependency.from.contains(componentMapping.getPhysicalPath())) {

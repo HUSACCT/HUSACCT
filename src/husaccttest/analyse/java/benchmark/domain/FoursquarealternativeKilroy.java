@@ -17,10 +17,10 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroyCheckCastFrom(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.kilroy.CheckCastFrom");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.SameExtend", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.CheckCastTo", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.SameExtend", super.EXTENDSCONCRETE, 8));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.SameExtend", super.INVOCCONSTRUCTOR, 11));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.SameExtend", "domain.foursquarealternative.SameExtend", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.CheckCastTo", "domain.foursquarealternative.whrrl.CheckCastTo", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.SameExtend", "domain.foursquarealternative.SameExtend", super.EXTENDSCONCRETE, 8));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.SameExtend", "domain.foursquarealternative.SameExtend", super.INVOCCONSTRUCTOR, 11));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -28,8 +28,8 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroyComment(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.kilroy.Comment");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlComment", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlComment", super.EXTENDSCONCRETE, 7));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlComment", "domain.foursquarealternative.whrrl.WhrrlComment", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlComment", "domain.foursquarealternative.whrrl.WhrrlComment", super.EXTENDSCONCRETE, 7));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -37,9 +37,9 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroyFuture(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.kilroy.Future");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlFuture", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlFuture", super.INVOCCONSTRUCTOR, 9));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlFuture", super.INVOCMETHOD, 9));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlFuture", "domain.foursquarealternative.whrrl.WhrrlFuture", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlFuture", "domain.foursquarealternative.whrrl.WhrrlFuture", super.INVOCCONSTRUCTOR, 9));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlFuture", "domain.foursquarealternative.whrrl.WhrrlFuture", super.INVOCMETHOD, 9));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}
@@ -86,10 +86,10 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroySettings(){
 		TestObject testobject = new TestObject("domain.foursquarealternative.kilroy.Settings");
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.ISee", super.IMPORT, 3));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlSettings", super.IMPORT, 4));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.ISee", super.IMPLEMENTS, 8));
-		testobject.addDependency(new DependencyDTO("", "domain.foursquarealternative.whrrl.WhrrlSettings", super.INVOCCONSTRUCTOR, 10));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.ISee", "domain.foursquarealternative.whrrl.ISee", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlSettings", "domain.foursquarealternative.whrrl.WhrrlSettings", super.IMPORT, 4));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.ISee", "domain.foursquarealternative.whrrl.ISee", super.IMPLEMENTS, 8));
+		testobject.addDependency(new DependencyDTO("", "", "domain.foursquarealternative.whrrl.WhrrlSettings", "domain.foursquarealternative.whrrl.WhrrlSettings", super.INVOCCONSTRUCTOR, 10));
 		boolean result = super.testDependencyObject(testobject);
 		assertTrue(testobject.getLastError(), result);
 	}

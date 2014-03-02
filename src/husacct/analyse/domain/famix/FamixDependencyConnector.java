@@ -52,9 +52,10 @@ class FamixDependencyConnector {
             try {
             	// Try to replace declareType by a unique name of its containing entity.
         		classFoundInImports = "";
-            	theClass = entity.belongsToClass;
+        		theClass = entity.belongsToClass;
                 if (!declareTypeHoldsUniqueName(entity.declareType)) {
                     classFoundInImports = findClassInImports(theClass, entity.declareType);
+                    // Extend in the future!!! Type may be an import of one of the super classes!
                     if (!classFoundInImports.equals("")) {
                         entity.declareType = classFoundInImports;
                     } else {
