@@ -56,13 +56,13 @@ public class PersistentDomain implements ISaveable {
 		domainParser = new DomainXML(SoftwareArchitecture.getInstance());
 
 		switch(parseData){
-		case LOGICAL:
-			domainParser.setParseLogical(false);
-			return domainParser.getApplicationInXML(domainService.getApplicationDetails());
-		case APPLICATION:
-		case PHYSICAL:
-		default:
-			return domainParser.getApplicationInXML(domainService.getApplicationDetails());
+			case LOGICAL:
+				domainParser.setParseLogical(false);
+				return domainParser.getApplicationInXML(domainService.getApplicationDetails());
+			case APPLICATION:
+			case PHYSICAL:
+			default:
+				return domainParser.getApplicationInXML(domainService.getApplicationDetails());
 		}
 	}
 
@@ -75,13 +75,16 @@ public class PersistentDomain implements ISaveable {
 		SoftwareArchitecture workspaceArchitecture = workspaceApplication.getArchitecture(); 
 
 		switch (parseData) {
-		default:
-			ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-			for (Project project : workspaceApplication.getProjects()) {
-				projects.add(new ProjectDTO(project.getName(), project
-						.getPaths(), project.getProgrammingLanguage(), project
-						.getVersion(), project.getDescription(), null));
-			}
+			case LOGICAL:
+			case APPLICATION:
+			case PHYSICAL:
+			default:
+				ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+				for (Project project : workspaceApplication.getProjects()) {
+					projects.add(new ProjectDTO(project.getName(), project
+							.getPaths(), project.getProgrammingLanguage(), project
+							.getVersion(), project.getDescription(), null));
+				}
 			ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), projects, workspaceApplication.getVersion());
 		} 
 	}

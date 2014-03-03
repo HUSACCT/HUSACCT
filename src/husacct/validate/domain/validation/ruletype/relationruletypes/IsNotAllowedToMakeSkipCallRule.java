@@ -41,19 +41,19 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 			for(ModuleDTO layerTo : potentialLayersToBeSkipped){ 
 				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsFromModule(layerTo, currentRule.violationTypeKeys));
 			}
-			DependencyDTO[] dependencies = analyseService.getAllDependencies();
-			
+
 			for (Mapping classPathFrom : physicalClasspathsFrom) {
 				for (Mapping classPathTo : modulesTo) {
-					for (DependencyDTO dependency : dependencies) {
-						if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) &&
-                                dependency.to.startsWith(classPathTo.getPhysicalPath())) {
-                            Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-                            violations.add(violation);
-                        }
+					DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+					if(violatingDependencies != null){
+						for(DependencyDTO dependency : violatingDependencies){
+							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+	                        violations.add(violation);
+						}
 					}
 				}
 			}
+			
 		}
 		return violations;
 	}
