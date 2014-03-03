@@ -22,8 +22,10 @@ class FamixDependencyFinder extends FamixFinder {
 	protected int numberOfIncompleteAssociations;
 	protected int numberOfDuplicateAssociations;
 	protected int numberOfExtendsConcrete;
-	protected int numberOfAssociationsWithoutfromClass;
+	protected int numberOfAssociationsWithoutFromClass;
 	protected int numberOfAssociationsWithoutToClass;
+	protected int numberOfFilteredDependenciesToLanguageConstruct;
+	
 	// TreeMap dependenciesOnFromTo has as first key classPathFrom, as second key classPathTo, and as value a list of dependencies.
 	// Note: To find inner classes to, make use of tailMap() instead of get(). tailMap() may return a Map of values!
 	private HashMap<String, HashMap<String, ArrayList<DependencyDTO>>> dependenciesOnFromTo; 
@@ -155,8 +157,9 @@ class FamixDependencyFinder extends FamixFinder {
 		numberOfIncompleteAssociations = 0;
 		numberOfDuplicateAssociations = 0;
 		numberOfExtendsConcrete = 0;
-		numberOfAssociationsWithoutfromClass = 0;
+		numberOfAssociationsWithoutFromClass = 0;
 		numberOfAssociationsWithoutToClass = 0;
+		numberOfFilteredDependenciesToLanguageConstruct = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
@@ -164,36 +167,43 @@ class FamixDependencyFinder extends FamixFinder {
 						numberOfIncompleteAssociations ++;
 					}
 					else{
-						String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type);
-						fromClassPath = association.from;
-						toClassPath = association.to;
-							
-						if (!result.containsKey(uniqueName)){
-							// Check if from is existing class. If not, determine parent-class for fromClassPath.
-							if((theModel.classes.containsKey(association.from))){
-								FamixClass toClass = theModel.classes.get(association.from);
-								if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
-									fromClassPath = toClass.belongsToClass;
-								}
-							} else{
-								numberOfAssociationsWithoutToClass ++;
-							}
-
-							// Check if to is existing class. If not, determine parent-class for toClassPath.
-							if((theModel.classes.containsKey(association.to))){
-								FamixClass toClass = theModel.classes.get(association.to);
-								if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
-									toClassPath = toClass.belongsToClass;
-								}
-							} else{
-								numberOfAssociationsWithoutToClass ++;
-							}
-
-							DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber);
-							result.put(uniqueName, foundDirectDependency);
+						// Filter on programming language to-values; To do: Make language dependent and configurable!  
+						if((association.to.startsWith("java.")) || (association.to.startsWith("javax."))){
+							numberOfFilteredDependenciesToLanguageConstruct ++;
 						}
 						else {
-							numberOfDuplicateAssociations ++; }
+							String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type);
+							fromClassPath = association.from;
+							toClassPath = association.to;
+							if (!result.containsKey(uniqueName)){
+	
+								// Check if from is existing class. If not, determine parent-class for fromClassPath.
+								if((theModel.classes.containsKey(association.from))){
+									FamixClass toClass = theModel.classes.get(association.from);
+									if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
+										fromClassPath = toClass.belongsToClass;
+									}
+								} else{
+									numberOfAssociationsWithoutFromClass ++;
+								}
+	
+								// Check if to is existing class. If not, determine parent-class for toClassPath.
+								if((theModel.classes.containsKey(association.to))){
+									FamixClass toClass = theModel.classes.get(association.to);
+									if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
+										toClassPath = toClass.belongsToClass;
+									}
+								} else{
+									numberOfAssociationsWithoutToClass ++;
+								}
+								
+								// Create Dependency and add to result
+								DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber);
+								result.put(uniqueName, foundDirectDependency);
+							}
+							else {
+								numberOfDuplicateAssociations ++; }
+						}	
 					}
 				}
 				else{
@@ -234,7 +244,7 @@ class FamixDependencyFinder extends FamixFinder {
 		//if(!preventRecursion)
 		//result.addAll(findIndirectDependencies(from, to, applyFilter));
 		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
-		this.logger.info(" Associations without validated ToClass: " + numberOfAssociationsWithoutToClass);
+		this.logger.info(" Associations: filtered (language Class): " + numberOfFilteredDependenciesToLanguageConstruct + "; non-classes fromClass: " + numberOfAssociationsWithoutFromClass + "; non-classes toClass: " + numberOfAssociationsWithoutToClass);
 		return resultToReturn;
 	
 	
