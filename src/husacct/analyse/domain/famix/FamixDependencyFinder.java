@@ -22,6 +22,7 @@ class FamixDependencyFinder extends FamixFinder {
 	protected int numberOfIncompleteAssociations;
 	protected int numberOfDuplicateAssociations;
 	protected int numberOfExtendsConcrete;
+	protected int numberOfAssociationsWithoutfromClass;
 	protected int numberOfAssociationsWithoutToClass;
 	// TreeMap dependenciesOnFromTo has as first key classPathFrom, as second key classPathTo, and as value a list of dependencies.
 	// Note: To find inner classes to, make use of tailMap() instead of get(). tailMap() may return a Map of values!
@@ -148,10 +149,13 @@ class FamixDependencyFinder extends FamixFinder {
 	    HashMap<String, DependencyDTO> result = new HashMap<String, DependencyDTO>();
 		List<DependencyDTO> resultToReturn = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
+		String fromClassPath;
+		String toClassPath;
 		numberOfNotComplyingAssociations = 0;
 		numberOfIncompleteAssociations = 0;
 		numberOfDuplicateAssociations = 0;
 		numberOfExtendsConcrete = 0;
+		numberOfAssociationsWithoutfromClass = 0;
 		numberOfAssociationsWithoutToClass = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
@@ -160,29 +164,32 @@ class FamixDependencyFinder extends FamixFinder {
 						numberOfIncompleteAssociations ++;
 					}
 					else{
-						String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type); 
+						String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type);
+						fromClassPath = association.from;
+						toClassPath = association.to;
 							
-						// Check if from or to are existing classes. If not, determine parentclass for fromClassPath and toClassPath.
-						if(association.to.startsWith("husacct.define.domain.SoftwareUnitDefinition")){
-							FamixClass outer = theModel.classes.get(association.to);
-							String innerName = "husacct.define.domain.SoftwareUnitDefinition.Type";
-							boolean innerExists = theModel.classes.containsKey(innerName);
-							FamixClass inner = theModel.classes.get(innerName);
-							String top = "top";
-						}
 						if (!result.containsKey(uniqueName)){
-							if((theModel.classes.containsKey(association.to))){
-								FamixClass toClass = theModel.classes.get(association.to);
-								if((toClass != null) && (toClass.isInnerClass)){
-									String uniqueNameParent = toClass.belongsToClass;
-									if(toClass.belongsToClass != null) 
-									association.to = uniqueNameParent;
+							// Check if from is existing class. If not, determine parent-class for fromClassPath.
+							if((theModel.classes.containsKey(association.from))){
+								FamixClass toClass = theModel.classes.get(association.from);
+								if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
+									fromClassPath = toClass.belongsToClass;
 								}
 							} else{
 								numberOfAssociationsWithoutToClass ++;
 							}
 
-							DependencyDTO foundDirectDependency = buildDependencyDTO(association);
+							// Check if to is existing class. If not, determine parent-class for toClassPath.
+							if((theModel.classes.containsKey(association.to))){
+								FamixClass toClass = theModel.classes.get(association.to);
+								if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
+									toClassPath = toClass.belongsToClass;
+								}
+							} else{
+								numberOfAssociationsWithoutToClass ++;
+							}
+
+							DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber);
 							result.put(uniqueName, foundDirectDependency);
 						}
 						else {
@@ -308,13 +315,13 @@ class FamixDependencyFinder extends FamixFinder {
 		
 		for(FamixAssociation association : allAssociations){
 			if(compliesWithFunction(association, FinderFunction.TO, from, to) && compliesWithFilter(association, applyFilter)){
-				DependencyDTO foundDirectDependency = buildDependencyDTO(association);
+				DependencyDTO foundDirectDependency = new DependencyDTO(association.from, association.from, association.to, association.to, association.type, association.lineNumber);
 				if(!containsDependency(foundDirectDependency, dependenciesTo)){
 					dependenciesTo.add(foundDirectDependency);
 				}
 			}
 			if(compliesWithFunction(association, FinderFunction.FROM, from, to) && compliesWithFilter(association, applyFilter)){
-				DependencyDTO foundDirectDependency = buildDependencyDTO(association);
+				DependencyDTO foundDirectDependency = new DependencyDTO(association.from, association.from, association.to, association.to, association.type, association.lineNumber);
 				if(!containsDependency(foundDirectDependency, dependenciesFrom)){
 					dependenciesFrom.add(foundDirectDependency);
 				}
@@ -416,10 +423,6 @@ class FamixDependencyFinder extends FamixFinder {
 		return compare1.from == compare2.from && compare1.to == compare2.to && compare1.lineNumber == compare2.lineNumber && compare1.type == compare2.type;
 	}
 	
-	private DependencyDTO buildDependencyDTO(FamixAssociation association){
-		return new DependencyDTO(association.from, association.from, association.to, association.to, association.type, association.lineNumber);
-	}
-	
     // Fill HashMap dependenciesOnFromTo 
 	public void initializeDependencyHashMap(){
 		this.dependenciesOnFromTo = new HashMap<String, HashMap<String, ArrayList<DependencyDTO>>>();
@@ -427,8 +430,8 @@ class FamixDependencyFinder extends FamixFinder {
 		HashMap<String, ArrayList<DependencyDTO>> toMap;
 		try{
 	        for(DependencyDTO dependency : dependencies) {
-            	String uniqueNameFrom = dependency.from;
-            	String uniqueNameTo = dependency.to;
+            	String uniqueNameFrom = dependency.fromClassPath;
+            	String uniqueNameTo = dependency.toClassPath;
             	if(dependenciesOnFromTo.containsKey(uniqueNameFrom)){
             		toMap = dependenciesOnFromTo.get(uniqueNameFrom);
             		if(toMap.containsKey(uniqueNameTo)){
@@ -436,8 +439,8 @@ class FamixDependencyFinder extends FamixFinder {
             			ArrayList<DependencyDTO> matchingDependencies = toMap.get(uniqueNameTo);
             			boolean found = false;
             			for(DependencyDTO matchingDependency : matchingDependencies){
-	            			if(matchingDependency.type == dependency.type){
-	            				if(matchingDependency.lineNumber == dependency.lineNumber){
+	            			if((matchingDependency.from == dependency.from) && (matchingDependency.to == dependency.to)){
+	            				if((matchingDependency.type == dependency.type) && (matchingDependency.lineNumber == dependency.lineNumber)){
 	            					// Do nothing, dependency already exists
 	            					found = true;
 	            					break;

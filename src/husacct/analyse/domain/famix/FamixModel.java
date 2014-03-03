@@ -20,7 +20,7 @@ class FamixModel extends FamixObject {
     //public HashMap<String, FamixPackage> packages;
     public TreeMap<String, FamixPackage> packages;
     //public HashMap<String, FamixClass> classes;
-    public TreeMap<String, FamixClass> classes;
+    public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixImport> imports;
     public HashMap<String, FamixInterface> interfaces;
     public HashMap<String, FamixLibrary> libraries;
@@ -41,7 +41,7 @@ class FamixModel extends FamixObject {
         waitingStructuralEntitys = new ArrayList<FamixStructuralEntity>();
         associations = new ArrayList<FamixAssociation>();
         //classes = new HashMap<String, FamixClass>();
-        classes = new TreeMap<String, FamixClass>();
+        classes = new HashMap<String, FamixClass>();
         //packages = new HashMap<String, FamixPackage>();
         packages = new TreeMap<String, FamixPackage>();
         imports = new HashMap<String, FamixImport>();
