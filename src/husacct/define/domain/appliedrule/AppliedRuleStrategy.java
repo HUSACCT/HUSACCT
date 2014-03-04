@@ -7,8 +7,13 @@ import husacct.define.domain.module.ModuleStrategy;
 import java.util.ArrayList;
 
 public abstract class AppliedRuleStrategy {
-	protected String type;
 	protected static long STATIC_ID;
+	public static void setStaticId(long highestId){
+		STATIC_ID = highestId++;
+		STATIC_ID++;
+	}
+	
+	protected String type;
 	private long id;
 	private String description;
 	private String[] dependencies;

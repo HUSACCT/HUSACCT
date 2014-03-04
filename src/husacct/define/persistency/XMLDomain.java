@@ -30,11 +30,15 @@ public class XMLDomain {
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
     private final Logger logger = Logger.getLogger(XMLDomain.class);
+    private long highestModuleId;
+    private long highestAppliedRuleId;
 
 
 	public XMLDomain(Element workspaceData) {
 		workspace = workspaceData;
 		softwareArchitecture = SoftwareArchitecture.getInstance();
+		highestModuleId = 0;
+		highestAppliedRuleId = 0;
 	}
 
 	public Application createApplication() {
@@ -88,11 +92,14 @@ public class XMLDomain {
 			ModuleFactory factory = new ModuleFactory();
 			String moduleType = module.getChildText("type");
 			String moduleDescription = module.getChildText("description");
-			int moduleId = Integer.parseInt(module.getChildText("id"));
 			String moduleName = module.getChildText("name");
 			Element SoftwareUnitDefinitions = module.getChild("SoftwareUnitDefinitions");
+			int moduleId = Integer.parseInt(module.getChildText("id"));
+			// Determine highestModuleId to make sure that new modules (after loading from XML) don't get an existing moduleId, erroneously.
+			if(moduleId > highestModuleId){
+				highestModuleId = moduleId;
+			}
 
-			// TODO: When modules change to factory, this should be revised
 			switch (moduleType) {
 			case "ExternalLibrary":
 				newModule = moduleService.createNewModule("ExternalLibrary");
@@ -115,13 +122,13 @@ public class XMLDomain {
 			default:
 				newModule = factory.createDummy("Blank");
 				break;
-
 			}
+
 			boolean fromStorage = true;
 			newModule.set(moduleName, moduleDescription, fromStorage);
 			newModule.setId(moduleId);
 
-			// Add to Software Unit
+			// Add neModule to parent
 			if (parentId == 0) {
 				try {
 					moduleService.addModuleToRoot(newModule);
@@ -173,8 +180,7 @@ public class XMLDomain {
 				SoftwareUnitDefinitionType);
 	}
 
-	private SoftwareArchitecture createArchitectureFromElement(
-			Element XMLElement) {
+	private SoftwareArchitecture createArchitectureFromElement(Element XMLElement) {
 		softwareArchitecture.setName(XMLElement.getChild("name").getValue());
 		softwareArchitecture.setDescription(XMLElement.getChild("description")
 				.getValue());
@@ -188,6 +194,10 @@ public class XMLDomain {
 		if (XMLElement.getChild("rules").getChildren().size() > 0) {
 			createAppliedRulesFromXML(XMLElement.getChild("rules"));
 		}
+		
+		// Set highestId for ModuleStrategy and AppliedRuleStrategy
+		ModuleStrategy.setStaticId(highestModuleId);
+		AppliedRuleStrategy.setStaticId(highestAppliedRuleId);
 
 		return softwareArchitecture;
 	}
@@ -203,19 +213,21 @@ public class XMLDomain {
 		for (Element appliedRule : XMLElement.getChildren()) {
 			try{
 				AppliedRuleStrategy dummyRule = createDummyRule(appliedRule);
-	
-				//if (!ruleService.isMandatory(dummyRule.getRuleType(), dummyRule.getModuleFrom())) {
 					long newID = ruleService.addAppliedRule(dummyRule.getRuleType(), dummyRule.getDescription(),
-							dummyRule.getDependencies(), dummyRule.getRegex(),
-							dummyRule.getModuleFrom(), dummyRule.getModuleTo(),
-							dummyRule.isEnabled());
+							dummyRule.getDependencies(), dummyRule.getRegex(), dummyRule.getModuleFrom(), 
+							dummyRule.getModuleTo(), dummyRule.isEnabled());
 					AppliedRuleStrategy newRule = ruleService.getAppliedRuleById(newID);
 					newRule.setId(dummyRule.getId());
+					// Determine highestAppliedRuleId to make sure that new rules (after loading from XML) don't get an existing moduleId, erroneously.
+					if(newRule.getId() > highestAppliedRuleId){
+						highestAppliedRuleId = newRule.getId();
+					}
+
 					if (hasExceptions(appliedRule)) {
 						newRule.setExceptions(getExceptionsFromXML(appliedRule));
 					}
-				//}
-	        } catch (Exception e) {
+
+			} catch (Exception e) {
 	        	this.logger.debug(new Date().toString() + e.getMessage());
 	        }
 		}
@@ -235,8 +247,7 @@ public class XMLDomain {
 	private AppliedRuleStrategy createDummyRule(Element appliedRule) {
 		String ruleTypeKey = appliedRule.getChildText("type");
 		String description = appliedRule.getChildText("description");
-		boolean enabled = Boolean.parseBoolean(appliedRule
-				.getChildText("enabled"));
+		boolean enabled = Boolean.parseBoolean(appliedRule.getChildText("enabled"));
 		String regex = appliedRule.getChildText("regex");
 		int ruleId = Integer.parseInt(appliedRule.getChildText("id"));
 
@@ -244,10 +255,8 @@ public class XMLDomain {
 
 		String[] dependencyList = getDependenciesFromXML(dependencies);
 
-		int moduleFromId = Integer.parseInt(appliedRule.getChild("moduleFrom")
-				.getChild("ModuleStrategy").getChildText("id"));
-		int moduleToId = Integer.parseInt(appliedRule.getChild("moduleTo")
-				.getChild("ModuleStrategy").getChildText("id"));
+		int moduleFromId = Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
+		int moduleToId = Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
 
 		AppliedRuleStrategy dummyRule = ruleFactory.createDummyRule(ruleTypeKey);
 		ModuleStrategy moduleFrom = moduleService.getModuleById(moduleFromId);

@@ -16,6 +16,12 @@ import java.util.List;
 public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	protected static long STATIC_ID = 1;
+	public static void setStaticId(long highestId){
+		STATIC_ID = highestId++;
+		STATIC_ID++;
+	}
+
+	
 	protected long id;
 	protected String name;
 	protected String description;
@@ -33,7 +39,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 	
 	public void set(String name, String description){
-		this.id = STATIC_ID;
+		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
