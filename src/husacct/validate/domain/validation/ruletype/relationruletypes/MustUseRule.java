@@ -30,31 +30,38 @@ public class MustUseRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations.clear();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-		boolean isUsingModule = false;
+		physicalClasspathsFrom = mappings.getMappingFrom();
+		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		for (Mapping physicalClasspathFrom : mappings.getMappingFrom()) {
-			for (Mapping physicalClasspathTo : mappings.getMappingTo()) {
-				for (DependencyDTO dependency : dependencies) {
-					if (!isUsingModule &&
-							dependency.from.startsWith(physicalClasspathFrom.getPhysicalPath()) &&
-							dependency.to.startsWith(physicalClasspathTo.getPhysicalPath()) &&
-							Arrays.binarySearch(physicalClasspathFrom.getViolationTypes(), dependency.type) >= 0) {
-						isUsingModule = true;
+		boolean isUsingModule = false;
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
+			for (Mapping classPathTo : physicalClasspathsTo) {
+				if(isUsingModule == true){
+					break;
+				}
+				DependencyDTO[] dependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+				if(dependencies != null && dependencies.length > 0){
+					for(DependencyDTO dependency : dependencies){
+						if(dependency != null){
+							isUsingModule = true;
+							break;
+						}
 					}
 				}
 			}
 		}
+		
 		if (!isUsingModule) {
 			LogicalModule logicalModuleFrom = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.type);
 			LogicalModule logicalModuleTo = new LogicalModule(currentRule.moduleTo.logicalPath, currentRule.moduleTo.type);
 			LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 			Violation violation = createViolation(rootRule, logicalModules, configuration);
 
-			violation.setClassPathFrom(convertPhysicalClassPathsToString(currentRule.moduleFrom.physicalPathDTOs));
-			violation.setClassPathTo(convertPhysicalClassPathsToString(currentRule.moduleTo.physicalPathDTOs));
+			//violation.setClassPathFrom(convertPhysicalClassPathsToString(currentRule.moduleFrom.physicalPathDTOs));
+			//violation.setClassPathTo(convertPhysicalClassPathsToString(currentRule.moduleTo.physicalPathDTOs));
 			violations.add(violation);
-		}
+		}		
+		
 		return violations;
 	}
 
