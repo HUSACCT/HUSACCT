@@ -24,8 +24,8 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
 		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
 		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
-
-		return removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		Mappings returnValue = removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		return returnValue;
 	}
 
 	private static List<Mapping> getExceptionClassPathTo(RuleDTO rule) {

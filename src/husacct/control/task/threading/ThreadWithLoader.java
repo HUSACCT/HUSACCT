@@ -34,7 +34,6 @@ public class ThreadWithLoader implements Runnable {
 	@Override
 	public void run() {
 		taskThread.start();
-		
 		monitorThread.start();
 		loadingDialog.setVisible(true);
 		loadingDialog.run();

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -72,17 +73,59 @@ class FamixDependencyFinder extends FamixFinder {
 		return findDependencies(FinderFunction.FROM, from, "", dependencyFilter);
 	}
 	
+	// Returns all dependencies for the exact match from classPathFrom and classPathTo
+	// Either classPathTFrom or classPathTo should have a value other than "", otherwise an empty array is returned.
+	// If classPathTFrom = "", then all dependencies to classPathTo are returned, which refer to existing classPathFrom's.
+	// If classPathTo = "", then all dependencies from classPathFrom are returned, which refer to existing classPathTo's.
 	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
 		ArrayList<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
-		// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
-		HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
-		// Select all dependencies within fromMap whose pathTo starts with classPathTo
-		if(fromMap != null ){	
-			ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
-			if(dependencyList != null){
-				foundDependencies.addAll(dependencyList);
+		if(classPathFrom != ""){
+			// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
+			HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
+			// Select all dependencies within fromMap whose pathTo starts with classPathTo
+			if(fromMap != null ){
+				if(classPathTo != ""){
+					ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
+					if(dependencyList != null){
+						foundDependencies.addAll(dependencyList);
+					}
+				} else{
+					// If classPathTo = "", then find all dependencies from classPathFrom. Add each, when it refers to an existing classPathTo 
+					Set<String> keyset = fromMap.keySet();
+					for(String keyTo : keyset){
+						ArrayList<DependencyDTO> dependencyList = fromMap.get(keyTo);
+						if(dependencyList != null){
+							for(DependencyDTO dependency : dependencyList){
+								if((theModel.classes.containsKey(dependency.toClassPath)) || 
+									(theModel.interfaces.containsKey(dependency.toClassPath) || 
+									(theModel.libraries.containsKey(dependency.toClassPath)))){
+									foundDependencies.add(dependency);
+								}
+							}
+						}
+					}
+				}
 			}
 		}
+		else{ //classPathFrom = ""
+			if(classPathTo != ""){
+				Set<String> fromKeyList = dependenciesOnFromTo.keySet();
+				for(String fromKey : fromKeyList){
+					HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(fromKey);
+					// Select all dependencies within fromMap whose pathTo starts with fromKey
+					if(fromMap != null ){
+						if(classPathTo != ""){
+							ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
+							if(dependencyList != null){
+								foundDependencies.addAll(dependencyList);
+							}
+						}
+					}
+				}
+			}
+		}
+			
+	
         DependencyDTO[] matchDependency = new DependencyDTO[foundDependencies.size()];
         int iterator = 0;
         for (DependencyDTO d : foundDependencies) {

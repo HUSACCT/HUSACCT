@@ -41,7 +41,13 @@ class ViolationRepository {
 				violationKey = "";
 				violationKey = violation.getClassPathFrom() + "." + violation.getLinenumber() + "." + violation.getViolationTypeKey() + "." + violation.getRuletypeKey() + "." + violation.getClassPathTo();
 				violationKey.toLowerCase();
-				violationTreemap.put(violationKey, violation);
+				if(violationTreemap.containsKey(violationKey)){
+					// Do nothing
+					 String stopForTest = "stop";
+				}
+				else{
+					violationTreemap.put(violationKey, violation);
+				}
 			} catch (Exception e) {
 				this.logger.error(new Date().toString() + " Exception:  " + e);
 			}

@@ -31,10 +31,12 @@ public class IsNotAllowedToUseRule extends RuleType {
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
-				if(violatingDependencies != null){
+				if(violatingDependencies != null && violatingDependencies.length > 0){
 					for(DependencyDTO dependency : violatingDependencies){
-						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-                        violations.add(violation);
+						if(dependency != null){
+							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+	                        violations.add(violation);
+						}
 					}
 				}
 			}

@@ -11,8 +11,10 @@ import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.internaltransferobjects.Mappings;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 
 public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
@@ -25,20 +27,27 @@ public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		// Only used to get the mappings, because filtering the 'From' is not
-		// corectly for this rule
-		// (need to filter for the 'To')
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+		// Create HashMap with all allowed to-classes (including the from-classes)
+		HashMap<String, Mapping> fromMap = new HashMap<String, Mapping>();
+		for(Mapping from : physicalClasspathsFrom){
+			fromMap.put(from.getPhysicalPath(), from);
+		}
+		for(Mapping to : physicalClasspathsTo){
+			fromMap.put(to.getPhysicalPath(), to);
+		}
 
 		for (Mapping classPathTo : physicalClasspathsTo) {
-			for (DependencyDTO dependency : dependencies) {
-				if (dependency.to.startsWith(classPathTo.getPhysicalPath()) &&
-                        !containsMapping(mappings, dependency.from) &&
-                        Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0) {
+			// Get all dependencies with matching dependency.classPathTo 
+			DependencyDTO[] dependenciesTo = analyseService.getDependenciesFromTo("", classPathTo.getPhysicalPath());
+			for (DependencyDTO dependency : dependenciesTo) {
+				if(fromMap.containsKey(dependency.from)){
+					// Do nothing
+				}
+				else{
                     Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                     violations.add(violation);
@@ -46,20 +55,5 @@ public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
 			}
 		}
 		return violations;
-	}
-
-	private boolean containsMapping(Mappings mappings, String physicalPath) {
-		for (Mapping mappingFrom : mappings.getMappingFrom()) {
-			if (physicalPath.startsWith(mappingFrom.getPhysicalPath())) {
-				return true;
-			}
-		}
-
-		for (Mapping mappingTo : mappings.getMappingTo()) {
-			if (mappingTo.getPhysicalPath().equals(physicalPath)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
