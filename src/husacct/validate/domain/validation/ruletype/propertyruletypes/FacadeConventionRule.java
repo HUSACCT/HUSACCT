@@ -13,6 +13,7 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 
 public class FacadeConventionRule extends RuleType {
@@ -23,68 +24,48 @@ public class FacadeConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		violations.clear();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> mappingsFrom = mappings.getMappingFrom();
-		List<Violation> allViolations = new ArrayList<Violation>();
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
-		Mapping componentMapping = null;
-		List<Mapping> facadeMappings = new ArrayList<Mapping>();
+		// Create HashMap with all allowed-to-use-classes (the classes mapped to the facade(s)). Note: This HashMap is not used, but useful for debugging, and the costs are low.   
+		HashMap<String, Mapping> facadeMap = new HashMap<String, Mapping>();
 
-		for (Mapping mappingFrom : mappingsFrom) {
-			if(mappingFrom.getLogicalPathType().toLowerCase().equals("component")) {
-				if(componentMapping == null) {
-					componentMapping = mappingFrom;
-				}
-				else {
-					if(mappingFrom.getPhysicalPath().length() < componentMapping.getPhysicalPath().length()) {
-						componentMapping = mappingFrom;
-					}
-				}
+		// Create HashMap with all not allowed-to-use-classes (all other classes within the component)
+		HashMap<String, Mapping> classesHiddeninComponentMap = new HashMap<String, Mapping>();
+
+		// Create HashMap with all classes within the component; these classes are allowed to use each other
+		HashMap<String, Mapping> allInComponentMap = new HashMap<String, Mapping>();
+		for(Mapping from : physicalClasspathsFrom){
+			allInComponentMap.put(from.getPhysicalPath(), from);
+		}
+		
+		for (Mapping mappingFrom : physicalClasspathsFrom) {
+			allInComponentMap.put(mappingFrom.getPhysicalPath(), mappingFrom);
+			if(mappingFrom.getLogicalPathType().toLowerCase().equals("facade")) {
+				facadeMap.put(mappingFrom.getPhysicalPath(), mappingFrom);
 			}
-			else if(mappingFrom.getLogicalPathType().toLowerCase().equals("facade")) {
-				boolean existingMapping = false;
-				for(Mapping facadeMapping: facadeMappings) {
-					if(facadeMapping.getLogicalPath().equals(mappingFrom.getLogicalPath())) {
-						existingMapping = true;
-					}
-				}
-				
-				if(!existingMapping) {
-					facadeMappings.add(mappingFrom);
-				}
+			else {
+				classesHiddeninComponentMap.put(mappingFrom.getPhysicalPath(), mappingFrom);
 			}
 		}
-
-		if(facadeMappings.size() > 0) {
+		
+		for (String hiddenClassPath : classesHiddeninComponentMap.keySet()) {
+			// Get all dependencies with matching dependency.classPathTo 
+			DependencyDTO[] dependencies = analyseService.getDependenciesFromTo("", hiddenClassPath);
 			for (DependencyDTO dependency : dependencies) {
-				if (dependency.to.contains(componentMapping.getPhysicalPath())) {
-					if (!dependency.from.contains(componentMapping.getPhysicalPath())) {
-						for(Mapping facadeMapping: facadeMappings) {
-							if (!dependency.to.contains(facadeMapping.getPhysicalPath())) {
-								Mapping fromMapping = new Mapping(dependency.from, new String[0]);
-								Mapping toMapping = new Mapping(dependency.to, new String[0]);
-	
-								for(Mapping theMapping: mappingsFrom) {
-									if(theMapping.getPhysicalPath().equals(fromMapping.getPhysicalPath())) {
-										fromMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
-											fromMapping.getPhysicalPath(), theMapping.getViolationTypes());
-									}
-									else if(theMapping.getPhysicalPath().equals(toMapping.getPhysicalPath())) {
-										toMapping = new Mapping(theMapping.getLogicalPath(), theMapping.getLogicalPathType(),
-											toMapping.getPhysicalPath(), theMapping.getViolationTypes());
-									}
-								}
-	
-								Violation violation = createViolation(rootRule, fromMapping, toMapping, dependency, configuration);
-								allViolations.add(violation);
-							}
-						}
-					}
+				if(allInComponentMap.containsKey(dependency.from)){
+					// Do nothing
+				}
+				else{
+					Mapping classPathTo = classesHiddeninComponentMap.get(hiddenClassPath);
+					Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
+                    Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                    violations.add(violation);
 				}
 			}
-		}
+		}		
 
-		return allViolations;
+		return violations;
 	}
 }
