@@ -26,16 +26,22 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-
+		//DependencyDTO[] dependencies = analyseService.getAllDependencies();
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			for (DependencyDTO dependency : dependencies) {
-				if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) && !containsMapping(mappings, dependency.to) &&
+			DependencyDTO[] allDependenciesFrom = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), "");
+			for (DependencyDTO dependency : allDependenciesFrom) {
+				if(!containsMapping(mappings, dependency.to)){
+                    Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
+                    Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                    violations.add(violation);
+				}
+				
+/*				if (dependency.from.startsWith(classPathFrom.getPhysicalPath()) && !containsMapping(mappings, dependency.to) &&
                         Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
                     Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                     violations.add(violation);
-                }
+                } */
 			}
 		}
 		return violations;

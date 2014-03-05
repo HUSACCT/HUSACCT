@@ -149,7 +149,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-		this.setVisible(true);
-		super.setAlwaysOnTop(true);
+		//super.setAlwaysOnTop(true);
 	}
 }

@@ -39,19 +39,8 @@ class ViolationRepository {
 		for(Violation violation : violationsList){
 			try{
 				violationKey = "";
-				violationKey = violation.getClassPathFrom() + "." + violation.getClassPathTo() + "." + violation.getViolationTypeKey() + "." + violation.getLinenumber();
+				violationKey = violation.getClassPathFrom() + "." + violation.getLinenumber() + "." + violation.getViolationTypeKey() + "." + violation.getRuletypeKey() + "." + violation.getClassPathTo();
 				violationKey.toLowerCase();
-				
-				/*// Start testcode
-				if(violationTreemap.containsKey(violationKey)){
-					String from = violation.getClassPathFrom();
-					String to = violation.getClassPathTo();
-					String ruleType = violation.getRuletypeKey();
-					String violationType = violation.getViolationTypeKey();
-					String a = violation.getViolationTypeKey();
-				}
-				// End testcode */
-				
 				violationTreemap.put(violationKey, violation);
 			} catch (Exception e) {
 				this.logger.error(new Date().toString() + " Exception:  " + e);

@@ -486,7 +486,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	private void runThread(Runnable runnable) {
 		if (!threadMonitor.add(runnable)) {
-			logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
+			//logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
 			graphicsFrame.setOutOfDate();
 		}
 	}

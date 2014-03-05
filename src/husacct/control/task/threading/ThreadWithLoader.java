@@ -36,6 +36,7 @@ public class ThreadWithLoader implements Runnable {
 		taskThread.start();
 		
 		monitorThread.start();
+		loadingDialog.setVisible(true);
 		loadingDialog.run();
 	}
 }
