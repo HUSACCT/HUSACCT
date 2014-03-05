@@ -31,4 +31,18 @@ public class ViolationDTO extends AbstractDTO {
 		this.severityName = severityName;
 		this.severityValue = severityValue;
 	}
+	
+    public String toString() {
+    	
+        String representation = "";
+        representation += "\nfromClasspath: " + fromClasspath;
+        representation += "\ntoClasspath: " + toClasspath;
+        representation += "\nlogicalModuleFrom: " + logicalModuleFrom;
+        representation += "\nlogicalModuleTo: " + logicalModuleTo;
+        representation += "\nruleType: " + ruleType;
+        representation += ", linenumber: " + linenumber;
+        representation += ", indirect: " + indirect;
+        representation += "\n";
+        return representation;
+    }
 }

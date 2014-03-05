@@ -43,7 +43,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class RuleTypeSupport {
 	private final static String projectSourcePath = "testprojects\\java\\srma";
-			//"D:\\Dropbox\\Themaopdracht ASE\\Benchmark test\\3 - Benchmark test Constructie\\SacctTestCode SRMA 2013-04-15\\SacctTestCode SRMA 2013-04-15\\src";
 	private final static String applicationName = "HUSACCT_BENCHMARK_SRMA_TEST";
 	private final static String programLanguage = "Java";
 	private final static String programVersion = "1.0";
@@ -501,7 +500,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule1_moduleFrom = new ModuleDTO("Domain Layer", new PhysicalPathDTO[] { rule1_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule1_moduleFrom_1, rule1_moduleFrom_2, rule1_moduleFrom_3, rule1_moduleFrom_4, rule1_moduleFrom_5, rule1_moduleFrom_6 });
 		
-		RuleDTO rule1 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString(), false, modulePresRelation, rule1_moduleFrom, 
+		RuleDTO rule1 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString(), true, modulePresRelation, rule1_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()), "", new RuleDTO[] {});
 		appliedRules[0] = rule1;	
 		
@@ -530,14 +529,14 @@ public class RuleTypeSupport {
 		ModuleDTO rule2en3_moduleFrom = new ModuleDTO("Technology Layer", new PhysicalPathDTO[] { rule2_physModuleFrom }, "package", 
 				new ModuleDTO[] { }); //rule2_moduleFrom_1, rule2_moduleFrom_2, rule2_moduleFrom_3, rule2_moduleFrom_4, rule2_moduleFrom_5, rule2_moduleFrom_6 });
 		
-		RuleDTO rule2 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString(), false, moduleDomainRelation, rule2en3_moduleFrom, 
+		RuleDTO rule2 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString(), true, moduleDomainRelation, rule2en3_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()), "", new RuleDTO[] {});
 		appliedRules[1] = rule2;	
 		
 		
 		//RULE 3: BackCallBan - From layer Technology to layer Presentation
 		//Can't be tested due because the required classes are not present in the layer Technology.
-		RuleDTO rule3 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString(), false, moduleDomainRelation, rule2en3_moduleFrom, 
+		RuleDTO rule3 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString(), true, moduleDomainRelation, rule2en3_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()), "", new RuleDTO[] {});
 		appliedRules[2] = rule3;
 		
@@ -565,7 +564,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule4_moduleFrom = new ModuleDTO("Presentation Layer", new PhysicalPathDTO[] { rule4_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule4_moduleFrom_1, rule4_moduleFrom_2, rule4_moduleFrom_3, rule4_moduleFrom_4, rule4_moduleFrom_5, rule4_moduleFrom_6 });
 		
-		RuleDTO rule4 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString(), false, moduleDomainRelation, rule4_moduleFrom, 
+		RuleDTO rule4 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString(), true, moduleDomainRelation, rule4_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString()), "", new RuleDTO[] {});
 		appliedRules[3] = rule4;
 		
@@ -608,7 +607,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule5_moduleFrom = new ModuleDTO("Technology Layer.Propertyrules.Naming_postfix", new PhysicalPathDTO[] { rule5_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule5_moduleFrom_1, rule5_moduleFrom_2, rule5_moduleFrom_3, rule5_moduleFrom_4, rule5_moduleFrom_5, rule5_moduleFrom_6, rule5_moduleFrom_7 });		
 		 
-		RuleDTO rule5 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), false, rule5_moduleFrom, rule5_moduleFrom, 
+		RuleDTO rule5 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), true, rule5_moduleFrom, rule5_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.NAMING_CONVENTION.toString()), "MDB*", new RuleDTO[] {});
 		appliedRules[5] = rule5;
 		
@@ -651,7 +650,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule6_moduleFrom = new ModuleDTO("Technology Layer.Propertyrules.Naming_prefix", new PhysicalPathDTO[] { rule6_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule6_moduleFrom_1, rule6_moduleFrom_2, rule6_moduleFrom_3, rule6_moduleFrom_4, rule6_moduleFrom_5, rule6_moduleFrom_6, rule6_moduleFrom_7 });
 		 
-		RuleDTO rule6 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), false, rule6_moduleFrom, rule6_moduleFrom, 
+		RuleDTO rule6 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), true, rule6_moduleFrom, rule6_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.NAMING_CONVENTION.toString()), "*MDB", new RuleDTO[] {});
 		appliedRules[4] = rule6;
 		
@@ -694,7 +693,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule7_moduleFrom = new ModuleDTO("Technology Layer.Propertyrules.Naming_mid", new PhysicalPathDTO[] { rule7_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule7_moduleFrom_1, rule7_moduleFrom_2, rule7_moduleFrom_3, rule7_moduleFrom_4, rule7_moduleFrom_5, rule7_moduleFrom_6, rule7_moduleFrom_7 });
 		 
-		RuleDTO rule7 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), false, rule7_moduleFrom, rule7_moduleFrom, 
+		RuleDTO rule7 = new RuleDTO(RuleTypes.NAMING_CONVENTION.toString(), true, rule7_moduleFrom, rule7_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.NAMING_CONVENTION.toString()), "*MDB*", new RuleDTO[] {});
 		appliedRules[6] = rule7;
 		
@@ -738,13 +737,13 @@ public class RuleTypeSupport {
 		ModuleDTO rule8en9_moduleFrom = new ModuleDTO("Technology Layer.Propertyrules.Component", new PhysicalPathDTO[] { rule8en9_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule8en9_moduleFrom_1, rule8en9_moduleFrom_3, rule8en9_moduleFrom_4, rule8en9_moduleFrom_5, rule8en9_moduleFrom_6, rule8en9_moduleFrom_7 });
 		
-		RuleDTO rule8 = new RuleDTO(RuleTypes.VISIBILITY_CONVENTION.toString(), false, rule8en9_moduleFrom, rule8en9_moduleFrom, 
+		RuleDTO rule8 = new RuleDTO(RuleTypes.VISIBILITY_CONVENTION.toString(), true, rule8en9_moduleFrom, rule8en9_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.VISIBILITY_CONVENTION.toString()), "", new RuleDTO[] {});
 		appliedRules[7] = rule8;
 		//Geef visibility package, default, public en protected mee.
 		
 		//RULE 9: FacadeConvention (PR4_1)
-		RuleDTO rule9 = new RuleDTO(RuleTypes.FACADE_CONVENTION.toString(), false, moduleTechRelationAllowed, rule8en9_moduleFrom, 
+		RuleDTO rule9 = new RuleDTO(RuleTypes.FACADE_CONVENTION.toString(), true, moduleTechRelationAllowed, rule8en9_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.FACADE_CONVENTION.toString()), "", new RuleDTO[] {});
 		appliedRules[8] = rule9;
 		
@@ -766,7 +765,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule10_moduleFrom = new ModuleDTO("Technology Layer.Propertyrules.Superclass_inheritance", new PhysicalPathDTO[] { rule10_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule10_moduleFrom_1, rule10_moduleFrom_2, rule10_moduleFrom_3 });
 		
-		RuleDTO rule10 = new RuleDTO(RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString(), false, rule10_moduleTo, rule10_moduleFrom, 
+		RuleDTO rule10 = new RuleDTO(RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString(), true, rule10_moduleTo, rule10_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString()), "", new RuleDTO[] {});
 		appliedRules[9] = rule10;
 		
@@ -787,7 +786,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule11_moduleFrom = new ModuleDTO("Technology Layer.Propertyrules.Interface_inheritance", new PhysicalPathDTO[] { rule11_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule11_moduleFrom_1, rule11_moduleFrom_2, rule11_moduleFrom_3 });
 		
-		RuleDTO rule11 = new RuleDTO(RuleTypes.INTERFACEINHERITANCE_CONVENTION.toString(), false, rule11_moduleTo, rule11_moduleFrom, 
+		RuleDTO rule11 = new RuleDTO(RuleTypes.INTERFACEINHERITANCE_CONVENTION.toString(), true, rule11_moduleTo, rule11_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.INTERFACEINHERITANCE_CONVENTION.toString()), "", new RuleDTO[] {});
 		appliedRules[10] = rule11;
 		
@@ -815,7 +814,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule12_moduleFrom = new ModuleDTO("Domain Layer.Relationrules.Is_allowed_to_use", new PhysicalPathDTO[] { rule12_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule12_moduleFrom_1, rule12_moduleFrom_2, rule12_moduleFrom_3, rule12_moduleFrom_4, rule12_moduleFrom_5, rule12_moduleFrom_6 });
 		
-		RuleDTO rule12 = new RuleDTO(RuleTypes.IS_ALLOWED_TO_USE.toString(), false, moduleTechRelationAllowed, rule12_moduleFrom, 
+		RuleDTO rule12 = new RuleDTO(RuleTypes.IS_ALLOWED_TO_USE.toString(), true, moduleTechRelationAllowed, rule12_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_ALLOWED_TO_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[11] = rule12;
 		
@@ -843,7 +842,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule13_moduleFrom = new ModuleDTO("Domain Layer.Relationrules.Is_only_allowed_to_use", new PhysicalPathDTO[] { rule13_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule13_moduleFrom_1, rule13_moduleFrom_2, rule13_moduleFrom_3, rule13_moduleFrom_4, rule13_moduleFrom_5, rule13_moduleFrom_6 });
 		
-		RuleDTO rule13 = new RuleDTO(RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString(), false, moduleTechRelationAllowed, rule13_moduleFrom, 
+		RuleDTO rule13 = new RuleDTO(RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString(), true, moduleTechRelationAllowed, rule13_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[12] = rule13;		
 		
@@ -855,7 +854,7 @@ public class RuleTypeSupport {
 		PhysicalPathDTO rule14_physModuleFrom = new PhysicalPathDTO("domain.relationrules.must_use_correct", "package");
 		ModuleDTO rule14_moduleFrom = new ModuleDTO("Domain Layer.Relationrules.Must_use_correct", new PhysicalPathDTO[] { rule14_physModuleFrom }, "package", new ModuleDTO[] { rule14_moduleFrom_1 });
 		
-		RuleDTO rule14 = new RuleDTO(RuleTypes.MUST_USE.toString(), false, moduleTechRelationAllowed, rule14_moduleFrom, 
+		RuleDTO rule14 = new RuleDTO(RuleTypes.MUST_USE.toString(), true, moduleTechRelationAllowed, rule14_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.MUST_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[13] = rule14;
 		
@@ -867,7 +866,7 @@ public class RuleTypeSupport {
 		PhysicalPathDTO rule15_physModuleFrom = new PhysicalPathDTO("domain.relationrules.must_use_violating", "package");
 		ModuleDTO rule15_moduleFrom = new ModuleDTO("Domain Layer.Relationrules.Must_use_violating", new PhysicalPathDTO[] { rule15_physModuleFrom }, "package", new ModuleDTO[] { rule15_moduleFrom_1 });
 		
-		RuleDTO rule15 = new RuleDTO(RuleTypes.MUST_USE.toString(), false, moduleTechRelationAllowed, rule15_moduleFrom, 
+		RuleDTO rule15 = new RuleDTO(RuleTypes.MUST_USE.toString(), true, moduleTechRelationAllowed, rule15_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.MUST_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[14] = rule15;
 		
@@ -895,7 +894,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule16_moduleFrom = new ModuleDTO("Domain Layer.Relationrules.Is_the_only_module_allowed_to_use_1", new PhysicalPathDTO[] { rule16_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule16_moduleFrom_1, rule16_moduleFrom_2, rule16_moduleFrom_3, rule16_moduleFrom_4, rule16_moduleFrom_5, rule16_moduleFrom_6 });
 		
-		RuleDTO rule16 = new RuleDTO(RuleTypes.IS_THE_ONLY_MODULE_ALLOWED_TO_USE.toString(), false, moduleTechRelationTheonlyone_allowed, rule16_moduleFrom, 
+		RuleDTO rule16 = new RuleDTO(RuleTypes.IS_THE_ONLY_MODULE_ALLOWED_TO_USE.toString(), true, moduleTechRelationTheonlyone_allowed, rule16_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_THE_ONLY_MODULE_ALLOWED_TO_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[15] = rule16;
 		
@@ -929,7 +928,7 @@ public class RuleTypeSupport {
 		ModuleDTO rule17en18_moduleFrom = new ModuleDTO("Domain Layer.Relationrules.Is_not_allowed_to_use", new PhysicalPathDTO[] { rule17en18_physModuleFrom }, "package", 
 				new ModuleDTO[] { rule17_moduleFrom_1, rule17_moduleFrom_2, rule17_moduleFrom_3, rule17_moduleFrom_4 });
 		
-		RuleDTO rule17 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), false, moduleTechRelationNotAllowed, rule17en18_moduleFrom, 
+		RuleDTO rule17 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), true, moduleTechRelationNotAllowed, rule17en18_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[16] = rule17;
 		
@@ -938,7 +937,7 @@ public class RuleTypeSupport {
 		//PhysicalPathDTO rule18_physModuleTo = new PhysicalPathDTO("", "externalsystem");
 		ModuleDTO rule18_moduleTo = new ModuleDTO("FoursquareApi", new PhysicalPathDTO[] { }, "externalsystem", new ModuleDTO[] {});
 		
-		RuleDTO rule18 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), false, rule18_moduleTo, rule17en18_moduleFrom, 
+		RuleDTO rule18 = new RuleDTO(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), true, rule18_moduleTo, rule17en18_moduleFrom, 
 				violationTypesPerRuleType.get(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString()), "", new RuleDTO[] {});
 		appliedRules[17] = rule18;
 	}

@@ -138,4 +138,17 @@ public class Violation {
 	public Severity getSeverity() {
 		return severity;
 	}
+	
+    public String toString() {
+        String representation = "";
+        representation += "\nfromClasspath: " + classPathFrom;
+        representation += "\ntoClasspath: " + classPathTo;
+        representation += "\nlogicalModuleFrom: " + logicalModules.getLogicalModuleFrom().getLogicalModulePath();
+        representation += "\nlogicalModuleTo: " + logicalModules.getLogicalModuleTo().getLogicalModulePath();
+        representation += "\nruleType: " + ruletypeKey;
+        representation += ", linenumber: " + linenumber;
+        representation += ", indirect: " + inDirect;
+        representation += "\n";
+        return representation;
+    }
 }

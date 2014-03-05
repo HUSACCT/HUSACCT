@@ -18,6 +18,7 @@ import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -95,7 +96,23 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	@Override
 	public void checkConformance() {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
-		domain.checkConformance(appliedRules);
+
+		// Filter out disabled rules
+		ArrayList<RuleDTO> intermediate = new ArrayList<RuleDTO>();
+		for(RuleDTO appliedRule : appliedRules){
+			if((appliedRule != null) && (appliedRule.enabled)){
+				intermediate.add(appliedRule);
+			}
+		}
+		int size = intermediate.size();
+		RuleDTO[] rulesToBeChecked = new RuleDTO[size];
+		int index = 0;
+		for(RuleDTO ruleToBeChecked : intermediate){
+			rulesToBeChecked[index] = ruleToBeChecked;
+				index ++;
+		}
+
+		domain.checkConformance(rulesToBeChecked);
 		this.validationExecuted = true;
 		notifyServiceListeners();
 		gui.violationChanged();
