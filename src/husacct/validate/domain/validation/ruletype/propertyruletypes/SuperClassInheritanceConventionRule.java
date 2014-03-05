@@ -1,5 +1,6 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
@@ -8,8 +9,11 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
+import husacct.validate.domain.validation.logicalmodule.LogicalModule;
+import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+
 import java.util.EnumSet;
 import java.util.List;
 
@@ -26,9 +30,32 @@ public class SuperClassInheritanceConventionRule extends RuleType {
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
+			for (Mapping classPathTo : physicalClasspathsTo) {
+				AnalysedModuleDTO from = analyseService.getModuleForUniqueName(classPathFrom.getPhysicalPath());
+				AnalysedModuleDTO to = analyseService.getModuleForUniqueName(classPathTo.getPhysicalPath());
+				if((!from.type.equals("package")) && (!to.type.equals("package"))){
+					boolean classInherits = false;
+					DependencyDTO lastDependency = null;
+					DependencyDTO[] dependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+					if(dependencies != null && dependencies.length > 0){
+						for(DependencyDTO dependency : dependencies){
+							lastDependency = dependency;
+							if((dependency != null) && (dependency.type.equals("Inheritance"))){
+								classInherits = true;
+							}
+						}	
+					}
+					if(classInherits == false){
+						Violation violation = createViolation(rootRule, classPathFrom, configuration);
+	                    violations.add(violation);
+					}
+				}
+			}
+		}
+		
+/*		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
 					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
@@ -39,6 +66,7 @@ public class SuperClassInheritanceConventionRule extends RuleType {
 				}
 			}
 		}
+*/		
 		return violations;
 	}
 }
