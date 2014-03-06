@@ -9,8 +9,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -37,11 +35,9 @@ public class SuperClassInheritanceConventionRule extends RuleType {
 				AnalysedModuleDTO to = analyseService.getModuleForUniqueName(classPathTo.getPhysicalPath());
 				if((!from.type.equals("package")) && (!to.type.equals("package"))){
 					boolean classInherits = false;
-					DependencyDTO lastDependency = null;
 					DependencyDTO[] dependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 					if(dependencies != null && dependencies.length > 0){
 						for(DependencyDTO dependency : dependencies){
-							lastDependency = dependency;
 							if((dependency != null) && (dependency.type.equals("Inheritance"))){
 								classInherits = true;
 							}
@@ -54,19 +50,6 @@ public class SuperClassInheritanceConventionRule extends RuleType {
 				}
 			}
 		}
-		
-/*		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			for (Mapping classPathTo : physicalClasspathsTo) {
-				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
-							dependency.to.equals(classPathTo.getPhysicalPath())) {
-						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-						violations.add(violation);
-					}
-				}
-			}
-		}
-*/		
 		return violations;
 	}
 }
