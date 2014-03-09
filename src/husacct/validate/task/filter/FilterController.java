@@ -76,9 +76,13 @@ public class FilterController {
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-			if (!appliedViolationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey()))) {
-				appliedViolationtypes.add(localeService.getTranslatedString(violation.getViolationTypeKey()));
+			String violationTypeKey = violation.getViolationTypeKey();
+			if ((violationTypeKey != null) && (violationTypeKey != "")){
+				if (!appliedViolationtypes.contains(localeService.getTranslatedString(violationTypeKey))) {
+					appliedViolationtypes.add(localeService.getTranslatedString(violationTypeKey));
+				}
 			}
+			appliedViolationtypes.add("-");
 		}
 		return appliedViolationtypes;
 	}

@@ -234,7 +234,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 						@Override
 						public void windowClosing(WindowEvent e) {
 							ServiceProvider.getInstance().getControlService().setValidate(false);
-							logger.debug("Stopping Thread");
+							logger.info("Stopping Thread");
 						}
 					});
 

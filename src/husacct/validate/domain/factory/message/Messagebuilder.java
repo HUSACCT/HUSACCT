@@ -48,9 +48,6 @@ public class Messagebuilder {
 	}
 
 	private String generateLeftMessage(Message message, Violation violation) {
-		if (message.getRuleKey().toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) {
-			return generateLeftFacadeConventionMessage(violation);
-		}
 		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
 
@@ -59,8 +56,9 @@ public class Messagebuilder {
 
 	private String generateRightMessage(Message message, Violation violation) {
 		if (message.getRuleKey().toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) {
-			return generateRightFacadeConventionMessage(violation);
-		} else if (message.getRuleKey().toLowerCase().equals(RuleTypes.NAMING_CONVENTION.toString().toLowerCase())) {
+			return appendStrings("", "");
+		} else
+		if (message.getRuleKey().toLowerCase().equals(RuleTypes.NAMING_CONVENTION.toString().toLowerCase())) {
 			return generateNamingConventionMessage(message);
 		} else if (message.getRuleKey().toLowerCase().equals(RuleTypes.VISIBILITY_CONVENTION.toString().toLowerCase())) {
 			return generateVisibilityConventionMessage(message);
@@ -71,15 +69,6 @@ public class Messagebuilder {
 		}
 	}
 
-	private String generateLeftFacadeConventionMessage(Violation violation) {
-		return violation.getClassPathFrom();
-		
-	}
-	
-	private String generateRightFacadeConventionMessage(Violation violation) {
-		return violation.getClassPathTo();
-	}
-	
 	private String generateNamingConventionMessage(Message message) {
 		return message.getRegex();
 	}

@@ -107,14 +107,16 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 
 	@Override
 	public String getTranslatedString(String key){
-		if(key == null)
-			return "NULL POINTER EXCEPTION";
+		String transKey = "";
+		if((key == null) || (key == ""))
+			return " - ";
 		try {
-			key = resourceBundle.getString(key);
+			transKey = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){
-			logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties", key, bundleLocation, resourceBundle.getLocale().getLanguage()));
+			logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties" + key + resourceBundle.getLocale().getLanguage()));
+			//missingResourceException.printStackTrace();
 		}
-		return key;
+		return transKey;
 	}
 	
 	/**
