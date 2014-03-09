@@ -15,6 +15,7 @@ import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.persistency.PersistentDomain;
 import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
@@ -126,6 +127,33 @@ public class DefineServiceImpl extends ObservableService implements
 				moduleService, appliedRuleService, exceptionService);
 		pd.setParseData(DomainElement.LOGICAL);
 		return pd.getWorkspaceData();
+	}
+
+	@Override
+	public ModuleDTO getLogicalModuleBySoftwareUnitName(String physicalPath) {
+		ModuleDTO returnValue = null;
+        String[] splitted = physicalPath.split("\\.");
+        int lenght = splitted.length;
+        for(int i = lenght; i > 0; i--){
+	        ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(physicalPath);
+			if (module != null){
+				returnValue = domainParser.parseModule(module);
+				return returnValue;
+			} 
+			else{
+				// Split the last part of physicalPath, if possible, and retry 
+		        if(i >= 2){
+			        physicalPath = splitted[0];
+			        for (int j = 1; j < i-1; j++) {
+			        	physicalPath = physicalPath + "."  + splitted[j];
+			        }
+		        }
+		        else{
+		        	// Do nothing; logical module not found; physical path may not be assigned to a logical module; return null
+		        }
+			}
+        }
+		return returnValue;
 	}
 
 	@Override

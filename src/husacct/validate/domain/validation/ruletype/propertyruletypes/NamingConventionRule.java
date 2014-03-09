@@ -40,7 +40,6 @@ public class NamingConventionRule extends RuleType {
 		PhysicalPathDTO[] pathDTOs = currentRule.moduleFrom.physicalPathDTOs;
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		String regex = Regex.makeRegexString(currentRule.regex);
-		System.out.println("REGEX used : " + regex);
 
 		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
@@ -59,7 +58,6 @@ public class NamingConventionRule extends RuleType {
 		PhysicalPathDTO[] pathDTOs = currentRule.moduleFrom.physicalPathDTOs;
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		String regex = Regex.makeRegexString(currentRule.regex);
-		System.out.println("REGEX used : " + regex);
 		
 		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());

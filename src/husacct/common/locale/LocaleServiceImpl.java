@@ -109,7 +109,7 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 	public String getTranslatedString(String key){
 		String transKey = "";
 		if((key == null) || (key == ""))
-			return " - ";
+			return "";
 		try {
 			transKey = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){

@@ -267,9 +267,9 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 				break;
 			}
 		}
-		if (moduleMappedToSU == null) {
-			//throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));
-		}
+//		if (moduleMappedToSU == null) {
+//			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));
+//		}
 		return moduleMappedToSU;
 	}
 

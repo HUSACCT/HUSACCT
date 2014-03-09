@@ -74,6 +74,16 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * @return Element with architecture data
 	 */
 	public Element getLogicalArchitectureData();
+	
+	
+	/**
+	 * Returns the logical module to which the physical path is assigned
+	 * 
+	 * @param physicalPath is the physical path of a class or interface
+	 * @return a ModuleDTO if a module is found based on physicalPath (or a part of physicalPath) 
+	 */
+	public ModuleDTO getLogicalModuleBySoftwareUnitName(String physicalPath);
+
 
 	/**
 	 * Returns the logical path of the parent from the given module
