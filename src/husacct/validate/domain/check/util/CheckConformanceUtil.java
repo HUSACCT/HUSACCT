@@ -24,8 +24,7 @@ public abstract class CheckConformanceUtil {
 					}
 
 					// if there are no violationtypes attached to this class you
-					// can remove this class for better checkconformance
-					// performance
+					// can remove this class for better checkconformance performance
 					if (mainClasspaths.get(iterator).getViolationTypes().length == 0) {
 						mainClasspaths.remove(iterator);
 						iterator--;

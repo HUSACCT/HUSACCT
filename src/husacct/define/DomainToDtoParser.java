@@ -38,9 +38,7 @@ public class DomainToDtoParser {
 		// module
 		// since you cannot add modules of the type module
 		if (!module.getType().equals("ModuleStrategy")) {
-			logicalPath = SoftwareArchitecture.getInstance()
-					.getModulesLogicalPath(module.getId());
-			;
+			logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(module.getId());
 		}
 		return logicalPath;
 	}
@@ -58,13 +56,13 @@ public class DomainToDtoParser {
 
 	public ModuleDTO parseModule(ModuleStrategy module) {
 		String logicalPath = getLogicalPath(module);
-		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module
-				.getUnits());
+		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module.getUnits());
 		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(expandedSoftwareUnits);
 		String type = module.getType();
 
 		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
-		for (ModuleStrategy subModule : module.getSubModules()) {
+		ArrayList<ModuleStrategy> subModulesList = module.getSubModules();
+		for (ModuleStrategy subModule : subModulesList) {
 			ModuleDTO subModuleDTO = parseModule(subModule);
 			subModuleDTOsList.add(subModuleDTO);
 		}
@@ -73,8 +71,7 @@ public class DomainToDtoParser {
 		subModuleDTOsList.toArray(subModuleDTOs);
 		ModuleDTO[] subModules = subModuleDTOs;
 
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPathDTOs, type,
-				subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPathDTOs, type, subModules);
 		return modDTO;
 	}
 

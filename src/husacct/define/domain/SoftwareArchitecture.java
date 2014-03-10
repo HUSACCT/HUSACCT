@@ -306,74 +306,48 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	public String getModulesLogicalPath(long moduleId) {
 		String logicalPath = "";
 		ModuleStrategy wantedModule = getModuleById(moduleId);
-		ModuleStrategy currentModule = null;
 
 		if (rootModule.getId() == moduleId) {
 			logicalPath = "**";
+			return logicalPath;
 		} else {
-			for (ModuleStrategy mod : rootModule.getSubModules()) {
-				if (mod.getName().equals(wantedModule.getName())
-						|| mod.hasSubModule(wantedModule.getName())) {
-					logicalPath += mod.getName();
-					currentModule = mod;
-
-					while (!currentModule.getName().equals(
-							wantedModule.getName())) {
-						for (ModuleStrategy subModule : currentModule
-								.getSubModules()) {
-							if (subModule.getName().equals(
-									wantedModule.getName())
-									|| subModule.hasSubModule(wantedModule
-											.getName())) {
-								logicalPath += "." + subModule.getName();
-								currentModule = subModule;
-							}
-						}
-					}
-					break;
-				}
+			ArrayList<String> list = new ArrayList<String>();
+			list.add(wantedModule.getName());
+			wantedModule = wantedModule.getparent();
+			while(wantedModule.getType() != "Root"){
+				list.add(wantedModule.getName());
+				wantedModule = wantedModule.getparent();
 			}
+			int lenght = list.size();
+			String[] names = new String[lenght];
+			int i = 0;
+			for(String s : list){
+				names[i] = s;
+				i++;
+			}	
+	        
+			for (int j = lenght-1; j >= 1; j--) {
+	        	logicalPath = logicalPath + names[j] + ".";
+	        }
+			logicalPath = logicalPath + names[0];
 		}
 		return logicalPath;
 	}
 
+		
 	public String getName() {
 		return rootModule.getName();
 	}
 
-	// TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D //al gedaan in
-	// ModuleDomainService maar dan zonder kut id....
 	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 
 		if (rootModule.getId() == childModuleId) {
 			parentModuleId = -1;
 		} else {
-			for (ModuleStrategy module : rootModule.getSubModules()) {
-				if (module.getId() == childModuleId) {
-					parentModuleId = rootModule.getId();
-				} else {
-					if (module.hasSubModule(childModuleId)) {
-						ModuleStrategy currentModule = module;
-						while (parentModuleId == -1L) {
-							for (ModuleStrategy subModule : currentModule
-									.getSubModules()) {
-								if (subModule.getId() == childModuleId) {
-									parentModuleId = currentModule.getId();
-									break;
-								} else if (subModule
-										.hasSubModule(childModuleId)) {
-									currentModule = subModule;
-									break;
-								}
-							}
-						}
-						break;
-					}
-				}
-			}
+			ModuleStrategy childModule = getModuleById(childModuleId);
+			parentModuleId = childModule.getparent().getId();
 		}
-
 		return parentModuleId;
 	}
 

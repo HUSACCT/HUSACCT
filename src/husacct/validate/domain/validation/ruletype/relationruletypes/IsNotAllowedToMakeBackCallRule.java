@@ -32,13 +32,14 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 		this.currentRule = rule;
 		this.logicalPathLayerFrom = currentRule.moduleFrom.logicalPath;
 		violations.clear();
+		mappings = null;
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		physicalClasspathsFrom = mappings.getMappingTo();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<ModuleDTO> brotherModules = Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(logicalPathLayerFrom)));
 		List<ModuleDTO> potentialLayersToBeBackCalled = selectPotentialLayersToBeBackCalled(brotherModules);
 		if(potentialLayersToBeBackCalled.size() >= 1){
-			List<Mapping> modulesTo = new ArrayList<>();
+			List<Mapping> modulesTo = new ArrayList<Mapping>();
 			for(ModuleDTO layerTo : potentialLayersToBeBackCalled){ 
 				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsFromModule(layerTo, currentRule.violationTypeKeys));
 			}

@@ -21,41 +21,17 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	private static IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
 
 	public static Mappings filterClassesFrom(RuleDTO rule) {
-		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
-		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
-		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
-		Mappings returnValue = removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
-		return returnValue;
-	}
-
-	private static List<Mapping> getExceptionClassPathTo(RuleDTO rule) {
+		Mappings mainClasspaths = createMappingsForRule(rule);
+		
+		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
 		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
 		for (RuleDTO exceptionRule : rule.exceptionRules) {
-			Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
+			Mappings exceptionClasspaths = createMappingsForRule(exceptionRule);
+			exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
 			exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
 		}
-		return exceptionClasspathTo;
-	}
-
-	private static List<Mapping> getExceptionClassPathFrom(RuleDTO rule) {
-		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-		for (RuleDTO exceptionRule : rule.exceptionRules) {
-			Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
-			exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
-		}
-		return exceptionClasspathFrom;
-	}
-
-	private static Mappings getAllClasspathsFromModule(RuleDTO rule) {
-		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
-		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
-
-		Arrays.sort(rule.violationTypeKeys);
-
-		mappingFrom = getAllClasspathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
-		mappingTo = getAllClasspathsFromModule(rule.moduleTo, rule.violationTypeKeys);
-
-		return new Mappings(mappingFrom, mappingTo);
+		Mappings returnValue = removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		return returnValue;
 	}
 
 	public static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO rootModule, String[] violationTypeKeys) {
@@ -68,6 +44,18 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 			getAllClasspathsFromModule(rootModule, classpathsFrom, violationTypeKeys);
 		}
 		return new ArrayList<Mapping>(classpathsFrom);
+	}
+
+	private static Mappings createMappingsForRule(RuleDTO rule) {
+		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
+		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
+
+		Arrays.sort(rule.violationTypeKeys);
+
+		mappingFrom = getAllClasspathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
+		mappingTo = getAllClasspathsFromModule(rule.moduleTo, rule.violationTypeKeys);
+
+		return new Mappings(mappingFrom, mappingTo);
 	}
 
 	private static HashSet<Mapping> getAllClassPaths(String[] violationTypeKeys) {
@@ -97,9 +85,12 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	}
 
 	private static HashSet<Mapping> getClassFromPhysicalPathDTO(ModuleDTO module, String[] violationTypeKeys, HashSet<Mapping> classpaths) {
-		for (String classpath : getAllChildPhysicalPaths(module)) {
-			if (!updateLogicalPaths(classpaths, module, classpath, violationTypeKeys)) {
-				classpaths.add(new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys));
+		List<String> subModules = getAllChildPhysicalPaths(module);
+		for (String classpath : subModules) {
+			boolean updateLogicalPaths = updateLogicalPaths(classpaths, module, classpath, violationTypeKeys);
+			if (!updateLogicalPaths) {
+				Mapping mapping = new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys);
+				classpaths.add(mapping);
 				AnalysedModuleDTO analysedModule = analyse.getModuleForUniqueName(classpath);
 				classpaths.addAll(getInnerClasses(analysedModule, new ArrayList<Mapping>(), module, violationTypeKeys));
 			}

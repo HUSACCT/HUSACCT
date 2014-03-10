@@ -1,6 +1,8 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
@@ -413,7 +415,21 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return units;
 	}
 
-
+    public String toString() {
+        String representation = "";
+        representation += "\nName: " + name;
+        representation += "\nType: " + type;
+        representation += "\nSubModules: ";
+        for (ModuleStrategy m : subModules){
+        	representation += (m.name) + ", ";
+        }
+        representation += "\nSoftwareUnits: ";
+        for (SoftwareUnitDefinition su : mappedSUunits){
+        	representation += su.getName() + ", ";
+        }
+        representation += "\n";
+        return representation;
+    }
 
 	
 
