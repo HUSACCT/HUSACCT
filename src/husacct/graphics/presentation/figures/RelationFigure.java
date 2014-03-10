@@ -28,9 +28,11 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private static final long		serialVersionUID	= 1805821357919823648L;
 	private LineConnectionFigure	line;
 	private TextFigure				amountFigure;
+	private boolean					violationRelation;
 	
 	public RelationFigure(String name, boolean violated, int amount) {
 		super(name);
+		violationRelation = violated;
 		
 		line = new LineConnectionFigure();
 		add(line);
@@ -100,9 +102,13 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		ArrowTip arrowTip = new ArrowTip(0.5, 7, 3.0);
 		set(AttributeKeys.END_DECORATION, arrowTip);
 		
-		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
-		set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });
-		
+		if(violationRelation){
+			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
+		}
+		else{
+			double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
+			set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });
+		}
 		super.draw(graphics);
 	}
 	

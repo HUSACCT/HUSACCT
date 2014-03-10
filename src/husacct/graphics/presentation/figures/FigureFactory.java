@@ -39,12 +39,9 @@ public final class FigureFactory {
 		if (violationDTOs.length == 0) throw new RuntimeException(
 				"No violations received. Cannot create a violation figure.");
 		
-		RelationFigure violatedRelationFigure = new RelationFigure(
-				"Violated dependency from " + violationDTOs[0].fromClasspath
-						+ " to " + violationDTOs[0].toClasspath, true,
-				violationDTOs.length);
-		violatedRelationFigure
-				.addDecorator(createViolationsDecorator(violationDTOs));
+		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " + violationDTOs[0].fromClasspath
+						+ " to " + violationDTOs[0].toClasspath, true, violationDTOs.length);
+		violatedRelationFigure.addDecorator(createViolationsDecorator(violationDTOs));
 		return violatedRelationFigure;
 	}
 	
