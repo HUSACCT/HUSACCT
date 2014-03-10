@@ -237,9 +237,7 @@ public class AppliedRuleController extends PopUpController {
 						ruleTypeValues.add(ServiceProvider.getInstance()
 								.getLocaleService()
 								.getTranslatedString(currentRuleType));
-						// RuleTypeDTO[] defaultRuleForModule =
-						// ServiceProvider.getInstance()
-						// .getValidateService().getDefaultRuleTypesOfModule(selectedModule.getType());
+						// RuleTypeDTO[] defaultRuleForModule = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(selectedModule.getType());
 						// for(RuleTypeDTO rtd : defaultRuleForModule) {
 						// if(rtd.getKey().equals(currentRuleType)) {
 						// ruleTypeValues.add(rtd);

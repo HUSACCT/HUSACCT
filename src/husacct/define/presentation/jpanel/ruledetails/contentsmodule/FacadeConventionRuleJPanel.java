@@ -82,7 +82,7 @@ public class FacadeConventionRuleJPanel extends AbstractDetailsJPanel {
 	HashMap<String, Object> ruleDetails = super.saveToHashMap();
 
 	ruleDetails.put("moduleFromId", moduleFromPanelComponent.getValue());
-	ruleDetails.put("moduleToId", new ModuleStrategy(){});
+	ruleDetails.put("moduleToId", moduleFromPanelComponent.getValue());
 	ruleDetails.put("enabled", enabledPanelComponent.getValue());
 	ruleDetails.put("description", descriptionPanelComponent.getValue());
 

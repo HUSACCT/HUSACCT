@@ -129,7 +129,7 @@ public class FactoryDetails {
     /**
      * 
      * @param ruleTypeKey
-     * @return returns a the instance of the AbstractDetailsJPanel corrisonding
+     * @return returns a the instance of the AbstractDetailsJPanel corresponding
      *         with the ruleTypeKey. If the Implemented AbstractDetailsJPanel is
      *         null then it will return a new instance.
      */

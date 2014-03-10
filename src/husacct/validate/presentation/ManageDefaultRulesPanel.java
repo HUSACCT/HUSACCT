@@ -62,12 +62,19 @@ public class ManageDefaultRulesPanel extends JPanel {
 		tableModel.addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {
+				int gc = e.getColumn();
 				if(e.getColumn() == 1){
+					String moduleType = componentList[components.getSelectedIndex()];
+					String ruleTypeKey = allowedRulesMap.get(e.getFirstRow());
+					Object stringValue = tableModel.getValueAt(e.getFirstRow(), 1);
+					int row = e.getFirstRow();
+					boolean value = Boolean.parseBoolean(stringValue.toString());
 					System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
-					ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(componentList[components.getSelectedIndex()], allowedRulesMap.get(e.getFirstRow()), (Boolean)tableModel.getValueAt(e.getFirstRow(), 1));
+					ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(moduleType, ruleTypeKey, value);
 				}
 			}
 		});
+
 		ruleTable = new JTable(tableModel){
 			private static final long serialVersionUID = 1L;
 			

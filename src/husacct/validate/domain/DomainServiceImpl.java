@@ -56,7 +56,7 @@ public class DomainServiceImpl {
 		if (violationtypefactory != null) {
 			return violationtypefactory.getAllViolationTypes();
 		} else {
-			logger.debug("Warning no language specified in define component");
+			logger.warn("Warning no language specified in define component");
 			return Collections.emptyMap();
 		}
 	}
@@ -107,6 +107,9 @@ public class DomainServiceImpl {
 	}
 	
 	public void checkModuleTypeFactoryInstance() {
-		this.moduleFactory = new ModuleFactory(ruleTypeFactory.getRuleTypes());
+		if (this.moduleFactory == null) {
+			this.moduleFactory = new ModuleFactory(ruleTypeFactory.getRuleTypes());
+			logger.info("new ModuleFactory within checkModuleTypeFactoryInstance()");
+		}	
 	}
 }

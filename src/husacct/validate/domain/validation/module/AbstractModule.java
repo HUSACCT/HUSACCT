@@ -47,11 +47,13 @@ abstract class AbstractModule {
 
 	public void setDefaultRuleType(String ruleTypeKey, boolean value) {
 		RuleType ruleType = getRuleType(ruleTypeKey);
-		
-		if (!defaultRuleTypes.contains(ruleType) && value) {
+		if (!defaultRuleTypes.contains(ruleType)) {
 			defaultRuleTypes.add(ruleType);
-		} else if (defaultRuleTypes.contains(ruleType) && !value) {
+		} 
+		else {
+			if (value == false) {
 			defaultRuleTypes.remove(ruleType);
+			}
 		}
 	}
 }

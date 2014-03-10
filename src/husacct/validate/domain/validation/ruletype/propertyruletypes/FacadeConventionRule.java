@@ -22,7 +22,7 @@ import java.util.List;
 public class FacadeConventionRule extends RuleType {
 
 	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationTypes, Severity severity) {
-		super(key, categoryKey, violationTypes, EnumSet.noneOf(RuleTypes.class), severity);
+		super(key, categoryKey, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override
