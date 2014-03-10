@@ -43,7 +43,7 @@ public class InterfaceInheritanceConventionRule extends RuleType {
 						}	
 					}
 					if(classInherits == false){
-						Violation violation = createViolation(rootRule, classPathFrom, configuration);
+						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, configuration);
 	                    violations.add(violation);
 					}
 				}

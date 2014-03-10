@@ -55,7 +55,9 @@ public class Messagebuilder {
 	}
 
 	private String generateRightMessage(Message message, Violation violation) {
-		if (message.getRuleKey().toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) {
+		if ((message.getRuleKey().toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) ||
+				(message.getRuleKey().toLowerCase().equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString().toLowerCase())) ||
+				(message.getRuleKey().toLowerCase().equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString().toLowerCase()))) {
 			return appendStrings("", "");
 		} else
 		if (message.getRuleKey().toLowerCase().equals(RuleTypes.NAMING_CONVENTION.toString().toLowerCase())) {

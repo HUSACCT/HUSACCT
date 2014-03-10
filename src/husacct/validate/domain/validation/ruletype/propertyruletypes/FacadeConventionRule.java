@@ -62,10 +62,10 @@ public class FacadeConventionRule extends RuleType {
 				}
 				else{
 					Mapping classPathTo = classesHiddeninComponentMap.get(hiddenClassPath);
-					// Get logicalModuleFrom based on dependency.from
 					Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
 
+					// Get logicalModuleFrom based on dependency.from and add it to the violation
                     ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getLogicalModuleBySoftwareUnitName(dependency.from);
 					if(moduleFrom != null){
 						// Add moduleFrom to violation.logicalModules, so that graphics can include these violations in architecture diagrams

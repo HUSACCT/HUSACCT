@@ -1,6 +1,8 @@
 package husacct.validate.domain.validation.ruletype.relationruletypes;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -9,6 +11,8 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.internaltransferobjects.Mappings;
+import husacct.validate.domain.validation.logicalmodule.LogicalModule;
+import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -50,6 +54,18 @@ public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
 				else{
                     Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                    
+					// Get logicalModuleFrom based on dependency.from and add it to the violation
+                    ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getLogicalModuleBySoftwareUnitName(dependency.from);
+					if(moduleFrom != null){
+						// Add moduleFrom to violation.logicalModules, so that graphics can include these violations in architecture diagrams
+						LogicalModules logicalModulesOld = violation.getLogicalModules();
+						LogicalModule logicalModuleTo = logicalModulesOld.getLogicalModuleTo();
+						LogicalModule logicalModuleFrom = new LogicalModule(moduleFrom.logicalPath, moduleFrom.type);
+						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+						violation.setLogicalModules(logicalModules);
+					}
+
                     violations.add(violation);
 				}
 			}
