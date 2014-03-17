@@ -90,17 +90,12 @@ public abstract class JtreeStateEngine {
 
 	
 
-	public void removeSoftwareUnit(ModuleStrategy module,
-			SoftwareUnitDefinition unit) {
-
+	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
 		AnalyzedModuleComponent analyzeModuleTobeRestored =  allUnitsRegistry.getAnalyzedUnit(unit);
-				
-		
-		
+		//analyzeModuleTobeRestored.detach();
 		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
 		data.add(analyzeModuleTobeRestored);
-		StateService.instance().allUnitsRegistry
-				.registerAnalyzedUnit(analyzeModuleTobeRestored);
+		StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
 		
 	}
 
