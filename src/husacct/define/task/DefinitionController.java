@@ -343,7 +343,6 @@ import org.apache.log4j.Logger;
 					logger.info("Removing software unit " + softwareUnit);
 					if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 						if (confirm) {
-							logger.info("getting type:" + type);
 							JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
 							JPanelStatus.getInstance("Removing software unit").start();
 							

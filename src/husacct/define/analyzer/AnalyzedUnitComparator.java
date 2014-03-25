@@ -20,136 +20,77 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class AnalyzedUnitComparator {
-	public AnalyzedModuleComponent calucalteChanges(
-			AbstractCombinedComponent left, AbstractCombinedComponent right) {
 
+	public AnalyzedModuleComponent calucalteChanges(AbstractCombinedComponent left, AbstractCombinedComponent right) {
 		ArrayList<AbstractCombinedComponent> toBeDeleted = new ArrayList<AbstractCombinedComponent>();
-		ArrayList<AbstractCombinedComponent> toBeAaded = new ArrayList<AbstractCombinedComponent>();
+		ArrayList<AbstractCombinedComponent> toBeAdded = new ArrayList<AbstractCombinedComponent>();
 		int leftsize = left.getChildren().size();
 		int rightsize = right.getChildren().size();
 		Collections.sort(left.getChildren());
 		Collections.sort(right.getChildren());
 		if (leftsize == rightsize) {
-
-			
-			
-			
-			isequal(left, right, toBeDeleted, toBeAaded);
+			isequal(left, right, toBeDeleted, toBeAdded);
 		} else if (leftsize > rightsize) {
-			isLessEqual(left, right, toBeDeleted, toBeAaded);
-
+			isLessEqual(left, right, toBeDeleted, toBeAdded);
 		} else if (leftsize < rightsize) {
-			isequal(left, right, toBeDeleted, toBeAaded);
-			isMoreEqual(left, right, toBeDeleted, toBeAaded);
-
+			isequal(left, right, toBeDeleted, toBeAdded);
+			isMoreEqual(left, right, toBeDeleted, toBeAdded);
 		}
-
 		
-		
-		
-		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAaded) {
-
-		
-			
-			
-			AnalyzedModuleComponent result = (AnalyzedModuleComponent)newAbstractCombinedComponent;
+		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAdded) {
+			AnalyzedModuleComponent result = (AnalyzedModuleComponent) newAbstractCombinedComponent;
 			if (WarningMessageService.getInstance().hasCodeLevelWarning(result)) {
-
-			
 				result.freeze();
 				left.addChild(result);
-				
-
 			} else {
-
 				left.addChild(result);
 			}
 		}
 		
-		
-		
-		
-		
-		
 		for (AbstractCombinedComponent remove : toBeDeleted) {
-
 			AnalyzedModuleComponent unittoberemoved = ((AnalyzedModuleComponent) remove);
-		
-			
-		
-           WarningMessageService.getInstance().addCodeLevelWarning((AnalyzedModuleComponent)unittoberemoved);
-			
-			
-
+			WarningMessageService.getInstance().addCodeLevelWarning((AnalyzedModuleComponent)unittoberemoved);
 			AbstractCombinedComponent parent = remove.getParentofChild();
-
 			int index = parent.getChildren().indexOf(remove);
 			parent.getChildren().remove(index);	
 			unittoberemoved.removeChildFromParent();
 		}
-
-	
 		return (AnalyzedModuleComponent) left;
 	}
 
 
-
-
-
-
-	private void isequal(AbstractCombinedComponent left,
-			AbstractCombinedComponent right,
-			ArrayList<AbstractCombinedComponent> toBeDeleted,
-			ArrayList<AbstractCombinedComponent> toBeAaded) {
-
+	private void isequal(AbstractCombinedComponent left, AbstractCombinedComponent right, ArrayList<AbstractCombinedComponent> toBeDeleted, ArrayList<AbstractCombinedComponent> toBeAdded) {
 		for (int i = 0; i < left.getChildren().size(); i++) {
-			compareAbstractCombinedComponent(left.getChildren().get(i), right
-					.getChildren().get(i), toBeDeleted, toBeAaded);
-			calucalteChanges(left.getChildren().get(i), right.getChildren()
-					.get(i));
+			compareAbstractCombinedComponent(left.getChildren().get(i), right.getChildren().get(i), toBeDeleted, toBeAdded);
+			calucalteChanges(left.getChildren().get(i), right.getChildren().get(i));
 		}
 		Collections.sort(left.getChildren());
 		Collections.sort(right.getChildren());
 	}
 
-	private void isLessEqual(AbstractCombinedComponent left,
-			AbstractCombinedComponent right,
-			ArrayList<AbstractCombinedComponent> toBeDeleted,
-			ArrayList<AbstractCombinedComponent> toBeAaded) {
+	private void isLessEqual(AbstractCombinedComponent left, AbstractCombinedComponent right, ArrayList<AbstractCombinedComponent> toBeDeleted, ArrayList<AbstractCombinedComponent> toBeAaded) {
 		int leftindex = left.getChildren().size();
 		int rightindex = right.getChildren().size() - 1;
 		Collections.sort(left.getChildren());
 		Collections.sort(right.getChildren());
 		for (int i = 0; i < leftindex; i++) {
-
 			if (rightindex >= i) {
-
-				if (left.getChildren().get(i).getUniqueName()
-						.equals(right.getChildren().get(i).getUniqueName())) {
+				if (left.getChildren().get(i).getUniqueName().equals(right.getChildren().get(i).getUniqueName())) {
 					ChekifTypeChanged(left, right);
 				} else {
 					toBeDeleted.add(left.getChildren().get(i));
 					toBeAaded.add(right.getChildren().get(i));
 				}
-
 			} else {
 				toBeDeleted.add(left.getChildren().get(i));
 			}
-
 		}
-
 	}
 
-	private void isMoreEqual(AbstractCombinedComponent left,
-			AbstractCombinedComponent right,
-			ArrayList<AbstractCombinedComponent> toBeDeleted,
-			ArrayList<AbstractCombinedComponent> toBeAaded) {
-
+	private void isMoreEqual(AbstractCombinedComponent left, AbstractCombinedComponent right, ArrayList<AbstractCombinedComponent> toBeDeleted, ArrayList<AbstractCombinedComponent> toBeAdded) {
 		int leftsize = left.getChildren().size();
 		int rightsize = right.getChildren().size();
-
 		for (int i = (rightsize - (rightsize - (leftsize))); i < rightsize; i++) {
-
 			boolean isfound = false;
 			for (AbstractCombinedComponent u : toBeDeleted) {
 				if (u.getUniqueName().equals(right.getChildren().get(i).getUniqueName())) {
@@ -158,27 +99,18 @@ public class AnalyzedUnitComparator {
 				}
 			}
 			if (!isfound) {
-
-				toBeAaded.add(right.getChildren().get(i));
+				toBeAdded.add(right.getChildren().get(i));
 			}
 		}
 
 	}
 
-	private void compareAbstractCombinedComponent(
-			AbstractCombinedComponent left, AbstractCombinedComponent right,
-			ArrayList<AbstractCombinedComponent> toBeDeleted,
-			ArrayList<AbstractCombinedComponent> toBeAaded) {
-
+	private void compareAbstractCombinedComponent(AbstractCombinedComponent left, AbstractCombinedComponent right, ArrayList<AbstractCombinedComponent> toBeDeleted, ArrayList<AbstractCombinedComponent> toBeAaded) {
 		String AbstractCombinedComponentL = left.getUniqueName();
 		String AbstractCombinedComponentR = right.getUniqueName();
-
 		if (AbstractCombinedComponentL.equals(AbstractCombinedComponentR)) {
-
 			ChekifTypeChanged(left, right);
-
-		} else if (!AbstractCombinedComponentL
-				.equals(AbstractCombinedComponentR)) {
+		} else if (!AbstractCombinedComponentL.equals(AbstractCombinedComponentR)) {
 			toBeDeleted.add(left);
 			toBeAaded.add(right);
 		}
@@ -186,109 +118,72 @@ public class AnalyzedUnitComparator {
 		Collections.sort(right.getChildren());
 	}
 
-	private void ChekifTypeChanged(AbstractCombinedComponent left,
-			AbstractCombinedComponent right) {
-
+	private void ChekifTypeChanged(AbstractCombinedComponent left, AbstractCombinedComponent right) {
 		if (!left.getType().equals(right.getType())) {
-
 			left.setType(right.getType());
 		}
-
 	}
 
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		StateService.instance().getAnalzedModuleRegistry().reset();
 		JtreeController.instance().setLoadState(true);
-		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
-				"root", "Application", "application", "public");
+		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Application", "application", "public");
 		//addExternalComponents(rootComponent);
 
-		ApplicationDTO application = ServiceProvider.getInstance()
-				.getControlService().getApplicationDTO();
-
+		ApplicationDTO application = ServiceProvider.getInstance().getControlService().getApplicationDTO();
 		for (ProjectDTO project : application.projects) {
-			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
-					project.name, project.name, "root", "public");
+			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(project.name, project.name, "root", "public");
 			for (AnalysedModuleDTO module : ServiceProvider.getInstance().getAnalyseService().getRootModules()) {
-            
-				this.addChildComponents(projectComponent, module);
+            	this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
 		}
-
 		Collections.sort(rootComponent.getChildren());
-
 		return rootComponent;
 	}
 
-	private void addChildComponents(AnalyzedModuleComponent parentComponent,
-			AnalysedModuleDTO module) {
-		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(
-				module.uniqueName, module.name, module.type, module.visibility);
+	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
 
-		AnalysedModuleDTO[] children = ServiceProvider.getInstance()
-				.getAnalyseService().getChildModulesInModule(module.uniqueName);
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
 		for (AnalysedModuleDTO subModule : children) {
-
 			this.addChildComponents(childComponent, subModule);
 		}
-
 		parentComponent.addChild(childComponent);
 		parentComponent.registerchildrenSize();
 	}
 
 	private void addExternalComponents(AnalyzedModuleComponent root) {
-		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent(
-				"external library", "External Systems", "externalpackage",
-				"public");
-
-		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance()
-				.getAnalyseService().getExternalSystems();
+		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent("external library", "External Systems", "externalpackage", "public");
+		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance().getAnalyseService().getExternalSystems();
 		for (ExternalSystemDTO exe : externalSystems) {
-
-			AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(
-					exe.systemPackage, exe.systemName, "externallibrary",
-					"public");
+			AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(exe.systemPackage, exe.systemName, "externallibrary", "public");
 			rootOfExterexternalLibrary.addChild(javalib);
-
 		}
-
 		root.addChild(rootOfExterexternalLibrary);
-
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		if (!JtreeController.instance().isLoaded()
-				|| !ServiceProvider.getInstance().getControlService()
-						.isPreAnalysed()) {
-
-			if (!ServiceProvider.getInstance().getControlService()
-					.isPreAnalysed()) {
-				AnalyzedModuleComponent root = JtreeController.instance()
-						.getRootOfModel();
+		if (!JtreeController.instance().isLoaded() || !ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+			if (!ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+				AnalyzedModuleComponent root = JtreeController.instance().getRootOfModel();
 				WarningMessageService.getInstance().resetNotAnalyzed();
 				WarningMessageService.getInstance().registerNotMappedUnits(root);
 				StateService.instance().registerImportedData();
 				return root;
 			}
 			JtreeController.instance().setLoadState(true);
-			JtreeController.instance().setCurrentTree(
-					new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
-			AnalyzedModuleComponent root = JtreeController.instance()
-					.getRootOfModel();
+			JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
+			AnalyzedModuleComponent root = JtreeController.instance().getRootOfModel();
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(root);
 			StateService.instance().registerImportedData();
 			return root;
-
 		} else {
-		
 			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
 		    AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
-		
-			
 			calucalteChanges(left, right);
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(right);

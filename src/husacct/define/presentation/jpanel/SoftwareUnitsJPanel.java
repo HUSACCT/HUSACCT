@@ -69,11 +69,9 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		else {
 			if (action.getSource() == addSoftwareUnitButton	|| action.getSource() == addSoftwareUnitItem) {
 				addSoftwareUnit(); 
-			} else if (action.getSource() == removeSoftwareUnitButton
-					|| action.getSource() == removeSoftwareUnitItem) {
+			} else if (action.getSource() == removeSoftwareUnitButton || action.getSource() == removeSoftwareUnitItem) {
 				removeSoftwareUnits();
-			} else if (action.getSource() == editSoftwareUnitButton
-					|| action.getSource() == editSoftwareUnitItem) {
+			} else if (action.getSource() == editSoftwareUnitButton || action.getSource() == editSoftwareUnitItem) {
 				editSoftwareUnit();
 			}
 		}
@@ -111,9 +109,7 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			if (softwareUnitFrame == null) {
-				softwareUnitFrame = new SoftwareUnitJDialog(
-						DefinitionController.getInstance()
-								.getSelectedModuleId());
+				softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
 				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else if (!softwareUnitFrame.isVisible()) {
@@ -126,10 +122,8 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
-
 		softwareUnitsTable.setDragEnabled(true);
-		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(
-				softwareUnitsTable);
+		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(softwareUnitsTable);
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -174,14 +168,11 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	}
 
 	private void createPopupMenu() {
-		addSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Add"));
+		addSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		addSoftwareUnitItem.addActionListener(this);
-		editSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Edit"));
+		editSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
 		editSoftwareUnitItem.addActionListener(this);
-		removeSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Remove"));
+		removeSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 		removeSoftwareUnitItem.addActionListener(this);
 
 		popupMenu.add(addSoftwareUnitItem);
@@ -254,13 +245,10 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 			DefinitionController.getInstance().addObserver(this);
 			BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 			setLayout(softwareUnitsPanelLayout);
-			setBorder(BorderFactory.createTitledBorder(ServiceProvider
-					.getInstance().getLocaleService()
-					.getTranslatedString("AssignedSoftwareUnitsTitle")));
+			setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("AssignedSoftwareUnitsTitle")));
 			this.add(addSoftwareUnitsTable(), BorderLayout.CENTER);
 			this.add(addButtonPanel(), BorderLayout.EAST);
-			ServiceProvider.getInstance().getLocaleService()
-					.addServiceListener(this);
+			ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 			createPopupMenu();
 			setButtonEnableState();
 		} catch (Exception e) {
@@ -269,8 +257,7 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	}
 
 	private boolean isSelectedRegex() {
-		if (((String) softwareUnitsTable.getValueAt(getSelectedRow(), 1))
-				.toLowerCase().equals("regex")) {
+		if (((String) softwareUnitsTable.getValueAt(getSelectedRow(), 1)).toLowerCase().equals("regex")) {
 			return true;
 		} else {
 			return false;
@@ -300,8 +287,7 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	private void setButtonEnableState() {
 		if (DefinitionController.getInstance().getSelectedModuleId() == -1) {
 			disableButtons();
-		} else if (softwareUnitsTable.getRowCount() == 0
-				|| getSelectedRow() == -1) {
+		} else if (softwareUnitsTable.getRowCount() == 0 || getSelectedRow() == -1) {
 			enableAddDisableEditRemoveButtons();
 		} else {
 			enableButtons();
@@ -324,16 +310,11 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	@Override
 	public void update() {
 		setButtonTexts();
-		setBorder(BorderFactory.createTitledBorder(ServiceProvider
-				.getInstance().getLocaleService()
-				.getTranslatedString("AssignedSoftwareUnitsTitle")));
+		setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("AssignedSoftwareUnitsTitle")));
 		softwareUnitsTable.changeColumnHeaders();
-
 	}
 
-	/**
-	 * Observer
-	 */
+	// Observer
 	@Override
 	public void update(Observable o, Object arg) {
 		updateSoftwareUnitTable();
@@ -342,37 +323,22 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 
 	public void updateSoftwareUnitTable() {
 		try {
-			JTableTableModel atm = (JTableTableModel) softwareUnitsTable
-					.getModel();
+			JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
 			atm.getDataVector().removeAllElements();
+			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 
-			long moduleId = DefinitionController.getInstance()
-					.getSelectedModuleId();
-			JPanelStatus.getInstance(
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
-
 				// Get all components from the service
-				ArrayList<String> softwareUnitNames = DefinitionController
-						.getInstance().getSoftwareUnitNamesBySelectedModule();
-
-				ArrayList<String> regExSoftwareUnitNames = DefinitionController
-						.getInstance()
-						.getRegExSoftwareUnitNamesBySelectedModule();
-
+				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule();
+				ArrayList<String> regExSoftwareUnitNames = DefinitionController.getInstance().getRegExSoftwareUnitNamesBySelectedModule();
 				if (softwareUnitNames != null) {
 					for (String softwareUnitName : softwareUnitNames) {
-						String softwareUnitType = DefinitionController
-								.getInstance()
-								.getSoftwareUnitTypeBySoftwareUnitName(
-										softwareUnitName);
+						String softwareUnitType = DefinitionController.getInstance().getSoftwareUnitTypeBySoftwareUnitName(softwareUnitName);
 						Object rowdata[] = { softwareUnitName, softwareUnitType };
-
 						atm.addRow(rowdata);
 					}
 				}
-
 				if (regExSoftwareUnitNames != null) {
 					for (String softwareUnitName : regExSoftwareUnitNames) {
 						Object rowdata[] = { softwareUnitName, "REGEX" };
@@ -381,13 +347,12 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 				}
 			}
 			atm.fireTableDataChanged();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			UiDialogs.errorDialog(this, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
-
 	}
-
 }

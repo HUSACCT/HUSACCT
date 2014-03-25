@@ -18,9 +18,7 @@ public class JPanelStatus extends JPanel {
     private static final long serialVersionUID = -7360960342696885795L;
 
     /**
-     * Because there can be only one instance of this jpanel the singleton
-     * pattern is implemented.
-     * 
+     * Because there can be only one instance of this jpanel the singleton pattern is implemented.
      * @return An StatusTask object
      */
     public static JPanelStatus getInstance() {
@@ -77,8 +75,7 @@ public class JPanelStatus extends JPanel {
     }
 
     private void gotoLastTask() {
-	if (messages.peek().equals(defaultMessage)
-		|| messages.peek().equals("") || messages.empty()) {
+	if (messages.empty() || messages.peek().equals("") || messages.peek().equals(defaultMessage)) {
 	    jLabelStatus.setText(defaultMessage);
 	    jProgressBar.setIndeterminate(false);
 	} else {
@@ -88,10 +85,7 @@ public class JPanelStatus extends JPanel {
 
     /**
      * Sets the message in an local variable
-     * 
-     * @param newMessage
-     *            The message that needs to show when the user calls
-     *            <code>start()</code>
+    * @param newMessage: The message that needs to show when the user calls <code>start()</code>
      */
     private void setMessage(String newMessage) {
 	if (messages.empty()) {
@@ -101,7 +95,7 @@ public class JPanelStatus extends JPanel {
     }
 
     /**
-     * This method shows the given message and starts the progressbar.
+     * This method shows the given message and starts the progress bar.
      */
     public void start() {
 	// logger.info("start() - Message: " + messages.peek());
@@ -113,8 +107,7 @@ public class JPanelStatus extends JPanel {
     }
 
     /**
-     * This method will replace the message with an default message and stops
-     * the progressbar.
+     * This method will replace the message with an default message and stops the progress bar.
      */
     public void stop() {
 	// logger.info("stop() - Message: " + defaultMessage);

@@ -12,19 +12,18 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
     private String visibility;
 
     public AnalyzedModuleComponent() {
-	super();
+    	super();
     }
 
-    public AnalyzedModuleComponent(String uniqueName, String name, String type,
-	    String visibility) {
-	this();
-	setUniqueName(uniqueName);
-	setName(name);
-	setType(type);
-	setVisibility(visibility);
-	if (uniqueName.equals("root")) {
-	    setParentOfChild(this);
-	}
+    public AnalyzedModuleComponent(String uniqueName, String name, String type, String visibility) {
+		this();
+		setUniqueName(uniqueName);
+		setName(name);
+		setType(type);
+		setVisibility(visibility);
+		if (uniqueName.equals("root")) {
+		    setParentOfChild(this);
+		}
     }
 
     @Override
@@ -46,93 +45,71 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
     }
 
     public void attach() {
-	attached = true;
+    	attached = true;
     }
 
     public void detach() {
-	attached = false;
+    	attached = false;
     }
 
     public void freeze() {
-	isfrozen = true;
+    	isfrozen = true;
     }
 
     @Override
     public ArrayList<AbstractCombinedComponent> getChildren() {
-
-	return children;
+    	return children;
     }
 
     public String getVisibility() {
-	return visibility;
-    }
-
-    public boolean isComplete() {
-	if (type.toLowerCase().equals("package")
-		|| type.toLowerCase().equals("externallibrary")) {
-	    if (children.size() < sizeOfChildren) {
-		return false;
-	    } else {
-		return true;
-	    }
-
-	} else {
-	    return true;
-	}
-
+    	return visibility;
     }
 
     public boolean isIsfrozen() {
-	return isfrozen;
-
+    	return isfrozen;
     }
 
     public boolean isMapped() {
-
-	return isfrozen;
+    	return isfrozen;
     }
 
     public boolean isRemoved() {
-	return isRemoved;
+    	return isRemoved;
     }
 
     public void registerchildrenSize() {
-	sizeOfChildren = getChildren().size();
-
+    	sizeOfChildren = getChildren().size();
     }
 
     @Override
     public void removeChild(AbstractCombinedComponent child) {
-	for (AbstractCombinedComponent currentchild : children) {
-	    if (currentchild.equals(child)) {
-		children.remove(currentchild);
-	    }
-	}
+		for (AbstractCombinedComponent currentchild : children) {
+		    if (currentchild.equals(child)) {
+		    	children.remove(currentchild);
+		    }
+		}
     }
 
     public void removeChildFromParent() {
-	isRemoved = true;
+    	isRemoved = true;
     }
 
     @Override
     public void setChildren(ArrayList<AbstractCombinedComponent> children) {
-	if (attached) {
-	    for (AbstractCombinedComponent a : children) {
-
-		a.setParentOfChild(this);
-	    }
-
-	}
-	this.children = children;
+		if (attached) {
+		    for (AbstractCombinedComponent a : children) {
+		    	a.setParentOfChild(this);
+		    }
+		}
+		this.children = children;
     }
 
     public void setVisibility(String visibility) {
-	this.visibility = visibility;
+    	this.visibility = visibility;
     }
 
     public void unfreeze() {
-	isfrozen = false;
-
+    	isfrozen = false;
     }
 
 	public boolean isAncestorsMapped() {
@@ -141,24 +118,15 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		String type = this.getType().toLowerCase();
 		buffer = (AnalyzedModuleComponent) this.getParentofChild();
 		while (!type.equals("application")) {
-		if (buffer.isMapped()) {
-			result =true;
-		    break;
-		
-		
-		}else{	
-		type=buffer.getParentofChild().getType().toLowerCase();
-		buffer=buffer.getParentofChild();
+			if (buffer.isMapped()) {
+				result =true;
+			    break;
+			}
+			else{	
+				type=buffer.getParentofChild().getType().toLowerCase();
+				buffer=buffer.getParentofChild();
+			}
 		}
-		}
-		
-		
-		
-		
 		return result;
 	}
-
-	
-	
-
 }

@@ -52,8 +52,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class SoftwareUnitJDialog extends HelpableJDialog implements
-		ActionListener, KeyListener, Observer {
+public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListener, KeyListener, Observer {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 
@@ -63,23 +62,20 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	private JButton saveButton;
 	private JButton cancelButton;
 	private JScrollPane softwareUnitScrollPane;
-
 	private JRadioButton UIMapping;
-	/*
-	 * private JRadioButton regExMapping; private JButton testButton; private
-	 * JTextField regExTextField;
-	 * 
-	 * private JLabel dynamicRegExLabel; private JCheckBox packageCheckBox;
+	/*private JRadioButton regExMapping; 
+	 * private JButton testButton; 
+	 * private JTextField regExTextField;
+	 * private JLabel dynamicRegExLabel; 
+	 * private JCheckBox packageCheckBox;
 	 * private JCheckBox classCheckBox;
 	 */
-
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
 	private long _moduleId;
 
 	public SoftwareUnitJDialog(long moduleId) {
-		super(((ControlServiceImpl) ServiceProvider.getInstance()
-				.getControlService()).getMainController().getMainGui(), false);
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), false);
 		_moduleId = moduleId;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
@@ -92,17 +88,12 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	private void initUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle(ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("SoftwareUnitTitle"));
-			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO))
-					.getImage());
+			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
+			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			DefinitionController.getInstance().addObserver(this);
-			this.getContentPane().add(this.createTypeSelectionPanel(),
-					BorderLayout.NORTH);
-			this.getContentPane().add(this.createUIMappingPanel(),
-					BorderLayout.CENTER);
-			this.getContentPane().add(this.createButtonPanel(),
-					BorderLayout.SOUTH);
+			this.getContentPane().add(this.createTypeSelectionPanel(), BorderLayout.NORTH);
+			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
+			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 
 			UIMapping.setEnabled(false);
 			this.setResizable(false);
@@ -117,20 +108,16 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	private JPanel createTypeSelectionPanel() {
 		JPanel typeSelectionPanel = new JPanel();
 		typeSelectionPanel.setLayout(new GridLayout(2, 2));
-		typeSelectionPanel.setBorder(BorderFactory
-				.createEmptyBorder(3, 3, 3, 3));
+		typeSelectionPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
-		JLabel typeSelectionLabel = new JLabel(ServiceProvider.getInstance()
-				.getLocaleService()
+		JLabel typeSelectionLabel = new JLabel(ServiceProvider.getInstance().getLocaleService()
 				.getTranslatedString("SelectSoftwareDefinitionType"));
-		Font bold = new Font(typeSelectionLabel.getFont().getName(), Font.BOLD,
-				typeSelectionLabel.getFont().getSize());
+		Font bold = new Font(typeSelectionLabel.getFont().getName(), Font.BOLD, typeSelectionLabel.getFont().getSize());
 		typeSelectionLabel.setFont(bold);
 		typeSelectionPanel.add(typeSelectionLabel);
 		typeSelectionPanel.add(new JLabel(""));
 
-		UIMapping = new JRadioButton(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("UIMapping"));
+		UIMapping = new JRadioButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UIMapping"));
 		UIMapping.setSelected(true);
 		UIMapping.addActionListener(this);
 
@@ -241,14 +228,10 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	 */
 
 	private void getSoftwareDefinationTree() {
-		this.softwareDefinitionTree = new AnalyzedModuleTree(DomainGateway
-				.getInstance().treeModel());
-		this.softwareDefinitionTree
-				.setTransferHandler(new ModuleTrasferhandler());
-		this.softwareDefinitionTree
-				.addTreeSelectionListener(treeselectionListener);
-		SoftwareUnitDropListerner dropListener = new SoftwareUnitDropListerner(
-				softwareDefinitionTree);
+		this.softwareDefinitionTree = new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
+		this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
+		this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
+		SoftwareUnitDropListerner dropListener = new SoftwareUnitDropListerner(softwareDefinitionTree);
 		this.softwareDefinitionTree.setDragEnabled(true);
 
 	}
@@ -274,16 +257,36 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	 * enteredText + "'"); } }
 	 */
 
+	private TreeSelectionListener treeselectionListener = new TreeSelectionListener() {
+		@Override
+		public void valueChanged(TreeSelectionEvent arg0) {
+			TreeSelectionModel paths = softwareDefinitionTree.getSelectionModel();
+			boolean isButtonAddEnabled = true;
+/*	Code disabled 2014-03-25, since in some cases the saveButton was disabled incorrectly 		
+			for (TreePath path : paths.getSelectionPaths()) {
+				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+				boolean unitIsMappeed = selectedComponent.isMapped();
+				if (unitIsMappeed || selectedComponent.getType().toLowerCase().equals("root")
+						|| selectedComponent.getType().toLowerCase().equals("application")
+						|| selectedComponent.getType().toLowerCase().equals("externalpackage")) {
+					isButtonAddEnabled = false;
+				}
+			}
+*/			
+			saveButton.setEnabled(isButtonAddEnabled);
+		}
+	};
+
+
+	
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 
-		saveButton = new JButton(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Add"));
+		saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		buttonPanel.add(saveButton);
 		saveButton.addActionListener(this);
 		saveButton.setEnabled(false);
-		cancelButton = new JButton(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Cancel"));
+		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
 
@@ -297,8 +300,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 		} else if (action.getSource() == this.cancelButton) {
 			this.cancel();
 		} else if (action.getSource() == this.UIMapping) {
-			this.getContentPane().add(this.createUIMappingPanel(),
-					BorderLayout.CENTER);
+			this.getContentPane().add(this.createUIMappingPanel(),BorderLayout.CENTER);
 			UIMapping.setEnabled(false);
 			// regExMapping.setEnabled(true);
 			// regExMappingPanel = null;
@@ -315,9 +317,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 
 	}
 
-	/**
-	 * Do nothing
-	 */
+	//Do nothing
 	@Override
 	public void keyPressed(KeyEvent event) {
 
@@ -332,9 +332,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 		}
 	}
 
-	/**
-	 * Do nothing
-	 */
+	// Do nothing
 	@Override
 	public void keyTyped(KeyEvent event) {
 
@@ -343,44 +341,37 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	private void save() {
 		_moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		boolean canclose = false;
-		/*
-		 * if(regExMappingPanel != null) { ExpressionEngine expressionEngine =
-		 * new ExpressionEngine(); if(!regExTextField.getText().equals("")) {
-		 * if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
-		 * 
-		 * AnalyzedModuleTree resultTree =
-		 * JtreeController.instance().getResultTree();
-		 * if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
-		 * expressionEngine.saveRegExToResultTree(regExTextField.getText(),
-		 * "PC"); } else if(packageCheckBox.isSelected()) {
-		 * expressionEngine.saveRegExToResultTree(regExTextField.getText(),
-		 * "P"); } else if(classCheckBox.isSelected()) {
-		 * expressionEngine.saveRegExToResultTree(regExTextField.getText(),
-		 * "C"); } this.dispose(); new SoftwareUnitResultJDialog(_moduleId,
-		 * resultTree, regExTextField.getText(), this); } else {
-		 * JOptionPane.showMessageDialog(this,
-		 * ServiceProvider.getInstance().getLocaleService
-		 * ().getTranslatedString("SelectRegExCheckBoxError"), "Message",
-		 * JOptionPane.WARNING_MESSAGE); } } else {
-		 * JOptionPane.showMessageDialog(this,
-		 * ServiceProvider.getInstance().getLocaleService
-		 * ().getTranslatedString("FillInRegExError"), "Message",
-		 * JOptionPane.WARNING_MESSAGE); } }
+		/* if(regExMappingPanel != null) { 
+		 * 	ExpressionEngine expressionEngine = new ExpressionEngine(); 
+		 * 	if(!regExTextField.getText().equals("")) {
+		 * 		if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
+		 * 			AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
+		 * 			if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
+		 * 				expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC"); 
+		 * 			} else if(packageCheckBox.isSelected()) {
+		 * 				expressionEngine.saveRegExToResultTree(regExTextField.getText(), "P"); 
+		 * 			} else if(classCheckBox.isSelected()) {
+		 * 				expressionEngine.saveRegExToResultTree(regExTextField.getText(), "C"); 
+		 * 			} 
+		 * 			this.dispose(); 
+		 * 			new SoftwareUnitResultJDialog(_moduleId, resultTree, regExTextField.getText(), this); 
+		 *		} else {
+		 * 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectRegExCheckBoxError"), "Message", JOptionPane.WARNING_MESSAGE); 
+		 * 		} 
+		 * 	} else {
+		 * 		JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("FillInRegExError"), "Message", JOptionPane.WARNING_MESSAGE); 
+		 * 	} 
+		 * }
 		 */
 		// else {
-		TreeSelectionModel paths = this.softwareDefinitionTree
-				.getSelectionModel();
+		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
 		for (TreePath path : paths.getSelectionPaths()) {
-			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path
-					.getLastPathComponent();
+			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
 			units.add(selectedComponent);
-
 		}
 		canclose = DomainGateway.getInstance().saveAnalzedModule(units);
-
 		if (canclose) {
-
 			this.dispose();
 		}
 
@@ -391,33 +382,6 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements
 	private void cancel() {
 		this.dispose();
 	}
-
-	private TreeSelectionListener treeselectionListener = new TreeSelectionListener() {
-
-		@Override
-		public void valueChanged(TreeSelectionEvent arg0) {
-			TreeSelectionModel paths = softwareDefinitionTree
-					.getSelectionModel();
-			boolean isButtonAddEnabled = true;
-			for (TreePath path : paths.getSelectionPaths()) {
-
-				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path
-						.getLastPathComponent();
-				if (selectedComponent.isMapped()
-						|| selectedComponent.getType().toLowerCase()
-								.equals("root")
-						|| selectedComponent.getType().toLowerCase()
-								.equals("application")
-						|| selectedComponent.getType().toLowerCase()
-								.equals("externalpackage")) {
-					isButtonAddEnabled = false;
-				}
-			}
-
-			saveButton.setEnabled(isButtonAddEnabled);
-		}
-
-	};
 
 	@Override
 	public void update(Observable o, Object arg) {
