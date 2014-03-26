@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 
@@ -63,8 +64,9 @@ public class AnalyseUIController {
     
     public List<AnalysedModuleDTO> listAllExternalSystems(){
     	List<AnalysedModuleDTO> allModules = new ArrayList<AnalysedModuleDTO>();
-//    	for(ExternalSystemDTO eSystem : analyseService.getExternalSystems())
-//    		allModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
+    	for(ExternalSystemDTO eSystem : analyseService.getExternalSystems()){
+    		allModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
+    	}
     	return allModules;
     }
 

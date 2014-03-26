@@ -7,6 +7,7 @@ import husacct.common.dto.ExternalSystemDTO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -43,7 +44,7 @@ class FamixDependencyFinder extends FamixFinder {
 		this.logger.info(new Date().toString() + " Dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);
 		initializeDependencyHashMap();
 
-		//getExternalSystems().size();
+		getExternalSystems().size();
 		return;
 	}
 	
@@ -144,34 +145,39 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 
 	public List<ExternalSystemDTO> getExternalSystems(){
-		if(externalSystemCache != null)
+		if(externalSystemCache != null){
 			return externalSystemCache;
-		List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
-		List<String> pathsToImports = new ArrayList<String>();
-		List<String> pathsToPackages = new ArrayList<String>();
-		//key of imports is combined 
-		for(String imp : theModel.imports.keySet())
-			if(!pathsToImports.contains(imp))
-				pathsToImports.add(imp);
-		for(String clls : theModel.classes.keySet())
-			if(!pathsToPackages.contains(clls))
-				pathsToPackages.add(clls);
-		for(String intrfc : theModel.interfaces.keySet())
-			if(!pathsToPackages.contains(intrfc))
-				pathsToPackages.add(intrfc);
-		for(String compareString : pathsToImports)
-			if(!pathsToPackages.contains(compareString)){
-				ExternalSystemDTO dto = new ExternalSystemDTO();
-				dto.systemName = (compareString.contains(".") && compareString.lastIndexOf('.') != compareString.length() - 1) ? compareString.substring(compareString.lastIndexOf('.')+1) : compareString;
-				dto.systemPackage = compareString;
-				externalSystems.add(dto);
-			}
-		for(ExternalSystemDTO dto : externalSystems){
-			dto.fromDependencies = (ArrayList<DependencyDTO>) getDependenciesTo(dto.systemPackage);
 		}
-		
+		List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
+		HashSet<String> completeImportStrings = new HashSet<String>();
+
+		// Select all imported types. Note: key of imports is combined from.to.
+		for(String importKey : theModel.imports.keySet()){
+			String importString = theModel.imports.get(importKey).completeImportString;
+			completeImportStrings.add(importString);
+		}
+
+		// Check for each completeImportString if it is an internal class or interface. If not, create an ExternalSystemDTO.
+		for(String completeImportString : completeImportStrings){
+			if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax."))){
+				if(!theModel.classes.containsKey(completeImportString) && !theModel.interfaces.containsKey(completeImportString)){
+					ExternalSystemDTO dto = new ExternalSystemDTO();
+					dto.systemName = (completeImportString.contains(".") && completeImportString.lastIndexOf('.') != completeImportString.length() - 1) ? completeImportString.substring(completeImportString.lastIndexOf('.')+1) : completeImportString;
+					dto.systemPackage = completeImportString;
+					DependencyDTO[] dependencies = getDependenciesFromTo("", completeImportString);
+					ArrayList<DependencyDTO> fromDependencies = new ArrayList<DependencyDTO>();
+					int lenght = dependencies.length;
+					if (lenght > 0){
+						for(int i = 0; i < lenght; i++){
+							fromDependencies.add(dependencies[i]);
+						}
+					}
+					dto.fromDependencies = fromDependencies;
+					externalSystems.add(dto);
+				}
+			}
+		}
 		externalSystemCache = externalSystems;
-		
 		return externalSystemCache;
 	}
 	
