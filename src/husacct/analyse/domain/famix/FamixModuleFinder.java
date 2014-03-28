@@ -63,11 +63,12 @@ class FamixModuleFinder extends FamixFinder {
     }
 
     private void performQuery(FinderArguments function, String argument, int depth) {
-        this.prepare(function, argument);
+    	this.prepare(function, argument);
         List<AnalysedModuleDTO> result = new ArrayList<AnalysedModuleDTO>();
         result.addAll(this.findPackages());
         result.addAll(this.findClasses());
         result.addAll(this.findInterfaces());
+        result.addAll(this.findLibraries());
         if (depth > 0) {
             for (AnalysedModuleDTO moduleDTO : result) {
                 moduleDTO.subModules.addAll(getChildModulesInModule(moduleDTO.uniqueName, depth - 1));
@@ -130,6 +131,22 @@ class FamixModuleFinder extends FamixFinder {
         return result;
     }
 
+    private List<AnalysedModuleDTO> findLibraries() {
+        List<AnalysedModuleDTO> result = new ArrayList<AnalysedModuleDTO>();
+        Iterator<Entry<String, FamixLibrary>> iterator = theModel.libraries.entrySet().iterator();
+        AnalysedModuleDTO current;
+        while (iterator.hasNext()) {
+            Entry<String, FamixLibrary> currentEntry = (Entry<String, FamixLibrary>) iterator.next();
+            FamixLibrary fLibrary = currentEntry.getValue();
+            boolean correctResult = this.compliesWithArguments(fLibrary.uniqueName);
+            if (correctResult) {
+                current = createAnalysedModuleDTO("library", fLibrary);
+                result.add(current);
+            }
+        }
+        return result;
+    }
+
     private boolean compliesWithArguments(String uniqueName) {
         switch (this.currentFunction) {
             case ROOT:
@@ -181,12 +198,17 @@ class FamixModuleFinder extends FamixFinder {
         if (theModel.interfaces.get(uniqueName) != null) {
             return true;
         }
+        if (theModel.libraries.get(uniqueName) != null) {
+            return true;
+        }
         return false;
     }
 
     private AnalysedModuleDTO createAnalysedModuleDTO(String type, FamixEntity theEntity, List<AnalysedModuleDTO> childs) {
         String name = theEntity.name;
         String uniqueName = theEntity.uniqueName;
+        if (theEntity instanceof FamixLibrary)
+        	uniqueName = ((FamixLibrary) theEntity).physicalPath;
         if (theEntity instanceof FamixPackage) {
             return new AnalysedModuleDTO(uniqueName, name, type, "public");
         } else {

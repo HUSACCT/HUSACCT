@@ -3,6 +3,7 @@ package husacct.analyse.domain.famix;
 public class FamixLibrary extends FamixEntity {
 
     public String belongsToPackage;
+    public String physicalPath;
 
     public boolean equals(FamixLibrary other) {
         return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 
@@ -13,6 +14,7 @@ public class FamixLibrary extends FamixEntity {
         String libraryRepresentation = "";
         libraryRepresentation += "\nUnique Name: " + super.uniqueName;
         libraryRepresentation += "\nBelongs to Library: " + belongsToPackage;
+        libraryRepresentation += "\nPhysical Path: " + physicalPath;
         libraryRepresentation += "\nName: " + super.name + "\n\n";
         return libraryRepresentation;
     }

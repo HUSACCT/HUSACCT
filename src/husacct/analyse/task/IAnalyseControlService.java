@@ -34,8 +34,6 @@ public interface IAnalyseControlService {
 
     public AnalysedModuleDTO[] getRootModules();
     
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems();
-
     public AnalysedModuleDTO[] getChildModulesInModule(String from);
 
     public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
@@ -47,8 +45,6 @@ public interface IAnalyseControlService {
     public void loadModel(Element analyseElement);
 
     public void exportDependencies(String path);
-    
-    public ExternalSystemDTO[] getExternalSystems();
     
     public int getAmountOfDependencies();
     

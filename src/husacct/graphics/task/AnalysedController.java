@@ -40,8 +40,9 @@ public class AnalysedController extends DrawingController {
 
 		AbstractDTO[] modules;
 
-		if (showLibraries) modules = analyseService
-				.getRootModulesWithExternalSystems();
+		if (showLibraries) 
+			// Support of External libraries is improved in version 2.4 and does not require separate method calls.  
+			modules = analyseService.getRootModules();
 		else
 			modules = analyseService.getRootModules();
 

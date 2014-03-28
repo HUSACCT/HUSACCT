@@ -37,8 +37,6 @@ public interface IModelQueryService {
 
     public HashMap<String, DependencyDTO> mapDependencies();
     
-    public ExternalSystemDTO[] getExternalSystems();
-    
     public void buildCache();
     
     public int getAmountOfDependencies();

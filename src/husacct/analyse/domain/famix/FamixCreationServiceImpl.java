@@ -2,6 +2,7 @@ package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
@@ -9,6 +10,7 @@ import javax.naming.directory.InvalidAttributesException;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelCreationService;
+import husacct.define.domain.SoftwareArchitecture;
 
 public class FamixCreationServiceImpl implements IModelCreationService {
 
@@ -394,8 +396,56 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         dependencyConnector.connectAssociationDependencies();
         associationsNumber = model.associations.size();
         this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
+        distinguisAndCreateLibraries();
+        this.logger.info(new Date().toString() + " Finished: distinguisAndCreateLibraries(), Nr of Libraries = " + model.libraries.size());
     }
 
+    private void distinguisAndCreateLibraries(){
+		// Create a root package "ExternalLibraries"
+		String rootLibraryPackage = "xLibraries";
+		createPackage(rootLibraryPackage, "", rootLibraryPackage);
+		// Select all imported types. Note: key of imports is combined from.to.
+		HashSet<String> completeImportStrings = new HashSet<String>();
+		for(String importKey : model.imports.keySet()){
+			String importString = model.imports.get(importKey).completeImportString;
+			completeImportStrings.add(importString);
+		}
+		// Check for each completeImportString if it is an internal class or interface. If not, create a FamixLibrary.
+		for(String completeImportString : completeImportStrings){
+			if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax."))){
+				if(!model.classes.containsKey(completeImportString) && !model.interfaces.containsKey(completeImportString)){
+					// Create package for each substring, except for the last substring 
+					String packageName = "";
+					String packageUniqueName = "";
+					String packageParent = rootLibraryPackage;
+					String libraryName = "";
+					if ((completeImportString.contains(".")) && (completeImportString.lastIndexOf('.') != completeImportString.length() - 1)) {
+						String[] names = completeImportString.split("\\.");
+				        libraryName = names[names.length -1];
+						for (int i = 0 ; i < (names.length -1); i++){
+							packageName = names[i]; 
+							packageUniqueName = packageParent + "." + names[i]; 
+							// Create a package with name fLibrary.belongsToPackage
+					        createPackage(packageUniqueName, packageParent, packageName);
+					        packageParent = packageUniqueName;
+						}
+					} else {
+						packageUniqueName = packageParent;
+						libraryName = completeImportString;
+					}
+					//Add externalSystem as FamixLibrary
+					FamixLibrary fLibrary = new FamixLibrary();
+					fLibrary.physicalPath = completeImportString;
+			        fLibrary.uniqueName = rootLibraryPackage + "." + completeImportString;
+			        fLibrary.belongsToPackage = packageUniqueName;
+			        fLibrary.visibility = "public";
+			        fLibrary.name = libraryName;
+			        addToModel(fLibrary);
+				}
+			}
+		}
+    }
+    
     private boolean addToModel(FamixObject newObject) {
         try {
         	model.addObject(newObject);

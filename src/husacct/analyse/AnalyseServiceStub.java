@@ -275,11 +275,6 @@ public class AnalyseServiceStub implements IAnalyseService {
 
         return returnModules;
     }
-    
-    @Override
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
-    	return null;
-    }
 
     @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
@@ -525,11 +520,6 @@ public class AnalyseServiceStub implements IAnalyseService {
     @Override
     public void exportDependencies(String fullPath) {
     }
-    
-    @Override
-	public ExternalSystemDTO[] getExternalSystems(){
-		return new ExternalSystemDTO[] { new ExternalSystemDTO() };
-	}
 
 	@Override
 	public Element getWorkspaceData() {

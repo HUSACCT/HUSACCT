@@ -47,11 +47,6 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     }
     
     @Override
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
-    	return domainService.getRootModulesWithExternalSystems();
-    }
-
-    @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
         return domainService.getChildModulesInModule(from);
     }
@@ -121,10 +116,6 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
         exportController.export(path);
     }
     
-    @Override
-    public ExternalSystemDTO[] getExternalSystems(){
-    	return domainService.getExternalSystems();
-    }
     public int getAmountOfDependencies() {
     	return domainService.getAmountOfDependencies();
     }

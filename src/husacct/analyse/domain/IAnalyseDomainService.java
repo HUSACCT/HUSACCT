@@ -33,8 +33,6 @@ public interface IAnalyseDomainService {
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 
     public AnalysedModuleDTO[] getRootModules();
-    
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems();
 
     public AnalysedModuleDTO[] getChildModulesInModule(String from);
 
@@ -47,8 +45,6 @@ public interface IAnalyseDomainService {
     public void loadModel(Element analyseElement);
 
     public HashMap<String, DependencyDTO> mapDependencies();
-    
-    public ExternalSystemDTO[] getExternalSystems();
     
     public int getAmountOfDependencies();
     

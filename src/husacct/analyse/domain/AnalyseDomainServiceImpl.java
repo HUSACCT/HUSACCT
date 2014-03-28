@@ -42,22 +42,6 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
 
     @Override
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems() {
-        //return this.getRootModules();
-        // Due to  severe performance problems the inclusion of external systems is disabled 2014-01-16
-        List<AnalysedModuleDTO> rootModuleList = queryService.getRootModules();
-        ExternalSystemDTO[] externalSystems = queryService.getExternalSystems();
-        List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
-        for (AnalysedModuleDTO rootModule : rootModuleList) {
-            rootModules.add(rootModule);
-        }
-        for (ExternalSystemDTO eSystem : externalSystems){
-        	rootModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
-        }
-        return rootModules.toArray(new AnalysedModuleDTO[rootModules.size()]);
-    }
-
-    @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
         List<AnalysedModuleDTO> childModules = queryService.getChildModulesInModule(from);
         AnalysedModuleDTO[] childs = new AnalysedModuleDTO[childModules.size()];
@@ -145,11 +129,6 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     public HashMap<String, DependencyDTO> mapDependencies() {
         return queryService.mapDependencies();
     }
-    
-    @Override
-	public ExternalSystemDTO[] getExternalSystems(){
-		return queryService.getExternalSystems();
-	}
     
     public int getAmountOfDependencies() {
     	return queryService.getAmountOfDependencies();

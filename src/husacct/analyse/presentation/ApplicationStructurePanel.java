@@ -46,11 +46,6 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
             root.add(rootNode);
             fillNode(rootNode);
         }
-        for(AnalysedModuleDTO externalSystems : dataControl.listAllExternalSystems()){
-        	DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(externalSystems);
-        	root.add(rootNode);
-        	fillNode(rootNode);
-        }
         this.expandLeaf(analysedCodeTree, 1);
 
         analysedCodeTree.setBackground(UIManager.getColor("Panel.background"));

@@ -22,7 +22,5 @@ public class TestIndirectDependency extends TestCaseExtended  {
 		
 		printDependencies(dependencies);
 		
-		for(ExternalSystemDTO dto : service.getExternalSystems())
-			System.out.println("External system: " + dto.toString());
 	}
 }

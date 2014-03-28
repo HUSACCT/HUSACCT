@@ -27,9 +27,7 @@ class FamixDependencyFinder extends FamixFinder {
 	protected int numberOfAssociationsWithoutFromClass;
 	protected int numberOfAssociationsWithoutToClass;
 	protected int numberOfFilteredDependenciesToLanguageConstruct;
-	
 	// TreeMap dependenciesOnFromTo has as first key classPathFrom, as second key classPathTo, and as value a list of dependencies.
-	// Note: To find inner classes to, make use of tailMap() instead of get(). tailMap() may return a Map of values!
 	private HashMap<String, HashMap<String, ArrayList<DependencyDTO>>> dependenciesOnFromTo; 
 
     
@@ -43,8 +41,6 @@ class FamixDependencyFinder extends FamixFinder {
 		int numberOfDependencies = getAllDependencies().size();
 		this.logger.info(new Date().toString() + " Dependencies added: " + numberOfDependencies + ", Not complying: " + numberOfNotComplyingAssociations + ", Incomplete: " + numberOfIncompleteAssociations + ", Removed duplicates: " + numberOfDuplicateAssociations + ", Extends concrete: " + numberOfExtendsConcrete);
 		initializeDependencyHashMap();
-
-		getExternalSystems().size();
 		return;
 	}
 	
@@ -125,9 +121,7 @@ class FamixDependencyFinder extends FamixFinder {
 				}
 			}
 		}
-			
-	
-        DependencyDTO[] matchDependency = new DependencyDTO[foundDependencies.size()];
+       DependencyDTO[] matchDependency = new DependencyDTO[foundDependencies.size()];
         int iterator = 0;
         for (DependencyDTO d : foundDependencies) {
             matchDependency[iterator] = d;

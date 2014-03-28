@@ -48,8 +48,6 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public AnalysedModuleDTO[] getRootModules();
     
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems();
-
     public AnalysedModuleDTO[] getChildModulesInModule(String from);
 
     public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
@@ -57,8 +55,6 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     public AnalysedModuleDTO getParentModuleForModule(String child);
 
     public void exportDependencies(String fullPath);
-    
-    public ExternalSystemDTO[] getExternalSystems();
     
     public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
     

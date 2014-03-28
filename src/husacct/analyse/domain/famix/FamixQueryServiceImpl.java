@@ -1,8 +1,12 @@
 package husacct.analyse.domain.famix;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -64,7 +68,62 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public List<DependencyDTO> getDependencies(String from, String to) {
-        return dependencyFinder.getDependencies(from, to);
+    	List<String> allFromTypeNames = getAllTypes(from);
+    	List<String> allToTypeNames = getAllTypes(to);
+        List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+        for (String fromTypeName : allFromTypeNames) {
+            for (String toTypeName : allToTypeNames) {
+                for (DependencyDTO dependency : dependencyFinder.getDependenciesFromTo(fromTypeName, toTypeName)) {
+                    if (!dependencies.contains(dependency)) {
+                        dependencies.add(dependency);
+                    }
+                }
+            }
+        }
+        return dependencies;
+    }
+    
+    private List<String> getAllTypes(String uniqueName){
+		List<String> uniqueNamesTypesFrom = new ArrayList<String>();
+		String uniqueNameTypeFrom;
+		//Determine if uniqueName is a packages or type. If it is a packages, get all sub-packages.
+		if (theModel.packages.containsKey(uniqueName)){
+			List<AnalysedModuleDTO> fromTypes = new ArrayList<AnalysedModuleDTO>();
+			Set<String> allPackages = theModel.packages.keySet();
+			for (String packageName : allPackages){
+				if (packageName.startsWith(uniqueName)){
+					//get all types within the package
+					fromTypes.addAll(getChildModulesInModule(packageName));
+				}
+			}
+			// Add unique names of the types to the result set
+			for (AnalysedModuleDTO typeFrom : fromTypes){
+				uniqueNameTypeFrom = typeFrom.uniqueName;
+				uniqueNamesTypesFrom.add(uniqueNameTypeFrom);
+			}
+		}
+		else {
+			if (theModel.libraries.containsKey(uniqueName)){
+				uniqueName = theModel.libraries.get(uniqueName).physicalPath;
+			}
+			uniqueNamesTypesFrom.add(uniqueName);
+		}
+		// Add inner classes to the result set
+		for (String name : uniqueNamesTypesFrom){
+			if (theModel.classes.containsKey(name)){
+				if (theModel.classes.get(name).hasInnerClasses){
+					Set<String> allClasses = theModel.classes.keySet();
+					for (String className : allClasses){
+						if (className.startsWith(name)){
+							if (theModel.classes.get(className).isInnerClass){
+								allClasses.add(theModel.classes.get(className).uniqueName);
+							}
+						}
+					}
+				}
+			}
+		}
+		return uniqueNamesTypesFrom;
     }
 
     @Override
@@ -115,12 +174,6 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         }
         return dependencyMap;
     }
-    
-    @Override
-	public ExternalSystemDTO[] getExternalSystems(){
-    	List<ExternalSystemDTO> externalSystems = dependencyFinder.getExternalSystems();
-    	return externalSystems.toArray(new ExternalSystemDTO[externalSystems.size()]);
-	}
     
     public int getAmountOfDependencies() {
     	return getAllDependencies().length;

@@ -155,16 +155,6 @@ public class AnalyzedUnitComparator {
 		parentComponent.registerchildrenSize();
 	}
 
-	private void addExternalComponents(AnalyzedModuleComponent root) {
-		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent("external library", "External Systems", "externalpackage", "public");
-		ExternalSystemDTO[] externalSystems = ServiceProvider.getInstance().getAnalyseService().getExternalSystems();
-		for (ExternalSystemDTO exe : externalSystems) {
-			AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(exe.systemPackage, exe.systemName, "externallibrary", "public");
-			rootOfExterexternalLibrary.addChild(javalib);
-		}
-		root.addChild(rootOfExterexternalLibrary);
-	}
-
 	public AnalyzedModuleComponent getRootModel() {
 		if (!JtreeController.instance().isLoaded() || !ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
 			if (!ServiceProvider.getInstance().getControlService().isPreAnalysed()) {

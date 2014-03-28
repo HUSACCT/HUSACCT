@@ -87,11 +87,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
     
     @Override
-    public AnalysedModuleDTO[] getRootModulesWithExternalSystems(){
-    	return service.getRootModulesWithExternalSystems();
-    }
-
-    @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
         return service.getChildModulesInModule(from);
     }
@@ -156,11 +151,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         service.exportDependencies(fullPath);
     }
     
-    @Override
-	public ExternalSystemDTO[] getExternalSystems(){
-		return TypeFilter.filterExternalSystems(service.getExternalSystems());
-	}
-
 	@Override
 	public Element getWorkspaceData() {
 		Element rootElement = new Element("rootElement");

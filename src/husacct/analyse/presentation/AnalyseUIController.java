@@ -26,7 +26,7 @@ public class AnalyseUIController {
     public List<AnalysedModuleDTO> getRootModules() {
         List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
 
-        for (AnalysedModuleDTO analysedModule : analyseService.getRootModulesWithExternalSystems()) {
+        for (AnalysedModuleDTO analysedModule : analyseService.getRootModules()) {
             rootModules.add(analysedModule);
         }
         return rootModules;
@@ -62,14 +62,6 @@ public class AnalyseUIController {
         return allModulesInModule;
     }
     
-    public List<AnalysedModuleDTO> listAllExternalSystems(){
-    	List<AnalysedModuleDTO> allModules = new ArrayList<AnalysedModuleDTO>();
-    	for(ExternalSystemDTO eSystem : analyseService.getExternalSystems()){
-    		allModules.add(new AnalysedModuleDTO(eSystem.systemPackage, eSystem.systemName, "library", "true"));
-    	}
-    	return allModules;
-    }
-
     public List<DependencyDTO> listDependencies(List<AnalysedModuleDTO> from, List<AnalysedModuleDTO> to) {
         List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
         for (AnalysedModuleDTO fromModule : from) {
