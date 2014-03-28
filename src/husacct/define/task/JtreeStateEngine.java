@@ -78,8 +78,10 @@ public abstract class JtreeStateEngine {
 		AnalyzedModuleComponent analyzeModuleTobeRestored =  allUnitsRegistry.getAnalyzedUnit(unit);
 		//analyzeModuleTobeRestored.detach();
 		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
-		data.add(analyzeModuleTobeRestored);
-		StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
+		if(analyzeModuleTobeRestored !=null){
+			data.add(analyzeModuleTobeRestored);
+			StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
+		}
 	}
 
 	public void addSoftwareUnit(ModuleStrategy module, ArrayList<AnalyzedModuleComponent> unitToBeinserted) {

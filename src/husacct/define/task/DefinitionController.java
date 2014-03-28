@@ -352,7 +352,7 @@ import org.apache.log4j.Logger;
 												"Your about to remove a software unit that does exist at code level",
 												"Remove?");
 								if (confirm2) {
-									softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId,	softwareUnit);
+									softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
 								}
 							} else {
 								softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);

@@ -168,12 +168,14 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 	public void restoreTreeItemm(List<String> softwareUnitNames, List<String> types) {
 		for (String uniqname : softwareUnitNames) {
 			AnalyzedModuleComponent tobeRestored= StateService.instance().getAnalyzedSoftWareUnit(uniqname);
-			if (tobeRestored instanceof RegexComponent) {
-				restoreRegex((RegexComponent)tobeRestored);
-			}
-			else{
-				tree.restoreTreeItem(tobeRestored);
-				tree.repaint();
+			if (tobeRestored != null){
+				if (tobeRestored instanceof RegexComponent) {
+					restoreRegex((RegexComponent)tobeRestored);
+				}
+				else{
+					tree.restoreTreeItem(tobeRestored);
+					tree.repaint();
+				}
 			}
 		}
 	}
