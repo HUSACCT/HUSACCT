@@ -53,8 +53,10 @@ public class ModuleFigure extends BaseFigure {
 				componentImageURL = Resource.get(Resource.ICON_COMPONENT);
 			} else if (type.toLowerCase().equals("subsystem")) {
 				componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
+			} else if (type.toLowerCase().equals("library")) {
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
 			} else if (type.toLowerCase().equals("externallibrary")) {
-				componentImageURL = Resource.get(Resource.ICON_LIBRARY);
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
 			} else if (type.toLowerCase().equals("facade")) {
 				componentImageURL = Resource.get(Resource.ICON_FACADE);
 			} else{

@@ -45,7 +45,7 @@ package husacct.define.presentation.moduletree;
 		if (component instanceof ComponentComponent) {
 		    icon = new ImageIcon(Resource.get(Resource.ICON_COMPONENT));
 		} else if (component instanceof ExternalLibraryComponent) {
-		    icon = new ImageIcon(Resource.get(Resource.ICON_LIBRARY));
+		    icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
 		} else if (component instanceof LayerComponent) {
 		    icon = new ImageIcon(Resource.get(Resource.ICON_LAYER));
 		} else if (component instanceof SubSystemComponent) {
@@ -99,7 +99,7 @@ package husacct.define.presentation.moduletree;
 			icon = new ImageIcon(
 				Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
 		    } else {
-			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB));
+			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
 		    }
 
 		} else if (component.getType().equals("SUBSYSTEM")) {
@@ -119,9 +119,9 @@ package husacct.define.presentation.moduletree;
 		} else if (component.getType().toLowerCase().equals("externalpackage")) {
 		    if (component.isMapped()) {
 			icon = new ImageIcon(
-				Resource.get(Resource.ICON_EXTERNALLIB2_GRAY));
+				Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
 		    } else {
-			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2));
+			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
 		    }
 
 		}

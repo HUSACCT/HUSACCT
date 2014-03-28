@@ -42,7 +42,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	if (component instanceof ComponentComponent) {
 	    icon = new ImageIcon(Resource.get(Resource.ICON_COMPONENT));
 	} else if (component instanceof ExternalLibraryComponent) {
-	    icon = new ImageIcon(Resource.get(Resource.ICON_LIBRARY));
+	    icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_BLUE));
 	} else if (component instanceof LayerComponent) {
 	    icon = new ImageIcon(Resource.get(Resource.ICON_LAYER));
 	} else if (component instanceof SubSystemComponent) {
@@ -61,9 +61,17 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	ImageIcon icon = new ImageIcon();
 	if (component.getType().equals("PACKAGE")) {
 	    if (component.isMapped()) {
-		icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));
+	    	icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));
+	        if(component.getName().equals("xLibraries")){
+	        	icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
+	        }
+
 	    } else {
-		icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
+	    	icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
+	        if(component.getName().equals("xLibraries")){
+	        	icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
+	        }
+
 	    }
 
 	} else if (component.getType().equals("CLASS")) {
@@ -91,12 +99,12 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
 	    }
 	  
-	} else if (component.getType().equals("EXTERNALLIBRARY")) {
+	} else if (component.getType().equals("LIBRARY")) {
 	    if (component.isMapped()) {
 		icon = new ImageIcon(
 			Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
 	    } else {
-		icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB));
+		icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
 	    }
 
 	} else if (component.getType().equals("SUBSYSTEM")) {
@@ -116,9 +124,9 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	} else if (component.getType().toLowerCase().equals("externalpackage")) {
 	    if (component.isMapped()) {
 		icon = new ImageIcon(
-			Resource.get(Resource.ICON_EXTERNALLIB2_GRAY));
+			Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
 	    } else {
-		icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2));
+		icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
 	    }
 
 	}

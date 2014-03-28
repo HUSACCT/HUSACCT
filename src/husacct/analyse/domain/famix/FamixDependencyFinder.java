@@ -26,7 +26,7 @@ class FamixDependencyFinder extends FamixFinder {
 	protected int numberOfExtendsConcrete;
 	protected int numberOfAssociationsWithoutFromClass;
 	protected int numberOfAssociationsWithoutToClass;
-	protected int numberOfFilteredDependenciesToLanguageConstruct;
+	protected int numberOfFilteredDependencies;
 	// TreeMap dependenciesOnFromTo has as first key classPathFrom, as second key classPathTo, and as value a list of dependencies.
 	private HashMap<String, HashMap<String, ArrayList<DependencyDTO>>> dependenciesOnFromTo; 
 
@@ -202,7 +202,7 @@ class FamixDependencyFinder extends FamixFinder {
 		numberOfExtendsConcrete = 0;
 		numberOfAssociationsWithoutFromClass = 0;
 		numberOfAssociationsWithoutToClass = 0;
-		numberOfFilteredDependenciesToLanguageConstruct = 0;
+		numberOfFilteredDependencies = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
@@ -210,9 +210,11 @@ class FamixDependencyFinder extends FamixFinder {
 						numberOfIncompleteAssociations ++;
 					}
 					else{
-						// Filter on programming language to-values; To do: Make language dependent and configurable!  
-						if((association.to.startsWith("java.")) || (association.to.startsWith("javax."))){
-							numberOfFilteredDependenciesToLanguageConstruct ++;
+						// Filter out dependencies if from and to do not refer to types
+						String libraryRoot = "xLibraries.";
+						if(!((theModel.classes.containsKey(association.to) || theModel.interfaces.containsKey(association.to) || theModel.libraries.containsKey((libraryRoot + association.to)))
+								&& (theModel.classes.containsKey(association.from) || theModel.interfaces.containsKey(association.from) || theModel.libraries.containsKey((libraryRoot + association.from))))){
+							numberOfFilteredDependencies ++;
 						}
 						else {
 							String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type);
@@ -220,7 +222,7 @@ class FamixDependencyFinder extends FamixFinder {
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
 	
-								// Check if from is existing class. If not, determine parent-class for fromClassPath.
+								// Check if from is existing class. If so, and if the class is an inner class, determine parent-class for fromClassPath.
 								if((theModel.classes.containsKey(association.from))){
 									FamixClass toClass = theModel.classes.get(association.from);
 									if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
@@ -230,7 +232,7 @@ class FamixDependencyFinder extends FamixFinder {
 									numberOfAssociationsWithoutFromClass ++;
 								}
 	
-								// Check if to is existing class. If not, determine parent-class for toClassPath.
+								// Check if to is existing class. If so, and if the class is an inner class, determine parent-class for fromClassPath.
 								if((theModel.classes.containsKey(association.to))){
 									FamixClass toClass = theModel.classes.get(association.to);
 									if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
@@ -287,7 +289,7 @@ class FamixDependencyFinder extends FamixFinder {
 		//if(!preventRecursion)
 		//result.addAll(findIndirectDependencies(from, to, applyFilter));
 		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
-		this.logger.info(" Associations: filtered (language Class): " + numberOfFilteredDependenciesToLanguageConstruct + "; non-classes fromClass: " + numberOfAssociationsWithoutFromClass + "; non-classes toClass: " + numberOfAssociationsWithoutToClass);
+		this.logger.info(" Associations: filtered: " + numberOfFilteredDependencies + "; non-classes fromClass: " + numberOfAssociationsWithoutFromClass + "; non-classes toClass: " + numberOfAssociationsWithoutToClass);
 		return resultToReturn;
 	
 	

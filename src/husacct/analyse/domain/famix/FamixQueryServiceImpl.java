@@ -98,8 +98,10 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			}
 			// Add unique names of the types to the result set
 			for (AnalysedModuleDTO typeFrom : fromTypes){
-				uniqueNameTypeFrom = typeFrom.uniqueName;
-				uniqueNamesTypesFrom.add(uniqueNameTypeFrom);
+				if ((typeFrom != null) && (typeFrom.uniqueName != "")){ 
+					uniqueNameTypeFrom = typeFrom.uniqueName;
+					uniqueNamesTypesFrom.add(uniqueNameTypeFrom);
+				}
 			}
 		}
 		else {

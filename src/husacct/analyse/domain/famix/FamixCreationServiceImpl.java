@@ -412,7 +412,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 		}
 		// Check for each completeImportString if it is an internal class or interface. If not, create a FamixLibrary.
 		for(String completeImportString : completeImportStrings){
-			if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax."))){
+			//if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax."))){
 				if(!model.classes.containsKey(completeImportString) && !model.interfaces.containsKey(completeImportString)){
 					// Create package for each substring, except for the last substring 
 					String packageName = "";
@@ -442,7 +442,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 			        fLibrary.name = libraryName;
 			        addToModel(fLibrary);
 				}
-			}
+			//}
 		}
     }
     

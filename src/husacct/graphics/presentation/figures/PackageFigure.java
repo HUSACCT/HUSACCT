@@ -23,6 +23,8 @@ public class PackageFigure extends BaseFigure {
 	private RectangleFigure		top;
 	private RectangleFigure		body;
 	private TextFigure			text;
+//	private BufferedImage 		moduleIcon;
+//	private ImageFigure 		moduleIconFig;
 	
 	private int					MIN_WIDTH			= 100;
 	private int					MIN_HEIGHT			= 80;
@@ -38,6 +40,25 @@ public class PackageFigure extends BaseFigure {
 		children.add(body);
 		children.add(text);
 		
+/*		To do: Include icon in package in a proper way 
+ * 		moduleIconFig = new ImageFigure();
+		moduleIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		moduleIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		try {
+			URL componentImageURL = null;
+			if (name.equals("xLibraries")) {
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
+			}
+			if(componentImageURL != null){
+				moduleIcon = ImageIO.read(componentImageURL);
+				moduleIconFig.setImage(null, moduleIcon);
+				children.add(moduleIconFig);
+			}
+		} catch (Exception e) {
+			moduleIconFig = null;
+			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
+		}
+*/
 		top.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 	}
@@ -52,11 +73,9 @@ public class PackageFigure extends BaseFigure {
 			lead.y = anchor.y + MIN_HEIGHT;
 		}
 		
-		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x)
-				* 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
+		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x) * 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
 		
-		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x,
-				(anchor.y + top.getBounds().height));
+		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x, (anchor.y + top.getBounds().height));
 		
 		body.setBounds(bodyTopLeft, lead);
 		
@@ -69,6 +88,14 @@ public class PackageFigure extends BaseFigure {
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
 		
+/*		if (moduleIconFig != null) {
+			double iconAnchorX = lead.x - 3 - 15; //-3 - moduleIcon.getWidth();
+			double iconAnchorY = anchor.y + 20; //+ 4;
+			double iconLeadX = iconAnchorX + moduleIcon.getWidth();
+			double iconLeadY = iconAnchorY + moduleIcon.getHeight();
+			moduleIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
+*/		
 		invalidate();
 	}
 	
@@ -79,11 +106,15 @@ public class PackageFigure extends BaseFigure {
 		other.top = top.clone();
 		other.body = body.clone();
 		other.text = text.clone();
+		// if (moduleIconFig != null)
+		//	other.moduleIconFig = moduleIconFig.clone();
 		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.top);
 		other.children.add(other.body);
 		other.children.add(other.text);
+		// if (moduleIconFig != null)
+		// 	other.children.add(other.moduleIconFig);
 		
 		return other;
 	}
