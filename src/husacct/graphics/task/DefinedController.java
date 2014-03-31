@@ -42,8 +42,7 @@ public class DefinedController extends DrawingController {
 	private void getAndDrawModulesIn(String parentName) {
 		if (parentName.equals("") || parentName.equals("**")) drawArchitecture(getCurrentDrawingDetail());
 		else {
-			ModuleDTO[] children = defineService
-					.getChildrenFromModule(parentName);
+			ModuleDTO[] children = defineService.getChildrenFromModule(parentName);
 			if (children.length > 0) {
 				setCurrentPaths(new String[] { parentName });
 				drawModulesAndLines(children);
@@ -92,19 +91,17 @@ public class DefinedController extends DrawingController {
 	}
 	
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
 		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
-		
-		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs)
-			for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
-				DependencyDTO[] foundDependencies = analyseService
-						.getDependencies(physicalFromPathDTO.path,
-								physicalToPath.path);
-				for (DependencyDTO tempDependency : foundDependencies)
-					dependencies.add(tempDependency);
+		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) 
+			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs){
+				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
+					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
+					for (DependencyDTO tempDependency : foundDependencies)
+						dependencies.add(tempDependency);
+				}
 			}
 		return dependencies.toArray(new DependencyDTO[] {});
 	}

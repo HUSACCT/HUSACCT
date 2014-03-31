@@ -134,15 +134,12 @@ public class GraphicsServiceImpl extends ObservableService implements
 		}
 	}
 	
-	private void loadWorkspaceDataForController(DrawingController controller,
-			Element data) {
-		if (isActive(data, workspaceShowDependencies)) controller
-				.showDependencies();
+	private void loadWorkspaceDataForController(DrawingController controller, Element data) {
+		if (isActive(data, workspaceShowDependencies)) controller.showDependencies();
 		else
 			controller.hideDependencies();
 		
-		if (isActive(data, workspaceShowViolations)) controller
-				.showViolations();
+		if (isActive(data, workspaceShowViolations)) controller.showViolations();
 		else
 			controller.hideViolations();
 		
@@ -152,9 +149,9 @@ public class GraphicsServiceImpl extends ObservableService implements
 		
 		DrawingLayoutStrategy selectedStrategy = null;
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values())
-			if (strategy.toString().equals(
-					data.getAttribute(workspaceLayoutStrategy).getValue())) selectedStrategy = strategy;
-		if (null != selectedStrategy) controller
-				.changeLayoutStrategy(selectedStrategy);
+			if (strategy.toString().equals( data.getAttribute(workspaceLayoutStrategy).getValue())) 
+				selectedStrategy = strategy;
+		if (null != selectedStrategy) 
+			controller.changeLayoutStrategy(selectedStrategy);
 	}
 }

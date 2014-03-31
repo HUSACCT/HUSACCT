@@ -8,7 +8,16 @@ public class AnalysedModuleComparator implements Comparator<AnalysedModuleDTO> {
 
     @Override
     public int compare(AnalysedModuleDTO dto1, AnalysedModuleDTO dto2) {
-
-	return dto1.name.compareTo(dto2.name);
+    	int result;
+    	if ( dto1 == null){
+    		result = 1;
+    		return result;
+    	} 
+    	if (dto2 == null){
+    		result = -1;
+    		return result;
+    	} 
+    	result = dto1.name.compareTo(dto2.name);
+    	return result;
     }
 }

@@ -112,8 +112,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawingView.cannotZoomOut();
 	}
 	
-	public void drawDependenciesBetween(DependencyDTO[] dependencies,
-			BaseFigure figureFrom, BaseFigure figureTo) {
+	public void drawDependenciesBetween(DependencyDTO[] dependencies, BaseFigure figureFrom, BaseFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		try {
 			dependencyFigure = figureFactory.createFigure(dependencies);
@@ -172,8 +171,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.updateGUI();
 	}
 	
-	public void drawMultiLevelModules(
-			HashMap<String, ArrayList<AbstractDTO>> modules) {
+	public void drawMultiLevelModules(HashMap<String, ArrayList<AbstractDTO>> modules) {
 		graphicsFrame.setUpToDate();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
@@ -183,17 +181,17 @@ public abstract class DrawingController extends DrawingSettingsController {
 			}
 			for (AbstractDTO dto : modules.get(parentName))
 				try {
-					BaseFigure generatedFigure = figureFactory
-							.createFigure(dto);
-					
-					if (parentFigure != null) parentFigure.add(generatedFigure);
-					
+					BaseFigure generatedFigure = figureFactory.createFigure(dto);
+					if (parentFigure != null){ 
+						parentFigure.add(generatedFigure);
+					}
 					drawing.add(generatedFigure);
 					figureMap.linkModule(generatedFigure, dto);
 				} catch (Exception e) {
 					logger.error("Could not generate and display figure.", e);
 				}
-			if (!parentName.isEmpty()) parentFigure.updateLayout();
+			if (!parentName.isEmpty()) 
+				parentFigure.updateLayout();
 		}
 	}
 	
@@ -223,11 +221,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 			}
 	}
 	
-	public void drawViolationsBetween(ViolationDTO[] violations,
-			BaseFigure figureFrom, BaseFigure figureTo) {
+	public void drawViolationsBetween(ViolationDTO[] violations, BaseFigure figureFrom, BaseFigure figureTo) {
 		try {
-			RelationFigure violationFigure = figureFactory
-					.createFigure(violations);
+			RelationFigure violationFigure = figureFactory.createFigure(violations);
 			figureMap.linkViolations(violationFigure, violations);
 			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
 			drawing.add(violationFigure);
@@ -245,11 +241,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 					getAndDrawViolationsBetween(figureFrom, figureTo);
 	}
 	
-	public void drawViolationsIn(ViolationDTO[] violations,
-			BaseFigure figureFrom) {
+	public void drawViolationsIn(ViolationDTO[] violations, BaseFigure figureFrom) {
 		try {
-			figureFrom.addDecorator(figureFactory
-					.createViolationsDecorator(violations));
+			figureFrom.addDecorator(figureFactory.createViolationsDecorator(violations));
 		} catch (Exception e) {
 			logger.error("Could not attach decorator to figure to indicate internal violations.", e);
 		}
@@ -263,48 +257,45 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
-		if (drawingView.getSelectionCount() == 0) graphicsFrame
-		.hideProperties();
+		if (drawingView.getSelectionCount() == 0) graphicsFrame.hideProperties();
 	}
 	
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
-		if (figureMap.isViolatedFigure(selectedFigure)) graphicsFrame
-		.showViolationsProperties(figureMap
-				.getViolatedDTOs(selectedFigure));
-		else if (figureMap.isViolationLine(selectedFigure)) graphicsFrame
-		.showViolationsProperties(figureMap
-				.getViolationDTOs(selectedFigure));
-		else if (figureMap.isDependencyLine(selectedFigure)) graphicsFrame
-		.showDependenciesProperties(figureMap
-				.getDependencyDTOs(selectedFigure));
+		if (figureMap.isViolatedFigure(selectedFigure)) 
+			graphicsFrame.showViolationsProperties(figureMap.getViolatedDTOs(selectedFigure));
+		else if (figureMap.isViolationLine(selectedFigure)) 
+			graphicsFrame.showViolationsProperties(figureMap.getViolationDTOs(selectedFigure));
+		else if (figureMap.isDependencyLine(selectedFigure)) 
+			graphicsFrame.showDependenciesProperties(figureMap.getDependencyDTOs(selectedFigure));
 		else
 			graphicsFrame.hideProperties();
 	}
 	
 	public BaseFigure[] getAllFigures() {
-		return drawingView.toFigureArray(drawingView.findFigures(drawingView
-				.getBounds()));
+		return drawingView.toFigureArray(drawingView.findFigures(drawingView.getBounds()));
 	}
 	
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		
 		DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
-				if (dependencies.length > 0) 
-					drawDependenciesBetween(dependencies,figureFrom, figureTo);
+		if (dependencies.length > 0){ 
+			drawDependenciesBetween(dependencies,figureFrom, figureTo);
+		}
 	}
 	
-	private void getAndDrawViolationsBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
+	private void getAndDrawViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
-		if (violations.length > 0) drawViolationsBetween(violations,
-				figureFrom, figureTo);
+		if (violations.length > 0){ 
+			drawViolationsBetween(violations, figureFrom, figureTo);
+		}
 	}
 	
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureFrom);
-		if (violations.length > 0) drawViolationsIn(violations, figureFrom);
+		if (violations.length > 0){ 
+			drawViolationsIn(violations, figureFrom);
+		}
 	}
 	
 	protected abstract DependencyDTO[] getDependenciesBetween(
@@ -330,12 +321,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 		return drawingView.toFigureArray(drawingView.getSelectedFigures());
 	}
 	
-	protected abstract ViolationDTO[] getViolationsBetween(
-			BaseFigure figureFrom, BaseFigure figureTo);
-	
+	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
 	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
-	boolean b = false;
-	return b;
+		boolean b = false;
+		return b;
 	}	
 	
 	protected boolean hasSavedFigureStates(String paths) {
@@ -389,8 +378,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		
 		if (selection.size() > 0) {
 			ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-			java.util.Collections.addAll(figures,
-					selection.toArray(new BaseFigure[selection.size()]));
+			java.util.Collections.addAll(figures, selection.toArray(new BaseFigure[selection.size()]));
 			
 			for (BaseFigure f : figures)
 				if(f instanceof ParentFigure)

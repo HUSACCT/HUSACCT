@@ -118,6 +118,9 @@ public class FilterController {
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		List<Violation> violations = new ArrayList<Violation>();
+		if (physicalPathTo.startsWith("xLibraries")){
+			physicalPathTo = physicalPathTo.substring(physicalPathTo.lastIndexOf(".") + 1, physicalPathTo.length());
+		}
 		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if (violation.getClassPathFrom().startsWith(physicalPathFrom) && violation.getClassPathTo().startsWith(physicalPathTo)) {
 				violations.add(violation);

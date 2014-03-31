@@ -24,6 +24,7 @@ public class ModuleFigure extends BaseFigure {
 	private TextFigure			moduleName;
 	private BufferedImage 		moduleIcon;
 	private ImageFigure 		moduleIconFig;
+	private String type;					
 
 	public int					MIN_WIDTH			= 100;
 	public int					MIN_HEIGHT			= 65;
@@ -142,4 +143,13 @@ public class ModuleFigure extends BaseFigure {
 		invalidate();
 	}
 	
+	@Override
+    public String toString() {
+        String representation = "";
+        representation += "\nName: " + super.name;
+        representation += "\nType: " + type;
+        representation += "\nIsContext: ";
+        representation += "\n";
+        return representation;
+    }
 }

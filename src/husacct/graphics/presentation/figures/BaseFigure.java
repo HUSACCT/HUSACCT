@@ -31,7 +31,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private boolean						isSizeable				= false;
 	private boolean						isEnabled				= true;
 	private boolean						isStoredInContainer		= false;
-	private final String				name;
+	protected final String				name;
 	private boolean						isContext				= false;
 	
 	public BaseFigure(String theName) {
@@ -241,4 +241,13 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 				heightY));
 		changed();
 	}
+	
+    public String toString() {
+        String representation = "";
+        representation += "\nName: " + name;
+        representation += "\nIsContext: ";
+        representation += "\n";
+        return representation;
+    }
+
 }

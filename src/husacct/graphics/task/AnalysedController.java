@@ -104,7 +104,7 @@ public class AnalysedController extends DrawingController {
 										if (dto != null){ 
 											tmp.add(dto); 
 											break;
-										}else{
+										} else{
 											logger.debug(figure.getName() + " -> " + figure);
 										}
 									}
@@ -133,8 +133,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
-		AbstractDTO[] children = analyseService
-				.getChildModulesInModule(parentName);
+		AbstractDTO[] children = analyseService.getChildModulesInModule(parentName);
 
 		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
 
@@ -150,14 +149,10 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
-				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
-				.getModuleDTO(figureTo);
-
-		if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null&& dtoTo != null){ 
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null && dtoTo != null){ 
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};
@@ -170,9 +165,7 @@ public class AnalysedController extends DrawingController {
 		try{
 			AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
 			AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
-
 			if (dtoFrom != null && dtoTo != null && !dtoFrom.uniqueName.equals(dtoTo.uniqueName)){ 
-				
 				if((analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0) || (analyseService.getDependencies(dtoTo.uniqueName, dtoFrom.uniqueName).length > 0)){
 					b = true;
 				}
@@ -185,14 +178,13 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
-				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
-				.getModuleDTO(figureTo);
-		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName,
-				dtoTo.uniqueName);
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		if (figureFrom.getName() == "husacct.analyse" && figureTo.getName() == "xLibraries.jxl"){
+			String test = "t";
+		}
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 
 	@Override

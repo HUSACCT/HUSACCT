@@ -68,7 +68,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
 		currentSettings.put("smartLines", true);
-		currentSettings.put("libraries", false);
+		currentSettings.put("libraries", true);
 		currentSettings.put("layoutStrategy",
 				DrawingLayoutStrategy.BASIC_LAYOUT);
 		
@@ -330,7 +330,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			}
 			if (showExternalLibraries.isSelected()) {
 				currentSettings.put("libraries", true);
-				listener.showLibraries();
+				listener.hideLibraries();
+				//listener.showLibraries();
 			} else {
 				currentSettings.put("libraries", false);
 				listener.hideLibraries();
@@ -349,19 +350,12 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	}
 	
 	private void resetUIElementsToCurrentSettings() {
-		showDependenciesOptionMenu.setSelected((Boolean) currentSettings
-				.get("dependencies"));
-		showViolationsOptionMenu.setSelected((Boolean) currentSettings
-				.get("violations"));
-		showExternalLibraries.setSelected((Boolean) currentSettings
-				.get("libraries"));
-		enableThickLines.setSelected((Boolean) currentSettings
-				.get("thickLines"));
-		smartLinesOptionMenu.setSelected((Boolean) currentSettings
-				.get("smartLines"));
-		layoutStrategyOptions.setSelectedItem(localeService
-				.getTranslatedString(currentSettings.get("layoutStrategy")
-						.toString()));
+		showDependenciesOptionMenu.setSelected((Boolean) currentSettings.get("dependencies"));
+		showViolationsOptionMenu.setSelected((Boolean) currentSettings.get("violations"));
+		showExternalLibraries.setSelected((Boolean) currentSettings.get("libraries"));
+		enableThickLines.setSelected((Boolean) currentSettings.get("thickLines"));
+		smartLinesOptionMenu.setSelected((Boolean) currentSettings.get("smartLines"));
+		layoutStrategyOptions.setSelectedItem(localeService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
 	}
 	
 	public void setDependenciesUIToActive() {

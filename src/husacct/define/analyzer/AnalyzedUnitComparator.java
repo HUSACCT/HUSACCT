@@ -128,8 +128,6 @@ public class AnalyzedUnitComparator {
 		StateService.instance().getAnalzedModuleRegistry().reset();
 		JtreeController.instance().setLoadState(true);
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Application", "application", "public");
-		//addExternalComponents(rootComponent);
-
 		ApplicationDTO application = ServiceProvider.getInstance().getControlService().getApplicationDTO();
 		for (ProjectDTO project : application.projects) {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(project.name, project.name, "root", "public");
@@ -144,7 +142,6 @@ public class AnalyzedUnitComparator {
 
 	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
-
 		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
