@@ -253,11 +253,8 @@ public class AppliedRuleController extends PopUpController {
 		keyValueComboBoxAppliedRule.setSelectedIndex(index);
 	}
 
-	public void fillRuleTypeComboBoxWithExceptions(
-			KeyValueComboBox keyValueComboBoxAppliedRule) {
-		CategoryDTO[] categories = ServiceProvider.getInstance()
-				.getValidateService().getCategories();
-
+	public void fillRuleTypeComboBoxWithExceptions(KeyValueComboBox keyValueComboBoxAppliedRule) {
+		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
 		for (CategoryDTO categorie : categories) {
 			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
 			// Get currently selected RuleType
@@ -265,19 +262,14 @@ public class AppliedRuleController extends PopUpController {
 				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)) {
 					if (ruleTypeDTO.exceptionRuleTypes.length == 0) {
 						throw new RuntimeException(
-								"No exception keys found for ruletype: "
-										+ selectedRuleTypeKey);
+								"No exception keys found for ruletype: " + selectedRuleTypeKey);
 					}
-
 					// Fill combobox with exceptionruletypes of that rule
 					ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 					ArrayList<String> ruleTypeValues = new ArrayList<String>();
-
 					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes) {
 						ruleTypeKeys.add(ruleDTO.key);
-						String value = ServiceProvider.getInstance()
-								.getLocaleService()
-								.getTranslatedString(ruleDTO.key);
+						String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleDTO.key);
 						ruleTypeValues.add(value);
 					}
 					keyValueComboBoxAppliedRule.setModel(
