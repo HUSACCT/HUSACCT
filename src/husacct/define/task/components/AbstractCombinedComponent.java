@@ -18,12 +18,12 @@ public abstract class AbstractCombinedComponent extends Component implements
     protected int sizeOfChildren;
     protected String type = "";
     protected String uniqueName = "";
-     static DataFlavor softwareUnitFlavour= new DataFlavor(AbstractCombinedComponent.class, "");
+    static DataFlavor softwareUnitFlavour= new DataFlavor(AbstractCombinedComponent.class, "");
 
 
     public AbstractCombinedComponent() {
-	super();
-	children = new ArrayList<AbstractCombinedComponent>();
+		super();
+		children = new ArrayList<AbstractCombinedComponent>();
     }
 
     public abstract void addChild(AbstractCombinedComponent child);
@@ -32,70 +32,59 @@ public abstract class AbstractCombinedComponent extends Component implements
 
     @Override
     public int compareTo(AbstractCombinedComponent left) {
-
-	if (left.getType().toLowerCase().equals("externalpackage")) {
-	    return -1;
-	} else if (getType().toLowerCase().equals("externalpackage")) {
-	    return 1;
-	}
-
-	else {
-
-	    return getUniqueName().toUpperCase().compareTo(
-		    left.getUniqueName().toUpperCase());
-	}
+		if (left.getType().toLowerCase().equals("externalpackage")) {
+		    return -1;
+		} else if (getType().toLowerCase().equals("externalpackage")) {
+		    return 1;
+		}
+		else {
+		    return getUniqueName().toUpperCase().compareTo(
+			    left.getUniqueName().toUpperCase());
+		}
     }
 
     public int getAnalyzedModuleComponentPosition() {
-	return analyzedModuleComponentPosition;
+    	return analyzedModuleComponentPosition;
     }
 
     public abstract ArrayList<AbstractCombinedComponent> getChildren();
 
     public AnalyzedModuleComponent getParentofChild() {
-
-	return parent;
+    	return parent;
     }
 
     public String getType() {
-	return type;
+    	return type;
     }
 
     public String getUniqueName() {
-	return uniqueName;
+    	return uniqueName;
     }
 
     public abstract void removeChild(AbstractCombinedComponent child);
 
-    public void setAnalyzedModuleComponentPosition(
-	    int analyzedModuleComponentPosition) {
-	this.analyzedModuleComponentPosition = analyzedModuleComponentPosition;
+    public void setAnalyzedModuleComponentPosition(int analyzedModuleComponentPosition) {
+    	this.analyzedModuleComponentPosition = analyzedModuleComponentPosition;
     }
 
-    public abstract void setChildren(
-	    ArrayList<AbstractCombinedComponent> children);
+    public abstract void setChildren(ArrayList<AbstractCombinedComponent> children);
 
     public void setParentOfChild(AbstractCombinedComponent parentofchild) {
-
-	parent = (AnalyzedModuleComponent) parentofchild;
+    	parent = (AnalyzedModuleComponent) parentofchild;
     }
 
     public void setType(String type) {
-	this.type = type.toUpperCase();
+    	this.type = type.toUpperCase();
     }
 
     public void setUniqueName(String uniqueName) {
-	this.uniqueName = uniqueName;
+    	this.uniqueName = uniqueName;
     }
 
     public void updateChilderenPosition() {
-	for (int i = 0; i < children.size(); i++) {
-	    int newPosition = i;
-	    children.get(i).setAnalyzedModuleComponentPosition(newPosition);
-
-	}
-
+		for (int i = 0; i < children.size(); i++) {
+		    int newPosition = i;
+		    children.get(i).setAnalyzedModuleComponentPosition(newPosition);
+		}
     }
-   
-
 }
