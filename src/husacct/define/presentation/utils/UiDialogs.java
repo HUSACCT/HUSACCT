@@ -31,8 +31,8 @@ public class UiDialogs {
      * @param title: The title of the dialog
      */
     public static void errorDialog(Component component, String message) {
-		Logger logger = Logger.getLogger(UiDialogs.class);
-		logger.info("errorDialog(" + component + "," + message + ")");
+		//Logger logger = Logger.getLogger(UiDialogs.class);
+		//logger.info("errorDialog(" + component + "," + message + ")");
 		ServiceProvider.getInstance().getControlService().showErrorMessage(message);
     }
 

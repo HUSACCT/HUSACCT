@@ -326,43 +326,39 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 
 	private void save() {
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			if (ruleDetailsJPanel.hasValidData()) {
+			if (!ruleDetailsJPanel.hasValidData()) {
+				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
+			} else {
 				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
-
-				if((Boolean) ruleDetails.get("enabled")) {
-					if(appliedRuleController.conformRuleConventions(ruleDetails)){
-						if(this.appliedRuleController.save(ruleDetails)) {
-							this.dispose();
-						} else {
-							UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined")+"\n"+ruleDetails.get("ruleTypeKey"));
-						}
-					}else{
-						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
-					}
-				}
-				else {
-					if(this.appliedRuleController.save(ruleDetails)) {
+				if(!appliedRuleController.conformRuleConventions(ruleDetails)){
+					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
+				}else{
+					String message = appliedRuleController.save(ruleDetails);
+					if (!message.equals("")){
+						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
+					} else {
 						this.dispose();
 					}
 				}
-			} else {
-				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
 			}
 		}
 		else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
-			if (ruleDetailsJPanel.hasValidData()) {
+			if (!ruleDetailsJPanel.hasValidData()) {
+				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
+			} else {
 				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
-
-				if(this.appliedRuleController.save(ruleDetails)) {
-					this.dispose();
+				String message = appliedRuleController.save(ruleDetails);
+				if (!message.equals("")){
+					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
+					if (message.equals("IncorrectToModuleFacadeConvExc")){
+						this.removeException();
+					}
 				} else {
-					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined")+"\n"+ruleDetails.get("ruleTypeKey"));
+					this.dispose();
 				}
 			}
-		} else {
-			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
 		}
 	}
 

@@ -516,8 +516,8 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 
-	public boolean save(HashMap<String, Object> ruleDetails) {
-
+	public String save(HashMap<String, Object> ruleDetails) {
+		String message = "";
 		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
 		Object from = ruleDetails.get("moduleFromId");
 		Object to = ruleDetails.get("moduleToId");
@@ -541,21 +541,20 @@ public class AppliedRuleController extends PopUpController {
 						moduleFrom, moduleTo, isEnabled);
 				if (currentAppliedRuleId == -1) {
 					logger.info("An identical rule already exists");
-					return false;
+					message = "NotAllowedBecauseDefined";
+					return message;
 				}
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-				appliedRuleService.updateAppliedRule(currentAppliedRuleId,
-						ruleTypeKey, description, dependencies, regex,
-						moduleFrom, moduleTo, isEnabled);
-				appliedRuleExceptionService
-						.removeAllAppliedRuleExceptions(currentAppliedRuleId);
+				appliedRuleService.updateAppliedRule(currentAppliedRuleId,ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+				appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 			}
 
 			saveAllExceptionRules();
 			DefinitionController.getInstance().notifyObservers(currentModuleId);
-			return true;
+			return message;
 		} catch (Exception e) {
-			return false;
+			message = e.getMessage();
+			return message;
 		}
 	}
 

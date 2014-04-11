@@ -83,12 +83,12 @@ public class ApplicationController {
 	
 	public void showErrorMessage(String message){
 		JOptionPane.showMessageDialog(mainController.getMainGui(), message, "Error", JOptionPane.ERROR_MESSAGE);
-		logger.error("Error: " + message);
+		//logger.error("Error: " + message);
 	}
 	
 	public void showInfoMessage(String message){
 		JOptionPane.showMessageDialog(mainController.getMainGui(), message, "Info", JOptionPane.INFORMATION_MESSAGE);
-		logger.error("Info: " + message);
+		//logger.error("Info: " + message);
 	}
 	
 	public void showConfigurationGUI() {
