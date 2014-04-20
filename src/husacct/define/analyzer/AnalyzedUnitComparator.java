@@ -3,10 +3,7 @@ package husacct.define.analyzer;
 import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
-import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
@@ -18,8 +15,14 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+
+import org.apache.log4j.Logger;
 
 public class AnalyzedUnitComparator {
+	
+	private final Logger logger = Logger.getLogger(AnalyzedUnitComparator.class);
+
 
 	public AnalyzedModuleComponent calucalteChanges(AbstractCombinedComponent left, AbstractCombinedComponent right) {
 		ArrayList<AbstractCombinedComponent> toBeDeleted = new ArrayList<AbstractCombinedComponent>();
@@ -145,8 +148,13 @@ public class AnalyzedUnitComparator {
 		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
-		for (AnalysedModuleDTO subModule : children) {
-			this.addChildComponents(childComponent, subModule);
+		for (int i = 0 ; i < children.length; i++) {
+			if (children[i] != null){
+				this.addChildComponents(childComponent, children[i]);
+			}
+			else{
+				this.logger.warn(new Date().toString() + " Null-child in parent: " + module.uniqueName);
+			}
 		}
 		parentComponent.addChild(childComponent);
 		parentComponent.registerchildrenSize();
@@ -171,7 +179,7 @@ public class AnalyzedUnitComparator {
 		} else {
 			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
 		    AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
-			calucalteChanges(left, right);
+			//calucalteChanges(left, right); // Disabled 2014-04-20, because it caused exceptions.
 			WarningMessageService.getInstance().resetNotAnalyzed();
 			WarningMessageService.getInstance().registerNotMappedUnits(right);
 			WarningMessageService.getInstance().updateWarnings();

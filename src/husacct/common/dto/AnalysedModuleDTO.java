@@ -41,11 +41,12 @@ public class AnalysedModuleDTO extends AbstractDTO{
 		result += "Type: " + type + "\n";
 		result += "Uniqename: " + uniqueName + "\n";
 		result += "name: " + name + "\n";
-		result += "Visibility: " + visibility + "\n\n";
+		result += "Visibility: " + visibility + "\n";
 		result += "Submodules:\n";
 		for(AnalysedModuleDTO module: subModules){
 			result += module.toString();
 		}
+		result += "\n";
 		return result;
 	}
 }

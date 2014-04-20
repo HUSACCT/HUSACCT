@@ -1,5 +1,7 @@
 package husacct.define.task.components;
 
+import husacct.common.dto.AnalysedModuleDTO;
+
 import java.util.ArrayList;
 
 public class AnalyzedModuleComponent extends AbstractCombinedComponent {
@@ -129,4 +131,20 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		}
 		return result;
 	}
+	
+	public String toString(){
+		String result = "";
+		result += "Type: " + type + "\n";
+		result += "Uniquename: " + uniqueName + "\n";
+		result += "name: " + getName() + "\n";
+		result += "Visibility: " + visibility + "\n";
+		result += "Attached: " + attached + ", IsFrozen: " + isfrozen + ", IsRemoved: " + isRemoved;
+		//result += "Submodules:\n";
+		//for(AnalysedModuleDTO module: subModules){
+		//	result += module.toString();
+		//}
+		result += "\n";
+		return result;
+	}
+
 }
