@@ -9,4 +9,11 @@ public class PhysicalPathDTO extends AbstractDTO {
 		this.path = path;
 		this.type = type;
 	}
+	
+	public String toString(){
+		String result = "";
+		result += "Path: " + path + "\n";
+		result += "Type: " + type + "\n";
+		return result;
+	}
 }

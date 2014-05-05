@@ -2,6 +2,7 @@ package husacct.define;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.services.ObservableService;
@@ -25,13 +26,17 @@ import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public class DefineServiceImpl extends ObservableService implements
-		IDefineService {
+public class DefineServiceImpl extends ObservableService implements IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
 	private DomainToDtoParser domainParser = new DomainToDtoParser();
@@ -86,6 +91,43 @@ public class DefineServiceImpl extends ObservableService implements
 		return childModuleDTOs;
 	}
 
+	@Override
+	public HashSet<PhysicalPathDTO> getAllPhysicalClassesOfModule(String logicalPath) {
+		ModuleStrategy[] modules = null;
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
+		HashSet<PhysicalPathDTO> resultClasses = new HashSet<PhysicalPathDTO>();
+		// 1 Get the module(s)
+		if (logicalPath.equals("**")) {
+			modules = moduleService.getRootModules();
+		} else {
+			modules = new ModuleStrategy[1];
+			modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
+		}
+		// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+		for (ModuleStrategy module : modules){
+			HashMap<String, SoftwareUnitDefinition> softwareUnits = module.getAllAssignedSoftwareUnitsInTree();
+			if(softwareUnits != null)
+				allAssignedSoftwareUnits.putAll(softwareUnits);
+		}
+		// 3 Get the physical classPaths of all classes represented by the SUs
+		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
+		for (String suName : allAssignedSoftwareUnitNames){
+			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
+			String suType = softwareUnit.getType().toString();
+			if (suType.equals("class")){
+				PhysicalPathDTO classPath = new PhysicalPathDTO(suName, suType);
+				resultClasses.add(classPath);
+			}
+			else if (suType.equals("package")){
+				// Get all underlying classes from AnalyseService
+				// Create a PhysicalPathDTO per classPath
+				// Add it to resultClasses
+			}
+		}
+		return resultClasses;
+	}
+
+	
 	@Override
 	// Gets the hierarchical level of a module. Throws RuntimeException when the module is not found.
 	public int getHierarchicalLevelOfLayer(String logicalPath){

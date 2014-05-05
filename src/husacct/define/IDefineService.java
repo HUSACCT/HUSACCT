@@ -2,12 +2,14 @@ package husacct.define;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.swing.JInternalFrame;
 
@@ -48,6 +50,14 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 */
 	public ModuleDTO[] getChildrenFromModule(String logicalPath);
 
+	/**
+	 * Gets all the physical classes represented by the assigned software units and these of all the children of the module
+	 * @param logicalPath is the logical path, ** is root module
+	 * @return an HashSet<PhysicalPathDTO>. Throws RuntimeException when the module is not found.
+	 */
+	public HashSet<PhysicalPathDTO> getAllPhysicalClassesOfModule(String logicalPath);
+
+	
 	/**
 	 * Gets the hierarchical level of a module
 	 * @param logicalPath is the logical path, ** is root module

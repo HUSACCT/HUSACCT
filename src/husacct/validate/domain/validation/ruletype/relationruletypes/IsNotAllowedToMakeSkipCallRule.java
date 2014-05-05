@@ -32,14 +32,14 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 		this.currentRule = rule;
 		this.logicalPathLayerFrom = currentRule.moduleFrom.logicalPath;
 
-		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
 		physicalClasspathsFrom = mappings.getMappingTo();
 		List<ModuleDTO> brotherModules = Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(logicalPathLayerFrom)));
 		List<ModuleDTO> potentialLayersToBeSkipped = selectPotentialLayersToBeSkipped(brotherModules);
 		if(potentialLayersToBeSkipped.size() >= 1){
 			List<Mapping> modulesTo = new ArrayList<>();
 			for(ModuleDTO layerTo : potentialLayersToBeSkipped){ 
-				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsFromModule(layerTo, currentRule.violationTypeKeys));
+				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsOfModule(layerTo, currentRule.violationTypeKeys));
 			}
 
 			for (Mapping classPathFrom : physicalClasspathsFrom) {

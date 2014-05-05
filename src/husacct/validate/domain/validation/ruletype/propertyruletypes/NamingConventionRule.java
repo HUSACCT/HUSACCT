@@ -54,7 +54,7 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
 		PhysicalPathDTO[] pathDTOs = currentRule.moduleFrom.physicalPathDTOs;
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		String regex = Regex.makeRegexString(currentRule.regex);

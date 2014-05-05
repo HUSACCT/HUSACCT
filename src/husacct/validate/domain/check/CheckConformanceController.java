@@ -41,14 +41,12 @@ public class CheckConformanceController {
 
 	public void checkConformance(RuleDTO[] appliedRules) {
 		this.logger.info(new Date().toString() + " Start ConformanceCheck");
-
+		ServiceProvider.getInstance().getControlService().updateProgress(0);
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-
 		for (ProjectDTO project : applicationDetails.projects) {
 			if (project.programmingLanguage != null && !project.programmingLanguage.isEmpty()) {
 				configuration.clearViolations();
 				ruleCache.clear();
-
 				List<Violation> violationList = new ArrayList<Violation>();
 				appliedRulesHandled = 0;
 				for (RuleDTO appliedRule : appliedRules) {
@@ -63,14 +61,10 @@ public class CheckConformanceController {
 						RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 						List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
 						violationList.addAll(newViolations);
-
-						if (appliedRule.exceptionRules.length > 0) {	
-							checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
-						}
 					} catch (RuleTypeNotFoundException e) {
 						logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
 					} catch (RuleInstantionException e) {
-						logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
+						logger.warn(String.format("RuleTypeKey: %s can not be instantiated, rules of this type will not be validated", appliedRule.ruleTypeKey));
 					}
 				}
 				configuration.addViolations(violationList);
@@ -84,28 +78,18 @@ public class CheckConformanceController {
 		}
 	}
 
-	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent) {
-		for (RuleDTO appliedRule : exceptionRules) {
-			try {
-				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-				List<Violation> newViolations = rule.check(configuration, parent, appliedRule);
-				configuration.addViolations(newViolations);
-			} catch (RuleTypeNotFoundException e) {
-				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-			} catch (RuleInstantionException e) {
-				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
-			}
+	private RuleType getRuleType(String ruleTypeKey) throws RuleInstantionException {
+		RuleType ruleType = null;
+		if(ruleCache.containsKey(ruleTypeKey)){
+			ruleType = ruleCache.get(ruleTypeKey);
 		}
-	}
-
-	private RuleType getRuleType(String ruleKey) throws RuleInstantionException {
-		RuleType rule = ruleCache.get(ruleKey);
-		if (rule == null) {
-			rule = ruleFactory.generateRuleType(ruleKey);
+		else {
+			ruleType = ruleFactory.generateRuleType(ruleTypeKey);
+			if (ruleType != null)
+				ruleCache.put(ruleTypeKey, ruleType);
+			else
+				throw new RuleInstantionException();
 		}
-		if (rule != null) {
-			ruleCache.put(ruleKey, rule);
-		}
-		return rule;
+		return ruleType;
 	}
 }

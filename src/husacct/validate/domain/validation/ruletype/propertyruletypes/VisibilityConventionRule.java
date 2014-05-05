@@ -21,7 +21,7 @@ public class VisibilityConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		int violationCounter = 0;

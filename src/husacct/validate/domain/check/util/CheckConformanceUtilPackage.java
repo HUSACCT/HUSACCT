@@ -21,16 +21,14 @@ public class CheckConformanceUtilPackage extends CheckConformanceUtil {
 	public static Mappings filterPackages(RuleDTO rule) {
 		Mappings mainClasspaths = getAllPackagepathsFromModule(rule);
 		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
-
 		if (rule.exceptionRules != null) {
 			for (RuleDTO exceptionRule : rule.exceptionRules) {
 				Mappings exceptionClasspaths = getAllPackagepathsFromModule(exceptionRule);
 				exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
-				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
 			}
 		}
-		return removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		List<Mapping> filteredFrom = removeExceptionRulePathsFromMainRulePaths(mainClasspaths.getMappingFrom(), exceptionClasspathFrom);
+		return new Mappings(filteredFrom, mainClasspaths.getMappingTo());
 	}
 
 	private static Mappings getAllPackagepathsFromModule(RuleDTO rule) {

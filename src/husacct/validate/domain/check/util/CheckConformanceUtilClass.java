@@ -9,6 +9,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.internaltransferobjects.Mappings;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,21 +21,48 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
 	private static IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
 
-	public static Mappings filterClassesFrom(RuleDTO rule) {
+	public static Mappings getMappingFromAndMappingTo(RuleDTO rule) {
+		Mappings returnValue;
+		// Create mappings for main rule
 		Mappings mainClasspaths = createMappingsForRule(rule);
+		returnValue = mainClasspaths;
 		
-		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
-		for (RuleDTO exceptionRule : rule.exceptionRules) {
-			Mappings exceptionClasspaths = createMappingsForRule(exceptionRule);
-			exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
-			exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
+		// Remove mappings of exception rules
+		if (rule.exceptionRules.length > 0){
+			//Create mappings for exception rules
+			List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
+			List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
+			for (RuleDTO exceptionRule : rule.exceptionRules) {
+				Mappings exceptionClasspaths = createMappingsForRule(exceptionRule);
+				exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
+				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
+			}
+			// Remove mappings of exception rules from the mappings of the main rule
+			// Old: returnValue = removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+			if(rule.ruleTypeKey.toLowerCase().equals(RuleTypes.IS_NOT_ALLOWED_TO_USE.toString().toLowerCase()) 
+					|| rule.ruleTypeKey.toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())){
+				List<Mapping> mappingFrom;
+				mappingFrom = removeExceptionRulePathsFromMainRulePaths(mainClasspaths.getMappingFrom(), exceptionClasspathFrom);
+				returnValue = new Mappings(mappingFrom, mainClasspaths.getMappingTo());
+			}
 		}
-		Mappings returnValue = removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		
 		return returnValue;
 	}
 
-	public static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO rootModule, String[] violationTypeKeys) {
+	private static Mappings createMappingsForRule(RuleDTO rule) {
+		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
+		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
+
+		Arrays.sort(rule.violationTypeKeys);
+
+		mappingFrom = getAllClasspathsOfModule(rule.moduleFrom, rule.violationTypeKeys);
+		mappingTo = getAllClasspathsOfModule(rule.moduleTo, rule.violationTypeKeys);
+
+		return new Mappings(mappingFrom, mappingTo);
+	}
+
+public static ArrayList<Mapping> getAllClasspathsOfModule(ModuleDTO rootModule, String[] violationTypeKeys) {
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
 
 		if (rootModule.logicalPath.equals("**") && rootModule.physicalPathDTOs.length == 0 && rootModule.subModules.length == 0) {
@@ -44,18 +72,6 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 			getAllClasspathsFromModule(rootModule, classpathsFrom, violationTypeKeys);
 		}
 		return new ArrayList<Mapping>(classpathsFrom);
-	}
-
-	private static Mappings createMappingsForRule(RuleDTO rule) {
-		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
-		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
-
-		Arrays.sort(rule.violationTypeKeys);
-
-		mappingFrom = getAllClasspathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
-		mappingTo = getAllClasspathsFromModule(rule.moduleTo, rule.violationTypeKeys);
-
-		return new Mappings(mappingFrom, mappingTo);
 	}
 
 	private static HashSet<Mapping> getAllClassPaths(String[] violationTypeKeys) {

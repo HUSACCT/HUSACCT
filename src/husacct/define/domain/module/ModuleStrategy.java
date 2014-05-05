@@ -245,7 +245,22 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		}
 		return names;
 	}
-
+	
+	// Returns all the SUs assigned to the module or assigned to one of the subModules, subSubModules, etc.
+	public HashMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsInTree(){
+		HashMap<String, SoftwareUnitDefinition> allSoftwareUnits = new HashMap<String, SoftwareUnitDefinition>();
+		for(SoftwareUnitDefinition softwareUnit : mappedSUunits){
+			allSoftwareUnits.put(softwareUnit.getName(), softwareUnit);
+		}
+		for (ModuleStrategy mod : subModules){
+			HashMap<String, SoftwareUnitDefinition> sus = mod.getAllAssignedSoftwareUnitsInTree();
+			if (sus != null){
+				allSoftwareUnits.putAll(sus);
+			}
+		}
+		return allSoftwareUnits;
+	}
+	
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName){
 		SoftwareUnitDefinition softwareUnit = null;
 		for (SoftwareUnitDefinition unit : mappedSUunits){

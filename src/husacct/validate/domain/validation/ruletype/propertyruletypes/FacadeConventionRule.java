@@ -28,7 +28,7 @@ public class FacadeConventionRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations.clear();
-		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		// Create HashMap with all allowed-to-use-classes (the classes mapped to the facade(s)). Note: This HashMap is not used, but useful for debugging, and the costs are low.   
