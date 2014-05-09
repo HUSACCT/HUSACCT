@@ -3,7 +3,6 @@ package husacct.validate.domain.validation.ruletype.relationruletypes;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -29,22 +28,19 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO rule) {
+		violations.clear();
 		this.currentRule = rule;
 		this.logicalPathLayerFrom = currentRule.moduleFrom.logicalPath;
-		violations.clear();
-		mappings = null;
-
-		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
+		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		List<ModuleDTO> brotherModules = Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(logicalPathLayerFrom)));
 		List<ModuleDTO> potentialLayersToBeBackCalled = selectPotentialLayersToBeBackCalled(brotherModules);
 		if(potentialLayersToBeBackCalled.size() >= 1){
 			List<Mapping> modulesTo = new ArrayList<Mapping>();
 			for(ModuleDTO layerTo : potentialLayersToBeBackCalled){ 
-				modulesTo.addAll(CheckConformanceUtilClass.getAllClasspathsOfModule(layerTo, currentRule.violationTypeKeys));
+				modulesTo.addAll(getAllClasspathsOfModule(layerTo, currentRule.violationTypeKeys));
 			}
 
-			for (Mapping classPathFrom : physicalClasspathsFrom) {
+			for (Mapping classPathFrom : fromMappings) {
 				for (Mapping classPathTo : modulesTo) {
 					DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 					if(violatingDependencies != null){

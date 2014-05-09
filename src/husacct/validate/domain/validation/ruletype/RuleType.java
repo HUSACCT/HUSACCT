@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.ruletype;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
 import husacct.validate.domain.check.util.CheckConformanceUtilSeverity;
@@ -15,12 +16,12 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
-import husacct.validate.domain.validation.internaltransferobjects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 
 public abstract class RuleType {
@@ -32,8 +33,8 @@ public abstract class RuleType {
 	protected List<RuleType> exceptionRules;
 	protected final Severity severity;
 	protected List<Violation> violations;
-	protected Mappings mappings;
-	protected List<Mapping> physicalClasspathsFrom;
+	protected List<Mapping> fromMappings;
+	protected List<Mapping> toMappings;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private AbstractViolationType violationTypeFactory;
@@ -81,6 +82,17 @@ public abstract class RuleType {
 	}
 
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
+
+	protected ArrayList<Mapping> getAllClasspathsOfModule(ModuleDTO module, String[] violationTypeKeys) {
+		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
+		List<String> physicalClassPaths = new ArrayList<String>();
+		physicalClassPaths.addAll(defineService.getAllPhysicalClassPathsOfModule(module.logicalPath));
+		for (String classpath : physicalClassPaths) {
+			Mapping mapping = new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys);
+			classpathsFrom.add(mapping);
+		}
+		return new ArrayList<Mapping>(classpathsFrom);
+	}
 
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);

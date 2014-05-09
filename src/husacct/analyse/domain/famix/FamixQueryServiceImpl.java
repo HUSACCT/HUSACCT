@@ -68,8 +68,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public List<DependencyDTO> getDependencies(String from, String to) {
-    	List<String> allFromTypeNames = getAllTypes(from);
-    	List<String> allToTypeNames = getAllTypes(to);
+    	List<String> allFromTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(from);
+    	List<String> allToTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(to);
         List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
         for (String fromTypeName : allFromTypeNames) {
             for (String toTypeName : allToTypeNames) {
@@ -83,7 +83,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         return dependencies;
     }
     
-    private List<String> getAllTypes(String uniqueName){
+    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    @Override
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
 		List<String> uniqueNamesTypesFrom = new ArrayList<String>();
 		String uniqueNameTypeFrom;
 		//Determine if uniqueName is a packages or type. If it is a packages, get all sub-packages.
@@ -105,6 +107,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			}
 		}
 		else {
+			// Since uniqueName refers to a type already, add it to uniqueNamesTypesFrom  
 			if (theModel.libraries.containsKey(uniqueName)){
 				uniqueName = theModel.libraries.get(uniqueName).physicalPath;
 			}

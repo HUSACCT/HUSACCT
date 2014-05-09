@@ -1,5 +1,7 @@
 package husacct.define;
 
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
@@ -28,6 +30,7 @@ import husacct.define.task.SoftwareUnitController;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -42,6 +45,8 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private DomainToDtoParser domainParser = new DomainToDtoParser();
 	private AppliedRuleExceptionDomainService exceptionService = new AppliedRuleExceptionDomainService();
 	private ModuleDomainService moduleService = new ModuleDomainService();
+	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+
 
 	public DefineServiceImpl() {
 		super();
@@ -91,11 +96,12 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return childModuleDTOs;
 	}
 
+	
 	@Override
-	public HashSet<PhysicalPathDTO> getAllPhysicalClassesOfModule(String logicalPath) {
+	public HashSet<String> getAllPhysicalClassPathsOfModule(String logicalPath) {
 		ModuleStrategy[] modules = null;
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
-		HashSet<PhysicalPathDTO> resultClasses = new HashSet<PhysicalPathDTO>();
+		HashSet<String> resultClasses = new HashSet<String>();
 		// 1 Get the module(s)
 		if (logicalPath.equals("**")) {
 			modules = moduleService.getRootModules();
@@ -114,14 +120,13 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		for (String suName : allAssignedSoftwareUnitNames){
 			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
 			String suType = softwareUnit.getType().toString();
-			if (suType.equals("class")){
-				PhysicalPathDTO classPath = new PhysicalPathDTO(suName, suType);
-				resultClasses.add(classPath);
+			if (suType.toLowerCase().equals("class") || suType.toLowerCase().equals("interface") || suType.toLowerCase().equals("library")){
+				resultClasses.add(suName);
 			}
-			else if (suType.equals("package")){
-				// Get all underlying classes from AnalyseService
-				// Create a PhysicalPathDTO per classPath
-				// Add it to resultClasses
+			else if (suType.toLowerCase().equals("package")){
+				// Get all underlying classes from AnalyseService and add them to resultClasses
+				List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(suName); 
+				resultClasses.addAll(AllPhysicalClassPaths); 
 			}
 		}
 		return resultClasses;

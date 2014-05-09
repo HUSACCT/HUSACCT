@@ -1,8 +1,6 @@
 package husacct.validate.domain.check.util;
 
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
-import husacct.validate.domain.validation.internaltransferobjects.Mappings;
-
 import java.util.HashMap;
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package husacct.analyse;
 
 import java.util.Date;
+import java.util.List;
 
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
@@ -104,6 +105,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public DependencyDTO[] getAllDependencies() {
         return TypeFilter.filterDependencies(service.getAllDependencies());
+    }
+    
+    @Override
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
+    	return service.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
     }
     
     @Override

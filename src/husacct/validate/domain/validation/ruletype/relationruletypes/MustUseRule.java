@@ -1,10 +1,7 @@
 package husacct.validate.domain.validation.ruletype.relationruletypes;
 
-import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -15,7 +12,6 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -29,13 +25,12 @@ public class MustUseRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations.clear();
-		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
+		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
 
 		boolean isUsingModule = false;
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			for (Mapping classPathTo : physicalClasspathsTo) {
+		for (Mapping classPathFrom : fromMappings) {
+			for (Mapping classPathTo : toMappings) {
 				if(isUsingModule == true){
 					break;
 				}

@@ -51,11 +51,11 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public ModuleDTO[] getChildrenFromModule(String logicalPath);
 
 	/**
-	 * Gets all the physical classes represented by the assigned software units and these of all the children of the module
+	 * Gets all the physical classPaths of the types represented by the assigned software units and these of all the children of the module
 	 * @param logicalPath is the logical path, ** is root module
 	 * @return an HashSet<PhysicalPathDTO>. Throws RuntimeException when the module is not found.
 	 */
-	public HashSet<PhysicalPathDTO> getAllPhysicalClassesOfModule(String logicalPath);
+	public HashSet<String> getAllPhysicalClassPathsOfModule(String logicalPath);
 
 	
 	/**

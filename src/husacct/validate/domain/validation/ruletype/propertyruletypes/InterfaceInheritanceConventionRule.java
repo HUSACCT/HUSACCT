@@ -3,7 +3,6 @@ package husacct.validate.domain.validation.ruletype.propertyruletypes;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -24,12 +23,11 @@ public class InterfaceInheritanceConventionRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations.clear();
-		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
+		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
 
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			for (Mapping classPathTo : physicalClasspathsTo) {
+		for (Mapping classPathFrom : fromMappings) {
+			for (Mapping classPathTo : toMappings) {
 				AnalysedModuleDTO from = analyseService.getModuleForUniqueName(classPathFrom.getPhysicalPath());
 				AnalysedModuleDTO to = analyseService.getModuleForUniqueName(classPathTo.getPhysicalPath());
 				if((!from.type.equals("package")) && (!to.type.equals("package"))){

@@ -514,6 +514,18 @@ public class AnalyseServiceStub implements IAnalyseService {
     }
 
     @Override
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
+        List<String> foursquareSub = new ArrayList<String>();
+        foursquareSub.add("domain.locationbased.foursquare.Account");
+        foursquareSub.add("domain.locationbased.foursquare.Friends");
+        foursquareSub.add("domain.locationbased.foursquare.Map");
+        foursquareSub.add("domain.locationbased.foursquare.History");
+    	return foursquareSub;
+    }
+    
+
+    
+    @Override
     public void notifyServiceListeners() {
     }
 

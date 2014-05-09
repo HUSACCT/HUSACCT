@@ -1,5 +1,7 @@
 package husacct.analyse.task;
 
+import java.util.List;
+
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
@@ -66,6 +68,11 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
         return domainService.getAllDependencies();
     }
 
+    @Override
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
+    	return domainService.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
+    }
+    
     @Override
     public DependencyDTO[] getDependencies(String from, String to) {
         return domainService.getDependencies(from, to);

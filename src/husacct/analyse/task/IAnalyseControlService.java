@@ -1,5 +1,7 @@
 package husacct.analyse.task;
 
+import java.util.List;
+
 import org.jdom2.Element;
 
 import husacct.common.dto.AnalysedModuleDTO;
@@ -16,7 +18,9 @@ public interface IAnalyseControlService {
 
     public DependencyDTO[] getAllDependencies();
 
-    public DependencyDTO[] getDependencies(String from, String to);
+	public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
+
+	public DependencyDTO[] getDependencies(String from, String to);
 
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
 
@@ -53,5 +57,4 @@ public interface IAnalyseControlService {
     public int getAmountOfPackages();
     
     public int getAmountOfClasses();
-    
 }

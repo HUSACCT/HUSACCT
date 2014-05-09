@@ -33,12 +33,16 @@ public class ModuleFactory {
 	}
 
 	public List<RuleType> getAllowedRuleTypesOfModule(String moduleType) throws ModuleNotFoundException {
+		if (moduleType.toLowerCase().equals("root"))
+			moduleType = "subsystem";
 		moduleType = moduleType.toLowerCase().replace("_", "");
 		AbstractModule module = moduleTypesMap.get(moduleType);
 		return module.getAllowedRuleTypes();
 	}
 	
 	public List<RuleType> getDefaultRuleTypesOfModule(String moduleType) throws ModuleNotFoundException {
+		if (moduleType.toLowerCase().equals("root"))
+			moduleType = "subsystem";
 		AbstractModule module = moduleTypesMap.get(moduleType.toLowerCase().replace("_", ""));
 		return module.getDefaultRuleTypes();
 	}

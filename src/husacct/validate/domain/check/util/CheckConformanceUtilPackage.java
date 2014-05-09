@@ -4,45 +4,17 @@ import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
-import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
-import husacct.validate.domain.validation.internaltransferobjects.Mappings;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class CheckConformanceUtilPackage extends CheckConformanceUtil {
+public class CheckConformanceUtilPackage {
 
 	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
 
-	public static Mappings filterPackages(RuleDTO rule) {
-		Mappings mainClasspaths = getAllPackagepathsFromModule(rule);
-		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-		if (rule.exceptionRules != null) {
-			for (RuleDTO exceptionRule : rule.exceptionRules) {
-				Mappings exceptionClasspaths = getAllPackagepathsFromModule(exceptionRule);
-				exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
-			}
-		}
-		List<Mapping> filteredFrom = removeExceptionRulePathsFromMainRulePaths(mainClasspaths.getMappingFrom(), exceptionClasspathFrom);
-		return new Mappings(filteredFrom, mainClasspaths.getMappingTo());
-	}
-
-	private static Mappings getAllPackagepathsFromModule(RuleDTO rule) {
-		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
-		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
-
-		Arrays.sort(rule.violationTypeKeys);
-		mappingFrom = getAllPackagepathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
-		mappingTo = getAllPackagepathsFromModule(rule.moduleTo, rule.violationTypeKeys);
-
-		return new Mappings(mappingFrom, mappingTo);
-	}
-
-	private static ArrayList<Mapping> getAllPackagepathsFromModule(ModuleDTO rootModule, String[] violationTypeKeys) {
+	public static ArrayList<Mapping> getAllPackagepathsFromModule(ModuleDTO rootModule, String[] violationTypeKeys) {
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
 
 		if (rootModule.logicalPath.equals("**") && rootModule.physicalPathDTOs.length == 0 && rootModule.subModules.length == 0) {

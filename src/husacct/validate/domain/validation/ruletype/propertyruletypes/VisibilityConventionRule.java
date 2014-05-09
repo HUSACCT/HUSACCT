@@ -2,7 +2,6 @@ package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -21,11 +20,11 @@ public class VisibilityConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		mappings = CheckConformanceUtilClass.getMappingFromAndMappingTo(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
+		violations.clear();
+		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 
 		int violationCounter = 0;
-		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
+		for (Mapping physicalClasspathFrom : fromMappings) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!analysedModule.type.toLowerCase().equals("package")) {
 				for (String violationKey : currentRule.violationTypeKeys) {

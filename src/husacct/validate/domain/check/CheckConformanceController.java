@@ -58,9 +58,11 @@ public class CheckConformanceController {
 					ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100) / appliedRules.length);
 					
 					try {
+						List<Violation> newViolations = null;
 						RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-						List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
+						newViolations = rule.check(configuration, appliedRule, appliedRule);
 						violationList.addAll(newViolations);
+						logger.info(String.format("Number of violations: %s ", violationList.size()));
 					} catch (RuleTypeNotFoundException e) {
 						logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
 					} catch (RuleInstantionException e) {

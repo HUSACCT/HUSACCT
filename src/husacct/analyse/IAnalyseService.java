@@ -1,6 +1,7 @@
 package husacct.analyse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 
@@ -25,6 +26,9 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     //The following function has been inserted due to performance issues. The function enables
     //function-users to use cache-mechanisms and special search-algorithms
     public DependencyDTO[] getAllDependencies();
+    
+    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
     public DependencyDTO[] getAllUnfilteredDependencies();
 

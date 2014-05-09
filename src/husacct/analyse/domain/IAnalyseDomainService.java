@@ -1,6 +1,7 @@
 package husacct.analyse.domain;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.jdom2.Element;
 
@@ -14,6 +15,9 @@ public interface IAnalyseDomainService {
 
     public DependencyDTO[] getAllDependencies();
 
+    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
+    
     public DependencyDTO[] getDependencies(String from, String to);
 
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
