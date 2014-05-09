@@ -37,7 +37,7 @@ public class AnalyseTask implements Runnable {
 					
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
 					
-					this.logger.info(new Date().toString() + " Starting: Analysing project " + currentProject);
+					this.logger.info(new Date().toString() + " Control-AnalyseTask is Starting: Analyse project " + currentProject);
 					mainController.getActionLogController().addAction("Analysing project " + currentProject);
 					
 					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
@@ -56,27 +56,23 @@ public class AnalyseTask implements Runnable {
 			}
 			
 			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
-			
+			ServiceProvider.getInstance().getControlService().finishPreAnalysing();
+			logger.info(new Date().toString() + " Control-AnalyseTask is Starting: getDefineService().analyze()");
+			ServiceProvider.getInstance().getDefineService().analyze();
+
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
 			this.mainController.getStateController().setAnalysing(false);
-			logger.info(new Date().toString() + " Finished: Analyse application; state isAnalyzing=false");
+			logger.info(new Date().toString() + " Control-AnalyseTask has Finished: Analyse application; state isAnalyzing=false");
 			logger.info(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces");
 			int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
 			logger.info(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
 			mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
-
-			//logger.debug(new Date().toString() + " Starting: Building cache");
-			//mainController.getActionLogController().addAction("Building cache");
-			
-			//int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
-			
-			//logger.debug(new Date().toString() + " Finished: Building cache; filled with " + cacheSize + " dependencies");
-			//mainController.getActionLogController().addAction("Cache is ready and filled with " + cacheSize + " dependencies");
 			
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
+
 		} catch (InterruptedException exception) {
 			this.logger.debug("RESETTING ANALYSE SERVICE");
 			ServiceProvider.getInstance().resetAnalyseService();

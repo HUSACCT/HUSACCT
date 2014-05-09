@@ -38,9 +38,7 @@ public class ApplicationAnalyser {
             }
         }
 
-        
-        ServiceProvider.getInstance().getControlService().finishPreAnalysing();
-        this.logger.info(new Date().toString() + " Finished: Model generated from sourcefile; state = PREANALYSED");
+        this.logger.info(new Date().toString() + " Finished: Model generated from sourcefile");
         analyser.connectDependencies();
         this.logger.info(new Date().toString() + " Finished: Connecting dependencies");
         //required for clearing the buffers after analysis is finished

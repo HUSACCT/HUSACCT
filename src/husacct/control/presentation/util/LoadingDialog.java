@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.log4j.Logger;
+
 public class LoadingDialog extends JFrame implements Runnable {
 
 	private int amountOfProcesses = 1;
@@ -38,6 +40,8 @@ public class LoadingDialog extends JFrame implements Runnable {
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private JLabel processLabel;
 
+	private final Logger logger = Logger.getLogger(LoadingDialog.class);
+	
 	public LoadingDialog(MainController mainController, String processInfoText) {
 		super();
 		setTitle(localeService.getTranslatedString("Prepare"));
@@ -149,6 +153,11 @@ public class LoadingDialog extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-		super.setAlwaysOnTop(true);
-	}
+		try{
+			super.setVisible(true);
+			super.setAlwaysOnTop(true);
+		} catch (Exception exception) {
+			this.logger.warn("Exception: " + exception.getClass() + exception.getMessage());
+		}
+		}
 }

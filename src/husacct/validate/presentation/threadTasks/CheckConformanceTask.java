@@ -1,5 +1,7 @@
 package husacct.validate.presentation.threadTasks;
 
+import java.util.Date;
+
 import husacct.ServiceProvider;
 import husacct.validate.presentation.browseViolations.FilterPanel;
 
@@ -23,10 +25,12 @@ public class CheckConformanceTask implements Runnable {
 		try {
 			ServiceProvider.getInstance().getControlService().setValidate(true);
 			Thread.sleep(1);
+			this.logger.info(new Date().toString() + " Control-AnalyseTask is Starting: IValidateService.checkConformance()" );
 			ServiceProvider.getInstance().getValidateService().checkConformance();
 			filterPanel.loadAfterChange();
 			buttonSaveInHistory.setEnabled(true);
 			ServiceProvider.getInstance().getControlService().setValidate(false);
+			this.logger.info(new Date().toString() + " Control-AnalyseTask sets state Validating is false" );
 		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());
 		}

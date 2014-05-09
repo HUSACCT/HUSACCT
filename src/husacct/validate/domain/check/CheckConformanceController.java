@@ -62,7 +62,7 @@ public class CheckConformanceController {
 						RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 						newViolations = rule.check(configuration, appliedRule, appliedRule);
 						violationList.addAll(newViolations);
-						logger.info(String.format("Number of violations: %s ", violationList.size()));
+
 					} catch (RuleTypeNotFoundException e) {
 						logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
 					} catch (RuleInstantionException e) {
