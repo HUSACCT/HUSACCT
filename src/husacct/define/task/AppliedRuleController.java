@@ -284,8 +284,7 @@ public class AppliedRuleController extends PopUpController {
 	 */
 
 	public HashMap<String, Object> getAppliedRuleDetails(long appliedRuleId) {
-		AppliedRuleStrategy rule = appliedRuleService
-				.getAppliedRuleById(appliedRuleId);
+		AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
 		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
 		ruleDetails.put("id", rule.getId());
 		ruleDetails.put("description", rule.getDescription());
@@ -402,7 +401,8 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	public String getSelectedRuleTypeKey() {
-		return selectedRuleTypeKey;
+		AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(this.currentAppliedRuleId);
+		return rule.getRuleType();
 	}
 
 	public ArrayList<DataHelper> getSiblingModules(long moduleId) {

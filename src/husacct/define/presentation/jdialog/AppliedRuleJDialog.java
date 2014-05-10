@@ -95,7 +95,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		this.createAppliedRuleKeyValueComboBox();
 		mainPanel.add(this.appliedRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
-		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
+		String ruleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		ruleDetailsJPanel.initGui();

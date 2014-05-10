@@ -198,20 +198,16 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 	}
 
 	private void editRule() {
-		long moduleId = DefinitionController.getInstance()
-				.getSelectedModuleId();
+		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if (selectedAppliedRuleId != -1) {
-			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(
-					moduleId, selectedAppliedRuleId);
+			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, selectedAppliedRuleId);
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this,
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("RuleSelectionError"),
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("WrongSelectionTitle"),
+					ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleSelectionError"),
+					ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"),
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
