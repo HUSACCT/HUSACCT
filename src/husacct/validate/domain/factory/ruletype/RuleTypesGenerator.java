@@ -83,7 +83,7 @@ class RuleTypesGenerator {
 			for (Enum<RuleTypes> ruleType : ruleTypes) {
 				String classPath;
 				try {
-					classPath = packageName + "." + ruleType.toString() + "Rule";
+					classPath = packageName + "." + ruleType.toString();
 					Class<?> myClass = myClassLoader.loadClass(classPath);
 
 					if (!Modifier.isAbstract(myClass.getModifiers()) && classHasRuleConstructor(myClass)) {
@@ -114,7 +114,7 @@ class RuleTypesGenerator {
 	}
 
 	private boolean isInstanceOfRule(Class<?> ruleClass) {
-		return ruleClass.getSimpleName().matches("^(.+Rule*)$") && !ruleClass.isAnonymousClass() && !ruleClass.isEnum() && ruleClass.getSuperclass().getName().equals("husacct.validate.domain.validation.ruletype.RuleType");
+		return !ruleClass.isAnonymousClass() && !ruleClass.isEnum() && ruleClass.getSuperclass().getName().equals("husacct.validate.domain.validation.ruletype.RuleType");
 	}
 
 	private String getCategoryKey(Class<?> ruleClass) {

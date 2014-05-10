@@ -17,11 +17,12 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
-public class FacadeConventionRule extends RuleType {
+public class FacadeConvention extends RuleType {
 
-	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationTypes, Severity severity) {
+	public FacadeConvention(String key, String categoryKey, List<ViolationType> violationTypes, Severity severity) {
 		super(key, categoryKey, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
@@ -43,7 +44,7 @@ public class FacadeConventionRule extends RuleType {
 			facadeMap.put(facadeClassPath.getPhysicalPath(), facadeClassPath);
 		}
 
-		// Create HashMap with all not allowed-to-use-classes (all other classes within the component)
+		// Create HashMap with all not allowed-to-use-classes (all other classes (so not facade-classes) within the component)
 		HashMap<String, Mapping> classesHiddeninComponentMap = new HashMap<String, Mapping>();
 		for (Mapping mappingFrom : fromMappings) {
 			if(!facadeMap.containsKey(mappingFrom.getPhysicalPath())) {
@@ -51,14 +52,17 @@ public class FacadeConventionRule extends RuleType {
 			}
 		}
 		
+		// Create a HashMap with all allowed from-to combinations, based on the exception rules.  
+		HashSet<String> allExceptionFromTos = getAllExceptionFromTos(currentRule);
+		
 		for (String hiddenClassPath : classesHiddeninComponentMap.keySet()) {
 			// Get all dependencies with matching dependency.classPathTo 
 			DependencyDTO[] dependencies = analyseService.getDependenciesFromTo("", hiddenClassPath);
 			for (DependencyDTO dependency : dependencies) {
-				if(allInComponentMap.containsKey(dependency.from)){
-					// Do nothing
-				}
-				else{
+				String fromToCombi = dependency.fromClassPath + "|" + dependency.toClassPath; 
+				if ((allInComponentMap.containsKey(dependency.from)) || (allExceptionFromTos.contains(fromToCombi))){
+					// Do not add a violation, since the dependency is allowed. 
+				} else{
 					Mapping classPathTo = classesHiddeninComponentMap.get(hiddenClassPath);
 					Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
                     Violation violation = createViolation(currentRule, classPathFrom, classPathTo, dependency, configuration);
@@ -77,8 +81,8 @@ public class FacadeConventionRule extends RuleType {
                     violations.add(violation);
 				}
 			}
-		}		
-
+		}
+		
 		return violations;
 	}
 	
@@ -90,6 +94,5 @@ public class FacadeConventionRule extends RuleType {
 		}
 		return mappingFacade;
 	}
-
-
+	
 }

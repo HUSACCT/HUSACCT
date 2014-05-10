@@ -15,10 +15,10 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.EnumSet;
 import java.util.List;
 
-public class MustUseRule extends RuleType {
+public class MustUse extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE, RuleTypes.IS_NOT_ALLOWED_TO_USE);
 
-	public MustUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public MustUse(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 

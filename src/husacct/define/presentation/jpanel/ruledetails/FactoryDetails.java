@@ -103,7 +103,7 @@ public class FactoryDetails {
 	} else if (ruleTypeKey.equals(BackCallJPanel.ruleTypeKey)) {
 	    backCallJPanel = new BackCallJPanel(appliedRuleController);
 	    return backCallJPanel;
-	    // Rules on the Dependency Limitation
+	// Rules on the Dependency Limitation
 	} else if (ruleTypeKey.equals(CyclesBetweenModulesJPanel.ruleTypeKey)) {
 	    cyclesBetweenModules = new CyclesBetweenModulesJPanel(
 		    appliedRuleController);
@@ -120,9 +120,9 @@ public class FactoryDetails {
 	    // throw new
 	    // RuntimeException("No known AbstractDetailsJPanel for key: " +
 	    // ruleTypeKey);
-	    cyclesBetweenModules = new CyclesBetweenModulesJPanel(
-		    appliedRuleController);
-	    return cyclesBetweenModules;
+	    isNotAllowedToUseJPanel = new IsNotAllowedToUseJPanel(
+			    appliedRuleController);
+		    return isNotAllowedToUseJPanel;
 	}
     }
 

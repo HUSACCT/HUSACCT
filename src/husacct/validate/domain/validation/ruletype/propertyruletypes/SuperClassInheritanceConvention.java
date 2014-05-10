@@ -14,10 +14,10 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.EnumSet;
 import java.util.List;
 
-public class SuperClassInheritanceConventionRule extends RuleType {
+public class SuperClassInheritanceConvention extends RuleType {
 	private final static EnumSet<RuleTypes> superClassInheritanceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
-	public SuperClassInheritanceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+	public SuperClassInheritanceConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, superClassInheritanceExceptionRules, severity);
 	}
 

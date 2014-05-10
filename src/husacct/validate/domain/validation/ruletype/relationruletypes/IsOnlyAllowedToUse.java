@@ -18,9 +18,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
-public class IsOnlyAllowedToUseRule extends RuleType {
+public class IsOnlyAllowedToUse extends RuleType {
 
-	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+	public IsOnlyAllowedToUse(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 

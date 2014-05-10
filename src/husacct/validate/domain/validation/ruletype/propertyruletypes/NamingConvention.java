@@ -16,9 +16,9 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.EnumSet;
 import java.util.List;
 
-public class NamingConventionRule extends RuleType {
+public class NamingConvention extends RuleType {
 
-	public NamingConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+	public NamingConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION), severity);
 	}
 

@@ -14,9 +14,9 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.EnumSet;
 import java.util.List;
 
-public class InterfaceInheritanceConventionRule extends RuleType {
+public class InterfaceInheritanceConvention extends RuleType {
 
-	public InterfaceInheritanceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+	public InterfaceInheritanceConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 

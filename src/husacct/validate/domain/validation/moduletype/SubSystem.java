@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.module;
+package husacct.validate.domain.validation.moduletype;
 
 import java.util.List;
 import husacct.validate.domain.validation.ruletype.RuleType;

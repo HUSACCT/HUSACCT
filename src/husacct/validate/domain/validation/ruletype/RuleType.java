@@ -94,7 +94,24 @@ public abstract class RuleType {
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, ConfigurationServiceImpl configuration) {
+	protected HashSet<String> getAllExceptionFromTos(RuleDTO rule){
+		HashSet<String> exceptionClassPathFromTos = new HashSet<String>();
+		if (rule.exceptionRules.length > 0){
+			//Create mappings for exception rules
+			for (RuleDTO exceptionRule : rule.exceptionRules) {
+				ArrayList<Mapping> fromExceptionMappings = getAllClasspathsOfModule(exceptionRule.moduleFrom, exceptionRule.violationTypeKeys);
+				ArrayList<Mapping> toExceptionMappings = getAllClasspathsOfModule(exceptionRule.moduleTo, exceptionRule.violationTypeKeys);
+				for (Mapping fromExceptionMapping : fromExceptionMappings) {
+					for (Mapping toExceptionMapping : toExceptionMappings) {
+						String fromToExceptionCombi = fromExceptionMapping.getPhysicalPath() + "|" + toExceptionMapping.getPhysicalPath();
+						exceptionClassPathFromTos.add(fromToExceptionCombi);
+					}
+				}
+			}
+		}
+		return exceptionClassPathFromTos;
+	}
+protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 

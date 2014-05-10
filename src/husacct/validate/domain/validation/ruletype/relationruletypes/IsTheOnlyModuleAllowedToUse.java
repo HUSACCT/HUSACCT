@@ -18,11 +18,11 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
-public class IsTheOnlyModuleAllowedToUseRule extends RuleType {
+public class IsTheOnlyModuleAllowedToUse extends RuleType {
 
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 
-	public IsTheOnlyModuleAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public IsTheOnlyModuleAllowedToUse(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 

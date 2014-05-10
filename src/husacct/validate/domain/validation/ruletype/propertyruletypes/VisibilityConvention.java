@@ -12,9 +12,9 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.EnumSet;
 import java.util.List;
 
-public class VisibilityConventionRule extends RuleType {
+public class VisibilityConvention extends RuleType {
 
-	public VisibilityConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+	public VisibilityConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, EnumSet.of(RuleTypes.VISIBILITY_CONVENTION, RuleTypes.VISIBILITY_CONVENTION_EXCEPTION), severity);
 	}
 

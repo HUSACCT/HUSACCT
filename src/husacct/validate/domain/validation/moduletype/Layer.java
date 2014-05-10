@@ -1,27 +1,27 @@
-package husacct.validate.domain.validation.module;
+package husacct.validate.domain.validation.moduletype;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+import java.util.ArrayList;
 
-public class Component extends AbstractModule {
+public class Layer extends AbstractModule {
 	
-	public Component(List<RuleType> ruleTypes) {
+	public Layer(List<RuleType> ruleTypes) {
 		super(ruleTypes);
 	}
 
 	@Override
 	public List<RuleType> initDefaultModuleRuleTypes() {
-		List<RuleType> defaultModuleRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> defaultRuleTypes = new ArrayList<RuleType>();
 
 		for (RuleType ruleType : ruleTypes) {
-			if (ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
-				defaultModuleRuleTypes.add(ruleType);
+			if (ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)
+					|| ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
+				defaultRuleTypes.add(ruleType);
 			}
 		}
-		return defaultModuleRuleTypes;
+		return defaultRuleTypes;
 	}
 
 	@Override
@@ -29,8 +29,7 @@ public class Component extends AbstractModule {
 		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
 
 		for (RuleType ruleType : ruleTypes) {
-			if (!ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)
-					&& !ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
+			if (!ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
 				allowedRuleTypes.add(ruleType);
 			}
 		}

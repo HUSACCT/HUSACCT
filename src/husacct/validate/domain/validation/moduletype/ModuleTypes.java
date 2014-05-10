@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.module;
+package husacct.validate.domain.validation.moduletype;
 
 public enum ModuleTypes {
 	COMPONENT("Component"),

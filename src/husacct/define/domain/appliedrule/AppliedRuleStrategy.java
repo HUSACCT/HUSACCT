@@ -3,6 +3,7 @@ package husacct.define.domain.appliedrule;
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
 
@@ -215,5 +216,17 @@ public abstract class AppliedRuleStrategy {
 	 * Abstract
 	 */
 	public abstract boolean checkConvention();
+	
+    public String toString() {
+        String representation = "";
+        representation += "\nId: " + id + ", Type: " + type;
+        representation += "\nEnabled: " + enabled;
+        representation += "\nFrom: " + moduleFrom.getName();
+        representation += "\nTo: " + moduleTo.getName();
+        representation += "\nExceptions: " + exceptions.size();
+        representation += "\n";
+        return representation;
+    }
+
 	
 }

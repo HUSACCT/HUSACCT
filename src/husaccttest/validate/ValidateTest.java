@@ -14,7 +14,7 @@ import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
-import husacct.validate.domain.validation.module.ModuleTypes;
+import husacct.validate.domain.validation.moduletype.ModuleTypes;
 import husacct.validate.domain.validation.ruletype.RuleTypeCategories;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;

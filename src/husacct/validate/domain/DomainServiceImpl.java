@@ -13,7 +13,7 @@ import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.module.ModuleFactory;
+import husacct.validate.domain.validation.moduletype.ModuleFactory;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.Collections;

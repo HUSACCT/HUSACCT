@@ -1,12 +1,12 @@
-package husacct.validate.domain.validation.module;
+package husacct.validate.domain.validation.moduletype;
 
 import java.util.List;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import java.util.ArrayList;
 
-public class Facade extends AbstractModule {
+public class ExternalLibrary extends AbstractModule {
 	
-	public Facade(List<RuleType> ruleTypes) {
+	public ExternalLibrary(List<RuleType> ruleTypes) {
 		super(ruleTypes);
 	}
 
