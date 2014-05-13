@@ -152,8 +152,7 @@ public class AppliedRuleDomainService {
 		 rule.setModuleFrom(ModuleStrategyFrom);
 		 rule.setModuleTo(ModuleStrategyTo);
 		 rule.setEnabled(enabled);
-		 ServiceProvider.getInstance().getDefineService()
-		 .notifyServiceListeners();
+		 ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	 }
 
 	 public CategoryDTO[] getCategories() {

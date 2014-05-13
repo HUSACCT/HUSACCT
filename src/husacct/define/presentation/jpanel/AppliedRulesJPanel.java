@@ -62,14 +62,11 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == addRuleButton
-				|| action.getSource() == addRuleItem) {
+		if (action.getSource() == addRuleButton || action.getSource() == addRuleItem) {
 			addRule();
-		} else if (action.getSource() == editRuleButton
-				|| action.getSource() == editRuleItem) {
+		} else if (action.getSource() == editRuleButton || action.getSource() == editRuleItem) {
 			editRule();
-		} else if (action.getSource() == removeRuleButton
-				|| action.getSource() == removeRuleItem) {
+		} else if (action.getSource() == removeRuleButton || action.getSource() == removeRuleItem) {
 			removeRules();
 		}
 	}
@@ -134,8 +131,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 	private void addRule() {
 		long moduleId = DomainGateway.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
-			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(
-					moduleId, -1L);
+			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 

@@ -81,52 +81,54 @@ class FamixDependencyFinder extends FamixFinder {
 			this.logger.warn(" Incomplete calls: ClassPathFrom = "  + classPathFrom + ", ClassPathTo = " + classPathTo);
 			return emptyDependencyArray;
 		}
-		try{	
-			if(classPathFrom != ""){
-				// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
-				HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
-				// Select all dependencies within fromMap whose pathTo starts with classPathTo
-				if(fromMap != null ){
-					if(classPathTo != ""){
-						ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
-						if(dependencyList != null){
-							foundDependencies.addAll(dependencyList);
-						}
-					} else{
-						// If classPathTo = "", then find all dependencies from classPathFrom. Add each, when it refers to an existing classPathTo 
-						Set<String> keyset = fromMap.keySet();
-						for(String keyTo : keyset){
-							ArrayList<DependencyDTO> dependencyList = fromMap.get(keyTo);
+		try{
+			if ((dependenciesOnFromTo != null) && (dependenciesOnFromTo.size() > 0)){
+				if(classPathFrom != ""){
+					// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
+					HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
+					// Select all dependencies within fromMap whose pathTo starts with classPathTo
+					if(fromMap != null ){
+						if(classPathTo != ""){
+							ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
 							if(dependencyList != null){
-								for(DependencyDTO dependency : dependencyList){
-									if((theModel.classes.containsKey(dependency.toClassPath)) || 
-										(theModel.interfaces.containsKey(dependency.toClassPath) || 
-										(theModel.libraries.containsKey(dependency.toClassPath)))){
-										foundDependencies.add(dependency);
+								foundDependencies.addAll(dependencyList);
+							}
+						} else{
+							// If classPathTo = "", then find all dependencies from classPathFrom. Add each, when it refers to an existing classPathTo 
+							Set<String> keyset = fromMap.keySet();
+							for(String keyTo : keyset){
+								ArrayList<DependencyDTO> dependencyList = fromMap.get(keyTo);
+								if(dependencyList != null){
+									for(DependencyDTO dependency : dependencyList){
+										if((theModel.classes.containsKey(dependency.toClassPath)) || 
+											(theModel.interfaces.containsKey(dependency.toClassPath) || 
+											(theModel.libraries.containsKey(dependency.toClassPath)))){
+											foundDependencies.add(dependency);
+										}
 									}
 								}
 							}
 						}
 					}
 				}
-			}
-			else{ //classPathFrom = ""
-				if(classPathTo != ""){
-					Set<String> fromKeyList = dependenciesOnFromTo.keySet();
-					for(String fromKey : fromKeyList){
-						HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(fromKey);
-						// Select all dependencies within fromMap whose pathTo starts with fromKey
-						if(fromMap != null ){
-							if(classPathTo != ""){
-								ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
-								if(dependencyList != null){
-									foundDependencies.addAll(dependencyList);
+				else{ //classPathFrom = ""
+					if(classPathTo != ""){
+						Set<String> fromKeyList = dependenciesOnFromTo.keySet();
+						for(String fromKey : fromKeyList){
+							HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(fromKey);
+							// Select all dependencies within fromMap whose pathTo starts with fromKey
+							if(fromMap != null ){
+								if(classPathTo != ""){
+									ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
+									if(dependencyList != null){
+										foundDependencies.addAll(dependencyList);
+									}
 								}
 							}
 						}
 					}
 				}
-			}
+			}	
 		} catch (Exception e) {
 	        this.logger.error(" Exception: "  + e);
 	        //e.printStackTrace();

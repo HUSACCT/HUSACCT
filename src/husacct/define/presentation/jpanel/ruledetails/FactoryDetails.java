@@ -44,10 +44,12 @@ public class FactoryDetails {
 
     public AbstractDetailsJPanel create(AppliedRuleController appliedRuleController, String ruleTypeKey) {
 	// Property Rules
-	if (ruleTypeKey.equals(FacadeConventionRuleJPanel.ruleTypeKey)) {
-	    facadeConventionJPanel = new FacadeConventionRuleJPanel(
-		    appliedRuleController);
-	    return facadeConventionJPanel;
+	if (ruleTypeKey.equals("NoRuleSelected")) {
+		cyclesBetweenModules = new CyclesBetweenModulesJPanel(appliedRuleController);
+	    return cyclesBetweenModules;
+	} else if (ruleTypeKey.equals(FacadeConventionRuleJPanel.ruleTypeKey)) {
+		    facadeConventionJPanel = new FacadeConventionRuleJPanel(appliedRuleController);
+		    return facadeConventionJPanel;
 	} else if (ruleTypeKey.equals(InterfaceInheritanceConventionJPanel.ruleTypeKey)) {
 	    interfaceInheritanceConventionJPanel = new InterfaceInheritanceConventionJPanel(
 		    appliedRuleController);
@@ -118,9 +120,9 @@ public class FactoryDetails {
 	    // throw new
 	    // RuntimeException("No known AbstractDetailsJPanel for key: " +
 	    // ruleTypeKey);
-	    isNotAllowedToUseJPanel = new IsNotAllowedToUseJPanel(
-			    appliedRuleController);
-		    return isNotAllowedToUseJPanel;
+	    cyclesBetweenModules = new CyclesBetweenModulesJPanel(appliedRuleController);
+		    return cyclesBetweenModules;
+
 	}
     }
 

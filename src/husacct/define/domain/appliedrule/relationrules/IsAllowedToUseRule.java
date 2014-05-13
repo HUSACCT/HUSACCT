@@ -8,8 +8,7 @@ public class IsAllowedToUseRule extends AppliedRuleStrategy{
 
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
-		boolean conventionSuccess = moduleCheckerHelper
-				.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse",
+		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse",
 					this.getModuleFrom(), this.getModuleTo());
 			if (conventionSuccess) {
 				conventionSuccess = moduleCheckerHelper

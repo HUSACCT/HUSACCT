@@ -49,6 +49,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 	private JPanel mainPanel;
 
 	private JTableException jTableException;
+	private HashMap<Long, Long> jTableExceptionIds;
 
 	private JButton jButtonAddExceptionRow;
 	private JButton jButtonRemoveExceptionRow;	
@@ -96,11 +97,9 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		mainPanel.add(this.appliedRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
 		String ruleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
-		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		ruleDetailsJPanel.initGui();
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-
 		//do this after the initGUI of the ruleDetailsJPanel
 		this.appliedRuleKeyValueComboBox.addItemListener(this);
 
@@ -131,23 +130,16 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 
 	private void refreshRuleDetailsJPanel() {
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
-		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			this.appliedRuleController.clearRuleExceptions();
 		}
-
 		this.mainPanel.remove(this.ruleDetailsJPanel);
-
 		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		this.ruleDetailsJPanel.initGui();
-
 		// updating panel!
 		if(this.getComponentCount() > 0) {
 			this.getRootPane().revalidate();
 		}
-
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-
 		this.repaint();
 		this.update();
 	}
@@ -218,9 +210,11 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		updateDetails();
-		updateExceptionTable();
-		setButtonEnableState();
+		if (appliedRuleController.getCurrentAppliedRuleId() != -1){
+			updateDetails();
+			updateExceptionTable();
+			setButtonEnableState();
+		}
 	}
 
 	private void updateDetails() {
@@ -247,7 +241,8 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
 		JTableTableModel tableModel = (JTableTableModel) jTableException.getModel();
 		tableModel.getDataVector().removeAllElements();
-
+		jTableExceptionIds = new HashMap<Long, Long>();
+		long row = 0;
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {	
 			String description = (String) exceptionRule.get("description");
 
@@ -265,6 +260,9 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 
 			Object rowdata[] = {moduleFrom, moduleTo, description, enabled};
 			tableModel.addRow(rowdata);
+			long ruleId = (long) exceptionRule.get("id");
+			jTableExceptionIds.put(row, ruleId);
+			row ++;
 		}
 		tableModel.fireTableDataChanged();
 		this.repaint();
@@ -309,8 +307,12 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 	}
 
 	private void removeException() {
-		appliedRuleController.removeException(jTableException.getSelectedRow());
-		updateExceptionTable();
+		long selectedRow = (long) jTableException.getSelectedRow();
+		if (selectedRow > -1){
+			long exceptionId = jTableExceptionIds.get(selectedRow);
+			appliedRuleController.removeException(exceptionId);
+			updateExceptionTable();
+		}
 	}
 
 	@Override
@@ -334,7 +336,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 				if(!appliedRuleController.conformRuleConventions(ruleDetails)){
 					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
 				}else{
-					String message = appliedRuleController.save(ruleDetails);
+					String message = appliedRuleController.saveRule(ruleDetails);
 					if (!message.equals("")){
 						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
 					} else {
@@ -349,7 +351,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 			} else {
 				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
-				String message = appliedRuleController.save(ruleDetails);
+				String message = appliedRuleController.saveRule(ruleDetails);
 				if (!message.equals("")){
 					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
 					if (message.equals("IncorrectToModuleFacadeConvExc")){

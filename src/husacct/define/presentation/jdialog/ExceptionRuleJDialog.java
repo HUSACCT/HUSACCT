@@ -156,8 +156,6 @@ public class ExceptionRuleJDialog  extends HelpableJDialog implements KeyListene
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() == this.exceptionRuleKeyValueComboBox){
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
-			this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-			
 			this.mainPanel.remove(this.ruleDetailsJPanel);
 			
 			this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
@@ -182,9 +180,13 @@ public class ExceptionRuleJDialog  extends HelpableJDialog implements KeyListene
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			ruleDetails.put("ruleTypeKey", ruleTypeKey);	
-			appliedRuleController.addException(ruleDetails);
-			this.appliedRuleFrame.updateExceptionTable();
-			this.dispose();
+			String message = appliedRuleController.saveRuleException(ruleDetails);
+			if (!message.equals("")){
+				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
+			} else {
+				this.appliedRuleFrame.updateExceptionTable();
+				this.dispose();
+			}
 		} else {
 			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
 		}

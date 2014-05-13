@@ -37,8 +37,6 @@ public class AppliedRuleController extends PopUpController {
 	private AppliedRuleDomainService appliedRuleService;
 	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
 	private long currentAppliedRuleId;
-	private ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();
-
 	private AppliedRuleJDialog jframeAppliedRule;
 	private ModuleDomainService moduleService;
 	private Long moduleToId;
@@ -54,10 +52,6 @@ public class AppliedRuleController extends PopUpController {
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 		appliedRuleExceptionService = new AppliedRuleExceptionDomainService();
-
-		if (getAction().equals(PopUpController.ACTION_EDIT)) {
-			loadAllRuleExceptions();
-		}
 	}
 
 	private void addChildComponents(AnalyzedModuleComponent parentComponent,
@@ -103,10 +97,6 @@ public class AppliedRuleController extends PopUpController {
 		parentComponent.addChild(childComponent);
 	}
 
-	public void addException(HashMap<String, Object> exceptionRule) {
-		exceptionRules.add(exceptionRule);
-	}
-
 	private ModuleStrategy assignToCorrectModule(Object o) {
 		ModuleStrategy module;
 		if (o instanceof SoftwareUnitDefinition) {
@@ -129,18 +119,12 @@ public class AppliedRuleController extends PopUpController {
 		return module;
 	}
 
-	public void clearRuleExceptions() {
-		exceptionRules.clear();
-	}
-
 	public boolean conformRuleConventions() {
-		return conformRuleConventions(appliedRuleService
-				.getAppliedRuleById(currentAppliedRuleId));
+		return conformRuleConventions(appliedRuleService.getAppliedRuleById(currentAppliedRuleId));
 	}
 
 	public boolean conformRuleConventions(HashMap<String, Object> ruleDetails) {
-		AppliedRuleStrategy dummyRule = ruleFactory
-				.createRuleWithModules(ruleDetails);
+		AppliedRuleStrategy dummyRule = ruleFactory.createRuleWithModules(ruleDetails);
 		return conformRuleConventions(dummyRule);
 	}
 
@@ -259,10 +243,10 @@ public class AppliedRuleController extends PopUpController {
 			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
 			// Get currently selected RuleType
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes) {
-				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)) {
+				if (ruleTypeDTO.key.equals(this.getSelectedRuleTypeKey())) {
 					if (ruleTypeDTO.exceptionRuleTypes.length == 0) {
 						throw new RuntimeException(
-								"No exception keys found for ruletype: " + selectedRuleTypeKey);
+								"No exception keys found for ruletype: " + this.getSelectedRuleTypeKey());
 					}
 					// Fill combobox with exceptionruletypes of that rule
 					ArrayList<String> ruleTypeKeys = new ArrayList<String>();
@@ -334,6 +318,22 @@ public class AppliedRuleController extends PopUpController {
 	 * Getters & Setters
 	 */
 	public ArrayList<HashMap<String, Object>> getExceptionRules() {
+		ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();
+		if (currentAppliedRuleId != -1L) {
+			ArrayList<AppliedRuleStrategy> exceptions = appliedRuleExceptionService.getExceptionsByAppliedRule(currentAppliedRuleId);
+			for (AppliedRuleStrategy exception : exceptions) {
+				HashMap<String, Object> exceptionRule = new HashMap<String, Object>();
+				exceptionRule.put("id", exception.getId());
+				exceptionRule.put("ruleTypeKey", exception.getRuleType());
+				exceptionRule.put("moduleFromId", exception.getModuleFrom().getId());
+				exceptionRule.put("moduleToId", exception.getModuleTo().getId());
+				exceptionRule.put("dependencies", exception.getDependencies());
+				exceptionRule.put("enabled", exception.isEnabled());
+				exceptionRule.put("description", exception.getDescription());
+				exceptionRule.put("regex", exception.getRegex());
+				exceptionRules.add(exceptionRule);
+			}
+		}
 		return exceptionRules;
 	}
 
@@ -401,8 +401,14 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	public String getSelectedRuleTypeKey() {
-		AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(this.currentAppliedRuleId);
-		return rule.getRuleType();
+		String result;
+		if(this.currentAppliedRuleId == -1){
+			result = "NoRuleSelected";
+		} else{
+			//AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(this.currentAppliedRuleId);
+			result = appliedRuleService.getAppliedRuleById(this.currentAppliedRuleId).getRuleType();
+		}
+		return result;
 	}
 
 	public ArrayList<DataHelper> getSiblingModules(long moduleId) {
@@ -465,7 +471,7 @@ public class AppliedRuleController extends PopUpController {
 			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
 			// Get currently selected RuleType
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes) {
-				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)) {
+				if (ruleTypeDTO.key.equals(this.getSelectedRuleTypeKey())) {
 					if (ruleTypeDTO.exceptionRuleTypes.length > 0) {
 						hasException = true;
 					}
@@ -479,25 +485,6 @@ public class AppliedRuleController extends PopUpController {
 		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
 	}
 
-	private void loadAllRuleExceptions() {
-		ArrayList<AppliedRuleStrategy> exceptions = appliedRuleExceptionService
-				.getExceptionsByAppliedRule(currentAppliedRuleId);
-		for (AppliedRuleStrategy exception : exceptions) {
-			HashMap<String, Object> exceptionRule = new HashMap<String, Object>();
-			exceptionRule.put("id", exception.getId());
-			exceptionRule.put("ruleTypeKey", exception.getRuleType());
-			exceptionRule
-					.put("moduleFromId", exception.getModuleFrom().getId());
-			exceptionRule.put("moduleToId", exception.getModuleTo().getId());
-			exceptionRule.put("dependencies", exception.getDependencies());
-			exceptionRule.put("enabled", exception.isEnabled());
-			exceptionRule.put("description", exception.getDescription());
-			exceptionRule.put("regex", exception.getRegex());
-			addException(exceptionRule);
-		}
-		notifyObservers();
-	}
-
 	/*
 	 * Oberver
 	 */
@@ -507,16 +494,18 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 
-	public void removeException(int index) {
-		if (index != -1) {
+	public void removeException(long exceptionRuleId) {
+		if (exceptionRuleId != -1) {
 			try {
-				exceptionRules.remove(index);
+				long parentRuleId = this.currentAppliedRuleId;
+				appliedRuleExceptionService.removeAppliedRuleException(parentRuleId, exceptionRuleId);
+				DefinitionController.getInstance().notifyObservers(currentModuleId);
 			} catch (Exception e) {
 			}
 		}
 	}
 
-	public String save(HashMap<String, Object> ruleDetails) {
+	public String saveRule(HashMap<String, Object> ruleDetails) {
 		String message = "";
 		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
 		Object from = ruleDetails.get("moduleFromId");
@@ -536,9 +525,7 @@ public class AppliedRuleController extends PopUpController {
 
 		try {
 			if (getAction().equals(PopUpController.ACTION_NEW)) {
-				currentAppliedRuleId = appliedRuleService.addAppliedRule(
-						ruleTypeKey, description, dependencies, regex,
-						moduleFrom, moduleTo, isEnabled);
+				currentAppliedRuleId = appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
 				if (currentAppliedRuleId == -1) {
 					logger.info("An identical rule already exists");
 					message = "NotAllowedBecauseDefined";
@@ -546,10 +533,8 @@ public class AppliedRuleController extends PopUpController {
 				}
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
 				appliedRuleService.updateAppliedRule(currentAppliedRuleId,ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
-				appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 			}
 
-			saveAllExceptionRules();
 			DefinitionController.getInstance().notifyObservers(currentModuleId);
 			return message;
 		} catch (Exception e) {
@@ -558,40 +543,25 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 
-	public void saveAllExceptionRules() {
-		appliedRuleExceptionService
-				.removeAllAppliedRuleExceptions(currentAppliedRuleId);
-		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
-		AppliedRuleFactory factory = new AppliedRuleFactory();
-		for (HashMap<String, Object> exceptionRule : exceptionRules) {
-			long appliedRuleId = currentAppliedRuleId;
+	public String saveRuleException(HashMap<String, Object> exceptionRule) {
+		String message = "";
+		try {
+			long parentAppliedRuleId = currentAppliedRuleId;
 			String ruleTypeKey = (String) exceptionRule.get("ruleTypeKey");
 			String description = (String) exceptionRule.get("description");
-			String[] dependencies = (String[]) exceptionRule
-					.get("dependencies");
-
+			String[] dependencies = (String[]) exceptionRule.get("dependencies");
 			Object from = exceptionRule.get("moduleFromId");
 			Object to = exceptionRule.get("moduleToId");
 			ModuleStrategy moduleFrom = assignToCorrectModule(from);
 			ModuleStrategy moduleTo = assignToCorrectModule(to);
+			appliedRuleExceptionService.addExceptionToAppliedRule(parentAppliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo, dependencies);
 
-			appliedRuleExceptionService.addExceptionToAppliedRule(
-					appliedRuleId, ruleTypeKey, description, moduleFrom,
-					moduleTo, dependencies);
-
-			AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
-			AppliedRuleStrategy exceptionRule2 = ruleFactory
-					.createRule(ruleTypeKey);
-			exceptionRule2.setAppliedRule(description, moduleFrom, moduleTo);
-			exceptionRule2.setDependencies(dependencies);
-			rules.add(exceptionRule2);
-
+			DefinitionController.getInstance().notifyObservers(currentModuleId);
+			return message;
+		} catch (Exception e) {
+			message = e.getMessage();
+			return message;
 		}
-		// hot hack {{
-		StateService.instance().addExceptionRule(
-				SoftwareArchitecture.getInstance().getAppliedRuleById(
-						currentAppliedRuleId), rules);
-
 	}
 
 	public boolean saveDefaultRules(HashMap<String, Object> ruleDetails) {
@@ -616,10 +586,6 @@ public class AppliedRuleController extends PopUpController {
 
 	public void setModuleToId(Long moduleToId) {
 		this.moduleToId = moduleToId;
-	}
-
-	public void setSelectedRuleTypeKey(String ruleTypeKey) {
-		selectedRuleTypeKey = ruleTypeKey;
 	}
 
 }

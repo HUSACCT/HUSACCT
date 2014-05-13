@@ -17,25 +17,20 @@ public class ModuleCheckerHelper {
 	appliedRuleService = new AppliedRuleDomainService();
     }
 
-    public boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType,
-	    ModuleStrategy fromModule, ModuleStrategy toModule) {
+    public boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType, ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getToModuleAppliedRules(toModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
-		    && checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
-			    appliedRule.getModuleFrom(), fromModule)
-		    && appliedRule.getModuleTo().getId() == toModule.getId() && !appliedRule.isEnabled()) {
-		setErrorMessage("'"
-			+ appliedRule.getModuleFrom().getName()
-			+ "' "
-			+ ServiceProvider.getInstance().getLocaleService()
-				.getTranslatedString(ruleType) + " '"
-			+ appliedRule.getModuleTo().getName() + "'");
-		return false;
+		    && checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(appliedRule.getModuleFrom(), fromModule)
+		    && appliedRule.getModuleTo().getId() == toModule.getId() 
+		    && !appliedRule.isEnabled()) {
+	    		setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' "
+	    		+ ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleType) + " '"
+	    		+ appliedRule.getModuleTo().getName() + "'");
+	    		return false;
 	    }
 	}
 	for (ModuleStrategy toModuleChild : toModule.getSubModules()) {
-	    if (!checkRuleTypeAlreadyFromOtherToSelected(ruleType, fromModule,
-		    toModuleChild)) {
+	    if (!checkRuleTypeAlreadyFromOtherToSelected(ruleType, fromModule, toModuleChild)) {
 		return false;
 	    }
 	}
