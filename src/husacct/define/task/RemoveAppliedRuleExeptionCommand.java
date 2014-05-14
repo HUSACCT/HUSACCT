@@ -6,8 +6,7 @@ import husacct.define.domain.services.stateservice.interfaces.Istate;
 public class RemoveAppliedRuleExeptionCommand implements Istate {
 
 	
-	public RemoveAppliedRuleExeptionCommand(long parentRuleId,
-			AppliedRuleStrategy exceptionRule) {
+	public RemoveAppliedRuleExeptionCommand(long parentRuleId, AppliedRuleStrategy exceptionRule) {
 		// TODO Auto-generated constructor stub
 	}
 

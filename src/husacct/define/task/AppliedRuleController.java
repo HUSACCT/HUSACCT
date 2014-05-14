@@ -555,7 +555,6 @@ public class AppliedRuleController extends PopUpController {
 			ModuleStrategy moduleFrom = assignToCorrectModule(from);
 			ModuleStrategy moduleTo = assignToCorrectModule(to);
 			appliedRuleExceptionService.addExceptionToAppliedRule(parentAppliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo, dependencies);
-
 			DefinitionController.getInstance().notifyObservers(currentModuleId);
 			return message;
 		} catch (Exception e) {

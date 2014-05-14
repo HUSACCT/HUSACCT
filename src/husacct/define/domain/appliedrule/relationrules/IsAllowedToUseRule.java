@@ -1,7 +1,7 @@
 package husacct.define.domain.appliedrule.relationrules;
 
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.task.conventions_checker.ModuleCheckerHelper;
+import husacct.define.domain.conventions_checker.ModuleCheckerHelper;
 
 public class IsAllowedToUseRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;

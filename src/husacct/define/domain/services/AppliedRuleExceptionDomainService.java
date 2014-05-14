@@ -76,17 +76,10 @@ public class AppliedRuleExceptionDomainService {
     	return SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId).getExceptions();
     }
 
-    public void removeAllAppliedRuleExceptions(long appliedRuleId) {
-		AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
-		parentRule.removeAllExceptions();
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-    }
-
     public void removeAppliedRuleException(long parentRuleId, long exceptionRuleId) {
 		AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
-		StateService.instance().removeAppliedRuleExeption(parentRuleId,parentRule.getExeptionByID(exceptionRuleId));
 		parentRule.removeExceptionById(exceptionRuleId);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		StateService.instance().removeAppliedRuleExeption(parentRuleId,parentRule.getExeptionByID(exceptionRuleId));
     }
 
 }

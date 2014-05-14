@@ -1,4 +1,4 @@
-package husacct.define.task.conventions_checker;
+package husacct.define.domain.conventions_checker;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;

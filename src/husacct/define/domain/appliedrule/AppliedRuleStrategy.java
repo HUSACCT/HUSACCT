@@ -74,6 +74,7 @@ public abstract class AppliedRuleStrategy {
 			if (rule.getId() == exceptionRuleId){
 				exceptionFound = true;
 				exceptions.remove(rule);
+				break;
 			}
 		}
 		if (!exceptionFound){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoException"));}

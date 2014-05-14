@@ -191,8 +191,7 @@ public abstract class JtreeStateEngine {
 		stateController.insertCommand(new EditAppliedRuleCommand(rule,objects) );
 	}
 
-	public void removeAppliedRuleExeption(long parentRuleId,
-			AppliedRuleStrategy exceptionRule) {
+	public void removeAppliedRuleExeption(long parentRuleId, AppliedRuleStrategy exceptionRule) {
 		stateController.insertCommand(new RemoveAppliedRuleExeptionCommand(parentRuleId,exceptionRule));	
 	}
 }

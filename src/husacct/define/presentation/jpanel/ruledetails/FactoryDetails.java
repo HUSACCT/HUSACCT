@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel.ruledetails;
 
 import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.CyclesBetweenModulesExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.CyclesBetweenModulesJPanel;
+import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.NoRulesSelectedJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.FacadeConventionRuleJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.InterfaceInheritanceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.NamingConventionExceptionJPanel;
@@ -24,6 +25,7 @@ public class FactoryDetails {
 
     private BackCallJPanel backCallJPanel;
     // Rules on the Dependency Limitation
+    private NoRulesSelectedJPanel NoRulesSelected;
     private CyclesBetweenModulesJPanel cyclesBetweenModules;
     private CyclesBetweenModulesExceptionJPanel cyclesBetweenModulesExceptionJPanel;
     private FacadeConventionRuleJPanel facadeConventionJPanel;
@@ -45,8 +47,8 @@ public class FactoryDetails {
     public AbstractDetailsJPanel create(AppliedRuleController appliedRuleController, String ruleTypeKey) {
 	// Property Rules
 	if (ruleTypeKey.equals("NoRuleSelected")) {
-		cyclesBetweenModules = new CyclesBetweenModulesJPanel(appliedRuleController);
-	    return cyclesBetweenModules;
+		NoRulesSelected = new NoRulesSelectedJPanel(appliedRuleController);
+	    return NoRulesSelected;
 	} else if (ruleTypeKey.equals(FacadeConventionRuleJPanel.ruleTypeKey)) {
 		    facadeConventionJPanel = new FacadeConventionRuleJPanel(appliedRuleController);
 		    return facadeConventionJPanel;
