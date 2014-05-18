@@ -110,7 +110,7 @@ public class DefaultRuleDomainService {
 		_module = rule.getModuleFrom();
 		retrieveRuleTypeDTOsByModule();
 		for (RuleTypeDTO ruleType : defaultRuleTypeDTOs) {
-			if (rule.getRuleType().equals(ruleType.getKey())) {
+			if (rule.getRuleTypeKey().equals(ruleType.getKey())) {
 				return true;
 			}
 		}
@@ -150,7 +150,7 @@ public class DefaultRuleDomainService {
 		if (defaultRuleTypeDTOs.length > 0) {
 			for (RuleTypeDTO rule : defaultRuleTypeDTOs) {
 				for (AppliedRuleStrategy appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
-					if (appliedRule.getModuleFrom().getId() == _module.getId()	&& rule.getKey().equals(appliedRule.getRuleType())) {
+					if (appliedRule.getModuleFrom().getId() == _module.getId()	&& rule.getKey().equals(appliedRule.getRuleTypeKey())) {
 						appliedRuleIds.add(appliedRule.getId());
 					}
 				}

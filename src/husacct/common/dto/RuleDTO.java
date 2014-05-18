@@ -7,10 +7,11 @@ public class RuleDTO extends AbstractDTO {
 	public ModuleDTO moduleFrom;
 	public ModuleDTO moduleTo;
 	public String regex;
+	public boolean isException;
 	public RuleDTO[] exceptionRules;
 	
-	public RuleDTO(String ruleTypeKey, boolean enabled, ModuleDTO moduleTo,
-			ModuleDTO moduleFrom, String[] violationTypeKeys, String regex, RuleDTO[] exceptionRules) {
+	public RuleDTO(String ruleTypeKey, boolean enabled, ModuleDTO moduleTo, ModuleDTO moduleFrom, 
+			String[] violationTypeKeys, String regex, RuleDTO[] exceptionRules, boolean isException) {
 		super();
 		this.ruleTypeKey = ruleTypeKey;
 		this.enabled = enabled;
@@ -19,12 +20,13 @@ public class RuleDTO extends AbstractDTO {
 		this.moduleTo = moduleTo;
 		this.regex = regex;
 		this.exceptionRules = exceptionRules;
+		this.isException = isException;
 	}
 	
     public String toString() {
     	
         String representation = "";
-        representation += "\nRuleTypeKey: " + ruleTypeKey;
+        representation += "\nRuleTypeKey: " + ruleTypeKey + ", IsException: " + isException;
         representation += "\nModuleFrom: " + moduleFrom.logicalPath;
         representation += "\nModuleTo: " + moduleTo.logicalPath;
         representation += "\nRegEx: " + regex;

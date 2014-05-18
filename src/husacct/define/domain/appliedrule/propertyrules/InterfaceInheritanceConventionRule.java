@@ -15,7 +15,7 @@ public class InterfaceInheritanceConventionRule extends AppliedRuleStrategy{
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
-		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(this.getRuleType(), this.getModuleTo());
+		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(this.getRuleTypeKey(), this.getModuleTo());
 		if (conventionSuccess) {
 			conventionSuccess = moduleCheckerHelper
 					.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse",

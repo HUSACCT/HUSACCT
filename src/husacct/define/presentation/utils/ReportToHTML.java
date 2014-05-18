@@ -59,10 +59,10 @@ public class ReportToHTML {
 	private String getSummary(){
 		String summary = ""; 
 		int modules = countModules(moduleService.getRootModules());
-		int appliedRules = ruleService.getAppliedRules().length;
+		int appliedRules = ruleService.getAllMainRules().length;
 		int softwareUnits = countSoftwareUnits(moduleService.getRootModules());
 		summary += makeli(modules+" Modules;");
-		summary += makeli(appliedRules+" Applied Rules ("+ruleService.getAppliedRules(true).length+" active);");
+		summary += makeli(appliedRules+" Applied Rules ("+ruleService.getAllEnabledMainRules().length+" enabled);");
 		summary += makeli(softwareUnits+" Software Units.");
 		return summary;
 	}
@@ -119,9 +119,9 @@ public class ReportToHTML {
 	}
 	private HashMap<String, Boolean> getAppliedRules(long moduleId){
 		HashMap<String, Boolean> appliedRules = new HashMap<String, Boolean>();
-		for(AppliedRuleStrategy rule : ruleService.getAppliedRules()){
+		for(AppliedRuleStrategy rule : ruleService.getAllMainRules()){
 			if(rule.getModuleFrom().getId() == moduleId){
-				appliedRules.put(rule.getRuleType(), rule.isEnabled());
+				appliedRules.put(rule.getRuleTypeKey(), rule.isEnabled());
 			}			
 		}
 		return appliedRules;

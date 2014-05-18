@@ -17,7 +17,7 @@ public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
 		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
-				this.getRuleType(), this.getModuleFrom());
+				this.getRuleTypeKey(), this.getModuleFrom());
 		if (conventionSuccess) {
 			conventionSuccess = layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom());
 		}

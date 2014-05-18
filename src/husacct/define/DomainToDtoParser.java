@@ -177,11 +177,11 @@ public class DomainToDtoParser {
 
 	public RuleDTO parseRule(AppliedRuleStrategy rule) {
 
-		String ruleTypeKey = rule.getRuleType();
+		String ruleTypeKey = rule.getRuleTypeKey();
 		boolean enabled = rule.isEnabled();
 		ModuleDTO moduleFrom = parseModule(rule.getModuleFrom());
 		ModuleDTO moduleTo = parseModule(rule.getModuleTo());
-		String[] violationTypeKeys = rule.getDependencies();
+		String[] violationTypeKeys = rule.getDependencyTypes();
 		String regex = rule.getRegex();
 
 		ArrayList<RuleDTO> exceptionRuleList = new ArrayList<RuleDTO>();
@@ -193,16 +193,18 @@ public class DomainToDtoParser {
 		RuleDTO[] exceptionRuleDTOs = new RuleDTO[exceptionRuleList.size()];
 		exceptionRuleList.toArray(exceptionRuleDTOs);
 		RuleDTO[] exceptionRules = exceptionRuleDTOs;
+		boolean isException = rule.isException();
+
 
 		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, enabled, moduleTo, moduleFrom,
-				violationTypeKeys, regex, exceptionRules);
+				violationTypeKeys, regex, exceptionRules, isException);
 		return ruleDTO;
 	}
 
 	/**
 	 * Applied Rules
 	 **/
-	public RuleDTO[] parseRules(AppliedRuleStrategy[] rules) {
+	public RuleDTO[] parseRules(ArrayList<AppliedRuleStrategy> rules) {
 		ArrayList<RuleDTO> ruleDTOsList = new ArrayList<RuleDTO>();
 		for (AppliedRuleStrategy rule : rules) {
 			RuleDTO ruleDTO = parseRule(rule);

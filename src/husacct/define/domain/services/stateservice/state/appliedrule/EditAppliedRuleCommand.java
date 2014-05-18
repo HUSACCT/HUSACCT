@@ -16,9 +16,9 @@ public class EditAppliedRuleCommand implements Istate {
 	}
 	
 	private Object[] convertOriginalValues(AppliedRuleStrategy rule) {
-		    String ruleTypeKey = rule.getRuleType();
+		    String ruleTypeKey = rule.getRuleTypeKey();
 		     String description=rule.getDescription();
-		    String[] dependencies = rule.getDependencies();
+		    String[] dependencies = rule.getDependencyTypes();
 		     String regex=rule.getRegex();
 		    ModuleStrategy ModuleStrategyFrom = rule.getModuleFrom();
 		    ModuleStrategy ModuleStrategyTo =rule.getModuleTo();

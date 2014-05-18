@@ -142,12 +142,12 @@ import org.apache.log4j.Logger;
 			HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
 			ruleDetails.put("id", rule.getId());
 			ruleDetails.put("description", rule.getDescription());
-			ruleDetails.put("dependencies", rule.getDependencies());
+			ruleDetails.put("dependencies", rule.getDependencyTypes());
 			ruleDetails.put("moduleFromName", rule.getModuleFrom().getName());
 			ruleDetails.put("moduleToName", rule.getModuleTo().getName());
 			ruleDetails.put("enabled", rule.isEnabled());
 			ruleDetails.put("regex", rule.getRegex());
-			ruleDetails.put("ruleTypeKey", rule.getRuleType());
+			ruleDetails.put("ruleTypeKey", rule.getRuleTypeKey());
 			ruleDetails.put("numberofexceptions", rule.getExceptions().size());
 			return ruleDetails;
 		}
@@ -295,7 +295,7 @@ import org.apache.log4j.Logger;
 							UiDialogs.errorDialog(definitionJPanel, ServiceProvider
 									.getInstance().getLocaleService()
 									.getTranslatedString("DefaultRule")
-									+ "\n- " + rule.getRuleType());
+									+ "\n- " + rule.getRuleTypeKey());
 							break;
 						}
 					}

@@ -32,7 +32,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
 	protected ArrayList<ModuleStrategy> subModules;
 	protected ModuleStrategy parent;
-	// fromStorage == true, if the object is restored from persistency; false, if new
+	// fromStorage == true, if the object is restored from persistence; false, if new
 	protected boolean fromStorage = false; 
 
 	public void set (String name, String description, boolean stored){

@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.services.ObservableService;
@@ -14,18 +13,17 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.AppliedRuleDomainService;
-import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
-import husacct.define.persistency.PersistentDomain;
-import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
+import husacct.define.task.persistency.PersistentDomain;
+import husacct.define.task.persistency.PersistentDomain.DomainElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +31,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
@@ -43,7 +39,6 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
 	private DomainToDtoParser domainParser = new DomainToDtoParser();
-	private AppliedRuleExceptionDomainService exceptionService = new AppliedRuleExceptionDomainService();
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 
@@ -159,7 +154,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public RuleDTO[] getDefinedRules() {
-		AppliedRuleStrategy[] rules = appliedRuleService.getAppliedRules();
+		ArrayList<AppliedRuleStrategy> rules = appliedRuleService.getAllAppliedRules();
 		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
 		return ruleDTOs;
 	}
@@ -170,8 +165,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public Element getLogicalArchitectureData() {
-		PersistentDomain pd = new PersistentDomain(defineDomainService,
-				moduleService, appliedRuleService, exceptionService);
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);
 		return pd.getWorkspaceData();
 	}
@@ -234,8 +228,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public Element getWorkspaceData() {
-		PersistentDomain pd = new PersistentDomain(defineDomainService,
-				moduleService, appliedRuleService, exceptionService);
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		return pd.getWorkspaceData();
 	}
 
@@ -269,26 +262,22 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public void loadLogicalArchitectureData(Element e) {
-		PersistentDomain pd = new PersistentDomain(defineDomainService,
-				moduleService, appliedRuleService, exceptionService);
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);
 		pd.loadWorkspaceData(e);
 	}
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		PersistentDomain pd = new PersistentDomain(defineDomainService,
-				moduleService, appliedRuleService, exceptionService);
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.loadWorkspaceData(workspaceData);
 	}
 
 	private void reset() {
-		// TODO this is just a hotfix
 		defineDomainService = new SoftwareArchitectureDomainService();
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 		domainParser = new DomainToDtoParser();
-		exceptionService = new AppliedRuleExceptionDomainService();
 
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());

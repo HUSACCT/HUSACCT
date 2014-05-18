@@ -44,10 +44,13 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     @Override
     public AnalysedModuleDTO[] getChildModulesInModule(String from) {
         List<AnalysedModuleDTO> childModules = queryService.getChildModulesInModule(from);
-        AnalysedModuleDTO[] childs = new AnalysedModuleDTO[childModules.size()];
-        if (childModules.size() > 0){
-	        for (int i = 0; i < childModules.size(); i++) {
-	            childs[i] = childModules.get(i);
+        int numberOfChildren = childModules.size();
+        AnalysedModuleDTO[] childs = new AnalysedModuleDTO[numberOfChildren];
+        if (numberOfChildren > 0){
+        	int i = 0;
+	        for (AnalysedModuleDTO  childModule : childModules) {
+	            childs[i] = childModule;
+	            i++;
 	        }
         }
 	    return childs;

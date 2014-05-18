@@ -19,7 +19,7 @@ public class ModuleCheckerHelper {
 
     public boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType, ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getToModuleAppliedRules(toModule)) {
-	    if (appliedRule.getRuleType().equals(ruleType)
+	    if (appliedRule.getRuleTypeKey().equals(ruleType)
 		    && checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(appliedRule.getModuleFrom(), fromModule)
 		    && appliedRule.getModuleTo().getId() == toModule.getId() 
 		    && !appliedRule.isEnabled()) {
@@ -55,7 +55,7 @@ public class ModuleCheckerHelper {
     public boolean checkRuleTypeAlreadyFromThisToOther(String ruleType,
 	    ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(fromModule)) {
-	    if (appliedRule.getRuleType().equals(ruleType)
+	    if (appliedRule.getRuleTypeKey().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
 			    .getId()
 		    && appliedRule.getModuleTo().getId() != toModule.getId() && !appliedRule.isEnabled()) {
@@ -86,7 +86,7 @@ public class ModuleCheckerHelper {
     public boolean checkRuleTypeAlreadyFromThisToSelected(String ruleType,
 	    ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(fromModule)) {
-	    if (appliedRule.getRuleType().equals(ruleType)
+	    if (appliedRule.getRuleTypeKey().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
 			    .getId()
 		    && appliedRule.getModuleTo().getId() == toModule.getId() && appliedRule.isEnabled()) {
@@ -116,7 +116,7 @@ public class ModuleCheckerHelper {
 
     public boolean checkRuleTypeAlreadySet(String ruleTypeKey, ModuleStrategy moduleFrom) {
 	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(moduleFrom)) {
-	    if (appliedRule.getRuleType().equals(ruleTypeKey)) {
+	    if (appliedRule.getRuleTypeKey().equals(ruleTypeKey)) {
 		setErrorMessage("'"
 			+ ServiceProvider.getInstance().getLocaleService()
 				.getTranslatedString(ruleTypeKey) + "'");

@@ -84,23 +84,6 @@ public class AppliedRuleFactory {
 		logger.error("Error in AppliedRuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}
-	public AppliedRuleStrategy createDummyRule(String choice){
-		for(int i = 0; i < ruleTypes.length; i++){
-			if(ruleTypes[i].equals(choice)) try{
-				AppliedRuleStrategy newRule = (AppliedRuleStrategy)ruleClasses[i].newInstance();
-				newRule.setRuleType(choice);
-				newRule.setId(-1);
-				return newRule;
-			}catch (InstantiationException ex) {
-				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
-			} catch (IllegalAccessException ex) {
-				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
-			}
-		}
-		logger.error("Error in AppliedRuleFactory: Illegal choice: ");
-		throw new IllegalArgumentException("Illegal choice");
-	}
-	
 	public AppliedRuleStrategy createRuleWithModules(HashMap<String, Object> ruleDetails){
 		ModuleDomainService mds = new ModuleDomainService();
 		for(int i = 0; i < ruleTypes.length; i++){

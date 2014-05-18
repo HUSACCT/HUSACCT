@@ -1,10 +1,7 @@
 package husacct.define.domain.appliedrule;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
-
 import java.util.ArrayList;
 
 public abstract class AppliedRuleStrategy {
@@ -14,46 +11,43 @@ public abstract class AppliedRuleStrategy {
 		STATIC_ID++;
 	}
 	
-	protected String type;
 	private long id;
+	protected String ruleTypeKey;
 	private String description;
-	private String[] dependencies;
+	private String[] dependencyTypes;
 	private String regex;
 	private ModuleStrategy moduleTo;
 	private ModuleStrategy moduleFrom;
 	private boolean enabled;
 	private ArrayList<AppliedRuleStrategy> exceptions;
+	private boolean isException = false;
+	// Reference to the main rule of which it is an exception
+	private AppliedRuleStrategy parentAppliedRule = null;
+	
+
 	
 	public void setAppliedRule(String description, String[] dependencies,
 			String regex, ModuleStrategy moduleFrom,
-			ModuleStrategy moduleTo, boolean enabled) {
+			ModuleStrategy moduleTo, boolean enabled, boolean isException, AppliedRuleStrategy parentRule) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.description = description;
-		this.dependencies = dependencies;
+		this.dependencyTypes = dependencies;
 		this.regex = regex;
 		this.moduleTo = moduleTo;
 		this.moduleFrom = moduleFrom;
 		this.exceptions = new ArrayList<AppliedRuleStrategy>();
 		this.enabled = enabled;
-	}
-	
-	public void setAppliedRule(AppliedRuleStrategy clone){
-		this.description = clone.getDescription();
-		this.dependencies = clone.getDependencies();
-		this.regex = clone.getRegex();
-		this.moduleTo = clone.getModuleTo();
-		this.moduleFrom = clone.getModuleFrom();
-		this.exceptions = clone.getExceptions();
-		this.enabled = clone.isEnabled();
+		this.isException = isException;
+		this.parentAppliedRule = parentRule;
 	}
 	
 	public void setAppliedRule(String description, ModuleStrategy moduleFrom, ModuleStrategy moduleTo){
-		setAppliedRule(description, new String[0], "",moduleFrom,moduleTo, true);
+		setAppliedRule(description, new String[0], "",moduleFrom,moduleTo, true, false, null);
 	}
 
 	public void setAppliedRule() {
-		setAppliedRule("",new String[0], "",null,null, true);
+		setAppliedRule("", new String[0], "",null,null, true, false, null);
 	}
 	
 	/**
@@ -100,12 +94,12 @@ public abstract class AppliedRuleStrategy {
 		return usesModule;
 	}
 
-	public String getRuleType() {
-		return type;
+	public String getRuleTypeKey() {
+		return ruleTypeKey;
 	}
 	
-	public void setRuleType(String type){
-		this.type = type;
+	public void setRuleType(String ruleTypeKey){
+		this.ruleTypeKey = ruleTypeKey;
 	}
 
 	public boolean isEnabled() {
@@ -149,12 +143,12 @@ public abstract class AppliedRuleStrategy {
 	return null;
 	}
 
-	public void setDependencies(String[] dependencies) {
-		this.dependencies = dependencies;
+	public void setDependencyTypes(String[] dependencyTypes) {
+		this.dependencyTypes = dependencyTypes;
 	}
 
-	public String[] getDependencies() {
-		return dependencies;
+	public String[] getDependencyTypes() {
+		return dependencyTypes;
 	}
 
 	public void setRegex(String regex) {
@@ -181,6 +175,23 @@ public abstract class AppliedRuleStrategy {
 		this.moduleFrom = moduleFrom;
 	}
 	
+	public boolean isException() {
+		return isException;
+	}
+
+	public void getIsExeption(boolean isException) {
+		this.isException = isException;
+	}
+
+	public AppliedRuleStrategy getParentAppliedRule() {
+		return parentAppliedRule;
+	}
+
+	public void setParentAppliedRule(AppliedRuleStrategy parentAppliedRule) {
+		this.parentAppliedRule = parentAppliedRule;
+	}
+
+
 	private boolean sameExceptions(AppliedRuleStrategy doppelganger){
 		if(this.exceptions.size() == doppelganger.exceptions.size()){
 			for(AppliedRuleStrategy exception : exceptions){
@@ -193,14 +204,9 @@ public abstract class AppliedRuleStrategy {
 		return false;
 	}
 
-	/**
-	 * Overrides
-	 */
-	@Override
-	public boolean equals(Object obj){
-		boolean returnme=false;
-		AppliedRuleStrategy doppelganger = (AppliedRuleStrategy) obj;
-		if(this.type==doppelganger.type 
+	public boolean equals(AppliedRuleStrategy doppelganger){
+		boolean result = false;
+		if(this.ruleTypeKey==doppelganger.ruleTypeKey 
 				&& 
 				this.moduleTo == doppelganger.moduleTo
 				&& 
@@ -208,9 +214,9 @@ public abstract class AppliedRuleStrategy {
 				&& 
 				this.sameExceptions(doppelganger)){
 		
-			returnme= true;
+			result = true;
 		}
-			return returnme;
+			return result;
 	}
 	
 	/**
@@ -220,8 +226,8 @@ public abstract class AppliedRuleStrategy {
 	
     public String toString() {
         String representation = "";
-        representation += "\nId: " + id + ", Type: " + type;
-        representation += "\nEnabled: " + enabled;
+        representation += "\nId: " + id + ", Type: " + ruleTypeKey;
+        representation += "\nEnabled: " + enabled + ", IsException: " + isException;
         representation += "\nFrom: " + moduleFrom.getName();
         representation += "\nTo: " + moduleTo.getName();
         representation += "\nExceptions: " + exceptions.size();

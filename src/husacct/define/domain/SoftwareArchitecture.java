@@ -131,7 +131,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
 		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
 		for (AppliedRuleStrategy rule : appliedRules) {
-			if (rule.getModuleFrom().getId() == moduleId) {
+			if ((rule.getModuleFrom().getId() == moduleId) && (!rule.isException())) {
 				appliedRuleIds.add(rule.getId());
 			}
 		}
@@ -141,7 +141,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
 		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
 		for (AppliedRuleStrategy rule : appliedRules) {
-			if (rule.getModuleTo().getId() == moduleId) {
+			if ((rule.getModuleTo().getId() == moduleId) && (!rule.isException())) {
 				appliedRuleIds.add(rule.getId());
 			}
 		}
@@ -150,34 +150,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	public String getDescription() {
 		return rootModule.getDescription();
-	}
-
-	public ArrayList<AppliedRuleStrategy> getEnabledAppliedRules() {
-		ArrayList<AppliedRuleStrategy> enabledRuleList = new ArrayList<AppliedRuleStrategy>();
-		for (AppliedRuleStrategy ar : appliedRules) {
-			if (ar.isEnabled()) {
-				enabledRuleList.add(ar);
-			}
-		}
-		return enabledRuleList;
-	}
-
-	// TODO: will be deleted in the next 2 days
-	public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
-		return null; // TODO: Has to get an implementation
-	}
-
-	// // TODO: will be deleted in the next 2 days
-	public ArrayList<Layer> getLayersBelow(Layer layer) {
-		ArrayList<Layer> returnList = new ArrayList<Layer>();
-		Layer underlyingLayer = getTheFirstLayerBelow(layer);
-		Layer _temp = underlyingLayer;
-
-		while (getTheFirstLayerBelow(_temp).equals(null)) {
-			returnList.add(_temp);
-			_temp = getTheFirstLayerBelow(_temp);
-		}
-		return returnList; // TODO: ?
 	}
 
 	public ModuleStrategy getModuleById(long moduleId) {
@@ -480,7 +452,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			String moduleFromType = rules.getModuleFrom().getType()
 					.toLowerCase();
 			String moduleToType = rules.getModuleTo().getType().toLowerCase();
-			String ruleType = rules.getRuleType();
+			String ruleType = rules.getRuleTypeKey();
 
 			if (ruleType.equals("IsNotAllowedToUse")
 					&& moduleFromType.equals("layer")
@@ -821,7 +793,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		AppliedRuleStrategy result= getAppliedRuleById(ruleid);
 		result.setRuleType(ruleTypeKey);
 		result.setDescription(description);
-		result.setDependencies(dependencies);
+		result.setDependencyTypes(dependencies);
 		result.setModuleFrom(ModuleStrategyFrom);
 		result.setRegex(regex);
 		result.setModuleTo(ModuleStrategyTo);
