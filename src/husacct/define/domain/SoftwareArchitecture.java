@@ -58,8 +58,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public static SoftwareArchitecture getInstance() {
-		return instance == null ? (instance = new SoftwareArchitecture())
-				: instance;
+		return instance == null ? (instance = new SoftwareArchitecture()): instance;
 	}
 
 	public static void setInstance(SoftwareArchitecture sA) {
@@ -76,12 +75,13 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
-
-		if (!appliedRules.contains(rule) && !hasAppliedRule(rule.getId())) {
+		appliedRules.add(rule);
+		/* if ((!hasAppliedRule(rule.getId())) && (!appliedRules.contains(rule))) {
 			appliedRules.add(rule);
 		} else {
+			logger.warn(String.format(" Rule already added: " + rule.toString()));
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleAlreadyAdded"));
-		}
+		} */
 	}
 
 	//Only to be used to add child modules (rootmodules) to the top module (root)

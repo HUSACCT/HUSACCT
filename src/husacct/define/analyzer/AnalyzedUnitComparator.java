@@ -134,7 +134,8 @@ public class AnalyzedUnitComparator {
 		ApplicationDTO application = ServiceProvider.getInstance().getControlService().getApplicationDTO();
 		for (ProjectDTO project : application.projects) {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(project.name, project.name, "root", "public");
-			for (AnalysedModuleDTO module : ServiceProvider.getInstance().getAnalyseService().getRootModules()) {
+			AnalysedModuleDTO[] moduleList = ServiceProvider.getInstance().getAnalyseService().getRootModules();
+			for (AnalysedModuleDTO module : moduleList) {
             	this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);

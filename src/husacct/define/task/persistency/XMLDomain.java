@@ -225,6 +225,8 @@ public class XMLDomain {
 	}
 
 	private AppliedRuleStrategy createRuleFromXML(Element appliedRule) {
+		AppliedRuleStrategy rule = null;
+		try{
 		long ruleId = Integer.parseInt(appliedRule.getChildText("id"));
 		String ruleTypeKey = appliedRule.getChildText("type");
 		//int moduleFromId = Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
@@ -240,7 +242,10 @@ public class XMLDomain {
 		long parentRule = -1;
 		if (isException)
 			parentRule = Integer.parseInt(appliedRule.getChildText("parentAppliedRuleId"));
-		AppliedRuleStrategy rule = ruleService.reloadAppliedRule(ruleId, ruleTypeKey, description, dependencyTypes, regex, moduleFromId, moduleToId, isEnabled, isException, parentRule);
+		 rule = ruleService.reloadAppliedRule(ruleId, ruleTypeKey, description, dependencyTypes, regex, moduleFromId, moduleToId, isEnabled, isException, parentRule);
+		} catch (Exception e) {
+        	this.logger.warn(new Date().toString() + "Applied rule not reloaded" + e.getMessage());
+		}
 		return rule;
 	}
 

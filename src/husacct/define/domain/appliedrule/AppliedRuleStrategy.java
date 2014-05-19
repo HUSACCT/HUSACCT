@@ -5,12 +5,7 @@ import husacct.define.domain.module.ModuleStrategy;
 import java.util.ArrayList;
 
 public abstract class AppliedRuleStrategy {
-	protected static long STATIC_ID;
-	public static void setStaticId(long highestId){
-		STATIC_ID = highestId++;
-		STATIC_ID++;
-	}
-	
+	protected static long STATIC_ID = 1;
 	private long id;
 	protected String ruleTypeKey;
 	private String description;
@@ -24,12 +19,16 @@ public abstract class AppliedRuleStrategy {
 	// Reference to the main rule of which it is an exception
 	private AppliedRuleStrategy parentAppliedRule = null;
 	
-
+	public static void setStaticId(long highestId){
+		STATIC_ID = highestId++;
+		STATIC_ID++;
+	}
 	
 	public void setAppliedRule(String description, String[] dependencies,
 			String regex, ModuleStrategy moduleFrom,
 			ModuleStrategy moduleTo, boolean enabled, boolean isException, AppliedRuleStrategy parentRule) {
-		this.id = STATIC_ID++;
+		long newId = STATIC_ID++;
+		this.id = newId;
 		STATIC_ID++;
 		this.description = description;
 		this.dependencyTypes = dependencies;
@@ -133,14 +132,13 @@ public abstract class AppliedRuleStrategy {
 	public ArrayList<AppliedRuleStrategy> getExceptions() {
 		return exceptions;
 	}
-	public AppliedRuleStrategy getExeptionByID(long exeptionId)
-	{
-	for (AppliedRuleStrategy result : exceptions) {
-		if (result.getId()==exeptionId) {
-			return result;
-		}
-	}	
-	return null;
+	public AppliedRuleStrategy getExeptionByID(long exeptionId){
+		for (AppliedRuleStrategy result : exceptions) {
+			if (result.getId()==exeptionId) {
+				return result;
+			}
+		}	
+		return null;
 	}
 
 	public void setDependencyTypes(String[] dependencyTypes) {

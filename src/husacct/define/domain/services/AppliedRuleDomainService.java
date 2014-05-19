@@ -7,11 +7,16 @@ import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
+
 import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
 
 public class AppliedRuleDomainService {
 
+	private SoftwareArchitecture softwareArchitecture = SoftwareArchitecture.getInstance(); 
 	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
+	private Logger logger = Logger.getLogger(AppliedRuleDomainService.class);
 
 	public AppliedRuleStrategy reloadAppliedRule(long ruleId, String ruleTypeKey, String description, String[] dependencies, String regex, 
 			long ModuleStrategyFromId, long ModuleStrategyToId, boolean enabled, boolean isException, long parentRuleId) {
@@ -26,24 +31,30 @@ public class AppliedRuleDomainService {
 		if (parentRuleId != -1) 
 			parentAppliedRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
 		
-		long newID = addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentAppliedRule);
-		AppliedRuleStrategy newRule = getAppliedRuleById(newID);
+		AppliedRuleStrategy newRule = ruleFactory.createRule(ruleTypeKey);
+		newRule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentAppliedRule); 
+		if (isDuplicate(newRule)) {
+			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
+		} else {
+			softwareArchitecture.addAppliedRule(newRule);
+		}
+
 		newRule.setId(ruleId);
 		return newRule;
 	}
 
-	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies, String regex, ModuleStrategy ModuleStrategyFrom, 
-			ModuleStrategy ModuleStrategyTo, boolean enabled, boolean isException, AppliedRuleStrategy parentRule) {
+	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies, String regex, ModuleStrategy moduleStrategyFrom, 
+			ModuleStrategy moduleStrategyTo, boolean enabled, boolean isException, AppliedRuleStrategy parentRule) {
 
 		AppliedRuleStrategy rule = ruleFactory.createRule(ruleTypeKey);
-		rule.setAppliedRule(description, dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled, isException, parentRule); 
+		rule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentRule); 
 		if (isDuplicate(rule)) {
+			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
 			return -1;
-		}
+		} 		
 		StateService.instance().addAppliedRule(rule);
-		SoftwareArchitecture.getInstance().addAppliedRule(rule);
+		softwareArchitecture.addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-
 		return rule.getId();
 	}
 

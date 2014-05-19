@@ -18,12 +18,6 @@ import java.util.List;
 public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	protected static long STATIC_ID = 1;
-	public static void setStaticId(long highestId){
-		STATIC_ID = highestId++;
-		STATIC_ID++;
-	}
-
-	
 	protected long id;
 	protected String name;
 	protected String description;
@@ -35,13 +29,19 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	// fromStorage == true, if the object is restored from persistence; false, if new
 	protected boolean fromStorage = false; 
 
+	public static void setStaticId(long highestId){
+		STATIC_ID = highestId++;
+		STATIC_ID++;
+	}
+
 	public void set (String name, String description, boolean stored){
 		this.fromStorage = stored;
 		set(name, description);
 	}
 	
 	public void set(String name, String description){
-		this.id = STATIC_ID++;
+		long newId = STATIC_ID++;
+		this.id = newId;
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
