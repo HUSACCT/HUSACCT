@@ -20,8 +20,11 @@ import java.util.List;
 
 public class IsOnlyAllowedToUse extends RuleType {
 
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
+
 	public IsOnlyAllowedToUse(String key, String category, List<ViolationType> violationTypes, Severity severity) {
-		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
+		super(key, category, violationTypes, exceptionRuleTypes, severity);
+		//super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override

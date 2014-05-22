@@ -20,10 +20,10 @@ import java.util.List;
 
 public class IsTheOnlyModuleAllowedToUse extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
 
 	public IsTheOnlyModuleAllowedToUse(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+		super(key, category, violationtypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

@@ -18,8 +18,10 @@ import java.util.List;
 
 public class NamingConvention extends RuleType {
 
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
+
 	public NamingConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
-		super(key, category, violationTypes, EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION), severity);
+		super(key, category, violationTypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

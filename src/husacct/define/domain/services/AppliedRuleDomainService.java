@@ -145,23 +145,23 @@ public class AppliedRuleDomainService {
 	 }
 
 	 public void removeAppliedRule(long appliedrule_id) {
-		 StateService.instance().removeAppliedRule(SoftwareArchitecture.getInstance().getAppliedRuleById(appliedrule_id));
-		 SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
+		 StateService.instance().removeAppliedRule(softwareArchitecture.getAppliedRuleById(appliedrule_id));
+		 softwareArchitecture.removeAppliedRule(appliedrule_id);
 		 ServiceProvider.getInstance().getDefineService()
 		 .notifyServiceListeners();
 	 }
 
 	 public void removeAppliedRules() {
-		 SoftwareArchitecture.getInstance().removeAppliedRules();
+		 softwareArchitecture.removeAppliedRules();
 		 ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	 }
 
 	 public void removeExceptionById(long parentRuleId, long exceptionRuleId) {
 		if (exceptionRuleId != -1) {
 			try {
-				AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
+				AppliedRuleStrategy parentRule = softwareArchitecture.getAppliedRuleById(parentRuleId);
 				parentRule.removeExceptionById(exceptionRuleId);
-				SoftwareArchitecture.getInstance().removeAppliedRule(exceptionRuleId);
+				softwareArchitecture.removeAppliedRule(exceptionRuleId);
 			} catch (Exception e) {
 			}
 		}

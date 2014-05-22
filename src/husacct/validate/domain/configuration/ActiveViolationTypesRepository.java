@@ -43,12 +43,13 @@ class ActiveViolationTypesRepository {
 				for (RuleType ruleType : ruleTypes) {
 					ActiveRuleType activeRuleType = initializeActiveViolationTypes(ruleType);
 					activeRuleTypes.add(activeRuleType);
-
-					for (RuleType exceptionRuleType : ruleType.getExceptionRules()) {
-						try {
-							containsRuleType(activeRuleTypes, exceptionRuleType.getKey());
-							activeRuleTypes.add(initializeActiveViolationTypes(exceptionRuleType));
-						} catch (RuntimeException e) {
+					if (ruleType.getExceptionRuleTypeKeys() != null) {
+						for (RuleType exceptionRuleType : ruleType.getExceptionRules()) {
+							try {
+								containsRuleType(activeRuleTypes, exceptionRuleType.getKey());
+								activeRuleTypes.add(initializeActiveViolationTypes(exceptionRuleType));
+							} catch (RuntimeException e) {
+							}
 						}
 					}
 				}

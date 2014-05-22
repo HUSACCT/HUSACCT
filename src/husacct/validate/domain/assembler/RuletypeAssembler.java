@@ -50,9 +50,11 @@ public class RuletypeAssembler {
 
 	private RuleTypeDTO[] createExceptionRuleTypeDTO(RuleType rule) {
 		List<RuleTypeDTO> exceptionRuleTypes = new ArrayList<RuleTypeDTO>();
-		for (RuleType ruletype : rule.getExceptionRules()) {
-			final RuleTypeDTO exceptionRuleType = createRootRuleTypeDTOWithViolationtypes(ruletype);
-			exceptionRuleTypes.add(exceptionRuleType);
+		if (rule.getExceptionRules() != null) {
+			for (RuleType ruletype : rule.getExceptionRules()) {
+				final RuleTypeDTO exceptionRuleType = createRootRuleTypeDTOWithViolationtypes(ruletype);
+				exceptionRuleTypes.add(exceptionRuleType);
+			}
 		}
 		return exceptionRuleTypes.toArray(new RuleTypeDTO[] {});
 	}

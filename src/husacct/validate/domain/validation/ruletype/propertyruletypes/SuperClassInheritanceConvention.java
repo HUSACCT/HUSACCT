@@ -15,10 +15,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class SuperClassInheritanceConvention extends RuleType {
-	private final static EnumSet<RuleTypes> superClassInheritanceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
 
 	public SuperClassInheritanceConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
-		super(key, category, violationTypes, superClassInheritanceExceptionRules, severity);
+		super(key, category, violationTypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

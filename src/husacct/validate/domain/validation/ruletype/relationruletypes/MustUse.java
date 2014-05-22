@@ -16,10 +16,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class MustUse extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE, RuleTypes.IS_NOT_ALLOWED_TO_USE);
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
 
 	public MustUse(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+		super(key, category, violationtypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

@@ -433,8 +433,13 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	public void removeAppliedRule(long appliedRuleId) {
 		if (hasAppliedRule(appliedRuleId)) {
-			AppliedRuleStrategy rule = getAppliedRuleById(appliedRuleId);
-			appliedRules.remove(rule);
+			AppliedRuleStrategy mainRule = getAppliedRuleById(appliedRuleId);
+			 if((mainRule.getExceptions() != null) && (mainRule.getExceptions().size() >= 0)){
+				 for (AppliedRuleStrategy exceptionRule : mainRule.getExceptions()){
+					 appliedRules.remove(exceptionRule);
+				 }
+			 }
+			appliedRules.remove(mainRule);
 		} else {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService().getTranslatedString("NoRule"));
@@ -445,27 +450,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		appliedRules = new ArrayList<AppliedRuleStrategy>();
 	}
 
-	public void removeLayerAppliedRules() {
-		ArrayList<AppliedRuleStrategy> rulesTobeRemoved = new ArrayList<AppliedRuleStrategy>();
-		for (AppliedRuleStrategy rules : appliedRules) {
-			String moduleFromType = rules.getModuleFrom().getType()
-					.toLowerCase();
-			String moduleToType = rules.getModuleTo().getType().toLowerCase();
-			String ruleType = rules.getRuleTypeKey();
-
-			if (ruleType.equals("IsNotAllowedToUse")
-					&& moduleFromType.equals("layer")
-					&& moduleToType.equals("layer")) {
-				rulesTobeRemoved.add(rules);
-			}
-		}
-		for (AppliedRuleStrategy rule : rulesTobeRemoved) {
-			int index = appliedRules.indexOf(rule);
-			appliedRules.remove(index);
-		}
-	}
-
-	// TODO: Needs revising, too big
 	public void removeModule(ModuleStrategy moduleToRemove) {
 		if (moduleToRemove.equals(rootModule)) {
 			return;

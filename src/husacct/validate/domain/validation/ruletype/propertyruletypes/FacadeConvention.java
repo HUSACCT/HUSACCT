@@ -22,8 +22,10 @@ import java.util.List;
 
 public class FacadeConvention extends RuleType {
 
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
+
 	public FacadeConvention(String key, String categoryKey, List<ViolationType> violationTypes, Severity severity) {
-		super(key, categoryKey, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
+		super(key, categoryKey, violationTypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

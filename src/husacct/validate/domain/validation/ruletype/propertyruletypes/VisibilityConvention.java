@@ -14,8 +14,10 @@ import java.util.List;
 
 public class VisibilityConvention extends RuleType {
 
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
+
 	public VisibilityConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
-		super(key, category, violationTypes, EnumSet.of(RuleTypes.VISIBILITY_CONVENTION, RuleTypes.VISIBILITY_CONVENTION_EXCEPTION), severity);
+		super(key, category, violationTypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

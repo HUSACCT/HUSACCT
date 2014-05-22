@@ -197,13 +197,15 @@ public class RuleTypesFactory {
 		try {
 			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
 			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
-			for (RuleTypes ruletype : rootRule.getExceptionRuleKeys()) {
-				final RuleType generatedRuleType = generateRuleTypeWithoutExceptionRules(ruletype.toString());
-				if (generatedRuleType != null) {
-					exceptionRuletypes.add(generatedRuleType);
+			if (rootRule.getExceptionRuleTypeKeys() != null) {
+				for (RuleTypes ruletype : rootRule.getExceptionRuleTypeKeys()) {
+					final RuleType generatedRuleType = generateRuleTypeWithoutExceptionRules(ruletype.toString());
+					if (generatedRuleType != null) {
+						exceptionRuletypes.add(generatedRuleType);
+					}
 				}
+				rootRule.setExceptionRules(exceptionRuletypes);
 			}
-			rootRule.setExceptionRules(exceptionRuletypes);
 			return rootRule;
 		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);

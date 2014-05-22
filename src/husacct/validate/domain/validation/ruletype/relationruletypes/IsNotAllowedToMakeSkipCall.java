@@ -19,11 +19,12 @@ import java.util.List;
 
 public class IsNotAllowedToMakeSkipCall extends RuleType {
 
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 	private RuleDTO currentRule;
 	private String logicalPathLayerFrom;
 	
 	public IsNotAllowedToMakeSkipCall(String key, String category, List<ViolationType> violationTypes, Severity severity) {
-		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
+		super(key, category, violationTypes, exceptionRuleTypes, severity);
 	}
 
 	@Override

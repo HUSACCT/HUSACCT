@@ -28,7 +28,7 @@ public abstract class RuleType {
 	protected final String key;
 	protected final String descriptionKey;
 	protected final String categoryKey;
-	protected final EnumSet<RuleTypes> exceptionRuleKeys;
+	protected final EnumSet<RuleTypes> exceptionRuleTypeKeys;
 	protected final List<ViolationType> violationTypes;
 	protected List<RuleType> exceptionRules;
 	protected final Severity severity;
@@ -39,13 +39,13 @@ public abstract class RuleType {
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private AbstractViolationType violationTypeFactory;
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationTypes, EnumSet<RuleTypes> exceptionRuleTypes, Severity severity) {
+	public RuleType(String key, String categoryKey, List<ViolationType> violationTypes, EnumSet<RuleTypes> exceptionRuleTypeKeys, Severity severity) {
 		this.violations = new ArrayList<>();
         this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
 		this.violationTypes = violationTypes;
-		this.exceptionRuleKeys = exceptionRuleTypes;
+		this.exceptionRuleTypeKeys = exceptionRuleTypeKeys;
 		this.severity = severity;
 	}
 
@@ -61,8 +61,8 @@ public abstract class RuleType {
 		return categoryKey;
 	}
 
-	public EnumSet<RuleTypes> getExceptionRuleKeys() {
-		return exceptionRuleKeys;
+	public EnumSet<RuleTypes> getExceptionRuleTypeKeys() {
+		return exceptionRuleTypeKeys;
 	}
 
 	public List<ViolationType> getViolationTypes() {
