@@ -15,6 +15,10 @@ public class IsNotAllowedToUseRule extends AppliedRuleStrategy{
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+
+		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
+			return false;
+		}
 		boolean conventionSuccess = moduleCheckerHelper
 				.checkRuleTypeAlreadyFromThisToSelected("IsOnlyAllowedToUse",
 						this.getModuleFrom(), this.getModuleTo());
@@ -38,18 +42,12 @@ public class IsNotAllowedToUseRule extends AppliedRuleStrategy{
 					.checkRuleTypeAlreadyFromThisToSelected("MustUse",
 							this.getModuleFrom(), this.getModuleTo());
 		}
-		if (conventionSuccess
-				&& layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom())
-				&& layerCheckerHelper.checkTypeIsLayer(this.getModuleTo())) {
-			ArrayList<ModuleStrategy> backCallLayers = layerCheckerHelper
-					.getBackCallLayers(this.getModuleFrom().getId());
-			ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
-					.getSkipCallLayers(this.getModuleFrom().getId());
+		if (conventionSuccess && layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom()) && layerCheckerHelper.checkTypeIsLayer(this.getModuleTo())) {
+			ArrayList<ModuleStrategy> backCallLayers = layerCheckerHelper.getBackCallLayers(this.getModuleFrom().getId());
+			ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper.getSkipCallLayers(this.getModuleFrom().getId());
 			for (ModuleStrategy skipCallLayer : skipCallLayers) {
 				if (skipCallLayer.equals(this.getModuleTo())) {
-					conventionSuccess = moduleCheckerHelper
-							.checkRuleTypeAlreadySet(
-									"IsNotAllowedToMakeSkipCall", this.getModuleFrom());
+					conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeSkipCall", this.getModuleFrom());
 				}
 			}
 			for (ModuleStrategy backCallLayer : backCallLayers) {

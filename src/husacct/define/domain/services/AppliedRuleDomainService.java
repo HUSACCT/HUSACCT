@@ -33,13 +33,12 @@ public class AppliedRuleDomainService {
 		
 		AppliedRuleStrategy newRule = ruleFactory.createRule(ruleTypeKey);
 		newRule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentAppliedRule); 
+		newRule.setId(ruleId);
 		if (isDuplicate(newRule)) {
 			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
 		} else {
 			softwareArchitecture.addAppliedRule(newRule);
 		}
-
-		newRule.setId(ruleId);
 		return newRule;
 	}
 
@@ -138,7 +137,7 @@ public class AppliedRuleDomainService {
 	 public boolean isDuplicate(AppliedRuleStrategy rule) {
 		 AppliedRuleStrategy[] appliedRules = getAllMainRules();
 		 for (AppliedRuleStrategy appliedRule : appliedRules) {
-			 if (rule.equals(appliedRule)) {
+			 if ((rule.getId() == appliedRule.getId()) || (rule.equals(appliedRule))) {
 				 return true;
 			 }
 		 }
@@ -224,14 +223,10 @@ public class AppliedRuleDomainService {
 	    	        if ((parentRuleType.equals("FacadeConvention")) || (parentRuleType.equals("IsNotAllowedToUse"))){
 	    	        	boolean matching = doesExceptionModuleMatchWithParentModule(parentModuleTo, moduleTo);
 	    	        	if (!matching){
-	    	        		throw new RuntimeException("Illegal module selected: The exception module has to match with the main rule module, or one of its submodules");
+	    	        		throw new RuntimeException("IncorrectToModuleFacadeConvExc");
 	    	        	} 
 	    	        } 
 	        	    // Create exception rule
-	        		//AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
-	        		//AppliedRuleStrategy exceptionRule = ruleFactory.createRule(ruleType);
-	        		//exceptionRule.setAppliedRule(description, moduleFrom, moduleTo);
-	        		//exceptionRule.setDependencyTypes(dependencies);
 	    	        String regex = null;
 	    	        boolean isEnabled = true;
 	    	        boolean isException = true;
@@ -265,6 +260,4 @@ public class AppliedRuleDomainService {
 	            }
 	    	    return exceptionModuleToIsChildOfParentModuleTo;
 	        }
-	        
-
 }

@@ -75,13 +75,12 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
-		appliedRules.add(rule);
-		/* if ((!hasAppliedRule(rule.getId())) && (!appliedRules.contains(rule))) {
+		if ((!hasAppliedRule(rule.getId())) && (!appliedRules.contains(rule))) {
 			appliedRules.add(rule);
 		} else {
-			logger.warn(String.format(" Rule already added: " + rule.toString()));
+			logger.warn(String.format(" Rule already added: " + rule.getRuleTypeKey() + ", " + rule.getModuleFrom().getName() + ", " + rule.getModuleTo().getName()));
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleAlreadyAdded"));
-		} */
+		}
 	}
 
 	//Only to be used to add child modules (rootmodules) to the top module (root)

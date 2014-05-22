@@ -15,6 +15,10 @@ public class InterfaceInheritanceConventionRule extends AppliedRuleStrategy{
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+
+		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
+			return false;
+		}
 		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(this.getRuleTypeKey(), this.getModuleTo());
 		if (conventionSuccess) {
 			conventionSuccess = moduleCheckerHelper

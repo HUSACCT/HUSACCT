@@ -25,7 +25,7 @@ import org.jdom2.Element;
 
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable {
 
-    private IAnalyseControlService service;
+    private IAnalyseControlService service ;
     private IModelPersistencyService persistService;
     private AnalyseInternalFrame analyseInternalFrame;
     private HistoryLogger historyLogger;
@@ -55,7 +55,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
 	@Override
     public void analyseApplication(ProjectDTO project) {
-        service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
+        this.service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
         this.logger.info(new Date().toString() + " Finished: IAnalyseControlService.analyseApplication()");
         this.analyseInternalFrame = new AnalyseInternalFrame();
         this.logger.info(new Date().toString() + " Finished: creation analyseInternalFrame");

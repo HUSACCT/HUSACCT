@@ -15,6 +15,10 @@ public class IsOnlyModuleAllowedToUseRule extends AppliedRuleStrategy{
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+
+		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
+			return false;
+		}
 		boolean conventionSuccess = moduleCheckerHelper
 				.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse",
 						this.getModuleFrom(), this.getModuleTo());

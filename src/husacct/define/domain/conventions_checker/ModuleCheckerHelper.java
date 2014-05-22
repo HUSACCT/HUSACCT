@@ -17,6 +17,13 @@ public class ModuleCheckerHelper {
 	appliedRuleService = new AppliedRuleDomainService();
     }
 
+    public boolean rootIsNotIncludedInRule(ModuleStrategy fromModule, ModuleStrategy toModule){
+    	if(fromModule.getType().equals("Root") || toModule.getType().equals("Root"))
+    		return false;
+    	else
+    		return true;
+    }
+    
     public boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType, ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getToModuleAppliedRules(toModule)) {
 	    if (appliedRule.getRuleTypeKey().equals(ruleType)
@@ -37,8 +44,7 @@ public class ModuleCheckerHelper {
 	return true;
     }
 
-    private boolean checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
-	    ModuleStrategy appliedRuleModule, ModuleStrategy fromModule) {
+    private boolean checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(ModuleStrategy appliedRuleModule, ModuleStrategy fromModule) {
 	if (appliedRuleModule.getId() == fromModule.getId()) {
 	    return false;
 	} else {

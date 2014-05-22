@@ -7,6 +7,10 @@ public class VisibilityConventionExceptionRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper = new ModuleCheckerHelper();
 
 	public boolean checkConvention() {
+
+		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
+			return false;
+		}
 		// TODO Auto-generated method stub
 		return true;
 	}

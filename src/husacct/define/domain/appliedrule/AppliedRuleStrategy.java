@@ -190,28 +190,10 @@ public abstract class AppliedRuleStrategy {
 	}
 
 
-	private boolean sameExceptions(AppliedRuleStrategy doppelganger){
-		if(this.exceptions.size() == doppelganger.exceptions.size()){
-			for(AppliedRuleStrategy exception : exceptions){
-				if(!doppelganger.exceptions.contains(exception)){
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
 	public boolean equals(AppliedRuleStrategy doppelganger){
 		boolean result = false;
-		if(this.ruleTypeKey==doppelganger.ruleTypeKey 
-				&& 
-				this.moduleTo == doppelganger.moduleTo
-				&& 
-				this.moduleFrom == doppelganger.moduleFrom 
-				&& 
-				this.sameExceptions(doppelganger)){
-		
+		if((this.id == doppelganger.getId()) || (this.ruleTypeKey==doppelganger.ruleTypeKey && 
+				this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom)){
 			result = true;
 		}
 			return result;

@@ -15,6 +15,10 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+
+		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
+			return false;
+		}
 		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
 				this.getRuleTypeKey(), this.getModuleFrom());
 		if (conventionSuccess) {

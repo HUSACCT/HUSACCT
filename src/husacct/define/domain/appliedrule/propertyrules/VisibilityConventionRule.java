@@ -8,6 +8,10 @@ public class VisibilityConventionRule extends AppliedRuleStrategy{
 
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
+
+		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
+			return false;
+		}
 		boolean conventionSuccess = moduleCheckerHelper
 				.checkRuleTypeAlreadySet(this.getRuleTypeKey(), this.getModuleFrom());
 		return conventionSuccess;
