@@ -55,7 +55,7 @@ public class ViolationAssembler {
 				ViolationDTO violationDTO = createViolationDTO(violation);
 				violationDTOList.add(violationDTO);
 			} catch (ViolationTypeNotFoundException e) {
-				logger.warn(String.format("ViolationtypeKey: %s not found in violation", violation.getViolationTypeKey()));
+				logger.warn(String.format("ViolationtypeKey not found in violation: " + violation.getRuletypeKey() + " "  + violation.getViolationTypeKey()));
 			} catch (LanguageNotFoundException e) {
 				logger.warn(e.getMessage());
 			} catch (RuleInstantionException e) {

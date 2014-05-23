@@ -144,7 +144,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public String addSubModule(ModuleStrategy subModule){
-		if(!subModules.contains(subModule) && !hasSubModule(subModule.getName())) {
+		if(!subModules.contains(subModule) && !hasSubModuleWithName(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
 			if (!subModule.fromStorage){
@@ -158,7 +158,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public void addSubModule(int index,ModuleStrategy subModule){
-		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+		if(!subModules.contains(subModule) && !this.hasSubModuleWithName(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(index,subModule);		
 		}else{
@@ -167,7 +167,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 
 	public void removeSubModule(ModuleStrategy subModule){
-		if(subModules.contains(subModule) && this.hasSubModule(subModule.getName())) {
+		if(subModules.contains(subModule) && this.hasSubModuleWithName(subModule.getName())) {
 			subModules.remove(subModule);
 		}else{
 			System.out.println("This sub module does not exist!");
@@ -185,13 +185,11 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return returnValue;	
 	}
 
-	public boolean hasSubModule(String name){
+	public boolean hasSubModuleWithName(String name){
 		boolean hasSubModule = false;
 
 		for(ModuleStrategy subModule : subModules){
 			if(subModule.getName().equals(name)){
-				hasSubModule = true;
-			}else if(!(subModule instanceof Layer) && subModule.hasSubModule(name)){
 				hasSubModule = true;
 			}
 		}
@@ -203,6 +201,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		for(ModuleStrategy subModule : subModules){
 			if(subModule.getId() == id || subModule.hasSubModule(id)){
 				hasSubModule = true;
+				break;
 			}
 		}
 		return hasSubModule;
@@ -432,7 +431,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
     public String toString() {
         String representation = "";
-        representation += "\nName: " + name;
+        representation += "\nName: " + name + ", ID: " + id;
         representation += "\nType: " + type;
         representation += "\nSubModules: ";
         for (ModuleStrategy m : subModules){

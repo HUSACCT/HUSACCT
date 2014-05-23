@@ -6,23 +6,32 @@ import husacct.common.locale.ILocaleService;
 import husacct.common.locale.LocaleServiceImpl;
 import husacct.common.services.IServiceListener;
 import husacct.control.task.configuration.ConfigurationManager;
-
+import java.net.URL;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LocaleControllerTest {
 
 	private ILocaleService localeService;
-	
 	private String translatedString = "JUnitTestValue";
 	private String stringIdentifier = "ControlJUnitTestKey";
+	private static Logger logger;
 	
 	@Before
 	public void setup(){
-		 localeService = new LocaleServiceImpl();
+		localeService = new LocaleServiceImpl();
+		setLog4jConfiguration();
+	}
+
+	private static void setLog4jConfiguration() {
+		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		PropertyConfigurator.configure(propertiesFile);
+		logger = Logger.getLogger(LocaleControllerTest.class);
 	}
 
 	@Test
@@ -53,6 +62,7 @@ public class LocaleControllerTest {
 	
 	@Test
 	public void testSetNonExistingLocale(){
+		logger.info("Executing test on Locale service");
 		Locale oldLocale = localeService.getLocale(); 
 		Locale testLocale = new Locale("xx", "xx");
 		localeService.setLocale(testLocale);
@@ -70,7 +80,8 @@ public class LocaleControllerTest {
 	public void testGetNonExistingTranslatedString(){
 		String nonExistingKey = UUID.randomUUID().toString();
 		String translatedString = localeService.getTranslatedString(nonExistingKey);
-		assertEquals(translatedString, nonExistingKey);
+		String expectedResult = nonExistingKey + " (Missing resource in Locale service)";
+		assertEquals(translatedString, expectedResult);
 	}
 
 	@Test

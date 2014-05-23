@@ -105,7 +105,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	public String addModule(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		registerModule(module);
-		return parentModule.addSubModule(module);
+ 		return parentModule.addSubModule(module);
 	}
 
 	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
@@ -164,8 +164,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			}
 		}
 		if (currentModule == null) {
-			throw new RuntimeException(ServiceProvider.getInstance()
-					.getLocaleService().getTranslatedString("NoModule"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoModule") + ", ModuleId = " + moduleId);
 		}
 		return currentModule;
 	}

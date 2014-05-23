@@ -71,7 +71,7 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 			loadBundle();
 			notifyServiceListeners();
 		} else {
-			logger.error("Trying to set non-existing locale " + locale.getLanguage());
+			logger.warn("Trying to set non-existing locale " + locale.getLanguage());
 		}
 	}
 	
@@ -113,7 +113,8 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 		try {
 			transKey = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){
-			logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties" + key + resourceBundle.getLocale().getLanguage()));
+			return key + " (Missing resource in Locale service)"; 
+			//logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties" + key + resourceBundle.getLocale().getLanguage()));
 			//missingResourceException.printStackTrace();
 		}
 		return transKey;

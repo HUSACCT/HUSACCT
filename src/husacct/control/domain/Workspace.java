@@ -1,6 +1,8 @@
 package husacct.control.domain;
 
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 
 public class Workspace {
 	
@@ -19,5 +21,13 @@ public class Workspace {
 	public void setApplicationData(ApplicationDTO appData) {
 		this.appData = appData;
 	}
+	
+    public String toString() {
+        String representation = "";
+        representation += "\nName: " + name;
+        representation += "\n";
+        return representation;
+    }
+	
 	
 }

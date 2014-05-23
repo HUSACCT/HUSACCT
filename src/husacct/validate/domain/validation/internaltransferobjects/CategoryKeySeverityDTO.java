@@ -1,5 +1,6 @@
 package husacct.validate.domain.validation.internaltransferobjects;
 
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.validate.domain.validation.DefaultSeverities;
 
 public class CategoryKeySeverityDTO {
@@ -24,5 +25,14 @@ public class CategoryKeySeverityDTO {
 
 	public String getKey() {
 		return key;
+	}
+	
+	public String toString(){
+		String result = "";
+		result += "Key: " + key + "\n";
+		result += "Category: " + category + "\n";
+		result += "DefaultSeverity: " + defaultSeverity + "\n";
+		result += "\n";
+		return result;
 	}
 }

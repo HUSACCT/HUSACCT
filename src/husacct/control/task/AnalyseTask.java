@@ -60,10 +60,6 @@ public class AnalyseTask implements Runnable {
 			logger.info(new Date().toString() + " Control-AnalyseTask is Starting: getDefineService().analyze()");
 			ServiceProvider.getInstance().getDefineService().analyze();
 
-			if (!mainController.getStateController().isAnalysing()) {
-				ServiceProvider.getInstance().resetAnalyseService();
-			}
-			this.mainController.getStateController().setAnalysing(false);
 			logger.info(new Date().toString() + " Control-AnalyseTask has Finished: Analyse application; state isAnalyzing=false");
 			logger.info(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfInterfaces() + " interfaces");
 			int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
@@ -72,6 +68,10 @@ public class AnalyseTask implements Runnable {
 			
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
+			if (!mainController.getStateController().isAnalysing()) {
+				ServiceProvider.getInstance().resetAnalyseService();
+			}
+			this.mainController.getStateController().setAnalysing(false);
 
 		} catch (InterruptedException exception) {
 			this.logger.debug("RESETTING ANALYSE SERVICE");

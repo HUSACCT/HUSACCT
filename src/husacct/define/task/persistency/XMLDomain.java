@@ -41,6 +41,7 @@ public class XMLDomain {
 
 	public Application createApplication() {
 		try {
+			logger.info("Loading application from storage");
 			List<Element> applicationProperties = workspace.getChildren();
 
 			Element name = applicationProperties.get(0);
@@ -52,7 +53,7 @@ public class XMLDomain {
 			application = new Application(name.getValue(), projectsList, version.getValue());
 			application.setArchitecture(createArchitectureFromElement(architecture));
 		} catch (Exception exe) {
-			System.out.println("XMLDOMAIN :86 nill");
+			logger.error("createApplication() :86 nill");
 		}
 		return application;
 	}
@@ -101,74 +102,78 @@ public class XMLDomain {
 	}
 
 	private void createModulesFromXML(long parentId, Element XMLElement) {
-		for (Element module : XMLElement.getChildren()) {
-			ModuleStrategy newModule;
-			ModuleFactory factory = new ModuleFactory();
-			String moduleType = module.getChildText("type");
-			String moduleDescription = module.getChildText("description");
-			String moduleName = module.getChildText("name");
-			Element SoftwareUnitDefinitions = module.getChild("SoftwareUnitDefinitions");
-			int moduleId = Integer.parseInt(module.getChildText("id"));
-			// Determine highestModuleId to make sure that new modules (after loading from XML) don't get an existing moduleId, erroneously.
-			if(moduleId > highestModuleId){
-				highestModuleId = moduleId;
-			}
-
-			switch (moduleType) {
-			case "ExternalLibrary":
-				newModule = moduleService.createNewModule("ExternalLibrary");
-				break;
-			case "Component":
-				newModule = moduleService.createNewModule("Component");
-				break;
-			case "Facade":
-				newModule = moduleService.createNewModule("Facade");
-				break;
-			case "SubSystem":
-				newModule = moduleService.createNewModule("SubSystem");
-				break;
-			case "Layer":
-				newModule = moduleService.createNewModule("Layer");
-				int HierarchicalLevel = Integer.parseInt(module
-						.getChildText("HierarchicalLevel"));
-				((Layer) newModule).setHierarchicalLevel(HierarchicalLevel);
-				break;
-			default:
-				newModule = factory.createDummy("Blank");
-				break;
-			}
-
-			boolean fromStorage = true;
-			newModule.set(moduleName, moduleDescription, fromStorage);
-			newModule.setId(moduleId);
-
-			// Add neModule to parent
-			if (parentId == 0) {
-				try {
-					moduleService.addModuleToRoot(newModule);
-				} catch (Exception e) {
-					e.printStackTrace();
+		try{
+			for (Element module : XMLElement.getChildren()) {
+				ModuleStrategy newModule;
+				ModuleFactory factory = new ModuleFactory();
+				String moduleType = module.getChildText("type");
+				String moduleDescription = module.getChildText("description");
+				String moduleName = module.getChildText("name");
+				Element SoftwareUnitDefinitions = module.getChild("SoftwareUnitDefinitions");
+				int moduleId = Integer.parseInt(module.getChildText("id"));
+				// Determine highestModuleId to make sure that new modules (after loading from XML) don't get an existing moduleId, erroneously.
+				if(moduleId > highestModuleId){
+					highestModuleId = moduleId;
 				}
-			} else {
-				moduleService.addModuleToParent(parentId, newModule);
-			}
-
-			if (SoftwareUnitDefinitions != null) {
-				List<Element> SoftwareUnitDefinitionsList = SoftwareUnitDefinitions.getChildren("SoftwareUnitDefinition");
-				Iterator SUDIterator = SoftwareUnitDefinitionsList.iterator();
-				while (SUDIterator.hasNext()) {
-					Object o = SUDIterator.next();
-					if (o instanceof Element) {
-						newModule.addSUDefinition(getSoftwareUnitDefinitionFromXML((Element) o));
+	
+				switch (moduleType) {
+				case "ExternalLibrary":
+					newModule = moduleService.createNewModule("ExternalLibrary");
+					break;
+				case "Component":
+					newModule = moduleService.createNewModule("Component");
+					break;
+				case "Facade":
+					newModule = moduleService.createNewModule("Facade");
+					break;
+				case "SubSystem":
+					newModule = moduleService.createNewModule("SubSystem");
+					break;
+				case "Layer":
+					newModule = moduleService.createNewModule("Layer");
+					int HierarchicalLevel = Integer.parseInt(module
+							.getChildText("HierarchicalLevel"));
+					((Layer) newModule).setHierarchicalLevel(HierarchicalLevel);
+					break;
+				default:
+					newModule = factory.createDummy("Blank");
+					break;
+				}
+	
+				boolean fromStorage = true;
+				newModule.set(moduleName, moduleDescription, fromStorage);
+				newModule.setId(moduleId);
+	
+				// Add neModule to parent
+				if (parentId == 0) {
+					try {
+						moduleService.addModuleToRoot(newModule);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					moduleService.addModuleToParent(parentId, newModule);
+				}
+	
+				if (SoftwareUnitDefinitions != null) {
+					List<Element> SoftwareUnitDefinitionsList = SoftwareUnitDefinitions.getChildren("SoftwareUnitDefinition");
+					Iterator SUDIterator = SoftwareUnitDefinitionsList.iterator();
+					while (SUDIterator.hasNext()) {
+						Object o = SUDIterator.next();
+						if (o instanceof Element) {
+							newModule.addSUDefinition(getSoftwareUnitDefinitionFromXML((Element) o));
+						}
 					}
 				}
+	
+				if (hasSubmodules(module)) {
+					createModulesFromXML(newModule.getId(),	module.getChild("SubModules"));
+				}
 			}
-
-			if (hasSubmodules(module)) {
-				createModulesFromXML(newModule.getId(),	module.getChild("SubModules"));
-			}
+			SoftwareArchitecture.getInstance().registerImportedValues();
+		} catch (Exception exe) {
+			logger.error("createModulesFromXML()" + exe.getMessage());
 		}
-		SoftwareArchitecture.getInstance().registerImportedValues();
 	}
 
 	public SoftwareUnitDefinition getSoftwareUnitDefinitionFromXML(Element e) {

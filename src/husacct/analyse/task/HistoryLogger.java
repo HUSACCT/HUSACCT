@@ -42,14 +42,18 @@ public class HistoryLogger {
 
 
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
-		this.service = ServiceProvider.getInstance().getAnalyseService();
-		File file = new File(xmlFile); 
-		if(file.exists()) {
-			addToExistingXml(applicationDTO, workspaceName);
-		} else {
-			if(saveHistory(applicationDTO, workspaceName)) {
-				createXML(doc, rootElement);
+		try{
+			this.service = ServiceProvider.getInstance().getAnalyseService();
+			File file = new File(xmlFile); 
+			if(file.exists()) {
+				addToExistingXml(applicationDTO, workspaceName);
+			} else {
+				if(saveHistory(applicationDTO, workspaceName)) {
+					createXML(doc, rootElement);
+				}
 			}
+		} catch (Exception e) {
+			logger.warn("Analysis session not added to applicationanalysishistory.xml; exception: " + e);
 		}
 	}
 
@@ -137,14 +141,9 @@ public class HistoryLogger {
 
 			createXML(doc, (Element)root);
 
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		} catch (SAXException saxe) {
-			saxe.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		//} catch (ParserConfigurationException pce) { pce.printStackTrace(); } catch (SAXException saxe) { saxe.printStackTrace(); } catch (IOException ioe) { ioe.printStackTrace();
 		} catch (Exception e) {
-	        this.logger.debug(new Date().toString() + " "  + e);
+			logger.warn("Analysis session not added to applicationanalysishistory.xml; exception: " + e);
 		}
 
 		return true;
