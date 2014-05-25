@@ -44,18 +44,18 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public ApplicationDTO getApplicationDetails();
 
 	/**
-	 * Gets all the children from a module
+	 * Gets all the children from a module, not the grand children
 	 * @param logicalPath is the logical path, ** is root module
 	 * @return an array of ModuleDTO's. Throws RuntimeException when the module is not found.
 	 */
-	public ModuleDTO[] getChildrenFromModule(String logicalPath);
+	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath);
 
 	/**
 	 * Gets all the physical classPaths of the types represented by the assigned software units and these of all the children of the module
 	 * @param logicalPath is the logical path, ** is root module
 	 * @return an HashSet<PhysicalPathDTO>. Throws RuntimeException when the module is not found.
 	 */
-	public HashSet<String> getAllPhysicalClassPathsOfModule(String logicalPath);
+	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath);
 
 	
 	/**
@@ -92,7 +92,7 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * @param physicalPath is the physical path of a class or interface
 	 * @return a ModuleDTO if a module is found based on physicalPath (or a part of physicalPath) 
 	 */
-	public ModuleDTO getLogicalModuleBySoftwareUnitName(String physicalPath);
+	public ModuleDTO getModule_BasedOnSoftwareUnitName(String physicalPath);
 
 
 	/**
@@ -102,14 +102,14 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 *            is the logical path of the module ("**" is root)
 	 * @return a String containing the logical path to the Parent
 	 */
-	public String getParentFromModule(String logicalPath);
+	public String getModule_TheParentOfTheModule(String logicalPath);
 
 	/**
 	 * Gets all the root modules
 	 * 
 	 * @return a array of ModuleDTO's with all the root modules
 	 */
-	public ModuleDTO[] getRootModules();
+	public ModuleDTO[] getModule_AllRootModules();
 
 	/**
 	 * Checks if there is a module defined.

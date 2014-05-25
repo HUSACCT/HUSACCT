@@ -33,7 +33,7 @@ public class DefinedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(getCurrentDrawingDetail());
 		super.notifyServiceListeners();
-		AbstractDTO[] modules = defineService.getRootModules();
+		AbstractDTO[] modules = defineService.getModule_AllRootModules();
 		resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) showViolations();
 		drawModulesAndLines(modules);
@@ -42,13 +42,12 @@ public class DefinedController extends DrawingController {
 	private void getAndDrawModulesIn(String parentName) {
 		if (parentName.equals("") || parentName.equals("**")) drawArchitecture(getCurrentDrawingDetail());
 		else {
-			ModuleDTO[] children = defineService.getChildrenFromModule(parentName);
+			ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
 			if (children.length > 0) {
 				setCurrentPaths(new String[] { parentName });
 				drawModulesAndLines(children);
 			} else
-				logger.warn("Tried to draw modules for \"" + parentName
-						+ "\", but it has no children.");
+				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 		}
 	}
 	
@@ -57,8 +56,7 @@ public class DefinedController extends DrawingController {
 		else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
-				AbstractDTO[] children = defineService
-						.getChildrenFromModule(parentName);
+				AbstractDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
 				if (parentName.equals("") || parentName.equals("**")) {
 					drawArchitecture(getCurrentDrawingDetail());
 					continue;
@@ -68,8 +66,7 @@ public class DefinedController extends DrawingController {
 						knownChildren.add(child);
 					allChildren.put(parentName, knownChildren);
 				} else {
-					AbstractDTO value = getFigureMap().getModuleDTO(
-							definedFigures.get(parentName));
+					AbstractDTO value = getFigureMap().getModuleDTO(definedFigures.get(parentName));
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
@@ -81,10 +78,8 @@ public class DefinedController extends DrawingController {
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = allChildren
-						.get(onlyParentModule);
-				drawModulesAndLines(onlyParentChildren
-						.toArray(new AbstractDTO[] {}));
+				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else
 				drawModulesAndLines(allChildren);
 		}
@@ -148,8 +143,7 @@ public class DefinedController extends DrawingController {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures)
 			if (figure.isModule()) try {
-				ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(
-						figure);
+				ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(figure);
 				parentNames.add(parentDTO.logicalPath);
 				definedFigures.put(parentDTO.logicalPath, figure);
 			} catch (Exception e) {
@@ -171,8 +165,7 @@ public class DefinedController extends DrawingController {
 		if (getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
 			String firstCurrentPaths = getCurrentPaths()[0];
-			String parentPath = defineService
-					.getParentFromModule(firstCurrentPaths);
+			String parentPath = defineService.getModule_TheParentOfTheModule(firstCurrentPaths);
 			if (parentPath != null) getAndDrawModulesIn(parentPath);
 			else
 				moduleZoomOutFailed();
@@ -199,7 +192,6 @@ public class DefinedController extends DrawingController {
 	
 	@Override
 	public void moduleZoom(String zoomType) {
-		// Unused, does not need implementation. AnalyseController has
-		// implementation
+		// Unused, does not need implementation. AnalyseController has implementation
 	}
 }

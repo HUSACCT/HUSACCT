@@ -36,7 +36,7 @@ public class CommandLineController {
 			logger.debug(exception.getMessage());
 		}
 		
-		logger.info(jsap.getUsage());
+		//logger.info(jsap.getUsage());
 	}
 	
 	public void parse(String[] commandLineArguments){

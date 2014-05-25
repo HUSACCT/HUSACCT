@@ -330,8 +330,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			}
 			if (showExternalLibraries.isSelected()) {
 				currentSettings.put("libraries", true);
-				listener.hideLibraries();
-				//listener.showLibraries();
+				listener.showLibraries();
 			} else {
 				currentSettings.put("libraries", false);
 				listener.hideLibraries();

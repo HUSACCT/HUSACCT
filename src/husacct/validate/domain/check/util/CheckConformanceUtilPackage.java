@@ -28,7 +28,7 @@ public class CheckConformanceUtilPackage {
 
 	private static HashSet<Mapping> getAllPackages(String[] violationTypeKeys) {
 		HashSet<Mapping> allPackages = new HashSet<Mapping>();
-		ModuleDTO[] rootModules = define.getRootModules();
+		ModuleDTO[] rootModules = define.getModule_AllRootModules();
 		for (ModuleDTO rootModule : rootModules) {
 			allPackages.addAll(getPackageFromPhysicalPathDTO(rootModule, violationTypeKeys));
 			allPackages.addAll(getAllPackagePathsFromAllModules(rootModule, allPackages, violationTypeKeys));
@@ -37,7 +37,7 @@ public class CheckConformanceUtilPackage {
 	}
 
 	private static HashSet<Mapping> getAllPackagePathsFromAllModules(ModuleDTO module, HashSet<Mapping> classpaths, String[] violationTypeKeys) {
-		for (ModuleDTO subModule : define.getChildrenFromModule(module.logicalPath)) {
+		for (ModuleDTO subModule : define.getModule_TheChildrenOfTheModule(module.logicalPath)) {
 			classpaths.addAll(getPackageFromPhysicalPathDTO(subModule, violationTypeKeys));
 			classpaths.addAll(getAllPackagepathsFromModule(subModule, classpaths, violationTypeKeys));
 		}

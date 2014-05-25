@@ -73,10 +73,10 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public ModuleDTO[] getChildrenFromModule(String logicalPath) {
+	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath) {
 		ModuleDTO[] childModuleDTOs;
 		if (logicalPath.equals("**")) {
-			childModuleDTOs = getRootModules();
+			childModuleDTOs = getModule_AllRootModules();
 		} else {
 			ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
 			ModuleDTO moduleDTO = domainParser.parseModule(module);
@@ -93,7 +93,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	
 	@Override
-	public HashSet<String> getAllPhysicalClassPathsOfModule(String logicalPath) {
+	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath) {
 		ModuleStrategy[] modules = null;
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
 		HashSet<String> resultClasses = new HashSet<String>();
@@ -171,7 +171,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public ModuleDTO getLogicalModuleBySoftwareUnitName(String physicalPath) {
+	public ModuleDTO getModule_BasedOnSoftwareUnitName(String physicalPath) {
 		ModuleDTO returnValue = null;
         String[] splitted = physicalPath.split("\\.");
         int lenght = splitted.length;
@@ -198,7 +198,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public String getParentFromModule(String logicalPath) {
+	public String getModule_TheParentOfTheModule(String logicalPath) {
 		String parentLogicalPath = "";
 		if (logicalPath.contains(".")) {
 			String[] moduleNames = logicalPath.split("\\.");
@@ -216,7 +216,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public ModuleDTO[] getRootModules() {
+	public ModuleDTO[] getModule_AllRootModules() {
 		ModuleStrategy[] modules = moduleService.getRootModules();
 		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
 		return moduleDTOs;

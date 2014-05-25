@@ -53,7 +53,7 @@ public class IsTheOnlyModuleAllowedToUse extends RuleType {
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
                     
 					// Get logicalModuleFrom based on dependency.from and add it to the violation
-                    ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getLogicalModuleBySoftwareUnitName(dependency.from);
+                    ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getModule_BasedOnSoftwareUnitName(dependency.from);
 					if(moduleFrom != null){
 						// Add moduleFrom to violation.logicalModules, so that graphics can include these violations in architecture diagrams
 						LogicalModules logicalModulesOld = violation.getLogicalModules();

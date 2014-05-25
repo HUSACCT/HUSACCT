@@ -86,7 +86,7 @@ public abstract class RuleType {
 	protected ArrayList<Mapping> getAllClasspathsOfModule(ModuleDTO module, String[] violationTypeKeys) {
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
 		List<String> physicalClassPaths = new ArrayList<String>();
-		physicalClassPaths.addAll(defineService.getAllPhysicalClassPathsOfModule(module.logicalPath));
+		physicalClassPaths.addAll(defineService.getModule_AllPhysicalClassPathsOfModule(module.logicalPath));
 		for (String classpath : physicalClassPaths) {
 			Mapping mapping = new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys);
 			classpathsFrom.add(mapping);

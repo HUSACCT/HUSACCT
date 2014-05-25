@@ -70,7 +70,7 @@ public class FacadeConvention extends RuleType {
                     Violation violation = createViolation(currentRule, classPathFrom, classPathTo, dependency, configuration);
 
 					// Get logicalModuleFrom based on dependency.from and add it to the violation
-                    ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getLogicalModuleBySoftwareUnitName(dependency.from);
+                    ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getModule_BasedOnSoftwareUnitName(dependency.from);
 					if(moduleFrom != null){
 						// Add moduleFrom to violation.logicalModules, so that graphics can include these violations in architecture diagrams
 						LogicalModules logicalModulesOld = violation.getLogicalModules();
@@ -90,7 +90,7 @@ public class FacadeConvention extends RuleType {
 	
 	private ArrayList<Mapping> getAllClassPathsOfFacadeOfComponent(ModuleDTO module, String[] violationTypeKeys) {
 		ArrayList<Mapping> mappingFacade = new ArrayList<Mapping>();
-		for (ModuleDTO subModule : defineService.getChildrenFromModule(module.logicalPath)) {
+		for (ModuleDTO subModule : defineService.getModule_TheChildrenOfTheModule(module.logicalPath)) {
 			if (subModule.type.toLowerCase().equals("facade"))
 				mappingFacade.addAll(getAllClasspathsOfModule(subModule, violationTypeKeys));
 		}

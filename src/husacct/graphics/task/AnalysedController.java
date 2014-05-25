@@ -19,6 +19,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.sun.xml.internal.org.jvnet.fastinfoset.stax.LowLevelFastInfosetStreamWriter;
+
 public class AnalysedController extends DrawingController {
 	private final Logger			logger			= Logger.getLogger(AnalysedController.class);
 	protected IAnalyseService		analyseService;
@@ -40,12 +42,26 @@ public class AnalysedController extends DrawingController {
 
 		AbstractDTO[] modules;
 
-		if (showLibraries) 
+		if (showLibraries) {
 			// Support of External libraries is improved in version 2.4 and does not require separate method calls.  
 			modules = analyseService.getRootModules();
-		else
-			modules = analyseService.getRootModules();
-
+		} else {
+			AnalysedModuleDTO[] analysedModules = analyseService.getRootModules();
+			int nrOfInternalModules = 0;
+			for (AnalysedModuleDTO analysedModule : analysedModules){
+				if (!analysedModule.name.toLowerCase().equals("xlibraries"))
+					nrOfInternalModules++;
+			}
+			AbstractDTO[] internalModules = new AnalysedModuleDTO[nrOfInternalModules];
+			int i = 0;
+			for (AnalysedModuleDTO analysedModule : analysedModules){
+				if (!analysedModule.name.toLowerCase().equals("xlibraries")) {
+					internalModules[i] = analysedModule;
+					i++;	
+				}
+			}
+			modules = internalModules;
+		}
 		resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) showViolations();
 		this.drawModulesAndLines(modules);
@@ -62,15 +78,15 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		AnalysedModuleDTO[] children = analyseService
-				.getChildModulesInModule(parentName);
-		if (parentName.equals("")) drawArchitecture(getCurrentDrawingDetail());
-		else if (children.length > 0) {
+		//AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
+		ArrayList<AbstractDTO> children = getChildrenOf(parentName);
+		if (parentName.equals("")) 
+			drawArchitecture(getCurrentDrawingDetail());
+		else if (children.size() > 0) {
 			setCurrentPaths(new String[] { parentName });
-			this.drawModulesAndLines(children);
+			this.drawModulesAndLines(children.toArray(new AbstractDTO[] {}));
 		} else
-			logger.warn("Tried to draw modules for \"" + parentName
-					+ "\", but it has no children.");
+			logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
@@ -272,8 +288,7 @@ public class AnalysedController extends DrawingController {
 			saveSingleLevelFigurePositions();
 			resetContextFigures();
 			String firstCurrentPaths = getCurrentPaths()[0];
-			AnalysedModuleDTO parentDTO = analyseService
-					.getParentModuleForModule(firstCurrentPaths);
+			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(firstCurrentPaths);
 			if (parentDTO != null) this
 			.getAndDrawModulesIn(parentDTO.uniqueName);
 			else

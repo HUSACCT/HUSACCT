@@ -54,7 +54,7 @@ public class IsOnlyAllowedToUse extends RuleType {
                     Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
 
 					// Get logicalModuleTo based on dependency.to and add it to the violation
-                    ModuleDTO moduleTo = ServiceProvider.getInstance().getDefineService().getLogicalModuleBySoftwareUnitName(dependency.to);
+                    ModuleDTO moduleTo = ServiceProvider.getInstance().getDefineService().getModule_BasedOnSoftwareUnitName(dependency.to);
 					if(moduleTo != null){
 						// Add moduleTo to violation.logicalModules, so that graphics can include these violations in architecture diagrams
 						LogicalModules logicalModulesOld = violation.getLogicalModules();
