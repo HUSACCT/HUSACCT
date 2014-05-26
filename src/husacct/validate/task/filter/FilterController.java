@@ -1,8 +1,10 @@
 package husacct.validate.task.filter;
 
 import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
+import husacct.define.IDefineService;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -88,52 +90,36 @@ public class FilterController {
 	}
 
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
-		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
-
-		/*//Start test code
-		String testFrom = "husacct.bootstrap";
-		String testTo = "Define";
-		Boolean testCaseFound = false;
-		//End test code */
-
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
-			String violationLogModFrom = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
-			String violationLogModTo = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
-
-			/*//Start test code
-			if(violationLogModTo.startsWith(testTo) && violation.getClassPathFrom().startsWith(testFrom))
-				testCaseFound = true;
-			//End test code */
-
-			if (violationLogModFrom.startsWith(logicalpathFrom)) {
-				if (violationLogModTo.startsWith(logicalpathTo)) {
-					violations.add(violation);
-				}
-			}
-		}
-		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
-		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+		@SuppressWarnings("unchecked")
+		List<String> physicalPathsFrom = (List<String>) defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathFrom);
+		@SuppressWarnings("unchecked")
+		List<String> physicalPathsTo = (List<String>) defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathTo);
+		ViolationDTO[] returnValue = getViolationsByPhysicalPathLists(physicalPathsFrom, physicalPathsTo);
+		return returnValue;
 	}
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
-		List<Violation> violations = new ArrayList<Violation>();
-		if (physicalPathTo.startsWith("xLibraries")){
-			physicalPathTo = physicalPathTo.substring(physicalPathTo.lastIndexOf(".") + 1, physicalPathTo.length());
-		}
-		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
-			if (violation.getClassPathFrom().startsWith(physicalPathFrom) && violation.getClassPathTo().startsWith(physicalPathTo)) {
-				violations.add(violation);
-			} else if (violation.getClassPathFrom().startsWith(physicalPathFrom) && physicalPathFrom.equals(physicalPathTo) && violation.getClassPathTo().isEmpty()) {
-				violations.add(violation);
+		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+		List<String> physicalPathsFrom = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(physicalPathFrom);
+		List<String> physicalPathsTo = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(physicalPathTo);
+		ViolationDTO[] returnValue = getViolationsByPhysicalPathLists(physicalPathsFrom, physicalPathsTo);
+		return returnValue;
+	}
+
+	private ViolationDTO[] getViolationsByPhysicalPathLists(List<String> physicalPathsFrom, List<String> physicalPathsTo){
+		List<Violation> violations = new  ArrayList<Violation>();
+		for (String pathFrom : physicalPathsFrom){
+			for (String pathTo : physicalPathsTo){
+				violations.addAll(configuration.getViolationsFromTo(pathFrom, pathTo));
 			}
 		}
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
-
-		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+		ViolationDTO[] returnValue = violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+		return returnValue;
 	}
-
+	
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
 

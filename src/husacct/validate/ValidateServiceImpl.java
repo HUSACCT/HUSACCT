@@ -78,8 +78,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		if (!validationExecuted) {
 			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
 		}
-		return task.getViolationsByPhysicalPath(physicalpathFrom,
-				physicalpathTo);
+		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
 	/**

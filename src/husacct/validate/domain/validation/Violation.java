@@ -146,7 +146,8 @@ public class Violation {
         representation += "\nlogicalModuleFrom: " + logicalModules.getLogicalModuleFrom().getLogicalModulePath();
         representation += "\nlogicalModuleTo: " + logicalModules.getLogicalModuleTo().getLogicalModulePath();
         representation += "\nruleType: " + ruletypeKey;
-        representation += ", linenumber: " + linenumber;
+        representation += ", line: " + linenumber;
+        representation += ", violationType: " + violationTypeKey;
         representation += ", indirect: " + inDirect;
         representation += "\n";
         return representation;

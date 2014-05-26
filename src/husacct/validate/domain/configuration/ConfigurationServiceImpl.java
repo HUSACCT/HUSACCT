@@ -61,8 +61,14 @@ public final class ConfigurationServiceImpl extends Observable {
 		return violationRepository.getAllViolations();
 	}
 
+	// returns a List of Violations; it is empty if no Violation is registered for the specific combination of from-to
+	public List<Violation> getViolationsFromTo(String physicalPathFrom, String physicalPathTo) {
+		return violationRepository.getViolationsFromTo(physicalPathFrom, physicalPathTo);
+	}
+	
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
+		
 		setChanged();
 		notifyObservers();
 		notifyServiceListeners();
