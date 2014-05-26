@@ -28,7 +28,6 @@ public class AnalysedController extends DrawingController {
 	protected IValidateService		validateService;
 
 	private ArrayList<BaseFigure>	analysedContextFigures;
-	private boolean					showLibraries	= false;										;
 
 	public AnalysedController() {
 		super();
@@ -42,7 +41,7 @@ public class AnalysedController extends DrawingController {
 
 		AbstractDTO[] modules;
 
-		if (showLibraries) {
+		if (areExternalLibrariesShown) {
 			// Support of External libraries is improved in version 2.4 and does not require separate method calls.  
 			modules = analyseService.getRootModules();
 		} else {
@@ -63,7 +62,8 @@ public class AnalysedController extends DrawingController {
 			modules = internalModules;
 		}
 		resetCurrentPaths();
-		if (DrawingDetail.WITH_VIOLATIONS == detail) showViolations();
+		if (DrawingDetail.WITH_VIOLATIONS == detail) 
+			showViolations();
 		this.drawModulesAndLines(modules);
 
 		/*
@@ -205,9 +205,8 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void hideLibraries() {
-		showLibraries = false;
-		refreshDrawing();
 		super.hideLibraries();
+		refreshDrawing();
 	}
 
 	private void initializeServices() {
@@ -320,9 +319,8 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void showLibraries() {
-		showLibraries = true;
-		refreshDrawing();
 		super.showLibraries();
+		refreshDrawing();
 	}
 
 	@Override

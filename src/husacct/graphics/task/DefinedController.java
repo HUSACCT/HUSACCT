@@ -3,6 +3,7 @@ package husacct.graphics.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
@@ -15,6 +16,8 @@ import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class DefinedController extends DrawingController {
@@ -33,9 +36,28 @@ public class DefinedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(getCurrentDrawingDetail());
 		super.notifyServiceListeners();
-		AbstractDTO[] modules = defineService.getModule_AllRootModules();
+
+		ModuleDTO[] modules = defineService.getModule_AllRootModules();
+		modules = enrichModulesWithAllUnderlyingPhysicalClassPaths(modules); 
+		if (!areExternalLibrariesShown) {
+			int nrOfInternalModules = 0;
+			for (ModuleDTO module : modules){
+				if (!module.type.toLowerCase().equals("externallibrary"))
+					nrOfInternalModules++;
+			}
+			ModuleDTO[] internalModules = new ModuleDTO[nrOfInternalModules];
+			int i = 0;
+			for (ModuleDTO module : modules){
+				if (!module.type.toLowerCase().equals("externallibrary")) {
+					internalModules[i] = module;
+					i++;	
+				}
+			}
+			modules = internalModules;
+		}
 		resetCurrentPaths();
-		if (DrawingDetail.WITH_VIOLATIONS == detail) showViolations();
+		if (DrawingDetail.WITH_VIOLATIONS == detail) 
+			showViolations();
 		drawModulesAndLines(modules);
 	}
 	
@@ -43,6 +65,7 @@ public class DefinedController extends DrawingController {
 		if (parentName.equals("") || parentName.equals("**")) drawArchitecture(getCurrentDrawingDetail());
 		else {
 			ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
+			children = enrichModulesWithAllUnderlyingPhysicalClassPaths(children); 
 			if (children.length > 0) {
 				setCurrentPaths(new String[] { parentName });
 				drawModulesAndLines(children);
@@ -56,7 +79,8 @@ public class DefinedController extends DrawingController {
 		else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
-				AbstractDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
+				ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
+				children = enrichModulesWithAllUnderlyingPhysicalClassPaths(children); 
 				if (parentName.equals("") || parentName.equals("**")) {
 					drawArchitecture(getCurrentDrawingDetail());
 					continue;
@@ -83,6 +107,19 @@ public class DefinedController extends DrawingController {
 			} else
 				drawModulesAndLines(allChildren);
 		}
+	}
+	
+	private ModuleDTO[] enrichModulesWithAllUnderlyingPhysicalClassPaths(ModuleDTO[] modules){
+		for (ModuleDTO module : modules){
+			ArrayList<PhysicalPathDTO> PhysicalPathDTOs = new ArrayList<PhysicalPathDTO>();
+			HashSet<String> physicalClassPaths = defineService.getModule_AllPhysicalClassPathsOfModule(module.logicalPath);
+			for (String physicalClassPath : physicalClassPaths){
+				PhysicalPathDTO physicalPathDTO = new PhysicalPathDTO(physicalClassPath, "");
+				PhysicalPathDTOs.add(physicalPathDTO);
+			}
+			module.physicalPathDTOs = PhysicalPathDTOs.toArray(new PhysicalPathDTO[PhysicalPathDTOs.size()]);
+		}
+		return modules;
 	}
 	
 	@Override
@@ -185,6 +222,18 @@ public class DefinedController extends DrawingController {
 		getAndDrawModulesIn(getCurrentPaths());
 	}
 	
+	@Override
+	public void hideLibraries() {
+		super.hideLibraries();
+		refreshDrawing();
+	}
+
+	@Override
+	public void showLibraries() {
+		super.showLibraries();
+		refreshDrawing();
+	}
+
 	@Override
 	public void showViolations() {
 		if (validateService.isValidated()) super.showViolations();

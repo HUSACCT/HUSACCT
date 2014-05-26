@@ -11,8 +11,7 @@ public class DrawingSingleLevelThread implements Runnable {
 	private AbstractDTO[]		toDrawModules;
 	private Logger logger = Logger.getLogger(DrawingSingleLevelThread.class);
 	
-	public DrawingSingleLevelThread(DrawingController theController,
-			AbstractDTO[] modules) {
+	public DrawingSingleLevelThread(DrawingController theController, AbstractDTO[] modules) {
 		controller = theController;
 		toDrawModules = modules;
 	}

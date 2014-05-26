@@ -7,8 +7,7 @@ import husacct.graphics.util.UserInputListener;
 public abstract class DrawingSettingsController implements UserInputListener {
 	protected boolean	areSmartLinesOn	= true;
 	protected boolean	isZoomWithContextOn	= false;
-	protected boolean	areDependenciesShown, areViolationsShown,
-			areExternalLibrariesShown, areLinesThick;
+	protected boolean	areDependenciesShown, areViolationsShown, areExternalLibrariesShown, areLinesThick;
 	
 	protected String[]	currentPaths	= new String[] {};
 	

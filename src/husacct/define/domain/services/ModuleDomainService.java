@@ -34,9 +34,7 @@ public class ModuleDomainService {
 
 	public String addNewModuleToParent(long parentModuleId,	ModuleStrategy module) {
 		StateService.instance().addModule(module);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
-	
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
 	}
 	
@@ -50,13 +48,11 @@ public class ModuleDomainService {
 	}
 
 	public ModuleStrategy getModuleByLogicalPath(String logicalPath) {
-		return SoftwareArchitecture.getInstance().getModuleByLogicalPath(
-				logicalPath);
+		return SoftwareArchitecture.getInstance().getModuleByLogicalPath(logicalPath);
 	}
 
 	public ModuleStrategy getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {
-		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(
-				su.getName());
+		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su.getName());
 	}
 	
 	public ModuleStrategy getModuleByName(String name){
@@ -66,8 +62,7 @@ public class ModuleDomainService {
 	public String getModuleNameById(long moduleId) {
 		String moduleName = new String();
 		if (moduleId != -1) {
-			moduleName = SoftwareArchitecture.getInstance()
-					.getModuleById(moduleId).getName();
+			moduleName = SoftwareArchitecture.getInstance().getModuleById(moduleId).getName();
 		}
 		return moduleName;
 	}
@@ -77,8 +72,7 @@ public class ModuleDomainService {
 	}
 
 	public Long getParentModuleIdByChildId(Long moduleId) {
-		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(
-				moduleId);
+		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
 	}
 
 	public ModuleStrategy getRootModule() {
@@ -86,16 +80,14 @@ public class ModuleDomainService {
 	}
 
 	public ModuleStrategy[] getRootModules() {
-		ArrayList<ModuleStrategy> moduleList = SoftwareArchitecture
-				.getInstance().getModules();
+		ArrayList<ModuleStrategy> moduleList = SoftwareArchitecture.getInstance().getModules();
 		ModuleStrategy[] modules = new ModuleStrategy[moduleList.size()];
 		moduleList.toArray(modules);
 		return modules;
 	}
 
 	public ArrayList<Long> getRootModulesIds() {
-		ArrayList<ModuleStrategy> moduleList = SoftwareArchitecture
-				.getInstance().getModules();
+		ArrayList<ModuleStrategy> moduleList = SoftwareArchitecture.getInstance().getModules();
 		ArrayList<Long> moduleIdList = new ArrayList<Long>();
 		for (ModuleStrategy module : moduleList) {
 			moduleIdList.add(module.getId());
@@ -106,20 +98,16 @@ public class ModuleDomainService {
 	public ArrayList<Long> getSiblingModuleIds(long moduleId) {
 		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
 		if (moduleId != -1) {
-			long parentModuleId = SoftwareArchitecture.getInstance()
-					.getParentModuleIdByChildId(moduleId);
+			long parentModuleId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
 			childModuleIdList = getSubModuleIds(parentModuleId);
-
-			ModuleStrategy module = SoftwareArchitecture.getInstance()
-					.getModuleById(moduleId);
+			ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 			childModuleIdList.remove(module.getId());
 		}
 		return childModuleIdList;
 	}
 
 	public ArrayList<ModuleStrategy> getSortedModules() {
-		ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance()
-				.getModules();
+		ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance().getModules();
 		Collections.sort(modules, new ModuleComparator());
 		for (ModuleStrategy module : modules) {
 			sortModuleChildren(module);
@@ -129,16 +117,11 @@ public class ModuleDomainService {
 
 	public ArrayList<Long> getSubModuleIds(Long parentModuleId) {
 		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
-
 		if (parentModuleId != -1) {
-			ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
-					.getModuleById(parentModuleId);
-
+			ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 			for (ModuleStrategy module : parentModule.getSubModules()) {
 				childModuleIdList.add(module.getId());
-
-				ArrayList<Long> subModuleIdList = getSubModuleIds(module
-						.getId());
+				ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
 				for (Long l : subModuleIdList) {
 					childModuleIdList.add(l);
 				}
@@ -152,26 +135,22 @@ public class ModuleDomainService {
 	public void moveLayerDown(long layerId) {
 		StateService.instance().layerDown(layerId);
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void moveLayerUp(long layerId) {
 		StateService.instance().layerUp(layerId);
 		SoftwareArchitecture.getInstance().moveLayerUp(layerId);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void removeAllModules() {
 		SoftwareArchitecture.getInstance().removeAllModules();
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void removeModuleById(long moduleId) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
       try{
 		SoftwareArchitecture.getInstance().removeModule(module);
 	    JtreeController.instance().registerTreeRemoval(module);
@@ -179,8 +158,7 @@ public class ModuleDomainService {
       {
     	  e.printStackTrace();
       }
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void sortModuleChildren(ModuleStrategy module) {
@@ -192,15 +170,12 @@ public class ModuleDomainService {
 	}
 
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
-		StateService.instance().addUpdateModule(moduleId,
-				new String[] { module.getName(), moduleDescription },
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		StateService.instance().addUpdateModule(moduleId, new String[] { module.getName(), moduleDescription },
 				new String[] { moduleName, moduleDescription });
 		module.setName(moduleName);
 		module.setDescription(moduleDescription);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	public void updateModuleType(long moduleId, String moduleName, String moduleDescription, String newType) {
@@ -216,9 +191,7 @@ public class ModuleDomainService {
 				StateService.instance().addUpdateModule(module, updatedModule);
 			}
 		}
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
-
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	public void updateFacade(long moduleId, String moduleName){

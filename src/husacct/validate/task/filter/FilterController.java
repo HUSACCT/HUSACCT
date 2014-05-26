@@ -15,6 +15,7 @@ import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -91,10 +92,10 @@ public class FilterController {
 
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-		@SuppressWarnings("unchecked")
-		List<String> physicalPathsFrom = (List<String>) defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathFrom);
-		@SuppressWarnings("unchecked")
-		List<String> physicalPathsTo = (List<String>) defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathTo);
+		List<String> physicalPathsFrom = new ArrayList<String>();
+		physicalPathsFrom.addAll(defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathFrom));
+		List<String> physicalPathsTo = new ArrayList<String>();
+		physicalPathsTo.addAll(defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathTo));
 		ViolationDTO[] returnValue = getViolationsByPhysicalPathLists(physicalPathsFrom, physicalPathsTo);
 		return returnValue;
 	}
