@@ -118,11 +118,11 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			if (suType.toLowerCase().equals("class") || suType.toLowerCase().equals("interface") || suType.toLowerCase().equals("library")){
 				resultClasses.add(suName);
 			}
-			else if (suType.toLowerCase().equals("package")){
-				// Get all underlying classes from AnalyseService and add them to resultClasses
+//			else if (suType.toLowerCase().equals("package")){
+				// Get all underlying classes (also inner classes) from AnalyseService and add them to resultClasses
 				List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(suName); 
 				resultClasses.addAll(AllPhysicalClassPaths); 
-			}
+//			}
 		}
 		return resultClasses;
 	}

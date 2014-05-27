@@ -17,48 +17,23 @@ public class creditsFetcher {
 
 	private Logger logger = Logger.getLogger(creditsFetcher.class);
 	
-	public List<String> fetchStudentNames() {
+	public List<String> fetchDeveloperNames() {
 		
-		List<String> students = new ArrayList<String>();
+		List<String> developers = new ArrayList<String>();
 		try {
-			InputStream stream = Resource.getStream((Resource.CREDITS_PATH) +"credits_students.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-			//String CreditsPath = URLDecoder.decode((Resource.get(Resource.CREDITS_PATH) +"credits_students.txt").replaceAll("file:/", ""), "utf-8");
-			//File f = new File(CreditsPath);
-			//BufferedReader br = new BufferedReader(new FileReader(f));
-			String line;
-			while((line = br.readLine()) != null) {
-				if(line.charAt(0) != '@') {					
-					students.add(line);
-				}
-			}
-			return students;
-		}
-		catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		return students;
-	}
-	public List<String> fetchTeacherNames() {
-		
-		List<String> teacher = new ArrayList<String>();
-		try {
-			//String CreditsPath = URLDecoder.decode((Resource.get(Resource.CREDITS_PATH) +"credits_teachers.txt").replaceAll("file:/", ""), "utf-8");
-			//File f = new File(CreditsPath);
-			//BufferedReader br = new BufferedReader(new FileReader(f));
-			InputStream stream = Resource.getStream((Resource.CREDITS_PATH) +"credits_teachers.txt");
+			InputStream stream = Resource.getStream((Resource.CREDITS_PATH) +"credits_developers.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 			String line;
 			while((line = br.readLine()) != null) {
 				if(line.charAt(0) != '@') {					
-					teacher.add(line);
+					developers.add(line);
 				}
 			}
-			return teacher;
+			return developers;
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		return teacher;
+		return developers;
 	}
 }

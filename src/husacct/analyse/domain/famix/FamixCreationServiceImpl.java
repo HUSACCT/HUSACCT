@@ -65,6 +65,13 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             fClass.visibility = visibility;
         }
         addToModel(fClass);
+        // If the class is an inner class, set parent.hasInnerClasses to true.
+		if (model.classes.containsKey(belongsToClass)){
+			FamixClass parent = model.classes.get(belongsToClass);
+			parent.hasInnerClasses = true;
+		}
+		
+
     }
 
     @Override

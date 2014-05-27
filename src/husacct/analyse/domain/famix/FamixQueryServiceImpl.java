@@ -114,20 +114,23 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			uniqueNamesTypesFrom.add(uniqueName);
 		}
 		// Add inner classes to the result set
+		List<String> innerClassNames = new ArrayList<String>();
 		for (String name : uniqueNamesTypesFrom){
 			if (theModel.classes.containsKey(name)){
-				if (theModel.classes.get(name).hasInnerClasses){
+				FamixClass selectedClass = theModel.classes.get(name);
+				if (selectedClass.hasInnerClasses){
 					Set<String> allClasses = theModel.classes.keySet();
 					for (String className : allClasses){
 						if (className.startsWith(name)){
 							if (theModel.classes.get(className).isInnerClass){
-								allClasses.add(theModel.classes.get(className).uniqueName);
+								innerClassNames.add(theModel.classes.get(className).uniqueName);
 							}
 						}
 					}
 				}
 			}
 		}
+		uniqueNamesTypesFrom.addAll(innerClassNames);
 		return uniqueNamesTypesFrom;
     }
 

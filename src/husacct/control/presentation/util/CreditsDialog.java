@@ -1,7 +1,6 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
-import husacct.common.Resource;
 import husacct.common.credits.creditsFetcher;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
@@ -11,16 +10,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -30,56 +26,39 @@ import javax.swing.JTextArea;
 public class CreditsDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private MainController mainController;
-	
-	private JPanel logoPanel, textPanel;
-	private JLabel teacherLabelDescription, studentLabelDescription;
-	private JTextArea teacherLabel;
-	private JTextArea studentLabel;
-	private JButton okButton, creditsButton;
-	private String versionNumber = "1.0";
-
+	private JPanel textPanel1, textPanel2, textPanel3, buttonPanel;
+	private JLabel architectLabelDescription, processDescription, developerLabelDescription;
+	private JTextArea architectLabel;
+	private JTextArea processLabel;
+	private JTextArea developersLabel;
+	private JButton okButton;
 	private GridBagConstraints constraint = new GridBagConstraints();
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public CreditsDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
-		this.mainController = mainController;
 		setTitle(localeService.getTranslatedString("Credits"));
 		setup();
 		addComponents();
 		setListeners();
 		this.setVisible(true);
-
-	}
-	private String getCreditsTeachers() {
-		creditsFetcher cf = new creditsFetcher();
-		List<String> teachers = cf.fetchTeacherNames();
-		Collections.sort(teachers, new LastNameComperator());
-		String teacherCreditsString = "";
-		for(int i = 0; i < teachers.size() ; i++) {
-			teacherCreditsString += teachers.get(i) + "\n";
-		}
-		return teacherCreditsString;
 	}
 
-
-	private String getCreditsStudents() {
+	private String getCreditsDevelopers() {
 		creditsFetcher cf = new creditsFetcher();
-		List<String> students = cf.fetchStudentNames();
-		Collections.sort(students, new LastNameComperator());
-		String studentCreditsString = "";
-		for(int i = 0; i < students.size() ; i++) {
-			studentCreditsString += students.get(i) + ", ";
+		List<String> developers = cf.fetchDeveloperNames();
+		Collections.sort(developers, new LastNameComperator());
+		String developerCreditsString = "";
+		for(int i = 0; i < developers.size() ; i++) {
+			developerCreditsString += developers.get(i) + ", ";
 		}
-		return studentCreditsString.substring(0, studentCreditsString.length() - 2) ;
-		//cf.fetchTeacherNames();
+		return developerCreditsString.substring(0, developerCreditsString.length() - 2) ;
 	}
 
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 400));
+		this.setSize(new Dimension(500, 450));
 		this.setLayout(new FlowLayout());
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
@@ -87,35 +66,58 @@ public class CreditsDialog extends JDialog {
 
 	private void addComponents(){
 
-		textPanel = new JPanel();
-		textPanel.setLayout(new GridBagLayout());
-		teacherLabelDescription = new JLabel(localeService.getTranslatedString("Teachers") + ":");
-		teacherLabelDescription.setFont(new Font("Arial", Font.BOLD, 14));
-		teacherLabel = new JTextArea(getCreditsTeachers());
-		teacherLabel.setLineWrap(true);
-		teacherLabel.setWrapStyleWord(true);
-		teacherLabel.setPreferredSize(new Dimension(400, 75));
-		teacherLabel.setOpaque(false);
-		teacherLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-		teacherLabel.setEditable(false);
-		studentLabelDescription = new JLabel(localeService.getTranslatedString("Students") + ":");
-		studentLabelDescription.setFont(new Font("Arial", Font.BOLD, 14));
-		studentLabel = new JTextArea(getCreditsStudents());
-		studentLabel.setLineWrap(true);
-		studentLabel.setWrapStyleWord(true);
-		studentLabel.setPreferredSize(new Dimension(400, 300));
-		studentLabel.setOpaque(false);
-		studentLabel.setFont(new Font("Arial", Font.PLAIN, 11));
-		studentLabel.setEditable(false);
-		textPanel.add(teacherLabelDescription, getConstraint(0,1, 6,1));
-		textPanel.add(teacherLabel,getConstraint(0, 2,6,6));
+		textPanel1 = new JPanel();
+		textPanel1.setLayout(new GridBagLayout());
+		architectLabelDescription = new JLabel(localeService.getTranslatedString("Architect") + ":");
+		architectLabelDescription.setFont(new Font("Arial", Font.BOLD, 14));
+		architectLabel = new JTextArea("\n" + "Leo Pruijt" + "\n" + "HU University of Applied Sciences, Utrecht, The Netherlands");
+		architectLabel.setLineWrap(true);
+		architectLabel.setWrapStyleWord(true);
+		architectLabel.setSize(new Dimension(400, 150));
+		architectLabel.setOpaque(false);
+		architectLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+		architectLabel.setEditable(false);
 
+		textPanel2 = new JPanel();
+		textPanel2.setLayout(new GridBagLayout());
+		processDescription = new JLabel("Process support"  + ":");
+		processDescription.setFont(new Font("Arial", Font.BOLD, 14));
+		processLabel = new JTextArea("\n" + "Christian Köppe, Michiel Borkent");
+		processLabel.setLineWrap(true);
+		processLabel.setWrapStyleWord(true);
+		processLabel.setSize(new Dimension(400, 150));
+		processLabel.setOpaque(false);
+		processLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+		processLabel.setEditable(false);
+		
+		textPanel3 = new JPanel();
+		textPanel3.setLayout(new GridBagLayout());
+		developerLabelDescription = new JLabel(localeService.getTranslatedString("Developers") + ":");
+		developerLabelDescription.setFont(new Font("Arial", Font.BOLD, 14));
+		developersLabel = new JTextArea("\n" + getCreditsDevelopers());
+		developersLabel.setLineWrap(true);
+		developersLabel.setWrapStyleWord(true);
+		developersLabel.setSize(new Dimension(400, 300));
+		developersLabel.setOpaque(false);
+		developersLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+		developersLabel.setEditable(false);
 
-		textPanel.add(studentLabelDescription, getConstraint(0,8,6,1));
-		textPanel.add(studentLabel,getConstraint(0, 9,6,6));			
-		okButton = new JButton("Close");
+		textPanel1.add(architectLabelDescription, getConstraint(0,2,6,1));
+		textPanel1.add(architectLabel,getConstraint(0,2,6,6));
+		textPanel2.add(processDescription, getConstraint(0,5,6,1));
+		textPanel2.add(processLabel,getConstraint(0,5,6,6));
+		textPanel3.add(developerLabelDescription, getConstraint(0,8,6,1));
+		textPanel3.add(developersLabel,getConstraint(0,8,6,6));			
 
-		add(textPanel);	
+		buttonPanel = new JPanel();
+		buttonPanel.setPreferredSize(new Dimension(400,70));
+		okButton = new JButton(localeService.getTranslatedString("Close"));
+		buttonPanel.add(okButton);
+
+		add(textPanel1);
+		add(textPanel2);
+		add(textPanel3);
+		add(buttonPanel);
 	}
 
 	private void setListeners(){
@@ -133,13 +135,6 @@ public class CreditsDialog extends JDialog {
 		constraint.gridy = gridy;
 		constraint.gridwidth = gridwidth;
 		constraint.gridheight = gridheight;
-		return constraint;		
-	}
-	private GridBagConstraints getConstraint(int gridx, int gridy){
-		constraint.fill = GridBagConstraints.BOTH;
-		constraint.insets = new Insets(3, 3, 3, 3);
-		constraint.gridx = gridx;
-		constraint.gridy = gridy;
 		return constraint;		
 	}
 
