@@ -198,7 +198,7 @@ public class ModuleDomainService {
 		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		for(ModuleStrategy subModule : parent.getSubModules()){
 			if(subModule.getType().equals("Facade")){
-				subModule.setName("Facade<"+moduleName+">");
+				subModule.setName("Interface<"+moduleName+">");
 			}
 		}
 	}

@@ -339,7 +339,6 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 		moduleTree = new ModuleTree(rootComponent);
 		moduleTree.setContextMenu(new ModuletreeContextMenu(this));
-		;
 		moduleTreeScrollPane.setViewportView(moduleTree);
 		moduleTree.addTreeSelectionListener(this);
 		checkLayerComponentIsSelected();

@@ -29,8 +29,12 @@ public class ModuleFigure extends BaseFigure {
 	public int					MIN_WIDTH			= 100;
 	public int					MIN_HEIGHT			= 65;
 	
-	public ModuleFigure(String name, String type) {
+	public ModuleFigure(String name, String stereotype) {
 		super(name);
+		this.type = stereotype;
+		if (type.toLowerCase().equals("facade")) {
+			type = "Interface";
+		}
 		
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
@@ -58,8 +62,9 @@ public class ModuleFigure extends BaseFigure {
 				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
 			} else if (type.toLowerCase().equals("externallibrary")) {
 				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
-			} else if (type.toLowerCase().equals("facade")) {
+			} else if (type.toLowerCase().equals("interface")) {
 				componentImageURL = Resource.get(Resource.ICON_FACADE);
+				type = "Interface";
 			} else{
 				componentImageURL = Resource.get(Resource.ICON_MODULE);
 			}

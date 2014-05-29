@@ -38,7 +38,7 @@ public class Resource {
 	public static final String ICON_APPLICATION_PROPERTIES = ICONSET_PATH + "application-properties.png";
 	public static final String ICON_CLASS_PRIVATE = ICONSET_PATH + "class-private.png";
 	public static final String ICON_CLASS_PUBLIC = ICONSET_PATH + "class-public.png";
-	public static final String ICON_COMPONENT = ICONSET_PATH + "component.png";
+	public static final String ICON_COMPONENT = ICONSET_PATH + "define-component.png";
 	public static final String ICON_DEFINE_ARCHITECTURE = ICONSET_PATH + "define-architecture.png";
 	public static final String ICON_DEFINE_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "defined-architecture-diagram.png";
 	public static final String ICON_DEPENDENCIES_ACTIVE = ICONSET_PATH + "dependencies-active.png";
@@ -62,7 +62,7 @@ public class Resource {
 	public static final String ICON_SAVE = ICONSET_PATH + "save.png";
 	public static final String ICON_SOFTWARE_ARCHITECTURE = ICONSET_PATH + "software-architecture.png";
 	public static final String ICON_SOURCE = ICONSET_PATH + "source.png";
-	public static final String ICON_SUBSYSTEM = ICONSET_PATH + "subsystem.png";
+	public static final String ICON_SUBSYSTEM = ICONSET_PATH + "define-subsystem.png";
 	public static final String ICON_VALIDATE = ICONSET_PATH + "validate.png";
 	public static final String ICON_VIOLATIONS_ACTIVE = ICONSET_PATH + "violations-active.png";
 	public static final String ICON_VIOLATIONS_INACTIVE = ICONSET_PATH + "violations-inactive.png";

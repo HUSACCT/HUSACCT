@@ -20,13 +20,18 @@ public class ModuleComparator implements Comparator<Object> {
 			compareReturn = -1;
 		} else if(emp2 instanceof Layer) {
 			compareReturn = 1;
-		}  else if(((ModuleStrategy) emp1).getparent() instanceof Component&&
-				((ModuleStrategy) emp1).getparent() instanceof Component) {
-		compareReturn=	compareComponents(emp1,emp2);
-		}else {
+		} else if(((ModuleStrategy) emp1).getparent() instanceof Component &&
+				((ModuleStrategy) emp2).getparent() instanceof Component) {
+			compareReturn=	compareComponents(emp1,emp2);
+		} else {
 			long moduleid1 = ((ModuleStrategy)emp1).getId();
 			long moduleid2 = ((ModuleStrategy)emp2).getId();
 			compareReturn = this.compareLongs(moduleid1, moduleid2);
+		}
+		if(emp1 instanceof Facade) {
+			compareReturn = -1;
+		} else if(emp2 instanceof Facade) {
+			compareReturn = 1;
 		} 
 		return compareReturn;
     }
