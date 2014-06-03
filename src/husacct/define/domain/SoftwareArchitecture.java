@@ -180,6 +180,10 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	public ModuleStrategy getModuleByLogicalPath(String logicalPath) {
 		ModuleStrategy currentModule = null;
+		if ((logicalPath == null) || (logicalPath.equals(""))){
+			logger.warn(String.format(" Module not found; logical path: " + logicalPath));
+			return currentModule;
+		}
 		if (logicalPath.equals("**")) {
 			currentModule = rootModule;
 		} else {

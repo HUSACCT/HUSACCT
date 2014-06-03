@@ -338,13 +338,19 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 
 						HashMap<String, Object> ruleDetails = DefinitionController.getInstance().getRuleDetailsByAppliedRuleId(appliedRuleId);
 						String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
-						// SetDataHelper to help retrieve the applied Rule id
-						// through the ruleTypeKey
+						// SetDataHelper to help retrieve the applied Rule id through the ruleTypeKey
 						DataHelper datahelperRuleType = new DataHelper();
 						datahelperRuleType.setId(appliedRuleId);
 						datahelperRuleType.setValue(ruleTypeKey);
 
-						String moduleToName = (String) ruleDetails.get("moduleToName");
+						String moduleToName;
+						if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) 
+								|| (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) || (ruleTypeKey.equals("InterfaceInheritanceConvention")) 
+								|| (ruleTypeKey.equals("SuperClassInheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
+							moduleToName = (String) ruleDetails.get("moduleToName");
+						} else {
+							moduleToName = ""; //Do not show the module to. Logically there is no module to, but technically module to is the same as module from.
+						}
 						boolean appliedRuleIsEnabled = (Boolean) ruleDetails.get("enabled");
 						String enabled = "Off";
 						if (appliedRuleIsEnabled) {

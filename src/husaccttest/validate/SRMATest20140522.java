@@ -110,7 +110,7 @@ public class SRMATest20140522 {
 		boolean isValidatedCorrectly = false;
 		try {
 			String pathFrom = "domain.relationrules.is_not_allowed_to_use";
-			String pathTo = "fi.foyt";
+			String pathTo = "xLibraries.fi.foyt";
 			violations = validate.getViolationsByPhysicalPath(pathFrom, pathTo);
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
@@ -215,7 +215,7 @@ public class SRMATest20140522 {
 		boolean isValidatedCorrectly = false;
 		try {
 			String pathFrom = "Technology.PropertyRules.NamingPrefix";
-			String pathTo = "";
+			String pathTo = "Technology.PropertyRules.NamingPrefix";
 			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
@@ -230,7 +230,7 @@ public class SRMATest20140522 {
 		boolean isValidatedCorrectly = false;
 		try {
 			String pathFrom = "Technology.PropertyRules.NamingMid";
-			String pathTo = "";
+			String pathTo = "Technology.PropertyRules.NamingMid";
 			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
@@ -245,7 +245,7 @@ public class SRMATest20140522 {
 		boolean isValidatedCorrectly = false;
 		try {
 			String pathFrom = "Technology.PropertyRules.NamingPostfix";
-			String pathTo = "";
+			String pathTo = "Technology.PropertyRules.NamingPostfix";
 			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
@@ -290,7 +290,7 @@ public class SRMATest20140522 {
 		boolean isValidatedCorrectly = false;
 		try {
 			String pathFrom = "Technology.PropertyRules.Component";
-			String pathTo = "";
+			String pathTo = "Technology.PropertyRules.Component";
 			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
