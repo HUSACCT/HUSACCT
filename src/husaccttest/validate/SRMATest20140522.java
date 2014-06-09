@@ -298,10 +298,7 @@ public class SRMATest20140522 {
 		assertEquals(4, violations.length);
 	}
 
-	//
-	//private helpers
-	//
-	//From Maven plugin
+	//private helpers; from Maven plugin
 
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");

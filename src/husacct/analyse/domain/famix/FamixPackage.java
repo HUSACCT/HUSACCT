@@ -1,8 +1,6 @@
 package husacct.analyse.domain.famix;
 
-class FamixPackage extends FamixEntity {
-
-    public String belongsToPackage;
+class FamixPackage extends FamixDecompositionEntity {
 
     @Override
     public boolean equals(Object object) {

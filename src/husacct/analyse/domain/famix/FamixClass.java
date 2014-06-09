@@ -1,11 +1,10 @@
 package husacct.analyse.domain.famix;
 
-class FamixClass extends FamixEntity {
+class FamixClass extends FamixDecompositionEntity {
 
     public boolean isInnerClass = false;
     public boolean isAbstract = false;
     public boolean hasInnerClasses = false;
-    public String belongsToPackage;
     public String belongsToClass = null;
 
     @Override

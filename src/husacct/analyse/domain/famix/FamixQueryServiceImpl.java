@@ -86,23 +86,22 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
     @Override
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
-		List<String> uniqueNamesTypesFrom = new ArrayList<String>();
-		String uniqueNameTypeFrom;
+		List<String> uniqueNamesAllFoundTypes = new ArrayList<String>();
 		//Determine if uniqueName is a packages or type. If it is a packages, get all sub-packages.
 		if (theModel.packages.containsKey(uniqueName)){
-			List<AnalysedModuleDTO> fromTypes = new ArrayList<AnalysedModuleDTO>();
+			List<AnalysedModuleDTO> foundTypes = new ArrayList<AnalysedModuleDTO>();
 			Set<String> allPackages = theModel.packages.keySet();
 			for (String packageName : allPackages){
 				if (packageName.startsWith(uniqueName)){
 					//get all types within the package
-					fromTypes.addAll(getChildModulesInModule(packageName));
+					foundTypes.addAll(getChildModulesInModule(packageName));
 				}
 			}
 			// Add unique names of the types to the result set
-			for (AnalysedModuleDTO typeFrom : fromTypes){
+			for (AnalysedModuleDTO typeFrom : foundTypes){
 				if ((typeFrom != null) && (!typeFrom.uniqueName.equals("")) && (!typeFrom.type.toLowerCase().equals("package"))){ 
-					uniqueNameTypeFrom = typeFrom.uniqueName;
-					uniqueNamesTypesFrom.add(uniqueNameTypeFrom);
+					String uniqueNameTypeFrom = typeFrom.uniqueName;
+					uniqueNamesAllFoundTypes.add(uniqueNameTypeFrom);
 				} 
 			}
 		}
@@ -111,27 +110,20 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			if (theModel.libraries.containsKey(uniqueName)){
 				uniqueName = theModel.libraries.get(uniqueName).physicalPath;
 			}
-			uniqueNamesTypesFrom.add(uniqueName);
+			uniqueNamesAllFoundTypes.add(uniqueName);
 		}
 		// Add inner classes to the result set
 		List<String> innerClassNames = new ArrayList<String>();
-		for (String name : uniqueNamesTypesFrom){
+		for (String name : uniqueNamesAllFoundTypes){
 			if (theModel.classes.containsKey(name)){
 				FamixClass selectedClass = theModel.classes.get(name);
 				if (selectedClass.hasInnerClasses){
-					Set<String> allClasses = theModel.classes.keySet();
-					for (String className : allClasses){
-						if (className.startsWith(name)){
-							if (theModel.classes.get(className).isInnerClass){
-								innerClassNames.add(theModel.classes.get(className).uniqueName);
-							}
-						}
-					}
+					innerClassNames.addAll(selectedClass.children);
 				}
 			}
 		}
-		uniqueNamesTypesFrom.addAll(innerClassNames);
-		return uniqueNamesTypesFrom;
+		uniqueNamesAllFoundTypes.addAll(innerClassNames);
+		return uniqueNamesAllFoundTypes;
     }
 
     @Override

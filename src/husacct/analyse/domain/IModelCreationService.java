@@ -9,10 +9,6 @@ public interface IModelCreationService {
 
     public void clearModel();
 
-    @Deprecated /*This function will be replaced after all analysers have adapter one of the below functions*/
-
-    public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
-
     public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 
     public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity);

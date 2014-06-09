@@ -44,11 +44,14 @@ public class NamingConvention extends RuleType {
 
 		for (Mapping fromMapping : fromMappings) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(fromMapping.getPhysicalPath());
-			if (!pathDTOarrayContainsValue(pathDTOs, fromMapping.getPhysicalPath()) &&
-					!Regex.matchRegex(regex, analysedModule.name) &&
-					analysedModule.type.toLowerCase().equals("package")) {
-				Violation violation = createViolation(rootRule, fromMapping, configuration);
-				violations.add(violation);
+			if (!pathDTOarrayContainsValue(pathDTOs, fromMapping.getPhysicalPath())) {
+				if (!Regex.matchRegex(regex, analysedModule.name)) {
+					if (analysedModule.type.toLowerCase().equals("package")){
+						Violation violation = createViolation(rootRule, fromMapping, configuration);
+						violations.add(violation);
+						
+					}
+				}
 			}
 		}
 		return violations;

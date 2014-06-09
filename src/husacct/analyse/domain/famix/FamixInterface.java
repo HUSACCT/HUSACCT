@@ -1,8 +1,6 @@
 package husacct.analyse.domain.famix;
 
-public class FamixInterface extends FamixEntity {
-
-    public String belongsToPackage;
+public class FamixInterface extends FamixDecompositionEntity {
 
     public boolean equals(FamixInterface other) {
         return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 

@@ -10,9 +10,12 @@ import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import org.apache.log4j.Logger;
+
 class FamixModel extends FamixObject {
 
     private static FamixModel currentInstance;
+    private final Logger logger = Logger.getLogger(FamixModel.class);
     public List<FamixStructuralEntity> waitingStructuralEntitys;
     public List<FamixAssociation> waitingAssociations;
     public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
@@ -63,8 +66,6 @@ class FamixModel extends FamixObject {
     }
 
     public void addObject(FamixObject e) throws InvalidAttributesException {
-    	String name = "";
-    	FamixClass returnValue;
         try{
     	if (e instanceof FamixEntity) {
             if (e instanceof FamixBehaviouralEntity) {
@@ -72,14 +73,56 @@ class FamixModel extends FamixObject {
             } else if (e instanceof FamixStructuralEntity) {
                 structuralEntities.put(((FamixEntity) e).uniqueName, (FamixStructuralEntity) e);
             } else if (e instanceof FamixPackage) {
-                packages.put(((FamixEntity) e).uniqueName, (FamixPackage) e);
+                if (!packages.containsKey(((FamixEntity) e).uniqueName)){
+	            	packages.put(((FamixEntity) e).uniqueName, (FamixPackage) e);
+	                String parentUniqueName = ((FamixPackage) e).belongsToPackage;
+	                FamixPackage parent = null;
+	                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+	                	parent = packages.get(parentUniqueName);
+	                	parent.children.add(((FamixEntity) e).uniqueName);
+	                }
+                }
             } else if (e instanceof FamixClass) {
-            	name = ((FamixEntity) e).uniqueName.trim();
-            	classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
+                if (!classes.containsKey(((FamixEntity) e).uniqueName)){
+	            	classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
+	                String parentUniqueName;
+	                if (((FamixClass) e).isInnerClass) {
+	                	parentUniqueName = ((FamixClass) e).belongsToClass;
+	            		if ((!parentUniqueName.equals("")) && (classes.containsKey(parentUniqueName))){
+	            			FamixClass parent = classes.get(parentUniqueName);
+	            			parent.hasInnerClasses = true;
+	            			parent.children.add(((FamixEntity) e).uniqueName);
+	            		}
+	                } else {
+	                	parentUniqueName = ((FamixClass) e).belongsToPackage;
+		                FamixPackage parent = null;
+		                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+		                	parent = packages.get(parentUniqueName);
+		                	parent.children.add(((FamixEntity) e).uniqueName);
+		                }
+	                }
+                }
             } else if (e instanceof FamixInterface) {
-                interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
+                if (!interfaces.containsKey(((FamixEntity) e).uniqueName)){
+                	interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
+	                String parentUniqueName = ((FamixInterface) e).belongsToPackage;
+	                FamixPackage parent = null;
+	                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+	                	parent = packages.get(parentUniqueName);
+	                	parent.children.add(((FamixEntity) e).uniqueName);
+	                }
+                }
             } else if (e instanceof FamixLibrary) {
-                libraries.put(((FamixLibrary) e).uniqueName, (FamixLibrary) e);
+                if (!libraries.containsKey(((FamixEntity) e).uniqueName)){
+                	libraries.put(((FamixEntity) e).uniqueName, (FamixLibrary) e);
+	                String parentUniqueName = ((FamixLibrary) e).belongsToPackage;
+	                ((FamixLibrary) e).external = true;
+	                FamixPackage parent = null;
+	                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+	                	parent = packages.get(parentUniqueName);
+	                	parent.children.add(((FamixEntity) e).uniqueName);
+	                }
+                }
             }
         } else if (e instanceof FamixAssociation){
 			if(e instanceof FamixImport){
@@ -91,6 +134,7 @@ class FamixModel extends FamixObject {
             throw new InvalidAttributesException("Wrongtype (not of type entity or association) ");
         }
         }catch(Exception e1) {
+        	this.logger.error(new Date().toString() + " Exception while adding:  " + e.toString());
 	        e1.printStackTrace();
         }
     }

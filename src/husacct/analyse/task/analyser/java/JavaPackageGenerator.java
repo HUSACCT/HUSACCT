@@ -10,9 +10,6 @@ class JavaPackageGenerator extends JavaGenerator {
         String belongsToPackage = getParentPackageName(uniqueName);
         String name = getNameOfPackage(uniqueName);
         createPackage(name, uniqueName, belongsToPackage);
-        if (hasParentPackages(uniqueName)) {
-            createAllParentPackages(belongsToPackage);
-        }
         return uniqueName;
     }
 
@@ -35,21 +32,6 @@ class JavaPackageGenerator extends JavaGenerator {
         return uniqueName;
     }
 
-    private void createAllParentPackages(String uniqueChildPackageName) {
-        String belongsToPackage = "";
-        String name = "";
-        if (hasParentPackages(uniqueChildPackageName)) {
-            belongsToPackage = getParentPackageName(uniqueChildPackageName);
-            name = getNameOfPackage(uniqueChildPackageName);
-        } else {
-            name = uniqueChildPackageName;
-        }
-        createPackage(name, uniqueChildPackageName, belongsToPackage);
-        if (hasParentPackages(uniqueChildPackageName)) {
-            createAllParentPackages(belongsToPackage);
-        }
-    }
-
     private String getNameOfPackage(String completePackageName) {
         String[] allPackages = splitPackages(completePackageName);
         return allPackages[allPackages.length - 1];
@@ -64,7 +46,4 @@ class JavaPackageGenerator extends JavaGenerator {
         modelService.createPackage(uniqueName, belongsToPackage, name);
     }
 
-    private boolean hasParentPackages(String completePackageName) {
-        return completePackageName.contains(".");
-    }
 }

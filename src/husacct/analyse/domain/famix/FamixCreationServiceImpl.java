@@ -30,23 +30,43 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     public void createPackage(String uniqueName, String belongsToPackage, String name) {
-        FamixPackage fPackage = new FamixPackage();
-        fPackage.uniqueName = uniqueName;
-        fPackage.belongsToPackage = belongsToPackage;
-        fPackage.name = name;
-        addToModel(fPackage);
+        if (!model.packages.containsKey(uniqueName)){
+	        FamixPackage fPackage = new FamixPackage();
+	        fPackage.uniqueName = uniqueName;
+	        fPackage.belongsToPackage = belongsToPackage;
+	        fPackage.name = name;
+	        if ((!belongsToPackage.equals("") && (!model.packages.containsKey(belongsToPackage)))){
+	        	createPackageParent(belongsToPackage);
+	        }
+        	addToModel(fPackage);
+        }
     }
 
+    private void createPackageParent(String uniquePackageName){
+    	String belongsToPackage = "";
+        String name = "";
+        if (uniquePackageName.contains(".")) {
+        	// Determine parentPackageName
+            String[] allPackages = uniquePackageName.split("\\.");
+            for (int i = 0; i < allPackages.length - 1; i++) {
+                if (belongsToPackage == "") {
+                    belongsToPackage += allPackages[i];
+                } else {
+                    belongsToPackage += "." + allPackages[i];
+                }
+            }
+            name = allPackages[allPackages.length - 1];
+        } else {
+            name = uniquePackageName;
+        }
+        createPackage(uniquePackageName, belongsToPackage, name);
+    }
+    
+    
     @Override
     public void createClass(String uniqueName, String name, String belongsToPackage,
             boolean isAbstract, boolean isInnerClass) {
         createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", "public");
-    }
-
-    @Override
-    public void createClass(String uniqueName, String name, String belongsToPackage,
-            boolean isAbstract, boolean isInnerClass, String belongsToClass) {
-        createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, "public");
     }
 
     @Override
@@ -65,13 +85,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             fClass.visibility = visibility;
         }
         addToModel(fClass);
-        // If the class is an inner class, set parent.hasInnerClasses to true.
-		if (model.classes.containsKey(belongsToClass)){
-			FamixClass parent = model.classes.get(belongsToClass);
-			parent.hasInnerClasses = true;
-		}
-		
-
     }
 
     @Override
@@ -411,6 +424,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 		// Create a root package "ExternalLibraries"
 		String rootLibraryPackage = "xLibraries";
 		createPackage(rootLibraryPackage, "", rootLibraryPackage);
+		FamixPackage externalRoot = model.packages.get(rootLibraryPackage);
+		externalRoot.external = true;
 		// Select all imported types. Note: key of imports is combined from.to.
 		HashSet<String> completeImportStrings = new HashSet<String>();
 		for(String importKey : model.imports.keySet()){
@@ -433,7 +448,11 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 							packageName = names[i]; 
 							packageUniqueName = packageParent + "." + names[i]; 
 							// Create a package with name fLibrary.belongsToPackage
-					        createPackage(packageUniqueName, packageParent, packageName);
+							if (!model.libraries.containsKey(packageUniqueName)) {
+						        createPackage(packageUniqueName, packageParent, packageName);
+								FamixPackage newPackage = model.packages.get(packageUniqueName);
+								newPackage.external = true;
+							}
 					        packageParent = packageUniqueName;
 						}
 					} else {
@@ -444,9 +463,15 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 					FamixLibrary fLibrary = new FamixLibrary();
 					fLibrary.physicalPath = completeImportString;
 			        fLibrary.uniqueName = rootLibraryPackage + "." + completeImportString;
-			        fLibrary.belongsToPackage = packageUniqueName;
+					if (!model.libraries.containsKey(packageUniqueName)) {
+						fLibrary.belongsToPackage = packageUniqueName;
+				        fLibrary.name = libraryName;
+					} else { // The library class is an inner class
+						fLibrary.belongsToPackage = packageUniqueName.substring(0, packageUniqueName.lastIndexOf("."));
+						String containingClass = packageUniqueName.substring(packageUniqueName.lastIndexOf(".") + 1, packageUniqueName.length());
+				        fLibrary.name = containingClass + "." + libraryName;
+					}
 			        fLibrary.visibility = "public";
-			        fLibrary.name = libraryName;
 			        addToModel(fLibrary);
 				}
 			//}
