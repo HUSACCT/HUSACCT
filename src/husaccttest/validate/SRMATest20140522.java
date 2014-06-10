@@ -25,7 +25,7 @@ public class SRMATest20140522 {
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
-	private final static String workspaceLocation = "C:\\Tools\\Eclipse43\\Workspace\\HUSACCT\\testprojects\\workspaces\\SrmaTest2014-05-22.xml";
+	private final static String workspaceLocation = "C:\\Tools\\Eclipse43\\Workspace\\HUSACCT\\testprojects\\workspaces\\SrmaTest2014-06-10 HUSACCT_3.1.xml";
 	private final static String outputFormat = "xml";
 	private final static String outputLocation = "C:\\Tools\\HUSACCT\\Reports";
 	private static Logger logger;

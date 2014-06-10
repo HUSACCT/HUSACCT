@@ -234,6 +234,12 @@ public class XMLDomain {
 		try{
 		long ruleId = Integer.parseInt(appliedRule.getChildText("id"));
 		String ruleTypeKey = appliedRule.getChildText("type");
+		// In version 3.1, InheritanceConvention was introduced instead of SuperClassInheritanceConvention
+		if ((ruleTypeKey.equals("SuperClassInheritanceConvention")) || (ruleTypeKey.equals("InterfaceInheritanceConvention"))){
+			ruleTypeKey = "InheritanceConvention";
+		}
+		// In version 3.0, only id's were included, instead of all the data of the referred modules 
+		// To convert old to 3.0, enable next to lines and disable the two lines thereafter. Save workspace and discard changes below again.
 		//int moduleFromId = Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
 		//int moduleToId = Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
 		long moduleFromId = Integer.parseInt(appliedRule.getChildText("moduleFrom"));

@@ -344,9 +344,8 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 						datahelperRuleType.setValue(ruleTypeKey);
 
 						String moduleToName;
-						if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) 
-								|| (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) || (ruleTypeKey.equals("InterfaceInheritanceConvention")) 
-								|| (ruleTypeKey.equals("SuperClassInheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
+						if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) || (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) 
+								|| (ruleTypeKey.equals("InheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
 							moduleToName = (String) ruleDetails.get("moduleToName");
 						} else {
 							moduleToName = ""; //Do not show the module to. Logically there is no module to, but technically module to is the same as module from.

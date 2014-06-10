@@ -8,7 +8,7 @@ import husacct.define.domain.module.modules.Layer;
 
 import java.util.ArrayList;
 
-public class InterfaceInheritanceConventionRule extends AppliedRuleStrategy{
+public class InheritanceConvention extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;
 	private LayerCheckerHelper layerCheckerHelper;
 
@@ -19,7 +19,8 @@ public class InterfaceInheritanceConventionRule extends AppliedRuleStrategy{
 		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
 			return false;
 		}
-		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(this.getRuleTypeKey(), this.getModuleTo());
+		boolean conventionSuccess = moduleCheckerHelper
+				.checkRuleTypeAlreadySet(this.getRuleTypeKey(), this.getModuleFrom());
 		if (conventionSuccess) {
 			conventionSuccess = moduleCheckerHelper
 					.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse",

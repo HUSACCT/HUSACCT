@@ -14,11 +14,10 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.util.EnumSet;
 import java.util.List;
 
-public class InterfaceInheritanceConvention extends RuleType {
-
+public class InheritanceConvention extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
-	
-	public InterfaceInheritanceConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+
+	public InheritanceConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, exceptionRuleTypes, severity);
 	}
 
@@ -49,7 +48,6 @@ public class InterfaceInheritanceConvention extends RuleType {
 				}
 			}
 		}
-		
 		return violations;
 	}
 }

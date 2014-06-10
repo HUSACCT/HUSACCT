@@ -4,10 +4,9 @@ import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.Cycle
 import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.CyclesBetweenModulesJPanel;
 import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.NoRulesSelectedJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.FacadeConventionRuleJPanel;
-import husacct.define.presentation.jpanel.ruledetails.propertyrules.InterfaceInheritanceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.NamingConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.NamingConventionJPanel;
-import husacct.define.presentation.jpanel.ruledetails.propertyrules.SuperClassInheritanceConventionJPanel;
+import husacct.define.presentation.jpanel.ruledetails.propertyrules.InheritanceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.VisibilityConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.propertyrules.VisibilityConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.relationrules.BackCallJPanel;
@@ -30,7 +29,6 @@ public class FactoryDetails {
     private CyclesBetweenModulesExceptionJPanel cyclesBetweenModulesExceptionJPanel;
     private FacadeConventionRuleJPanel facadeConventionJPanel;
     // Rules on the Contents of a module
-    private InterfaceInheritanceConventionJPanel interfaceInheritanceConventionJPanel;
     private IsAllowedToUseJPanel isAllowedToUseJPanel;
     // Rules of the Legality of Dependency
     private IsNotAllowedToUseJPanel isNotAllowedToUseJPanel;
@@ -40,7 +38,7 @@ public class FactoryDetails {
     private NamingConventionExceptionJPanel namingConventionExceptionJPanel;
     private NamingConventionJPanel namingConventionJPanel;
     private SkipCallJPanel skipCallJPanel;
-    private SuperClassInheritanceConventionJPanel superClassInheritanceConventionJPanel;
+    private InheritanceConventionJPanel inheritanceConventionJPanel;
     private VisibilityConventionExceptionJPanel visibilityConventionExceptionJPanel;
     private VisibilityConventionJPanel visibilityConventionJPanel;
 
@@ -52,14 +50,10 @@ public class FactoryDetails {
 	} else if (ruleTypeKey.equals(FacadeConventionRuleJPanel.ruleTypeKey)) {
 		    facadeConventionJPanel = new FacadeConventionRuleJPanel(appliedRuleController);
 		    return facadeConventionJPanel;
-	} else if (ruleTypeKey.equals(InterfaceInheritanceConventionJPanel.ruleTypeKey)) {
-	    interfaceInheritanceConventionJPanel = new InterfaceInheritanceConventionJPanel(
+	} else if (ruleTypeKey.equals(InheritanceConventionJPanel.ruleTypeKey)) {
+		inheritanceConventionJPanel = new InheritanceConventionJPanel(
 		    appliedRuleController);
-	    return interfaceInheritanceConventionJPanel;
-	} else if (ruleTypeKey.equals(SuperClassInheritanceConventionJPanel.ruleTypeKey)) {
-		superClassInheritanceConventionJPanel = new SuperClassInheritanceConventionJPanel(
-		    appliedRuleController);
-	    return superClassInheritanceConventionJPanel;
+	    return inheritanceConventionJPanel;
 	} else if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)) {
 	    visibilityConventionJPanel = new VisibilityConventionJPanel(
 		    appliedRuleController);
@@ -138,18 +132,12 @@ public class FactoryDetails {
     public AbstractDetailsJPanel get(
 	    AppliedRuleController appliedRuleController, String ruleTypeKey) {
 	// Rules on the Contents of a module
-	if (ruleTypeKey.equals(InterfaceInheritanceConventionJPanel.ruleTypeKey)) {
-	    if (interfaceInheritanceConventionJPanel == null) {
-		interfaceInheritanceConventionJPanel = new InterfaceInheritanceConventionJPanel(
-			appliedRuleController);
-	    }
-	    return interfaceInheritanceConventionJPanel;
-	} else if (ruleTypeKey.equals(SuperClassInheritanceConventionJPanel.ruleTypeKey)) {
-	    if (superClassInheritanceConventionJPanel == null) {
-	    	superClassInheritanceConventionJPanel = new SuperClassInheritanceConventionJPanel(
-			appliedRuleController);
-	    }
-	    return superClassInheritanceConventionJPanel;
+    	if (ruleTypeKey.equals(InheritanceConventionJPanel.ruleTypeKey)) {
+		    if (inheritanceConventionJPanel == null) {
+		    	inheritanceConventionJPanel = new InheritanceConventionJPanel(
+				appliedRuleController);
+		    }
+	    return inheritanceConventionJPanel;
 	} else if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)) {
 	    if (visibilityConventionJPanel == null) {
 		visibilityConventionJPanel = new VisibilityConventionJPanel(

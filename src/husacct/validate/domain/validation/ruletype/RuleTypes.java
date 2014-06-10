@@ -16,12 +16,11 @@ public enum RuleTypes {
 	NAMING_CONVENTION_EXCEPTION("NamingConventionException", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION("VisibilityConvention", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION_EXCEPTION("VisibilityConventionException", DefaultSeverities.MEDIUM),
-	INTERFACEINHERITANCE_CONVENTION("InterfaceInheritanceConvention", DefaultSeverities.MEDIUM),
-	SUPERCLASSINHERITANCE_CONVENTION("SuperClassInheritanceConvention", DefaultSeverities.MEDIUM),
+	INHERITANCE_CONVENTION("InheritanceConvention", DefaultSeverities.MEDIUM),
 	FACADE_CONVENTION("FacadeConvention", DefaultSeverities.HIGH);
 	
 	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(
-			FACADE_CONVENTION, SUPERCLASSINHERITANCE_CONVENTION, INTERFACEINHERITANCE_CONVENTION, IS_NOT_ALLOWED_TO_USE, IS_ONLY_ALLOWED_TO_USE,
+			FACADE_CONVENTION, INHERITANCE_CONVENTION, IS_NOT_ALLOWED_TO_USE, IS_ONLY_ALLOWED_TO_USE,
 			IS_THE_ONLY_MODULE_ALLOWED_TO_USE, MUST_USE, IS_NOT_ALLOWED_BACK_CALL, IS_NOT_ALLOWED_SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION);
 	private final String key;
 	private final DefaultSeverities defaultSeverity;

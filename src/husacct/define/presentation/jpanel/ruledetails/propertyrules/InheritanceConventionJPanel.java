@@ -12,8 +12,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
 
-public class InterfaceInheritanceConventionJPanel extends AbstractDetailsJPanel {
-    public static final String ruleTypeKey = "InterfaceInheritanceConvention";
+
+public class InheritanceConventionJPanel extends AbstractDetailsJPanel {
+    public static final String ruleTypeKey = "InheritanceConvention";
     private static final long serialVersionUID = 376037038601799822L;
 
     public DescriptionPanelComponent descriptionPanelComponent;
@@ -21,7 +22,7 @@ public class InterfaceInheritanceConventionJPanel extends AbstractDetailsJPanel 
     public ModuleFromPanelComponent moduleFromPanelComponent;
     public ModuleToPanelComponent moduleToPanelComponent;
 
-    public InterfaceInheritanceConventionJPanel(AppliedRuleController appliedRuleController) {
+    public InheritanceConventionJPanel(AppliedRuleController appliedRuleController) {
 	super(appliedRuleController);
     }
 
@@ -29,7 +30,7 @@ public class InterfaceInheritanceConventionJPanel extends AbstractDetailsJPanel 
     protected GridBagLayout createRuleDetailsLayout() {
 	GridBagLayout ruleDetailsLayout = new GridBagLayout();
 	ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
-	 ruleDetailsLayout.rowHeights = new int[] { 30, 150, 30, 90 };
+	ruleDetailsLayout.rowHeights = new int[] { 30, 150, 30, 90 };
 	// max total height = 290
 //	if (!isException) {
 //	    ruleDetailsLayout.rowHeights = new int[] { 30, 150, 30, 90 };

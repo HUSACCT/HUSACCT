@@ -143,16 +143,8 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected boolean isInterfaceInheritanceConvention(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.INTERFACEINHERITANCE_CONVENTION)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean isSuperClassInheritanceConvention(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.SUPERCLASSINHERITANCE_CONVENTION)) {
+	protected boolean isInheritanceConvention(String ruleTypeKey) {
+		if (ruleTypeKey.equals(RuleTypes.INHERITANCE_CONVENTION)) {
 			return true;
 		} else {
 			return false;

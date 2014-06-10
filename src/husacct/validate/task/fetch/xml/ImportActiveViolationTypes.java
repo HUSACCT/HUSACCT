@@ -17,7 +17,11 @@ public class ImportActiveViolationTypes {
 		for (Element activeViolationTypeElement : activeViolationTypesElement.getChildren()) {
 			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
 			for (Element ruleTypeElement : activeViolationTypeElement.getChildren()) {
-				final String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
+				String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
+				// In version 3.1, InheritanceConvention was introduced instead of SuperClassInheritanceConvention
+				if (ruleTypeKey.equals("SuperClassInheritanceConvention")){
+					ruleTypeKey = "InheritanceConvention";
+				}
 
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
 				Element violationTypesElement = ruleTypeElement.getChild("violationTypes");
@@ -30,8 +34,11 @@ public class ImportActiveViolationTypes {
 					}
 				}
 
-				ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey, activeViolationTypes);
-				activeRuleTypes.add(activeRuleType);
+				// In version 3.1, InterfaceInheritanceConvention was removed
+				if (!ruleTypeKey.equals("InterfaceInheritanceConvention")){
+					ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey, activeViolationTypes);
+					activeRuleTypes.add(activeRuleType);
+				}
 			}
 			activeRuleTypesMap.put(activeViolationTypeElement.getAttributeValue("language"), activeRuleTypes);
 		}
