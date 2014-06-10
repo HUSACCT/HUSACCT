@@ -44,35 +44,34 @@ class FamixModuleFinder extends FamixFinder {
     }
 
     public List<AnalysedModuleDTO> getChildModulesInModule(String module) {
-        this.prepare(FinderArguments.CHILDS, module);
     	List<AnalysedModuleDTO> result = new ArrayList<AnalysedModuleDTO>();
     	TreeSet<String> children = null;
         // New finder function, based on FamixDecompositionEntity
-    	if (theModel.packages.containsKey(currentArgument)){
-    		children = theModel.packages.get(currentArgument).children;
+    	if (theModel.packages.containsKey(module)){
+    		FamixPackage selected = theModel.packages.get(module);
+    		children = theModel.packages.get(module).children;
+    	} else if (theModel.classes.containsKey(module)){
+    		children = theModel.classes.get(module).children;
     	}
     	AnalysedModuleDTO current;
     	if (children != null){
 	    	for (String child : children){
-	    		if (theModel.libraries.containsKey(child)){
-	    			current = createAnalysedModuleDTO("library", theModel.libraries.get(child));
-	    			result.add(current);
-    			} else if (theModel.packages.containsKey(child)){
+    			if (theModel.packages.containsKey(child)){
 	    			current = createAnalysedModuleDTO("package", theModel.packages.get(child));
 	    			result.add(current);
-	    		} else if (theModel.classes.containsKey(child)){
+	    		}
+    			if (theModel.classes.containsKey(child)){
 	    			current = createAnalysedModuleDTO("class", theModel.classes.get(child));
 	    			result.add(current);
 	    		} else if (theModel.interfaces.containsKey(child)){
 	    			current = createAnalysedModuleDTO("interface", theModel.interfaces.get(child));
 	    			result.add(current);
+	    		} else if (theModel.libraries.containsKey(child)){
+	    			current = createAnalysedModuleDTO("library", theModel.libraries.get(child));
+	    			result.add(current);
 	    		}
-
 	    	}
     	}
-        //result.addAll(this.findClasses());
-        //result.addAll(this.findInterfaces());
-        //result.addAll(this.findLibraries());
     	return result;
     }
 

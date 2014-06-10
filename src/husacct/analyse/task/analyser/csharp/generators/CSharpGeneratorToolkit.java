@@ -32,7 +32,10 @@ public class CSharpGeneratorToolkit {
      * @param parentName
      */
     public static String potentiallyInsertDot(String parentName) {
-        return parentName.length() > 0 ? DOT : EMPTYSTRING;
+        if ((parentName == null) || (parentName.equals("")))
+        		return "";
+        else
+        	return ".";
     }
 
     /**

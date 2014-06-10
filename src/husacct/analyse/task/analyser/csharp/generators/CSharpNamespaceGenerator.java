@@ -43,12 +43,8 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
 		for (int i = namespaceStack.size(); i > 0; i--) {
 			namespaceName = namespaceStack.peek();
 			uniqueName = CSharpGeneratorToolkit.getUniqueName(rootNamespace, CSharpGeneratorToolkit.getParentName(namespaceStack));
-
 			namespaceStack.pop();
-
-			String parentName = CSharpGeneratorToolkit.getParentName(namespaceStack);
-			parentNamespace = rootNamespace + CSharpGeneratorToolkit.potentiallyInsertDot(parentName) + parentName;
-
+			parentNamespace = CSharpGeneratorToolkit.getParentName(namespaceStack);
 			modelService.createPackage(uniqueName, parentNamespace, namespaceName);
 		}
 	}

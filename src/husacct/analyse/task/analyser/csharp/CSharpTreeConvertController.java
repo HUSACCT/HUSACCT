@@ -8,9 +8,11 @@ import husacct.analyse.task.analyser.csharp.generators.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class CSharpTreeConvertController {
 
@@ -26,6 +28,7 @@ public class CSharpTreeConvertController {
 	List<CommonTree> usings = new ArrayList<>();
 	Stack<String> namespaceStack = new Stack<>();
 	Stack<String> classNameStack = new Stack<>();
+    private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
 
 	public CSharpTreeConvertController() {
 		csUsingGenerator = new CSharpUsingGenerator();
@@ -128,6 +131,8 @@ public class CSharpTreeConvertController {
 		String analysedClass;
 		if (isInnerClass) {
 			analysedClass = csClassGenerator.generateToModel(classTree, getParentName(namespaceStack), getParentName(classNameStack));
+			if (analysedClass == null)
+	    		logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));
 		} else {
 			analysedClass = csClassGenerator.generateToDomain(classTree, getParentName(namespaceStack));
 		}
