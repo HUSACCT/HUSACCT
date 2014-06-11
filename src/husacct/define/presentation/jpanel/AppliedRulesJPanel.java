@@ -240,8 +240,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 	private long getSelectedAppliedRuleId() {
 		long selectedAppliedRuleId = -1;
 		try {
-			Object o = appliedRulesTable.getValueAt(getSelectedRow(),
-					appliedRulesTable.getRuleTypeColumnIndex());
+			Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
 			if (o instanceof DataHelper) {
 				DataHelper datahelper = (DataHelper) o;
 				selectedAppliedRuleId = datahelper.getId();

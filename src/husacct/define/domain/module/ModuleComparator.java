@@ -2,6 +2,7 @@ package husacct.define.domain.module;
 
 
 import husacct.define.domain.module.modules.Component;
+import husacct.define.domain.module.modules.ExternalLibrary;
 import husacct.define.domain.module.modules.Facade;
 import husacct.define.domain.module.modules.Layer;
 
@@ -32,6 +33,11 @@ public class ModuleComparator implements Comparator<Object> {
 			compareReturn = -1;
 		} else if(emp2 instanceof Facade) {
 			compareReturn = 1;
+		} 
+		if(emp1 instanceof ExternalLibrary) {
+			compareReturn = 1;
+		} else if(emp2 instanceof ExternalLibrary) {
+			compareReturn = -1;
 		} 
 		return compareReturn;
     }
