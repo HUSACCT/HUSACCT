@@ -95,6 +95,8 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 		warningButton.setMaximumSize(d);
 		Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 		warningButton.setIcon(icon);
+		// Disabled 2014-06-11, since the shown warnings in the warnings dialogue are not correct
+		warningButton.setEnabled(false);
 		undoButton= new JButton("<");
 		redoButton= new JButton(">");
 		setButtonsVisability(undoButton,redoButton);
@@ -150,7 +152,7 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == warningButton) {
 				
-			  warnings.refresh();
+				warnings.refresh();
 				warnings.setVisible(true);
 			}
 			if (e.getSource()==redoButton) {

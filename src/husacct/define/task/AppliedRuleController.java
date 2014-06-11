@@ -39,7 +39,6 @@ public class AppliedRuleController extends PopUpController {
 		setModuleId(moduleId);
 		currentAppliedRuleId = appliedRuleId;
 		determineAction();
-
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 	}
@@ -152,36 +151,38 @@ public class AppliedRuleController extends PopUpController {
 	/**
 	 * Load Data
 	 */
-	public void fillRuleTypeComboBox(
-			KeyValueComboBox keyValueComboBoxAppliedRule) {
+	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		fillRuleTypeComboBox(keyValueComboBoxAppliedRule, false);
 	}
 
 	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule, boolean update) {
-		ModuleStrategy selectedModule = this.moduleService
-				.getModuleById(DefinitionController.getInstance()
-						.getSelectedModuleId());
+		ModuleStrategy selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
 
 		String currentRuleType = "";
 		if (currentAppliedRuleId != -1) {
-			currentRuleType = this.getAppliedRuleDetails(currentAppliedRuleId)
-					.get("ruleTypeKey").toString();
+			currentRuleType = this.getAppliedRuleDetails(currentAppliedRuleId).get("ruleTypeKey").toString();
 		}
 
 		int index = 0;
 		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 		ArrayList<String> ruleTypeValues = new ArrayList<String>();
+		RuleTypeDTO[] allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(selectedModule.getType());
 
-		CategoryDTO[] rulesCategory = ServiceProvider.getInstance()
-				.getValidateService().getCategories();
-		RuleTypeDTO[] allowedRules = ServiceProvider.getInstance()
-				.getValidateService()
-				.getAllowedRuleTypesOfModule(selectedModule.getType());
+		// Present all allowed rules, not sorted on Category	
+		for (RuleTypeDTO allowedRule : allowedRules) {
+			String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(allowedRule.key);
+			if (currentRuleType.equals("")) {
+				ruleTypeKeys.add(allowedRule.getKey());
+				ruleTypeValues.add(value);
+			} else {
+				ruleTypeKeys.add(currentRuleType);
+				ruleTypeValues.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(currentRuleType));
+			}
 
-		ServiceProvider.getInstance()
-				.getValidateService()
-				.getDefaultRuleTypesOfModule(selectedModule.getType());
-
+		}
+		
+/*		// Present all allowed rules, sorted on Category
+		CategoryDTO[] rulesCategory = ServiceProvider.getInstance().getValidateService().getCategories();
 		for (CategoryDTO category : rulesCategory) {
 			ArrayList<RuleTypeDTO> _temp = new ArrayList<RuleTypeDTO>();
 			for (RuleTypeDTO categoryRule : category.getRuleTypes()) {
@@ -193,37 +194,21 @@ public class AppliedRuleController extends PopUpController {
 			}
 			if (!_temp.isEmpty()) {
 				ruleTypeKeys.add("setDisabled");
-				ruleTypeValues.add("--- "
-						+ ServiceProvider.getInstance().getLocaleService()
-								.getTranslatedString(category.getKey())
-						+ " ---");
-
+				ruleTypeValues.add("--- " + ServiceProvider.getInstance().getLocaleService().getTranslatedString(category.getKey()) + " ---");
 				for (RuleTypeDTO rule : _temp) {
-
-					String value = ServiceProvider.getInstance()
-							.getLocaleService().getTranslatedString(rule.key);
-
+					String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(rule.key);
 					if (currentRuleType.equals("")) {
 						ruleTypeKeys.add(rule.getKey());
 						ruleTypeValues.add(value);
 					} else {
 						ruleTypeKeys.add(currentRuleType);
-						ruleTypeValues.add(ServiceProvider.getInstance()
-								.getLocaleService()
-								.getTranslatedString(currentRuleType));
-						// RuleTypeDTO[] defaultRuleForModule = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(selectedModule.getType());
-						// for(RuleTypeDTO rtd : defaultRuleForModule) {
-						// if(rtd.getKey().equals(currentRuleType)) {
-						// ruleTypeValues.add(rtd);
-						// }
-						// }
+						ruleTypeValues.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(currentRuleType));
 					}
 				}
 			}
 		}
-
-		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(),
-				ruleTypeValues.toArray());
+*/
+		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 		keyValueComboBoxAppliedRule.setSelectedIndex(index);
 	}
 

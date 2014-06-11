@@ -343,9 +343,6 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 		moduleTree.addTreeSelectionListener(this);
 		checkLayerComponentIsSelected();
 
-		
-		ModuleDropTarget moduledroptarget = new ModuleDropTarget(moduleTree);
-
 		moduleTree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {

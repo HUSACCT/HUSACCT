@@ -28,4 +28,20 @@ public class RuleTypeDTO extends AbstractDTO {
 	public RuleTypeDTO[] getExceptionRuleTypes() {
 		return exceptionRuleTypes;
 	}
+
+	public String toString() {
+    	
+        String representation = "";
+        representation += "\nRuleTypeKey: " + key + ", DescriptionKey: " + descriptionKey;
+        representation += "\nViolationTypeKeys: ";
+        for (ViolationTypeDTO v : violationTypes){
+        	representation += v.key + ", ";
+        }
+        representation += "\nExceptionRuleKeys: ";
+        for (RuleTypeDTO r : exceptionRuleTypes){
+        	representation += r.key + ", ";
+        }
+        representation += "\n";
+        return representation;
+    }
 }

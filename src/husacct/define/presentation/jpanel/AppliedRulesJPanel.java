@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
+import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.services.DomainGateway;
@@ -52,6 +53,8 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 	private JPopupMenu popupMenu = new JPopupMenu();
 	private JButton removeRuleButton;
 	private JMenuItem removeRuleItem = new JMenuItem();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+
 
 	public AppliedRulesJPanel() {
 		super();
@@ -341,7 +344,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 						// SetDataHelper to help retrieve the applied Rule id through the ruleTypeKey
 						DataHelper datahelperRuleType = new DataHelper();
 						datahelperRuleType.setId(appliedRuleId);
-						datahelperRuleType.setValue(ruleTypeKey);
+						datahelperRuleType.setValue(localeService.getTranslatedString(ruleTypeKey));
 
 						String moduleToName;
 						if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) || (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) 

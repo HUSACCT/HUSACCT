@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -31,8 +32,8 @@ public class RuleTypesFactory {
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private final ConfigurationServiceImpl configuration;
 	private AbstractViolationType violationtypefactory;
-	private HashMap<String, CategoryKeyClassDTO> allRuleTypes;
-	private HashMap<String, CategoryKeyClassDTO> mainRuleTypes;
+	private TreeMap<String, CategoryKeyClassDTO> allRuleTypes;
+	private TreeMap<String, CategoryKeyClassDTO> mainRuleTypes;
 
 	public RuleTypesFactory(ConfigurationServiceImpl configuration) {
 		this.configuration = configuration;

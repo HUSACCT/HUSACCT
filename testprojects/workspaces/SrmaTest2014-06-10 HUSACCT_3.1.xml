@@ -9,9 +9,9 @@
       <version>1.0</version>
       <projects>
         <Project>
-          <name>SrmaTest-2014-05-22 Project1</name>
+          <name>SrmaTest2013-08-23 with Exceptions</name>
           <paths>
-            <path>C:\Tools\Eclipse43\Workspace\HUSACCT\testprojects\java\srma20140522\src</path>
+            <path>C:\Tools\BenchmarkTests\SacctTestCode SRMA 2014-05-22\src</path>
           </paths>
           <programmingLanguage>Java</programmingLanguage>
           <version>1.0</version>
@@ -27,7 +27,7 @@
             <description />
             <id>1</id>
             <name>Presentation</name>
-            <HierarchicalLevel>1</HierarchicalLevel>
+            <HierarchicalLevel>4</HierarchicalLevel>
             <SoftwareUnitDefinitions>
               <SoftwareUnitDefinition>
                 <name>presentation</name>
@@ -94,7 +94,7 @@
             <description />
             <id>14</id>
             <name>Domain</name>
-            <HierarchicalLevel>2</HierarchicalLevel>
+            <HierarchicalLevel>5</HierarchicalLevel>
             <SoftwareUnitDefinitions>
               <SoftwareUnitDefinition>
                 <name>domain</name>
@@ -266,7 +266,7 @@
             <description />
             <id>4</id>
             <name>Technology</name>
-            <HierarchicalLevel>3</HierarchicalLevel>
+            <HierarchicalLevel>6</HierarchicalLevel>
             <SoftwareUnitDefinitions>
               <SoftwareUnitDefinition>
                 <name>technology</name>
@@ -851,28 +851,6 @@ IsNotAllowedToMakeBackCallDescription</description>
             <isException>false</isException>
           </AppliedRule>
           <AppliedRule>
-            <id>32</id>
-            <type>SuperClassInheritanceConvention</type>
-            <moduleFrom>11</moduleFrom>
-            <moduleTo>38</moduleTo>
-            <enabled>true</enabled>
-            <description />
-            <regex />
-            <dependencies />
-            <isException>false</isException>
-          </AppliedRule>
-          <AppliedRule>
-            <id>34</id>
-            <type>InterfaceInheritanceConvention</type>
-            <moduleFrom>12</moduleFrom>
-            <moduleTo>37</moduleTo>
-            <enabled>true</enabled>
-            <description />
-            <regex />
-            <dependencies />
-            <isException>false</isException>
-          </AppliedRule>
-          <AppliedRule>
             <id>43</id>
             <type>IsAllowedToUse</type>
             <moduleFrom>14</moduleFrom>
@@ -971,6 +949,28 @@ IsNotAllowedToMakeBackCallDescription</description>
             <isException>true</isException>
             <parentAppliedRuleId>8</parentAppliedRuleId>
           </AppliedRule>
+          <AppliedRule>
+            <id>56</id>
+            <type>InheritanceConvention</type>
+            <moduleFrom>11</moduleFrom>
+            <moduleTo>38</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>58</id>
+            <type>InheritanceConvention</type>
+            <moduleFrom>12</moduleFrom>
+            <moduleTo>37</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
         </rules>
       </Architecture>
     </Application>
@@ -985,17 +985,17 @@ IsNotAllowedToMakeBackCallDescription</description>
       <severities>
         <severity>
           <severityKey>Low</severityKey>
-          <id>9af63c97-5553-4460-93aa-a912ceda7a64</id>
+          <id>d2ef6262-8ebd-4322-8307-d5c699161591</id>
           <color>-65536</color>
         </severity>
         <severity>
           <severityKey>Medium</severityKey>
-          <id>cba78295-a0b9-4fe4-8351-166f1e64d130</id>
+          <id>1926a49e-9bcf-46f3-902c-0cf454bf8243</id>
           <color>-65536</color>
         </severity>
         <severity>
           <severityKey>High</severityKey>
-          <id>64b4d9dc-8c56-4a08-b96c-8362e8f5a315</id>
+          <id>506260e5-f0bf-4be2-a520-4d9b7cf16cad</id>
           <color>-65536</color>
         </severity>
       </severities>
@@ -1003,109 +1003,106 @@ IsNotAllowedToMakeBackCallDescription</description>
         <severityPerTypePerProgrammingLanguage language="C#">
           <severityPerType>
             <typeKey>Import</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>protected</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>default</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Call</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Annotation</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>package</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>class</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>Declaration</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>Inheritance</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Access</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Inheritance</typeKey>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Declaration</typeKey>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>public</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>private</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
         </severityPerTypePerProgrammingLanguage>
         <severityPerTypePerProgrammingLanguage language="Java">
           <severityPerType>
             <typeKey>Import</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>protected</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>default</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Call</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Annotation</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>package</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>class</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Inheritance</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Declaration</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Access</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>public</typeKey>
-            <severityId>cba78295-a0b9-4fe4-8351-166f1e64d130</severityId>
+            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>private</typeKey>
-            <severityId>9af63c97-5553-4460-93aa-a912ceda7a64</severityId>
+            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
           </severityPerType>
         </severityPerTypePerProgrammingLanguage>
       </severitiesPerTypesPerProgrammingLanguages>
       <activeViolationTypes>
         <activeViolationType language="C#">
-          <ruleType type="SuperClassInheritanceConvention">
-            <violationTypes />
-          </ruleType>
           <ruleType type="NamingConvention">
             <violationTypes>
               <violationType>
@@ -1117,9 +1114,6 @@ IsNotAllowedToMakeBackCallDescription</description>
                 <enabled>true</enabled>
               </violationType>
             </violationTypes>
-          </ruleType>
-          <ruleType type="InterfaceInheritanceConvention">
-            <violationTypes />
           </ruleType>
           <ruleType type="FacadeConvention">
             <violationTypes />
@@ -1135,6 +1129,9 @@ IsNotAllowedToMakeBackCallDescription</description>
                 <enabled>true</enabled>
               </violationType>
             </violationTypes>
+          </ruleType>
+          <ruleType type="InheritanceConvention">
+            <violationTypes />
           </ruleType>
           <ruleType type="VisibilityConvention">
             <violationTypes>
@@ -1430,9 +1427,6 @@ IsNotAllowedToMakeBackCallDescription</description>
           </ruleType>
         </activeViolationType>
         <activeViolationType language="Java">
-          <ruleType type="SuperClassInheritanceConvention">
-            <violationTypes />
-          </ruleType>
           <ruleType type="NamingConvention">
             <violationTypes>
               <violationType>
@@ -1444,9 +1438,6 @@ IsNotAllowedToMakeBackCallDescription</description>
                 <enabled>true</enabled>
               </violationType>
             </violationTypes>
-          </ruleType>
-          <ruleType type="InterfaceInheritanceConvention">
-            <violationTypes />
           </ruleType>
           <ruleType type="FacadeConvention">
             <violationTypes />
@@ -1462,6 +1453,9 @@ IsNotAllowedToMakeBackCallDescription</description>
                 <enabled>true</enabled>
               </violationType>
             </violationTypes>
+          </ruleType>
+          <ruleType type="InheritanceConvention">
+            <violationTypes />
           </ruleType>
           <ruleType type="VisibilityConvention">
             <violationTypes>
@@ -1761,7 +1755,7 @@ IsNotAllowedToMakeBackCallDescription</description>
   </husacct.validate.ValidateServiceImpl>
   <husacct.graphics.GraphicsServiceImpl>
     <ArchitecureGraphicsService>
-      <analysedController showDependencies="true" showViolations="false" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
+      <analysedController showDependencies="true" showViolations="true" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
       <definedController showDependencies="true" showViolations="false" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
     </ArchitecureGraphicsService>
   </husacct.graphics.GraphicsServiceImpl>

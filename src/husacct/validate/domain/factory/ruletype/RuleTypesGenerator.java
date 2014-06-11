@@ -14,6 +14,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -27,9 +28,9 @@ class RuleTypesGenerator {
 		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
 
-	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
-		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
-		HashMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
+	TreeMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
+		TreeMap<String, CategoryKeyClassDTO> keyClasses = new TreeMap<String, CategoryKeyClassDTO>();
+		TreeMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
 
 		for (Enum<RuleTypes> ruleKey : rules) {
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
@@ -43,8 +44,8 @@ class RuleTypesGenerator {
 	}
 
 	@SuppressWarnings("unchecked")
-	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
-		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
+	TreeMap<String, CategoryKeyClassDTO> generateAllRules() {
+		TreeMap<String, CategoryKeyClassDTO> keyClasses = new TreeMap<String, CategoryKeyClassDTO>();
 		List<Class<?>> ruleClasses = getRuleClasses(EnumSet.allOf(RuleTypes.class));
 		for (Class<?> ruleClass : ruleClasses) {
 			String ruleKey = "";

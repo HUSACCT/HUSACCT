@@ -28,7 +28,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 	private JScrollPane componentScrollpane, rulesScrollpane;
 	private JTable ruleTable;
 	private DefaultTableModel tableModel;
-	private RuleTypeDTO[] allowedRules, currentlyDefaultRules;
+	private RuleTypeDTO[] allowedRules, currentDefaultRules;
 	private String[] componentList = {"Component", "ExternalLibrary", "Facade", "Layer", "SubSystem"};
 	private HashMap<Integer, String> allowedRulesMap;
 
@@ -108,19 +108,20 @@ public class ManageDefaultRulesPanel extends JPanel {
 	private void loadTable(int listItem){
 		tableModel.setRowCount(0);
 		allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(componentList[listItem]);
-		currentlyDefaultRules = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(componentList[listItem]);
+		currentDefaultRules = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(componentList[listItem]);
 		allowedRulesMap = new HashMap<Integer, String>();
 		int count = 0;
 		
 		for(RuleTypeDTO allowedRule : allowedRules){
 			String curRule = allowedRule.key;
-			allowedRulesMap.put(count, allowedRule.key);
+			String curRuleTranslated = localeService.getTranslatedString(curRule);
+			allowedRulesMap.put(count, curRuleTranslated);
 			count++;
 			Boolean isDefault = false;
-			for(RuleTypeDTO defaultRule : currentlyDefaultRules)
+			for(RuleTypeDTO defaultRule : currentDefaultRules)
 				if(defaultRule.key.equals(curRule))
 					isDefault = true;
-			tableModel.addRow(new Object[]{curRule, isDefault});
+			tableModel.addRow(new Object[]{curRuleTranslated, isDefault});
 		}
 	}
 }
