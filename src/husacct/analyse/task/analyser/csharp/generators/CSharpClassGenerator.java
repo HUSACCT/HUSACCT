@@ -12,7 +12,7 @@ public class CSharpClassGenerator extends CSharpGenerator {
         String visibility = getVisibility(classTree);
         boolean isAbstract = isAbstract(classTree);
 
-        modelService.createClass(uniqueName, name, namespace, isAbstract, false, "", visibility);
+        modelService.createClass(uniqueName, name, namespace, isAbstract, false, "", visibility, false);
         return name;
     }
 
@@ -23,7 +23,7 @@ public class CSharpClassGenerator extends CSharpGenerator {
 	        String visibility = getVisibility(classTree);
 	        boolean isAbstract = isAbstract(classTree);
 	
-	        modelService.createClass(uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility);
+	        modelService.createClass(uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility, false);
         return name;
     }
 

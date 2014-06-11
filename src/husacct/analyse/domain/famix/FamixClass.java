@@ -2,6 +2,7 @@ package husacct.analyse.domain.famix;
 
 class FamixClass extends FamixDecompositionEntity {
 
+    public boolean isInterface = false;
     public boolean isInnerClass = false;
     public boolean isAbstract = false;
     public boolean hasInnerClasses = false;
@@ -14,9 +15,13 @@ class FamixClass extends FamixDecompositionEntity {
 
     public String toString() {
         String classRepresentation = "";
-        classRepresentation += "\nUnique Name: " + super.uniqueName;
-        classRepresentation += "\nBelongs to Package: " + belongsToPackage;
         classRepresentation += "\nName: " + super.name;
+        classRepresentation += "\nBelongs to Package: " + belongsToPackage;
+        if (isInterface) {
+            classRepresentation += "\nisInterface: true";
+        } else {
+            classRepresentation += "\nisInterface: false";
+        }
         if (isAbstract) {
             classRepresentation += "\nisAbstract: true";
         } else {

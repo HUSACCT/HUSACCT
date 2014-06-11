@@ -24,7 +24,7 @@ class JavaInterfaceGenerator extends JavaGenerator {
         } else {
             this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
         }
-        modelService.createInterface(uniqueName, name, belongsToPackage, visibillity);
+        modelService.createClass(uniqueName, name, belongsToPackage, false, false, "", visibillity, true);
         return uniqueName;
     }
 

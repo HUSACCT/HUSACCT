@@ -3,10 +3,13 @@ package husacct.analyse.domain.famix;
 import husacct.common.dto.AnalysedModuleDTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
 
 class FamixModuleFinder extends FamixFinder {
 
@@ -16,6 +19,7 @@ class FamixModuleFinder extends FamixFinder {
     private String currentArgument;
     private FinderArguments currentFunction = FinderArguments.ROOT;
     private List<AnalysedModuleDTO> currentResult;
+    private final Logger logger = Logger.getLogger(FamixModuleFinder.class);
 
     public FamixModuleFinder(FamixModel model) {
         super(model);
@@ -25,13 +29,13 @@ class FamixModuleFinder extends FamixFinder {
 
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
     	if (theModel.packages.containsKey(uniquename)) {
-    		return createAnalysedModuleDTO("package", theModel.packages.get(uniquename));
+    		return createAnalysedModuleDTO(theModel.packages.get(uniquename));
     	} else if (theModel.classes.containsKey(uniquename)){
-    		return createAnalysedModuleDTO("class", theModel.classes.get(uniquename));
+    		return createAnalysedModuleDTO(theModel.classes.get(uniquename));
     	} else if (theModel.interfaces.containsKey(uniquename)){
-    		return createAnalysedModuleDTO("interface", theModel.interfaces.get(uniquename));
+    		return createAnalysedModuleDTO(theModel.interfaces.get(uniquename));
     	} else if (theModel.libraries.containsKey(uniquename)){
-    		return createAnalysedModuleDTO("library", theModel.libraries.get(uniquename));
+    		return createAnalysedModuleDTO(theModel.libraries.get(uniquename));
     	}
     	else {
             return new AnalysedModuleDTO("", "", "", "");
@@ -48,26 +52,29 @@ class FamixModuleFinder extends FamixFinder {
     	TreeSet<String> children = null;
         // New finder function, based on FamixDecompositionEntity
     	if (theModel.packages.containsKey(module)){
-    		FamixPackage selected = theModel.packages.get(module);
     		children = theModel.packages.get(module).children;
     	} else if (theModel.classes.containsKey(module)){
     		children = theModel.classes.get(module).children;
+    	} else if (theModel.interfaces.containsKey(module)){
+    		children = theModel.interfaces.get(module).children;
+    	} else if (theModel.libraries.containsKey(module)){
+    		children = theModel.libraries.get(module).children;
     	}
     	AnalysedModuleDTO current;
     	if (children != null){
 	    	for (String child : children){
     			if (theModel.packages.containsKey(child)){
-	    			current = createAnalysedModuleDTO("package", theModel.packages.get(child));
+	    			current = createAnalysedModuleDTO(theModel.packages.get(child));
 	    			result.add(current);
 	    		}
     			if (theModel.classes.containsKey(child)){
-	    			current = createAnalysedModuleDTO("class", theModel.classes.get(child));
+    				current = createAnalysedModuleDTO(theModel.classes.get(child));
 	    			result.add(current);
 	    		} else if (theModel.interfaces.containsKey(child)){
-	    			current = createAnalysedModuleDTO("interface", theModel.interfaces.get(child));
+	    			current = createAnalysedModuleDTO(theModel.interfaces.get(child));
 	    			result.add(current);
 	    		} else if (theModel.libraries.containsKey(child)){
-	    			current = createAnalysedModuleDTO("library", theModel.libraries.get(child));
+	    			current = createAnalysedModuleDTO(theModel.libraries.get(child));
 	    			result.add(current);
 	    		}
 	    	}
@@ -127,7 +134,7 @@ class FamixModuleFinder extends FamixFinder {
             FamixPackage fPackage = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fPackage.uniqueName);
             if (correctResult) {
-                current = createAnalysedModuleDTO("package", fPackage);
+                current = createAnalysedModuleDTO(fPackage);
                 result.add(current);
             }
         }
@@ -143,7 +150,7 @@ class FamixModuleFinder extends FamixFinder {
             FamixClass fClass = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fClass.uniqueName);
             if (correctResult) {
-                current = createAnalysedModuleDTO("class", fClass);
+                current = createAnalysedModuleDTO(fClass);
                 result.add(current);
             }
         }
@@ -159,7 +166,7 @@ class FamixModuleFinder extends FamixFinder {
             FamixInterface fInterface = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fInterface.uniqueName);
             if (correctResult) {
-                current = createAnalysedModuleDTO("interface", fInterface);
+                current = createAnalysedModuleDTO(fInterface);
                 result.add(current);
             }
         }
@@ -175,7 +182,7 @@ class FamixModuleFinder extends FamixFinder {
             FamixLibrary fLibrary = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fLibrary.uniqueName);
             if (correctResult) {
-                current = createAnalysedModuleDTO("library", fLibrary);
+                current = createAnalysedModuleDTO(fLibrary);
                 result.add(current);
             }
         }
@@ -218,17 +225,29 @@ class FamixModuleFinder extends FamixFinder {
         return currentChild.equals(child);
     }
 
-    private AnalysedModuleDTO createAnalysedModuleDTO(String type, FamixEntity theEntity) {
+    private AnalysedModuleDTO createAnalysedModuleDTO(FamixEntity theEntity) {
         List<AnalysedModuleDTO> emptyList = new ArrayList<AnalysedModuleDTO>();
-        return createAnalysedModuleDTO(type, theEntity, emptyList);
+        return createAnalysedModuleDTO(theEntity, emptyList);
     }
-    private AnalysedModuleDTO createAnalysedModuleDTO(String type, FamixEntity theEntity, List<AnalysedModuleDTO> childs) {
-        String name = theEntity.name;
+    private AnalysedModuleDTO createAnalysedModuleDTO(FamixEntity theEntity, List<AnalysedModuleDTO> childs) {
+    	String type;
+    	String name = theEntity.name;
         String uniqueName = theEntity.uniqueName;
         String visibility = theEntity.visibility;
-        if (theEntity instanceof FamixLibrary){
+        if (theEntity instanceof FamixPackage){
+        	type = "package";
+        } else if (theEntity instanceof FamixClass){
+			if (((FamixClass) theEntity).isInterface)
+				type = "interface";
+			else
+				type = "class";
+        } else if (theEntity instanceof FamixLibrary){
         	// To the uniqueName of a FamixLibrary the prefix "xLibrary." is added.
         	uniqueName = ((FamixLibrary) theEntity).physicalPath;
+        	type = "library";
+        } else {
+        	type = "class";
+        	this.logger.error(new Date().toString() + " Unknown type of enity:  " + uniqueName);
         }
         return new AnalysedModuleDTO(uniqueName, name, type, visibility);
     }

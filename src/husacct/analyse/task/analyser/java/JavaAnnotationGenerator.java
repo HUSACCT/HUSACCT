@@ -17,7 +17,7 @@ class JavaAnnotationGenerator extends JavaGenerator {
     public String generateToDomain(CommonTree commonTree) {
         this.setName(commonTree);
         this.setUniquename();
-        modelService.createInterface(this.uniqueName, this.name, this.belongsToPackage);
+        modelService.createAnnotation(this.belongsToPackage, this.name, this.name, this.uniqueName, this.lineNumber);
         return this.uniqueName;
     }
 

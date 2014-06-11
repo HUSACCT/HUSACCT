@@ -364,11 +364,11 @@ public abstract class TestCaseExtended{
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "infrastructure.socialmedia.locationbased.latitude", false, false);
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMapp", "IMapp", "infrastructure.socialmedia.locationbased.latitude", false, false);
 		
-		famix.createInterface("indirect.houses.type.IType", "IType", "indirect.houses.type");
-		famix.createInterface("indirect.houses.type.IGlobal", "IGlobal", "indirect.houses.type");
+		famix.createClass("indirect.houses.type.IType", "IType", "indirect.houses.type", false, false, "", "default", true);
+		famix.createClass("indirect.houses.type.IGlobal", "IGlobal", "indirect.houses.type", false, false, "", "default", true);
 		famix.createClass("indirect.houses.type.RowHouse", "RowHouse", "indirect.houses.type", false, false);
 		
-		famix.createInterface("indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door");
+		famix.createClass("indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door", false, false, "", "default", true);
 		famix.createClass("indirect.houses.attributes.Door", "Door", "indirect.houses.attributes", false, false);
 		
 		famix.createConstructorInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "");

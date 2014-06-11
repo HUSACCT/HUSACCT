@@ -11,7 +11,7 @@ public interface IModelCreationService {
 
     public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 
-    public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity);
+    public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity, boolean isInterface);
 
     public void createInterface(String uniqueName, String name, String belongsToPackage);
 

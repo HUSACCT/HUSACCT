@@ -37,7 +37,7 @@ class JavaClassGenerator extends JavaGenerator {
             annotationGenerator.generateMethod((CommonTree) modifierListTree.getFirstChildWithType(JavaParser.AT));
         }
         this.isAbstract = isAbstract(modifierListTree);
-        modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visibility);
+        modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visibility, false);
         return uniqueName;
     }
 
@@ -63,7 +63,7 @@ class JavaClassGenerator extends JavaGenerator {
             this.belongsToClass = parentClassName;
             this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();
             this.visibility = getVisibillityFromTree(commonTree);
-            modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visibility);
+            modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visibility, false);
             return uniqueName;
         }
         return "";
