@@ -60,19 +60,13 @@ public class PersistentDomain implements ISaveable {
 		xmlToDomainParser = new XMLDomain(workspaceData);
 		workspaceApplication = xmlToDomainParser.createApplication();
 
-		switch (parseData) {
-			case LOGICAL:
-			case APPLICATION:
-			case PHYSICAL:
-			default:
-				ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-				for (Project project : workspaceApplication.getProjects()) {
-					projects.add(new ProjectDTO(project.getName(), project
-							.getPaths(), project.getProgrammingLanguage(), project
-							.getVersion(), project.getDescription(), null));
-				}
-			ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), projects, workspaceApplication.getVersion());
-		} 
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		for (Project project : workspaceApplication.getProjects()) {
+			projects.add(new ProjectDTO(project.getName(), project
+					.getPaths(), project.getProgrammingLanguage(), project
+					.getVersion(), project.getDescription(), null));
+		}
+		ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), projects, workspaceApplication.getVersion());
 	}
 
 	/**
