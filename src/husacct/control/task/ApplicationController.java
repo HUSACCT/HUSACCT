@@ -1,7 +1,9 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.AboutDialog;
@@ -15,6 +17,8 @@ import husacct.control.task.threading.ThreadWithLoader;
 import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -40,6 +44,17 @@ public class ApplicationController {
 		setApplicationData(applicationDTO);
 		analyseApplication();
 	}
+	
+	public ApplicationDTO createApplicationData(String name, String language, String version, ArrayList<String> paths){
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
+		projects.add(project);
+		
+		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
+		return applicationData;
+	}
+
 	
 	public void setApplicationData(ApplicationDTO applicationDTO) {
 		ServiceProvider.getInstance().getDefineService().createApplication(

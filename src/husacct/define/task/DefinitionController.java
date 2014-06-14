@@ -252,7 +252,7 @@ import org.apache.log4j.Logger;
 				UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
 			}
 			else {
-				logger.info("Adding module with id and name: " + module.getId() + module.getName());
+				logger.info("Adding module with id: " + module.getId() + " and name: " + module.getName());
 			}
 		}
 

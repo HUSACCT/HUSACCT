@@ -113,6 +113,7 @@ public class OpenWorkspaceDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if(selectedLoaderPanel.validateData() && loadWorkspace()){
 					dispose();
+					mainController.getViewController().showDefineArchitecture();
 				}
 			}
 		});

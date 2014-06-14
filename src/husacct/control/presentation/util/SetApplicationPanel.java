@@ -7,6 +7,7 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
+import husacct.control.task.MainController;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -43,12 +44,15 @@ public class SetApplicationPanel extends JPanel{
 	private JDialog dialogOwner;
 	private JPanel panel;
 	private GridBagConstraints constraint = new GridBagConstraints();
+	private MainController mainController;
+
 
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
-	public SetApplicationPanel(JDialog dialogOwner){
+	public SetApplicationPanel(JDialog dialogOwner, MainController mainController){
 		this.setDialogOwner(dialogOwner);
+		this.mainController = mainController;
 		addComponents();
 		setListeners();
 		setDefaultValues();
@@ -162,12 +166,7 @@ public class SetApplicationPanel extends JPanel{
 		String version = versionText.getText();
 		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
 		
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
-		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
-		projects.add(project);
-		
-		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
+		ApplicationDTO applicationData = mainController.getApplicationController().createApplicationData(name, language, version, paths);
 		return applicationData;
 	}
 

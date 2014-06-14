@@ -15,6 +15,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -41,7 +42,7 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 	public CreateWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setApplicationPanel = new SetApplicationPanel(this);
+		setApplicationPanel = new SetApplicationPanel(this, mainController);
 		setApplicationPanel.setVisible(false);
 		this.setTitle(localeService.getTranslatedString("CreateWorkspaceTitle"));		
 		setup();
@@ -109,7 +110,13 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 					}
 				} else {
 					if(workspaceNameValidated()) {
-						createWorkspace();			
+						createWorkspace();
+						String name = workspaceNameText.getText();
+						String language = "Java";
+						String version = "1.0";
+						ArrayList<String> paths = new ArrayList<String>(); 
+						ApplicationDTO applicationData = mainController.getApplicationController().createApplicationData(name, language, version, paths);
+						mainController.getApplicationController().setApplicationData(applicationData);
 						dispose();	
 						mainController.getViewController().showDefineArchitecture();		
 					}
