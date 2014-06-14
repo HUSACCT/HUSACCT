@@ -56,8 +56,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public void createApplication(String name, ArrayList<ProjectDTO> projects,
-			String version) {
+	public void createApplication(String name, ArrayList<ProjectDTO> projects, String version) {
 		defineDomainService.createApplication(name, projects, version);
 	}
 

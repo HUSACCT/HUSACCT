@@ -25,59 +25,57 @@ public class AnalyseTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			this.mainController.getStateController().setAnalysing(true);
-			this.mainController.getStateController().setPreAnalysed(false);
-			Thread.sleep(1);
-			if (this.applicationDTO.projects.size() > 0) {
+			if ((this.applicationDTO.projects.size() > 0) && (this.applicationDTO.projects.get(0).paths.size() > 0)) {
+				this.mainController.getStateController().setAnalysing(true);
+				this.mainController.getStateController().setPreAnalysed(false);
+				Thread.sleep(1);
 				this.mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(this.applicationDTO.projects.size());
 				
 				for (int i = 0; i < this.applicationDTO.projects.size(); i++) {
-
-					this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
-					
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
-					
-					this.logger.info(new Date().toString() + " Control-AnalyseTask is Starting: Analyse project " + currentProject);
-					mainController.getActionLogController().addAction("Analysing project " + currentProject);
-					
-					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
-					
-					// Add analysed root modules to project
-					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
-					AnalysedModuleDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-					for (AnalysedModuleDTO analysedModule : analysedRootModules) {
-						currentProject.analysedModules.add(analysedModule);
+					if (currentProject.paths.size() > 0) {
+						this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
+						this.logger.info(new Date().toString() + " Control-AnalyseTask is Starting: Analyse project " + currentProject);
+						mainController.getActionLogController().addAction("Analysing project " + currentProject);
+						
+						ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
+						
+						// Add analysed root modules to project
+						currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
+						AnalysedModuleDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
+						for (AnalysedModuleDTO analysedModule : analysedRootModules) {
+							currentProject.analysedModules.add(analysedModule);
+						}
+	
+						// Update project with analysedRootModules
+						this.applicationDTO.projects.remove(i);
+						this.applicationDTO.projects.add(i, currentProject);
 					}
-
-					// Update project with analysedRootModules
-					this.applicationDTO.projects.remove(i);
-					this.applicationDTO.projects.add(i, currentProject);
 				}
-			}
-			
-			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
-			ServiceProvider.getInstance().getControlService().finishPreAnalysing();
-			logger.info(new Date().toString() + " Control-AnalyseTask is Starting: getDefineService().analyze()");
-			ServiceProvider.getInstance().getDefineService().analyze();
+				mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
+				ServiceProvider.getInstance().getControlService().finishPreAnalysing();
+				logger.info(new Date().toString() + " Control-AnalyseTask is Starting: getDefineService().analyze()");
+				ServiceProvider.getInstance().getDefineService().analyze();
 
-			logger.info(new Date().toString() + " Control-AnalyseTask has Finished: Analyse application; state isAnalyzing=false");
-			logger.info(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes");
-			int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
-			logger.info(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
-			mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
-			
-			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
-			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
-			if (!mainController.getStateController().isAnalysing()) {
-				ServiceProvider.getInstance().resetAnalyseService();
+				logger.info(new Date().toString() + " Control-AnalyseTask has Finished: Analyse application; state isAnalyzing=false");
+				logger.info(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes");
+				int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
+				logger.info(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
+				mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
+				
+				String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+				ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
+				if (!mainController.getStateController().isAnalysing()) {
+					ServiceProvider.getInstance().resetAnalyseService();
+				}
+				this.mainController.getStateController().setAnalysing(false);
+			} else {
+				logger.info(new Date().toString() + " No project specified, or no project path specified");
 			}
-			this.mainController.getStateController().setAnalysing(false);
-
 		} catch (InterruptedException exception) {
 			this.logger.debug("RESETTING ANALYSE SERVICE");
 			ServiceProvider.getInstance().resetAnalyseService();
 			this.mainController.getStateController().setAnalysing(false);
-
 		}
 	}
 }
