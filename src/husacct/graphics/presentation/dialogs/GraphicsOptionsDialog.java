@@ -67,6 +67,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings = new HashMap<String, Object>();
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
+		currentSettings.put("thickLines", false);
 		currentSettings.put("smartLines", true);
 		currentSettings.put("libraries", true);
 		currentSettings.put("layoutStrategy",

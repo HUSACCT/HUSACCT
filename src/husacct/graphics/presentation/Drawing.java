@@ -1,5 +1,6 @@
 package husacct.graphics.presentation;
 
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -31,8 +32,7 @@ public class Drawing extends QuadTreeDrawing {
 	private final ArrayList<BaseFigure>	hiddenFigures;
 	private final Logger				logger				= Logger.getLogger(Drawing.class);
 	private final FileManager			filemanager			= new FileManager();
-	private File						selectedFile		= filemanager
-																	.getFile();
+	private File						selectedFile		= filemanager.getFile();
 	private FigureMap					figureMap;
 	
 	public Drawing() {
@@ -172,10 +172,12 @@ public class Drawing extends QuadTreeDrawing {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
 			JFileChooser fileChooser = new JFileChooser();
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG",
-					"png", "png");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png", "png");
 			fileChooser.setFileFilter(filter);
 			fileChooser.setVisible(true);
+			selectedFile = new File(ConfigurationManager.getProperty("LastUsedGraphicsExportPath"));
+			File currentDirectory = getDirectoryFromFile(selectedFile);
+			fileChooser.setCurrentDirectory(currentDirectory);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
 			
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -186,18 +188,29 @@ public class Drawing extends QuadTreeDrawing {
 				for (BaseFigure bf : hiddenFigures){
 					cloneDrawing.remove(bf);					
 				}
-				imageoutputformat.write(filemanager.getOutputStream(),
-						cloneDrawing);
+				imageoutputformat.write(filemanager.getOutputStream(), cloneDrawing);
 				filemanager.closeOutputStream();
-				
+				ConfigurationManager.setProperty("LastUsedGraphicsExportPath", selectedFile.getAbsolutePath());
+				ConfigurationManager.storeProperties();
 			}
 		} catch (IOException e) {
-			logger.debug("Cannot save file to "
-					+ selectedFile.getAbsolutePath());
+			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
 		}
 		
 	}
 	
+	public File getDirectoryFromFile(File file){
+		File output = new File("");
+		
+		if(file != null){
+			String pathWithSelectedFile = file.getAbsolutePath();
+			String pathToSelectedFile = pathWithSelectedFile.substring(0, pathWithSelectedFile.lastIndexOf('\\') + 1);
+			output = new File(pathToSelectedFile);
+		}
+		
+		return output;
+	}
+
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
 		int maxAmount = figureMap.getMaxAll();
 		for (RelationFigure figure : figures) {

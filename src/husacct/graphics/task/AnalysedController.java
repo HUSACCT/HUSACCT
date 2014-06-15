@@ -351,7 +351,7 @@ public class AnalysedController extends DrawingController {
 		logger.warn("Tried to zoom out from \""
 				+ getCurrentPaths()
 				+ "\", but it has no parent (could be root if it's an empty string).");
-		logger.debug("Reverting to the root of the application.");
+		logger.info("Reverting to the root of the application.");
 		drawArchitecture(getCurrentDrawingDetail());
 	}
 }
