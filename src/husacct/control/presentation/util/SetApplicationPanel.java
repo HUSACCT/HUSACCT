@@ -8,6 +8,7 @@ import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -15,6 +16,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,10 +47,9 @@ public class SetApplicationPanel extends JPanel{
 	private JPanel panel;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private MainController mainController;
-
-
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+	private String selectedFile =ConfigurationManager.getProperty("LastUsedAddedProjectPathPath");
 
 	public SetApplicationPanel(JDialog dialogOwner, MainController mainController){
 		this.setDialogOwner(dialogOwner);
@@ -132,9 +133,18 @@ public class SetApplicationPanel extends JPanel{
 
 	private void showAddFileDialog() {
 		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, localeService.getTranslatedString("AddButton"));
+		String pathToSelectedFileDir;
+		if((selectedFile != null) && (!selectedFile.equals(""))){
+			if(selectedFile.contains("\\")) {
+			pathToSelectedFileDir = selectedFile.substring(0, selectedFile.lastIndexOf('\\') + 1);
+			fileChooser.setCurrentDirectory(new File(pathToSelectedFileDir));
+			}
+		}
 		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
+			selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
+			pathListModel.add(pathListModel.size(), selectedFile);
+			ConfigurationManager.setProperty("LastUsedAddProjectPath", selectedFile);
 		}
 	}
 

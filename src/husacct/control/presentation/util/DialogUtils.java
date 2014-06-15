@@ -7,6 +7,7 @@ import husacct.control.task.MainController;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.File;
 
 import javax.swing.JDialog;
 
