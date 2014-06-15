@@ -53,7 +53,7 @@ public class XMLDomain {
 			application = new Application(name.getValue(), projectsList, version.getValue());
 			application.setArchitecture(createArchitectureFromElement(architecture));
 		} catch (Exception exe) {
-			logger.error("createApplication() :86 nill");
+			logger.warn("Loaded Application incomplete! Software Architecture not specified?");
 		}
 		return application;
 	}

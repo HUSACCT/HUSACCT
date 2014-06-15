@@ -36,7 +36,7 @@ public class SetApplicationPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JLabel pathLabel, applicationNameLabel, languageSelectLabel, versionLabel;
 	private JList<String> pathList;
-	private JTextField applicationNameText, versionText;
+	public 	JTextField applicationNameText, versionText;
 	private JComboBox<String> languageSelect;
 	private JButton addButton, removeButton;
 	private String[] languages;
@@ -217,5 +217,4 @@ public class SetApplicationPanel extends JPanel{
 	public void setDialogOwner(JDialog dialogOwner) {
 		this.dialogOwner = dialogOwner;
 	}
-
 }

@@ -28,9 +28,8 @@ import javax.swing.event.ListSelectionListener;
 @SuppressWarnings("serial")
 public class OpenWorkspaceDialog extends JDialog{
 
+	private String selectedLoader = "Xml";
 	private MainController mainController;
-	private JList<Object> loaderList;
-	private List<String> loaderListData;
 	private JButton openButton, cancelButton;
 	
 	private JPanel loaderPanelContainer;
@@ -44,7 +43,6 @@ public class OpenWorkspaceDialog extends JDialog{
 		this.setTitle(localeService.getTranslatedString("OpenWorkspace"));
 		this.mainController = mainController;
 		this.setup();
-		this.setLoaders();
 		this.addComponents();
 		this.setListeners();
 		this.setResizable(true);
@@ -53,34 +51,22 @@ public class OpenWorkspaceDialog extends JDialog{
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 380));
+		this.setSize(new Dimension(400, 250));
 		this.setLocationRelativeTo(getRootPane());
 	}
 	
-	private void setLoaders(){
-		loaderListData = ResourceFactory.getAvailableResources();
-	}
-	
 	private void addComponents(){
-		
-		loaderList = new JList<Object>(loaderListData.toArray());
-		loaderList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		loaderList.setLayoutOrientation(JList.VERTICAL);
-		loaderList.setVisibleRowCount(-1);
-		JScrollPane listScrollPane = new JScrollPane(loaderList);
-		listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-		
 		openPanel = new JPanel();
 		openPanel.setLayout(new BoxLayout(openPanel, BoxLayout.Y_AXIS));
 		
 		loaderPanelContainer = new JPanel();
-		loaderPanelContainer.setPreferredSize(new Dimension(350, 300));
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		loaderPanelContainer.setPreferredSize(new Dimension(350, 200));
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		
 		openButton = new JButton(localeService.getTranslatedString("OpenButton"));
 		cancelButton = new JButton(localeService.getTranslatedString("CancelButton"));
 		
-		openButton.setEnabled(false);
+		openButton.setEnabled(true);
 		getRootPane().setDefaultButton(openButton);
 		
 		buttonsPanel.add(openButton);
@@ -88,21 +74,14 @@ public class OpenWorkspaceDialog extends JDialog{
 		
 		openPanel.add(loaderPanelContainer);
 		openPanel.add(buttonsPanel);
+		add(openPanel);
 		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, openPanel);
-		splitPane.setDividerLocation(150);
-		splitPane.setEnabled(false);
-		add(splitPane);
+		selectedLoaderPanel = LoaderPanelFactory.get(selectedLoader);
+		loaderPanelContainer.removeAll();
+		loaderPanelContainer.add(selectedLoaderPanel);
 	}
 	
 	private void setListeners(){
-		loaderList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				loadSelectedOpenMethodPanel();
-				openButton.setEnabled(true);
-			}
-		});
-		
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -120,16 +99,7 @@ public class OpenWorkspaceDialog extends JDialog{
 	}
 	
 	private boolean loadWorkspace(){
-		String selectedLoader = (String) loaderList.getSelectedValue();
 		HashMap<String, Object> data = selectedLoaderPanel.getData();
 		return mainController.getWorkspaceController().loadWorkspace(selectedLoader, data);
-	}
-	
-	private void loadSelectedOpenMethodPanel(){
-		String selectedLoader = (String) loaderList.getSelectedValue();
-		selectedLoaderPanel = LoaderPanelFactory.get(selectedLoader);
-		loaderPanelContainer.removeAll();
-		loaderPanelContainer.add(selectedLoaderPanel);
-		validate();
 	}
 }

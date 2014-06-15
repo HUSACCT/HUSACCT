@@ -6,6 +6,7 @@ import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
 import husacct.control.task.configuration.ConfigurationManager;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -60,6 +61,7 @@ public class XmlLoadPanel extends LoaderPanel{
 		
 		if(selectedFile != null){
 			pathText.setText(selectedFile.getAbsolutePath());
+			pathText.setDisabledTextColor(Color.BLUE);
 		}
 		
 		JPanel hiddenPanel = new JPanel();

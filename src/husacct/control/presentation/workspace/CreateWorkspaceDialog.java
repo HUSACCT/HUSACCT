@@ -35,6 +35,7 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 	private JCheckBox analyseApplicationCheckbox;
 	private JButton okButton, cancelButton;
 	private JTextField workspaceNameText;
+	private String newWorkspaceName = "Workspace";
 
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -71,7 +72,8 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 		okButton = new JButton(localeService.getTranslatedString("OkButton"));
 		cancelButton = new JButton(localeService.getTranslatedString("CancelButton"));
 		workspaceNameText = new JTextField(20);
-		workspaceNameText.setText("myHusacctWorkspace"); 
+		workspaceNameText.setText(newWorkspaceName); 
+		workspaceNameText.selectAll();
 
 		getRootPane().setDefaultButton(okButton);
 
@@ -134,6 +136,8 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 	private void toggleSetApplicationPanel(boolean checked){
 		if(checked){
 			this.setSize(new Dimension(350, 420));
+			if ((!workspaceNameText.getText().equals(newWorkspaceName)) && (setApplicationPanel.applicationNameText.getText().length() < 1)) 
+				setApplicationPanel.applicationNameText.setText(workspaceNameText.getText());
 			setApplicationPanel.setVisible(true);
 		} else {
 			this.setSize(new Dimension(350, 150));

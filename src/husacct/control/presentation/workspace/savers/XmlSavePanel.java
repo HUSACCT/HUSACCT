@@ -7,6 +7,7 @@ import husacct.control.presentation.util.FileDialog;
 import husacct.control.presentation.util.Regex;
 import husacct.control.task.configuration.ConfigurationManager;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -47,7 +48,7 @@ public class XmlSavePanel extends SaverPanel{
 	private JLabel spaceAvailableDescription;
 	private JLabel spaceAvailable;
 	
-	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedSaveXMLWorkspacePath"));
+	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedLoadXMLWorkspacePath"));
 	
 	private GridBagConstraints constraints;
 	
@@ -101,6 +102,7 @@ public class XmlSavePanel extends SaverPanel{
 		
 		if(selectedFile != null){
 			pathText.setText(selectedFile.getAbsolutePath());
+			pathText.setDisabledTextColor(Color.BLUE);
 		}
 		
 		JPanel hiddenPanel = new JPanel();
@@ -181,7 +183,8 @@ public class XmlSavePanel extends SaverPanel{
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			if(fileDialog.getSelectedFile().exists()){
-				setFile(fileDialog.getSelectedFile());
+				File selectedFile = fileDialog.getSelectedFile();
+				setFile(selectedFile);
 			} else {
 				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
 			}
