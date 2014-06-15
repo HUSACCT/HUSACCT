@@ -58,9 +58,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	paddingSize, labelWidth, elementWidth, elementHeight;
 	private HashMap<String, DrawingLayoutStrategy>	layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
-	private ILocaleService							localeService		= ServiceProvider
-			.getInstance()
-			.getLocaleService();
+	private ILocaleService							localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public GraphicsOptionsDialog() {
 		super((GraphicsOptionsDialog) null, true);
@@ -70,8 +68,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("thickLines", false);
 		currentSettings.put("smartLines", true);
 		currentSettings.put("libraries", true);
-		currentSettings.put("layoutStrategy",
-				DrawingLayoutStrategy.BASIC_LAYOUT);
+		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
 		
 		totalWidth = 550;
 		totalHeight = 260;
@@ -88,8 +85,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		int i = 0;
 		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
-			String translation = localeService.getTranslatedString(strategy
-					.toString());
+			String translation = localeService.getTranslatedString(strategy .toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
 			i++;
@@ -476,7 +472,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	
 	public void showDialog() {
 		setResizable(false);
-		setAlwaysOnTop(true);
+		setAlwaysOnTop(false);
 		setSize(totalWidth, totalHeight);
 		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		setVisible(true);

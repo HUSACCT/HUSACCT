@@ -46,13 +46,13 @@ public class OpenWorkspaceDialog extends JDialog{
 		this.addComponents();
 		this.setListeners();
 		this.setResizable(true);
+		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		this.setVisible(true);
 	}
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(400, 250));
-		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void addComponents(){
