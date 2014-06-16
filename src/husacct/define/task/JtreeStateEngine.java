@@ -97,6 +97,7 @@ public abstract class JtreeStateEngine {
 	}
 
 	public void analyze() {
+		reset();
 		getRootModel();
 		DefinitionController.getInstance().notifyAnalyzedObservers();
 	}

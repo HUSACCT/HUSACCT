@@ -128,7 +128,6 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
-		StateService.instance().getAnalzedModuleRegistry().reset();
 		JtreeController.instance().setLoadState(true);
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Application", "application", "public");
 		ApplicationDTO application = ServiceProvider.getInstance().getControlService().getApplicationDTO();
@@ -162,30 +161,12 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		if (!JtreeController.instance().isLoaded() || !ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-			if (!ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-				AnalyzedModuleComponent root = JtreeController.instance().getRootOfModel();
-				WarningMessageService.getInstance().resetNotAnalyzed();
-				WarningMessageService.getInstance().registerNotMappedUnits(root);
-				StateService.instance().registerImportedData();
-				return root;
-			}
+		if (ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
 			JtreeController.instance().setLoadState(true);
 			JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
-			AnalyzedModuleComponent root = JtreeController.instance().getRootOfModel();
-			WarningMessageService.getInstance().resetNotAnalyzed();
-			WarningMessageService.getInstance().registerNotMappedUnits(root);
-			StateService.instance().registerImportedData();
-			return root;
-		} else {
-			AnalyzedModuleComponent left = JtreeController.instance().getRootOfModel();
-		    AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
-			//calucalteChanges(left, right); // Disabled 2014-04-20, because it caused exceptions.
-			WarningMessageService.getInstance().resetNotAnalyzed();
-			WarningMessageService.getInstance().registerNotMappedUnits(right);
-			WarningMessageService.getInstance().updateWarnings();
-			StateService.instance().registerImportedData();
-			return left;
 		}
-	}
+		AnalyzedModuleComponent root = JtreeController.instance().getRootOfModel();
+		StateService.instance().registerImportedData();
+		return root;
+		}
 }

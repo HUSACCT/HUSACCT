@@ -21,36 +21,24 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	private Map<String,AnalyzedModuleComponent> allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
 	private Map<Long,AbstractDefineComponent> allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
 	private Map<String,String> importedUniqnames  =  new LinkedHashMap<String, String>();
-    
-	
 
 	public AnalyzedUnitRegistry()
 	{
 		UndoRedoService.getInstance().registerObserver(this);
-		
 	}
 	
 	public void registerAnalyzedUnit(AnalyzedModuleComponent unit) {
 		allAnalyzedUnits.put(unit.getUniqueName(),unit);
-
 	}
 
-
-
-
-
-
-
-
 	public int getUnitsCount() {
-
 		return 0;
-
 	}
 
 	public void reset() {
-		
-
+		allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
+		allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
+		importedUniqnames  =  new LinkedHashMap<String, String>();
 	}
 
 	public AnalyzedModuleComponent getAnalyzedUnit(SoftwareUnitDefinition unit) {
