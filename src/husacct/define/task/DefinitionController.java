@@ -4,13 +4,11 @@ import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
-import husacct.define.domain.module.modules.Facade;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.WarningMessageService;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
@@ -224,7 +222,6 @@ import org.apache.log4j.Logger;
 		}
 		
 		public void notifyAnalyzedObservers() {
-			long moduleId = getSelectedModuleId();
 			for (Observer o : observers) {
 				o.update(this, "updateSoftwareTree");
 			}
@@ -264,14 +261,12 @@ import org.apache.log4j.Logger;
 			try {
 				JPanelStatus.getInstance("Removing ModuleStrategy").start();
 				moduleService.removeModuleById(moduleId);
-				setSelectedModuleId(0);
+				setSelectedModuleId(definitionJPanel.modulePanel.getSelectedModuleId());
 				this.notifyObservers();
 			} catch (Exception e) {
-				logger.error("removeModuleById(" + moduleId + ") - exception: "
-						+ e.getMessage());
+				logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 				e.printStackTrace();
-
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
@@ -340,7 +335,7 @@ import org.apache.log4j.Logger;
 			
 				for (String softwareUnit : softwareUnitNames) {
 					String type = types.get(location);
-					logger.info("Removing software unit " + softwareUnit);
+					logger.info("Removing software unit " + softwareUnit + ", Type: " + type);
 					if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 						if (confirm) {
 							JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);

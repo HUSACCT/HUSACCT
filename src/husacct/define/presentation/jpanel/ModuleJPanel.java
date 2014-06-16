@@ -206,18 +206,14 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 		moveModuleUpItem.setEnabled(true);
 	}
 
-	private long getSelectedModuleId() {
+	public long getSelectedModuleId() {
 		long moduleId = -1;
-
 		TreePath path = moduleTree.getSelectionPath();
 		if (path != null) {// returns null if nothing is selected
-			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path
-					.getLastPathComponent();
+			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
 			moduleId = selectedComponent.getModuleId();
 		}
-
 		return moduleId;
-
 	}
 
 	public void initGui() {
@@ -281,29 +277,27 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	public void removeModule() {
 		long moduleId = getSelectedModuleId();
-		HashMap<String, Object> moduleDetails = DefinitionController
-				.getInstance().getModuleDetails(moduleId);
+		HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
 		if (moduleDetails.get("type").equals("Facade")) {
-			boolean confirm = UiDialogs.confirmDialog(this,
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("RemoveConfirm"),
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("RemovePopupTitle"));
+			boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"),
+					ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
 			if (confirm) {
-				JOptionPane.showMessageDialog(this,
-						ServiceProvider.getInstance().getLocaleService()
-								.getTranslatedString("DefaultModule"),
+				JOptionPane.showMessageDialog(this,ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultModule"),
 						"Message", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 		} else if (moduleId != -1 && moduleId != 0) {
-			boolean confirm = UiDialogs.confirmDialog(this,
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("RemoveConfirm"),
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("RemovePopupTitle"));
+			boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"),
+					ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
 			if (confirm) {
+				
+				TreePath selectedPath = moduleTree.getSelectionPath();
 				moduleTree.clearSelection();
+				TreePath parentPath = selectedPath.getParentPath();
+				if (parentPath != null) {// returns null if nothing is selected
+					moduleTree.setSelectionPath(parentPath);
+				}
+				
 				DefinitionController.getInstance().removeModuleById(moduleId);
 			}
 		}
@@ -330,12 +324,11 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		updateModuleTree();
+		//updateModuleTree();
 	}
 
 	public void updateModuleTree() {
-		AbstractDefineComponent rootComponent = DefinitionController
-				.getInstance().getModuleTreeComponents();
+		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
 
 		moduleTree = new ModuleTree(rootComponent);
 		moduleTree.setContextMenu(new ModuletreeContextMenu(this));
@@ -360,12 +353,8 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 			}
 		});
 
-		moduleTree.setSelectedRow(DefinitionController.getInstance()
-				.getSelectedModuleId());
-
-		for (int i = 0; i < moduleTree.getRowCount(); i++) {
-			moduleTree.expandRow(i);
-		}
+		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
+		moduleTree.expandPath(moduleTree.getSelectionPath());
 	}
 
 	private void updateSelectedModule(long moduleId) {
