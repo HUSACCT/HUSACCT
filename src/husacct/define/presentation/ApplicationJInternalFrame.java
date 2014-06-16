@@ -56,7 +56,7 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 	   
 			WarningMessageService.getInstance().addObserver(this);
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    ServiceProvider.getInstance().getDefineService().addServiceListener(this);
+			ServiceProvider.getInstance().getDefineService().addServiceListener(this);
 			this.addDefinitionPanel();
 			this.addToolBar();
 			pack();

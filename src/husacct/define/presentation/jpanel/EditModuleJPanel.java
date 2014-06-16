@@ -161,7 +161,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		setBorder(BorderFactory.createTitledBorder(ServiceProvider
 				.getInstance().getLocaleService()
 				.getTranslatedString("ModulePropertiesTitle")));
-		setPreferredSize(new java.awt.Dimension(442, 105));
+		setPreferredSize(new java.awt.Dimension(542, 105));
 
 		addModuleNameComponent();
 		addModuleDescriptionComponent();

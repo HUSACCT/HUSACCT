@@ -39,6 +39,7 @@ public class GuiController {
 
 	public JInternalFrame getBrowseViolationsGUI() {
 		initializeBrowseViolations();
+		browseViolations.validateNow();
 		return browseViolations;
 	}
 

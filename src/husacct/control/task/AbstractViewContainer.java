@@ -18,7 +18,7 @@ abstract public class AbstractViewContainer {
 	private JInternalFrame internalFrame;
 	private MainController mainController;
 	
-	public static final Dimension defaultDimension = new Dimension(800, 600);
+	public static final Dimension defaultDimension = new Dimension(950, 600);
 	private static Point lastStartPosition = new Point(10, 10);
 	private static Point positionIncrement = new Point(25, 25);
 	

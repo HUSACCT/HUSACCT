@@ -37,6 +37,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -257,6 +258,7 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         	}
         }
         dependencyTable.setModel(new DependencyTableModel(filteredList, dataControl));
+        setColumnWidths();
         dependencyTable.repaint();
     }
     
@@ -276,6 +278,21 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         this.repaint();
     }
     
-    private Logger logger = Logger.getLogger(DependencyPanel.class);
-    
+    protected void setColumnWidths() {
+	TableColumn column = null;
+		for (int i = 0; i < dependencyTable.getColumnCount(); i++) {
+		    column = dependencyTable.getColumnModel().getColumn(i);
+		    if (i == 0) {
+			column.setPreferredWidth(360); // From
+		    } else if (i == 1) {
+			column.setPreferredWidth(360); // To
+		    } else if (i == 2) {
+			column.setPreferredWidth(70); // Type
+		    } else if (i == 3) {
+			column.setPreferredWidth(30); // Line
+		    } else if (i == 4) {
+			column.setPreferredWidth(50); // Direct
+		    }
+		}
+	}
 }

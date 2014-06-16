@@ -47,6 +47,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
@@ -88,7 +89,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		setClosable(true);
 		setMaximizable(true);
 		setIconifiable(true);
-		setSize(new Dimension(800, 600));
+		//setSize(new Dimension(1000, 600));
 
 		splitPane = new JSplitPane();
 		leftSidePane = new JPanel();
@@ -107,11 +108,12 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		statisticsPanel = new StatisticsPanel();
 		violationsTable = new JTable();
 
-		getContentPane().add(splitPane, BorderLayout.CENTER);
-		leftSidePane.setMinimumSize(new Dimension(200, 10));
-		splitPane.setLeftComponent(leftSidePane);
-		chooseViolationHistoryTableScrollPane.setViewportView(chooseViolationHistoryTable);
-		splitPane.setRightComponent(rightSidePane);
+		getContentPane().add(rightSidePane, BorderLayout.CENTER);
+		//getContentPane().add(splitPane, BorderLayout.CENTER);
+		//leftSidePane.setMinimumSize(new Dimension(200, 10));
+		//splitPane.setLeftComponent(leftSidePane);
+		//chooseViolationHistoryTableScrollPane.setViewportView(chooseViolationHistoryTable);
+		//splitPane.setRightComponent(rightSidePane);
 		statisticsScrollPane.setBorder(null);
 		statisticsScrollPane.setViewportView(statisticsPanel);
 		violationsTableScrollPane.setViewportView(violationsTable);
@@ -325,7 +327,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	private void loadViolationsTableModel() {
-		String[] columnNames = {localeService.getTranslatedString("Source"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("Rule"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Direct") + "/" + localeService.getTranslatedString("Indirect"), localeService.getTranslatedString("Severity")};
+		String[] columnNames = {localeService.getTranslatedString("Source"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("RuleType"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Direct"), localeService.getTranslatedString("Severity")};
 
 		violationsTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 7993526243751581611L;
@@ -345,6 +347,27 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		violationsTable.setAutoCreateRowSorter(true);
 		violationsTable.getTableHeader().setReorderingAllowed(false);
 		violationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setColumnWidths();
+	}
+
+    protected void setColumnWidths() {
+	TableColumn column = null;
+		for (int i = 0; i < violationsTable.getColumnCount(); i++) {
+		    column = violationsTable.getColumnModel().getColumn(i);
+		    if (i == 0) {
+			column.setPreferredWidth(290); // From
+		    } else if (i == 1) {
+			column.setPreferredWidth(290); // To
+		    } else if (i == 2) {
+			column.setPreferredWidth(150); // Rule
+		    } else if (i == 3) {
+			column.setPreferredWidth(70); // DependencyKind
+		    } else if (i == 4) {
+			column.setPreferredWidth(50); // Direct
+		    } else if (i == 5) {
+			column.setPreferredWidth(50); // Severity
+		    }
+		}
 	}
 
 	private void loadChooseViolationHistoryTableModel() {
@@ -459,4 +482,25 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 			shownViolations = filterViolations(shownViolations);
 		}
 	}
+	
+	public void validateNow() {
+		if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)){
+			selectedViolationHistory = null;
+			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
+			LoadingDialog currentLoader = validateThread.getLoader();
+			currentLoader.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					ServiceProvider.getInstance().getControlService().setValidate(false);
+					logger.info("Stopping Thread");
+				}
+			});
+
+			validateThread.run();
+		}
+		else {
+			//TODO make an error frame that validating or analysing is already running
+		}
+	}
+
 }

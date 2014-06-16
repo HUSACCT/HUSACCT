@@ -7,6 +7,7 @@ import husacct.common.locale.ILocaleService;
 import java.util.HashMap;
 
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 
 public class DependencyDataModel extends AbstractTableModel {
 	private static final long		serialVersionUID	= -298507387139026205L;
@@ -19,23 +20,16 @@ public class DependencyDataModel extends AbstractTableModel {
 	
 	public DependencyDataModel(DependencyDTO[] dtos) {
 		localeService = ServiceProvider.getInstance().getLocaleService();
-		columnKeys = new String[] { "From", "To", "DependencyType",
-				"LineNumber", "Direct/Indirect" };
+		columnKeys = new String[] { "From", "To", "Type", "Linenumber", "Direct/Indirect" };
 		columnNames = new HashMap<String, String>();
-		columnNames.put(columnKeys[0],
-				localeService.getTranslatedString(columnKeys[0]));
-		columnNames.put(columnKeys[1],
-				localeService.getTranslatedString(columnKeys[1]));
-		columnNames.put(columnKeys[2],
-				localeService.getTranslatedString(columnKeys[2]));
-		columnNames.put(columnKeys[3],
-				localeService.getTranslatedString(columnKeys[3]));
-		columnNames.put(columnKeys[4],
-				localeService.getTranslatedString("Direct") + "/"
-						+ localeService.getTranslatedString("Indirect"));
+		columnNames.put(columnKeys[0], localeService.getTranslatedString(columnKeys[0]));
+		columnNames.put(columnKeys[1], localeService.getTranslatedString(columnKeys[1]));
+		columnNames.put(columnKeys[2], localeService.getTranslatedString(columnKeys[2]));
+		columnNames.put(columnKeys[3], localeService.getTranslatedString(columnKeys[3]));
+		columnNames.put(columnKeys[4], localeService.getTranslatedString("Direct"));
 		data = dtos;
 	}
-	
+
 	@Override
 	public int getColumnCount() {
 		return columnNames.size();
@@ -58,11 +52,9 @@ public class DependencyDataModel extends AbstractTableModel {
 		DependencyDTO row = data[rowIndex];
 		if (columnKey.equals(columnKeys[0])) value = row.from;
 		else if (columnKey.equals(columnKeys[1])) value = row.to;
-		else if (columnKey.equals(columnKeys[2])) value = localeService
-				.getTranslatedString(row.type);
+		else if (columnKey.equals(columnKeys[2])) value = localeService.getTranslatedString(row.type);
 		else if (columnKey.equals(columnKeys[3])) value = "" + row.lineNumber;
-		else if (columnKey.equals(columnKeys[4])) value = row.isIndirect ? localeService
-				.getTranslatedString("Indirect") : localeService
+		else if (columnKey.equals(columnKeys[4])) value = row.isIndirect ? localeService.getTranslatedString("Indirect") : localeService
 				.getTranslatedString("Direct");
 		return value;
 	}

@@ -46,9 +46,9 @@ public class JTableSoftwareUnits extends AbstractJTable implements
 	for (int i = 0; i < getColumnCount(); i++) {
 	    column = getColumnModel().getColumn(i);
 	    if (i == 0) {
-		column.setPreferredWidth(275); // Software unit name
+		column.setPreferredWidth(300); // Software unit name
 	    } else if (i == 2) {
-		column.setPreferredWidth(25); // Type
+		column.setPreferredWidth(100); // Type
 	    }
 	}
     }
