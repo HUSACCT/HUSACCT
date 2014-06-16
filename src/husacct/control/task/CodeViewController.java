@@ -23,6 +23,7 @@ public class CodeViewController {
 	private IControlService controlService;
 	private CodeviewerService currentCodeviewer;
 	private static Logger logger = Logger.getLogger(ServiceProvider.class);
+	private String fileName;
 	
 	public CodeViewController(MainController mainController) {
 		controlService = ServiceProvider.getInstance().getControlService();
@@ -61,9 +62,11 @@ public class CodeViewController {
 		}
 		else{
 			// Path empty, thus not found, show error.
+			String message = ServiceProvider.getInstance().getLocaleService().getTranslatedString("CodeViewerNoSourceMsg") + " " + fileName;
+
 			JOptionPane.showMessageDialog(
 				null,
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("CodeViewerNoSourceMsg"),
+				message,
 				ServiceProvider.getInstance().getLocaleService().getTranslatedString("CodeViewerNoSource"),
 				JOptionPane.ERROR_MESSAGE
 			);
@@ -114,7 +117,7 @@ public class CodeViewController {
 		}
 		
 		// Check default conversion
-		String fileName = classPath;
+		fileName = classPath;
 		fileName = rootPath + fileName.replace(".", File.separator) + extension;
 		if(fileExists(fileName)){
 			logger.info("Basic path converter found the path: " + fileName);
@@ -144,7 +147,7 @@ public class CodeViewController {
 		
 		// If not found log
 		if(filePath == "")
-			logger.info("No valid file path could be found.");
+			logger.info("No valid file path could be found for: " + fileName);
 		
 		// Return path, empty if not found.
 		return filePath;

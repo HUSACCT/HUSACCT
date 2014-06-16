@@ -80,9 +80,9 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
 			public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() >= 2){
 					int row = dependencyTable.getSelectedRow();
-					String cls = dependencyTable.getModel().getValueAt(row, 0).toString();
-					int lineNumber = (int) dependencyTable.getModel().getValueAt(row, 3);
-					dataControl.getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.RED));
+					String cls = dependencyTable.getValueAt(row, 0).toString();
+					int lineNumber = (int) dependencyTable.getValueAt(row, 3);
+					dataControl.getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.LIGHT_GRAY));
 				}
 			}
 			@Override
