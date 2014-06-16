@@ -5,6 +5,7 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -170,8 +171,8 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(!sourceClassPath.equals("") && !sourceClassPath.equals(".java")){
-			logger.info("Opening code viewer: " + sourceClassPath + " at line " + sourceLine);
-			ServiceProvider.getInstance().getControlService().displayErrorInFile(sourceClassPath, sourceLine, sourceSeverity);
+			//logger.info("Opening code viewer: " + sourceClassPath + " at line " + sourceLine);
+			ServiceProvider.getInstance().getControlService().displayErrorInFile(sourceClassPath, sourceLine, new Severity("test", Color.ORANGE));
 		}
 	}
 }
