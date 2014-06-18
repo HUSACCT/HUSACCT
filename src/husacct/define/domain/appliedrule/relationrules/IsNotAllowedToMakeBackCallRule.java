@@ -20,14 +20,12 @@ public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
 			return false;
 		}
-		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
-				this.getRuleTypeKey(), this.getModuleFrom());
+		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(this.getRuleTypeKey(), this.getModuleFrom());
 		if (conventionSuccess) {
 			conventionSuccess = layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom());
 		}
-		if (conventionSuccess) {
-			ArrayList<ModuleStrategy> backCallLayers = layerCheckerHelper
-					.getBackCallLayers(this.getModuleFrom().getId());
+/*		if (conventionSuccess) {
+			ArrayList<ModuleStrategy> backCallLayers = layerCheckerHelper.getBackCallLayers(this.getModuleFrom().getId());
 			for (ModuleStrategy backCallLayer : backCallLayers) {
 				this.setModuleTo(backCallLayer);
 				if (!checkIsNotAllowedToUse()) {
@@ -35,7 +33,7 @@ public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 					break;
 				}
 			}
-		}
+		} */
 		return conventionSuccess;
 	}
 

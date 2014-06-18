@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 public class MustUseRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;
-	private LayerCheckerHelper layerCheckerHelper;
+	//private LayerCheckerHelper layerCheckerHelper;
 
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
-		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+		//layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
 
 		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
 			return false;
@@ -32,7 +32,7 @@ public class MustUseRule extends AppliedRuleStrategy{
 				    .checkRuleTypeAlreadyFromOtherToSelected(
 					    "IsTheOnlyModuleAllowedToUse", this.getModuleFrom(), this.getModuleTo());
 			}
-			if (conventionSuccess) {
+/*			if (conventionSuccess) {
 			    if (!moduleCheckerHelper.checkRuleTypeAlreadySet(
 				    "IsNotAllowedToMakeSkipCall", this.getModuleFrom())) {
 				ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
@@ -57,7 +57,7 @@ public class MustUseRule extends AppliedRuleStrategy{
 				    }
 				}
 			    }
-			}
+			} */
 			return conventionSuccess;
 	}
 

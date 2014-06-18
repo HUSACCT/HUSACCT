@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 public class IsNotAllowedToUseRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;
-	private LayerCheckerHelper layerCheckerHelper;
+	//private LayerCheckerHelper layerCheckerHelper;
 
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
-		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+		//layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
 
 		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
 			return false;
@@ -42,7 +42,7 @@ public class IsNotAllowedToUseRule extends AppliedRuleStrategy{
 					.checkRuleTypeAlreadyFromThisToSelected("MustUse",
 							this.getModuleFrom(), this.getModuleTo());
 		}
-		if (conventionSuccess && layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom()) && layerCheckerHelper.checkTypeIsLayer(this.getModuleTo())) {
+/*		if (conventionSuccess && layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom()) && layerCheckerHelper.checkTypeIsLayer(this.getModuleTo())) {
 			ArrayList<ModuleStrategy> backCallLayers = layerCheckerHelper.getBackCallLayers(this.getModuleFrom().getId());
 			ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper.getSkipCallLayers(this.getModuleFrom().getId());
 			for (ModuleStrategy skipCallLayer : skipCallLayers) {
@@ -57,7 +57,7 @@ public class IsNotAllowedToUseRule extends AppliedRuleStrategy{
 									"IsNotAllowedToMakeBackCall", this.getModuleFrom());
 				}
 			}
-		}
+		} */
 		return conventionSuccess;
 	}
 

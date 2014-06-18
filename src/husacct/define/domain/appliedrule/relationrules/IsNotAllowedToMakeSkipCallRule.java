@@ -24,7 +24,7 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 		if (conventionSuccess) {
 			conventionSuccess = layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom());
 		}
-		if (conventionSuccess) {
+/*		if (conventionSuccess) {
 			ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
 					.getSkipCallLayers(this.getModuleFrom().getId());
 			for (ModuleStrategy skipCallLayer : skipCallLayers) {
@@ -34,7 +34,7 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 					break;
 				}
 			}
-		}
+		} */
 		return conventionSuccess;
 	}
 

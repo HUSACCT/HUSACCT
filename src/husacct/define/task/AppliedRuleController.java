@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observer;
 
+import org.apache.log4j.Logger;
+
 public class AppliedRuleController extends PopUpController {
 
 	private AppliedRuleDomainService appliedRuleService;
@@ -33,6 +35,7 @@ public class AppliedRuleController extends PopUpController {
 	private long currentAppliedRuleId;
 	private ModuleDomainService moduleService;
 	private Long moduleToId;
+	private Logger logger = Logger.getLogger(AppliedRuleController.class);
 
 	public AppliedRuleController(long moduleId, long appliedRuleId) {
 		super();
@@ -113,8 +116,8 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	public boolean conformRuleConventions(HashMap<String, Object> ruleDetails) {
-		AppliedRuleStrategy dummyRule = ruleFactory.createRuleWithModules(ruleDetails);
-		return conformRuleConventions(dummyRule);
+			AppliedRuleStrategy dummyRule = ruleFactory.createRuleWithModules(ruleDetails);
+			return conformRuleConventions(dummyRule);
 	}
 
 	private boolean conformRuleConventions(AppliedRuleStrategy appliedRule) {

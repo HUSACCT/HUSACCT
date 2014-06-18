@@ -15,8 +15,8 @@ public class LayerCheckerHelper {
     private ArrayList<Layer> layers;
 
     public LayerCheckerHelper(ModuleStrategy moduleFrom) {
-	layers = new ArrayList<Layer>();
-	fillLayerList(moduleFrom);
+	//layers = new ArrayList<Layer>();
+	//fillLayerList(moduleFrom);
 	setErrorMessage("");
     }
 
@@ -58,30 +58,9 @@ public class LayerCheckerHelper {
         }
 
     private ArrayList<ModuleStrategy> getCurrentModules(ModuleStrategy moduleFrom) {
-	
     	ModuleDomainService moduleService =new  ModuleDomainService();
-	
-    	Long parentId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(1L);
-    	
-    	parentId=-1L;
-	if (parentId != -1) {
-		try{
-		
-		}catch(Exception e)
-		{
-			
-		}
-		ModuleStrategy parentModule = moduleService.getModuleById(parentId);
-	    moduleService.sortModuleChildren(parentModule);
-	    return parentModule.getSubModules();
-	} else {
-	    
-		return moduleService.getSortedModules();
+    	return moduleService.getSortedModules();
 	}
-    
-	
-	
-    }
 
     public String getErrorMessage() {
 	return errorMessage;

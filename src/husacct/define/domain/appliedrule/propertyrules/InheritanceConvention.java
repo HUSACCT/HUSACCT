@@ -14,7 +14,6 @@ public class InheritanceConvention extends AppliedRuleStrategy{
 
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
-		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
 
 		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){
 			return false;
@@ -40,19 +39,6 @@ public class InheritanceConvention extends AppliedRuleStrategy{
 						"IsNotAllowedToMakeSkipCall", this.getModuleFrom())) {
 					ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
 							.getSkipCallLayers(this.getModuleFrom().getId());
-					for (ModuleStrategy skipCallLayer : skipCallLayers) {
-						if (skipCallLayer == this.getModuleTo()) {
-							conventionSuccess = false;
-							break;
-						}
-					}
-				}
-			}
-			if (conventionSuccess) {
-				if (!moduleCheckerHelper.checkRuleTypeAlreadySet(
-						"IsNotAllowedToMakeBackCall", this.getModuleFrom())) {
-					ArrayList<ModuleStrategy> skipCallLayers = layerCheckerHelper
-							.getBackCallLayers(this.getModuleFrom().getId());
 					for (ModuleStrategy skipCallLayer : skipCallLayers) {
 						if (skipCallLayer == this.getModuleTo()) {
 							conventionSuccess = false;
