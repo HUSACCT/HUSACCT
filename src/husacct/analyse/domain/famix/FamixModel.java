@@ -68,8 +68,9 @@ class FamixModel extends FamixObject {
     public void addObject(FamixObject e) throws InvalidAttributesException {
         try{
     	if (e instanceof FamixEntity) {
-        	if (((FamixEntity) e).uniqueName.contains("org.dtangler.swingui.aboutinfodisplayer.impl.AboutInfoView.Actions")) {
-        		String test = "breakpoint"; }
+        	// Test Utility
+    		//if (((FamixEntity) e).uniqueName.contains("org.dtangler.swingui.aboutinfodisplayer.impl.AboutInfoView.Actions")) {
+        	//	String test = "breakpoint"; }
             if (e instanceof FamixBehaviouralEntity) {
                 behaviouralEntities.put(((FamixEntity) e).uniqueName, (FamixBehaviouralEntity) e);
             } else if (e instanceof FamixStructuralEntity) {
