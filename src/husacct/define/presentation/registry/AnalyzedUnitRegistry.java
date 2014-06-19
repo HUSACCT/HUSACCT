@@ -19,7 +19,7 @@ import java.util.Map;
 public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 
 	private Map<String,AnalyzedModuleComponent> allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
-	private Map<Long,AbstractDefineComponent> allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
+	//private Map<Long,AbstractDefineComponent> allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
 	private Map<String,String> importedUniqnames  =  new LinkedHashMap<String, String>();
 
 	public AnalyzedUnitRegistry()
@@ -37,7 +37,7 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 
 	public void reset() {
 		allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
-		allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
+		//allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
 		importedUniqnames  =  new LinkedHashMap<String, String>();
 	}
 
@@ -45,10 +45,10 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	return allAnalyzedUnits.get(unit.getName());
 	}
 	
-	public AbstractDefineComponent getDefinedUnit(ModuleStrategy module)
+/*	public AbstractDefineComponent getDefinedUnit(ModuleStrategy module)
 	{
 		return allDefinedUnits.get(module.getId());
-	}
+	} */
 
 
 

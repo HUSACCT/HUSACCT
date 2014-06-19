@@ -71,6 +71,7 @@ public class DefineMenu extends JMenu{
 		importArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getImportController().showImportArchitectureGui();
+				mainController.getViewController().showDefineArchitecture();
 			}
 		});
 		

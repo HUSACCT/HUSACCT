@@ -51,7 +51,7 @@ public class ImportArchitectureDialog extends JDialog {
 	}
 
 	private void addComponents(){
-		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabelShort"));
 		pathText = new JTextField(20);
 		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		importButton = new JButton(localeService.getTranslatedString("ImportButton"));

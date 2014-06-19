@@ -51,8 +51,6 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	@Override
 	public void analyze() {
 		StateService.instance().analyze();
-		
-
 	}
 
 	@Override
@@ -259,11 +257,12 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public void loadLogicalArchitectureData(Element e) {
+		reset();
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);
 		pd.loadWorkspaceData(e);
 		DefinitionController.getInstance().notifyObservers();
-		//getDefinitionController().initSettings();
+		getDefinitionController().initSettings();
 	}
 
 	@Override
@@ -273,6 +272,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	private void reset() {
+		//StateService.instance().reset();
 		defineDomainService = new SoftwareArchitectureDomainService();
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
