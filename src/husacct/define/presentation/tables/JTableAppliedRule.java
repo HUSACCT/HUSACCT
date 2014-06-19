@@ -46,11 +46,11 @@ public class JTableAppliedRule extends AbstractJTable implements
 		for (int i = 0; i < getColumnCount(); i++) {
 		    column = getColumnModel().getColumn(i);
 		    if (i == 0) {
-			column.setPreferredWidth(150); // Rule Type
+			column.setPreferredWidth(180); // Rule Type
 		    } else if (i == 1) {
-			column.setPreferredWidth(150); // To layer
+			column.setPreferredWidth(180); // To layer
 		    } else if (i == 2) {
-			column.setPreferredWidth(50); // Enabled
+			column.setPreferredWidth(40); // Enabled
 		    } else if (i == 3) {
 			column.setPreferredWidth(50); // Exceptions
 		    }
