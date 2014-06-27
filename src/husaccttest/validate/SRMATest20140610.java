@@ -92,6 +92,20 @@ public class SRMATest20140610 {
 
 
 	@Test
+	public void isValidatedCorrectly() {
+		IValidateService validate = ServiceProvider.getInstance().getValidateService();
+		boolean isValidatedCorrectly = false;
+		int numberOfViolations = 0;
+		try {
+			numberOfViolations = validate.getAllViolations().getValue().size();
+		} catch (ProgrammingLanguageNotFoundException e) {
+			assertTrue(isValidatedCorrectly);
+		}
+		assertEquals(69, numberOfViolations);
+	}
+
+
+	@Test
 	public void isNotAllowedToUse_Internal() {
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
 		ViolationDTO[] violations = null;

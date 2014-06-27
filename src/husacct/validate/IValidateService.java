@@ -5,9 +5,12 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IObservableService;
+import husacct.validate.domain.validation.Violation;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.List;
+import java.util.AbstractMap.SimpleEntry;
 
 import javax.swing.JInternalFrame;
 
@@ -22,14 +25,19 @@ public interface IValidateService extends IObservableService {
 	public CategoryDTO[] getCategories();
 
 	/**
+	 * This method is used only for testing within the Test suite
+	 */
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations();
+
+	
+	/**
 	 * Gets all violations by a specific logicalPath
 	 * 
 	 * @param logicalpathFrom the 'from' logical path
 	 * @param logicalpathTo the 'to' logical path
 	 * @return an array of ViolationDTO's
 	 */
-	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom,
-			String logicalpathTo);
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);
 
 	/**
 	 * Gets all violations by a specific physical path

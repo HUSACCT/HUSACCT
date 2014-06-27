@@ -39,10 +39,10 @@ public class ImportExportTest {
 	}
 
 	public void testImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
-		ClassLoader.getSystemResource("husaccttest/validate/testfile_nieuw.xml").toURI();
+		ClassLoader.getSystemResource("husaccttest/validate/Testfile_ImportExportTest.xml").toURI();
 		DocumentBuilderFactory domfactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dombuilder = domfactory.newDocumentBuilder();
-		File file = new File(ClassLoader.getSystemResource("husaccttest/validate/testfile_nieuw.xml").toURI());
+		File file = new File(ClassLoader.getSystemResource("husaccttest/validate/Testfile_ImportExportTest.xml").toURI());
 		DOMBuilder domBuilder = new DOMBuilder();
 		Document document = domBuilder.build(dombuilder.parse(file));
 		validate.loadWorkspaceData(document.getRootElement());

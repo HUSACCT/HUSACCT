@@ -12,6 +12,7 @@ import husacct.control.task.configuration.ConfigPanel;
 import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.presentation.ValidateConfigurationPanel;
 import husacct.validate.task.ReportServiceImpl;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.AbstractMap.SimpleEntry;
 
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -57,6 +60,11 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	public CategoryDTO[] getCategories() {
 		CategoryDTO[] categories = domain.getCategories();
 		return categories;
+	}
+
+	@Override
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations() {
+		return task.getAllViolations();
 	}
 
 	/**
