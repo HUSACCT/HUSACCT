@@ -29,15 +29,13 @@ public class SRMATest20140610 {
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
 	private final static String workspaceLocation = "C:\\Tools\\Eclipse43\\Workspace\\HUSACCT\\testprojects\\workspaces\\SrmaTest2014-06-10 HUSACCT_3.1.xml";
-	private final static String outputFormat = "xml";
-	private final static String outputLocation = "C:\\Tools\\HUSACCT\\Reports";
 	private static Logger logger;
 
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			logger.info(String.format("Running HUSACCT using workspace %s, violations report stored as %s at %s", workspaceLocation, outputFormat, outputLocation));
+			logger.info(String.format("Running HUSACCT using workspace: " + workspaceLocation));
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -68,12 +66,9 @@ public class SRMATest20140610 {
 				isValidating = mainController.getStateController().isValidating();
 			}
 
-			//exportViolations(outputLocation, outputFormat);
-
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getMessage();
 			logger.warn(errorMessage);
-			//System.exit(0);
 		}
 	}
 

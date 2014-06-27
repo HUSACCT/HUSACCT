@@ -2,9 +2,9 @@ package technology.direct.subclass;
 
 import technology.direct.dao.CallInstanceSuperClassDAO;
 
-public class CallInstanceSubClassDOA extends CallInstanceSuperClassDAO {
+public class CallInstanceSubSubClassDOA extends CallInstanceSubClassDOA {
 	
-	public CallInstanceSubClassDOA() {
+	public CallInstanceSubSubClassDOA() {
 		};
 	
 	public CallInstanceSuperClassDAO MethodSuperClassInstance;

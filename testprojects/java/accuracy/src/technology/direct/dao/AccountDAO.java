@@ -1,5 +1,5 @@
 package technology.direct.dao;
 
-public class HistoryDAO {
+public class AccountDAO {
 
 }

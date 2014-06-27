@@ -226,7 +226,7 @@ class FamixDependencyFinder extends FamixFinder {
 					else{
 						// Filter out dependencies if from and to do not refer to types
 						String libraryRoot = "xLibraries.";
-						if(!((theModel.classes.containsKey(association.to) || theModel.interfaces.containsKey(association.to) || theModel.libraries.containsKey((libraryRoot + association.to)))
+						if(!((theModel.classes.containsKey(association.to) || theModel.libraries.containsKey((libraryRoot + association.to)))
 								&& (theModel.classes.containsKey(association.from) || theModel.interfaces.containsKey(association.from) || theModel.libraries.containsKey((libraryRoot + association.from))))){
 							numberOfFilteredDependencies ++;
 						}
@@ -235,27 +235,6 @@ class FamixDependencyFinder extends FamixFinder {
 							fromClassPath = association.from;
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
-	
-								// Check if from is existing class. If so, and if the class is an inner class, determine parent-class for fromClassPath.
-								if((theModel.classes.containsKey(association.from))){
-									FamixClass toClass = theModel.classes.get(association.from);
-									if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
-										fromClassPath = toClass.belongsToClass;
-									}
-								} else{
-									numberOfAssociationsWithoutFromClass ++;
-								}
-	
-								// Check if to is existing class. If so, and if the class is an inner class, determine parent-class for fromClassPath.
-								if((theModel.classes.containsKey(association.to))){
-									FamixClass toClass = theModel.classes.get(association.to);
-									if((toClass != null) && (toClass.isInnerClass) && (theModel.classes.containsKey(toClass.belongsToClass))){
-										toClassPath = toClass.belongsToClass;
-									}
-								} else{
-									numberOfAssociationsWithoutToClass ++;
-								}
-								
 								// Create Dependency and add to result
 								DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber);
 								result.put(uniqueName, foundDirectDependency);
