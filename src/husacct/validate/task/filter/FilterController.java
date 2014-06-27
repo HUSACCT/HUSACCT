@@ -2,6 +2,7 @@ package husacct.validate.task.filter;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.define.IDefineService;
@@ -121,6 +122,14 @@ public class FilterController {
 		return returnValue;
 	}
 	
+	public ViolationDTO[] getViolationsByRule(RuleDTO appliedRule) {
+		List<Violation> violations = configuration.getViolationsByRule(appliedRule.moduleFrom.logicalPath, appliedRule.moduleTo.logicalPath, appliedRule.ruleTypeKey);
+		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
+		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
+		ViolationDTO[] returnValue = violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+		return returnValue;
+	}
+
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
 

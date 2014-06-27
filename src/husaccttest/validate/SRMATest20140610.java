@@ -3,6 +3,7 @@ package husaccttest.validate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.IValidateService;
 import husacct.analyse.IAnalyseService;
@@ -10,7 +11,9 @@ import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.define.IDefineService;
 import husaccttest.analyse.java.benchmark.accuracy.DependencyDetectionAccuracyTest;
+
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
@@ -21,7 +24,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SRMATest20140522 {
+public class SRMATest20140610 {
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
@@ -177,16 +180,41 @@ public class SRMATest20140522 {
 		}
 		assertEquals(9, violations.length);
 	}
-
 	@Test
-	public void MustUse() {
+	public void isTheOnlyModuleAllowedToUse_ViaGetViolationsByRule() {
+		IDefineService define = ServiceProvider.getInstance().getDefineService();
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
 		ViolationDTO[] violations = null;
 		boolean isValidatedCorrectly = false;
 		try {
-			String pathFrom = "Domain.RelationRules.MustUse-Violating";
-			String pathTo = "Technology.RelationRules.Allowed";
-			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
+			RuleDTO[] rules = define.getDefinedRules();
+			for (RuleDTO rule : rules) {
+				if (rule.ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse") 
+						&& rule.moduleFrom.logicalPath.equals("Domain.RelationRules.IsTheOnlyModuleAllowedToUse1")) {
+					violations = validate.getViolationsByRule(rule);
+					break;
+				}
+			}
+		} catch (ProgrammingLanguageNotFoundException e) {
+			assertTrue(isValidatedCorrectly);	
+		}
+		assertEquals(9, violations.length);
+	}
+
+	@Test
+	public void MustUse() {
+		IDefineService define = ServiceProvider.getInstance().getDefineService();
+		IValidateService validate = ServiceProvider.getInstance().getValidateService();
+		ViolationDTO[] violations = null;
+		boolean isValidatedCorrectly = false;
+		try {
+			RuleDTO[] rules = define.getDefinedRules();
+			for (RuleDTO rule : rules) {
+				if (rule.ruleTypeKey.equals("MustUse") && rule.moduleFrom.logicalPath.equals("Domain.RelationRules.MustUse-Violating")) {
+					violations = validate.getViolationsByRule(rule);
+					break;
+				}
+			}
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
@@ -210,13 +238,18 @@ public class SRMATest20140522 {
 
 	@Test
 	public void NamingPrefix() {
+		IDefineService define = ServiceProvider.getInstance().getDefineService();
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
 		ViolationDTO[] violations = null;
 		boolean isValidatedCorrectly = false;
 		try {
-			String pathFrom = "Technology.PropertyRules.NamingPrefix";
-			String pathTo = "Technology.PropertyRules.NamingPrefix";
-			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
+			RuleDTO[] rules = define.getDefinedRules();
+			for (RuleDTO rule : rules) {
+				if (rule.ruleTypeKey.equals("NamingConvention") && rule.moduleFrom.logicalPath.equals("Technology.PropertyRules.NamingPrefix")) {
+					violations = validate.getViolationsByRule(rule);
+					break;
+				}
+			}
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
@@ -225,13 +258,18 @@ public class SRMATest20140522 {
 
 	@Test
 	public void NamingMid() {
+		IDefineService define = ServiceProvider.getInstance().getDefineService();
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
 		ViolationDTO[] violations = null;
 		boolean isValidatedCorrectly = false;
 		try {
-			String pathFrom = "Technology.PropertyRules.NamingMid";
-			String pathTo = "Technology.PropertyRules.NamingMid";
-			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
+			RuleDTO[] rules = define.getDefinedRules();
+			for (RuleDTO rule : rules) {
+				if (rule.ruleTypeKey.equals("NamingConvention") && rule.moduleFrom.logicalPath.equals("Technology.PropertyRules.NamingMid")) {
+					violations = validate.getViolationsByRule(rule);
+					break;
+				}
+			}
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
@@ -240,13 +278,18 @@ public class SRMATest20140522 {
 
 	@Test
 	public void NamingPostfix() {
+		IDefineService define = ServiceProvider.getInstance().getDefineService();
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
 		ViolationDTO[] violations = null;
 		boolean isValidatedCorrectly = false;
 		try {
-			String pathFrom = "Technology.PropertyRules.NamingPostfix";
-			String pathTo = "Technology.PropertyRules.NamingPostfix";
-			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
+			RuleDTO[] rules = define.getDefinedRules();
+			for (RuleDTO rule : rules) {
+				if (rule.ruleTypeKey.equals("NamingConvention") && rule.moduleFrom.logicalPath.equals("Technology.PropertyRules.NamingPostfix")) {
+					violations = validate.getViolationsByRule(rule);
+					break;
+				}
+			}
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
@@ -285,13 +328,18 @@ public class SRMATest20140522 {
 
 	@Test
 	public void VisibilityConvention() {
+		IDefineService define = ServiceProvider.getInstance().getDefineService();
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
 		ViolationDTO[] violations = null;
 		boolean isValidatedCorrectly = false;
 		try {
-			String pathFrom = "Technology.PropertyRules.Component";
-			String pathTo = "Technology.PropertyRules.Component";
-			violations = validate.getViolationsByLogicalPath(pathFrom, pathTo);
+			RuleDTO[] rules = define.getDefinedRules();
+			for (RuleDTO rule : rules) {
+				if (rule.ruleTypeKey.equals("VisibilityConvention")) {
+					violations = validate.getViolationsByRule(rule);
+					break;
+				}
+			}
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}

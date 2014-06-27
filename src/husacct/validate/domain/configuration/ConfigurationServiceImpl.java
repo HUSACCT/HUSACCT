@@ -1,6 +1,8 @@
 package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.RuleDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
@@ -66,6 +68,10 @@ public final class ConfigurationServiceImpl extends Observable {
 		return violationRepository.getViolationsFromTo(physicalPathFrom, physicalPathTo);
 	}
 	
+	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
+		return violationRepository.getViolationsByRule(moduleFrom, moduleTo, ruleTypeKey);
+	}
+
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
 		

@@ -2,6 +2,7 @@ package husacct.validate.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
@@ -56,6 +57,18 @@ public class TaskServiceImpl {
 		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
+		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
+	}
+
+	public ViolationDTO[] getViolationsByRule(RuleDTO appliedRule) {
+		return filterController.getViolationsByRule(appliedRule);
+	}
+	
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
+		return filterController.getViolationsPerSeverity(shownViolations, severities);
+	}
+
 	public void setFilterValues(PathDTO dto, boolean hideFilter, Calendar date) {
 		filterController.setFilterValues(dto, hideFilter, getHistoryViolations(date));
 	}
@@ -107,10 +120,6 @@ public class TaskServiceImpl {
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
-		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
-	}
-
 	public Map<String, List<ViolationType>> getViolationTypes(String language) {
 		return domain.getAllViolationTypes(language);
 	}
@@ -125,10 +134,6 @@ public class TaskServiceImpl {
 
 	public Element exportValidationWorkspace() {
 		return exportController.exportAllData(configuration);
-	}
-
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
-		return filterController.getViolationsPerSeverity(shownViolations, severities);
 	}
 
 	public void restoreAllKeysToDefaultSeverities(String language) {

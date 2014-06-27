@@ -1,6 +1,7 @@
 package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IObservableService;
@@ -37,8 +38,15 @@ public interface IValidateService extends IObservableService {
 	 * @param logicalpathTo the 'to' physical path
 	 * @return an array of ViolationDTO's
 	 */
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom,
-			String physicalpathTo);
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo);
+
+	/**
+	 * Gets the detected violations of the given rule.
+	 * 
+	 * @param appliedRule is one RuleDTO.
+	 * @return an array of ViolationDTO's
+	 */
+	public ViolationDTO[] getViolationsByRule(RuleDTO appliedRule);
 
 	/**
 	 * Checks all defined rules, and saved the found violations.

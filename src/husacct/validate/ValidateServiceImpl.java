@@ -195,20 +195,14 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		return configuration;
 	}
 
-	/**
-	 * This method is only used for testing with the Testsuite It checks an
-	 * array of applied rules for conformance.
-	 * 
-	 * @param appliedRules an array of applied rules.
-	 */
-	public void Validate(RuleDTO[] appliedRules) {
-		domain.checkConformance(appliedRules);
+	@Override
+	public ViolationDTO[] getViolationsByRule(RuleDTO appliedRule) {
+		return task.getViolationsByRule(appliedRule);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
 		return domain.getDefaultRuleTypeOfModule(type);
 	}

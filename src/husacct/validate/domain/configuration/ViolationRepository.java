@@ -9,14 +9,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
 class ViolationRepository {
 
 	private List<Violation> violationsList;
-	private HashMap<String, HashMap<String, Violation>> violationToFromHashMap;
+	private HashMap<String, HashMap<String, Violation>> violationFromToHashMap;
 	private Calendar repositoryCalendar;
 	private final Logger logger = Logger.getLogger(ViolationRepository.class);
     
@@ -40,8 +38,8 @@ class ViolationRepository {
 		String violationFromToKey = physicalPathFrom + "|" + physicalPathTo;
 		violationFromToKey.toLowerCase();
 		HashMap<String, Violation> violationDetailsHashMap;
-		if(violationToFromHashMap.containsKey(violationFromToKey)){
-			violationDetailsHashMap = violationToFromHashMap.get(violationFromToKey);
+		if(violationFromToHashMap.containsKey(violationFromToKey)){
+			violationDetailsHashMap = violationFromToHashMap.get(violationFromToKey);
 			Set<String> keySet = violationDetailsHashMap.keySet();
 			for (String violationDetailsKey : keySet) {
 				foundViolations.add(violationDetailsHashMap.get(violationDetailsKey));
@@ -50,12 +48,32 @@ class ViolationRepository {
 		return foundViolations;
 	}
 
+	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
+		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
+		for (Violation violation : violationsList) {
+			// Note: message refers to moduleFrom and moduleTo of the original rule, while the violation may refer to another moduleFrom or moduleTo 
+			if (violation.getMessage().getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().equals(moduleFrom)) { 
+				if (!moduleFrom.equals(moduleTo)) {
+					if (violation.getMessage().getLogicalModules().getLogicalModuleTo().getLogicalModulePath().equals(moduleTo) && violation.getRuletypeKey().equals(ruleTypeKey)) {
+						foundViolations.add(violation);
+					}
+				} else {
+					if (violation.getRuletypeKey().equals(ruleTypeKey)) {
+						foundViolations.add(violation);
+					}
+				}
+			}
+		}
+		return foundViolations;
+	}
+
+	
 	void filterAndSortAllViolations(){
 		int beforeNrOfViolations = violationsList.size();
 		ArrayList<Violation> sortedViolationsList = new ArrayList<Violation>();
 		String violationFromToKey;
 		String violationDetailsKey;
-		violationToFromHashMap = new HashMap<String, HashMap<String, Violation>>();
+		violationFromToHashMap = new HashMap<String, HashMap<String, Violation>>();
 		HashMap<String, Violation> violationDetailsHashMap;
 		for(Violation violation : violationsList){
 			try{
@@ -66,8 +84,8 @@ class ViolationRepository {
 				violationDetailsKey = violation.getRuletypeKey() + "|" + violation.getLinenumber() + "|" + violation.getViolationTypeKey();
 				violationFromToKey.toLowerCase();
 				violationDetailsKey.toLowerCase();
-				if(violationToFromHashMap.containsKey(violationFromToKey)){
-					violationDetailsHashMap = violationToFromHashMap.get(violationFromToKey);
+				if(violationFromToHashMap.containsKey(violationFromToKey)){
+					violationDetailsHashMap = violationFromToHashMap.get(violationFromToKey);
 					if(violationDetailsHashMap.containsKey(violationDetailsKey)){
 						// Do nothing; violation is already registered
 					} else {
@@ -78,7 +96,7 @@ class ViolationRepository {
 				else{
 					violationDetailsHashMap = new HashMap<String, Violation>();
 					violationDetailsHashMap.put(violationDetailsKey, violation);
-					violationToFromHashMap.put(violationFromToKey, violationDetailsHashMap);
+					violationFromToHashMap.put(violationFromToKey, violationDetailsHashMap);
 					sortedViolationsList.add(violation);
 				}
 			} catch (Exception e) {
