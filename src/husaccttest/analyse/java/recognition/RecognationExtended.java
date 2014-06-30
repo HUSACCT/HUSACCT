@@ -7,8 +7,8 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.define.IDefineService;
-import husaccttest.analyse.TestProjectFinder;
-import husaccttest.analyse.TestCaseExtended;
+import husaccttest.TestResourceFinder;
+import husaccttest.analyse.java.TestCaseExtended;
 
 public abstract class RecognationExtended extends TestCaseExtended{
 
@@ -21,7 +21,7 @@ public abstract class RecognationExtended extends TestCaseExtended{
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 
-		String path = TestProjectFinder.lookupProject("java", "recognition");
+		String path = TestResourceFinder.findSourceCodeDirectory("java", "recognition");
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(path);
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();

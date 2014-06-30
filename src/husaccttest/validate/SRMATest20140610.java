@@ -12,7 +12,7 @@ import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.define.IDefineService;
-import husaccttest.analyse.java.benchmark.accuracy.DependencyDetectionAccuracyTest;
+import husaccttest.TestResourceFinder;
 
 import java.io.File;
 import java.net.URL;
@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,19 +29,21 @@ public class SRMATest20140610 {
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
-	private final static String workspaceLocation = "C:\\Tools\\Eclipse43\\Workspace\\HUSACCT\\testprojects\\workspaces\\SrmaTest2014-06-10 HUSACCT_3.1.xml";
-	private static Logger logger;
+	private final static String workspace = "SrmaTest2014-06-10 HUSACCT_3.1.xml";
+	private static Logger logger = Logger.getLogger(SRMATest20140610.class);
+
 
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			logger.info(String.format("Running HUSACCT using workspace: " + workspaceLocation));
+			String workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
+			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
 			workspaceController = mainController.getWorkspaceController();
-			loadWorkspace(workspaceLocation);
+			loadWorkspace(workspacePath);
 	
 			analyseApplication();
 			//analyseApplication() starts a different Thread, and needs some time
@@ -72,6 +75,11 @@ public class SRMATest20140610 {
 		}
 	}
 
+	@AfterClass
+	public static void tearDown(){
+		workspaceController.closeWorkspace();
+	}
+	
 	@Test
 	public void isAnalysedCorrectly() {
 		IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
@@ -360,7 +368,6 @@ public class SRMATest20140610 {
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
-		logger = Logger.getLogger(DependencyDetectionAccuracyTest.class);
 	}
 	
 	private static void loadWorkspace(String location) {

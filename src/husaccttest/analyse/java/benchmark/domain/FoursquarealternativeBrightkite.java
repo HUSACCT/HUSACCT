@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import husacct.common.dto.DependencyDTO;
-import husaccttest.analyse.TestObject;
+import husaccttest.analyse.java.TestObject;
 import husaccttest.analyse.java.benchmark.BenchmarkExtended;
 
 

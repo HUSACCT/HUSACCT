@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import husacct.analyse.AnalyseServiceImpl;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ProjectDTO;
-import husaccttest.analyse.TestCaseExtended;
-import husaccttest.analyse.TestProjectFinder;
+import husaccttest.TestResourceFinder;
+import husaccttest.analyse.java.TestCaseExtended;
 
 public class VisibillityTestExtended extends TestCaseExtended{
 
@@ -21,7 +21,7 @@ public class VisibillityTestExtended extends TestCaseExtended{
 	public void setUp(){
 		
 		service = new AnalyseServiceImpl();
-		String path = TestProjectFinder.lookupProject("java", "visibillity");
+		String path = TestResourceFinder.findSourceCodeDirectory("java", "visibillity");
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(path);
 		String language = "Java";

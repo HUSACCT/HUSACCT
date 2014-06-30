@@ -6,9 +6,8 @@ import java.util.List;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
 import husacct.common.dto.AnalysedModuleDTO;
-import husaccttest.analyse.TestCaseExtended;
+import husaccttest.analyse.java.TestCaseExtended;
 
 public class TestDomainModule extends TestCaseExtended{
 	

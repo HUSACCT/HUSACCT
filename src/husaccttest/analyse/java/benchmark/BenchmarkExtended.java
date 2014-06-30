@@ -9,9 +9,9 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.define.IDefineService;
-import husaccttest.analyse.TestObject;
-import husaccttest.analyse.TestProjectFinder;
-import husaccttest.analyse.TestCaseExtended;
+import husaccttest.TestResourceFinder;
+import husaccttest.analyse.java.TestCaseExtended;
+import husaccttest.analyse.java.TestObject;
 
 public abstract class BenchmarkExtended extends TestCaseExtended{
 
@@ -24,7 +24,7 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 
-		String path = TestProjectFinder.lookupProject("java", "benchmark");
+		String path = TestResourceFinder.findSourceCodeDirectory("java", "benchmark_2012");
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(path);
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();

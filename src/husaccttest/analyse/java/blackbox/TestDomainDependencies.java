@@ -5,9 +5,8 @@ import java.util.HashMap;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
 import husacct.common.dto.DependencyDTO;
-import husaccttest.analyse.TestCaseExtended;
+import husaccttest.analyse.java.TestCaseExtended;
 
 public class TestDomainDependencies extends TestCaseExtended{
 	
