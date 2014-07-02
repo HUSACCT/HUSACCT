@@ -556,11 +556,6 @@ public class AnalyseServiceStub implements IAnalyseService {
 	}
 
 	@Override
-	public int getAmountOfInterfaces() {
-		return 1;
-	}
-
-	@Override
 	public int getAmountOfPackages() {
 		return 1;
 	}

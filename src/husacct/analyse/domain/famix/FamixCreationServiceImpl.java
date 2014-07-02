@@ -90,21 +90,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void createInterface(String uniqueName, String name, String belongsToPackage) {
-        createInterface(uniqueName, name, belongsToPackage, "default");
-    }
-
-    @Override
-    public void createInterface(String uniqueName, String name, String belongsToPackage, String visibility) {
-        FamixInterface fInterface = new FamixInterface();
-        fInterface.uniqueName = uniqueName;
-        fInterface.name = name;
-        fInterface.belongsToPackage = belongsToPackage;
-        fInterface.visibility = visibility;
-        addToModel(fInterface);
-    }
-
-    @Override
     public void createImport(String importingClass, String importedModule, int lineNumber,
             String completeImportString, boolean importsCompletePackage) {
 

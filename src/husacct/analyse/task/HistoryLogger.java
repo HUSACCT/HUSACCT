@@ -222,12 +222,6 @@ public class HistoryLogger {
 
 		analyse.appendChild(classes);
 
-		//interfaces
-		Element interfaces = doc.createElement("interfaces");
-		interfaces.appendChild(doc.createTextNode(service.getAmountOfInterfaces() + ""));
-
-		analyse.appendChild(interfaces);
-
 		//dependencies
 		Element dependencies = doc.createElement("dependencies");
 		dependencies.appendChild(doc.createTextNode(service.getAmountOfDependencies() + ""));

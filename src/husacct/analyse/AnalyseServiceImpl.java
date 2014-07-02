@@ -180,11 +180,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
     
 	@Override
-    public int getAmountOfInterfaces() {
-    	return service.getAmountOfInterfaces();
-    }
-    
-	@Override
     public int getAmountOfPackages() {
     	return service.getAmountOfPackages();
     }

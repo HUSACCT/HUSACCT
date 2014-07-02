@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import javax.naming.directory.InvalidAttributesException;
@@ -24,7 +25,6 @@ class FamixDependencyConnector {
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
     private HashMap<String, ArrayList<FamixAssociation>> inheritanceAccociationsPerClass;
-    private ArrayList<FamixFormalParameter> parametersArrayList;
     private HashMap<String, FamixStructuralEntity> structuralEntityHashMapOnClassNameVariableName;
     private final Logger logger = Logger.getLogger(FamixDependencyConnector.class);
     private int numberOfNotConnectedWaitingAssociations;
@@ -53,7 +53,7 @@ class FamixDependencyConnector {
             	// Try to replace declareType by a unique name of its containing entity.
         		classFoundInImports = "";
         		theClass = entity.belongsToClass;
-                if (!declareTypeHoldsUniqueName(entity.declareType)) {
+                if (!entity.declareType.contains(".")) {
                     classFoundInImports = findClassInImports(theClass, entity.declareType);
                     // Extend in the future!!! Type may be an import of one of the super classes!
                     if (!classFoundInImports.equals("")) {
@@ -117,7 +117,7 @@ class FamixDependencyConnector {
                 }
                 else {
                 	theClass = association.from;
-                	if (!declareTypeHoldsUniqueName(association.to)) {
+                	if (!association.to.contains(".")) {
 	                    classFoundInImports = findClassInImports(theClass, association.to);
 	                    if (!classFoundInImports.equals("")) {
 	                        // So, in case association.to does not contain "." AND association.to is an import of association.from
@@ -135,7 +135,7 @@ class FamixDependencyConnector {
 	                        }
 	                    }
 	                    if (!connected) {
-	                        if (isInvocation(association)) {
+	                        if (association instanceof FamixInvocation) {
 	                            theInvocation = (FamixInvocation) association;
 	                            if (theInvocation.belongsToMethod == null || theInvocation.belongsToMethod.equals("")) {
 	                                //Then it is an attribute assignment. Example: currentFunction = FinderArguments.ROOT; 
@@ -203,8 +203,6 @@ class FamixDependencyConnector {
         		+ ", 6) Access: " + numberOfConnectedAccess);
     }
     
-    
-
     public String getNumberOfRejectedWaitingAssociations() {
     	String number = String.valueOf(numberOfNotConnectedWaitingAssociations);
     	return number;
@@ -221,33 +219,24 @@ class FamixDependencyConnector {
     private void determineSpecificExtendType(FamixAssociation association) {
         String type = association.type;
         if (type.equals(EXTENDS)) {
-            FamixClass theClass = getClassForUniqueName(association.to);
+            FamixClass theClass = theModel.classes.get(association.to);
             if (theClass != null) {
                 if (theClass.isAbstract) {
                     type = EXTENDS_ABSTRACT;
                 } else if (!theClass.isAbstract) {
-                    type = EXTENDS_CONCRETE;
+                	if (theClass.isInterface){
+                		type = EXTENDS_INTERFACE;
+                	} else {
+                		type = EXTENDS_CONCRETE;
+                	}
                 }
             } else {
-                FamixInterface theInterface = getInterfaceForUniqueName(association.to);
-                if (theInterface != null) {
-                    type = EXTENDS_INTERFACE;
-                } else {
-                    type = EXTENDS_LIBRARY;
+                if (theModel.libraries.containsKey(association.to)) {
+                	type = EXTENDS_LIBRARY;
                 }
-
             }
-
-        }
+       }
         association.type = type;
-    }
-
-    private FamixClass getClassForUniqueName(String uniqueName) {
-        return theModel.classes.get(uniqueName);
-    }
-
-    private FamixInterface getInterfaceForUniqueName(String uniqueName) {
-        return theModel.interfaces.get(uniqueName);
     }
 
     private String getClassForAttribute(String declareClass, String attributeName) {
@@ -261,44 +250,6 @@ class FamixDependencyConnector {
         return "";
     }
 
-    private String getClassForParameter(String declareClass, String declareMethod, String attributeName) {
-        HashMap<String, ArrayList<FamixFormalParameter>> parameterPerClassHashMap = null;
-    	String belongsToMethodFull = declareClass + "." + declareMethod;
-        ArrayList<FamixFormalParameter> paramsPerClass = parameterPerClassHashMap.get(declareClass);
-        if (paramsPerClass != null){     
-        for (FamixFormalParameter parameter : paramsPerClass) {
-	            if (parameter.belongsToMethod.equals(belongsToMethodFull)) {
-	                if (parameter.name.equals(attributeName)) {
-	                    return parameter.declareType;
-	                }
-	            }
-	        }
-        }
-        return "";
-    }
-
-    private String getClassForLocalVariable(String declareClass, String belongsToMethod, String nameOfInstance) {
-		FamixStructuralEntity entity;
-		FamixLocalVariable variable;
-		
-        for (String s : theModel.structuralEntities.keySet()) {
-            if (!s.startsWith(declareClass)) {
-                entity = (FamixStructuralEntity) theModel.structuralEntities.get(s);
-                if (entity instanceof FamixLocalVariable) {
-                    variable = (FamixLocalVariable) entity;
-                    if (variable.belongsToMethod.equals(belongsToMethod) && variable.name.equals(nameOfInstance)) {
-                            return variable.declareType;
-                    }
-                }
-            }
-        }
-        return "";
-    }
-
-    private boolean isInvocation(FamixAssociation association) {
-        return association instanceof FamixInvocation;
-    }
-
     private String findClassInImports(String importingClass, String typeDeclaration) {
     	List<FamixImport> imports = getImportsInClass(importingClass);
     	if (imports != null){
@@ -309,7 +260,7 @@ class FamixDependencyConnector {
 	                }
 	            } 
 	            else {
-	                for (String uniqueClassName : getModulesInPackage(fImport.to)) {
+	                for (String uniqueClassName : getClassesInPackage(fImport.to)) {
 	                    if (uniqueClassName.endsWith("." + typeDeclaration)) {
 	                        return uniqueClassName;
 	                    }
@@ -327,17 +278,34 @@ class FamixDependencyConnector {
         return importsReturned;
     }
 
-    private boolean declareTypeHoldsUniqueName(String typeDeclaration) {
-        return typeDeclaration.contains(".");
-    }
-
     private String findClassInPackage(String className, String uniquePackageName) {
-        for (String uniqueName : getModulesInPackage(uniquePackageName)) {
+        for (String uniqueName : getClassesInPackage(uniquePackageName)) {
             if (uniqueName.endsWith("." + className)) {
                 return uniqueName;
             }
         }
         return "";
+    }
+
+    private List<String> getClassesInPackage(String packageUniqueName) {
+        List<String> result = new ArrayList<String>();
+      // New finder function, based on FamixDecompositionEntity. Status 2014-07-01: results in less found dependencies!!!  
+        if (theModel.packages.containsKey(packageUniqueName)){
+        	TreeSet<String> children = theModel.packages.get(packageUniqueName).children;
+        	if ((children != null) && (children.size() > 0)){
+        		for (String uniqueName : children){
+        			FamixClass foundClass = theModel.classes.get(uniqueName);
+        			if (foundClass != null){
+        				result.add(uniqueName);
+        				if (foundClass.hasInnerClasses){
+        					result.addAll(foundClass.children);
+        				}
+        			}
+        			
+        		}
+        	}
+        }
+        return result;
     }
 
     private String getPackageFromUniqueClassName(String completeImportString) {
@@ -347,38 +315,7 @@ class FamixDependencyConnector {
                 return fclass.belongsToPackage;
             }
         }
-
-        FamixInterface f = theModel.interfaces.get(completeImportString);
-        if (f != null) {
-            return f.belongsToPackage;
-        }
-
-
-        return "";
-    }
-
-    private List<String> getModulesInPackage(String packageUniqueName) {
-        List<String> result = new ArrayList<String>();
-        Iterator<Entry<String, FamixClass>> classIterator = theModel.classes.entrySet().iterator();
-		FamixClass currentClass;
-		FamixInterface currentInterface;
-		
-        while (classIterator.hasNext()) {
-            Entry<String, FamixClass> entry = (Entry<String, FamixClass>) classIterator.next();
-            currentClass = entry.getValue();
-            if (currentClass.belongsToPackage.equals(packageUniqueName)) {
-                result.add(currentClass.uniqueName);
-            }
-        }
-        Iterator<Entry<String, FamixInterface>> interfaceIterator = theModel.interfaces.entrySet().iterator();
-        while (interfaceIterator.hasNext()) {
-            Entry<String, FamixInterface> entry = (Entry<String, FamixInterface>) interfaceIterator.next();
-            currentInterface = entry.getValue();
-            if (currentInterface.belongsToPackage.equals(packageUniqueName)) {
-                result.add(currentInterface.uniqueName);
-            }
-        }
-        return result;
+       return "";
     }
 
     private boolean addToModel(FamixObject newObject) {

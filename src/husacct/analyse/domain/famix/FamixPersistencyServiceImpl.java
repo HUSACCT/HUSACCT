@@ -19,7 +19,6 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     private HashMap<String, FamixClass> classList;
     private HashMap<String, FamixBehaviouralEntity> methodsList;
     private HashMap<String, FamixStructuralEntity> variablesList;
-    private HashMap<String, FamixInterface> interfacesList;
     private HashMap<String, FamixLibrary> librarieList;
     private ArrayList<FamixAssociation> associationList;
 

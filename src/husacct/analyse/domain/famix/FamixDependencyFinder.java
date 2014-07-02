@@ -100,9 +100,7 @@ class FamixDependencyFinder extends FamixFinder {
 								ArrayList<DependencyDTO> dependencyList = fromMap.get(keyTo);
 								if(dependencyList != null){
 									for(DependencyDTO dependency : dependencyList){
-										if((theModel.classes.containsKey(dependency.toClassPath)) || 
-											(theModel.interfaces.containsKey(dependency.toClassPath) || 
-											(theModel.libraries.containsKey(dependency.toClassPath)))){
+										if((theModel.classes.containsKey(dependency.toClassPath)) || (theModel.libraries.containsKey(dependency.toClassPath))){
 											foundDependencies.add(dependency);
 										}
 									}
@@ -168,7 +166,7 @@ class FamixDependencyFinder extends FamixFinder {
 		// Check for each completeImportString if it is an internal class or interface. If not, create an ExternalSystemDTO.
 		for(String completeImportString : completeImportStrings){
 			if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax."))){
-				if(!theModel.classes.containsKey(completeImportString) && !theModel.interfaces.containsKey(completeImportString)){
+				if(!theModel.classes.containsKey(completeImportString)){
 					ExternalSystemDTO dto = new ExternalSystemDTO();
 					dto.systemName = (completeImportString.contains(".") && completeImportString.lastIndexOf('.') != completeImportString.length() - 1) ? completeImportString.substring(completeImportString.lastIndexOf('.')+1) : completeImportString;
 					dto.systemPackage = completeImportString;
@@ -227,7 +225,7 @@ class FamixDependencyFinder extends FamixFinder {
 						// Filter out dependencies if from and to do not refer to types
 						String libraryRoot = "xLibraries.";
 						if(!((theModel.classes.containsKey(association.to) || theModel.libraries.containsKey((libraryRoot + association.to)))
-								&& (theModel.classes.containsKey(association.from) || theModel.interfaces.containsKey(association.from) || theModel.libraries.containsKey((libraryRoot + association.from))))){
+								&& (theModel.classes.containsKey(association.from) || theModel.libraries.containsKey((libraryRoot + association.from))))){
 							numberOfFilteredDependencies ++;
 						}
 						else {
@@ -288,45 +286,6 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	}
 
-	private boolean determineParentClass(String toString){
-		boolean returnValue = false;
-		
-		
-		/*
-		while (!returnValue){
-			String[] partNames = toString.split("\\.");
-			int nr = partNames.length;
-			while (nr > 0){
-				String s = partNames[nr];
-				nr --;
-			}
-		}
-		if((theModel.classes.get(toString) == null)){
-		} */
-		return returnValue;
-	}
-	
-	public List<DependencyDTO> getAccessClassVariableInterfaceDirectDependencies(){
-		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
-		HashMap<String, FamixInterface> allInterfaces = theModel.interfaces;
-		ArrayList<FamixAssociation> allAssociations  = theModel.associations;
-	
-		for(String interfaceObject : allInterfaces.keySet()){
-			for(FamixAssociation association : allAssociations){
-				if(interfaceObject.equals(association.to) && association.type.equals("Import")){
-					/*System.out.println("\n InterfaceObject: " + interfaceObject);
-					System.out.println("\n AssociationTO: " + association.to);
-					System.out.println(	"\n From: " + association.from +
-										"\n To: " + association.to +
-										"\n Type: " + association.type +
-										"\n Line: " + association.lineNumber);*/
-					result.add(new DependencyDTO(association.from, association.from, association.to, association.to, "AccessClassVariableInterface", false, association.lineNumber));
-				}
-			}
-		}
-		return result;
-	}
-	
 	private List<DependencyDTO> queryCache(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
 		List<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
 		for(DependencyDTO dependency : dependencyCache){

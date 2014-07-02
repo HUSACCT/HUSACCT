@@ -143,10 +143,6 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     	return queryService.getAmountOfDependencies();
     }
     
-    public int getAmountOfInterfaces() {
-    	return queryService.getAmountOfInterfaces();
-    }
-    
     public int getAmountOfPackages() {
     	return queryService.getAmountOfPackages();
     }

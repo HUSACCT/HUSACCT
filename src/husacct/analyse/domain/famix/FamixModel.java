@@ -1,7 +1,5 @@
 package husacct.analyse.domain.famix;
 
-import husacct.common.dto.ExternalSystemDTO;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +23,6 @@ class FamixModel extends FamixObject {
     //public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixImport> imports;
-    public HashMap<String, FamixInterface> interfaces;
     public HashMap<String, FamixLibrary> libraries;
     public ArrayList<FamixAssociation> associations;
     public String exporterName;
@@ -48,7 +45,6 @@ class FamixModel extends FamixObject {
         //packages = new HashMap<String, FamixPackage>();
         packages = new TreeMap<String, FamixPackage>();
         imports = new HashMap<String, FamixImport>();
-        interfaces = new HashMap<String, FamixInterface>();
         libraries = new HashMap<String, FamixLibrary>();
         structuralEntities = new HashMap<String, FamixStructuralEntity>();
         behaviouralEntities = new HashMap<String, FamixBehaviouralEntity>();
@@ -103,16 +99,6 @@ class FamixModel extends FamixObject {
 		                	parent = packages.get(parentUniqueName);
 		                	parent.children.add(((FamixEntity) e).uniqueName);
 		                }
-	                }
-                }
-            } else if (e instanceof FamixInterface) {
-                if (!interfaces.containsKey(((FamixEntity) e).uniqueName)){
-                	interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
-	                String parentUniqueName = ((FamixInterface) e).belongsToPackage;
-	                FamixPackage parent = null;
-	                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
-	                	parent = packages.get(parentUniqueName);
-	                	parent.children.add(((FamixEntity) e).uniqueName);
 	                }
                 }
             } else if (e instanceof FamixLibrary) {
@@ -227,30 +213,9 @@ class FamixModel extends FamixObject {
         throw new Exception("The unit (or a part of it) '" + typeVariable + " or " + uniqueVarName + "' is not found or defined.");
     }
     
-    @Deprecated
-    public ExternalSystemDTO[] getExternalSystems(){
-		List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
-		List<String> pathsToImports = new ArrayList<String>();
-		List<String> pathsToPackages = new ArrayList<String>();
-		for(String imp : imports.keySet())
-			if(!pathsToImports.contains(imp))
-				pathsToImports.add(imp);
-		for(String clls : classes.keySet())
-			if(!pathsToPackages.contains(clls))
-				pathsToPackages.add(clls);
-		for(String intrfc : interfaces.keySet())
-			if(!pathsToPackages.contains(intrfc))
-				pathsToPackages.add(intrfc);
-		for(String compareString : pathsToImports)
-			if(!pathsToPackages.contains(compareString))
-				externalSystems.add(new ExternalSystemDTO(compareString.substring(compareString.lastIndexOf('.')+1), compareString));
-		return externalSystems.toArray(new ExternalSystemDTO[externalSystems.size()]);
-	}
-
     public String toString() {
         return "\n ------------Packages------------- \n" + packages
                 + "\n ------------Classes------------- \n" + classes
-                + "\n ------------Interfaces------------\n" + interfaces
                 + "\n -----------Assocations:-------------- \n" + associations
                 + "\n -----------Libraries:-------------- \n" + libraries
                 + "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
@@ -266,7 +231,6 @@ class FamixModel extends FamixObject {
         currentInstance.associations.clear();
         currentInstance.classes.clear();
         currentInstance.packages.clear();
-        currentInstance.interfaces.clear();
         currentInstance.libraries.clear();
         currentInstance.imports.clear();
         currentInstance.structuralEntities.clear();

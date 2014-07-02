@@ -127,10 +127,6 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     	return domainService.getAmountOfDependencies();
     }
     
-    public int getAmountOfInterfaces() {
-    	return domainService.getAmountOfInterfaces();
-    }
-    
     public int getAmountOfPackages() {
     	return domainService.getAmountOfPackages();
     }

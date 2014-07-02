@@ -43,8 +43,6 @@ public interface IModelQueryService {
     
     public int getAmountOfDependencies();
     
-    public int getAmountOfInterfaces();
-    
     public int getAmountOfPackages();
     
     public int getAmountOfClasses();
