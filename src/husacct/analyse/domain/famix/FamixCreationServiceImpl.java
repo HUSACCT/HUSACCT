@@ -192,7 +192,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.name = name;
         famixAttribute.uniqueName = uniqueName;
         famixAttribute.lineNumber = line;
-        model.waitingStructuralEntitys.add(famixAttribute);
+        model.waitingStructuralEntities.add(famixAttribute);
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
@@ -228,7 +228,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixLocalVariable.name = name;
         famixLocalVariable.uniqueName = uniqueName;
         famixLocalVariable.lineNumber = lineNumber;
-        model.waitingStructuralEntitys.add(famixLocalVariable);
+        model.waitingStructuralEntities.add(famixLocalVariable);
         //addToModel(famixLocalVariable);
         FamixAssociation fAssocation = new FamixAssociation();
 
@@ -260,7 +260,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixParameter.uniqueName = uniqueName;
         famixParameter.declaredTypes = declareTypes;
         //addToModel(famixParameter);
-        model.waitingStructuralEntitys.add(famixParameter);
+        model.waitingStructuralEntities.add(famixParameter);
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
@@ -291,7 +291,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.name = name;
         famixAttribute.uniqueName = uniqueName;
         //addToModel(famixAttribute);
-        model.waitingStructuralEntitys.add(famixAttribute);
+        model.waitingStructuralEntities.add(famixAttribute);
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
@@ -399,9 +399,9 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         createClassesAndLibrariesBasedOnImports();
         this.logger.info(new Date().toString() + " Finished: distinguisAndCreateLibraries(), Nr of Libraries = " + model.libraries.size());
         int associationsNumber = model.associations.size();
-        this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntitys.size());
-        dependencyConnector.connectStructuralDependecies();
-        this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
+        this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntities.size());
+        dependencyConnector.processWaitingStructuralEntities();
+        this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
         dependencyConnector.connectAssociationDependencies();
         associationsNumber = model.associations.size();
         this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());

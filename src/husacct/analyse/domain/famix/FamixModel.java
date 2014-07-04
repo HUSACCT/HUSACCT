@@ -14,7 +14,7 @@ class FamixModel extends FamixObject {
 
     private static FamixModel currentInstance;
     private final Logger logger = Logger.getLogger(FamixModel.class);
-    public List<FamixStructuralEntity> waitingStructuralEntitys;
+    public List<FamixStructuralEntity> waitingStructuralEntities;
     public List<FamixAssociation> waitingAssociations;
     public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
     public HashMap<String, FamixStructuralEntity> structuralEntities;
@@ -38,7 +38,7 @@ class FamixModel extends FamixObject {
     private FamixModel() {
         this.exporterDate = new Date().toString();
         waitingAssociations = new ArrayList<FamixAssociation>();
-        waitingStructuralEntitys = new ArrayList<FamixStructuralEntity>();
+        waitingStructuralEntities = new ArrayList<FamixStructuralEntity>();
         associations = new ArrayList<FamixAssociation>();
         //classes = new HashMap<String, FamixClass>();
         classes = new HashMap<String, FamixClass>();
@@ -227,7 +227,7 @@ class FamixModel extends FamixObject {
 
     public void clear() {
         currentInstance.waitingAssociations.clear();
-        currentInstance.waitingStructuralEntitys.clear();
+        currentInstance.waitingStructuralEntities.clear();
         currentInstance.associations.clear();
         currentInstance.classes.clear();
         currentInstance.packages.clear();
