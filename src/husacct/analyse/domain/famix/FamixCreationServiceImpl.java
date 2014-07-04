@@ -402,7 +402,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntities.size());
         dependencyConnector.processWaitingStructuralEntities();
         this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
-        dependencyConnector.connectAssociationDependencies();
+        dependencyConnector.processInheritanceAccociations();
+        dependencyConnector.processWaitingAssociations();
         associationsNumber = model.associations.size();
         this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
     }

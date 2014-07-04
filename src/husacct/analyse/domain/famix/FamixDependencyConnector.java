@@ -6,8 +6,10 @@ import husacct.control.task.States;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
@@ -24,7 +26,7 @@ class FamixDependencyConnector {
     private static final String EXTENDS_INTERFACE = "ExtendsInterface";
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
-    private HashMap<String, ArrayList<FamixAssociation>> inheritanceAccociationsPerClass;
+    private HashMap<String, HashSet<String>> inheritanceAccociationsPerClass;
     private final Logger logger = Logger.getLogger(FamixDependencyConnector.class);
     private int numberOfNotConnectedWaitingAssociations;
     //Needed for the ProgressBar of the analyse application LoaderDialog 
@@ -40,38 +42,41 @@ class FamixDependencyConnector {
     }
 
     void processWaitingStructuralEntities() {
-		String theClass;
         numberOfWaitingObjects = (theModel.waitingAssociations.size() + theModel.waitingStructuralEntities.size());
 		initializeHashMapsimportsPerEntity();
-		
 	
 		for (FamixStructuralEntity entity : theModel.waitingStructuralEntities) {
             try {
             	boolean belongsToClassExists = false;
             	boolean declareTypeExists = false;
-        		theClass = entity.belongsToClass;
+            	String theContainingClass = entity.belongsToClass;
             	
             	// Test helper
-            	if (theClass.contains("domain.direct.Base")){
-            		boolean breakpoint1 = true;
-            	}
+            	//if (theClass.contains("Domain.Direct.Base")){
+            	//	boolean breakpoint1 = true;
+            	//}
             	
             	// Check if belongsToClass refers to an existing class
-            	if (theModel.classes.containsKey(theClass)) {
+            	if (theModel.classes.containsKey(theContainingClass)) {
             		belongsToClassExists = true;
             	}
 
             	// Objective: If FamixStructuralEntity.declareType is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents.
             	// Check if declareType refers to an existing class or library
-            	if (theModel.classes.containsKey(entity.declareType) || theModel.libraries.containsKey(entity.declareType) || theModel.libraries.containsKey("xLibraries." + entity.declareType)) {
+            	if (theModel.classes.containsKey(entity.declareType) || theModel.libraries.containsKey(entity.declareType)) {
             		declareTypeExists = true;
+            	} else {
+            		if (theModel.libraries.containsKey("xLibraries." + entity.declareType)) {
+            			entity.declareType = "xLibraries." + entity.declareType;
+            			declareTypeExists = true;
+            		}
             	}
 
             	// Objective: If declareType is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents.
             	// Try to derive declareType from the unique name from the imports.
-            	if (!declareTypeExists) {
+            	if (belongsToClassExists && (!declareTypeExists)) {
 	            	String classFoundInImports = "";
-                    classFoundInImports = findClassInImports(theClass, entity.declareType);
+                    classFoundInImports = findClassInImports(theContainingClass, entity.declareType);
                     if (!classFoundInImports.equals("")) {
 	                	if (theModel.classes.containsKey(classFoundInImports) || theModel.libraries.containsKey("xLibraries." + classFoundInImports)) {
 	                        entity.declareType = classFoundInImports;
@@ -82,7 +87,7 @@ class FamixDependencyConnector {
 
             	// Find out or the name refers to a type in the same package as the from class.*/
             	if (belongsToClassExists && (!declareTypeExists)) {
-                    String belongsToPackage = theModel.classes.get(theClass).belongsToPackage;
+                    String belongsToPackage = theModel.classes.get(theContainingClass).belongsToPackage;
             		String type = findClassInPackage(entity.declareType, belongsToPackage);
                     if (!type.equals("")) {
 	                	if (theModel.classes.containsKey(type)) {
@@ -109,42 +114,77 @@ class FamixDependencyConnector {
         }
     }
 
-    void connectAssociationDependencies() {
-		String theClass;
-		String belongsToPackage;
-		String to;
-		FamixInvocation theInvocation;
-        
-		initializeHashMapsinheritanceAccociationsPerClass();
+    void processInheritanceAccociations() {
+		FamixAssociation foundInheritance;
+		HashSet<String> foundInheritanceList;
+		HashSet<String> alreadyIncludedInheritanceList;
+		inheritanceAccociationsPerClass = new HashMap<String, HashSet<String>>();
+		try{
+			Iterator<FamixAssociation> iterator = theModel.waitingAssociations.iterator() ;
+	        for (Iterator<FamixAssociation> i=iterator ; i.hasNext();) {
+	        	FamixAssociation association = (FamixAssociation) i.next();
+            	String uniqueNameFrom = association.from;
+		        if (association.type.equals(EXTENDS) || association.type.equals(EXTENDS_CONCRETE)|| association.type.equals(EXTENDS_ABSTRACT) || association.type.equals(EXTENDS_INTERFACE)){
+		        	// 
+		        	if (!association.to.contains(".")) {
+	                    String to = findClassInImports(association.from, association.to);
+	                    if (theModel.classes.containsKey(to) || theModel.libraries.containsKey("xLibraries." + to)) {
+	                        association.to = to;
+	                    }
+                	}
+	            	if (!(theModel.classes.containsKey(uniqueNameFrom) && (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)))) {
+	            		i.remove();
+	            	} else { //Fill the HashMaps inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 
+		            	alreadyIncludedInheritanceList = null;
+		            	foundInheritance = null;
+		            	foundInheritanceList = null;
+		            	alreadyIncludedInheritanceList = null;
+		            	foundInheritance = association;
+		            	if(inheritanceAccociationsPerClass.containsKey(uniqueNameFrom)){
+		            		alreadyIncludedInheritanceList = inheritanceAccociationsPerClass.get(uniqueNameFrom);
+		            		alreadyIncludedInheritanceList.add(foundInheritance.to);
+		            		inheritanceAccociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
+		            	}
+		            	else{
+			            	foundInheritanceList = new HashSet<String>();
+			            	foundInheritanceList.add(foundInheritance.to);
+			            	inheritanceAccociationsPerClass.put(uniqueNameFrom, foundInheritanceList);
+		            	}
+		            	addToModel(association);
+		            	i.remove();
+	            	}
+	            }
+            }
+	        this.logger.info(new Date().toString() + " Finished: initializeHashMapsForQueries()");
+		} catch(Exception e) {
+	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
+	        //e.printStackTrace();
+		}
+    }
 
+    
+	// Objective: Check references to FamixObjects and try to replace missing information (focusing on the to object).
+    void processWaitingAssociations() {
 		int numberOfConnectedViaImport = 0;
 		int numberOfConnectedViaPackage = 0;
-		int numberOfConnectedViaAssignment = 0;
 		int numberOfConnectedViaAttribute = 0;
 		int numberOfConnectedViaLocalVariable = 0;
 		int numberOfConnectedViaSuperclass = 0;
 		int numberOfConnectedAccess = 0;
 
-    	/* Objective: If FamixAssociation.to is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents. 
-    	 * The following options are available:
-    	 * 1) FamixAssociation.to is a unique name already => Check if it refers to a FamixClass or FamixLibrary. If so, add to model.
-    	 * 2) FamixAssociation.to is not a unique name =>
-    	 * 2.1) Try to derive the unique name from the imports.
-    	 * 2.2) Find out or the name refers to a type in the same package as the from class.
-    	 * 2.3) Find out or the name refers to a superclass variable. */
-
-		List<FamixAssociation> allWaitingAssociations  = theModel.waitingAssociations;
-        for (FamixAssociation association : allWaitingAssociations) {
+        for (FamixAssociation association : theModel.waitingAssociations) {
             try {
-            	to = "";
-                boolean connected = false;
-                theInvocation = null;
-            	// Test helper
-            	if (association.from.equals("domain.direct.allowed.CallInstanceLibraryClass")){
-            		boolean breakpoint = true;
-            	}
+            	boolean fromExists = false;
+            	boolean toExists = false;
+            	boolean toHasValue = false;
+            	String to = "";
+            	FamixInvocation theInvocation = null;
+
+                // Test helpers
+            	//if (association.from.equals("domain.direct.violating.CallConstructorLibraryClass")){
+            	//	boolean breakpoint = true;
+            	//}
                 /*
-                Note: Usefull to select a certain testcase and breakline here with the debugger
                 if (isInvocation(association)) {
                 	theInvocation = (FamixInvocation) association;
                 	if (theInvocation.belongsToMethod.equalsIgnoreCase("CallInstanceMethod()")){
@@ -153,93 +193,107 @@ class FamixDependencyConnector {
                 	}
                 }
                 */
-                
-                if (association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){ 
-                	numberOfNotConnectedWaitingAssociations ++;
+
+            	// Check if association.from refers to an existing class
+            	if (theModel.classes.containsKey(association.from)) {
+            		fromExists = true;
+            	} 
+            	// Check if association.to refers to an existing class or library
+                if ((association.to != null) && (!association.to.equals(""))){ 
+                	toHasValue = true;
+                	if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey(association.to)) {
+                		toExists = true;
+                	} else {
+                		if (theModel.libraries.containsKey("xLibraries." + association.to)) {
+                			association.to = "xLibraries." + association.to;
+                			toExists = true;
+                		}
+                	}
                 }
-                else {
-                	theClass = association.from;
+
+            	// Objective: If FamixAssociation.to is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents. 
+                // 1) Try to derive the unique name from the imports.
+                if (fromExists && !toExists && toHasValue){
                 	if (!association.to.contains(".")) {
-	                    to = findClassInImports(theClass, association.to);
-	                    if (!to.equals("")) {
-	                        // So, in case association.to does not contain "." AND association.to is an import of association.from
+	                    to = findClassInImports(association.from, association.to);
+	                    if (theModel.classes.containsKey(to) || theModel.libraries.containsKey("xLibraries." + to)) {
 	                        association.to = to;
-	                        connected = true;
-	                        numberOfConnectedViaImport ++;
-	                    } else {
-	                        if (theModel.classes.containsKey(association.from)) {
-		                    	belongsToPackage = theModel.classes.get(association.from).belongsToPackage;
-		                        to = findClassInPackage(association.to, belongsToPackage);
-		                        if (!to.equals("")) { // So, in case association.to does not contain "." AND association.to shares the same package as association.from 
-		                            association.to = to;
-		                            connected = true;
-		                            numberOfConnectedViaPackage ++;
-		                        }
-	                        }
+                			toExists = true;
+                			numberOfConnectedViaImport ++;
 	                    }
-	                    if (!connected) {
-	                        if (association instanceof FamixInvocation) {
-	                            theInvocation = (FamixInvocation) association;
-	                            if (theInvocation.belongsToMethod == null || theInvocation.belongsToMethod.equals("")) {
-	                                //Then it is an attribute assignment. Example: currentFunction = FinderArguments.ROOT; 
-	                                theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
-	                                numberOfConnectedViaAssignment ++;
-	                                connected = true;
-	                            } else {
-	                            	// If association.type == InvocConstructor, then connected should be true
-	                            	// If association.type == AccessPropertyOrField or InvocMethod, the type of the variable needs to be determined
-	                            	// The variable may be an attribute, local variable, inherited variable, global variable, parameter, ...                             	
-
-	                            	// 1) Attribute: Get StructuralEntity on key ClassName.VariableName
-	                            	String searchKey = theInvocation.from + "." + theInvocation.nameOfInstance;
-	                            	if (theModel.structuralEntities.containsKey(searchKey)) {
-	                            		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
-	                            		if (entity.declareType != null && !entity.declareType.equals("")){
-	                            			theInvocation.to = entity.declareType;
-	                            			numberOfConnectedViaAttribute ++;
-	                            			connected = true;
-	                            		}
-    		                        } else { // 2) Local variable: Get StructuralEntity on key ClassName.MethodName.VariableName
-	                            		searchKey = theInvocation.from + "." + theInvocation.belongsToMethod + "." + theInvocation.nameOfInstance;
-		                            	if (theModel.structuralEntities.containsKey(searchKey)) {
-		                            		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
-		                            		if (entity.declareType != null && !entity.declareType.equals("")){
-		                            			theInvocation.to = entity.declareType;
-		                            			numberOfConnectedViaLocalVariable ++;
-		                            			connected = true;
-		                            		}
-		                            	}
-	                            	}
-	                            }
-	                        }
-		                    if (!connected) {
-		                    	// 3) // Find out or association.to refers to the type of a superclass variable
-	    	                    to = findVariableTypeViaSuperClass(association.from, association.to);
-	    		                if (!to.equals("")) { // So, in case association.to refers to the type of a superclass variable 
-	    		                	association.to = to;
-	    		                	numberOfConnectedViaSuperclass ++;
-		                        }
-	                        }
-	                        if (!connected && association instanceof FamixAccess) {
-	                            FamixAccess z = (FamixAccess) association;
-	                            numberOfConnectedAccess ++;
-	                        }
-	                    }
-	                }
-    				
-
-            		if(association.to == null || association.from == null || association.to.equals("") || association.from.equals("")){
-            			numberOfNotConnectedWaitingAssociations ++;
-    				} else {
-    					determineSpecificExtendType(association);
-    					addToModel(association);
-	                    calculateProgress();
-	                    //Needed to check if Thread is allowed to continue
-	                	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
-	                        break;
-	                	}
-    				}
+                	}
                 }
+	                    
+                // 2) Find out or association.to refers to a type in the same package as the from class.
+                if (fromExists && !toExists && toHasValue){
+                	if (!association.to.contains(".")) {
+	                	String belongsToPackage = theModel.classes.get(association.from).belongsToPackage;
+	                    to = findClassInPackage(association.to, belongsToPackage);
+	                    if (!to.equals("")) { // So, in case association.to does not contain "." AND association.to shares the same package as association.from 
+	                        association.to = to;
+	            			toExists = true;
+	            			numberOfConnectedViaPackage ++;
+	                    }
+                	}
+                }
+
+                // 3) Find out or association.to refers to an attribute. If so, get StructuralEntity on key ClassName.VariableName
+                if (fromExists && !toExists && toHasValue){
+                	String searchKey = association.from + "." + association.to;
+                	if (theModel.structuralEntities.containsKey(searchKey)) {
+                		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
+                		if (entity.declareType != null && !entity.declareType.equals("")){
+                			association.to = entity.declareType;
+	            			toExists = true;
+	            			numberOfConnectedViaAttribute ++;
+                		}
+                	}
+                }
+
+                // 4) Local variable: Get StructuralEntity on key ClassName.MethodName.VariableName
+	            if (fromExists && !toExists && toHasValue){
+                    if (association instanceof FamixInvocation) {
+                        theInvocation = (FamixInvocation) association;
+		            	String searchKey = association.from + "." + theInvocation.belongsToMethod + "." + theInvocation.nameOfInstance;
+	                	if (theModel.structuralEntities.containsKey(searchKey)) {
+	                		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
+	                		if (entity.declareType != null && !entity.declareType.equals("")){
+	                			theInvocation.to = entity.declareType;
+		            			toExists = true;
+		            			numberOfConnectedViaLocalVariable ++;
+	                		}
+	                	}
+                    }
+            	}
+
+            	// 5) // Find out or association.to refers to the type of a superclass variable
+                if (fromExists && !toExists && toHasValue){
+                    to = findVariableTypeViaSuperClass(association.from, association.to);
+	                if (!to.equals("")) { // So, in case association.to refers to the type of a superclass variable 
+	                	association.to = to;
+	                	toExists = true;
+	                	numberOfConnectedViaSuperclass ++;
+                    }
+                }
+
+                if ((fromExists && !toExists && toHasValue) && association instanceof FamixAccess) {
+                    FamixAccess z = (FamixAccess) association;
+                    numberOfConnectedAccess ++;
+                }
+    				
+    			if (fromExists && toExists) {
+					determineSpecificExtendType(association);
+					addToModel(association);
+                } else {
+        			numberOfNotConnectedWaitingAssociations ++;
+                }
+    			
+                calculateProgress();
+                //Needed to check if Thread is allowed to continue
+            	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+                    break;
+            	}
+
             } catch (Exception e) {
             	String associationType = association.type;
     	        this.logger.error(new Date().toString() + " "  + e + " " + associationType + " " + association.toString());
@@ -248,9 +302,8 @@ class FamixDependencyConnector {
         }
 
         this.logger.info(" Connected via 1) Import: " + numberOfConnectedViaImport 
-        		+ ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Assignment: " + numberOfConnectedViaAssignment 
-        		+ ", 4) Attribute: " + numberOfConnectedViaAttribute + ", 5) Inherited var: " + numberOfConnectedViaSuperclass 
-        		+ ", 6) Local var: " + numberOfConnectedViaLocalVariable  + ", 7) Access: " + numberOfConnectedAccess);
+        		+ ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Attribute: " + numberOfConnectedViaAttribute + ", 4) Inherited var: " + numberOfConnectedViaSuperclass 
+        		+ ", 5) Local var: " + numberOfConnectedViaLocalVariable  + ", 6) Access: " + numberOfConnectedAccess);
     }
     
     public String getNumberOfRejectedWaitingAssociations() {
@@ -303,21 +356,25 @@ class FamixDependencyConnector {
     private String findVariableTypeViaSuperClass(String uniqueClassName, String variableName) {
     	String result = "";
     	if (inheritanceAccociationsPerClass.containsKey(uniqueClassName)){
-    		for (FamixAssociation inheritanceAssociation : inheritanceAccociationsPerClass.get(uniqueClassName)){
-        		String superClass = inheritanceAssociation.to;
+    		HashSet<String> inheritanceAssociations = inheritanceAccociationsPerClass.get(uniqueClassName);
+    		if (inheritanceAssociations.size() >= 10) {
+    			boolean breakpoint = true;
+    		}
+    		for (String superClass : inheritanceAssociations){
 	    		String searchKey = superClass + "." + variableName;
             	if (theModel.structuralEntities.containsKey(searchKey)) {
             		result = theModel.structuralEntities.get(searchKey).declareType;
+            		break;
 	            }
 	            else {
 	            	if (inheritanceAccociationsPerClass.containsKey(superClass)){
 	            		result = findVariableTypeViaSuperClass(superClass, variableName);
+	            		break;
 	            	}
 	            }
-    			
-    		}
+    		} 
     	}
-    	return result;
+    	return result; 
     }
     
     private String findClassInImports(String importingClass, String typeDeclaration) {
@@ -410,45 +467,4 @@ class FamixDependencyConnector {
 		}
     }
     
-    private void initializeHashMapsinheritanceAccociationsPerClass() {
-		FamixAssociation foundInheritance;
-		ArrayList<FamixAssociation> foundInheritanceList;
-		ArrayList<FamixAssociation>  alreadyIncludedInheritanceList;
-		inheritanceAccociationsPerClass = new HashMap<String, ArrayList<FamixAssociation>>();
-
-		try{
-	        for (FamixAssociation association : theModel.waitingAssociations) {
-            	String uniqueNameFrom = association.from;
-            	//if(uniqueNameFrom.equals("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect")){
-            	//	String type = association.type;
-            	//	this.logger.debug(new Date().toString() + " Type: domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect =  " + type);
-            	//}
-	            //Fill the HashMaps inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 
-		        if (association.type.equals(EXTENDS) || association.type.equals(EXTENDS_CONCRETE)|| association.type.equals(EXTENDS_ABSTRACT) || association.type.equals(EXTENDS_INTERFACE)){
-	            	alreadyIncludedInheritanceList = null;
-	            	foundInheritance = null;
-	            	foundInheritanceList = null;
-	            	alreadyIncludedInheritanceList = null;
-	            	foundInheritance = association;
-	            	if(inheritanceAccociationsPerClass.containsKey(uniqueNameFrom)){
-	            		alreadyIncludedInheritanceList = inheritanceAccociationsPerClass.get(uniqueNameFrom);
-	            		alreadyIncludedInheritanceList.add(foundInheritance);
-	            		inheritanceAccociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
-	            	}
-	            	else{
-		            	foundInheritanceList = new ArrayList<FamixAssociation>();
-		            	foundInheritanceList.add(foundInheritance);
-		            	inheritanceAccociationsPerClass.put(uniqueNameFrom, foundInheritanceList);
-	            	}
-	            }
-            }
-	        this.logger.info(new Date().toString() + " Finished: initializeHashMapsForQueries()");
-		} catch(Exception e) {
-	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
-	        //e.printStackTrace();
-		}
-    	
-    	return;
-    }
-
 }
