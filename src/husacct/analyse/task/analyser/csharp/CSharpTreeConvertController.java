@@ -70,11 +70,16 @@ public class CSharpTreeConvertController {
 						namespaceStack.pop();
 						break;
 					case CSharpParser.CLASS:
+					case CSharpParser.INTERFACE:
 					case CSharpParser.ENUM:
 					case CSharpParser.STRUCT:
 						CommonTree classTree = treeNode;
+						boolean isInterface = false;
+						if (nodeType == CSharpParser.INTERFACE) {
+							isInterface = true;
+						}
 						boolean isInner = classNameStack.size() > 0;
-						classNameStack.push(delegateClass(classTree, isInner));
+						classNameStack.push(delegateClass(classTree, isInner, isInterface));
 						if (!isInner) {
 							delegateUsings();
 						}
@@ -127,14 +132,14 @@ public class CSharpTreeConvertController {
 		return csNamespaceGenerator.generateModel(CSharpGeneratorToolkit.getParentName(namespaceStack), namespaceTree);
 	}
 
-	private String delegateClass(CommonTree classTree, boolean isInnerClass) {
+	private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface) {
 		String analysedClass;
 		if (isInnerClass) {
-			analysedClass = csClassGenerator.generateToModel(classTree, getParentName(namespaceStack), getParentName(classNameStack));
+			analysedClass = csClassGenerator.generateToModel(classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface);
 			if (analysedClass == null)
 	    		logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));
 		} else {
-			analysedClass = csClassGenerator.generateToDomain(classTree, getParentName(namespaceStack));
+			analysedClass = csClassGenerator.generateToDomain(classTree, getParentName(namespaceStack), isInterface);
 		}
 		return analysedClass;
 	}

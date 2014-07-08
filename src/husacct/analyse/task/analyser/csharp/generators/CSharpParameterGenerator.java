@@ -2,8 +2,11 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
 import java.util.*;
+
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.log4j.Logger;
 
 public class CSharpParameterGenerator extends CSharpGenerator {
 
@@ -11,6 +14,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 	private String packageAndClassName;
 	private Stack<Argument> arguments = new Stack<>();
 	private int lineNumber;
+    private final Logger logger = Logger.getLogger(CSharpParameterGenerator.class);
 
 	public Stack<String> generateParameterObjects(CommonTree argumentTree, String name, String classUniqueName) {
 		packageAndClassName = classUniqueName;
@@ -59,20 +63,25 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 	}
 
 	private List<String> getGenericTypes(CommonTree genericListTree, List<String> genericTypes) {
-		if (genericListTree != null) {
-			for (int i = 0; i < genericListTree.getChildCount(); i++) {
-
-				CommonTree childTree = (CommonTree) genericListTree.getChild(i);
-				CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-
-				genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
-
-				if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
-					genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
-					genericTypes = getGenericTypes(genericListTree, genericTypes);
+    	try {		
+			if (genericListTree != null) {
+				for (int i = 0; i < genericListTree.getChildCount(); i++) {
+	
+					CommonTree childTree = (CommonTree) genericListTree.getChild(i);
+					CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+	
+					genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
+	
+					if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
+						genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
+						genericTypes = getGenericTypes(genericListTree, genericTypes);
+					}
 				}
 			}
-		}
+        } catch (Exception e) {
+	        logger.warn("Exception: "  + e + ", in getGenericTypes()");
+	        //e.printStackTrace();
+        }
 		return genericTypes;
 	}
 

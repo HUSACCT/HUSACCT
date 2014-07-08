@@ -245,14 +245,15 @@ public class CSharpLexer extends Lexer {
     // return value is only used for debugging purposes
     protected boolean push(boolean expr) {
         /* if we are already within a block that should not be parsed due to current macro defs,
-         do not parse the child if-section */
+         do not parse the child if-section 
         if (!ifStack.peek()) {
             ifStack.push(false);
             return false;
         } else {
             ifStack.push(expr);
             return expr;
-        }
+        }*/
+    	return false; // Method disabled 2014-07-08, since it causes null pointer exceptions  
     }
 
     protected boolean pop() {

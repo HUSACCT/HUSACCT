@@ -70,7 +70,7 @@ public interface IModelCreationService {
             String belongsToMethod, List<String> declareTypes);
 
     //Function to connect dependencies, after all modules are known in the model
-    public void connectDependencies();
+    public void executePostProcesses();
 
     //Single debugging functionality, to check the completeness of the implementation
     public String represent();

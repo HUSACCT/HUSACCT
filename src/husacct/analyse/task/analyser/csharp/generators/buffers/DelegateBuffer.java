@@ -3,9 +3,12 @@ package husacct.analyse.task.analyser.csharp.generators.buffers;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
 import org.antlr.runtime.tree.CommonTree;
+
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.task.analyser.csharp.generators.CSharpParameterGenerator;
+
 import java.util.Stack;
 
 public class DelegateBuffer {

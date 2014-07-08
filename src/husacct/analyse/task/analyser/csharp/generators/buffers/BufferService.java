@@ -5,9 +5,11 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.csharp.generators.CSharpBlockScopeGenerator;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.antlr.runtime.tree.CommonTree;
 
 public class BufferService {

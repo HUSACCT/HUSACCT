@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public abstract class TestCaseExtended{
@@ -397,7 +398,7 @@ public abstract class TestCaseExtended{
 		famix.createInheritanceDefinition("indirect.houses.attributes.IAttribute", "indirect.houses.type.IType", 5);
 		
 		
-		famix.connectDependencies();
+		famix.executePostProcesses();
 	}
 	
 	public void printDependencies(DependencyDTO[] dependencies){

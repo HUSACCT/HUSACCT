@@ -16,7 +16,7 @@ public abstract class AbstractAnalyser {
     }
 
     public void connectDependencies() {
-        modelCreationService.connectDependencies();
+        modelCreationService.executePostProcesses();
     }
 
     public void clearMemoryFromObjectsNotUsedAnymore() {

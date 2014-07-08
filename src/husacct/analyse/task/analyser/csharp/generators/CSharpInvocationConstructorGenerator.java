@@ -1,12 +1,16 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import java.util.ArrayList;
+
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.log4j.Logger;
 
 public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocationGenerator{
 	private ArrayList<String> toNames = new ArrayList<String>();
+    private static final Logger logger = Logger.getLogger(CSharpInvocationConstructorGenerator.class);
 
 	public CSharpInvocationConstructorGenerator(String packageAndClassName) {
 		super(packageAndClassName);
@@ -53,16 +57,21 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 	}
 
 	private void walkTreeToGetNames(CommonTree treeNode) {
-		for (int i = 0; i < treeNode.getChildCount(); i++) {
-			CommonTree child = (CommonTree)treeNode.getChild(i);
-			switch (child.getType()) {
-			case CSharpParser.NAMESPACE_OR_TYPE_NAME:
-			case CSharpParser.NAMESPACE_OR_TYPE_PART:  
-				String name = child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-				this.toNames.add(name);
-				break;
+		try {
+				for (int i = 0; i < treeNode.getChildCount(); i++) {
+				CommonTree child = (CommonTree)treeNode.getChild(i);
+				switch (child.getType()) {
+				case CSharpParser.NAMESPACE_OR_TYPE_NAME:
+				case CSharpParser.NAMESPACE_OR_TYPE_PART:  
+					String name = child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+					this.toNames.add(name);
+					break;
+				}
+				walkTreeToGetNames(child);
 			}
-			walkTreeToGetNames(child);
+		} catch (Exception e) {
+	        logger.warn("Exception: "  + e + ", in getTypeNameAndParts()");
+	        //e.printStackTrace();
 		}
 	}
 

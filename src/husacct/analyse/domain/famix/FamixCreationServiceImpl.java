@@ -2,12 +2,15 @@ package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
 
 import org.apache.log4j.Logger;
+
+import com.sun.org.apache.xpath.internal.FoundIndex;
 
 import husacct.analyse.domain.IModelCreationService;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -16,13 +19,13 @@ import husacct.define.domain.SoftwareArchitecture;
 public class FamixCreationServiceImpl implements IModelCreationService {
 
     private FamixModel model;
-    private FamixDependencyConnector dependencyConnector;
+    private FamixCreationPostProcessor creationPostProcessor;
     private final Logger logger = Logger.getLogger(FamixCreationServiceImpl.class);
     
 
     public FamixCreationServiceImpl() {
         model = FamixModel.getInstance();
-        dependencyConnector = new FamixDependencyConnector();
+        creationPostProcessor = new FamixCreationPostProcessor();
     }
 
     @Override
@@ -73,20 +76,25 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     @Override
     public void createClass(String uniqueName, String name, String belongsToPackage,
             boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility, boolean isInterface) {
-        FamixClass fClass = new FamixClass();
-        fClass.uniqueName = uniqueName.trim();
-        fClass.isAbstract = isAbstract;
-        fClass.belongsToPackage = belongsToPackage.trim();
-        fClass.isInnerClass = isInnerClass;
-        fClass.name = name.trim();
-        fClass.belongsToClass = belongsToClass;
-        if (visibility.equals("")) {
-            fClass.visibility = "default";
-        } else {
-            fClass.visibility = visibility;
-        }
-        fClass.isInterface = isInterface;
-        addToModel(fClass);
+    	if ((uniqueName != null) && !uniqueName.equals("") && (name != null) && !name.equals("") && (belongsToPackage != null) && !belongsToPackage.equals("") && (belongsToClass != null)) { 
+	    	FamixClass fClass = new FamixClass();
+	        fClass.uniqueName = uniqueName.trim();
+	        fClass.isAbstract = isAbstract;
+	        fClass.belongsToPackage = belongsToPackage.trim();
+	        fClass.isInnerClass = isInnerClass;
+	     	fClass.name = name.trim();
+	        fClass.belongsToClass = belongsToClass;
+	        if (visibility.equals("")) {
+	            fClass.visibility = "default";
+	        } else {
+	            fClass.visibility = visibility;
+	        }
+	        fClass.isInterface = isInterface;
+	        addToModel(fClass);
+    	} else {
+    		// String breakpoint = "true"; // Test helper
+    	}
+    	
     }
 
     @Override
@@ -395,17 +403,18 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void connectDependencies() {
+    public void executePostProcesses() {
+    	creationPostProcessor.processImports();
         createClassesAndLibrariesBasedOnImports();
         this.logger.info(new Date().toString() + " Finished: distinguisAndCreateLibraries(), Nr of Libraries = " + model.libraries.size());
         int associationsNumber = model.associations.size();
         this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntities.size());
-        dependencyConnector.processWaitingStructuralEntities();
+        creationPostProcessor.processWaitingStructuralEntities();
         this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
-        dependencyConnector.processInheritanceAccociations();
-        dependencyConnector.processWaitingAssociations();
+        creationPostProcessor.processInheritanceAccociations();
+        creationPostProcessor.processWaitingAssociations();
         associationsNumber = model.associations.size();
-        this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + dependencyConnector.getNumberOfRejectedWaitingAssociations());
+        this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());
     }
 
     private void createClassesAndLibrariesBasedOnImports() {
@@ -415,21 +424,18 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 		FamixPackage externalRoot = model.packages.get(rootLibraryPackage);
 		externalRoot.external = true;
 		// Select all imported types. Note: key of imports is combined from.to.
-		HashSet<String> completeImportStrings = new HashSet<String>();
+		HashMap<String, Boolean> completeImportStrings = new HashMap<String, Boolean>();
 		for(String importKey : model.imports.keySet()){
-			String importString = model.imports.get(importKey).completeImportString;
-			completeImportStrings.add(importString);
+			FamixImport foundImport = model.imports.get(importKey);
+			completeImportStrings.put(foundImport.completeImportString, foundImport.importsCompletePackage);
 		}
-		// Get a list of the root units
+		// Get a list of the root units.
 		List<AnalysedModuleDTO> rootModules = (new FamixModuleFinder(model)).getRootModules();
 		
-		// Check for each completeImportString if it is an internal class or interface. If not, create a FamixLibrary.
-		for(String completeImportString : completeImportStrings){
-			if (!completeImportString.contains("*")) { //May be extended, eg: if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax.")))
-				if (completeImportString.contains("org.dtangler.core.analysisresult.Violation.Severity")){
-					String test = "breakpoint";
-				}
-				
+		// Check for each completeImportString if it is an internal class. If not, create a FamixLibrary. Exclude imports which refer to a complete package or namespace.
+		for(String completeImportString : completeImportStrings.keySet()){
+			boolean importsCompletePackage = completeImportStrings.get(completeImportString);
+			if (!importsCompletePackage && !completeImportString.contains("*")) { //May be extended, eg: if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax.")))
 				//	Determine if the complete import string starts with a root module and refers to an internal type. 
 				boolean isExternal = true;
 				String rootModuleUniqueName = "";
@@ -501,7 +507,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         // Determine if the new class is an inner class
 		if (model.classes.containsKey(packageUniqueName)) { // The class is an inner class
 			newClass.belongsToPackage = packageUniqueName.substring(0, packageUniqueName.lastIndexOf("."));
-			String containingClass = packageUniqueName.substring(packageUniqueName.lastIndexOf(".") + 1, packageUniqueName.length());
+			//String containingClass = packageUniqueName.substring(packageUniqueName.lastIndexOf(".") + 1, packageUniqueName.length());
 	        newClass.name = className;
 			newClass.isInnerClass = true;
 			newClass.belongsToClass = packageUniqueName;
@@ -518,13 +524,13 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
     
     private void createLibraryWithParentsBasedOnImport(String completeImportString, String rootLibraryPackage) {
-		// Create package for each substring, except for the last substring 
+		// Create package for each substring, except for the last substring (do it then only, if importsCompletePackage = true.
 		String packageName = "";
 		String packageUniqueName = "";
 		String packageParent = rootLibraryPackage;
 		String libraryName = "";
 		if (completeImportString.contains(".")) {
-			if (completeImportString.lastIndexOf('.') != completeImportString.length() - 1) {
+			if (completeImportString.lastIndexOf('.') != completeImportString.length() - 1) { // If completeImportString doesn't end with a ".".
 				String[] names = completeImportString.split("\\.");
 		        libraryName = names[names.length -1];
 				for (int i = 0 ; i < (names.length -1); i++){

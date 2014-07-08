@@ -3,17 +3,20 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.VisibilitySet;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Stack;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class CSharpGeneratorToolkit {
 	private static final String EMPTYSTRING = "";
 	private static final String DOT = ".";
 	private static final String COMMA = ",";
+    private static final Logger logger = Logger.getLogger(CSharpGeneratorToolkit.class);
 
     /**
      * Returns the parentname from the stack: IE stack is C.B.A -> "A.B.C"
@@ -160,16 +163,21 @@ public class CSharpGeneratorToolkit {
      */
     public static String getTypeNameAndParts(CommonTree tree) {
 		String s = EMPTYSTRING;
-		CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-		if (typenameTree != null) {
-			s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-			for (int i = 0; i < typenameTree.getChildCount(); i++) {
-				Tree t = typenameTree.getChild(i);
-				if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
-					s += DOT + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
+    	try {		
+			CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+			if (typenameTree != null) {
+				s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+				for (int i = 0; i < typenameTree.getChildCount(); i++) {
+					Tree t = typenameTree.getChild(i);
+					if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
+						s += DOT + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
+					}
 				}
 			}
-		}
+        } catch (Exception e) {
+	        logger.warn("Exception: "  + e + ", in getTypeNameAndParts()");
+	        //e.printStackTrace();
+        }
 		return s;
 	}
 
