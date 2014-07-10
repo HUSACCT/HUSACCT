@@ -3,12 +3,16 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGenerator {
 	private CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator;
 	private CommonTree methodTree;
+    private static final Logger logger = Logger.getLogger(CSharpInvocationMethodGenerator.class);
+
 	
 	public CSharpInvocationMethodGenerator(String packageAndClassName) {
 		super(packageAndClassName);
@@ -33,11 +37,16 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
   	}
 	
 	private void deleteTrainWreck(CommonTree tree) {
-		Tree wagon = tree.getChild(0);
-		if (wagon.getType() == CSharpParser.METHOD_INVOCATION){
-			methodTree = findMethodInvocation((CommonTree)wagon);
-			deleteTrainWreck((CommonTree) methodTree);
-		}		
+    	try {		
+			Tree wagon = tree.getChild(0);
+			if (wagon.getType() == CSharpParser.METHOD_INVOCATION){
+				methodTree = findMethodInvocation((CommonTree)wagon);
+				deleteTrainWreck((CommonTree) methodTree);
+			}		
+        } catch (Exception e) {
+	        logger.warn("Exception: "  + e + ", in deleteTrainWreck()");
+	        //e.printStackTrace();
+        }
 	}
 
 	private CommonTree findMethodInvocation(CommonTree tree) {
@@ -66,7 +75,14 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 	}
 
 	private boolean methodHasConstructor(CommonTree tree) {
-		return tree.getChild(0).getType() == CSharpParser.OBJECT_CREATION_EXPRESSION;
+		boolean returnValue = false;
+		try {
+			returnValue = tree.getChild(0).getType() == CSharpParser.OBJECT_CREATION_EXPRESSION;
+        } catch (Exception e) {
+	        logger.warn("Exception: "  + e + ", in methodHasConstructor()");
+	        //e.printStackTrace();
+        }
+		return returnValue;
 	}
 	
 	private void delegateConstructor(CommonTree tree) {
@@ -89,8 +105,8 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 			CommonTree accessToClass = getAccessToClassTree(tree);
 			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();	
 		} catch (Exception e) {
-			System.out.println("Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
-			new TreePrinter(tree, this.getClass().getName());
+	        logger.warn("Exception: "  + e + ", in createMethodInvocationDetails(): Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
+			//new TreePrinter(tree, this.getClass().getName());
 		}
 	}
 	

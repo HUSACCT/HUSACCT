@@ -1,6 +1,8 @@
 // $ANTLR 3.4 C:\\Users\\chw\\workspace-cloudmig\\CSharpKDMDiscoverer\\grammars\\CSharpLexer.g 2013-01-09 17:08:25
 package husacct.analyse.infrastructure.antlr.csharp;
 
+import husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Set;
@@ -8,15 +10,23 @@ import java.util.HashSet;
 import java.util.Queue;
 
 
+
+
 import org.antlr.runtime.*;
+import org.apache.log4j.Logger;
+
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+
+
 @SuppressWarnings({"all", "warnings", "unchecked"})
 public class CSharpLexer extends Lexer {
+	
+    private static final Logger logger = Logger.getLogger(CSharpLexer.class);
 
     public static final int EOF = -1;
     public static final int ABSTRACT = 4;
@@ -257,7 +267,15 @@ public class CSharpLexer extends Lexer {
     }
 
     protected boolean pop() {
-        return ifStack.pop();
+    	boolean returnValue = false;
+    	try {		
+    		ifStack.pop();
+        } catch (Exception e) {
+	        logger.warn("Exception: "  + e + ", in pop()");
+	        //e.printStackTrace();
+        }
+
+        return returnValue;
     }
     // static and dynamic macro definition controlling
     protected Set<String> definedMacros = new HashSet<String>();

@@ -1,6 +1,8 @@
 namespace Domain.Direct.Violating
 {
-	public class AccessInstanceVariable : Base
+	using Domain.Direct;	
+
+	public class AccessInstanceVariableWrite : Base
 	{
 		public AccessInstanceVariable()
 		{

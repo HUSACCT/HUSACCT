@@ -2,7 +2,7 @@ namespace Domain.Direct.Violating
 {
 	using Domain.Direct;	
 
-	public class AccessInstanceVariable : Base
+	public class AccessInstanceVariableRead : Base
 	{
 		public AccessInstanceVariable()
 		{

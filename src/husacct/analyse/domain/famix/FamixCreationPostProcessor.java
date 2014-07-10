@@ -84,7 +84,7 @@ class FamixCreationPostProcessor {
             	String theContainingClass = entity.belongsToClass;
             	
             	// Test helper
-            	if (theContainingClass.contains("Domain.Direct.Base")){
+            	if (theContainingClass.contains("CheckInDAO")){
             		boolean breakpoint1 = true;
             	}
             	
@@ -221,7 +221,7 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.equals("Domain.Direct.Violating.CallInstanceInterface")){
+            	if (association.from.contains("AccessClassVariableInterface")){
             		boolean breakpoint = true;
             	}
                 /*

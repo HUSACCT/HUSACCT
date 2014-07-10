@@ -1,12 +1,17 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.log4j.Logger;
+
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.csharp.generators.AbstractCSharpInvocationGenerator;
 
 public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvocationGenerator {
 	private CSharpInvocationConstructorGenerator csInvocationConstructorGenerator;
+    private static final Logger logger = Logger.getLogger(CSharpInvocationPropertyOrFieldGenerator.class);
+
 
 	public CSharpInvocationPropertyOrFieldGenerator(String packageAndClassName) {
 		super(packageAndClassName);
@@ -54,7 +59,7 @@ public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvo
 			CommonTree accessToClass = getAccessToClassTree(tree);
 			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 		} catch (Exception e) {
-			System.out.println("Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
+	        logger.warn("Exception: "  + e + ", in createPropertyOrFieldInvocationDetails(): Could not detect dependency on line " + this.lineNumber +  " in: " + tryToGetFilePath(tree));
 		}
 	}
 

@@ -1,10 +1,11 @@
-namespace Domain.Direct.Allowed
+
+namespace Domain.Direct.Violating
 {
 	public class AccessClassVariable
 	{
 		public AccessClassVariable()
 		{
-			string s = Technology.Direct.Dao.CheckInDAO.currentLocation;
+            string s = Technology.Direct.Dao.CheckInDAO.currentLocation;
 		}
 	}
 }

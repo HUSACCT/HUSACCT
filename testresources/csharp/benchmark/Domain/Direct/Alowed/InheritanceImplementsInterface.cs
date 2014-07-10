@@ -1,6 +1,6 @@
-namespace Domain.Direct.Allowed
+namespace Domain.Direct.Violating
 {
-    public class InheritanceImplementsInterface : Technology.Direct.Dao.IMapDAO
+	public class InheritanceImplementsInterface : Technology.Direct.Dao.IMapDAO
 	{
 	}
 }

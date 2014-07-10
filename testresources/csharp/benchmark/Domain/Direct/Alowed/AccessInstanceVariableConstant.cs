@@ -1,5 +1,7 @@
-namespace Domain.Direct.Allowed
+namespace Domain.Direct.Violating
 {
+	using Domain.Direct;	
+
 	public class AccessInstanceVariableConstant : Base
 	{
 		public string sniMessage;

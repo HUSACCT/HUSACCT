@@ -1,6 +1,8 @@
-namespace Domain.Direct.Allowed
+namespace Domain.Direct.Violating
 {
-	public class AccessInstanceVariable : Base
+	using Domain.Direct;	
+
+	public class AccessInstanceVariableRead : Base
 	{
 		public AccessInstanceVariable()
 		{

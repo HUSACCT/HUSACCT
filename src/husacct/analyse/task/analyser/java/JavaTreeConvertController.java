@@ -40,8 +40,9 @@ class JavaTreeConvertController {
 	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
 	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 	        createClassInformation(compilationUnitTree);
+	        // Test helper
 	        if (this.theClass != null) {
-	            delegateASTToGenerators(compilationUnitTree);
+	        	delegateASTToGenerators(compilationUnitTree);
 	        } 
     	}
     	catch (Exception e) {
@@ -114,7 +115,7 @@ class JavaTreeConvertController {
                 int nodeType = treeNode.getType();
 
                 switch (nodeType) {
-                    case JavaParser.CLASS: case JavaParser.ENUM:
+                    case JavaParser.CLASS: case JavaParser.ENUM: case JavaParser.INTERFACE:	
                         if (classCount > 0) {
                             CommonTree innerClassTree = (CommonTree) treeNode;
                             this.parentClass = currentClass;

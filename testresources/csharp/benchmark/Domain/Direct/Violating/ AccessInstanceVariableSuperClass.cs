@@ -4,7 +4,7 @@ namespace Domain.Direct.Violating
 	{
 		public String Method()
 		{
-			return SubDao.VariableOnSuperClass;
+			return subDao.VariableOnSuperClass;
 		}
 	}
 }
