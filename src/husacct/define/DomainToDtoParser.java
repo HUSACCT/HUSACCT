@@ -56,7 +56,8 @@ public class DomainToDtoParser {
 
 	public ModuleDTO parseModule(ModuleStrategy module) {
 		String logicalPath = getLogicalPath(module);
-		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module.getUnits());
+		// ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module.getUnits());
+		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = new ArrayList<SoftwareUnitDefinition>();
 		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(expandedSoftwareUnits);
 		String type = module.getType();
 

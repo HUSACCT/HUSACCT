@@ -6,6 +6,7 @@ import husacct.common.dto.ExternalSystemDTO;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface IModelQueryService {
 
@@ -21,7 +22,7 @@ public interface IModelQueryService {
 
     public DependencyDTO[] getAllDependencies();
 
-    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
+    public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
     public List<DependencyDTO> getDependencies(String from, String to);
 

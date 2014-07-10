@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -68,8 +69,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public List<DependencyDTO> getDependencies(String from, String to) {
-    	List<String> allFromTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(from);
-    	List<String> allToTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(to);
+    	TreeSet<String> allFromTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(from);
+    	TreeSet<String> allToTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(to);
         List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
         for (String fromTypeName : allFromTypeNames) {
             for (String toTypeName : allToTypeNames) {
@@ -85,44 +86,16 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     
     // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
     @Override
-    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
-		List<String> uniqueNamesAllFoundTypes = new ArrayList<String>();
-		//Determine if uniqueName is a packages or type. If it is a packages, get all sub-packages.
-		if (theModel.packages.containsKey(uniqueName)){
-			List<AnalysedModuleDTO> foundTypes = new ArrayList<AnalysedModuleDTO>();
-			Set<String> allPackages = theModel.packages.keySet();
-			for (String packageName : allPackages){
-				if (packageName.startsWith(uniqueName)){
-					//get all types within the package
-					foundTypes.addAll(getChildModulesInModule(packageName));
-				}
-			}
-			// Add unique names of the types to the result set
-			for (AnalysedModuleDTO typeFrom : foundTypes){
-				if ((typeFrom != null) && (!typeFrom.uniqueName.equals("")) && (!typeFrom.type.toLowerCase().equals("package"))){ 
-					String uniqueNameTypeFrom = typeFrom.uniqueName;
-					uniqueNamesAllFoundTypes.add(uniqueNameTypeFrom);
-				} 
-			}
-		}
-		else {
-			// Since uniqueName refers to a type already, add it to uniqueNamesTypesFrom  
-			if (theModel.libraries.containsKey(uniqueName)){
-				uniqueName = theModel.libraries.get(uniqueName).physicalPath;
-			}
-			uniqueNamesAllFoundTypes.add(uniqueName);
-		}
-		// Add inner classes to the result set
-		List<String> innerClassNames = new ArrayList<String>();
-		for (String name : uniqueNamesAllFoundTypes){
-			if (theModel.classes.containsKey(name)){
-				FamixClass selectedClass = theModel.classes.get(name);
-				if (selectedClass.hasInnerClasses){
-					innerClassNames.addAll(selectedClass.children);
-				}
-			}
-		}
-		uniqueNamesAllFoundTypes.addAll(innerClassNames);
+    public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
+		TreeSet<String> uniqueNamesAllFoundTypes = new TreeSet<String>();
+		uniqueNamesAllFoundTypes.add(uniqueName);
+		TreeSet<String> children = (moduleFinder.getChildModulesNamesInModule(uniqueName));
+    	if ((children != null) && (children.size() > 0)){
+    		uniqueNamesAllFoundTypes.addAll(children);
+	    	for (String child : children){
+	    		uniqueNamesAllFoundTypes.addAll(getAllPhysicalClassPathsOfSoftwareUnit(child));
+	    	}
+    	}
 		return uniqueNamesAllFoundTypes;
     }
 

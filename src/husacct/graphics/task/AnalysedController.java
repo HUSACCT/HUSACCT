@@ -195,9 +195,6 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		if (figureFrom.getName() == "husacct.analyse" && figureTo.getName() == "xLibraries.jxl"){
-			String test = "t";
-		}
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);

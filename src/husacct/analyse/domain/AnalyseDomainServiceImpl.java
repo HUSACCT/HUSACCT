@@ -3,6 +3,7 @@ package husacct.analyse.domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.jdom2.Element;
 
@@ -72,7 +73,12 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
 
     @Override
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
-    	return queryService.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
+    	List<String> returnValue = new ArrayList<String>(); 
+    	TreeSet<String> allPaths = queryService.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
+    	for (String path : allPaths) {
+    		returnValue.add(path);
+    	}
+    	return returnValue;
     }
     
     @Override

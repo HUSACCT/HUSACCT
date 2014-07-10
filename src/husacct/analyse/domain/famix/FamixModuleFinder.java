@@ -45,8 +45,7 @@ class FamixModuleFinder extends FamixFinder {
         return this.currentResult;
     }
 
-    public List<AnalysedModuleDTO> getChildModulesInModule(String module) {
-    	List<AnalysedModuleDTO> result = new ArrayList<AnalysedModuleDTO>();
+    public TreeSet<String> getChildModulesNamesInModule(String module) {
     	TreeSet<String> children = null;
         // New finder function, based on FamixDecompositionEntity
     	if (theModel.packages.containsKey(module)){
@@ -56,6 +55,12 @@ class FamixModuleFinder extends FamixFinder {
     	} else if (theModel.libraries.containsKey(module)){
     		children = theModel.libraries.get(module).children;
     	}
+    	return children;
+    }
+
+    public List<AnalysedModuleDTO> getChildModulesInModule(String module) {
+    	List<AnalysedModuleDTO> result = new ArrayList<AnalysedModuleDTO>();
+    	TreeSet<String> children = getChildModulesNamesInModule(module);
     	AnalysedModuleDTO current;
     	if ((children != null) && (children.size() > 0)){
 	    	for (String child : children){
@@ -219,7 +224,7 @@ class FamixModuleFinder extends FamixFinder {
 				type = "class";
         } else if (theEntity instanceof FamixLibrary){
         	// To the uniqueName of a FamixLibrary the prefix "xLibrary." is added.
-        	uniqueName = ((FamixLibrary) theEntity).physicalPath;
+        	// uniqueName = ((FamixLibrary) theEntity).physicalPath;
         	type = "library";
         } else {
         	type = "class";

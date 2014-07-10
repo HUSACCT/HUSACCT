@@ -104,12 +104,20 @@ class FamixModel extends FamixObject {
             } else if (e instanceof FamixLibrary) {
                 if (!libraries.containsKey(((FamixEntity) e).uniqueName)){
                 	libraries.put(((FamixEntity) e).uniqueName, (FamixLibrary) e);
-	                String parentUniqueName = ((FamixLibrary) e).belongsToPackage;
 	                ((FamixLibrary) e).external = true;
-	                FamixPackage parent = null;
-	                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
-	                	parent = packages.get(parentUniqueName);
-	                	parent.children.add(((FamixEntity) e).uniqueName);
+	                String parentUniqueName = ((FamixLibrary) e).belongsToPackage;
+	                if (parentUniqueName.equals("xLibraries")){
+		                FamixPackage parent = null;
+		                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+		                	parent = packages.get(parentUniqueName);
+		                	parent.children.add(((FamixEntity) e).uniqueName);
+		                }
+	                } else {
+		                FamixLibrary parent = null;
+		                if (!parentUniqueName.equals("") && (libraries.containsKey(parentUniqueName))){
+		                	parent = libraries.get(parentUniqueName);
+		                	parent.children.add(((FamixEntity) e).uniqueName);
+		                }
 	                }
                 }
             }

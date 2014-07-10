@@ -2,7 +2,8 @@ package husacct.analyse.domain.famix;
 
 public class FamixLibrary extends FamixDecompositionEntity {
 
-    public String physicalPath;
+    public boolean isPackage = true;
+	public String physicalPath;
 
     public boolean equals(FamixLibrary other) {
         return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 

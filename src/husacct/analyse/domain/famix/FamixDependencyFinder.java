@@ -83,6 +83,11 @@ class FamixDependencyFinder extends FamixFinder {
 		}
 		try{
 			if ((dependenciesOnFromTo != null) && (dependenciesOnFromTo.size() > 0)){
+				// Find out if classPathTo refers to a Library. If so, remove the prefix.
+				if(theModel.libraries.containsKey(classPathTo)){
+					classPathTo = theModel.libraries.get(classPathTo).physicalPath;
+				}
+
 				if(classPathFrom != ""){
 					// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
 					HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);

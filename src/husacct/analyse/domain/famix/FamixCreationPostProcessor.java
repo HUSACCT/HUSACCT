@@ -41,7 +41,7 @@ class FamixCreationPostProcessor {
         progressPercentage = 0;
     }
 
-    // Two objectives: 1) Check value isCompletePackage; 2) Fill HashMap importsPerEntity 
+    // Objective: Fill HashMap importsPerEntity 
     void processImports() {
         FamixImport foundImport;
 		ArrayList<FamixImport> foundImportsList;
@@ -84,9 +84,9 @@ class FamixCreationPostProcessor {
             	String theContainingClass = entity.belongsToClass;
             	
             	// Test helper
-            	if (theContainingClass.contains("CheckInDAO")){
-            		boolean breakpoint1 = true;
-            	}
+            	//if (theContainingClass.contains("CheckInDAO")){
+            	//	boolean breakpoint1 = true;
+            	//}
             	
             	// Check if belongsToClass refers to an existing class
             	if (theModel.classes.containsKey(theContainingClass)) {
@@ -221,9 +221,9 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.contains("AccessClassVariableInterface")){
-            		boolean breakpoint = true;
-            	}
+            	//if (association.from.contains("AccessClassVariableInterface")){
+            	//	boolean breakpoint = true;
+            	//}
                 /*
                 if (isInvocation(association)) {
                 	theInvocation = (FamixInvocation) association;

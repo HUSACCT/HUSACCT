@@ -432,10 +432,10 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 		// Get a list of the root units.
 		List<AnalysedModuleDTO> rootModules = (new FamixModuleFinder(model)).getRootModules();
 		
-		// Check for each completeImportString if it is an internal class. If not, create a FamixLibrary. Exclude imports which refer to a complete package or namespace.
+		// Check for each completeImportString if it is an internal class. If not, create a FamixLibrary or package if it refers to a complete package or namespace.
 		for(String completeImportString : completeImportStrings.keySet()){
 			boolean importsCompletePackage = completeImportStrings.get(completeImportString);
-			if (!importsCompletePackage && !completeImportString.contains("*")) { //May be extended, eg: if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax.")))
+			if (!completeImportString.contains("*")) { //May be extended, eg: if((!completeImportString.startsWith("java.")) && (!completeImportString.startsWith("javax.")))
 				//	Determine if the complete import string starts with a root module and refers to an internal type. 
 				boolean isExternal = true;
 				String rootModuleUniqueName = "";
@@ -443,11 +443,11 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 					if (completeImportString.startsWith(rootModule.uniqueName)){
 						isExternal =  false;
 						rootModuleUniqueName = rootModule.uniqueName;
+						break;
 					}
 				}
-				if (isExternal == false) {
-					// completeImportString refers to an internal package of type. If it's not a package, it must be a class (assuming that all packages are created(slight uncertainty?)). If the type is not registered yet, create it.
-					if (!model.packages.containsKey(completeImportString)){
+				if (isExternal == false) { // completeImportString refers to an internal package of type. If it's not a package, it must be a class (assuming that all packages are created). If the type is not registered yet, create it.
+					if (!importsCompletePackage && !model.packages.containsKey(completeImportString)){
 						if(!model.classes.containsKey(completeImportString)){
 							createClassWithParentsBasedOnImport(completeImportString, rootModuleUniqueName);
 						} else {
@@ -456,17 +456,12 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 					} else {
 						// Do nothing: package exists already
 					}
-				} else {
-					// completeImportString refers to  an external package or type. Create a library with parents, if not registered already.
+				} else { // completeImportString refers to  an external package or type. Create a library with parent Library objects, if not registered already.
 					String uniqueExternalName = rootLibraryPackage + "." + completeImportString;
-					if (!model.packages.containsKey(uniqueExternalName)){
-						if(!model.libraries.containsKey(uniqueExternalName)){
-							createLibraryWithParentsBasedOnImport(completeImportString, rootLibraryPackage);
-						} else {
-							// Do nothing: class exists already
-						}
+					if(!model.libraries.containsKey(uniqueExternalName)){
+						createLibraryPackagewithParents(completeImportString, rootLibraryPackage, importsCompletePackage);
 					} else {
-						// Do nothing: class exists already
+						// Do nothing: library exists already
 					}
 				}
 			}
@@ -523,50 +518,41 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         addToModel(newClass);
     }
     
-    private void createLibraryWithParentsBasedOnImport(String completeImportString, String rootLibraryPackage) {
-		// Create package for each substring, except for the last substring (do it then only, if importsCompletePackage = true.
-		String packageName = "";
-		String packageUniqueName = "";
-		String packageParent = rootLibraryPackage;
+    private void createLibraryPackagewithParents(String completeImportString, String rootLibraryPackage, boolean importsCompletePackage) {
+		// Create a FamixLibrary for each substring.
 		String libraryName = "";
-		if (completeImportString.contains(".")) {
-			if (completeImportString.lastIndexOf('.') != completeImportString.length() - 1) { // If completeImportString doesn't end with a ".".
-				String[] names = completeImportString.split("\\.");
-		        libraryName = names[names.length -1];
-				for (int i = 0 ; i < (names.length -1); i++){
-					packageName = names[i]; 
-					packageUniqueName = packageParent + "." + names[i]; 
-					// Create a package if it is not registered already
-					if (!model.packages.containsKey(packageUniqueName) && !model.libraries.containsKey(packageUniqueName)) { // Needed in case the import refers to an inner class
-				        createPackage(packageUniqueName, packageParent, packageName); 
-						FamixPackage newPackage = model.packages.get(packageUniqueName);
-						newPackage.external = true;
-					}
-			        packageParent = packageUniqueName;
+		String libraryUniqueName = ""; // physicalPath prefixed by rootLibraryPackage
+		String libraryPhysicalPath = ""; // original path in the source code
+		String libraryParentUniqueName = rootLibraryPackage;
+		if (completeImportString.lastIndexOf('.') != completeImportString.length() - 1) { // If completeImportString doesn't end with a ".".
+			String[] names = completeImportString.split("\\.");
+			for (int i = 0 ; i < (names.length); i++){
+				libraryName = names[i]; 
+				libraryUniqueName = libraryParentUniqueName + "." + libraryName;
+				if (i == 0) {
+					libraryPhysicalPath = libraryName;
+				} else {
+					libraryPhysicalPath = libraryPhysicalPath + "." + libraryName;
 				}
-			} else {
-				// Do nothing: Type name which finishes with a dot 
+				// Create a library if it is not registered already
+				if (!model.libraries.containsKey(libraryUniqueName)) { 
+					//Add completeImportString as FamixLibrary
+					FamixLibrary fLibrary = new FamixLibrary();
+			        fLibrary.name = libraryName;
+			        fLibrary.uniqueName = libraryUniqueName;
+					fLibrary.physicalPath = libraryPhysicalPath;
+					fLibrary.isPackage = importsCompletePackage;
+					fLibrary.belongsToPackage = libraryParentUniqueName;
+			        fLibrary.visibility = "public";
+			        addToModel(fLibrary);
+				}
+		        libraryParentUniqueName = libraryUniqueName;
 			}
 		} else {
-			packageUniqueName = packageParent;
-			libraryName = completeImportString;
+			// Do nothing: Type name which finishes with a dot 
 		}
-		//Add completeImportString as FamixLibrary
-		FamixLibrary fLibrary = new FamixLibrary();
-		fLibrary.physicalPath = completeImportString;
-        fLibrary.uniqueName = rootLibraryPackage + "." + completeImportString;
-		if (model.libraries.containsKey(packageUniqueName)) {// The library class is an inner class
-			fLibrary.belongsToPackage = packageUniqueName.substring(0, packageUniqueName.lastIndexOf("."));
-			String containingClass = packageUniqueName.substring(packageUniqueName.lastIndexOf(".") + 1, packageUniqueName.length());
-	        fLibrary.name = containingClass + "." + libraryName;
-		} else { 
-			fLibrary.belongsToPackage = packageUniqueName;
-	        fLibrary.name = libraryName;
-		}
-        fLibrary.visibility = "public";
-        addToModel(fLibrary);
     }
-
+    
     private boolean addToModel(FamixObject newObject) {
         try {
         	model.addObject(newObject);
