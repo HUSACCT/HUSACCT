@@ -38,7 +38,6 @@ public class DefinedController extends DrawingController {
 		super.notifyServiceListeners();
 
 		ModuleDTO[] modules = defineService.getModule_AllRootModules();
-		modules = enrichModulesWithAllUnderlyingPhysicalClassPaths(modules); 
 		if (!areExternalLibrariesShown) {
 			int nrOfInternalModules = 0;
 			for (ModuleDTO module : modules){
@@ -65,7 +64,6 @@ public class DefinedController extends DrawingController {
 		if (parentName.equals("") || parentName.equals("**")) drawArchitecture(getCurrentDrawingDetail());
 		else {
 			ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
-			children = enrichModulesWithAllUnderlyingPhysicalClassPaths(children); 
 			if (children.length > 0) {
 				setCurrentPaths(new String[] { parentName });
 				drawModulesAndLines(children);
@@ -80,7 +78,6 @@ public class DefinedController extends DrawingController {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
 				ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
-				children = enrichModulesWithAllUnderlyingPhysicalClassPaths(children); 
 				if (parentName.equals("") || parentName.equals("**")) {
 					drawArchitecture(getCurrentDrawingDetail());
 					continue;
@@ -109,28 +106,17 @@ public class DefinedController extends DrawingController {
 		}
 	}
 	
-	private ModuleDTO[] enrichModulesWithAllUnderlyingPhysicalClassPaths(ModuleDTO[] modules){
-		for (ModuleDTO module : modules){
-			ArrayList<PhysicalPathDTO> PhysicalPathDTOs = new ArrayList<PhysicalPathDTO>();
-			HashSet<String> physicalClassPaths = defineService.getModule_AllPhysicalClassPathsOfModule(module.logicalPath);
-			for (String physicalClassPath : physicalClassPaths){
-				PhysicalPathDTO physicalPathDTO = new PhysicalPathDTO(physicalClassPath, "");
-				PhysicalPathDTOs.add(physicalPathDTO);
-			}
-			module.physicalPathDTOs = PhysicalPathDTOs.toArray(new PhysicalPathDTO[PhysicalPathDTOs.size()]);
-		}
-		return modules;
-	}
-	
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(dtoFrom.logicalPath);
 		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(dtoTo.logicalPath);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) 
-			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs){
-				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
-					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
+			for (String physicalClassPathFrom : physicalClassPathsFrom){
+				for (String physicalClassPathTo : physicalClassPathsTo) {
+					DependencyDTO[] foundDependencies = analyseService.getDependenciesFromTo(physicalClassPathFrom, physicalClassPathTo);
 					for (DependencyDTO tempDependency : foundDependencies)
 						dependencies.add(tempDependency);
 				}

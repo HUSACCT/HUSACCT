@@ -88,7 +88,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     @Override
     public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
 		TreeSet<String> uniqueNamesAllFoundTypes = new TreeSet<String>();
-		uniqueNamesAllFoundTypes.add(uniqueName);
+		if (!theModel.packages.containsKey(uniqueName)) { // Add only classes and libraries
+			uniqueNamesAllFoundTypes.add(uniqueName);
+		}
 		TreeSet<String> children = (moduleFinder.getChildModulesNamesInModule(uniqueName));
     	if ((children != null) && (children.size() > 0)){
     		uniqueNamesAllFoundTypes.addAll(children);
