@@ -17,33 +17,6 @@ import java.util.ArrayList;
 public class DomainToDtoParser {
 
 	/**
-	 * SoftwareUnits
-	 */
-	private ArrayList<SoftwareUnitDefinition> getExpandedSoftwareUnits(
-			ArrayList<SoftwareUnitDefinition> units) {
-		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
-		for (SoftwareUnitDefinition su : units) {
-			// if (su.getType() == Type.PACKAGE){
-			// softwareUnits.addAll(getAllChildModules(su));
-			// }
-			softwareUnits.add(su);
-		}
-		return softwareUnits;
-	}
-
-	public String getLogicalPath(ModuleStrategy module) {
-		String logicalPath = "";
-		// If the type is ModuleStrategy then its a placeholder for a
-		// non-existing
-		// module
-		// since you cannot add modules of the type module
-		if (!module.getType().equals("ModuleStrategy")) {
-			logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(module.getId());
-		}
-		return logicalPath;
-	}
-
-	/**
 	 * Application
 	 **/
 	public ApplicationDTO parseApplication(Application app) {
@@ -54,11 +27,11 @@ public class DomainToDtoParser {
 		return appDTO;
 	}
 
+	/**
+	 * Modules
+	 **/
 	public ModuleDTO parseModule(ModuleStrategy module) {
 		String logicalPath = getLogicalPath(module);
-		// ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module.getUnits());
-		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = new ArrayList<SoftwareUnitDefinition>();
-		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(expandedSoftwareUnits);
 		String type = module.getType();
 
 		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
@@ -72,13 +45,22 @@ public class DomainToDtoParser {
 		subModuleDTOsList.toArray(subModuleDTOs);
 		ModuleDTO[] subModules = subModuleDTOs;
 
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPathDTOs, type, subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, type, subModules);
 		return modDTO;
 	}
 
-	/**
-	 * Modules
-	 **/
+	private String getLogicalPath(ModuleStrategy module) {
+		String logicalPath = "";
+		// If the type is ModuleStrategy then its a placeholder for a
+		// non-existing
+		// module
+		// since you cannot add modules of the type module
+		if (!module.getType().equals("ModuleStrategy")) {
+			logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(module.getId());
+		}
+		return logicalPath;
+	}
+
 	public ModuleDTO[] parseModules(ModuleStrategy[] modules) {
 		ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<ModuleDTO>();
 		for (ModuleStrategy module : modules) {
@@ -112,34 +94,6 @@ public class DomainToDtoParser {
 		return physicalPathDTOs;
 	}
 
-	// private ArrayList<SoftwareUnitDefinition>
-	// getAllChildModules(SoftwareUnitDefinition su) {
-	// ArrayList<SoftwareUnitDefinition> softwareUnits = new
-	// ArrayList<SoftwareUnitDefinition>();
-	// AnalysedModuleDTO[] analysedSubModuleDTOs =
-	// ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(su.getName());
-	//
-	// for (AnalysedModuleDTO am : analysedSubModuleDTOs){
-	// SoftwareUnitDefinition softwareUnit = parseAnalysedModuleDTO(am);
-	// if (softwareUnit.getType() == Type.PACKAGE){
-	// ArrayList<SoftwareUnitDefinition> subSoftwareUnits =
-	// getAllChildModules(softwareUnit);
-	// softwareUnits.addAll(subSoftwareUnits);
-	// }
-	// softwareUnits.add(softwareUnit);
-	// }
-	// return softwareUnits;
-	// }
-	//
-	// private SoftwareUnitDefinition parseAnalysedModuleDTO(AnalysedModuleDTO
-	// analysedModuleDTO){
-	// String name = analysedModuleDTO.uniqueName;
-	// Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
-	// SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(name,
-	// type);
-	// return softwareUnit;
-	// }
-
 	public ArrayList<ProjectDTO> parseProjects(ArrayList<Project> projects) {
 		ArrayList<ProjectDTO> projectDTOs = new ArrayList<ProjectDTO>();
 		for (Project project : projects) {
@@ -153,15 +107,9 @@ public class DomainToDtoParser {
 
 	public ModuleDTO parseRootModule(ModuleStrategy module) {
 		String logicalPath = getLogicalPath(module);
-		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module
-				.getUnits());
-		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(expandedSoftwareUnits);
-
 		String type = module.getType();
 		ModuleDTO[] subModules = new ModuleDTO[0];
-
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPathDTOs, type,
-				subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, type, subModules);
 		return modDTO;
 	}
 
@@ -176,6 +124,9 @@ public class DomainToDtoParser {
 		return moduleDTOs;
 	}
 
+	/**
+	 * Applied Rules
+	 **/
 	public RuleDTO parseRule(AppliedRuleStrategy rule) {
 
 		String ruleTypeKey = rule.getRuleTypeKey();
@@ -202,9 +153,6 @@ public class DomainToDtoParser {
 		return ruleDTO;
 	}
 
-	/**
-	 * Applied Rules
-	 **/
 	public RuleDTO[] parseRules(ArrayList<AppliedRuleStrategy> rules) {
 		ArrayList<RuleDTO> ruleDTOsList = new ArrayList<RuleDTO>();
 		for (AppliedRuleStrategy rule : rules) {
@@ -215,4 +163,5 @@ public class DomainToDtoParser {
 		ruleDTOsList.toArray(ruleDTOs);
 		return ruleDTOs;
 	}
+
 }

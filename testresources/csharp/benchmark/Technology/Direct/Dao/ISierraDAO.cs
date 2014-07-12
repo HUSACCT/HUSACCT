@@ -1,6 +1,6 @@
 namespace Technology.Direct.Dao
 {
-	public abstract class ISierraDAO
+	public abstract interface ISierraDAO
 	{
 		public static string NAME = "ISierraDAO";
 	}

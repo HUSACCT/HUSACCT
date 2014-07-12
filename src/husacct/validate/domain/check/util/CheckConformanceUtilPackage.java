@@ -17,7 +17,7 @@ public class CheckConformanceUtilPackage {
 	public static ArrayList<Mapping> getAllPackagepathsFromModule(ModuleDTO rootModule, String[] violationTypeKeys) {
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
 
-		if (rootModule.logicalPath.equals("**") && rootModule.physicalPathDTOs.length == 0 && rootModule.subModules.length == 0) {
+		if (rootModule.logicalPath.equals("**") && rootModule.subModules.length == 0) {
 			classpathsFrom.addAll(getAllPackages(violationTypeKeys));
 		} else {
 			classpathsFrom.addAll(getPackageFromPhysicalPathDTO(rootModule, violationTypeKeys));

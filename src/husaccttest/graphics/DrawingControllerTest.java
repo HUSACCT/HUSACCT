@@ -40,8 +40,8 @@ public class DrawingControllerTest {
 	@Test
 	public void drawSingleLevelModulesTest() {
 		AnalysedModuleDTO layerDTO = new AnalysedModuleDTO("test.layer", "analysedLayer", "layer", "public");
-		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", new PhysicalPathDTO[] {}, "subsystem", new ModuleDTO[] {});
-		ModuleDTO componentDTO = new ModuleDTO("test.component", new PhysicalPathDTO[] {}, "component", new ModuleDTO[] {});
+		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", "subsystem", new ModuleDTO[] {});
+		ModuleDTO componentDTO = new ModuleDTO("test.component", "component", new ModuleDTO[] {});
 		AnalysedModuleDTO externalLibraryDTO = new AnalysedModuleDTO("test.externalLibrary", "analysedLibrary", "externallibrary", "public");
 
 		analysedController.drawSingleLevelModules(new AbstractDTO[] { layerDTO, subsystemDTO, componentDTO, externalLibraryDTO });
@@ -75,9 +75,9 @@ public class DrawingControllerTest {
 	public void drawMultiLevelModulesTest() {
 		HashMap<String, ArrayList<AbstractDTO>> multiLevelDTOs = new HashMap<String, ArrayList<AbstractDTO>>();
 
-		ModuleDTO classDTO = new ModuleDTO("parent.class", new PhysicalPathDTO[] {}, "class", new ModuleDTO[] {});
-		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", new PhysicalPathDTO[] {}, "interface", new ModuleDTO[] {});
-		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass", new PhysicalPathDTO[] {}, "abstract", new ModuleDTO[] {});
+		ModuleDTO classDTO = new ModuleDTO("parent.class", "class", new ModuleDTO[] {});
+		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", "interface", new ModuleDTO[] {});
+		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass","abstract", new ModuleDTO[] {});
 
 		AnalysedModuleDTO analysedClassDTO = new AnalysedModuleDTO("parent.analysedChild", "analysedChild", "class", "public");
 
