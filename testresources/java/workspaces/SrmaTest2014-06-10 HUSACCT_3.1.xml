@@ -590,12 +590,12 @@
                     <name>Exception</name>
                     <SoftwareUnitDefinitions>
                       <SoftwareUnitDefinition>
-                        <name>fi.foyt.foursquare.api.FoursquareApiException</name>
+                        <name>xLibraries.fi.foyt.foursquare.api.FoursquareApiException</name>
                         <type>LIBRARY</type>
                       </SoftwareUnitDefinition>
                     </SoftwareUnitDefinitions>
                     <PhysicalPaths>
-                      <path>fi.foyt.foursquare.api.FoursquareApiException</path>
+                      <path>xLibraries.fi.foyt.foursquare.api.FoursquareApiException</path>
                     </PhysicalPaths>
                   </ModuleStrategy>
                 </SubModules>

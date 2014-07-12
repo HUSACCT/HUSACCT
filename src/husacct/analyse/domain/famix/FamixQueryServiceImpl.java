@@ -93,9 +93,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 		}
 		TreeSet<String> children = (moduleFinder.getChildModulesNamesInModule(uniqueName));
     	if ((children != null) && (children.size() > 0)){
-    		uniqueNamesAllFoundTypes.addAll(children);
 	    	for (String child : children){
-	    		uniqueNamesAllFoundTypes.addAll(getAllPhysicalClassPathsOfSoftwareUnit(child));
+	    		TreeSet<String> validChildName = getAllPhysicalClassPathsOfSoftwareUnit(child);
+	    		uniqueNamesAllFoundTypes.addAll(validChildName);
 	    	}
     	}
 		return uniqueNamesAllFoundTypes;

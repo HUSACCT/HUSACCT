@@ -130,7 +130,7 @@ public class SRMATest20140610 {
 		boolean isValidatedCorrectly = false;
 		try {
 			String pathFrom = "domain.relationrules.is_not_allowed_to_use";
-			String pathTo = "xLibraries.fi.foyt";
+			String pathTo = "xLibraries.fi";
 			violations = validate.getViolationsByPhysicalPath(pathFrom, pathTo);
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	

@@ -83,11 +83,6 @@ class FamixDependencyFinder extends FamixFinder {
 		}
 		try{
 			if ((dependenciesOnFromTo != null) && (dependenciesOnFromTo.size() > 0)){
-				// Find out if classPathTo refers to a Library. If so, remove the prefix.
-				if(theModel.libraries.containsKey(classPathTo)){
-					classPathTo = theModel.libraries.get(classPathTo).physicalPath;
-				}
-
 				if(classPathFrom != ""){
 					// Select all dependencies within TreeMap dependenciesOnFromTo whose pathFrom equals classPathFrom
 					HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesOnFromTo.get(classPathFrom);
@@ -229,11 +224,13 @@ class FamixDependencyFinder extends FamixFinder {
 					else{
 						// Filter out dependencies if from and to do not refer to types
 						String libraryRoot = "xLibraries.";
-						if(!((theModel.classes.containsKey(association.to) || theModel.libraries.containsKey((libraryRoot + association.to)))
-								&& (theModel.classes.containsKey(association.from) || theModel.libraries.containsKey((libraryRoot + association.from))))){
+						if(!(theModel.classes.containsKey(association.from) && (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey((libraryRoot + association.to))))){
 							numberOfFilteredDependencies ++;
 						}
 						else {
+							if (theModel.libraries.containsKey((libraryRoot + association.to))) {
+								association.to = libraryRoot + association.to; // Prefix it with the libraryRoot to present  external systems everywhere the same to the tool users.
+							}							
 							String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type);
 							fromClassPath = association.from;
 							toClassPath = association.to;

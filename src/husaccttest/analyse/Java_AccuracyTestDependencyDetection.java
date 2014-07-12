@@ -227,7 +227,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void CallConstructorLibraryClass(){
 		String fromModule = "domain.direct.violating.CallConstructorLibraryClass";
-		String toModule = "fi.foyt.foursquare.api.FoursquareApi";
+		String toModule = "xLibraries.fi.foyt.foursquare.api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -263,7 +263,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void CallInstanceLibraryClass(){
 		String fromModule = "domain.direct.violating.CallInstanceLibraryClass";
-		String toModule = "fi.foyt.foursquare.api.FoursquareApi";
+		String toModule = "xLibraries.fi.foyt.foursquare.api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));

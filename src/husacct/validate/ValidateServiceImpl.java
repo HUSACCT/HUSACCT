@@ -84,7 +84,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
 		if (!validationExecuted) {
-			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
+			logger.info("getViolationsByPhysicalPath requested but without prior validation!");
 		}
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
