@@ -57,6 +57,13 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 */
 	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath);
 
+	/**
+	 * Gets all the physical classPaths of the packages represented by the assigned software units and these of all the child packages of the module
+	 * @param String logicalPath is the logical path, ** is root module
+	 * @return a HashSet<PhysicalPathDTO>. Throws RuntimeException when the module is not found.
+	 */
+	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath);
+
 	
 	/**
 	 * Gets the hierarchical level of a module

@@ -111,7 +111,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
     	return service.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
     }
-    
+
+    @Override
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+    	return service.getAllPhysicalPackagePathsOfSoftwareUnit(uniqueName);
+    }
+
     @Override
 	public DependencyDTO[] getAllUnfilteredDependencies() {
 		return service.getAllDependencies();

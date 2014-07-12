@@ -101,6 +101,23 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 		return uniqueNamesAllFoundTypes;
     }
 
+    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    @Override
+    public TreeSet<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+		TreeSet<String> uniqueNamesAllFoundPackages = new TreeSet<String>();
+		if (theModel.packages.containsKey(uniqueName)) { // Add only packages
+			uniqueNamesAllFoundPackages.add(uniqueName);
+		}
+		TreeSet<String> children = (moduleFinder.getChildModulesNamesInModule(uniqueName));
+    	if ((children != null) && (children.size() > 0)){
+	    	for (String child : children){
+	    		TreeSet<String> validChildName = getAllPhysicalPackagePathsOfSoftwareUnit(child);
+	    		uniqueNamesAllFoundPackages.addAll(validChildName);
+	    	}
+    	}
+		return uniqueNamesAllFoundPackages;
+    }
+
     @Override
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
         List<DependencyDTO> result = dependencyFinder.getDependencies(from, to, dependencyFilter);

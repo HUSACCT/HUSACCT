@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
+
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
@@ -91,23 +92,9 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	
 	@Override
 	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath) {
-		ModuleStrategy[] modules = null;
-		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
 		HashSet<String> resultClasses = new HashSet<String>();
-		// 1 Get the module(s)
-		if (logicalPath.equals("**")) {
-			modules = moduleService.getRootModules();
-		} else {
-			modules = new ModuleStrategy[1];
-			modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
-		}
-		// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
-		for (ModuleStrategy module : modules){
-			HashMap<String, SoftwareUnitDefinition> softwareUnits = module.getAllAssignedSoftwareUnitsInTree();
-			if(softwareUnits != null)
-				allAssignedSoftwareUnits.putAll(softwareUnits);
-		}
-		// 3 Get the physical classPaths of all classes represented by the SUs
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
+		// Get the physical classPaths of all classes represented by the SUs
 		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
 		for (String suName : allAssignedSoftwareUnitNames){
 			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
@@ -122,6 +109,43 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return resultClasses;
 	}
 
+	@Override
+	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath){
+		HashSet<String> resultPackages = new HashSet<String>();
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
+		// Get the physical classPaths of all classes represented by the SUs
+		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
+		for (String suName : allAssignedSoftwareUnitNames){
+			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
+			String suType = softwareUnit.getType().toString();
+			if (suType.toLowerCase().equals("package")){
+				resultPackages.add(suName);
+			}
+			// Get all underlying packages from AnalyseService and add them to resultPackages
+			List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(suName); 
+			resultPackages.addAll(AllPhysicalClassPaths); 
+		}
+		return resultPackages;
+	}
+
+	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
+		ModuleStrategy[] modules = null;
+		// 1 Get the module(s)
+		if (logicalPath.equals("**")) {
+			modules = moduleService.getRootModules();
+		} else {
+			modules = new ModuleStrategy[1];
+			modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
+		}
+		// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+		for (ModuleStrategy module : modules){
+			HashMap<String, SoftwareUnitDefinition> softwareUnits = module.getAllAssignedSoftwareUnitsInTree();
+			if(softwareUnits != null)
+				allAssignedSoftwareUnits.putAll(softwareUnits);
+		}
+		return allAssignedSoftwareUnits;
+	}
 	
 	@Override
 	// Gets the hierarchical level of a module. Throws RuntimeException when the module is not found.

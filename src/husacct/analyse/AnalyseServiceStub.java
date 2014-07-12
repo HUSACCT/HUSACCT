@@ -523,6 +523,13 @@ public class AnalyseServiceStub implements IAnalyseService {
     	return foursquareSub;
     }
     
+    @Override
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+        List<String> foursquareSub = new ArrayList<String>();
+        foursquareSub.add("domain.locationbased.foursquare");
+    	return foursquareSub;
+     }
+
 
     
     @Override

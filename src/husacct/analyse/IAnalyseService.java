@@ -30,6 +30,9 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
+    // Returns unique names of all subpackages of the SoftwareUnit with uniqueName  
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
+    
     public DependencyDTO[] getAllUnfilteredDependencies();
 
     public DependencyDTO[] getDependencies(String from, String to);

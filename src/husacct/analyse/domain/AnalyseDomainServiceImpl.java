@@ -82,6 +82,16 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
     
     @Override
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+    	List<String> returnValue = new ArrayList<String>(); 
+    	TreeSet<String> allPaths = queryService.getAllPhysicalPackagePathsOfSoftwareUnit(uniqueName);
+    	for (String path : allPaths) {
+    		returnValue.add(path);
+    	}
+    	return returnValue;
+    }
+    
+    @Override
     public DependencyDTO[] getDependencies(String from, String to) {
         List<DependencyDTO> dependencyList = queryService.getDependencies(from, to);
         DependencyDTO[] dependencies = new DependencyDTO[dependencyList.size()];

@@ -24,6 +24,8 @@ public interface IModelQueryService {
 
     public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
+    public TreeSet<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
+    
     public List<DependencyDTO> getDependencies(String from, String to);
 
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);

@@ -19,7 +19,9 @@ public interface IAnalyseControlService {
     public DependencyDTO[] getAllDependencies();
 
 	public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
-
+	
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
+    
 	public DependencyDTO[] getDependencies(String from, String to);
 
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);

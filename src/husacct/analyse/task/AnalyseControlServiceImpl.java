@@ -74,6 +74,11 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     }
     
     @Override
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+    	return domainService.getAllPhysicalPackagePathsOfSoftwareUnit(uniqueName);
+    }
+
+    @Override
     public DependencyDTO[] getDependencies(String from, String to) {
         return domainService.getDependencies(from, to);
     }

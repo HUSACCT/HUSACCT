@@ -64,26 +64,8 @@ public class CheckConformanceUtilPackage {
 
 	private static List<String> getAllChildPackages(ModuleDTO module) {
 		List<String> paths = new ArrayList<String>();
-
-		for (PhysicalPathDTO classpath : module.physicalPathDTOs) {
-			if (classpath.type.toLowerCase().equals("package")) {
-				paths.add(classpath.path);
-				paths.addAll(getAllChildPackages(classpath.path));
-			}
-		}
-		return paths;
-	}
-
-	private static List<String> getAllChildPackages(String physicalPath) {
-		List<String> paths = new ArrayList<String>();
-		AnalysedModuleDTO[] analysedSubModuleDTOs = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(physicalPath);
-		for (AnalysedModuleDTO am : analysedSubModuleDTOs) {
-			if (am.type.toLowerCase().equals("package")) {
-				List<String> subPaths = getAllChildPackages(am.uniqueName);
-				paths.add(am.uniqueName);
-				paths.addAll(subPaths);
-			}
-		}
+		HashSet<String> childPaths = ServiceProvider.getInstance().getDefineService().getModule_AllPhysicalPackagePathsOfModule(module.logicalPath);
+		paths.addAll(childPaths);
 		return paths;
 	}
 
