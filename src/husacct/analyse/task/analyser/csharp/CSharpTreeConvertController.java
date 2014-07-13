@@ -87,6 +87,7 @@ public class CSharpTreeConvertController {
 						classNameStack.pop();
 						break;
 					case CSharpParser.EXTENDS_OR_IMPLEMENTS:
+					case CSharpParser.IMPLEMENTS:
 						delegateInheritanceDefinition(treeNode);
 						deleteTreeChild(treeNode);
 						break;

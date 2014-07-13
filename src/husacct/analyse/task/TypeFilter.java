@@ -1,18 +1,20 @@
 package husacct.analyse.task;
 
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 public class TypeFilter {	
 	private static final Map<String, List<String>> TYPE_DICTIONARY = new HashMap<>();
 	private static final List<String> DICTIONARY_KEYS;
+    private static final Logger logger = Logger.getLogger(TypeFilter.class);
+
 	
 	static {
 		TYPE_DICTIONARY.put("Inheritance", Arrays.asList(new String[] {"Extends", "Implements", "Inheritance"}));
@@ -30,30 +32,12 @@ public class TypeFilter {
 		return dtos;
 	}
 	
-	private static ArrayList<DependencyDTO> filterDependenciesInExternalSystemDTO(ArrayList<DependencyDTO> dtos) {
-		ArrayList<DependencyDTO> newdtos = new ArrayList<>();
-		Iterator<DependencyDTO> iterator = dtos.iterator();
-		while(iterator.hasNext())
-			newdtos.add(editDTO(iterator.next()));
-		return newdtos;
-	}
-	
-	public static ExternalSystemDTO[] filterExternalSystems(ExternalSystemDTO[] dtos) {
-		for (int dto = 0; dto < dtos.length; dto++)
-			dtos[dto] = editExternalSystemDTO(dtos[dto]);
-		return dtos;
-	}
-
-	private static ExternalSystemDTO editExternalSystemDTO(ExternalSystemDTO externalSystemDTO) {
-		externalSystemDTO.fromDependencies = filterDependenciesInExternalSystemDTO(externalSystemDTO.fromDependencies);
-		return externalSystemDTO;
-	}
-
 	private static DependencyDTO editDTO(DependencyDTO dto) {
 		try {
 			dto.type = getSimpleType(dto.type);
 		} catch (NoSimpleTypeFoundException e) {
-			e.printStackTrace();
+	        logger.warn(new Date().toString() + " Exception: " + e);
+	        //e.printStackTrace();
 		}
 		return dto;
 	}

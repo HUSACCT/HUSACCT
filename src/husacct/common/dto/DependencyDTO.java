@@ -25,7 +25,7 @@ public class DependencyDTO extends AbstractDTO{
 		this.isIndirect = false;
 	}
 	
-	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, boolean indirect, int lineNumber){
+	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, int lineNumber, boolean indirect){
 		this.from = from;
 		this.fromClassPath = fromClassPath;
 		this.to = to;

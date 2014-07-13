@@ -329,7 +329,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
     @Override
     public void createImplementsDefinition(String from, String to, int lineNumber) {
-        FamixImplementationDefinition fImplements = new FamixImplementationDefinition();
+    	FamixInheritanceDefinition fImplements = new FamixInheritanceDefinition();
         fImplements.from = from;
         fImplements.to = to;
         fImplements.lineNumber = lineNumber;
@@ -411,7 +411,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntities.size());
         creationPostProcessor.processWaitingStructuralEntities();
         this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
-        creationPostProcessor.processInheritanceAccociations();
+        creationPostProcessor.processInheritanceAssociations();
         creationPostProcessor.processWaitingAssociations();
         associationsNumber = model.associations.size();
         this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());

@@ -90,7 +90,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}
-		assertEquals(365, numberOfDependencies);
+		assertEquals(367, numberOfDependencies);
 	}
 
 
@@ -104,7 +104,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);
 		}
-		assertEquals(69, numberOfViolations);
+		assertEquals(67, numberOfViolations);
 	}
 
 
@@ -325,7 +325,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(2, violations.length);
+		assertEquals(1, violations.length);
 	}
 
 	@Test
@@ -340,7 +340,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(2, violations.length);
+		assertEquals(1, violations.length);
 	}
 
 	@Test

@@ -50,14 +50,6 @@ class FamixDependencyFinder extends FamixFinder {
 		return dependencyCache;
 	}
 	
-	public List<DependencyDTO> getDependencies(String from, String to){
-		return getDependencies(from, to, null);
-	}
-	
-	public List<DependencyDTO> getDependencies(String from, String to, boolean preventRecursion){
-		return findDependencies(FinderFunction.BOTH, from, to, null, preventRecursion);
-	}
-	
 	public List<DependencyDTO> getDependencies(String from, String to, String[] dependencyFilter){
 		return findDependencies(FinderFunction.BOTH, from, to, dependencyFilter);
 	}
@@ -192,17 +184,13 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter){
-		return findDependencies(findFunction, from, to, applyFilter, true);
-	}
-	
-	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
 		if(dependencyCache == null)
-			return findDependenciesRaw(findFunction, from, to, applyFilter, preventRecursion);
+			return findDependenciesRaw(findFunction, from, to, applyFilter);
 		else
-			return queryCache(findFunction, from, to, applyFilter, preventRecursion);
+			return queryCache(findFunction, from, to, applyFilter);
 	}
 	
-	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
+	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter){
 	    HashMap<String, DependencyDTO> result = new HashMap<String, DependencyDTO>();
 		List<DependencyDTO> resultToReturn = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
@@ -211,9 +199,6 @@ class FamixDependencyFinder extends FamixFinder {
 		numberOfNotComplyingAssociations = 0;
 		numberOfIncompleteAssociations = 0;
 		numberOfDuplicateAssociations = 0;
-		numberOfExtendsConcrete = 0;
-		numberOfAssociationsWithoutFromClass = 0;
-		numberOfAssociationsWithoutToClass = 0;
 		numberOfFilteredDependencies = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
@@ -236,7 +221,7 @@ class FamixDependencyFinder extends FamixFinder {
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
 								// Create Dependency and add to result
-								DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber);
+								DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber, association.isIndirect);
 								result.put(uniqueName, foundDirectDependency);
 							}
 							else {
@@ -247,48 +232,17 @@ class FamixDependencyFinder extends FamixFinder {
 				else{
 					numberOfNotComplyingAssociations ++;
 				}
-					
-				if(!preventRecursion){
-					if(association.type == "ExtendsConcrete"){
-						numberOfExtendsConcrete ++;
-						// Pass true to prevent recursion and endless calls!
-						List<DependencyDTO> extendingDirectDependencies = getDependencies(association.to, to, true);
-						for(DependencyDTO extendingDirectDependency : extendingDirectDependencies){
-							if(compliesWithFunction(association, FinderFunction.FROM, from, to) && isTo(extendingDirectDependency, to)){
-								extendingDirectDependency.type = association.type + extendingDirectDependency.type;
-								extendingDirectDependency.isIndirect = typeOfDependency(extendingDirectDependency) == DependencyType.INDIRECT;
-								extendingDirectDependency.from = association.from;
-								extendingDirectDependency.via = association.to;
-								extendingDirectDependency.to = extendingDirectDependency.to;
-								//if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
-								if (result.containsKey(extendingDirectDependency) && !extendingDirectDependency.isIndirect){
-									String uniqueName = (extendingDirectDependency.from + String.valueOf(extendingDirectDependency.lineNumber) + extendingDirectDependency.to + extendingDirectDependency.type); 
-									result.put(uniqueName, extendingDirectDependency);
-									//result.add(extendingDirectDependency);
-								}	
-							}
-						}
-					}
-				}
 			}
-
 		} catch (Exception e) {
 	        this.logger.error(" Exception: "  + e);
 	        //e.printStackTrace();
 	    }
-
-		
-		// Indirect dependency analysis disabled 2014-01-20; improve effectiveness and efficiency before it is enabled again.
-		//if(!preventRecursion)
-		//result.addAll(findIndirectDependencies(from, to, applyFilter));
 		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
-		this.logger.info(" Associations: filtered: " + numberOfFilteredDependencies + "; non-classes fromClass: " + numberOfAssociationsWithoutFromClass + "; non-classes toClass: " + numberOfAssociationsWithoutToClass);
+		this.logger.info(" Filtered associations without existing from or to object: " + numberOfFilteredDependencies + "; duplicate associations: " + numberOfDuplicateAssociations);
 		return resultToReturn;
-	
-	
 	}
 
-	private List<DependencyDTO> queryCache(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
+	private List<DependencyDTO> queryCache(FinderFunction findFunction, String from, String to, String[] applyFilter){
 		List<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
 		for(DependencyDTO dependency : dependencyCache){
 			switch(findFunction){
@@ -315,50 +269,6 @@ class FamixDependencyFinder extends FamixFinder {
 		}
 		return foundDependencies;
 	}
-	
-	private List<DependencyDTO> findIndirectDependencies(String from, String to, String[] applyFilter){
-		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
-		List<FamixAssociation> allAssociations = theModel.associations;
-		List<DependencyDTO> dependenciesTo = new ArrayList<DependencyDTO>();
-		List<DependencyDTO> dependenciesFrom = new ArrayList<DependencyDTO>();
-		
-		for(FamixAssociation association : allAssociations){
-			if(compliesWithFunction(association, FinderFunction.TO, from, to) && compliesWithFilter(association, applyFilter)){
-				DependencyDTO foundDirectDependency = new DependencyDTO(association.from, association.from, association.to, association.to, association.type, association.lineNumber);
-				if(!containsDependency(foundDirectDependency, dependenciesTo)){
-					dependenciesTo.add(foundDirectDependency);
-				}
-			}
-			if(compliesWithFunction(association, FinderFunction.FROM, from, to) && compliesWithFilter(association, applyFilter)){
-				DependencyDTO foundDirectDependency = new DependencyDTO(association.from, association.from, association.to, association.to, association.type, association.lineNumber);
-				if(!containsDependency(foundDirectDependency, dependenciesFrom)){
-					dependenciesFrom.add(foundDirectDependency);
-				}
-			}
-		}
-		
-		for(DependencyDTO dependencyTo : dependenciesTo){
-			for(DependencyDTO dependencyFrom : dependenciesFrom){
-				if(dependencyTo.from.equals(dependencyFrom.to)){
-					DependencyDTO indirectDependency = new DependencyDTO(dependencyFrom.from, dependencyFrom.from, dependencyTo.to, dependencyTo.to, dependencyFrom.type + dependencyTo.type, true, dependencyFrom.lineNumber);
-					indirectDependency.via = dependencyFrom.to;
-					if(isValidIndirectDependency(indirectDependency) && !containsDependency(indirectDependency, result))
-						result.add(indirectDependency);
-				}
-			}
-		}
-		return result;
-	}
-	
-	private boolean isValidIndirectDependency(DependencyDTO dependency){
-    	if(dependency.type.matches("Extends.*?Extends.*"))
-    		return true;
-    	if(dependency.type.matches("Extends.*?Implements.*"))
-    		return true;
-    	if(dependency.type.matches("Implements.*?Extends.*"))
-    		return true;
-    	return false;
-    }
 	
 	private DependencyType typeOfDependency(DependencyDTO dependency){
 		if(dependency.type.matches("Extends.*?Extends.*"))
@@ -419,17 +329,6 @@ class FamixDependencyFinder extends FamixFinder {
 		result = result || dependency.to.startsWith(to + ".");
 		result = result && !dependency.to.equals(dependency.from);
 		return result;
-	}
-	
-	private boolean containsDependency(DependencyDTO find, List<DependencyDTO> dependencies) {
-        for (DependencyDTO d : dependencies)
-            if (find.equals(d) || compareDependency(find, d))
-                return true;
-        return false;
-    }
-	
-	private boolean compareDependency(DependencyDTO compare1, DependencyDTO compare2){
-		return compare1.from == compare2.from && compare1.to == compare2.to && compare1.lineNumber == compare2.lineNumber && compare1.type == compare2.type;
 	}
 	
     // Fill HashMap dependenciesOnFromTo 

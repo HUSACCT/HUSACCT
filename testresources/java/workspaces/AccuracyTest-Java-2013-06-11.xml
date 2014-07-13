@@ -51,6 +51,44 @@
                   </ModuleStrategy>
                 </SubModules>
               </ModuleStrategy>
+              <ModuleStrategy>
+                <type>SubSystem</type>
+                <description />
+                <id>73</id>
+                <name>Indirect</name>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>75</id>
+                    <name>ViolatingFrom</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>domain.indirect.violatingfrom</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>domain.indirect.violatingfrom</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>77</id>
+                    <name>IndirectTo</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>domain.indirect.indirectto</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>domain.indirect.indirectto</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
             </SubModules>
           </ModuleStrategy>
           <ModuleStrategy>
@@ -115,6 +153,17 @@
             <dependencies />
             <isException>false</isException>
           </AppliedRule>
+          <AppliedRule>
+            <id>70</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>75</moduleFrom>
+            <moduleTo>77</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
         </rules>
       </Architecture>
     </Application>
@@ -129,17 +178,17 @@
       <severities>
         <severity>
           <severityKey>Low</severityKey>
-          <id>365ad61e-1420-49b5-a84a-226cba224dce</id>
+          <id>3bd068fe-7ce0-43ce-9c68-e4f990947226</id>
           <color>-65536</color>
         </severity>
         <severity>
           <severityKey>Medium</severityKey>
-          <id>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</id>
+          <id>9fefcd44-9b93-4f31-a73b-29639b42c51b</id>
           <color>-65536</color>
         </severity>
         <severity>
           <severityKey>High</severityKey>
-          <id>8edd09a4-b082-4898-b7b4-e375945816a0</id>
+          <id>12597a2c-a732-4ef9-85c0-c9d31c8b4e46</id>
           <color>-65536</color>
         </severity>
       </severities>
@@ -147,101 +196,101 @@
         <severityPerTypePerProgrammingLanguage language="C#">
           <severityPerType>
             <typeKey>Import</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>default</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>protected</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Call</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Annotation</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>package</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>class</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Declaration</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Inheritance</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Access</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>public</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>private</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
         </severityPerTypePerProgrammingLanguage>
         <severityPerTypePerProgrammingLanguage language="Java">
           <severityPerType>
             <typeKey>Import</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>protected</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>default</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Call</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Annotation</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>package</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>class</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>Inheritance</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Access</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Inheritance</typeKey>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Declaration</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>public</typeKey>
-            <severityId>e0ea5292-afc0-46ae-b1c0-231eb8e5e716</severityId>
+            <severityId>9fefcd44-9b93-4f31-a73b-29639b42c51b</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>private</typeKey>
-            <severityId>365ad61e-1420-49b5-a84a-226cba224dce</severityId>
+            <severityId>3bd068fe-7ce0-43ce-9c68-e4f990947226</severityId>
           </severityPerType>
         </severityPerTypePerProgrammingLanguage>
       </severitiesPerTypesPerProgrammingLanguages>
