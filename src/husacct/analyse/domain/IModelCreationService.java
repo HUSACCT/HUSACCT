@@ -15,7 +15,7 @@ public interface IModelCreationService {
 
     public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 
-    public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName);
+    public void createAttributeOnly(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 
     public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 
@@ -62,7 +62,10 @@ public interface IModelCreationService {
     public void createLocalVariable(String belongsToClass,
             String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString, List<String> declareTypes);
 
-    public void createParameter(String name, String uniqueName, String declareType,
+    public void createLocalVariableOnly(String belongsToClass, String declareType, String name,
+            String uniqueName, int lineNumber, String belongsToMethodString);
+
+	public void createParameter(String name, String uniqueName, String declareType,
             String belongsToClass, int lineNumber, String belongsToMethod);
 
     public void createParameter(String name, String uniqueName,

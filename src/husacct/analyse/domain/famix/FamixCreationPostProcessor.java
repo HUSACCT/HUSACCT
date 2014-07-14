@@ -25,6 +25,8 @@ class FamixCreationPostProcessor {
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
     private HashMap<String, HashSet<String>> inheritanceAssociationsPerClass;
+    private List<FamixAssociation> indirectAssociations = new ArrayList<FamixAssociation>();
+
     private final Logger logger = Logger.getLogger(FamixCreationPostProcessor.class);
     private int numberOfNotConnectedWaitingAssociations;
     //Needed for the ProgressBar of the analyse application LoaderDialog 
@@ -79,6 +81,7 @@ class FamixCreationPostProcessor {
             try {
             	boolean belongsToClassExists = false;
             	boolean declareTypeExists = false;
+            	boolean declareTypeHasValue = false;
             	String theContainingClass = entity.belongsToClass;
             	
             	// Test helper
@@ -93,18 +96,16 @@ class FamixCreationPostProcessor {
 
             	// Objective: If FamixStructuralEntity.declareType is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents.
             	// Check if declareType refers to an existing class or library
-            	if (theModel.classes.containsKey(entity.declareType) || theModel.libraries.containsKey(entity.declareType)) {
-            		declareTypeExists = true;
-            	} else {
-            		if (theModel.libraries.containsKey("xLibraries." + entity.declareType)) {
-            			entity.declareType = "xLibraries." + entity.declareType;
-            			declareTypeExists = true;
-            		}
-            	}
+                if ((entity.declareType != null) && (!entity.declareType.equals(""))){ 
+                	declareTypeHasValue = true;
+	            	if (theModel.classes.containsKey(entity.declareType) || theModel.libraries.containsKey(entity.declareType)) {
+	            		declareTypeExists = true;
+	            	}
+                }
 
             	// Objective: If declareType is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents.
             	// Try to derive declareType from the unique name from the imports.
-            	if (belongsToClassExists && (!declareTypeExists)) {
+            	if (belongsToClassExists && (!declareTypeExists) && declareTypeHasValue) {
 	            	String classFoundInImports = "";
                     classFoundInImports = findClassInImports(theContainingClass, entity.declareType);
                     if (!classFoundInImports.equals("")) {
@@ -116,7 +117,7 @@ class FamixCreationPostProcessor {
         		}
 
             	// Find out or the name refers to a type in the same package as the from class.*/
-            	if (belongsToClassExists && (!declareTypeExists)) {
+            	if (belongsToClassExists && (!declareTypeExists) && declareTypeHasValue) {
                     String belongsToPackage = theModel.classes.get(theContainingClass).belongsToPackage;
             		String type = findClassInPackage(entity.declareType, belongsToPackage);
                     if (!type.equals("")) {
@@ -127,7 +128,8 @@ class FamixCreationPostProcessor {
                     }
                 }
                 
-            	if (belongsToClassExists && declareTypeExists) {
+            	//if (belongsToClassExists && declareTypeExists) {
+            	if (belongsToClassExists && declareTypeHasValue) {
             		addToModel(entity);
             	} else {
             		//boolean breakpoint = true;
@@ -161,9 +163,9 @@ class FamixCreationPostProcessor {
 		        String uniqueNameFrom = association.from;
 
             	// Test helper
-            	//if (association.from.startsWith("Domain.Indirect.Intermediate.IWhrrl")){
-            	//	boolean breakpoint = true;
-            	//}
+            	if (association.from.startsWith("Limaki.Actions.Command")){
+            		boolean breakpoint = true;
+            	}
 
 		        if (association instanceof FamixInheritanceDefinition){
 		        	inheritanceAssociation = true;
@@ -199,9 +201,11 @@ class FamixCreationPostProcessor {
     		        	toExists = true;
     		        }
             	}
-	        	if (inheritanceAssociation && fromExists && toExists) {
-		        	// Add the inheritance association to the FamixModel, but only if to and from refer to an existing type. 
-	            	addToModel(association);
+	        	if (inheritanceAssociation && fromExists && toExists && !theModel.associations.contains(association)) {
+		        	// Add the inheritance association to the FamixModel, but only if to and from are equal. 
+	            	if (!association.from.equals(association.to)) { 
+	            		addToModel(association);
+	            	}
 
 	            	// Fill the HashMap inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 
 	            	alreadyIncludedInheritanceList = null;
@@ -211,7 +215,9 @@ class FamixCreationPostProcessor {
 	            	foundInheritance = association;
 	            	if(inheritanceAssociationsPerClass.containsKey(uniqueNameFrom)){
 	            		alreadyIncludedInheritanceList = inheritanceAssociationsPerClass.get(uniqueNameFrom);
-	            		alreadyIncludedInheritanceList.add(foundInheritance.to);
+	            		if (!alreadyIncludedInheritanceList.contains(association.to)) {
+	            			alreadyIncludedInheritanceList.add(foundInheritance.to);
+	            		}
 	            		inheritanceAssociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
 	            	}
 	            	else{
@@ -238,7 +244,7 @@ class FamixCreationPostProcessor {
 		int numberOfConnectedViaAttribute = 0;
 		int numberOfConnectedViaLocalVariable = 0;
 		int numberOfConnectedViaSuperclass = 0;
-		int numberOfConnectedAccess = 0;
+		int numberOfIndirectAccessAssociations = 0;
 
         for (FamixAssociation association : theModel.waitingAssociations) {
             try {
@@ -249,18 +255,9 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	//if (association.from.contains("AccessClassVariableInterface")){
-            	//	boolean breakpoint = true;
-            	//}
-                /*
-                if (isInvocation(association)) {
-                	theInvocation = (FamixInvocation) association;
-                	if (theInvocation.belongsToMethod.equalsIgnoreCase("CallInstanceMethod()")){
-                		String method = theInvocation.belongsToMethod;
-                		String fromClass = theInvocation.from;
-                	}
-                }
-                */
+            	if (association.from.contains("AccessInstanceVariableIndirect_VarVar")){
+            		boolean breakpoint = true;
+            	}
 
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {
@@ -279,7 +276,7 @@ class FamixCreationPostProcessor {
                 if (fromExists && !toExists && toHasValue){
                 	if (!association.to.contains(".")) {
 	                    to = findClassInImports(association.from, association.to);
-	                    if (!to.equals("") && (theModel.classes.containsKey(to) || theModel.libraries.containsKey("xLibraries." + to))) {
+	                    if (!to.equals("")) {
 	                        association.to = to;
                 			toExists = true;
                 			numberOfConnectedViaImport ++;
@@ -338,14 +335,26 @@ class FamixCreationPostProcessor {
 	                	numberOfConnectedViaSuperclass ++;
                     }
                 }
-
-                if ((fromExists && !toExists && toHasValue) && association instanceof FamixAccess) {
-                    numberOfConnectedAccess ++;
+                
+                // Add indirect associations
+                // a) Add indirect access based on an inherited variable of association.to 
+                if ((fromExists && toExists) && (association.type.equals("AccessPropertyOrField"))) {
+                	// If invocationName is a variable of a superclass, then add an access association to this supertype
+                    theInvocation = (FamixInvocation) association;
+                    String superClass = findSuperClassThatDecalaresVariable(association.to, theInvocation.invocationName);
+                	if (!superClass.equals("")) {
+                		indirectAssociations_AddIndirectAssociation(association.type, association.from, superClass, association.lineNumber);
+	                    numberOfIndirectAccessAssociations ++;
+                	}
                 }
     				
     			if (fromExists && toExists) {
-					determineSpecificExtendType(association);
+					if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to)) {
+    				determineSpecificExtendType(association);
 					addToModel(association);
+					} else {
+	        			numberOfNotConnectedWaitingAssociations ++;
+					}
                 } else {
         			numberOfNotConnectedWaitingAssociations ++;
                 }
@@ -362,10 +371,14 @@ class FamixCreationPostProcessor {
     	        e.printStackTrace();
             }
         }
+        // Add the indirect associations created during this process to FamixModel.associations
+        for (FamixAssociation indirectAssociation : indirectAssociations) {
+        	addToModel(indirectAssociation);
+        }
 
         this.logger.info(" Connected via 1) Import: " + numberOfConnectedViaImport 
         		+ ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Attribute: " + numberOfConnectedViaAttribute + ", 4) Inherited var: " + numberOfConnectedViaSuperclass 
-        		+ ", 5) Local var: " + numberOfConnectedViaLocalVariable  + ", 6) Access: " + numberOfConnectedAccess);
+        		+ ", 5) Local var: " + numberOfConnectedViaLocalVariable  + ", 6) Indirect Access: " + numberOfIndirectAccessAssociations);
     }
     
     public String getNumberOfRejectedWaitingAssociations() {
@@ -415,6 +428,7 @@ class FamixCreationPostProcessor {
         return "";
     }
 
+    // Returns the unique name of the type of variable if variableName is declared within the superclass of the uniqueClassName. 
     private String findVariableTypeViaSuperClass(String uniqueClassName, String variableName) {
     	String result = "";
     	if (inheritanceAssociationsPerClass.containsKey(uniqueClassName)){
@@ -431,6 +445,31 @@ class FamixCreationPostProcessor {
 	            else {
 	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
 	            		result = findVariableTypeViaSuperClass(superClass, variableName);
+	            		break;
+	            	}
+	            }
+    		} 
+    	}
+    	return result; 
+    }
+    
+    // Returns the unique name of the superclass of the uniqueClassName that declares variable variableName. 
+    private String findSuperClassThatDecalaresVariable(String uniqueClassName, String variableName) {
+    	String result = "";
+    	if (inheritanceAssociationsPerClass.containsKey(uniqueClassName)){
+    		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
+    		for (String superClass : inheritanceAssociations){
+    			if (superClass.equals(uniqueClassName)) {
+    				break; // Otherwise, things go wrong with derived C# classes with the same name.
+    			}
+	    		String searchKey = superClass + "." + variableName;
+            	if (theModel.structuralEntities.containsKey(searchKey)) {
+            		result = superClass;
+            		break;
+	            }
+	            else {
+	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
+	            		result = findSuperClassThatDecalaresVariable(superClass, variableName);
 	            		break;
 	            	}
 	            }
@@ -508,41 +547,50 @@ class FamixCreationPostProcessor {
                 	numberOfNotConnectedWaitingAssociations ++;
                 }
                 else if (directAssociation instanceof FamixInheritanceDefinition){ 
-                	// Test helper
-                	//if (associationx.from.startsWith("domain.indirect.violatingfrom.Inheritance")){
-                	//	boolean breakpoint = true;
-                	//}
-    				if (inheritanceAssociationsPerClass.containsKey(directAssociation.to) ){
-    					indirectInheritanceAssociations.addAll(IndirectAssociations_AddIndirectInheritanceAssociation(directAssociation.from, directAssociation.to, directAssociation.lineNumber));
-    				}
-    			}
-        	}
+    				indirectInheritanceAssociations.addAll(indirectAssociations_AddIndirectInheritanceAssociation(directAssociation.from, directAssociation.to, directAssociation.lineNumber));
+				}
+			}
 	        for (FamixAssociation indirectInheritanceAssociation : indirectInheritanceAssociations) {
 	        	addToModel(indirectInheritanceAssociation);
 	        }
-        } 	catch (Exception e) {
+        } catch (Exception e) {
 	        this.logger.debug(new Date().toString() + " "  + e);
 	        e.printStackTrace();
         }
     }
 
-    private List<FamixAssociation> IndirectAssociations_AddIndirectInheritanceAssociation(String from, String to, int lineNumber) {
+    private List<FamixAssociation> indirectAssociations_AddIndirectInheritanceAssociation(String from, String to, int lineNumber) {
     	List<FamixAssociation> indirectInheritanceAssociations = new ArrayList<FamixAssociation>();
 		HashSet<String> foundInheritanceList = inheritanceAssociationsPerClass.get(to);
-		for (String foundInheritance : foundInheritanceList){
-			//Create a new association of type FamixInheritanceDefinition from association to superSuperClass
-			FamixAssociation newAssociation = new FamixAssociation();
-			newAssociation.from = from;
-			newAssociation.to = foundInheritance;
-			newAssociation.lineNumber = lineNumber;
-			newAssociation.type = EXTENDS_INDIRECT;
-			newAssociation.isIndirect = true;
-			indirectInheritanceAssociations.add(newAssociation);
-			if (inheritanceAssociationsPerClass.containsKey(newAssociation.to) ){
-				indirectInheritanceAssociations.addAll(IndirectAssociations_AddIndirectInheritanceAssociation(newAssociation.from, newAssociation.to, newAssociation.lineNumber));
+		if (foundInheritanceList != null) {
+			for (String foundInheritance : foundInheritanceList){
+				if (!foundInheritance.equals(to)){
+					//Create a new association of type FamixInheritanceDefinition from association to superSuperClass
+					FamixAssociation newAssociation = new FamixAssociation();
+					newAssociation.from = from;
+					newAssociation.to = foundInheritance;
+					newAssociation.lineNumber = lineNumber;
+					newAssociation.type = EXTENDS_INDIRECT;
+					newAssociation.isIndirect = true;
+					indirectInheritanceAssociations.add(newAssociation);
+					if (inheritanceAssociationsPerClass.containsKey(newAssociation.to) ){
+		    			indirectInheritanceAssociations.addAll(indirectAssociations_AddIndirectInheritanceAssociation(newAssociation.from, newAssociation.to, newAssociation.lineNumber));
+					}
+				}
 			}
 		}
 		return indirectInheritanceAssociations;
+    }
+
+    private void indirectAssociations_AddIndirectAssociation(String type, String from, String to, int lineNumber) {
+		//Create a new association of type FamixInheritanceDefinition from association to superSuperClass
+		FamixAssociation newAssociation = new FamixAssociation();
+		newAssociation.from = from;
+		newAssociation.to = to;
+		newAssociation.lineNumber = lineNumber;
+		newAssociation.type = type;
+		newAssociation.isIndirect = true;
+		indirectAssociations.add(newAssociation);
     }
 
 }

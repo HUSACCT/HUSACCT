@@ -164,10 +164,17 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void createAttribute(Boolean classScope, String accesControlQualifier,
-            String belongsToClass, String declareType, String name, String uniqueName) {
-
-        this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, 0);
+    public void createAttributeOnly(Boolean classScope, String accesControlQualifier,
+            String belongsToClass, String declareType, String name, String uniqueName, int line) {
+        FamixAttribute famixAttribute = new FamixAttribute();
+        famixAttribute.hasClassScope = classScope;
+        famixAttribute.accessControlQualifier = accesControlQualifier;
+        famixAttribute.belongsToClass = belongsToClass;
+        famixAttribute.declareType = declareType;
+        famixAttribute.name = name;
+        famixAttribute.uniqueName = uniqueName;
+        famixAttribute.lineNumber = line;
+        model.waitingStructuralEntities.add(famixAttribute);
     }
 
     @Override
@@ -201,6 +208,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.uniqueName = uniqueName;
         famixAttribute.lineNumber = line;
         model.waitingStructuralEntities.add(famixAttribute);
+        
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
@@ -245,6 +253,19 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         fAssocation.type = "DeclarationVariableWithinMethod";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
+    }
+
+    @Override
+    public void createLocalVariableOnly(String belongsToClass, String declareType, String name,
+            String uniqueName, int lineNumber, String belongsToMethodString) {
+        FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
+        famixLocalVariable.belongsToMethod = belongsToMethodString;
+        famixLocalVariable.belongsToClass = belongsToClass;
+        famixLocalVariable.declareType = declareType;
+        famixLocalVariable.name = name;
+        famixLocalVariable.uniqueName = uniqueName;
+        famixLocalVariable.lineNumber = lineNumber;
+        model.waitingStructuralEntities.add(famixLocalVariable);
     }
 
     @Override
@@ -337,13 +358,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void createPropertyOrFieldInvocation(String from, int lineNumber,
-            String to, String invocationName, String nameOfInstance) {
-        createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, "", nameOfInstance);
-
-    }
-
-    @Override
     public void createMethodInvocation(String from, int lineNumber, String to,
             String invocationName, String nameOfInstance) {
         createMethodInvocation(from, to, lineNumber, invocationName, "", nameOfInstance);
@@ -385,6 +399,12 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixInvocation.belongsToMethod = belongsToMethod;
         famixInvocation.nameOfInstance = nameOfInstance;
         model.waitingAssociations.add(famixInvocation);
+    }
+
+    @Override
+    public void createPropertyOrFieldInvocation(String from, int lineNumber,
+            String to, String invocationName, String nameOfInstance) {
+        createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, "", nameOfInstance);
     }
 
     @Override

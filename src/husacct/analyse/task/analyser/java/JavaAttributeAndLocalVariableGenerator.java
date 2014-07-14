@@ -85,7 +85,9 @@ class JavaAttributeAndLocalVariableGenerator {
         if (declareType.contains(".")) {
             declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
         }
-        if (!SkippedTypes.isSkippable(declareType)) {
+        if (SkippedTypes.isSkippable(declareType)) {
+            modelService.createAttributeOnly(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+        } else {
             modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
         }
         declareType = "";
@@ -95,9 +97,7 @@ class JavaAttributeAndLocalVariableGenerator {
         if (declareType.contains(".")) {
             declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
         }
-        if (!SkippedTypes.isSkippable(declareType)) {
-            modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
-        }
+        modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
         declareType = "";
     }
 

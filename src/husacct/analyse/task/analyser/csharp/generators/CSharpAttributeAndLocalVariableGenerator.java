@@ -43,7 +43,9 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
 	private void createAttributeObject() {
 		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
-		if(!SkippableTypes.isSkippable(declareType)){
+		if(SkippableTypes.isSkippable(declareType)){
+	           modelService.createAttributeOnly(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+        } else {
 			modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, this.declareTypes);
 		}
 		declareType = "";
@@ -52,11 +54,8 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
 	private void createLocalVariableObject() {
 		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
-		if(!SkippableTypes.isSkippable(declareType)){
-			modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
-		}
+		modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
 		declareType = "";
-
 	}
 
 
@@ -117,8 +116,8 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	
 	private void setDeclareType(Tree typeNode) {
 		CommonTree typeTree = (CommonTree) typeNode;
-		if(declareType == null || !SkippableTypes.isSkippable(declareType))	declareType = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree); 
-		
+		if(declareType == null || !SkippableTypes.isSkippable(declareType))	
+			declareType = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree); 
 		addArgumentListTypes(typeTree);
 	}
 
@@ -135,8 +134,8 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	
 	private void addTypeNameIfNotSkippable(CommonTree typeTree) {
 		String s = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree);
-		if(!SkippableTypes.isSkippable(s))declareTypes.add(s);
-
+		if(!SkippableTypes.isSkippable(s))
+			declareTypes.add(s);
 	}
 
 	private void setClassScope(Tree modifierList) {

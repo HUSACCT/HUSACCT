@@ -164,13 +164,31 @@ public class CSharpGeneratorToolkit {
     public static String getTypeNameAndParts(CommonTree tree) {
 		String s = EMPTYSTRING;
     	try {		
-			CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+			CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME); // NAMESPACE_OR_TYPE_NAME
 			if (typenameTree != null) {
 				s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 				for (int i = 0; i < typenameTree.getChildCount(); i++) {
 					Tree t = typenameTree.getChild(i);
 					if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
 						s += DOT + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
+					}
+				}
+			} else {
+				typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.STRING);
+				if (typenameTree != null) {
+					s += tree.getFirstChildWithType(CSharpParser.STRING).getText();
+				} else { 
+					typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.INT);
+					if (typenameTree != null) {
+						s += tree.getFirstChildWithType(CSharpParser.INT).getText();
+					} else {
+						typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.BOOL);
+						if (typenameTree != null) {
+							s += tree.getFirstChildWithType(CSharpParser.BOOL).getText();
+						} else {
+							// Test Helper
+							boolean breakpoint = true;
+						}
 					}
 				}
 			}
