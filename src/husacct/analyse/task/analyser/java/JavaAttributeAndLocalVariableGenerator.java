@@ -97,8 +97,13 @@ class JavaAttributeAndLocalVariableGenerator {
         if (declareType.contains(".")) {
             declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
         }
-        modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
-        declareType = "";
+        if (SkippedTypes.isSkippable(declareType)) {
+            //modelService.createLocalVariableOnly(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
+            modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+        } else {
+        	modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+        }
+        	declareType = "";
     }
 
     private void setAttributeName(Tree tree) {

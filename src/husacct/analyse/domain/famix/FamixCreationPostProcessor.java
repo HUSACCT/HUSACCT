@@ -235,6 +235,7 @@ class FamixCreationPostProcessor {
 	        //e.printStackTrace();
 		}
 		indirectAssociations_DeriveIndirectInheritance();
+        this.logger.info(new Date().toString() + " Finished: processInheritanceAssociations()");
     }
 
 	// Objective: Check references to FamixObjects and try to replace missing information (focusing on the to object).
@@ -255,7 +256,7 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.contains("AccessInstanceVariableIndirect_VarVar")){
+            	if (association.from.contains("CallInstanceMethodIndirect_SuperClass")){
             		boolean breakpoint = true;
             	}
 
@@ -339,19 +340,29 @@ class FamixCreationPostProcessor {
                 // Add indirect associations
                 // a) Add indirect access based on an inherited variable of association.to 
                 if ((fromExists && toExists) && (association.type.equals("AccessPropertyOrField"))) {
-                	// If invocationName is a variable of a superclass, then add an access association to this supertype
+                	// If invocationName is a variable of a superclass, then add an indirect access association to this supertype
                     theInvocation = (FamixInvocation) association;
-                    String superClass = findSuperClassThatDecalaresVariable(association.to, theInvocation.invocationName);
+                    String superClass = indirectAssociations_findSuperClassThatDecalaresVariable(association.to, theInvocation.invocationName);
                 	if (!superClass.equals("")) {
                 		indirectAssociations_AddIndirectAssociation(association.type, association.from, superClass, association.lineNumber);
 	                    numberOfIndirectAccessAssociations ++;
                 	}
                 }
     				
+                // b) Add indirect calls based on an inherited methods of association.to 
+                if ((fromExists && toExists) && (association.type.startsWith("Invoc"))) {
+                	// If invocationName is a method of a superclass, then add an indirect access association to this supertype
+                    theInvocation = (FamixInvocation) association;
+                    String superClass = indirectAssociations_findSuperClassThatContainsMethod(association.to, theInvocation.invocationName);
+                	if (!superClass.equals("")) {
+                		indirectAssociations_AddIndirectAssociation(association.type, association.from, superClass, association.lineNumber);
+	                    numberOfIndirectAccessAssociations ++;
+                	}
+                }
     			if (fromExists && toExists) {
-					if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to)) {
-    				determineSpecificExtendType(association);
-					addToModel(association);
+					if (!association.from.equals(association.to) && (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to))) {
+	    				determineSpecificExtendType(association);
+						addToModel(association);
 					} else {
 	        			numberOfNotConnectedWaitingAssociations ++;
 					}
@@ -445,31 +456,6 @@ class FamixCreationPostProcessor {
 	            else {
 	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
 	            		result = findVariableTypeViaSuperClass(superClass, variableName);
-	            		break;
-	            	}
-	            }
-    		} 
-    	}
-    	return result; 
-    }
-    
-    // Returns the unique name of the superclass of the uniqueClassName that declares variable variableName. 
-    private String findSuperClassThatDecalaresVariable(String uniqueClassName, String variableName) {
-    	String result = "";
-    	if (inheritanceAssociationsPerClass.containsKey(uniqueClassName)){
-    		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
-    		for (String superClass : inheritanceAssociations){
-    			if (superClass.equals(uniqueClassName)) {
-    				break; // Otherwise, things go wrong with derived C# classes with the same name.
-    			}
-	    		String searchKey = superClass + "." + variableName;
-            	if (theModel.structuralEntities.containsKey(searchKey)) {
-            		result = superClass;
-            		break;
-	            }
-	            else {
-	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
-	            		result = findSuperClassThatDecalaresVariable(superClass, variableName);
 	            		break;
 	            	}
 	            }
@@ -582,7 +568,57 @@ class FamixCreationPostProcessor {
 		return indirectInheritanceAssociations;
     }
 
-    private void indirectAssociations_AddIndirectAssociation(String type, String from, String to, int lineNumber) {
+    // Returns the unique name of the superclass of the uniqueClassName that contains method variableName. 
+    private String indirectAssociations_findSuperClassThatContainsMethod(String uniqueClassName, String variableName) {
+    	String result = "";
+    	if (inheritanceAssociationsPerClass.containsKey(uniqueClassName)){
+    		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
+    		for (String superClass : inheritanceAssociations){
+    			if (superClass.equals(uniqueClassName)) {
+    				break; // Otherwise, things go wrong with derived C# classes with the same name.
+    			}
+	    		String searchKey = superClass + "." + variableName + "()";
+            	if (theModel.behaviouralEntities.containsKey(searchKey)) {
+            		result = superClass;
+            		break;
+	            }
+	            else {
+	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
+	            		result = indirectAssociations_findSuperClassThatContainsMethod(superClass, variableName);
+	            		break;
+	            	}
+	            }
+    		} 
+    	}
+    	return result; 
+    }
+    
+    // Returns the unique name of the superclass of the uniqueClassName that declares variable variableName. 
+    private String indirectAssociations_findSuperClassThatDecalaresVariable(String uniqueClassName, String variableName) {
+    	String result = "";
+    	if (inheritanceAssociationsPerClass.containsKey(uniqueClassName)){
+    		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
+    		for (String superClass : inheritanceAssociations){
+    			if (superClass.equals(uniqueClassName)) {
+    				break; // Otherwise, things go wrong with derived C# classes with the same name.
+    			}
+	    		String searchKey = superClass + "." + variableName;
+            	if (theModel.structuralEntities.containsKey(searchKey)) {
+            		result = superClass;
+            		break;
+	            }
+	            else {
+	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
+	            		result = indirectAssociations_findSuperClassThatDecalaresVariable(superClass, variableName);
+	            		break;
+	            	}
+	            }
+    		} 
+    	}
+    	return result; 
+    }
+    
+private void indirectAssociations_AddIndirectAssociation(String type, String from, String to, int lineNumber) {
 		//Create a new association of type FamixInheritanceDefinition from association to superSuperClass
 		FamixAssociation newAssociation = new FamixAssociation();
 		newAssociation.from = from;
