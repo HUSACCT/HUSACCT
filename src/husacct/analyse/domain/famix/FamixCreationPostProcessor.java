@@ -85,7 +85,7 @@ class FamixCreationPostProcessor {
             	String theContainingClass = entity.belongsToClass;
             	
             	// Test helper
-            	//if (theContainingClass.contains("CheckInDAO")){
+            	//if (theContainingClass.contains("BaseIndirect")){
             	//	boolean breakpoint1 = true;
             	//}
             	
@@ -256,7 +256,7 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.contains("CallInstanceMethodIndirect_SuperClass")){
+            	if (association.from.contains("AccessInstanceVariableIndirect_SuperClass")){
             		boolean breakpoint = true;
             	}
 

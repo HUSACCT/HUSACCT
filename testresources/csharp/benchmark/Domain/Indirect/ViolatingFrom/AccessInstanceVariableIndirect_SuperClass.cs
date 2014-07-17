@@ -1,6 +1,8 @@
+using Domain.Indirect;
+
 namespace Domain.Indirect.ViolatingFrom
 {
-    public class AccessInstanceVariableIndirect_SuperClass : Domain.Indirect.BaseIndirect
+    public class AccessInstanceVariableIndirect_SuperClass : BaseIndirect
     {
         public String Method()
         {

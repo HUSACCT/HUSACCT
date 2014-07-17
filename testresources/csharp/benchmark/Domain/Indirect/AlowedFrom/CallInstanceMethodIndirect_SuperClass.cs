@@ -1,4 +1,6 @@
-namespace Domain.Indirect.AllowedFrom
+using Domain.Indirect;
+
+namespace Domain.Indirect.ViolatingFrom
 {
 	public class CallInstanceMethodIndirect_SuperClass : BaseIndirect
 	{
