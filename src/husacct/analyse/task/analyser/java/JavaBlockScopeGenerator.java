@@ -23,6 +23,16 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
     for (int i = 0; i < tree.getChildCount(); i++) {
         Tree child = tree.getChild(i);
         int treeType = child.getType();
+
+        /* Test helper
+    	if (this.belongsToClass.contains("domain.direct.violating.AccessInstanceVariableConstant")){
+    		if (child.getLine() == 13) {
+    			if (child.getType() == 6) {		
+    				boolean breakpoint1 = true;
+    			}
+    		}
+    	} */
+
         switch(treeType) {
         case JavaParser.VAR_DECLARATION:
             javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
@@ -41,7 +51,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             deleteTreeChild(child);
         	break;
         case JavaParser.ASSIGN:
-            if (child.getChild(0).getType() == JavaParser.DOT) {
+        	if ((child.getChild(0).getType() == JavaParser.DOT) || (child.getChild(1).getType() == JavaParser.DOT)) {
                 delegateInvocation(child, "accessPropertyOrField");
             }
             break;

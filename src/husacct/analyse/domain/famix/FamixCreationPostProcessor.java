@@ -255,10 +255,10 @@ class FamixCreationPostProcessor {
             	String to = "";
             	FamixInvocation theInvocation = null;
 
-                // Test helpers
-            	if (association.from.contains("AccessInstanceVariableIndirect_SuperClass")){
+                /* Test helpers
+            	if (association.from.contains("AccessInstanceVariableConstant")){
             		boolean breakpoint = true;
-            	}
+            	} */
 
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {

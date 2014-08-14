@@ -8,6 +8,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
     private String from;
     private String to = "";
+    private String leftVariableInAssignment = "";
+    private String rightVariableInAssignment = "";
     private int lineNumber;
     private String invocationName;
     private String belongsToMethod;
@@ -71,7 +73,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
         allIdents = true;
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
-
         checkKindOfTreeAndDelegate(treeNode);
 
     }
@@ -83,7 +84,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         if (TreeHasConstructorInvocation(treeNode)) {
             createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
         } else {
-            createMethodOrPropertyFieldInvocationDetails(treeNode);
+            createMethodInvocationDetails(treeNode);
         }
         createMethodInvocationDomainObject();
     }
@@ -103,7 +104,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
             if (treeType == JavaParser.CLASS_CONSTRUCTOR_CALL) {
                 constructorInMethodInvocationFound = true;
             }
-
             checkIfTreeHasConstructorInvocation(child);
         }
     }
@@ -161,12 +161,15 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
     }
 
-    private void createMethodOrPropertyFieldInvocationDetails(Tree tree) {
+    private void createMethodInvocationDetails(Tree tree) {
         if (tree != null) {
             for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
                 CommonTree treeNode = (CommonTree) tree.getChild(childCount);
                 if (treeNode.getType() == JavaParser.IDENT && childCount == 0 && treeNode.getParent().getType() != JavaParser.VAR_DECLARATOR) {
-                    setToAndNameOfInstance(treeNode.getText());
+                    if (this.to == null || this.to.equals("")) {
+                        to = treeNode.getText();
+                        nameOfInstance = to;
+                    }
                 }
                 if (treeNode.getType() == JavaParser.IDENT && childCount == 1 && invocationNameFound == false) {
                     invocationName = treeNode.getText();
@@ -176,7 +179,34 @@ public class JavaInvocationGenerator extends JavaGenerator {
                 if (treeNode.getType() == JavaParser.EXPR) {
                     this.parseExprToAssociation(treeNode);
                 }
-                createMethodOrPropertyFieldInvocationDetails(tree.getChild(childCount));
+                createMethodInvocationDetails(tree.getChild(childCount));
+            }
+        }
+    }
+
+    private void createPropertyOrFieldInvocationDetails(Tree tree) {
+        if (tree != null) {
+            for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
+                CommonTree treeNode = (CommonTree) tree.getChild(childCount);
+                if (childCount == 0 && (treeNode.getType() == JavaParser.IDENT) && (treeNode.getParent().getType() != JavaParser.VAR_DECLARATOR)) {
+                	leftVariableInAssignment = treeNode.getText();
+                	if (this.to == null || this.to.equals("")) {
+                        to = treeNode.getText();
+                        nameOfInstance = to;
+                    }
+                }
+                if (childCount == 1 && (treeNode.getType() == JavaParser.IDENT)) {
+                	rightVariableInAssignment = treeNode.getText();
+                	if (invocationNameFound == false) {
+                		invocationName = treeNode.getText();
+                		invocationNameFound = true;
+                		this.lineNumber = treeNode.getLine();
+                	}
+                }
+                if (treeNode.getType() == JavaParser.EXPR) {
+                    this.parseExprToAssociation(treeNode);
+                }
+                createPropertyOrFieldInvocationDetails(tree.getChild(childCount));
             }
         }
     }
@@ -212,13 +242,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
         }
     }
 
-    private void setToAndNameOfInstance(String thisTo) {
-        if (this.to == null || this.to.equals("")) {
-            to = thisTo;
-            nameOfInstance = to;
-        }
-    }
-
     public void generatePropertyOrFieldInvocToDomain(CommonTree treeNode, String belongsToMethod) {
         invocationNameFound = false;
         allIdents = true;
@@ -226,11 +249,23 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
         if (TreeHasConstructorInvocation(treeNode)) {
             createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
-        } else {
-            createMethodOrPropertyFieldInvocationDetails(treeNode);
             createPropertyOrFieldInvocationDomainObject();
+
+        } else {
+        	createPropertyOrFieldInvocationDetails(treeNode);
+        	if(treeNode.getType() == 6){
+        		// Create invocation of variable at left side of =
+        		this.to = leftVariableInAssignment;
+        		this.nameOfInstance = to;
+        		createPropertyOrFieldInvocationDomainObject();
+        		// Create invocation of variable at right side of =
+        		this.to = rightVariableInAssignment;
+        		this.nameOfInstance = to;
+        		createPropertyOrFieldInvocationDomainObject();
+        	} else {
+        		createPropertyOrFieldInvocationDomainObject();
+        	}
         }
-        createPropertyOrFieldInvocationDomainObject();
     }
 
     private void createPropertyOrFieldInvocationDomainObject() {

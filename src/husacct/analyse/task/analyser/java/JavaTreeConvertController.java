@@ -41,6 +41,13 @@ class JavaTreeConvertController {
 	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 	        createClassInformation(compilationUnitTree);
 	        // Test helper
+        	if(this.theClass.contains("AccessInstanceVariableConstant")){
+        		String parentName = parentClass;
+        		String className = theClass;
+        		//String innerClass = classTree.getChild(1).toString();
+        		String packageName = this.thePackage;
+        	}
+
 	        if (this.theClass != null) {
 	        	delegateASTToGenerators(compilationUnitTree);
 	        } 
