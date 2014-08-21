@@ -430,7 +430,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.AccessInstanceVariableIndirect_MethodVar";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -529,7 +529,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.AccessStaticVariableIndirect_MethodVar";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -575,7 +575,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -584,7 +584,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethodToString";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -629,8 +629,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirect_VarMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -638,8 +638,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirectIndirect_MethodVarMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -647,8 +647,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirectIndirect_VarVarMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -657,7 +657,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -732,8 +732,8 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void ViolationsInDirect_CompareToNumberOfInDirectDependencies_violatingfrom_dao(){
-		String fromModule = "domain.indirect.violatingfrom";
+	public void ViolationsInDirect_CompareToNumberOfInDirectDependencies_violating_dao(){
+		String fromModule = "domain.direct.violating";
 		String toModule = "technology.direct.dao";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();

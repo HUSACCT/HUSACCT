@@ -24,14 +24,14 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         Tree child = tree.getChild(i);
         int treeType = child.getType();
 
-        /* Test helper
-    	if (this.belongsToClass.contains("domain.direct.violating.AccessInstanceVariableConstant")){
-    		if (child.getLine() == 13) {
-    			if (child.getType() == 6) {		
+        // Test helper
+       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.CallStaticMethodIndirect_VarStaticMethod")){
+    		if (child.getLine() == 15) {
+//    			if (child.getType() == JavaParser.METHOD_CALL) {		
     				boolean breakpoint1 = true;
     			}
-    		}
-    	} */
+//    		}
+    	} 
 
         switch(treeType) {
         case JavaParser.VAR_DECLARATION:
@@ -40,6 +40,9 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             break;
         case JavaParser.CLASS_CONSTRUCTOR_CALL:
             delegateInvocation(child, "invocConstructor");
+            break;
+        case JavaParser.CAST_EXPR:
+            delegateInvocation(child, "accessPropertyOrField");
             break;
         case JavaParser.METHOD_CALL: 
             if (child.getChild(0).getType() == JavaParser.DOT) {
@@ -51,9 +54,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             deleteTreeChild(child);
         	break;
         case JavaParser.ASSIGN:
-        	if ((child.getChild(0).getType() == JavaParser.DOT) || (child.getChild(1).getType() == JavaParser.DOT)) {
                 delegateInvocation(child, "accessPropertyOrField");
-            }
             break;
         case JavaParser.FOR_EACH: case JavaParser.FOR: case JavaParser.WHILE:
             delegateLoop(child);

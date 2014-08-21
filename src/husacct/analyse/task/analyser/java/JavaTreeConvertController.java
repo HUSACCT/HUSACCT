@@ -40,13 +40,13 @@ class JavaTreeConvertController {
 	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
 	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 	        createClassInformation(compilationUnitTree);
-	        // Test helper
-        	if(this.theClass.contains("AccessInstanceVariableConstant")){
+	        /* Test helper
+        	if(this.theClass.contains("domain.direct.violating.DeclarationTypeCast")){
         		String parentName = parentClass;
         		String className = theClass;
         		//String innerClass = classTree.getChild(1).toString();
         		String packageName = this.thePackage;
-        	}
+        	} */
 
 	        if (this.theClass != null) {
 	        	delegateASTToGenerators(compilationUnitTree);

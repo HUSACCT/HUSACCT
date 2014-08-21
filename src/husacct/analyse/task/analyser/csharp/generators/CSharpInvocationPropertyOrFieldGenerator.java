@@ -54,7 +54,7 @@ public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvo
 	private void createPropertyOrFieldInvocationDetails(CommonTree tree) {
 		try {
 			this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-			this.to = setToName(tree);
+			this.to = getToValue(tree);
 			
 			CommonTree accessToClass = getAccessToClassTree(tree);
 			this.nameOfInstance = accessToClass.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();

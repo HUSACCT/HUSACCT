@@ -21,7 +21,7 @@ public abstract class AbstractCSharpInvocationGenerator extends CSharpGenerator 
 	
 	abstract void saveInvocationToDomain();
 	
-	protected String setToName(CommonTree treeNode) {
+	protected String getToValue(CommonTree treeNode) {
 		String toName = "";
 		walkTreeToGetNames(treeNode);	
 		

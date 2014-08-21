@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.java;
 import java.util.ArrayList;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
@@ -15,7 +16,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
     private String belongsToClass;
     private String accessControlQualifier = "package-private";
     private boolean isPureAccessor;
-    private ArrayList<String> declaredReturnType;
+    private String declaredReturnType;
     private String signature = "";
     public String name;
     public String uniqueName;
@@ -32,16 +33,15 @@ class JavaMethodGeneratorController extends JavaGenerator {
     }
 
     private void checkMethodType(CommonTree methodTree) {
-        declaredReturnType = new ArrayList<String>();
         int methodTreeType = methodTree.getType();
         switch(methodTreeType) {
         case JavaParser.CONSTRUCTOR_DECL: 
-            declaredReturnType.add("");
+            declaredReturnType = "";
             isConstructor = true;
             name = getClassOfUniqueName(belongsToClass);
             break;
         case JavaParser.VOID_METHOD_DECL:
-            declaredReturnType.add("");
+            declaredReturnType = "";
             isConstructor = false;
         	break;
         case JavaParser.FUNCTION_METHOD_DECL:
@@ -62,6 +62,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
         for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
             Tree child = tree.getChild(childCount);
             int treeType = child.getType();
+            
             switch(treeType) {
             case JavaParser.ABSTRACT: 
             	isAbstract = true;
@@ -79,7 +80,8 @@ class JavaMethodGeneratorController extends JavaGenerator {
             	accessControlQualifier = "protected"; 
             	break;
             case JavaParser.TYPE: 
-            	getReturnType(child); deleteTreeChild(child); 
+            	getReturnType(child); 
+            	deleteTreeChild(child); 
             	break;
             case JavaParser.IDENT: 
             	name = child.getText(); 
@@ -128,7 +130,26 @@ class JavaMethodGeneratorController extends JavaGenerator {
     }
 
     private void getReturnType(Tree tree) {
-        declaredReturnType = javaLocalVariableGenerator.generateMethodReturnType(tree, belongsToClass);
+        Tree child = tree.getChild(0);
+        Tree declaretype = child.getChild(0);
+        String foundType = "";
+        if (child.getType() != JavaParser.QUALIFIED_TYPE_IDENT) {
+            foundType = child.getText();
+        } else {
+            if (child.getChildCount() > 1) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    foundType += child.getChild(i).toString() + ".";
+                }
+            } else {
+                foundType = declaretype.getText();
+            }
+        }
+
+        if (foundType != null) {
+            this.declaredReturnType = foundType;
+        } else {
+        	this.declaredReturnType = "";
+       	}
     }
 
     private void deleteTreeChild(Tree treeNode) {
@@ -139,12 +160,9 @@ class JavaMethodGeneratorController extends JavaGenerator {
 
     private void createMethodObject() {
         uniqueName = belongsToClass + "." + this.name + signature;
-        ArrayList<String> returnTypes = new ArrayList<String>();
-        for (String s : declaredReturnType) {
-            if (!SkippedTypes.isSkippable(s)) {
-                returnTypes.add(s);
-            }
+        if (SkippedTypes.isSkippable(declaredReturnType)) {
+        	declaredReturnType = "";
         }
-        modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+        modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
     }
 }
