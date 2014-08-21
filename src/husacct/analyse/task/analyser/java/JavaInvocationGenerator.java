@@ -77,6 +77,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        if (TreeHasConstructorInvocation(treeNode)) {
 	            createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
 	        } else {
+	        	if (treeNode.getChild(0).getChild(0).getType() == JavaParser.METHOD_CALL) { // Needed for some indirect invocation test cases, e.g. CallStaticMethodIndirect_VarStaticMethod 
+		        	String invocTo = getAssignmentString(treeNode);
+		        	this.to = invocTo;
+		        	this.nameOfInstance = to;
+		        	this.invocationName = to;
+		        	createMethodInvocationDomainObject();
+	        	}
 	            createMethodInvocationDetails(treeNode);
 	        }
 	        createMethodInvocationDomainObject();
