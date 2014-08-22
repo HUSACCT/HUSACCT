@@ -25,8 +25,8 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         int treeType = child.getType();
 
         // Test helper
-       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.CallStaticMethodIndirect_VarStaticMethod")){
-    		if (child.getLine() == 15) {
+       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethod_ViaConstructor")){
+    		if (child.getLine() == 13) {
 //    			if (child.getType() == JavaParser.METHOD_CALL) {		
     				boolean breakpoint1 = true;
     			}

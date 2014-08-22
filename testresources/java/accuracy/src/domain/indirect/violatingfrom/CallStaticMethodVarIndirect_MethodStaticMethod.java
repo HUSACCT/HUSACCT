@@ -12,7 +12,7 @@ public class CallStaticMethodIndirect_VarStaticMethod {
 	// Indirect invocation of a static method
 	@SuppressWarnings("static-access")
 	public void case5(){
-		String s = b.getServiceOne().getsName();
+		String s = b.serviceOne.getsName();
 		System.out.println(s);
 		
 	}

@@ -590,7 +590,7 @@ public class Java_AccuracyTestDependencyDetection {
 
 	@Test
 	public void CallInstanceMethodIndirect_MethodMethod_ViaConstructor(){
-		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
+		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethodViaConstructor";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");

@@ -12,7 +12,7 @@ public class CallStaticMethodIndirect_MethodStaticMethod {
 	// Indirect invocation of a static method
 	@SuppressWarnings("static-access")
 	public void case5(){
-		String s = b.serviceOne.getsName();
+		String s = b.getServiceOne().getsName();
 		System.out.println(s);
 		
 	}

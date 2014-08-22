@@ -73,20 +73,32 @@ public class JavaInvocationGenerator extends JavaGenerator {
         allIdents = true;
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
+        
+        // Test helper
+       	if (this.from.equals("domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethodViaConstructor")){
+//    		if (lineNumber == 13) {
+//    			if (child.getType() == JavaParser.METHOD_CALL) {		
+    				boolean breakpoint1 = true;
+//    			}
+//    		}
+    	} 
+
         if ((treeNode.getChildCount() > 0) && (treeNode.getChild(0).getChildCount() > 0)) {
+        	int type = treeNode.getChild(0).getChild(0).getType();
+        	if ((type == JavaParser.METHOD_CALL) || (type == JavaParser.DOT)) { // Needed for some indirect invocation test cases, e.g. CallStaticMethodIndirect_VarStaticMethod 
+	        	String invocTo = getAssignmentString(treeNode);
+	        	this.to = invocTo;
+	        	this.nameOfInstance = to;
+	        	this.invocationName = to;
+	        	createMethodInvocationDomainObject();
+        	}
 	        if (TreeHasConstructorInvocation(treeNode)) {
 	            createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
+		        createMethodInvocationDomainObject();
 	        } else {
-	        	if (treeNode.getChild(0).getChild(0).getType() == JavaParser.METHOD_CALL) { // Needed for some indirect invocation test cases, e.g. CallStaticMethodIndirect_VarStaticMethod 
-		        	String invocTo = getAssignmentString(treeNode);
-		        	this.to = invocTo;
-		        	this.nameOfInstance = to;
-		        	this.invocationName = to;
-		        	createMethodInvocationDomainObject();
-	        	}
 	            createMethodInvocationDetails(treeNode);
+		        createMethodInvocationDomainObject();
 	        }
-	        createMethodInvocationDomainObject();
         }
     }
 
@@ -296,11 +308,17 @@ public class JavaInvocationGenerator extends JavaGenerator {
     		String left = getAssignmentString((CommonTree) tree.getChild(0));
     		String right = getAssignmentString((CommonTree) tree.getChild(1));
     		returnValue += left + "(" + right + ")";
+        } else if ((tree.getType() == JavaParser.STATIC_ARRAY_CREATOR) || (tree.getText().equals("STATIC_ARRAY_CREATOR"))) {
+        	if (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) {
+        		returnValue += tree.getChild(0).getChild(0).getText();
+        	} else {
+        		returnValue += "";
+        	}
         } else if (tree.getType() == JavaParser.ARGUMENT_LIST) {
         	if (tree.getChildCount() == 0) {
-        		returnValue = "";
+        		returnValue += "";
         	}
-        } else if ((tree.getType() == JavaParser.IDENT) || (tree.getType() == JavaParser.STRING_LITERAL)) {
+        } else if ((tree.getType() == JavaParser.IDENT) || (tree.getType() == JavaParser.STRING_LITERAL) || (tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT)) {
         	returnValue = tree.getText();
         } else if (tree.getType() == JavaParser.CAST_EXPR) {
         	CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
@@ -310,7 +328,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
         	// Generate FamixTypeCast
     		generateTypeCastToDomain(typeCastTo);
         } else {
-        	returnValue = "";
+        	int type = tree.getType();
+        	returnValue += "";
         }
         return returnValue;
     }

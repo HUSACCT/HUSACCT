@@ -324,10 +324,10 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.contains("domain.indirect.violatingfrom.CallStaticMethodIndirect_VarStaticMethod")){
-            		if (association.lineNumber == 15) {
+            	if (association.from.equals("domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethodViaConstructor")){
+//            		if (association.lineNumber == 13) {
             			boolean breakpoint = true;
-        			}
+//        			}
             	}
 
             	// Check if association.from refers to an existing class
@@ -506,7 +506,7 @@ class FamixCreationPostProcessor {
     		toIdentified = false;
         	
         	// Test helper
-        	if (invocation.from.contains("domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethod")){
+        	if (invocation.from.contains("domain.indirect.violatingfrom.CallStaticMethodIndirect_MethodStaticMethod")){
         		if (invocation.lineNumber == 15) {
         			boolean breakpoint = true;
     			}
@@ -573,9 +573,11 @@ class FamixCreationPostProcessor {
         		FamixBehaviouralEntity entity = theModel.behaviouralEntities.get(invocation.to);
         		if (entity.declaredReturnType != null && !entity.declaredReturnType.equals("")){
         			invocation.to = entity.declaredReturnType;
-        			invocation.type = "InvocMethod";
-        			toIdentified = true;
+        		} else {
+        			invocation.to = originalToType;
         		}
+    			invocation.type = "InvocMethod";
+    			toIdentified = true;
         	}
             
             
