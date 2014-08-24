@@ -47,6 +47,17 @@ class JavaAttributeAndLocalVariableGenerator {
     	JavaAnnotationGenerator annotationGenerator = null;
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree child = tree.getChild(i);
+
+            // Test helper
+           	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsParameter_POI")){
+        		if (child.getLine() == 12) {
+//        			if (child.getType() == JavaParser.METHOD_CALL) {		
+        				boolean breakpoint1 = true;
+//        			}
+        		}
+        	} 
+
+
             int treeType = child.getType();
             switch(treeType)
             {
@@ -68,11 +79,15 @@ class JavaAttributeAndLocalVariableGenerator {
                 annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
                 annotationGenerator.generateMethod((CommonTree) child);
             	break;
+            case JavaParser.METHOD_CALL:
+                if (child.getParent().getParent().getType() != JavaParser.METHOD_CALL) { // Prevents useless associations in case of chaining calls
+	            	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+	               	javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
+                }
+                break;
             case JavaParser.EXPR:
-                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-                if (child.getChild(0).getType() == JavaParser.METHOD_CALL) {
-                    javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child.getChild(0), belongsToMethod);
-                } else if (child.getChild(0).getType() == JavaParser.DOT) {
+                if ((child.getChild(0).getType() == JavaParser.DOT) && (child.getChild(0).getChild(0).getType() != JavaParser.METHOD_CALL)) {
+                    javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                     javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 }
             	break;

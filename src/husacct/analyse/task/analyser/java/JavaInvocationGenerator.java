@@ -1,8 +1,10 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class JavaInvocationGenerator extends JavaGenerator {
 
@@ -18,51 +20,27 @@ public class JavaInvocationGenerator extends JavaGenerator {
     private boolean constructorInMethodInvocationFound = false;
     private boolean foundAllMethodInvocInfo = false;
     private boolean allIdents = true;
+    private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
+
 
     public JavaInvocationGenerator(String uniqueClassName) {
         from = uniqueClassName;
     }
 
     public void generateConstructorInvocToDomain(CommonTree commonTree, String belongsToMethod) {
-        invocationName = "Constructor";
+    	this.invocationName = "Constructor";
         this.belongsToMethod = belongsToMethod;
-        createConstructorInvocationDetails(commonTree);
+        this. lineNumber = commonTree.getLine();
+       	if ((commonTree.getChildCount() > 0)) {
+        	String invocTo = getAssignmentString(commonTree);
+        	this.to = invocTo;
+        	this.nameOfInstance = to;
+        }
         createConstructorInvocationDomainObject();
     }
 
-    private void createConstructorInvocationDetails(Tree tree) {
-        boolean constructorFound = false;
-        if (tree.getType() == JavaParser.CLASS_CONSTRUCTOR_CALL) {
-            createConstructorInvocationDetailsWhenFoundClassConstructorCall((CommonTree) tree);
-            constructorFound = true;
-        }
-        if (constructorFound == false) {
-            int childcount = tree.getChildCount();
-            for (int i = 0; i < childcount; i++) {
-                Tree child = tree.getChild(i);
-                int treeType = child.getType();
-
-                if (treeType == JavaParser.CLASS_CONSTRUCTOR_CALL) {
-                    createConstructorInvocationDetailsWhenFoundClassConstructorCall((CommonTree) child);
-                }
-                createConstructorInvocationDetails(child);
-            }
-        }
-    }
-
-    private void createConstructorInvocationDetailsWhenFoundClassConstructorCall(CommonTree firstChildClassConstructorCall) {
-        Tree child = firstChildClassConstructorCall.getChild(0);
-        this.to = "";
-        if (child.getType() != JavaParser.QUALIFIED_TYPE_IDENT) {
-            this.to = child.getText();
-        } else {
-        	this.to = getToValue((CommonTree) child);
-        }
-        this.lineNumber = child.getLine();
-    }
-
     private void createConstructorInvocationDomainObject() {
-        if (!SkippedTypes.isSkippable(to)) {
+        if (to != null && to != "" && !SkippedTypes.isSkippable(to)) {
             modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
         }
     }
@@ -74,31 +52,21 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
         
-        // Test helper
-       	if (this.from.equals("domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethodViaConstructor")){
-//    		if (lineNumber == 13) {
-//    			if (child.getType() == JavaParser.METHOD_CALL) {		
+        /* Test helper
+       	if (this.from.equals("domain.indirect.violatingfrom.CallInstanceMethodIndirect_SuperClass")){
+    		if (lineNumber == 10) {
+    			if (treeNode.getType() == JavaParser.METHOD_CALL) {		
     				boolean breakpoint1 = true;
-//    			}
-//    		}
-    	} 
+    			}
+    		}
+    	} */
 
-        if ((treeNode.getChildCount() > 0) && (treeNode.getChild(0).getChildCount() > 0)) {
-        	int type = treeNode.getChild(0).getChild(0).getType();
-        	if ((type == JavaParser.METHOD_CALL) || (type == JavaParser.DOT)) { // Needed for some indirect invocation test cases, e.g. CallStaticMethodIndirect_VarStaticMethod 
-	        	String invocTo = getAssignmentString(treeNode);
-	        	this.to = invocTo;
-	        	this.nameOfInstance = to;
-	        	this.invocationName = to;
-	        	createMethodInvocationDomainObject();
-        	}
-	        if (TreeHasConstructorInvocation(treeNode)) {
-	            createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
-		        createMethodInvocationDomainObject();
-	        } else {
-	            createMethodInvocationDetails(treeNode);
-		        createMethodInvocationDomainObject();
-	        }
+       	if ((treeNode.getChildCount() > 0) && (treeNode.getChild(0).getChildCount() > 0)) {
+        	String invocTo = getAssignmentString(treeNode);
+        	this.to = invocTo;
+        	this.nameOfInstance = to;
+        	this.invocationName = to;
+        	createMethodInvocationDomainObject();
         }
     }
 
@@ -177,29 +145,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
         return returnValue;
     }
 
-    private void createMethodInvocationDetails(Tree tree) {
-        if (tree != null) {
-            for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
-                CommonTree treeNode = (CommonTree) tree.getChild(childCount);
-                if (treeNode.getType() == JavaParser.IDENT && childCount == 0 && treeNode.getParent().getType() != JavaParser.VAR_DECLARATOR) {
-                    if (this.to == null || this.to.equals("")) {
-                        to = treeNode.getText();
-                        nameOfInstance = to;
-                    }
-                }
-                if (treeNode.getType() == JavaParser.IDENT && childCount == 1 && invocationNameFound == false) {
-                    invocationName = treeNode.getText();
-                    invocationNameFound = true;
-                    this.lineNumber = treeNode.getLine();
-                }
-                if (treeNode.getType() == JavaParser.EXPR) {
-                    this.parseExprToAssociation(treeNode);
-                }
-                createMethodInvocationDetails(tree.getChild(childCount));
-            }
-        }
-    }
-
     private void createPropertyOrFieldInvocationDetails(Tree tree) {
         if (tree != null) {
             for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
@@ -267,7 +212,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	            createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
 	            createPropertyOrFieldInvocationDomainObject();
 	        } else {
-	        	if(treeNode.getType() == JavaParser.ASSIGN){
+	        	int treeType = treeNode.getType();
+	        	if((treeType == JavaParser.ASSIGN) || (treeType == JavaParser.NOT_EQUAL) || (treeType == JavaParser.EQUAL) || (treeType == JavaParser.GREATER_OR_EQUAL) || (treeType == JavaParser.LESS_OR_EQUAL)){
 	        		// CreateAssignmentDetails(treeNode);
 	                for (int childCount = 0; childCount < treeNode.getChildCount(); childCount++) {
 	                    CommonTree childNode = (CommonTree) treeNode.getChild(childCount);
@@ -300,37 +246,56 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
     private String getAssignmentString(CommonTree tree) {
     	String returnValue = "";
-        if (tree.getType() == JavaParser.DOT) { // "."
-    		String left = getAssignmentString((CommonTree) tree.getChild(0));
-    		String right = getAssignmentString((CommonTree) tree.getChild(1));
-    		returnValue += left + "." + right;
-        } else if (tree.getType() == JavaParser.METHOD_CALL) {
-    		String left = getAssignmentString((CommonTree) tree.getChild(0));
-    		String right = getAssignmentString((CommonTree) tree.getChild(1));
-    		returnValue += left + "(" + right + ")";
-        } else if ((tree.getType() == JavaParser.STATIC_ARRAY_CREATOR) || (tree.getText().equals("STATIC_ARRAY_CREATOR"))) {
-        	if (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) {
-        		returnValue += tree.getChild(0).getChild(0).getText();
-        	} else {
-        		returnValue += "";
-        	}
-        } else if (tree.getType() == JavaParser.ARGUMENT_LIST) {
-        	if (tree.getChildCount() == 0) {
-        		returnValue += "";
-        	}
-        } else if ((tree.getType() == JavaParser.IDENT) || (tree.getType() == JavaParser.STRING_LITERAL) || (tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT)) {
-        	returnValue = tree.getText();
-        } else if (tree.getType() == JavaParser.CAST_EXPR) {
-        	CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
-        	String typeCastTo = typeChild.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT).getChild(0).getText();
-    		String right = getAssignmentString((CommonTree) tree.getChild(1));
-    		returnValue += right;
-        	// Generate FamixTypeCast
-    		generateTypeCastToDomain(typeCastTo);
-        } else {
-        	int type = tree.getType();
-        	returnValue += "";
-        }
+    	try {
+	        if (tree.getType() == JavaParser.DOT) { // "."
+	    		String left = getAssignmentString((CommonTree) tree.getChild(0));
+	    		String right = getAssignmentString((CommonTree) tree.getChild(1));
+	    		returnValue += left + "." + right;
+	        } else if (tree.getType() == JavaParser.METHOD_CALL) {
+	    		String left = getAssignmentString((CommonTree) tree.getChild(0));
+	    		String right = getAssignmentString((CommonTree) tree.getChild(1));
+	    		returnValue += left + "(" + right + ")";
+	        } else if (tree.getType() == JavaParser.CLASS_CONSTRUCTOR_CALL) {
+	        	returnValue += getAssignmentString((CommonTree) tree.getChild(0));
+	        } else if ((tree.getType() == JavaParser.STATIC_ARRAY_CREATOR) || (tree.getText().equals("STATIC_ARRAY_CREATOR"))) {
+	        	if ((tree.getChildCount() > 0) && (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT)) {
+	        		returnValue += tree.getChild(0).getChild(0).getText();
+	        	} else {
+	        		returnValue += "";
+	        	}
+	        } else if ((tree.getType() == JavaParser.ARGUMENT_LIST) || (tree.getType() == JavaParser.EXPR)) {
+	    		for (int i = 0; i < tree.getChildCount(); i++) {
+	    			String argTo= getAssignmentString((CommonTree) tree.getChild(i));
+	    			createPropertyOrFieldInvocationDomainObject(argTo);
+	        		returnValue += "";
+	                /* if (i == tree.getChildCount() - 1) { // Activate to include the arguments in the method call
+	                	returnValue += argTo;
+	                } else {
+	                	returnValue += argTo + ",";
+	                } */
+	    		}
+	        } else if ((tree.getType() == JavaParser.IDENT) || (tree.getType() == JavaParser.STRING_LITERAL) || (tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT)) {
+	        	//returnValue = tree.getText();
+	        	returnValue = getToValue(tree);
+	        } else if (tree.getType() == JavaParser.CAST_EXPR) {
+	    		returnValue += getAssignmentString((CommonTree) tree.getChild(1));
+	    		// Create association of typecast-type access
+	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
+	        	if (typeChild != null) {
+	        		CommonTree identChild = (CommonTree) typeChild.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+	        		if ((identChild != null) && (identChild.getChildCount() > 0)) {
+	        			String typeCastTo = identChild.getChild(0).getText();
+	        			this.lineNumber = tree.getLine();
+	        			createPropertyOrFieldInvocationDomainObject(typeCastTo);
+	        		}
+	        	}
+	        } else {
+	        	//int type = tree.getType(); // Test helper
+	        	returnValue += "";
+	        }
+    	} catch (Exception e) {
+    		logger.error("Exception: "+ e);
+    	}
         return returnValue;
     }
 
@@ -340,12 +305,11 @@ public class JavaInvocationGenerator extends JavaGenerator {
         }
     }
     
-    public void generateTypeCastToDomain(String typeCastTo) {
-        if ((typeCastTo != null) && (typeCastTo != "") && !SkippedTypes.isSkippable(typeCastTo)) {
-        	String typeCastInvocationName = "";
-        	String typeCastNameOfInstance =  typeCastTo;
-            modelService.createPropertyOrFieldInvocation(from, typeCastTo, lineNumber, typeCastInvocationName, belongsToMethod, typeCastNameOfInstance);
+    private void createPropertyOrFieldInvocationDomainObject(String invocationTo) {
+        if ((invocationTo != null) && (invocationTo != "") && !SkippedTypes.isSkippable(invocationTo)) {
+            modelService.createPropertyOrFieldInvocation(from, invocationTo, lineNumber, invocationTo, belongsToMethod, invocationTo);
         }
     }
 
 }
+

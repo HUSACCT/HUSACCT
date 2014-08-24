@@ -345,7 +345,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.direct.violating.DeclarationTypeCastOfArgument";
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
+		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -430,7 +430,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.AccessInstanceVariableIndirect_MethodVar";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Call");
+		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -491,7 +491,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessObjectReferenceIndirect_AsParameter_POI(){
 		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsParameter_POI";
-		String toModule = "domain.indirect.indirectto.indirectto.POI";
+		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
@@ -529,7 +529,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.AccessStaticVariableIndirect_MethodVar";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Call");
+		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -629,7 +629,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirect_VarMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -638,7 +638,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirectIndirect_MethodVarMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -647,7 +647,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.indirect.violatingfrom.CallInstanceMethodIndirectIndirect_VarVarMethod";
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 

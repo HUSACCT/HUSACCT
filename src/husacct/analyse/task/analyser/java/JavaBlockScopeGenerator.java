@@ -25,8 +25,8 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         int treeType = child.getType();
 
         // Test helper
-       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.CallInstanceMethodIndirect_MethodMethod_ViaConstructor")){
-    		if (child.getLine() == 13) {
+       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_WithinIfStament_POI")){
+    		if (child.getLine() == 10) {
 //    			if (child.getType() == JavaParser.METHOD_CALL) {		
     				boolean breakpoint1 = true;
     			}
@@ -54,7 +54,10 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             deleteTreeChild(child);
         	break;
         case JavaParser.ASSIGN:
-                delegateInvocation(child, "accessPropertyOrField");
+            delegateInvocation(child, "accessPropertyOrField");
+            break;
+        case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: case JavaParser.LESS_OR_EQUAL:
+            delegateInvocation(child, "accessPropertyOrField");
             break;
         case JavaParser.FOR_EACH: case JavaParser.FOR: case JavaParser.WHILE:
             delegateLoop(child);
