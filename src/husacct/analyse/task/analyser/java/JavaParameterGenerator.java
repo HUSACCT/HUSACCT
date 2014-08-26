@@ -27,7 +27,15 @@ public class JavaParameterGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         this.belongsToClass = belongsToClass;
         setLineNumber(allParametersTree);
-        DelegateParametersFromTree(allParametersTree);
+
+        // Test helper
+       	if (this.belongsToClass.equals("domain.direct.violating.AccessLocalVariable_Argument")){
+    		if (lineNumber == 7) {
+    				boolean breakpoint1 = true;
+    		}
+    	} //
+
+       	DelegateParametersFromTree(allParametersTree);
         writeParameterToDomain();
         return signature;
     }
@@ -68,9 +76,8 @@ public class JavaParameterGenerator extends JavaGenerator {
         int childrenCount = tree.getChildCount();
         for (int i = 0; i < childrenCount; i++) {
             CommonTree currentChild = (CommonTree) tree.getChild(i);
-
-            if (currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT) {
-                getAttributeType(currentChild);
+            if (currentChild.getType() == JavaParser.TYPE) {
+            	setDeclareType(currentChild);
                 this.declareTypeFound = true;
                 this.signature += !this.signature.equals("") ? "," : "";
                 this.signature += this.declareType;
@@ -81,41 +88,26 @@ public class JavaParameterGenerator extends JavaGenerator {
         return "";
     }
 
-    public String getAttributeType(CommonTree tree) {
-        String attributeType = "";
-        attributeType = getAttributeRecursive(tree);
-        attributeType = attributeType.replace("<.", "<");
-        attributeType = attributeType.substring(1);
-        return attributeType;
-    }
-
-    public String getAttributeRecursive(CommonTree tree) {
-        String attributeType = "";
-        int childs = tree.getChildCount();
-        for (int childCount = 0; childCount < childs; childCount++) {
-            CommonTree childTree = (CommonTree) tree.getChild(childCount);
-            switch (childTree.getType()) {
-                case JavaParser.IDENT:
-                    if (declareType == null || declareType.equals("")) {
-                        declareType = childTree.getText();
-                    } else {
-                        currentTypes.add(childTree.getText());
-                    }
-                    attributeType += "." + childTree.getText();
-                    if (childTree.getChildCount() > 0) {
-                        attributeType += getAttributeRecursive(childTree);
-                    }
-                    break;
-                case JavaParser.GENERIC_TYPE_ARG_LIST:
-                    attributeType += "<";
-                    attributeType += getAttributeRecursive(childTree);
-                    attributeType += ">";
-                    break;
-                default:
-                    attributeType += getAttributeRecursive(childTree);
+    private void setDeclareType(Tree typeTree) {
+        Tree child = typeTree.getChild(0);
+        Tree declaretype = child.getChild(0);
+        String foundType = "";
+        if (child.getType() != JavaParser.QUALIFIED_TYPE_IDENT) {
+            foundType = child.getText();
+        } else {
+            if (child.getChildCount() > 1) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    foundType += child.getChild(i).toString() + ".";
+                }
+            } else {
+                foundType = declaretype.getText();
             }
         }
-        return attributeType;
+        if (this.declareType == null || this.declareType.equals("")) {
+            this.declareType = foundType;
+        } else {
+        	currentTypes.add(foundType);
+        }
     }
 
     private void deleteTreeChild(Tree treeNode) {
@@ -144,8 +136,11 @@ public class JavaParameterGenerator extends JavaGenerator {
             ArrayList<String> types = (ArrayList<String>) currentParam.get(2);
             this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
             String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")";
-            if (!SkippedTypes.isSkippable(type)) {
+            if (SkippedTypes.isSkippable(type)) {
+                modelService.createParameterOnly(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
+            } else {
                 modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
+            	
             }
         }
     }

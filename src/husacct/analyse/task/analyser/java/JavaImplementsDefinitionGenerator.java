@@ -40,7 +40,7 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator {
     private void createDomainObject() {
         to = to.substring(0, to.length() - 1); 
         if (!SkippedTypes.isSkippable(to)) {
-            modelService.createImplementsDefinition(from, to, lineNumber);
+            modelService.createInheritanceDefinition(from, to, lineNumber);
         }
     }
 

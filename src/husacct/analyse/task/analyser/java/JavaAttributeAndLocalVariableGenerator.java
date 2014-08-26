@@ -45,18 +45,17 @@ class JavaAttributeAndLocalVariableGenerator {
     private void walkThroughAST(Tree tree) {
     	JavaInvocationGenerator javaInvocationGenerator = null;
     	JavaAnnotationGenerator annotationGenerator = null;
+        boolean walkThroughChildren = true;
+
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree child = tree.getChild(i);
 
             // Test helper
-           	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsParameter_POI")){
-        		if (child.getLine() == 12) {
-//        			if (child.getType() == JavaParser.METHOD_CALL) {		
+           	if (this.belongsToClass.equals("domain.direct.violating.AccessLocalVariable_Argument")){
+        		if (child.getLine() == 8) {
         				boolean breakpoint1 = true;
-//        			}
         		}
-        	} 
-
+        	} //
 
             int treeType = child.getType();
             switch(treeType)
@@ -68,31 +67,32 @@ class JavaAttributeAndLocalVariableGenerator {
             case JavaParser.TYPE:
                 setDeclareType(child);
             	break;
-            case JavaParser.VAR_DECLARATOR_LIST:
+            case JavaParser.VAR_DECLARATOR:
                 setAttributeName(child);
             	break;
+            case JavaParser.EXPR:
+                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+                javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
+                walkThroughChildren = false;
+            	break;
+            case JavaParser.METHOD_CALL:
+            	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+               	javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
+            walkThroughChildren = false;
+            break;
             case JavaParser.CLASS_CONSTRUCTOR_CALL:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, belongsToMethod);
+                walkThroughChildren = false;
             	break;
             case JavaParser.AT:
                 annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
                 annotationGenerator.generateMethod((CommonTree) child);
             	break;
-            case JavaParser.METHOD_CALL:
-                if (child.getParent().getParent().getType() != JavaParser.METHOD_CALL) { // Prevents useless associations in case of chaining calls
-	            	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-	               	javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
-                }
-                break;
-            case JavaParser.EXPR:
-                if ((child.getChild(0).getType() == JavaParser.DOT) && (child.getChild(0).getChild(0).getType() != JavaParser.METHOD_CALL)) {
-                    javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-                    javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
-                }
-            	break;
             }
-            walkThroughAST(child);
+            if (walkThroughChildren) {
+            	walkThroughAST(child);
+            }
         }
     }
 
@@ -125,14 +125,14 @@ class JavaAttributeAndLocalVariableGenerator {
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree child = tree.getChild(i);
             int treeType = child.getType();
-            if (treeType == JavaParser.IDENT) {
+            if (treeType == JavaParser.IDENT) { // <164>
                 this.name = child.getText();
                 this.lineNumber = tree.getLine();
                 break;
             }
             setAttributeName(child);
         }
-    }
+   	}
 
     private void setDeclareType(Tree typeTree) {
         Tree child = typeTree.getChild(0);

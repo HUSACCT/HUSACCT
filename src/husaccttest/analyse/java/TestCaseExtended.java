@@ -326,7 +326,7 @@ public abstract class TestCaseExtended{
 		famix.createClass("abc.c", "c", "abc", false, false);
 //		famix.createInheritanceDefinition("abc.c", "abc.b", 1);
 		famix.createInheritanceDefinition("abc.b", "abc.a", 2);
-		famix.createImplementsDefinition("abc.c", "abc.b", 2);
+		famix.createInheritanceDefinition("abc.c", "abc.b", 2);
 	}
 	
 	private void fillFamixAsStub(){
@@ -372,11 +372,11 @@ public abstract class TestCaseExtended{
 		famix.createClass("indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door", false, false, "", "default", true);
 		famix.createClass("indirect.houses.attributes.Door", "Door", "indirect.houses.attributes", false, false);
 		
-		famix.createConstructorInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "");
+		famix.createMethodInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "", "InvocConstructor");
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", 10);
-		famix.createImplementsDefinition("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", 10);
+		famix.createInheritanceDefinition("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", 10);
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", 10);
-		famix.createConstructorInvocation("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 11, "Account", "AccountDAO()", "");
+		famix.createMethodInvocation("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 11, "Account", "AccountDAO()", "",  "InvocConstructor");
 		famix.createInheritanceDefinition("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", 10);
 		famix.createImplementsDefinition("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 10);
 		famix.createImplementsDefinition("domain.locationbased.latitude.Mapp", "infrastructure.socialmedia.locationbased.latitude.IMap", 10);

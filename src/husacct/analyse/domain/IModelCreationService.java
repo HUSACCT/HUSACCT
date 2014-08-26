@@ -44,17 +44,11 @@ public interface IModelCreationService {
 
     public void createImplementsDefinition(String from, String to, int lineNumber);
 
-    void createPropertyOrFieldInvocation(String from, int lineNumber, String to, String invocationName, String nameOfInstance);
+    public void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
 
-    void createMethodInvocation(String from, int lineNumber, String to, String invocationName, String nameOfInstance);
+    public void createMethodInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance, String type);
 
-    void createConstructorInvocation(String from, int lineNumber, String to, String invocationName, String nameOfInstance);
-
-    void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
-
-    void createMethodInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
-
-    void createConstructorInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
+    public void createDeclarationTypeCast(String from, String to, int lineNumber);
 
     public void createLocalVariable(String belongsToClass,
             String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString);
@@ -65,8 +59,8 @@ public interface IModelCreationService {
     public void createLocalVariableOnly(String belongsToClass, String declareType, String name,
             String uniqueName, int lineNumber, String belongsToMethodString);
 
-	public void createParameter(String name, String uniqueName, String declareType,
-            String belongsToClass, int lineNumber, String belongsToMethod);
+	public void createParameterOnly(String name, String uniqueName, String declareType,
+            String belongsToClass, int lineNumber, String belongsToMethod, List<String> declareTypes);
 
     public void createParameter(String name, String uniqueName,
             String declareType, String belongsToClass, int lineNumber,

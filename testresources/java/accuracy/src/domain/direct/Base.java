@@ -20,6 +20,10 @@ public class Base {
 	
 
 	public Base(){
-		
 	}
+		
+	public ProfileDAO getProfileInformation(String s, int i){
+		return new ProfileDAO();
+	}
+
 }

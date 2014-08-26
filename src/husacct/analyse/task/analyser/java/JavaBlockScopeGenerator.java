@@ -23,15 +23,16 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
     for (int i = 0; i < tree.getChildCount(); i++) {
         Tree child = tree.getChild(i);
         int treeType = child.getType();
+        boolean walkThroughChildren = true;
 
-        // Test helper
-       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_WithinIfStament_POI")){
+        /* Test helper
+       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass")){
     		if (child.getLine() == 10) {
 //    			if (child.getType() == JavaParser.METHOD_CALL) {		
     				boolean breakpoint1 = true;
     			}
 //    		}
-    	} 
+    	} */
 
         switch(treeType) {
         case JavaParser.VAR_DECLARATION:
@@ -45,9 +46,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             delegateInvocation(child, "accessPropertyOrField");
             break;
         case JavaParser.METHOD_CALL: 
-            if (child.getChild(0).getType() == JavaParser.DOT) {
-                delegateInvocation(child, "invocMethod");
-            }
+            delegateInvocation(child, "invocMethod");
             break;
         case JavaParser.THROW: case JavaParser.CATCH: case JavaParser.THROWS:
             delegateException(child);
@@ -55,17 +54,20 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         	break;
         case JavaParser.ASSIGN:
             delegateInvocation(child, "accessPropertyOrField");
+            walkThroughChildren = false;
             break;
-        case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: case JavaParser.LESS_OR_EQUAL:
+        case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: 
+        	case JavaParser.LESS_OR_EQUAL: case JavaParser.LESS_THAN: case JavaParser.GREATER_THAN:
             delegateInvocation(child, "accessPropertyOrField");
             break;
         case JavaParser.FOR_EACH: case JavaParser.FOR: case JavaParser.WHILE:
             delegateLoop(child);
             deleteTreeChild(child);
             break;
-        
     }
-        walkThroughBlockScope(child);
+        if (walkThroughChildren) {
+        	walkThroughBlockScope(child);
+        }
     }
     }
 

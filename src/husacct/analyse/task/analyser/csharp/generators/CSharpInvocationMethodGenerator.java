@@ -113,7 +113,7 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 	@Override
 	void saveInvocationToDomain() {
 		if(!SkippableTypes.isSkippable(to)){
-			modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+			modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocMethod");
 		}
 	}
 }

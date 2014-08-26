@@ -187,6 +187,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessLocalVariable_Argument(){
+		String fromModule = "domain.direct.violating.AccessLocalVariable_Argument";
+		String toModule = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void AccessObjectReferenceWithinIfStatement(){
 		String fromModule = "domain.direct.violating.AccessObjectReferenceWithinIfStatement";
 		String toModule = "technology.direct.dao.ProfileDAO";
@@ -345,7 +354,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.direct.violating.DeclarationTypeCastOfArgument";
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -504,6 +513,15 @@ public class Java_AccuracyTestDependencyDetection {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
+	public void AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide(){
+		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
+		String toModule = "domain.indirect.indirectTo.POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	@Test
