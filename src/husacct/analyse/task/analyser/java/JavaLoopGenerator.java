@@ -65,32 +65,10 @@ public class JavaLoopGenerator extends JavaGenerator {
             child = tree.getChild(childCount);
             int treeType = child.getType();
             switch(treeType) {
-            case JavaParser.TYPE:
-                if (tree.getType() != JavaParser.CAST_EXPR) {
-                    myLoopTree = (CommonTree) child;
-                    typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
-                    if (typeIdentTree != null) {
-                        String type = "";
-                        for (int count = 0; count < typeIdentTree.getChildCount(); count++) {
-                            type += !type.equals("") ? "." : "";
-                            type += typeIdentTree.getChild(count).getText();
-                        }
-
-                        int lineNumber = typeIdentTree.getFirstChildWithType(JavaParser.IDENT).getLine();
-                        if (tree.getChild(childCount + 1) != null) {
-                            javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, type, tree.getChild(childCount + 1).getText(), lineNumber);
-                        }
-                    } else if (tree.getChild(childCount + 1).getType() == JavaParser.IDENT) {
-                        int lineNumber = tree.getChild(childCount + 1).getLine();
-                        javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText(), tree.getChild(childCount + 1).getText(), lineNumber);
-                    } else {
-                        logger.warn("Problems with finding type. Please notice analyse");
-                    }
-                }
-            	break;
             case JavaParser.CAST_EXPR:
-                //a cast can ruin our algorithm. We delete the cast part since we don't need to know it anyway
-                deleteTreeChild(child.getChild(0));
+                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+                javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
+                deleteTreeChild(child);
             	break;
             case JavaParser.METHOD_CALL:
                 javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);

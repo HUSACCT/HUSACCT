@@ -525,6 +525,25 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType(){
+		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
+		String toModule = "domain.indirect.indirectTo.POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		// This test case should assert false, conform the algorithm of FamixCreationPostProcessor.findMethodOnName(); 2014-08-28.
+	}
+
+	@Test
+	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic(){
+		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
+		String toModule = "domain.indirect.indirectTo.POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
 	public void AccessObjectReferenceIndirect_WithinIfStament_POI(){
 		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_WithinIfStament_POI";
 		String toModule = "domain.indirect.indirectto.POI";

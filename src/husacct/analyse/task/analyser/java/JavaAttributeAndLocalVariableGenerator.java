@@ -29,6 +29,13 @@ class JavaAttributeAndLocalVariableGenerator {
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
         startFiltering(attributeTree, belongsToClass);
+        // Test helper
+       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic")){
+    		if (this.lineNumber == 10) {
+    				boolean breakpoint1 = true;
+    		}
+    	} 
+
         createLocalVariableObject();
     }
 
@@ -45,17 +52,17 @@ class JavaAttributeAndLocalVariableGenerator {
     private void walkThroughAST(Tree tree) {
     	JavaInvocationGenerator javaInvocationGenerator = null;
     	JavaAnnotationGenerator annotationGenerator = null;
-        boolean walkThroughChildren = true;
 
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree child = tree.getChild(i);
+            boolean walkThroughChildren = true;
 
             // Test helper
-           	if (this.belongsToClass.equals("domain.direct.violating.AccessLocalVariable_Argument")){
-        		if (child.getLine() == 8) {
+           	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic")){
+        		if (child.getLine() == 10) {
         				boolean breakpoint1 = true;
         		}
-        	} //
+        	} 
 
             int treeType = child.getType();
             switch(treeType)
@@ -65,7 +72,9 @@ class JavaAttributeAndLocalVariableGenerator {
                 setClassScope(child);
             	break;
             case JavaParser.TYPE:
-                setDeclareType(child);
+                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+                this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+                walkThroughChildren = false;
             	break;
             case JavaParser.VAR_DECLARATOR:
                 setAttributeName(child);
@@ -97,28 +106,32 @@ class JavaAttributeAndLocalVariableGenerator {
     }
 
     private void createAttributeObject() {
-        if (declareType.contains(".")) {
-            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
-        }
-        if (SkippedTypes.isSkippable(declareType)) {
-            modelService.createAttributeOnly(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
-        } else {
-            modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
-        }
-        declareType = "";
+    	if ((declareType != null) && (declareType != "")) {
+    		if (declareType.contains(".")) {
+	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
+	        }
+	        if (SkippedTypes.isSkippable(declareType)) {
+	            modelService.createAttributeOnly(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+	        } else {
+	            modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
+	        }
+	        declareType = "";
+    	}
     }
 
     private void createLocalVariableObject() {
-        if (declareType.contains(".")) {
-            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
-        }
-        if (SkippedTypes.isSkippable(declareType)) {
-            //modelService.createLocalVariableOnly(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
-            modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
-        } else {
-        	modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
-        }
-        	declareType = "";
+    	if ((declareType != null) && (declareType != "")) {
+	        if (declareType.contains(".")) {
+	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
+	        }
+	        if (SkippedTypes.isSkippable(declareType)) {
+	            //modelService.createLocalVariableOnly(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
+	            modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+	        } else {
+	        	modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+	        }
+	        	declareType = "";
+	    }
     }
 
     private void setAttributeName(Tree tree) {
@@ -133,28 +146,6 @@ class JavaAttributeAndLocalVariableGenerator {
             setAttributeName(child);
         }
    	}
-
-    private void setDeclareType(Tree typeTree) {
-        Tree child = typeTree.getChild(0);
-        Tree declaretype = child.getChild(0);
-        String foundType = "";
-        if (child.getType() != JavaParser.QUALIFIED_TYPE_IDENT) {
-            foundType = child.getText();
-        } else {
-            if (child.getChildCount() > 1) {
-                for (int i = 0; i < child.getChildCount(); i++) {
-                    foundType += child.getChild(i).toString() + ".";
-                }
-            } else {
-                foundType = declaretype.getText();
-            }
-        }
-        if (this.declareType == null || this.declareType.equals("")) {
-            this.declareType = foundType;
-        } else {
-            declareTypes.add(foundType);
-        }
-    }
 
     private void setAccesControllQualifier(Tree tree) {
         Tree ModifierList = tree.getChild(0);
@@ -173,15 +164,6 @@ class JavaAttributeAndLocalVariableGenerator {
                 break;
             }
         }
-    }
-
-    public void generateLocalLoopVariable(String belongsToClass, String belongsToMethod, String declareType, String name, int lineNumber) {
-        this.belongsToClass = belongsToClass;
-        this.belongsToMethod = belongsToClass + "." + belongsToMethod;
-        this.declareType = declareType;
-        this.name = name;
-        this.lineNumber = lineNumber;
-        createLocalVariableObject();
     }
 
 }

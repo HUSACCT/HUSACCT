@@ -36,7 +36,9 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 
         switch(treeType) {
         case JavaParser.VAR_DECLARATION:
-            javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
+            if (child.getChildCount() > 0) {
+            	javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
+            }
             deleteTreeChild(child);
             break;
         case JavaParser.CLASS_CONSTRUCTOR_CALL:

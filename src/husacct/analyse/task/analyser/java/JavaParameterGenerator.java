@@ -28,12 +28,12 @@ public class JavaParameterGenerator extends JavaGenerator {
         this.belongsToClass = belongsToClass;
         setLineNumber(allParametersTree);
 
-        // Test helper
+        /* Test helper
        	if (this.belongsToClass.equals("domain.direct.violating.AccessLocalVariable_Argument")){
     		if (lineNumber == 7) {
     				boolean breakpoint1 = true;
     		}
-    	} //
+    	} */
 
        	DelegateParametersFromTree(allParametersTree);
         writeParameterToDomain();

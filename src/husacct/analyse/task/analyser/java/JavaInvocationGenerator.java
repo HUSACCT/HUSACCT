@@ -27,7 +27,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         this. lineNumber = commonTree.getLine();
        	if ((commonTree.getChildCount() > 0)) {
-        	String invocTo = getAssignmentString(commonTree);
+        	String invocTo = getCompleteToString(commonTree);
         	this.to = invocTo;
         	this.nameOfInstance = to;
             if (to != null && to != "" && !SkippedTypes.isSkippable(to)) {
@@ -40,7 +40,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
       	if ((treeNode.getChildCount() > 0) && (treeNode.getChild(0).getChildCount() > 0)) {
-        	String invocTo = getAssignmentString(treeNode);
+        	String invocTo = getCompleteToString(treeNode);
         	this.to = invocTo;
         	this.nameOfInstance = to;
         	this.invocationName = to;
@@ -58,10 +58,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
             for (int childCount = 0; childCount < treeNode.getChildCount(); childCount++) {
                 CommonTree childNode = (CommonTree) treeNode.getChild(childCount);
                 if (childCount == 0) {
-                	leftVariableInAssignment = getAssignmentString(childNode);
+                	leftVariableInAssignment = getCompleteToString(childNode);
                 }
                 if (childCount == 1) {
-                	rightVariableInAssignment = getAssignmentString(childNode);
+                	rightVariableInAssignment = getCompleteToString(childNode);
             		this.lineNumber = childNode.getLine();
                 }
             }
@@ -85,7 +85,12 @@ public class JavaInvocationGenerator extends JavaGenerator {
         }
     }
 
-    private String getAssignmentString(CommonTree tree) {
+    /* Returns the complete string of an expression of a variable, also in case of chaining call/access combinations.
+     * In case of a type cast, it does not include the type cast in the returnValue, but it creates a declaration association.
+     * Use this method to determine the to-string in case in the following cases: 
+     * 1) type declaration of a (local) variable; 2) at both sides of an assignment; 3) at both sides of an comparison. 
+     */
+    public String getCompleteToString(CommonTree tree) {  
     	String returnValue = "";
     	try {
     		String left = "";
@@ -96,17 +101,17 @@ public class JavaInvocationGenerator extends JavaGenerator {
     		}
     		switch(treeType) {
 	        case JavaParser.DOT: // "."
-	    		left = getAssignmentString((CommonTree) tree.getChild(0));
-	    		right = getAssignmentString((CommonTree) tree.getChild(1));
+	    		left = getCompleteToString((CommonTree) tree.getChild(0));
+	    		right = getCompleteToString((CommonTree) tree.getChild(1));
 	    		returnValue += left + "." + right;
 	            break;
 	        case JavaParser.METHOD_CALL:
-	    		left = getAssignmentString((CommonTree) tree.getChild(0));
-	    		right = getAssignmentString((CommonTree) tree.getChild(1));
+	    		left = getCompleteToString((CommonTree) tree.getChild(0));
+	    		right = getCompleteToString((CommonTree) tree.getChild(1));
 	    		returnValue += left + "(" + right + ")";
 	            break;
-	        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST:
-	        	returnValue += getAssignmentString((CommonTree) tree.getChild(0));
+	        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST: case JavaParser.TYPE:
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case JavaParser.STATIC_ARRAY_CREATOR: 
 	        	if ((tree.getChildCount() > 0) && (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT)) {
@@ -116,18 +121,16 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        	}
 	            break;
 	        case JavaParser.EXPR:
-	        	returnValue += getAssignmentString((CommonTree) tree.getChild(0));
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case JavaParser.ARGUMENT_LIST:
-	            //Test helper
-	           	if (from.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide")){
-	        		boolean breakpoint1 = true;
-	        	}
-
 	    		for (int i = 0; i < tree.getChildCount(); i++) {
-	    			String argTo= getAssignmentString((CommonTree) tree.getChild(i));
+	    			String argTo= getCompleteToString((CommonTree) tree.getChild(i));
 	    			createPropertyOrFieldInvocationDomainObject(argTo);
 	        		//Includes the arguments in the method call signature
+	    			if (argTo.contains(".")) { // Currently, arguments with a "." disable the indirect dependency detection algorithm. 
+	    				argTo = "";
+	    			}
 	        		if (i == tree.getChildCount() - 1) { 
 	                	returnValue += argTo;
 	                } else {
@@ -135,8 +138,11 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	                } 
 	    		}
 	            break;
-	        case JavaParser.IDENT: case JavaParser.QUALIFIED_TYPE_IDENT:
-	        	returnValue = getToValue(tree);
+	        case JavaParser.IDENT:
+	        	returnValue = tree.getText();
+	            break;
+	        case JavaParser.QUALIFIED_TYPE_IDENT:
+	        	returnValue = tree.getChild(0).getText();
 	            break;
 	        case JavaParser.DECIMAL_LITERAL: case JavaParser.INT: 
 	        	returnValue += "int";
@@ -154,7 +160,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        	returnValue += "byte";
 	            break;
 	        case JavaParser.CAST_EXPR:
-	    		returnValue += getAssignmentString((CommonTree) tree.getChild(1));
+	    		returnValue += getCompleteToString((CommonTree) tree.getChild(1));
 	    		// Create association of typecast-type access
 	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
 	        	if (typeChild != null) {
@@ -171,42 +177,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
     	} catch (Exception e) {
     		logger.error("Exception: "+ e);
     	}
-        return returnValue;
-    }
-
-    private String getToValue(CommonTree tree) {
-    	String returnValue = "";
-        if (tree.getChildCount() > 1) {
-            for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
-                if (childCount == tree.getChildCount() - 1) {
-                	returnValue += tree.getChild(childCount).toString();
-                } else {
-                	returnValue += tree.getChild(childCount).toString() + ".";
-                }
-            }
-        } else if (tree.getChildCount() == 1){
-        	returnValue = tree.getChild(0).getText();
-        } else {
-        	returnValue = tree.getText();
-        }
-        return returnValue;
-    }
-
-    private String getArgumentValueOrType(CommonTree tree) {
-    	String returnValue = "";
-        if (tree.getChildCount() > 1) {
-            for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
-                if (childCount == tree.getChildCount() - 1) {
-                	returnValue += tree.getChild(childCount).toString();
-                } else {
-                	returnValue += tree.getChild(childCount).toString() + ".";
-                }
-            }
-        } else if (tree.getChildCount() == 1){
-        	returnValue = tree.getChild(0).getText();
-        } else {
-        	returnValue = tree.getText();
-        }
         return returnValue;
     }
 
