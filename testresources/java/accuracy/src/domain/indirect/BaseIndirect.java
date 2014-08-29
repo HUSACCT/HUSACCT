@@ -2,7 +2,7 @@ package domain.indirect;
 
 import technology.direct.subclass.CallInstanceSubClassDOA;
 import technology.direct.subclass.CallInstanceSubSubClassDOA;
-import domain.indirect.indirectTo.POI;
+import domain.indirect.indirectto.POI;
 
 public class BaseIndirect {
 	

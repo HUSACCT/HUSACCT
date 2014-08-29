@@ -188,7 +188,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
     
     private void createPropertyOrFieldInvocationDomainObject(String invocationTo) {
         if ((invocationTo != null) && (invocationTo != "") && !SkippedTypes.isSkippable(invocationTo)) {
-            modelService.createPropertyOrFieldInvocation(from, invocationTo, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+            modelService.createPropertyOrFieldInvocation(from, invocationTo, lineNumber, invocationTo, belongsToMethod, invocationTo);
         }
     }
 }

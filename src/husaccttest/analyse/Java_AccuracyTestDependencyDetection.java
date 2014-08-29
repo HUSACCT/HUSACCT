@@ -178,6 +178,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessInstanceVariable_SetArgumentValue(){
+		String fromModule = "domain.direct.violating.AccessInstanceVariable_SetArgumentValue";
+		String toModule = "technology.direct.dao.CheckInDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
 	public void AccessObjectReferenceAsParameter(){
 		String fromModule = "domain.direct.violating.AccessObjectReferenceAsParameter";
 		String toModule = "technology.direct.dao.ProfileDAO";
@@ -187,12 +196,21 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void AccessLocalVariable_Argument(){
-		String fromModule = "domain.direct.violating.AccessLocalVariable_Argument";
+	public void AccessLocalVariable_ReadArgumentValue(){
+		String fromModule = "domain.direct.violating.AccessLocalVariable_ReadArgumentValue";
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void AccessLocalVariable_SetArgumentValue(){
+		String fromModule = "domain.direct.violating.AccessLocalVariable_SetArgumentValue";
+		String toModule = "technology.direct.dao.CheckInDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -286,7 +304,7 @@ public class Java_AccuracyTestDependencyDetection {
 		typesToFind.add("Call");
 		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
 		toModule = "technology.direct.dao.CallInstanceSuperClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
+		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, true); 
 		boolean totalOutcome = false;
 		if ((outcome1 == true) || (outcome2 == true)) {
 			totalOutcome = true;
@@ -301,12 +319,10 @@ public class Java_AccuracyTestDependencyDetection {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "technology.direct.subclass.CallInstanceSubClassDOA";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
 		toModule = "technology.direct.dao.CallInstanceSuperClassDAO";
-		boolean outcome3 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
+		boolean outcome3 = areDependencyTypesDetected(fromModule, toModule, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true) || (outcome3 == true)) {
+		if ((outcome1 == true) || (outcome3 == true)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -518,7 +534,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide(){
 		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
-		String toModule = "domain.indirect.indirectTo.POI";
+		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -527,7 +543,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType(){
 		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
-		String toModule = "domain.indirect.indirectTo.POI";
+		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
@@ -537,7 +553,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic(){
 		String fromModule = "domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
-		String toModule = "domain.indirect.indirectTo.POI";
+		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));

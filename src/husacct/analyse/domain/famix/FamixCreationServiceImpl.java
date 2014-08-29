@@ -405,7 +405,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         creationPostProcessor.processBehaviouralEntities();
         creationPostProcessor.processInheritanceAssociations();
         creationPostProcessor.processWaitingAssociations();
-        creationPostProcessor.processWaitingIndirectAssociations();
+        creationPostProcessor.processWaitingDerivedAssociations();
         associationsNumber = model.associations.size();
         this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());
     }

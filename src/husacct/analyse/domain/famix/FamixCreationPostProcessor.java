@@ -29,7 +29,7 @@ class FamixCreationPostProcessor {
     private HashMap<String, ArrayList<FamixMethod>> sequencesPerMethod;
     private HashMap<String, HashSet<String>> inheritanceAssociationsPerClass;
     private List<FamixAssociation> indirectAssociations = new ArrayList<FamixAssociation>();
-    private List<FamixInvocation> waitingIndirectAssociations = new ArrayList<FamixInvocation>();
+    private List<FamixInvocation> waitingDerivedAssociations = new ArrayList<FamixInvocation>();
 
     private final Logger logger = Logger.getLogger(FamixCreationPostProcessor.class);
     private int numberOfNotConnectedWaitingAssociations;
@@ -37,12 +37,12 @@ class FamixCreationPostProcessor {
     private int amountOfModulesConnected;
     private int progressPercentage;
     private int numberOfWaitingObjects; 
-    private int numberOfIndirectAssociations;
+    private int numberOfDerivedAssociations;
 
     public FamixCreationPostProcessor() {
         theModel = FamixModel.getInstance();
         numberOfNotConnectedWaitingAssociations = 0;
-		numberOfIndirectAssociations = 0;
+		numberOfDerivedAssociations = 0;
         amountOfModulesConnected = 0;
         progressPercentage = 0;
     }
@@ -330,7 +330,6 @@ class FamixCreationPostProcessor {
 		int numberOfConnectedViaPackage = 0;
 		int numberOfConnectedViaAttribute = 0;
 		int numberOfConnectedViaLocalVariable = 0;
-		int numberOfConnectedViaSuperclass = 0;
 
         for (FamixAssociation association : theModel.waitingAssociations) {
             try {
@@ -339,13 +338,14 @@ class FamixCreationPostProcessor {
             	boolean toHasValue = false;
             	boolean chainingInvocation = false;
             	boolean typeIsAccess = false;
+            	boolean nextAssociationIsIndirect = false;
             	String toRemainderChainingInvocation = "";
             	String toString = "";
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic")){
-            		if (association.lineNumber == 11) {
+            	if (association.from.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide")){
+            		if (association.lineNumber == 9) {
             			boolean breakpoint = true;
         			}
             	}
@@ -389,10 +389,10 @@ class FamixCreationPostProcessor {
             	// Objective: If FamixAssociation.to is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents. 
 
                 /* 0) Select and process FamixInvocations with a composed to-name
-                 * If FamixAssociation.to is composed of different names (a chaining assignment or call), a dependency to the type of the first identifier is a direct dependency.
-                 * Dependencies to types of the following identifiers are indirect.
-                 * Algorithm: Split the names and try to identify the type of the first variable. Create a separate indirect association to identify dependencies to following names (variables or methods). 
-                 * If the type of the first name is identified, replace the name by the type in the indirect association, and store this association to be processed later on.   
+                 * If FamixAssociation.to is composed of substrings (a chaining assignment or call), a dependency to the type of the first substring is a direct dependency.
+                 * Dependencies to types of the following substrings are determined afterwards. The next one is indirect, if the first substring is a method or variable of a super class, otherwise it is direct.
+                 * Algorithm: Split the string and try to identify the type of the first substring. Create a separate association to identify dependencies to following substring (variables or methods). 
+                 * If the type of the first substring is identified, replace the substring by the type in the next association, and store this association to be processed later on.   
                  * */
                 if (fromExists && !toExists && toHasValue){
                 	if ((association instanceof FamixInvocation)) {
@@ -438,39 +438,29 @@ class FamixCreationPostProcessor {
                 	}
                 }
 
-            	// 3) Determine if if association.to is an (inherited) attribute. If so determine the type of the attribute. 
+            	// 3) Determine if association.to is an (inherited) attribute. If so determine the type of the attribute. 
                 if ((association instanceof FamixInvocation) && (!association.to.endsWith(")"))) {
-    	        	boolean attributeFound = false;
-    	        	toString = association.from + "." + association.to;
-    	    	    if (theModel.structuralEntities.containsKey(toString)) {
-    	            	attributeFound = true;
-    	            } else { // Determine if nextToString is an inherited attribute 
-    	        		String superClassName = indirectAssociations_findSuperClassThatDeclaresVariable(association.from, association.to);
-    	        		if ((superClassName != null) && !superClassName.equals("")) {
-    	        			toString = superClassName + "." + association.to;
-    	        			if (theModel.structuralEntities.containsKey(toString)) {
-    	                    	attributeFound = true;
-    		                	// Create an access dependency on the superclass.
-    		    				FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", association.from, superClassName, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, true);
-    		                	addToModel(newIndirectInvocation);  
-    			    			numberOfIndirectAssociations ++;
-    			    			numberOfConnectedViaSuperclass++;
-    	                    }
-    	    			}
-    	        	}
-    	            if (attributeFound) {
-    	        		FamixStructuralEntity entity = theModel.structuralEntities.get(toString);
+    	        	String classOfAttribute = findAttribute(association.from, association.to);
+    	            if (!classOfAttribute.equals("")) {
+	        			if (!classOfAttribute.equals(association.from)) { // classOfAttribute refers to a super class  
+		                	// Create an access dependency on the superclass.
+		    				FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", association.from, classOfAttribute, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, false);
+		                	addToModel(newIndirectInvocation);  
+			    			numberOfDerivedAssociations ++;
+	                    }
+    	        		FamixStructuralEntity entity = theModel.structuralEntities.get(classOfAttribute + "." + association.to);
     	        		if (entity.declareType != null && !entity.declareType.equals("")){
     	        			association.to = entity.declareType;
     	                	toExists = true;
                 			typeIsAccess = true;
+        	            	numberOfConnectedViaAttribute++;
     	        		}
-    	            	numberOfConnectedViaAttribute++;
+
     	        	}
                 } 
  
                 // 4) Find out or association.to refers to a local variable or parameter: Get StructuralEntity on key ClassName.MethodName.VariableName
-	            if (fromExists && !toExists && toHasValue){
+	            if (fromExists && !toExists && toHasValue && (!association.to.endsWith(")"))){
                     if (association instanceof FamixInvocation) {
 		            	String searchKey = association.from + "." + theInvocation.belongsToMethod + "." + theInvocation.to;
 	                	if (theModel.structuralEntities.containsKey(searchKey)) {
@@ -488,29 +478,38 @@ class FamixCreationPostProcessor {
             	// 5) Determine if association.to is an (inherited) method. If so determine the return type of the method. 
                 if ((association instanceof FamixInvocation) && (association.to.endsWith(")"))) {
                 	boolean methodFound = false;
-                	toString = association.from + "." + association.to;
-    	            if (theModel.behaviouralEntities.containsKey(toString)) {
+                	FamixMethod foundMethod = findInvokedMethodOnName(association.from, theInvocation.belongsToMethod, association.from, association.to);
+    	            if (foundMethod != null) {
     	            	methodFound = true;
     	            } else { // Determine if association.to is an inherited method. 
-    	        		String superClassName = indirectAssociations_findSuperClassThatContainsMethod(association.from, association.to);
+    	        		String superClassName = indirectAssociations_findSuperClassThatContainsMethod(association.from, theInvocation.belongsToMethod, association.from, association.to);
     	        		if ((superClassName != null) && !superClassName.equals("")) {
-    	        			toString = superClassName + "." + association.to;
-    	        			if (theModel.behaviouralEntities.containsKey(toString)) {
-    	        				methodFound = true;
+    	                	foundMethod = findInvokedMethodOnName(association.from, theInvocation.belongsToMethod, superClassName, association.to);
+    	    	            if (foundMethod != null) {
+    	    	            	methodFound = true;
     		                	// Create a call dependency on the superclass;
-    		    				FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("InvocMethod", theInvocation.from, superClassName, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, true);
-    		                	addToModel(newIndirectInvocation);  
-    			    			numberOfIndirectAssociations ++;
-    			    			numberOfConnectedViaSuperclass++;
+    		    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("InvocMethod", theInvocation.from, superClassName, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, false);
+    		                	addToModel(newInvocation);  
+    			    			numberOfDerivedAssociations ++;
     	                    }
     	    			}
     	            }
     	            if (methodFound) {
     	            	// Determine the return type of the method.
-    	            	FamixBehaviouralEntity entity = theModel.behaviouralEntities.get(toString);
-    	        		if (entity.declaredReturnType != null && !entity.declaredReturnType.equals("")){
-    	        			association.to = entity.declaredReturnType;
-    	                	toExists = true;
+    	                if ((foundMethod != null) && (foundMethod.declaredReturnType != null) && !foundMethod.declaredReturnType.equals("")) {
+    	        			numberOfNotConnectedWaitingAssociations ++;
+    	                	association.to = foundMethod.declaredReturnType;
+    	                	theInvocation.invocationName = toRemainderChainingInvocation;
+    	                	if (chainingInvocation) { 
+    	                		// The invocation is not added to the model yet, because it reflects an invisible access of the return type of the method. Creating a new derived invocation too is redundant.
+	    	                	association.type = "Undetermined";
+	    	                	waitingDerivedAssociations.add(theInvocation);
+    	                	} else {
+								// The invocation is added  as an access invocation to the referred type; the return value of the complete string.
+	    	                	association.type = "AccessPropertyOrField";
+		            			toExists = true;
+							}
+
     	        		}
     	        	}
              	}
@@ -522,20 +521,23 @@ class FamixCreationPostProcessor {
             				association.type = "AccessPropertyOrField";
             			}
 						addToModel(association);
+					} else {
+	        			numberOfNotConnectedWaitingAssociations ++;
+					}
+					if (association instanceof FamixInvocation) {
 						if (chainingInvocation) { // If true, create an association to identify dependencies to the remaining parts of the chain. Store it temporarily; it is processed in a separate method. 
 		                    FamixInvocation indirectAssociation = new FamixInvocation();
 		                    indirectAssociation.type = "Undetermined";
-		                    indirectAssociation.isIndirect = false;
+		                    indirectAssociation.isIndirect = nextAssociationIsIndirect;
 		                    indirectAssociation.from = association.from;
 		                    indirectAssociation.lineNumber = association.lineNumber;
 		                    indirectAssociation.to = association.to;
 		                    indirectAssociation.invocationName = toRemainderChainingInvocation;
 		                    indirectAssociation.belongsToMethod = theInvocation.belongsToMethod;
 		                    indirectAssociation.nameOfInstance = theInvocation.nameOfInstance;
-		                    waitingIndirectAssociations.add(indirectAssociation);
+		                    waitingDerivedAssociations.add(indirectAssociation);
+						} else {
 						}
-					} else {
-	        			numberOfNotConnectedWaitingAssociations ++;
 					}
                 } else {
         			numberOfNotConnectedWaitingAssociations ++;
@@ -559,17 +561,17 @@ class FamixCreationPostProcessor {
         }
 
         this.logger.info(" Connected via 1) Import: " + numberOfConnectedViaImport 
-        		+ ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Attribute: " + numberOfConnectedViaAttribute + ", 4) Inherited var/method: " + numberOfConnectedViaSuperclass 
+        		+ ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Attribute: " + numberOfConnectedViaAttribute + ", 4) Inherited var/method: " + numberOfDerivedAssociations 
         		+ ", 5) Local var: " + numberOfConnectedViaLocalVariable);
     }
     
 	// Objective: Identify dependencies to the remaining parts of the chain in a chaining invocation (assignment or call).
-    void processWaitingIndirectAssociations() {
+    void processWaitingDerivedAssociations() {
     	List<FamixInvocation> addedInvocations = new ArrayList<FamixInvocation>();
-    	for (FamixInvocation invocation : waitingIndirectAssociations) {
+    	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	// Test helper
-        	if (invocation.from.contains("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType")){
+        	if (invocation.from.contains("domain.direct.violating.AccessInstanceVariable_SetArgumentValue")){
         		if (invocation.lineNumber == 10) {
         			boolean breakpoint = true;
     			}
@@ -578,15 +580,15 @@ class FamixCreationPostProcessor {
         	// 1) Split invocationName. Precondition: invocation.to is a type and invocationName contains the remainder of the string (determined in the previous process step).
         	String originalToType = invocation.to;
         	String nextToString = "";
-    		boolean chainingInvocation = false;
+    		boolean continueChaining = false;
         	String toRemainderChainingInvocation = "";
             String[] allSubstrings = invocation.invocationName.split("\\.");
-            if (allSubstrings.length > 0) {
+            if ((allSubstrings.length > 0) && (!allSubstrings[0].equals(""))) {
             	nextToString = allSubstrings[0];
 	            invocation.to = invocation.to + "." + nextToString; 
 	            // Put the remainder in a variable; needed to create a separate indirect association, later on
 	            if (allSubstrings.length > 1) {
-	            	chainingInvocation = true;
+	            	continueChaining = true;
 	                toRemainderChainingInvocation = allSubstrings[1];
 	                for (int i = 2; i < allSubstrings.length ; i++) {
 	                	toRemainderChainingInvocation = toRemainderChainingInvocation + "." + allSubstrings[i];
@@ -597,30 +599,36 @@ class FamixCreationPostProcessor {
         	/* 2) Determine if the second substring is an (inherited) attribute. If so determine the type of the attribute. 
         	 * If the type refers to a FamixClass or FamixLibrary, set this type as invocation.to. */
         	boolean addInvocation = false;
+        	String toTypeNewIndirectInvocation = "";
             if (!invocation.to.endsWith(")")) {
 	        	boolean attributeFound = false;
-	            if (theModel.structuralEntities.containsKey(invocation.to)) {
+	        	String searchKey = invocation.to;
+	            if (theModel.structuralEntities.containsKey(searchKey)) {
 	            	attributeFound = true;
+        			invocation.to = originalToType;
 	            } else { // Determine if nextToString is an inherited attribute 
 	        		String superClassName = indirectAssociations_findSuperClassThatDeclaresVariable(originalToType, nextToString);
 	        		if ((superClassName != null) && !superClassName.equals("")) {
-	        			invocation.to = superClassName + "." + nextToString;
-	        			if (theModel.structuralEntities.containsKey(invocation.to)) {
+	        			invocation.to = superClassName;
+	        			searchKey = superClassName + "." + nextToString;
+	        			if (theModel.structuralEntities.containsKey(searchKey)) {
 	                    	attributeFound = true;
-		                	// Create an access dependency on the superclass; the access dependency to the subclass is added under: if (addInvocation)
-		    				FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", invocation.from, superClassName, invocation.lineNumber, invocation.belongsToMethod, nextToString, invocation.nameOfInstance, true);
-		                	addToModel(newIndirectInvocation);  
-			    			numberOfIndirectAssociations ++;
+		        			invocation.to = superClassName;
+		        			invocation.isIndirect = true;
 	                    }
 	    			}
 	        	}
+            	// This current association should be added as an access call dependency on the original to-type or on the superclass
+    			invocation.type = "AccessPropertyOrField";
+    			invocation.invocationName = nextToString;
+    			addInvocation = true;
 	            if (attributeFound) {
-	        		FamixStructuralEntity entity = theModel.structuralEntities.get(invocation.to);
+        			// Determine if a next invocation in the chain needs to be created
+	        		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
 	        		if (entity.declareType != null && !entity.declareType.equals("")){
-	        			invocation.to = entity.declareType;
-	        			invocation.type = "AccessPropertyOrField";
-	        			invocation.isIndirect = true;
-	        			addInvocation = true;
+	        			toTypeNewIndirectInvocation = entity.declareType;
+	        		} else {
+	        			continueChaining = false;
 	        		}
 	        	}
             }
@@ -629,37 +637,33 @@ class FamixCreationPostProcessor {
         	/* 3) Determine if the second substring is an (inherited) method. If so determine the return type of the method. 
         	 * If not a primitive type, but an FamixClass or FamixLibrary,set this type as invocation.to. */
             if (invocation.to.endsWith(")")) {
-            	// Create a call dependency on the to-type.
-				FamixInvocation methodInvocation = indirectAssociations_AddIndirectInvocation("InvocMethod", invocation.from, originalToType, invocation.lineNumber, invocation.belongsToMethod, nextToString, invocation.nameOfInstance, invocation.isIndirect);
-            	addToModel(methodInvocation);  
+                // Try to find the method; first as a method of the originalToType class
                 boolean methodFound = false;
-                // Try to find the method
-                FamixMethod foundMethod = findMethodOnName(originalToType, nextToString);
-	            //if (theModel.behaviouralEntities.containsKey(invocation.to)) {
+    			invocation.to = originalToType;
+                FamixMethod foundMethod = findInvokedMethodOnName(invocation.from, invocation.belongsToMethod, originalToType, nextToString);
                 if (foundMethod != null) {
-        			invocation.to = foundMethod.uniqueName;
 	            	methodFound = true;
 	            } else { // Determine if nextToString is an inherited method 
-	        		String superClassName = indirectAssociations_findSuperClassThatContainsMethod(originalToType, nextToString);
+	        		String superClassName = indirectAssociations_findSuperClassThatContainsMethod(invocation.from, invocation.belongsToMethod, originalToType, nextToString);
 	        		if ((superClassName != null) && !superClassName.equals("")) {
-	        			foundMethod = findMethodOnName(superClassName, nextToString);
+	        			foundMethod = findInvokedMethodOnName(invocation.from, invocation.belongsToMethod, superClassName, nextToString);
 	                    if (foundMethod != null) {
-		        			invocation.to = foundMethod.uniqueName;
 	        				methodFound = true;
-		                	// Create a call dependency on the superclass; the call dependency to the subclass is added under: if (addInvocation)
-		    				FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("InvocMethod", invocation.from, superClassName, invocation.lineNumber, invocation.belongsToMethod, nextToString, invocation.nameOfInstance, true);
-		                	addToModel(newIndirectInvocation);  
-			    			numberOfIndirectAssociations ++;
+		        			invocation.to = superClassName;
+		        			invocation.isIndirect = true;
 	                    }
 	    			}
 	            }
+            	// This current association should be added as a call dependency on the original to-type or on the superclass
+    			invocation.type = "InvocMethod";
+    			invocation.invocationName = nextToString;
+    			addInvocation = true;
 	            if (methodFound) {
-	            	// Determine the return type of the method.
+        			// Determine if a next invocation in the chain needs to be created
 	            	if (foundMethod.declaredReturnType != null && !foundMethod.declaredReturnType.equals("")){
-	        			invocation.to = foundMethod.declaredReturnType;
-	        			invocation.isIndirect = true;
-	        			invocation.type = "AccessPropertyOrField";
-	        			addInvocation = true;
+	            		toTypeNewIndirectInvocation = foundMethod.declaredReturnType;
+	        		} else {
+	        			continueChaining = false;
 	        		}
 	        	}
          	}
@@ -667,21 +671,28 @@ class FamixCreationPostProcessor {
     		if (addInvocation) { 
     			if (!invocation.from.equals(invocation.to) && (theModel.classes.containsKey(invocation.to) || theModel.libraries.containsKey("xLibraries." + invocation.to))) {
 	    			addToModel(invocation);
-	    			numberOfIndirectAssociations ++;
-					if (chainingInvocation) { 
+					if (continueChaining) { 
 						// Create an indirect association to identify dependencies to the remaining parts of the chain. Store it temporarily; it is processed in a separate method. 
-						FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("Undetermined", invocation.from, invocation.to, invocation.lineNumber, invocation.belongsToMethod, toRemainderChainingInvocation, invocation.nameOfInstance, true);
+						FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("Undetermined", invocation.from, toTypeNewIndirectInvocation, invocation.lineNumber, invocation.belongsToMethod, toRemainderChainingInvocation, invocation.nameOfInstance, true);
 	                    addedInvocations.add(newIndirectInvocation);
+		    			numberOfDerivedAssociations ++;
+					} else {
+						if (toRemainderChainingInvocation.equals("") && !toTypeNewIndirectInvocation.equals("")) {
+							// Create an access invocation to the referred type; the return value of the complete string.
+							FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", invocation.from, toTypeNewIndirectInvocation, invocation.lineNumber, invocation.belongsToMethod, toRemainderChainingInvocation, invocation.nameOfInstance, true);
+		                    addedInvocations.add(newIndirectInvocation);
+			    			numberOfDerivedAssociations ++;
+						}
 					}
     			}
     		}
     	}
-    	waitingIndirectAssociations.clear();
+    	waitingDerivedAssociations.clear();
     	if (addedInvocations.size() > 0) {
-    		waitingIndirectAssociations.addAll(addedInvocations);
+    		waitingDerivedAssociations.addAll(addedInvocations);
     		addedInvocations.clear();
-        	this.logger.info(" Number of indirect invocations: " + numberOfIndirectAssociations);
-    		processWaitingIndirectAssociations();
+        	this.logger.info(" Number of derived invocations: " + numberOfDerivedAssociations);
+    		processWaitingDerivedAssociations();
     	}
     }
 
@@ -723,16 +734,21 @@ class FamixCreationPostProcessor {
 
     // Tries to find the specific method
     // Returns FamixMethod if one unique method is found AND declaredReturnType refers to an existing FamixClass or FamixLibrary. Else, it returns "". 
-    private FamixMethod findMethodOnName(String uniqueClassName, String methodNameAsInInvocation) {
+    private FamixMethod findInvokedMethodOnName(String fromClass, String fromMethod, String invokedClassName, String invokedMethodName) {
     	FamixMethod result = null;
+		// Test Helper
+		if (fromClass.equals("domain.direct.violating.AccessLocalVariable_SetArgumentValue")){
+			boolean breakpoint = true;
+		}
+
     	// First, if methodNameAsInInvocation matches with a method unique name, return that method. 
-    	String searchKey = uniqueClassName + "." + methodNameAsInInvocation;
+    	String searchKey = invokedClassName + "." + invokedMethodName;
     	if (theModel.behaviouralEntities.containsKey(searchKey)) {
     		return (FamixMethod) theModel.behaviouralEntities.get(searchKey);
     	}
  
-    	String methodName = methodNameAsInInvocation.substring(0, methodNameAsInInvocation.indexOf("(")); // Methodname without signature
-    	 searchKey = uniqueClassName + "." + methodName;
+    	String methodName = invokedMethodName.substring(0, invokedMethodName.indexOf("(")); // Methodname without signature
+    	 searchKey = invokedClassName + "." + methodName;
     	if (sequencesPerMethod.containsKey(searchKey)){
     		ArrayList<FamixMethod> methodsList = sequencesPerMethod.get(searchKey);
     		if (methodsList.size() == 0) {
@@ -740,17 +756,19 @@ class FamixCreationPostProcessor {
     		} else if (methodsList.size() == 1) {
     				return methodsList.get(0);
     		} else {
-    			String invocationSignature = methodNameAsInInvocation.substring(methodNameAsInInvocation.indexOf("("));;
+    			String invocationSignature = invokedMethodName.substring(invokedMethodName.indexOf("("));;
     			String contentsInvocationSignature = invocationSignature.substring(invocationSignature.indexOf("(") + 1, invocationSignature.indexOf(")")); 
     			String[] invocationArguments = contentsInvocationSignature.split(",");
     			int numberOfArguments = invocationArguments.length;
     			// If there is only one method with the same number of parameters as invocationArguments, then return this method
     			List<FamixMethod> matchingMethods1 = new ArrayList<FamixMethod>();
 	    		for (FamixMethod method : methodsList){
-	    			String contentsmethodParameter = method.signature.substring(method.signature.indexOf("(") + 1, method.signature.indexOf(")")); 
-	    			String[] methodParameters = contentsmethodParameter.split(",");
-	    			if (methodParameters.length == numberOfArguments) {
-	    				matchingMethods1.add(method);
+	    			if ((method.signature != null) && (!method.signature.equals(""))) {
+		    			String contentsmethodParameter = method.signature.substring(method.signature.indexOf("(") + 1, method.signature.indexOf(")")); 
+		    			String[] methodParameters = contentsmethodParameter.split(",");
+		    			if (methodParameters.length == numberOfArguments) {
+		    				matchingMethods1.add(method);
+		    			}
 	    			}
 	    		} 
 	    		if (matchingMethods1.size() == 0)
@@ -759,12 +777,15 @@ class FamixCreationPostProcessor {
 	    			return matchingMethods1.get(0);
     			
     			// If there is only one method where the first parameter type == the first argument type, then return this method  
+    			List<FamixMethod> matchingMethods2 = new ArrayList<FamixMethod>();
     			if (numberOfArguments >= 1) {
-        			List<FamixMethod> matchingMethods2 = new ArrayList<FamixMethod>();
+    				// Replace the argument string by a type, in case of an attribute
+    				invocationArguments[0] = getTypeOfAttribute(fromClass, fromMethod, invocationArguments[0]);
     	    		for (FamixMethod matchingMethod1 : matchingMethods1){
     	    			String contentsmethodParameter = matchingMethod1.signature.substring(matchingMethod1.signature.indexOf("(") + 1, matchingMethod1.signature.indexOf(")")); 
     	    			String[] methodParameters = contentsmethodParameter.split(",");
-    	    			if (methodParameters.length > 0) {
+    	    			if (methodParameters.length >= 1) {
+        	    			methodParameters[0] = getfullPathDeclaredType(fromClass, methodParameters[0]);
     	    				if (methodParameters[0].equals(invocationArguments[0])) {
     	    					matchingMethods2.add(matchingMethod1);
     	    				}
@@ -775,6 +796,27 @@ class FamixCreationPostProcessor {
     	    			return result;
     	    		if (matchingMethods2.size() == 1)
     	    			return matchingMethods2.get(0);
+    			}
+    			// If there is only one method where the second parameter type == the first argument type, then return this method  
+    			if (numberOfArguments >= 2) {
+    				matchingMethods1.clear();
+    				// Replace the argument string by a type, in case of an attribute
+    				invocationArguments[1] = getTypeOfAttribute(fromClass, fromMethod, invocationArguments[1]);
+    	    		for (FamixMethod matchingMethod1 : matchingMethods2){
+    	    			String contentsmethodParameter = matchingMethod1.signature.substring(matchingMethod1.signature.indexOf("(") + 1, matchingMethod1.signature.indexOf(")")); 
+    	    			String[] methodParameters = contentsmethodParameter.split(",");
+    	    			if (methodParameters.length >= 2) {
+        	    			methodParameters[1] = getfullPathDeclaredType(fromClass, methodParameters[1]);
+    	    				if (methodParameters[1].equals(invocationArguments[1])) {
+    	    					matchingMethods1.add(matchingMethod1);
+    	    				}
+    	    			}
+    	    			
+    	    		} 
+    	    		if (matchingMethods1.size() == 0)
+    	    			return result;
+    	    		if (matchingMethods1.size() == 1)
+    	    			return matchingMethods1.get(0);
     			}
     		}
 		}
@@ -886,7 +928,7 @@ class FamixCreationPostProcessor {
     }
 
     // Returns the unique name of the superclass of the uniqueClassName that contains method variableName. 
-    private String indirectAssociations_findSuperClassThatContainsMethod(String uniqueClassName, String variableName) {
+    private String indirectAssociations_findSuperClassThatContainsMethod(String fromClass, String fromMethod, String uniqueClassName, String methodName) {
     	String result = "";
     	if (inheritanceAssociationsPerClass.containsKey(uniqueClassName)){
     		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
@@ -894,14 +936,14 @@ class FamixCreationPostProcessor {
     			if (superClass.equals(uniqueClassName)) {
     				break; // Otherwise, things go wrong with derived C# classes with the same name.
     			}
-	    		String searchKey = superClass + "." + variableName;
-            	if (theModel.behaviouralEntities.containsKey(searchKey)) {
+                FamixMethod foundMethod = findInvokedMethodOnName(fromClass, fromMethod, superClass, methodName);
+                if (foundMethod != null) {
             		result = superClass;
             		break;
 	            }
 	            else {
 	            	if (inheritanceAssociationsPerClass.containsKey(superClass)){
-	            		result = indirectAssociations_findSuperClassThatContainsMethod(superClass, variableName);
+	            		result = indirectAssociations_findSuperClassThatContainsMethod(fromClass, fromMethod, superClass, methodName);
 	            		break;
 	            	}
 	            }
@@ -948,4 +990,60 @@ class FamixCreationPostProcessor {
 		return newInvocation;
 	}
 
+	// Tries to find out if the given attributeName matches an attribute of the className or a super class.
+	// Returns the unique name of the class that contains the attribute, or "" if no attribute is found.
+	private String findAttribute (String className, String attributeName) {
+    	String returnValue = "";
+		String toString = className + "." + attributeName;
+	    if (theModel.structuralEntities.containsKey(toString)) {
+        	return className;
+        } else { // Determine if attributeName is an inherited attribute 
+    		String superClassName = indirectAssociations_findSuperClassThatDeclaresVariable(className, attributeName);
+    		if ((superClassName != null) && !superClassName.equals("")) {
+    			toString = superClassName + "." + attributeName;
+    			if (theModel.structuralEntities.containsKey(toString)) {
+                	return superClassName;
+    			}
+    		}
+        }
+       	return returnValue;
+	}
+	
+	private String getTypeOfAttribute(String className, String fromMethod, String attributeName) {
+    	String returnValue = attributeName;
+    	// Find out if attributeName is a class or instance variable
+    	String classOfAttribute = findAttribute(className, attributeName);
+        if (!classOfAttribute.equals("")) {
+    		FamixStructuralEntity entity = theModel.structuralEntities.get(classOfAttribute + "." + attributeName);
+    		if (entity.declareType != null && !entity.declareType.equals("")){
+    			return entity.declareType;
+    		}
+        }
+    	// Find out if attributeName is a local variable
+    	String searchKey = className + "." + fromMethod + "." + attributeName;
+    	if (theModel.structuralEntities.containsKey(searchKey)) {
+    		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
+    		if (entity.declareType != null && !entity.declareType.equals("")){
+    			return entity.declareType;
+    		}
+    	}
+       	return returnValue;
+	}
+	
+	private String getfullPathDeclaredType(String className, String typeName) {
+    	String returnValue = typeName;
+        // Try to replace the type based on imports
+    	String typeString = findClassInImports(className, typeName);
+        if (!typeString.equals("")) {
+            return typeString;
+        }
+        // Find out or association.to refers to a type in the same package as the from class
+    	typeString = "";
+        String belongsToPackage = theModel.classes.get(className).belongsToPackage;
+    	typeString = findClassInPackage(typeName, belongsToPackage);
+        if (!typeString.equals("")) { 
+            return typeString;
+        }
+       	return returnValue;
+	}
 }
