@@ -39,7 +39,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
     public void generateMethodInvocToDomain(CommonTree treeNode, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
-      	if ((treeNode.getChildCount() > 0) && (treeNode.getChild(0).getChildCount() > 0)) {
+      	if ((treeNode.getChildCount() > 0)) {
         	String invocTo = getCompleteToString(treeNode);
         	this.to = invocTo;
         	this.nameOfInstance = to;
@@ -52,8 +52,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
     public void generatePropertyOrFieldInvocToDomain(CommonTree treeNode, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
-        this. lineNumber = treeNode.getLine();
-
+        this.lineNumber = treeNode.getLine();
         if (treeNode != null) {
             for (int childCount = 0; childCount < treeNode.getChildCount(); childCount++) {
                 CommonTree childNode = (CommonTree) treeNode.getChild(childCount);
@@ -93,42 +92,53 @@ public class JavaInvocationGenerator extends JavaGenerator {
     public String getCompleteToString(CommonTree tree) {  
     	String returnValue = "";
     	try {
-    		String left = "";
-    		String right = "";
     		int treeType = tree.getType();
     		if (tree.getText().equals("STATIC_ARRAY_CREATOR")) {
     			treeType = JavaParser.STATIC_ARRAY_CREATOR;	
     		}
     		switch(treeType) {
 	        case JavaParser.DOT: // "."
-	    		left = getCompleteToString((CommonTree) tree.getChild(0));
-	    		right = getCompleteToString((CommonTree) tree.getChild(1));
-	    		returnValue += left + "." + right;
+	        	String left = getCompleteToString((CommonTree) tree.getChild(0));
+	        	String right = getCompleteToString((CommonTree) tree.getChild(1));
+	        	if ((left == "") || (right == "")) {
+	        		returnValue += left + right;
+	        	} else {
+		    		returnValue += left + "." + right;
+	        	}
 	            break;
 	        case JavaParser.METHOD_CALL:
-	    		left = getCompleteToString((CommonTree) tree.getChild(0));
-	    		right = getCompleteToString((CommonTree) tree.getChild(1));
-	    		returnValue += left + "(" + right + ")";
+	        	String left1 = getCompleteToString((CommonTree) tree.getChild(0));
+	        	String right1 = getCompleteToString((CommonTree) tree.getChild(1));
+	    		returnValue += left1 + "(" + right1 + ")";
 	            break;
-	        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST: case JavaParser.TYPE:
+	        case JavaParser.CLASS_CONSTRUCTOR_CALL: 
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+	            break;
+	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST: case JavaParser.TYPE:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case JavaParser.STATIC_ARRAY_CREATOR: 
-	        	if ((tree.getChildCount() > 0) && (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT)) {
-	        		returnValue += tree.getChild(0).getChild(0).getText();
+	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == JavaParser.IDENT))) {
+		        	String left2 = getCompleteToString((CommonTree) tree.getChild(0));
+		        	String right2 = getCompleteToString((CommonTree) tree.getChild(1));
+		        	if (right2 == "") {
+		        		returnValue += left2;
+		        	} else {
+			    		returnValue += left2 + "(" + right2 + ")";
+		        	}
 	        	} else {
 	        		returnValue += "";
 	        	}
 	            break;
-	        case JavaParser.EXPR:
+	        case JavaParser.EXPR: case JavaParser.PARENTESIZED_EXPR:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case JavaParser.ARGUMENT_LIST:
 	    		for (int i = 0; i < tree.getChildCount(); i++) {
 	    			String argTo= getCompleteToString((CommonTree) tree.getChild(i));
-	    			createPropertyOrFieldInvocationDomainObject(argTo);
+	    			createPropertyOrFieldInvocationDomainObject(argTo, (CommonTree) tree.getChild(i));
 	        		//Includes the arguments in the method call signature
-	    			if (argTo.contains(".")) { // Currently, arguments with a "." disable the indirect dependency detection algorithm. 
+	    			if (argTo.contains(".") || argTo.contains(",")) { // Currently, arguments with a "." or "," disable the indirect dependency detection algorithm. In case of future improvements: create a FamixArgument object per argument. 
 	    				argTo = "";
 	    			}
 	        		if (i == tree.getChildCount() - 1) { 
@@ -143,6 +153,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	            break;
 	        case JavaParser.QUALIFIED_TYPE_IDENT:
 	        	returnValue = tree.getChild(0).getText();
+	            break;
+	        case JavaParser.THIS: case JavaParser.SUPER:
+	        	returnValue = "";
 	            break;
 	        case JavaParser.DECIMAL_LITERAL: case JavaParser.INT: 
 	        	returnValue += "int";
@@ -186,9 +199,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
         }
     }
     
-    private void createPropertyOrFieldInvocationDomainObject(String invocationTo) {
+    private void createPropertyOrFieldInvocationDomainObject(String invocationTo, CommonTree tree) {
         if ((invocationTo != null) && (invocationTo != "") && !SkippedTypes.isSkippable(invocationTo)) {
-            modelService.createPropertyOrFieldInvocation(from, invocationTo, lineNumber, invocationTo, belongsToMethod, invocationTo);
+            modelService.createPropertyOrFieldInvocation(from, invocationTo, tree.getLine(), invocationTo, belongsToMethod, invocationTo);
         }
     }
 }

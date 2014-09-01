@@ -259,6 +259,7 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         }
         dependencyTable.setModel(new DependencyTableModel(filteredList, dataControl));
         setColumnWidths();
+        dependencyTable.setAutoCreateRowSorter(true);
         dependencyTable.repaint();
     }
     

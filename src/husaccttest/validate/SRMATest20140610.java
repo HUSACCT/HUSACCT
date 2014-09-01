@@ -90,7 +90,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}
-		assertEquals(389, numberOfDependencies);
+		assertEquals(365, numberOfDependencies);
 	}
 
 
@@ -104,7 +104,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);
 		}
-		assertEquals(69, numberOfViolations);
+		assertEquals(61, numberOfViolations);
 	}
 
 
@@ -120,7 +120,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(9, violations.length);
+		assertEquals(8, violations.length);
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(4, violations.length);
+		assertEquals(3, violations.length);
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(9, violations.length);
+		assertEquals(8, violations.length);
 	}
 
 	@Test
@@ -165,7 +165,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(9, violations.length);
+		assertEquals(8, violations.length);
 	}
 
 	@Test
@@ -180,7 +180,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(9, violations.length);
+		assertEquals(8, violations.length);
 	}
 
 	@Test
@@ -195,8 +195,9 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(9, violations.length);
+		assertEquals(8, violations.length);
 	}
+	
 	@Test
 	public void isTheOnlyModuleAllowedToUse_ViaGetViolationsByRule() {
 		IDefineService define = ServiceProvider.getInstance().getDefineService();
@@ -215,7 +216,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(9, violations.length);
+		assertEquals(8, violations.length);
 	}
 
 	@Test
@@ -250,7 +251,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(7, violations.length);
+		assertEquals(5, violations.length);
 	}
 
 	@Test

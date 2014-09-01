@@ -137,10 +137,13 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             String signature, boolean isPureAccessor, ArrayList<String> declaredReturnType,
             String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
 
-        FamixMethod famixMethod = new FamixMethod();
+    	FamixMethod famixMethod = new FamixMethod();
         famixMethod.name = name;
         famixMethod.uniqueName = uniqueName;
         famixMethod.accessControlQualifier = accessControlQualifier;
+        if (signature.equals("") || signature.equals("")) {
+            signature = "()";
+        }
         famixMethod.signature = signature;
         famixMethod.isPureAccessor = isPureAccessor;
         famixMethod.declaredReturnType = declaredReturnType.size() == 0 ? "" : declaredReturnType.get(0);

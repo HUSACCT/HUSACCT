@@ -29,12 +29,12 @@ class JavaAttributeAndLocalVariableGenerator {
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
         startFiltering(attributeTree, belongsToClass);
-        // Test helper
-       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic")){
-    		if (this.lineNumber == 10) {
+        /* Test helper
+       	if (this.belongsToClass.equals("plugins.script.ScriptingEngine")){
+    		if (this.lineNumber == 113) {
     				boolean breakpoint1 = true;
     		}
-    	} 
+    	} */
 
         createLocalVariableObject();
     }

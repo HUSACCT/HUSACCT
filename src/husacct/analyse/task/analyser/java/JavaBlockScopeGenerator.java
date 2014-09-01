@@ -25,14 +25,14 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         int treeType = child.getType();
         boolean walkThroughChildren = true;
 
-        /* Test helper
-       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass")){
-    		if (child.getLine() == 10) {
+        // Test helper
+       	if (this.belongsToClass.equals("husacct.define.presentation.jdialog.AddModuleValuesJDialog")){
+    		if (child.getLine() == 44) {
 //    			if (child.getType() == JavaParser.METHOD_CALL) {		
     				boolean breakpoint1 = true;
     			}
 //    		}
-    	} */
+    	} 
 
         switch(treeType) {
         case JavaParser.VAR_DECLARATION:
@@ -41,14 +41,17 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             }
             deleteTreeChild(child);
             break;
-        case JavaParser.CLASS_CONSTRUCTOR_CALL:
+        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.SUPER_CONSTRUCTOR_CALL:
             delegateInvocation(child, "invocConstructor");
+            //walkThroughChildren = false;
             break;
         case JavaParser.CAST_EXPR:
             delegateInvocation(child, "accessPropertyOrField");
+            walkThroughChildren = false;
             break;
         case JavaParser.METHOD_CALL: 
             delegateInvocation(child, "invocMethod");
+            walkThroughChildren = false;
             break;
         case JavaParser.THROW: case JavaParser.CATCH: case JavaParser.THROWS:
             delegateException(child);

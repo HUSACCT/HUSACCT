@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
 class DependencyTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
-    private String[] fields;
+    private String[] columnNames;
     private String titleFrom, titleVia, titleTo, titleLine, titleType, titleIndirect;
     private List<DependencyDTO> data = new ArrayList<DependencyDTO>();
     private AnalyseUIController uiController;
@@ -28,7 +28,7 @@ class DependencyTableModel extends AbstractTableModel {
         titleLine = uiController.translate("Linenumber");
         titleType = uiController.translate("Type");
         titleIndirect = uiController.translate("Direct");
-        fields = new String[]{titleFrom, titleTo, titleType, titleLine, titleIndirect};
+        columnNames = new String[]{titleFrom, titleTo, titleType, titleLine, titleIndirect};
     }
 
     public void setModel(List<DependencyDTO> newData) {
@@ -37,7 +37,7 @@ class DependencyTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return fields.length;
+        return columnNames.length;
     }
 
     @Override
@@ -55,7 +55,7 @@ class DependencyTableModel extends AbstractTableModel {
         } else if (column.equals(titleTo)) {
             return data.get(row).to;
         } else if (column.equals(titleLine)) {
-            return data.get(row).lineNumber;
+            return new Integer(data.get(row).lineNumber);
         } else if (column.equals(titleType)) {
             return uiController.translate(data.get(row).type);
         } else if (column.equals(titleIndirect)) {
@@ -70,6 +70,6 @@ class DependencyTableModel extends AbstractTableModel {
     }
 
     public String getColumnName(int columnIndex) {
-        return fields[columnIndex];
+        return columnNames[columnIndex];
     }
 }

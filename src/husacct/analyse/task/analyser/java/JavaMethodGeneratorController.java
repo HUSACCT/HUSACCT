@@ -27,6 +27,15 @@ class JavaMethodGeneratorController extends JavaGenerator {
     public void delegateMethodBlock(CommonTree methodTree, String className) {
         this.belongsToClass = className;
         lineNumber = methodTree.getLine();
+        hasClassScope = false;
+        isAbstract = false;
+        isConstructor = false;
+        accessControlQualifier = "package-private";
+        isPureAccessor = false;
+        declaredReturnType = "";
+        signature = "";
+        name = "";
+        uniqueName  = "";
         checkMethodType(methodTree);
         WalkThroughMethod(methodTree);
         createMethodObject();
@@ -130,21 +139,8 @@ class JavaMethodGeneratorController extends JavaGenerator {
     }
 
     private void getReturnType(Tree tree) {
-        Tree child = tree.getChild(0);
-        Tree declaretype = child.getChild(0);
-        String foundType = "";
-        if (child.getType() != JavaParser.QUALIFIED_TYPE_IDENT) {
-            foundType = child.getText();
-        } else {
-            if (child.getChildCount() > 1) {
-                for (int i = 0; i < child.getChildCount(); i++) {
-                    foundType += child.getChild(i).toString() + ".";
-                }
-            } else {
-                foundType = declaretype.getText();
-            }
-        }
-
+    	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+    	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree);
         if (foundType != null) {
             this.declaredReturnType = foundType;
         } else {
@@ -160,9 +156,6 @@ class JavaMethodGeneratorController extends JavaGenerator {
 
     private void createMethodObject() {
         uniqueName = belongsToClass + "." + this.name + signature;
-        if (SkippedTypes.isSkippable(declaredReturnType)) {
-        	declaredReturnType = "";
-        }
         modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
     }
 }
