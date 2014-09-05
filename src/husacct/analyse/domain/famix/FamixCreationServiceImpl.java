@@ -66,18 +66,12 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         createPackage(uniquePackageName, belongsToPackage, name);
     }
     
-    
     @Override
-    public void createClass(String uniqueName, String name, String belongsToPackage,
-            boolean isAbstract, boolean isInnerClass) {
-        createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", "public", false);
-    }
-
-    @Override
-    public void createClass(String uniqueName, String name, String belongsToPackage,
+    public void createClass(String sourceFilePath, String uniqueName, String name, String belongsToPackage,
             boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility, boolean isInterface) {
     	if ((uniqueName != null) && !uniqueName.equals("") && (name != null) && !name.equals("") && (belongsToPackage != null) && !belongsToPackage.equals("") && (belongsToClass != null)) { 
 	    	FamixClass fClass = new FamixClass();
+	    	fClass.sourceFilePath = sourceFilePath;
 	        fClass.uniqueName = uniqueName.trim();
 	        fClass.isAbstract = isAbstract;
 	        fClass.belongsToPackage = belongsToPackage.trim();
@@ -112,29 +106,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         addToModel(fImport);
     }
 
-    @Override
     public void createMethod(String name, String uniqueName, String accessControlQualifier,
             String signature, boolean isPureAccessor, String declaredReturnType,
-            String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
-
-        createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType,
-                belongsToClass, isConstructor, isAbstract, hasClassScope, 0);
-    }
-
-    public void createMethod(String name, String uniqueName, String accessControlQualifier,
-            String signature, boolean isPureAccessor, String declaredReturnType,
-            String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
-
-        ArrayList<String> declaredReturnTypes = new ArrayList<String>();
-        declaredReturnTypes.add(declaredReturnType);
-
-        createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnTypes,
-                belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
-    }
-
-    @Override
-    public void createMethod(String name, String uniqueName, String accessControlQualifier,
-            String signature, boolean isPureAccessor, ArrayList<String> declaredReturnType,
             String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
 
     	FamixMethod famixMethod = new FamixMethod();
@@ -146,23 +119,20 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         }
         famixMethod.signature = signature;
         famixMethod.isPureAccessor = isPureAccessor;
-        famixMethod.declaredReturnType = declaredReturnType.size() == 0 ? "" : declaredReturnType.get(0);
+        famixMethod.declaredReturnType = declaredReturnType;
         famixMethod.belongsToClass = belongsToClass;
         famixMethod.isConstructor = isConstructor;
         famixMethod.isAbstract = isAbstract;
         famixMethod.hasClassScope = hasClassScope;
         addToModel(famixMethod);
 
-        for (String s : declaredReturnType) {
-            if (s != "" && s != null) {
-                FamixAssociation fAssocation = new FamixAssociation();
-                fAssocation.from = belongsToClass;
-                fAssocation.to = s;
-                fAssocation.type = "DeclarationReturnType";
-                fAssocation.lineNumber = lineNumber;
-                model.waitingAssociations.add(fAssocation);
-            }
-            //}
+        if ((declaredReturnType != null) && (!declaredReturnType.equals(""))) {
+            FamixAssociation fAssocation = new FamixAssociation();
+            fAssocation.from = belongsToClass;
+            fAssocation.to = declaredReturnType;
+            fAssocation.type = "DeclarationReturnType";
+            fAssocation.lineNumber = lineNumber;
+            model.waitingAssociations.add(fAssocation);
         }
     }
 
@@ -178,24 +148,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.uniqueName = uniqueName;
         famixAttribute.lineNumber = line;
         model.waitingStructuralEntities.add(famixAttribute);
-    }
-
-    @Override
-    public void createAttribute(Boolean classScope, String accesControlQualifier,
-            String belongsToClass, String declareType, String name, String uniqueName,
-            int line, List<String> declareTypes) {
-
-        this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line);
-
-        for (String type : declareTypes) {
-            FamixAssociation fAssocation = new FamixAssociation();
-            fAssocation.from = belongsToClass;
-            fAssocation.to = type;
-            fAssocation.type = "Declaration3";
-            fAssocation.lineNumber = line;
-            model.waitingAssociations.add(fAssocation);
-        }
-
     }
 
     @Override

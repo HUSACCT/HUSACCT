@@ -52,6 +52,8 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
+    
+    public String getSourceFilePathOfClass(String uniquename);
 
     public AnalysedModuleDTO[] getRootModules();
     

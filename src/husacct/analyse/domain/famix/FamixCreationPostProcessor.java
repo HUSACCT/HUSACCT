@@ -344,12 +344,12 @@ class FamixCreationPostProcessor {
             	String toString = "";
             	FamixInvocation theInvocation = null;
 
-                // Test helpers
-            	if (association.from.equals("husacct.define.presentation.jdialog.AddModuleValuesJDialog")){
-            		if (association.lineNumber == 44) {
+                /* Test helpers
+            	if (association.from.equals("Limada.Tests.ThingGraphs.Sample4Test")){
+            		if (association.lineNumber == 27) {
             			boolean breakpoint = true;
         			}
-            	}
+            	} */
 
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {
@@ -588,12 +588,12 @@ class FamixCreationPostProcessor {
     	List<FamixInvocation> addedInvocations = new ArrayList<FamixInvocation>();
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
-        	// Test helper
-        	if (invocation.from.contains("domain.direct.violating.AccessInstanceVariable_SetArgumentValue")){
-        		if (invocation.lineNumber == 10) {
+        	/* Test helper
+        	if (invocation.from.equals("Limada.Tests.ThingGraphs.Sample4Test")){
+        		if (invocation.lineNumber == 27) {
         			boolean breakpoint = true;
     			}
-        	} 
+        	} */
         	
         	// 1) Split invocationName. Precondition: invocation.to is a type and invocationName contains the remainder of the string (determined in the previous process step).
         	String originalToType = invocation.to;

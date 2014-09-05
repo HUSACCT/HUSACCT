@@ -12,6 +12,8 @@ public interface IModelQueryService {
 
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 
+    public String getSourceFilePathOfClass(String uniquename);
+
     public List<AnalysedModuleDTO> getRootModules();
 
     public List<AnalysedModuleDTO> getChildModulesInModule(String from);

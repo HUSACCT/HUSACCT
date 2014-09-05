@@ -9,7 +9,7 @@ import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 class JavaTreeConvertController {
-
+	private String sourceFilePath = "";
     private String theClass = null;
     private String thePackage = null;
     private String currentClass = null;
@@ -35,8 +35,9 @@ class JavaTreeConvertController {
         implementsGenerator = new JavaImplementsDefinitionGenerator();
     }
 
-    public void delegateASTToGenerators(JavaParser javaParser) throws RecognitionException {
+    public void delegateASTToGenerators(String sourceFilePath, JavaParser javaParser) throws RecognitionException {
     	try {
+    		this.sourceFilePath = sourceFilePath;
 	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
 	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 	        createClassInformation(compilationUnitTree);
@@ -179,15 +180,15 @@ class JavaTreeConvertController {
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
         String analysedClass;
         if (isInnerClass) {
-            analysedClass = javaClassGenerator.generateToModel(classTree, parentClass);
+            analysedClass = javaClassGenerator.generateToModel(sourceFilePath, classTree, parentClass);
         } else {
-            analysedClass = javaClassGenerator.generateToDomain(classTree);
+            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, classTree);
         }
         return analysedClass;
     }
 
     private String delegateInterface(CommonTree interfaceTree) {
-        return javaInterfaceGenerator.generateToDomain(interfaceTree);
+        return javaInterfaceGenerator.generateToDomain(sourceFilePath, interfaceTree);
     }
 
     private String delegateAnnotation(CommonTree annotationTree) {

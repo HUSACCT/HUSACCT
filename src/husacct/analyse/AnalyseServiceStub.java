@@ -505,6 +505,11 @@ public class AnalyseServiceStub implements IAnalyseService {
     }
 
     @Override
+    public String getSourceFilePathOfClass(String uniquename) {
+    	return "";
+    }
+
+    @Override
     public void addServiceListener(IServiceListener listener) {
     }
 

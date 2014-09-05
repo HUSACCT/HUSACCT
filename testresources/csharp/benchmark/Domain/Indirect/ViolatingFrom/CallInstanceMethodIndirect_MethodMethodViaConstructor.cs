@@ -1,6 +1,6 @@
 namespace Domain.Indirect.ViolatingFrom
 {
-	public class CallInstanceMethodIndirect_MethodMethodViaConstructor
+	public class CallInstanceMethodIndirect_MethodMethod_ViaConstructor
 	{
 		private string test;
 

@@ -69,12 +69,13 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 	
 					CommonTree childTree = (CommonTree) genericListTree.getChild(i);
 					CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-	
-					genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
-	
-					if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
-						genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
-						genericTypes = getGenericTypes(genericListTree, genericTypes);
+					if (typeNameTree != null) {
+						genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
+		
+						if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
+							genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
+							genericTypes = getGenericTypes(genericListTree, genericTypes);
+						}
 					}
 				}
 			}

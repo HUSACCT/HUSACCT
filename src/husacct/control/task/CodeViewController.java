@@ -1,6 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.IControlService;
@@ -100,10 +101,15 @@ public class CodeViewController {
 		if(controlService == null)
 			controlService = ServiceProvider.getInstance().getControlService();
 		
-		// Convert classPath to filePath
-		String filePath = "";
-		logger.info("Trying to find file path for class path: " + classPath);
+		// Request sourceFilePath (since version 3.3)
+		final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+		String sourceFilePath = analyseService.getSourceFilePathOfClass(classPath);
+		if ((sourceFilePath != null) && !sourceFilePath.equals("")) {
+			return sourceFilePath;
+		}
 		
+		// Convert classPath to filePath (algorithm before version 3.3)
+		String filePath = "";
 		// Grab root path
 		ApplicationDTO application = controlService.getApplicationDTO();
 		ProjectDTO project = application.projects.get(0);

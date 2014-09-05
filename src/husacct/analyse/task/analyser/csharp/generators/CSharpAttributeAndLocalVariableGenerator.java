@@ -2,7 +2,9 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+
 import java.util.ArrayList;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -12,21 +14,22 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	private String name;
 	private String accessControlQualifier;
 	private String packageAndClassName; 
-	private String declareType;  //int, string, CustomClass etc
+	private String declareType = "";  //int, string, CustomClass etc
 	private int lineNumber;
 	private String belongsToMethod = ""; //alleen voor local variables
 
-
-	private ArrayList<String> declareTypes = new ArrayList<String>();
-
 	public void generateLocalVariableToDomain(Tree treeNode, String packageAndClassName, String belongsToMethod) {
+		this.packageAndClassName = packageAndClassName;
 		this.belongsToMethod = belongsToMethod;
-		setMembers(treeNode, packageAndClassName);
+		setMembers(treeNode);
+		treeNodeTypeFilter(treeNode);
 		createLocalVariableObject();
 	}
 
 	public void generateAttributeToDomain(Tree treeNode, String packageAndClassName) {
-		setMembers(treeNode, packageAndClassName);
+		this.packageAndClassName = packageAndClassName;
+		setMembers(treeNode);
+		treeNodeTypeFilter(treeNode);
 		createAttributeObject();
 	}
 
@@ -39,103 +42,69 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		createLocalVariableObject();
 	}
 
-
-
 	private void createAttributeObject() {
-		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
-		if(SkippableTypes.isSkippable(declareType)){
-	           modelService.createAttributeOnly(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
-        } else {
-			modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, this.declareTypes);
+		if ((declareType != null) && (declareType != "")) {
+			if(SkippableTypes.isSkippable(declareType)){
+				modelService.createAttributeOnly(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+	        } else {
+	        	modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+			}
 		}
 		declareType = "";
-
 	}
 
 	private void createLocalVariableObject() {
 		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
-		modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+		modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 		declareType = "";
 	}
 
 
-	private void setMembers(Tree treeNode, String packageAndClassName) { //startFiltering in Java Implementation
+	private void setMembers(Tree treeNode) { //startFiltering in Java Implementation
 		CommonTree currentTree = (CommonTree) treeNode;
 		CommonTree identifierTree = (CommonTree) currentTree.getFirstChildWithType(CSharpParser.IDENTIFIER);
 		if(identifierTree != null){
 			this.name = identifierTree.getText();
 			this.lineNumber = identifierTree.getLine();
 		}
-		this.packageAndClassName = packageAndClassName;
-		treeNodeTypeFilter(treeNode);
 	}
 
 	private void treeNodeTypeFilter(Tree treeNode) {
 		for(int i = 0; i < treeNode.getChildCount(); i++){
-			Tree child = treeNode.getChild(i);
+            Tree child = treeNode.getChild(i);
+            boolean walkThroughChildren = true;
 			switch(child.getType()){
-
 			case CSharpParser.MODIFIERS:
 				setAccessControlQualifier(treeNode);
 				setClassScope(child);
 				break;
 			case CSharpParser.TYPE:
 				setDeclareType(child);		
+	            walkThroughChildren = false;
 				break;
-			case CSharpParser.VARIABLE_INITIALIZER:				
+			case CSharpParser.UNARY_EXPRESSION:
+				delegateInvocation(child);
+	            walkThroughChildren = false;
 				break;
-			case CSharpParser.OBJECT_CREATION_EXPRESSION:
-				delegateInvocationConstructor(child);
-				break;
-			case CSharpParser.METHOD_INVOCATION:
-				delegateInvocationMethod(child);
-				break;
-			case CSharpParser.MEMBER_ACCESS:
-				delegateInvocationPropertyOrField(child);
-				deleteTreeChild(child);
-				break;
-			}
-			treeNodeTypeFilter(child);
+			} 
+	        if (walkThroughChildren) {
+	        	treeNodeTypeFilter(child);
+	        }
 		}
 	}
 	
-	private void delegateInvocationMethod(Tree tree) {
-		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
-		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	private void delegateInvocation(Tree tree) {
+		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+		csharpInvocationGenerator.generateInvocationToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
-	private void delegateInvocationPropertyOrField(Tree tree) {
-		CSharpInvocationPropertyOrFieldGenerator csharpInvocationPropertyOrFieldGenerator = new CSharpInvocationPropertyOrFieldGenerator(this.packageAndClassName);
-		csharpInvocationPropertyOrFieldGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
-	}
-	
-	private void delegateInvocationConstructor(Tree tree) {
-		CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator= new CSharpInvocationConstructorGenerator(this.packageAndClassName);
-		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
-	}
-	
 	private void setDeclareType(Tree typeNode) {
 		CommonTree typeTree = (CommonTree) typeNode;
-		if(declareType == null || !SkippableTypes.isSkippable(declareType))	
-			declareType = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree); 
-		addArgumentListTypes(typeTree);
-	}
-
-	private void addArgumentListTypes(CommonTree typeTree) {
-		if(CSharpGeneratorToolkit.hasChild(typeTree, CSharpParser.TYPE_ARGUMENT_LIST)) {
-			addTypeNameIfNotSkippable((CommonTree)typeTree.getChild(1));
-		}
-		if(CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST) != null) {
-			CommonTree typeArgumentListTree =  CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST);
-			treeNodeTypeFilter(typeArgumentListTree);
-		}
-		
-	}
-	
-	private void addTypeNameIfNotSkippable(CommonTree typeTree) {
-		String s = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree);
-		if(!SkippableTypes.isSkippable(s))
-			declareTypes.add(s);
+		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree);
+        if ((foundType != null) && !foundType.equals("")) {
+            this.declareType = foundType;
+        } 
 	}
 
 	private void setClassScope(Tree modifierList) {

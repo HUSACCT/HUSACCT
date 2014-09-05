@@ -10,24 +10,23 @@ public class CSharpClassGenerator extends CSharpGenerator {
     private static final Logger logger = Logger.getLogger(CSharpGenerator.class);
 
 
-    public String generateToDomain(CommonTree classTree, String namespace, boolean isInterface) {
+    public String generateToDomain(String sourceFilePath, CommonTree classTree, String namespace, boolean isInterface) {
         String name = getClassName(classTree);
         String uniqueName = getUniqueName(namespace, name);
         String visibility = getVisibility(classTree);
         boolean isAbstract = isAbstract(classTree);
-
-        modelService.createClass(uniqueName, name, namespace, isAbstract, false, "", visibility, isInterface);
+        modelService.createClass(sourceFilePath, uniqueName, name, namespace, isAbstract, false, "", visibility, isInterface);
         return name;
     }
 
-    public String generateToModel(CommonTree classTree, String namespace, String parentClassNames, boolean isInterface) {
+    public String generateToModel(String sourceFilePath, CommonTree classTree, String namespace, String parentClassNames, boolean isInterface) {
         String name = getClassName(classTree);
 	        String belongsToClass = belongsToClass(namespace, parentClassNames);
 	        String uniqueName = getUniqueName(belongsToClass, name);
 	        String visibility = getVisibility(classTree);
 	        boolean isAbstract = isAbstract(classTree);
 	
-	        modelService.createClass(uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility, isInterface);
+	        modelService.createClass(sourceFilePath, uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility, isInterface);
         return name;
     }
 

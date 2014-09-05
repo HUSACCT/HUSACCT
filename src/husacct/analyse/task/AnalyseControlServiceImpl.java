@@ -44,6 +44,11 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     }
 
     @Override
+    public String getSourceFilePathOfClass(String uniquename) {
+    	return domainService.getSourceFilePathOfClass(uniquename);
+    }
+
+    @Override
     public AnalysedModuleDTO[] getRootModules() {
         return domainService.getRootModules();
     }

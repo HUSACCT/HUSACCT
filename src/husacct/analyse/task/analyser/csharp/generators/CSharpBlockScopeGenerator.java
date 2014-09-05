@@ -20,23 +20,27 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	private void walkThroughBlockScope(Tree tree) {
 		for (int i = 0; i < tree.getChildCount(); i++) {
 			Tree child = tree.getChild(i);
+            boolean walkThroughChildren = true;
+
+			/* Test helper
+	       	if (this.packageAndClassName.equals("Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod")){
+//	    		if (child.getLine() == 44) {
+	    				boolean breakpoint1 = true;
+//	    		}
+	    	} */
+
 			switch (child.getType()) {
 				case CSharpParser.VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
-					deleteTreeChild(child);
+		            walkThroughChildren = false;
 					break;
 				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
-					deleteTreeChild(child);
+		            walkThroughChildren = false;
 					break;
-				case CSharpParser.OBJECT_CREATION_EXPRESSION:
-					delegateInvocationConstructor(child);
-					break;
-				case CSharpParser.METHOD_INVOCATION:
-					delegateInvocationMethod(child);
-					break;
-				case CSharpParser.MEMBER_ACCESS:
-					delegateInvocationPropertyOrField(child);
+				case CSharpParser.UNARY_EXPRESSION:
+					delegateInvocation(child);
+		            walkThroughChildren = false;
 					break;
 				case CSharpParser.THROW:
 				case CSharpParser.CATCH:
@@ -48,9 +52,10 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 				case CSharpParser.DO:
 					delegateLoop(child);
 					break;
-				default:
-					walkThroughBlockScope(child);
 			}
+	        if (walkThroughChildren) {
+	        	walkThroughBlockScope(child);
+	        }
 		}
 	}
 
@@ -64,19 +69,9 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 		}
 	}
 
-	private void delegateInvocationConstructor(Tree tree) {
-		CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator= new CSharpInvocationConstructorGenerator(this.packageAndClassName);
-		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
-	}
-
-	private void delegateInvocationMethod(Tree tree) {
-		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
-		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
-	}
-
-	private void delegateInvocationPropertyOrField(Tree tree) {
-		CSharpInvocationPropertyOrFieldGenerator csharpInvocationPropertyOrFieldGenerator = new CSharpInvocationPropertyOrFieldGenerator(this.packageAndClassName);
-		csharpInvocationPropertyOrFieldGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	private void delegateInvocation(Tree tree) {
+		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+		csharpInvocationGenerator.generateInvocationToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
 	private void delegateException(Tree tree) {

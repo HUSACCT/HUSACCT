@@ -37,6 +37,11 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
     
     @Override
+    public String getSourceFilePathOfClass(String uniquename) {
+    	return queryService.getSourceFilePathOfClass(uniquename);
+    }
+
+    @Override
     public AnalysedModuleDTO[] getRootModules(){
     	List<AnalysedModuleDTO> rootModules = queryService.getRootModules();
     	return rootModules.toArray(new AnalysedModuleDTO[rootModules.size()]);

@@ -20,7 +20,7 @@ class JavaClassGenerator extends JavaGenerator {
         this.belongsToPackage = uniquePackageName;
     }
 
-    public String generateToDomain(CommonTree commonTree) {
+    public String generateToDomain(String sourceFilePath, CommonTree commonTree) {
 
         this.visibility = getVisibillityFromTree(commonTree);
 
@@ -37,7 +37,7 @@ class JavaClassGenerator extends JavaGenerator {
             annotationGenerator.generateMethod((CommonTree) modifierListTree.getFirstChildWithType(JavaParser.AT));
         }
         this.isAbstract = isAbstract(modifierListTree);
-        modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visibility, false);
+        modelService.createClass(sourceFilePath, uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visibility, false);
         return uniqueName;
     }
 
@@ -55,7 +55,7 @@ class JavaClassGenerator extends JavaGenerator {
         }
     }
 
-    public String generateToModel(CommonTree commonTree, String parentClassName) {
+    public String generateToModel(String sourceFilePath, CommonTree commonTree, String parentClassName) {
         if (commonTree.getChild(1) != null) {
             this.name = commonTree.getChild(1).toString();
             this.isAbstract = isAbstract(commonTree);
@@ -63,7 +63,7 @@ class JavaClassGenerator extends JavaGenerator {
             this.belongsToClass = parentClassName;
             this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();
             this.visibility = getVisibillityFromTree(commonTree);
-            modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visibility, false);
+            modelService.createClass(sourceFilePath, uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visibility, false);
             return uniqueName;
         }
         return "";

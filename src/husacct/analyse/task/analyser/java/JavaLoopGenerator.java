@@ -58,8 +58,6 @@ public class JavaLoopGenerator extends JavaGenerator {
 
     private void walkForEachAST(Tree tree) {
     	Tree child;
-    	CommonTree myLoopTree;
-    	CommonTree typeIdentTree;
     	int size = tree.getChildCount();
         for (int childCount = 0; childCount < size; childCount++) {
             child = tree.getChild(childCount);

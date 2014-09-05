@@ -181,7 +181,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        		if ((identChild != null) && (identChild.getChildCount() > 0)) {
 	        			String typeCastTo = identChild.getChild(0).getText();
 	        	        if ((typeCastTo != null) && (typeCastTo != "") && !SkippedTypes.isSkippable(typeCastTo)) {
-	        	            modelService.createDeclarationTypeCast(from, typeCastTo, lineNumber);
+	        	            modelService.createDeclarationTypeCast(from, typeCastTo, tree.getLine());
 	        	        }
 	        		}
 	        	}

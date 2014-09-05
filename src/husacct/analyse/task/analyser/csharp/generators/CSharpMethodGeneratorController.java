@@ -2,7 +2,9 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
 import java.util.*;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -13,7 +15,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	String uniqueName;
 	String accessControlQualifier;
 	Stack<String> argTypes = new Stack<>();
-	ArrayList<String> returnTypes;
+	String returnType = "";
 	boolean isPureAccessor = false; //Not known
 	boolean isConstructor = false;
 	boolean isAbstract = false;
@@ -31,16 +33,14 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	}
 
 	private void checkMethodType(CommonTree methodTree, String belongsToClass) {
-		returnTypes = new ArrayList<>();
 
 		switch (methodTree.getType()) {
 			case CSharpParser.CONSTRUCTOR_DECL:
-				returnTypes.add("");
 				name = getClassOfUniqueName(belongsToClass);
 				isConstructor = true;
 				break;
 			default:
-				getReturnTypes(methodTree);
+				getReturnType(methodTree);
 				name = getMethodName(methodTree);
 				break;
 		}
@@ -51,34 +51,17 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 		return parts[parts.length - 1];
 	}
 
-	private void getReturnTypes(CommonTree methodTree) {
+	private void getReturnType(CommonTree methodTree) {
 		for (int i = 0; i < methodTree.getChildCount(); i++) {
 			if (methodTree.getChild(i).getType() == CSharpParser.TYPE) {
 				CommonTree typeTree = (CommonTree) methodTree.getChild(i);
-				for(int j = 0  ; j < typeTree.getChildCount(); j++) {
-					if (typeTree.getChild(j).getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
-						returnTypes.add(typeTree.getChild(j).getChild(0).getText());
-					}
-				}
-				
-				if(typeTree.getChild(0) != null && typeTree.getChild(0).getChildCount() >= 2) {
-					for(int k = 1 ; k < typeTree.getChild(0).getChildCount() ; k++) {
-						returnTypes.add(typeTree.getChild(0).getChild(k).getChild(0).getText());
-					}
-				}
-				if(returnTypes.isEmpty()) {
-					returnTypes.add("");
-				}
+				CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
+		    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree);
+		        if ((foundType != null) && !foundType.equals("")) {
+		            this.returnType = foundType;
+		        } 
 			}
 		}
-		
-		String fullPathString = "";
-		for(String dir : returnTypes) {
-			fullPathString += dir += ".";
-		}
-		
-		returnTypes.clear();
-		returnTypes.add(fullPathString.substring(0, fullPathString.length() - 1));
 	}
 
 	private String getMethodName(CommonTree methodTree) {
@@ -123,7 +106,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 		String argumentTypes = createArgumentString(argTypes);
 		argTypes.clear();
 		this.uniqueName = getMethodUniqueName(belongsToClass, name, argumentTypes);
-		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
 	}
 
 	private String createArgumentString(Stack<String> argTypes) {

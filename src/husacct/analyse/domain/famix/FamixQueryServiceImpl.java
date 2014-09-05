@@ -40,6 +40,15 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
+    public String getSourceFilePathOfClass(String uniquename) {
+    	String returnValue = "";
+    	if (theModel.classes.containsKey(uniquename)) {
+    		returnValue = theModel.classes.get(uniquename).sourceFilePath;
+    	}
+    	return returnValue;
+    }
+
+    @Override
     public List<AnalysedModuleDTO> getRootModules() {
         return moduleFinder.getRootModules();
     }

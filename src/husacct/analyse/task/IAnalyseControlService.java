@@ -38,6 +38,8 @@ public interface IAnalyseControlService {
 
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 
+    public String getSourceFilePathOfClass(String uniquename);
+
     public AnalysedModuleDTO[] getRootModules();
     
     public AnalysedModuleDTO[] getChildModulesInModule(String from);

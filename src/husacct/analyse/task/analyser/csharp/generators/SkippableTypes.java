@@ -4,9 +4,10 @@ import java.util.EnumSet;
 
 enum SkippableTypes {
 
-	STRING("string"),
+	STRING1("string"),
+	STRING2("String"),
 	INT("int"),
-	BOOLEAN("boolean"),
+	BOOL("bool"),
 	OBJECT("object"),
 	BYTE("byte"),
 	CHAR("char");
@@ -25,7 +26,8 @@ enum SkippableTypes {
 	
 	public static boolean isSkippable(String type){
 		for(SkippableTypes skippedType : EnumSet.allOf(SkippableTypes.class)){
-			if(skippedType.toString().equals(type)){
+			String s= skippedType.toString();
+			if(s.equals(type)){
 				return true;
 			}
 		}

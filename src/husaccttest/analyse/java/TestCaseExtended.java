@@ -302,13 +302,13 @@ public abstract class TestCaseExtended{
 		famix.createPackage("domain.indirect.intermediate", "domain.indirect", "intermediate");
 		famix.createPackage("domain.indirect.indirectto", "domain.indirect", "indirectto");
 		
-		famix.createClass("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect", 
+		famix.createClass("testresources\\csharp\\benchmark", "domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect", 
 					"InheritanceExtendsExtendsIndirect", 
-					"domain.indirect.violatingfrom", false, false);
-		famix.createClass("domain.indirect.intermediate.MapsService", "MapsService", 
-					"domain.indirect.intermediate", false, false);
-		famix.createClass("domain.indirect.indirectto.POI", "POI", 
-					"domain.indirectindirectto", true, false);
+					"domain.indirect.violatingfrom", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.indirect.intermediate.MapsService", "MapsService", 
+					"domain.indirect.intermediate", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.indirect.indirectto.POI", "POI", 
+					"domain.indirectindirectto", true, false, "", "public", false);
 		
 		famix.createImport("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect", "domain.indirect.intermediate.MapsService", 3,
 					"domain.indirect.intermediate.MapsService", false);
@@ -321,9 +321,9 @@ public abstract class TestCaseExtended{
 				"domain.indirect.indirectto.POI", 5);
 		
 		
-		famix.createClass("abc.a", "a", "abc", false, false);
-		famix.createClass("abc.b", "b", "abc", true, false);
-		famix.createClass("abc.c", "c", "abc", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "abc.a", "a", "abc", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "abc.b", "b", "abc", true, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "abc.c", "c", "abc", false, false, "", "public", false);
 //		famix.createInheritanceDefinition("abc.c", "abc.b", 1);
 		famix.createInheritanceDefinition("abc.b", "abc.a", 2);
 		famix.createInheritanceDefinition("abc.c", "abc.b", 2);
@@ -346,31 +346,31 @@ public abstract class TestCaseExtended{
 		famix.createPackage("indirect.houses.type", "indirect.houses", "type");
 		famix.createPackage("indirect.houses.attributes", "indirect.houses", "attributes");
 				
-		famix.createClass("domain.locationbased.foursquare.Account", "Account", "domain.locationbased.foursquare", false, false);
-		famix.createClass("domain.locationbased.foursquare.Friends", "Friends", "domain.locationbased.foursquare", false, false);
-		famix.createClass("domain.locationbased.foursquare.Map", "Map", "domain.locationbased.foursquare", false, false);
-		famix.createClass("domain.locationbased.foursquare.History", "History", "domain.locationbased.foursquare", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.foursquare.Account", "Account", "domain.locationbased.foursquare", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.foursquare.Friends", "Friends", "domain.locationbased.foursquare", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.foursquare.Map", "Map", "domain.locationbased.foursquare", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.foursquare.History", "History", "domain.locationbased.foursquare", false, false, "", "public", false);
 		
-		famix.createClass("domain.locationbased.latitude.Account", "Account", "domain.locationbased.latitude", false, false);
-		famix.createClass("domain.locationbased.latitude.Friends", "Friends", "domain.locationbased.latitude", false, false);
-		famix.createClass("domain.locationbased.latitude.Map", "Map", "domain.locationbased.latitude", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.latitude.Account", "Account", "domain.locationbased.latitude", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.latitude.Friends", "Friends", "domain.locationbased.latitude", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "domain.locationbased.latitude.Map", "Map", "domain.locationbased.latitude", false, false, "", "public", false);
 		
-		famix.createClass("infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "AccountDAO", "infrastructure.socialmedia.locationbased.foursquare", false, false);
-		famix.createClass("infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "FriendsDAO", "infrastructure.socialmedia.locationbased.foursquare", true, false);
-		famix.createClass("infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "HistoryDAO", "infrastructure.socialmedia.locationbased.foursquare", false, false);
-		famix.createClass("infrastructure.socialmedia.locationbased.foursquare.IMap", "IMap", "infrastructure.socialmedia.locationbased.foursquare", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "AccountDAO", "infrastructure.socialmedia.locationbased.foursquare", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "FriendsDAO", "infrastructure.socialmedia.locationbased.foursquare", true, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "HistoryDAO", "infrastructure.socialmedia.locationbased.foursquare", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.foursquare.IMap", "IMap", "infrastructure.socialmedia.locationbased.foursquare", false, false, "", "public", false);
 		
-		famix.createClass("infrastructure.socialmedia.locationbased.latitude.AccountDAO", "AccountDAO", "infrastructure.socialmedia.locationbased.latitude", false, false);
-		famix.createClass("infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "FriendsDAO", "infrastructure.socialmedia.locationbased.latitude", true, false);
-		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "infrastructure.socialmedia.locationbased.latitude", false, false);
-		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMapp", "IMapp", "infrastructure.socialmedia.locationbased.latitude", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", "AccountDAO", "infrastructure.socialmedia.locationbased.latitude", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "FriendsDAO", "infrastructure.socialmedia.locationbased.latitude", true, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "infrastructure.socialmedia.locationbased.latitude", false, false, "", "public", false);
+		famix.createClass("testresources\\csharp\\benchmark", "infrastructure.socialmedia.locationbased.latitude.IMapp", "IMapp", "infrastructure.socialmedia.locationbased.latitude", false, false, "", "public", false);
 		
-		famix.createClass("indirect.houses.type.IType", "IType", "indirect.houses.type", false, false, "", "default", true);
-		famix.createClass("indirect.houses.type.IGlobal", "IGlobal", "indirect.houses.type", false, false, "", "default", true);
-		famix.createClass("indirect.houses.type.RowHouse", "RowHouse", "indirect.houses.type", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "indirect.houses.type.IType", "IType", "indirect.houses.type", false, false, "", "default", true);
+		famix.createClass("testresources\\csharp\\benchmark", "indirect.houses.type.IGlobal", "IGlobal", "indirect.houses.type", false, false, "", "default", true);
+		famix.createClass("testresources\\csharp\\benchmark", "indirect.houses.type.RowHouse", "RowHouse", "indirect.houses.type", false, false, "", "public", false);
 		
-		famix.createClass("indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door", false, false, "", "default", true);
-		famix.createClass("indirect.houses.attributes.Door", "Door", "indirect.houses.attributes", false, false);
+		famix.createClass("testresources\\csharp\\benchmark", "indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door", false, false, "", "default", true);
+		famix.createClass("testresources\\csharp\\benchmark", "indirect.houses.attributes.Door", "Door", "indirect.houses.attributes", false, false, "", "public", false);
 		
 		famix.createMethodInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "", "InvocConstructor");
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", 10);

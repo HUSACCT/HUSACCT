@@ -83,6 +83,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
 
     @Override
+    public String getSourceFilePathOfClass(String uniquename) {
+    	return service.getSourceFilePathOfClass(uniquename);
+    }
+
+    @Override
     public AnalysedModuleDTO[] getRootModules() {
         return service.getRootModules();
     }

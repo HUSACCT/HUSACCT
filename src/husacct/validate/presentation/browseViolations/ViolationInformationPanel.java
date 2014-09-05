@@ -170,8 +170,7 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(!sourceClassPath.equals("") && !sourceClassPath.equals(".java")){
-			//logger.info("Opening code viewer: " + sourceClassPath + " at line " + sourceLine);
+		if(!sourceClassPath.equals("")){
 			ServiceProvider.getInstance().getControlService().displayErrorInFile(sourceClassPath, sourceLine, new Severity("test", Color.ORANGE));
 		}
 	}

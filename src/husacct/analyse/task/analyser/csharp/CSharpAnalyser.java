@@ -35,7 +35,7 @@ public class CSharpAnalyser extends AbstractAnalyser {
         try {
             CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController();
             CSharpParser cSharpParser = generateCSharpParser(sourceFilePath);
-            cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser);
+            cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser, sourceFilePath);
         } catch (Exception e) {
             e.printStackTrace();
         }

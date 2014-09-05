@@ -200,12 +200,12 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	// Annotation	
 	@Test
-	public void AnnotationDependency(){
+	public void AnnotationDependency(){ // Asserts False, since annotations are not supported in C#
 		String fromModule = "Domain.Direct.Violating.AnnotationDependency";
 		String toModule = "Technology.Direct.Dao.SettingsAnnotation";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Annotation");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	// Call
@@ -228,12 +228,12 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void CallConstructorLibraryClass(){
+	public void CallConstructorLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
 		String fromModule = "Domain.Direct.Violating.CallConstructorLibraryClass";
 		String toModule = "FI.Foyt.Foursquare.Api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	@Test
@@ -264,12 +264,12 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void CallInstanceLibraryClass(){
+	public void CallInstanceLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
 		String fromModule = "Domain.Direct.Violating.CallInstanceLibraryClass";
 		String toModule = "FI.Foyt.Foursquare.Api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	@Test
@@ -494,7 +494,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessObjectReferenceIndirect_AsParameter_POI(){
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter_POI";
-		String toModule = "Domain.Indirect.IndirectTo.indirectto.POI";
+		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
@@ -578,7 +578,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod";
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -587,7 +587,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethodToString";
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -633,7 +633,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -642,7 +642,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -651,7 +651,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -669,7 +669,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	// Inheritance

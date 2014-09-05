@@ -1,11 +1,8 @@
 package husacct.analyse.task.analyser.java;
 
-import java.util.ArrayList;
-
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -18,24 +15,18 @@ class JavaAttributeAndLocalVariableGenerator {
     private String declareType;
     private int lineNumber;
     private String belongsToMethod;
-    private ArrayList<String> declareTypes = new ArrayList<String>();
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
+        this.belongsToClass = belongsToClass;
         startFiltering(attributeTree, belongsToClass);
         createAttributeObject();
     }
 
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
+        this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         startFiltering(attributeTree, belongsToClass);
-        /* Test helper
-       	if (this.belongsToClass.equals("plugins.script.ScriptingEngine")){
-    		if (this.lineNumber == 113) {
-    				boolean breakpoint1 = true;
-    		}
-    	} */
-
         createLocalVariableObject();
     }
 
@@ -45,7 +36,6 @@ class JavaAttributeAndLocalVariableGenerator {
         if (IdentTree != null) {
             this.name = IdentTree.getText();
         }
-        this.belongsToClass = belongsToClass;
         walkThroughAST(attributeTree);
     }
 
@@ -56,14 +46,6 @@ class JavaAttributeAndLocalVariableGenerator {
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree child = tree.getChild(i);
             boolean walkThroughChildren = true;
-
-            // Test helper
-           	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic")){
-        		if (child.getLine() == 10) {
-        				boolean breakpoint1 = true;
-        		}
-        	} 
-
             int treeType = child.getType();
             switch(treeType)
             {
@@ -113,7 +95,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	        if (SkippedTypes.isSkippable(declareType)) {
 	            modelService.createAttributeOnly(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	        } else {
-	            modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
+	            modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	        }
 	        declareType = "";
     	}
@@ -125,10 +107,9 @@ class JavaAttributeAndLocalVariableGenerator {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {
-	            //modelService.createLocalVariableOnly(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
-	            modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+	            modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	        } else {
-	        	modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+	        	modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	        }
 	        	declareType = "";
 	    }

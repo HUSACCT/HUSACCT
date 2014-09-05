@@ -9,9 +9,7 @@ public interface IModelCreationService {
 
     public void clearModel();
 
-    public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
-
-    public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity, boolean isInterface);
+    public void createClass(String sourceFilePath, String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity, boolean isInterface);
 
     public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 
@@ -19,24 +17,12 @@ public interface IModelCreationService {
 
     public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 
-    public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber, List<String> declareTypes);
-
     public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber);
 
     public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 
     public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
             boolean isPureAccessor, String declaredReturnType,
-            String belongsToClass, boolean isConstructor, boolean isAbstract,
-            boolean hasClassScope);
-
-    public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
-            boolean isPureAccessor, String declaredReturnType,
-            String belongsToClass, boolean isConstructor, boolean isAbstract,
-            boolean hasClassScope, int lineNumber);
-
-    public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
-            boolean isPureAccessor, ArrayList<String> declaredReturnType,
             String belongsToClass, boolean isConstructor, boolean isAbstract,
             boolean hasClassScope, int lineNumber);
 

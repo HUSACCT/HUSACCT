@@ -12,10 +12,9 @@ import java.util.Stack;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.apache.log4j.Logger;
 
 public class CSharpTreeConvertController {
-
+	String sourceFilePath = "";
 	CSharpUsingGenerator csUsingGenerator;
 	CSharpNamespaceGenerator csNamespaceGenerator;
 	CSharpClassGenerator csClassGenerator;
@@ -28,7 +27,7 @@ public class CSharpTreeConvertController {
 	List<CommonTree> usings = new ArrayList<>();
 	Stack<String> namespaceStack = new Stack<>();
 	Stack<String> classNameStack = new Stack<>();
-    private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
+    //private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
 
 	public CSharpTreeConvertController() {
 		csUsingGenerator = new CSharpUsingGenerator();
@@ -42,7 +41,8 @@ public class CSharpTreeConvertController {
 		csLamdaGenerator = new CSharpLamdaGenerator();
 	}
 
-	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
+	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser, String sourceFilePath) throws RecognitionException {
+		this.sourceFilePath = sourceFilePath;
 		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
 		delegateASTToGenerators(compilationCommonTree);
 	}
@@ -136,11 +136,13 @@ public class CSharpTreeConvertController {
 	private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface) {
 		String analysedClass;
 		if (isInnerClass) {
-			analysedClass = csClassGenerator.generateToModel(classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface);
-			if (analysedClass == null)
-	    		logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));
+			analysedClass = csClassGenerator.generateToModel(sourceFilePath, classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface);
+			if (analysedClass == null){
+				analysedClass = "";
+	    		// logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));
+			}
 		} else {
-			analysedClass = csClassGenerator.generateToDomain(classTree, getParentName(namespaceStack), isInterface);
+			analysedClass = csClassGenerator.generateToDomain(sourceFilePath, classTree, getParentName(namespaceStack), isInterface);
 		}
 		return analysedClass;
 	}
