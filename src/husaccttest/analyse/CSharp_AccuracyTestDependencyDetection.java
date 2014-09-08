@@ -181,12 +181,39 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessInstanceVariable_SetArgumentValue(){
+		String fromModule = "Domain.Direct.Violating.AccessInstanceVariable_SetArgumentValue";
+		String toModule = "Technology.Direct.Dao.CheckInDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
 	public void AccessObjectReferenceAsParameter(){
 		String fromModule = "Domain.Direct.Violating.AccessObjectReferenceAsParameter";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void AccessLocalVariable_ReadArgumentValue(){
+		String fromModule = "Domain.Direct.Violating.AccessLocalVariable_ReadArgumentValue";
+		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void AccessLocalVariable_SetArgumentValue(){
+		String fromModule = "Domain.Direct.Violating.AccessLocalVariable_SetArgumentValue";
+		String toModule = "Technology.Direct.Dao.CheckInDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
@@ -494,6 +521,34 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessObjectReferenceIndirect_AsParameter_POI(){
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter_POI";
+		String toModule = "Domain.Indirect.IndirectTo.POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
+	public void AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide(){
+		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
+		String toModule = "Domain.Indirect.IndirectTo.POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType(){
+		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
+		String toModule = "Domain.Indirect.IndirectTo.POI";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		// This test case should assert false, conform the algorithm of FamixCreationPostProcessor.findMethodOnName(); 2014-08-28.
+	}
+
+	@Test
+	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic(){
+		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");

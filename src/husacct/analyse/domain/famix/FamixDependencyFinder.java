@@ -10,13 +10,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
 class FamixDependencyFinder extends FamixFinder {
 	private static enum FinderFunction { FROM, TO, BOTH, ALL };
-	private static enum DependencyType { DIRECT, INDIRECT, EXTERNAL };
     private List<DependencyDTO> dependencyCache;
     private List<ExternalSystemDTO> externalSystemCache;
     private final Logger logger = Logger.getLogger(FamixDependencyFinder.class);
@@ -268,16 +265,6 @@ class FamixDependencyFinder extends FamixFinder {
 			}
 		}
 		return foundDependencies;
-	}
-	
-	private DependencyType typeOfDependency(DependencyDTO dependency){
-		if(dependency.type.matches("Extends.*?Extends.*"))
-			return DependencyType.INDIRECT;
-		if(dependency.type.matches("Extends.*?Implements.*"))
-			return DependencyType.INDIRECT;
-		if(dependency.type.matches("Implements.*?Extends.*"))
-			return DependencyType.INDIRECT;
-		return DependencyType.DIRECT;
 	}
 	
 	private boolean compliesWithFilter(FamixAssociation association, String[] filter){

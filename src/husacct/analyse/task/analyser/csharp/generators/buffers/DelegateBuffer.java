@@ -6,7 +6,6 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 
 import org.antlr.runtime.tree.CommonTree;
 
-import sun.reflect.generics.tree.TypeTree;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.task.analyser.csharp.generators.CSharpParameterGenerator;
 

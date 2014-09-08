@@ -1,6 +1,5 @@
 package husacct.analyse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
@@ -8,7 +7,6 @@ import javax.swing.JInternalFrame;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;

@@ -7,8 +7,6 @@ import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
-
 import org.jdom2.Element;
 
 public class AnalyseControlServiceImpl implements IAnalyseControlService {

@@ -1,20 +1,12 @@
 package husacct.analyse.domain.famix;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-
 import javax.naming.directory.InvalidAttributesException;
-
 import org.apache.log4j.Logger;
-
-import com.sun.org.apache.xpath.internal.FoundIndex;
-
 import husacct.analyse.domain.IModelCreationService;
 import husacct.common.dto.AnalysedModuleDTO;
-import husacct.define.domain.SoftwareArchitecture;
 
 public class FamixCreationServiceImpl implements IModelCreationService {
 
@@ -174,21 +166,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
     @Override
     public void createLocalVariable(String belongsToClass, String declareType, String name,
-            String uniqueName, int lineNumber, String belongsToMethodString, List<String> declareTypes) {
-        this.createLocalVariable(belongsToClass, declareType, name, uniqueName, lineNumber, belongsToMethodString);
-
-        for (String type : declareTypes) {
-            FamixAssociation fAssocation = new FamixAssociation();
-            fAssocation.from = belongsToClass;
-            fAssocation.to = type;
-            fAssocation.type = "DeclarationLocalVariable";
-            fAssocation.lineNumber = lineNumber;
-            model.waitingAssociations.add(fAssocation);
-        }
-    }
-
-    @Override
-    public void createLocalVariable(String belongsToClass, String declareType, String name,
             String uniqueName, int lineNumber, String belongsToMethodString) {
 
         FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
@@ -199,9 +176,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixLocalVariable.uniqueName = uniqueName;
         famixLocalVariable.lineNumber = lineNumber;
         model.waitingStructuralEntities.add(famixLocalVariable);
-        //addToModel(famixLocalVariable);
-        FamixAssociation fAssocation = new FamixAssociation();
 
+        FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
         fAssocation.type = "DeclarationVariableWithinMethod";

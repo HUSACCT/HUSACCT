@@ -1,6 +1,5 @@
 package husacct.analyse.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface IModelCreationService {
@@ -38,9 +37,6 @@ public interface IModelCreationService {
 
     public void createLocalVariable(String belongsToClass,
             String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString);
-
-    public void createLocalVariable(String belongsToClass,
-            String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString, List<String> declareTypes);
 
     public void createLocalVariableOnly(String belongsToClass, String declareType, String name,
             String uniqueName, int lineNumber, String belongsToMethodString);

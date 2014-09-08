@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 

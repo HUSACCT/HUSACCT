@@ -1,10 +1,6 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-
-import java.util.ArrayList;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -54,8 +50,13 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	private void createLocalVariableObject() {
-		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
-		modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
+		if ((declareType != null) && (declareType != "")) {
+			if(SkippableTypes.isSkippable(declareType)){
+				modelService.createLocalVariableOnly(packageAndClassName, declareType, name, packageAndClassName + "." + belongsToMethod + "." + name, lineNumber, belongsToMethod);
+	        } else {
+				modelService.createLocalVariable(packageAndClassName, declareType, name, packageAndClassName + "." + belongsToMethod + "." + name, lineNumber, belongsToMethod);
+	        }
+		}
 		declareType = "";
 	}
 

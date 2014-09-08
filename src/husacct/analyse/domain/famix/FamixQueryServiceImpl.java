@@ -1,20 +1,12 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
-import java.util.Map.Entry;
-
-import org.apache.log4j.Logger;
-
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 
 public class FamixQueryServiceImpl implements IModelQueryService {
 

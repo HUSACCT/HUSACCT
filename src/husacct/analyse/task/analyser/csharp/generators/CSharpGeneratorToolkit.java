@@ -3,7 +3,6 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.VisibilitySet;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -189,10 +188,7 @@ public class CSharpGeneratorToolkit {
 							typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.BOOL);
 							if (typenameTree != null) {
 								s += tree.getFirstChildWithType(CSharpParser.BOOL).getText();
-							} else {
-								// Test Helper
-								boolean breakpoint = true;
-							}
+							} 
 						}
 					}
 				}

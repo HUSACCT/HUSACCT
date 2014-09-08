@@ -90,10 +90,4 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         JavaLoopGenerator forEachLoopGenerator = new JavaLoopGenerator();
         forEachLoopGenerator.generateToDomainFromLoop((CommonTree) tree, this.belongsToClass, this.belongsToMethod);
     }
-
-    private void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
-        }
-    }
 }

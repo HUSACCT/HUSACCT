@@ -1,7 +1,5 @@
 package husacct.analyse.task.analyser.java;
 
-import java.util.ArrayList;
-
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;

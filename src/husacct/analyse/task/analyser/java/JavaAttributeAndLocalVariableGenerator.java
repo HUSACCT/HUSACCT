@@ -107,7 +107,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {
-	            modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
+	            modelService.createLocalVariableOnly(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	        } else {
 	        	modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	        }

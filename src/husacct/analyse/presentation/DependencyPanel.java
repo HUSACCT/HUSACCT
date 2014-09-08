@@ -1,6 +1,5 @@
 package husacct.analyse.presentation;
 
-import husacct.common.Resource;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -12,19 +11,13 @@ import husacct.validate.domain.validation.Severity;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
@@ -40,8 +33,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-
-import common.Logger;
 
 class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, ActionListener {
 

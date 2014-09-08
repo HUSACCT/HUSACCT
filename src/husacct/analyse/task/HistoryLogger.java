@@ -8,9 +8,7 @@ import husacct.common.dto.ProjectDTO;
 import husacct.control.task.configuration.ConfigurationManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -27,7 +25,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class HistoryLogger {
 

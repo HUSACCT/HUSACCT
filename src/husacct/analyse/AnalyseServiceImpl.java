@@ -13,7 +13,6 @@ import husacct.analyse.task.TypeFilter;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;

@@ -1,7 +1,6 @@
 package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import husacct.control.task.States;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import org.apache.log4j.Logger;
 
 class FamixCreationPostProcessor {
 
-    private static final String EXTENDS = "Extends";
     private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
     private static final String EXTENDS_ABSTRACT = "ExtendsAbstract";
     private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
@@ -160,10 +158,10 @@ class FamixCreationPostProcessor {
             	boolean declareTypeHasValue = false;
             	String theContainingClass = entity.belongsToClass;
             	
-            	// Test helper
+            	/* Test helper
             	if (theContainingClass.contains("BaseIndirect")){
             		boolean breakpoint1 = true;
-            	} 
+            	} */
             	
             	// Check if belongsToClass refers to an existing class
             	if (theModel.classes.containsKey(theContainingClass)) {
@@ -174,26 +172,28 @@ class FamixCreationPostProcessor {
             	// 0) Check if declareType refers to an existing class or library
                 if ((entity.declaredReturnType != null) && (!entity.declaredReturnType.equals(""))){ 
                 	declareTypeHasValue = true;
-	            	if (theModel.classes.containsKey(entity.declaredReturnType) || theModel.libraries.containsKey(entity.declaredReturnType)) {
+	            	if (theModel.classes.containsKey(entity.declaredReturnType) || theModel.libraries.containsKey("xLibraries." + entity.declaredReturnType)) {
 	            		declareTypeExists = true;
 	            	}
                 }
 
             	// Objective: If declareType is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents.
             	// 1) Try to derive declareType from the unique name from the imports.
-            	if (belongsToClassExists && declareTypeHasValue) {
-	            	String classFoundInImports = "";
-                    classFoundInImports = findClassInImports(theContainingClass, entity.declaredReturnType);
-                    if (!classFoundInImports.equals("")) {
-	                	if (theModel.classes.containsKey(classFoundInImports) || theModel.libraries.containsKey("xLibraries." + classFoundInImports)) {
-	                        entity.declaredReturnType = classFoundInImports;
-	                        declareTypeExists = true;
+            	if (belongsToClassExists && !declareTypeExists && declareTypeHasValue) {
+                	if (!entity.declaredReturnType.contains(".")) {
+		            	String classFoundInImports = "";
+	                    classFoundInImports = findClassInImports(theContainingClass, entity.declaredReturnType);
+	                    if (!classFoundInImports.equals("")) {
+		                	if (theModel.classes.containsKey(classFoundInImports) || theModel.libraries.containsKey("xLibraries." + classFoundInImports)) {
+		                        entity.declaredReturnType = classFoundInImports;
+		                        declareTypeExists = true;
+		                	}
 	                	}
                 	}
         		}
 
             	// 2) Find out or the name refers to a type in the same package as the from class.*/
-            	if (belongsToClassExists && (!declareTypeExists) && declareTypeHasValue) {
+            	if (belongsToClassExists && !declareTypeExists && declareTypeHasValue) {
                     String belongsToPackage = theModel.classes.get(theContainingClass).belongsToPackage;
             		String type = findClassInPackage(entity.declaredReturnType, belongsToPackage);
                     if (!type.equals("")) {
@@ -203,8 +203,13 @@ class FamixCreationPostProcessor {
 	                	}
                     }
                 }
-                
-                // Fill HashMap methodsPerClass 
+            	
+            	/* Test helper
+            	if (!declareTypeExists && declareTypeHasValue) {
+            		boolean testhelper = true;
+            	} */
+            	
+                // Fill HashMap methodsPerClass. Fill this Hashmap also with methods whose declaredReturnType is not found to exist, to prevent false positives in case of two or more methods with the same name, but with different signatures and return types. 
             	if (belongsToClassExists && (entity instanceof FamixMethod)) {
             		FamixMethod method = (FamixMethod) entity;
 	            	ArrayList<FamixMethod> alreadyIncludedMethodsList = null;
@@ -344,12 +349,12 @@ class FamixCreationPostProcessor {
             	String toString = "";
             	FamixInvocation theInvocation = null;
 
-                /* Test helpers
-            	if (association.from.equals("Limada.Tests.ThingGraphs.Sample4Test")){
-            		if (association.lineNumber == 27) {
+                // Test helpers
+            	if (association.from.contains("AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide")){
+            		if (association.lineNumber == 10) {
             			boolean breakpoint = true;
         			}
-            	} */
+            	} //
 
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {
@@ -757,10 +762,10 @@ class FamixCreationPostProcessor {
     // Returns FamixMethod if one unique method is found AND declaredReturnType refers to an existing FamixClass or FamixLibrary. Else, it returns "". 
     private FamixMethod findInvokedMethodOnName(String fromClass, String fromMethod, String invokedClassName, String invokedMethodName) {
     	FamixMethod result = null;
-		// Test Helper
+		/* Test Helper
 		if (fromClass.equals("domain.direct.violating.AccessLocalVariable_SetArgumentValue")){
 			boolean breakpoint = true;
-		}
+		} */
 
     	// First, if methodNameAsInInvocation matches with a method unique name, return that method. 
     	String searchKey = invokedClassName + "." + invokedMethodName;
@@ -775,7 +780,7 @@ class FamixCreationPostProcessor {
     		if (methodsList.size() == 0) {
     			return result;
     		} else if (methodsList.size() == 1) {
-    			FamixMethod result1 = methodsList.get(0);
+    			// FamixMethod result1 = methodsList.get(0);
     			return methodsList.get(0);
     		} else {
     			String invocationSignature = invokedMethodName.substring(invokedMethodName.indexOf("("));;
@@ -931,8 +936,8 @@ class FamixCreationPostProcessor {
 		HashSet<String> foundInheritanceList = inheritanceAssociationsPerClass.get(to);
 		if (foundInheritanceList != null) {
 			for (String foundInheritance : foundInheritanceList){
-				FamixClass superSuperClass = theModel.classes.get(foundInheritance);
-				if (!foundInheritance.equals(to)){ // Exclude interfaces: && !superSuperClass.isInterface
+				//FamixClass superSuperClass = theModel.classes.get(foundInheritance);
+				if (!foundInheritance.equals(to)){ // To exclude interfaces, add: && !superSuperClass.isInterface
 					//Create a new association of type FamixInheritanceDefinition from association to superSuperClass
 					FamixAssociation newAssociation = new FamixAssociation();
 					newAssociation.from = from;

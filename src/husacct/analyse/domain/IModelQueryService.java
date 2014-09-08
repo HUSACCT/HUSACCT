@@ -2,8 +2,6 @@ package husacct.analyse.domain;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
