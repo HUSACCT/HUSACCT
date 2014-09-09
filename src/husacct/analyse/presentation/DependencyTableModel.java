@@ -72,4 +72,22 @@ class DependencyTableModel extends AbstractTableModel {
     public String getColumnName(int columnIndex) {
         return columnNames[columnIndex];
     }
+
+    /*
+     * JTable uses this method to determine the default renderer/
+     * editor for each cell.  If we didn't implement this method,
+     * then the last column would contain text ("true"/"false"),
+     * rather than a check box.
+     */
+    @Override
+    public Class getColumnClass(int c) {
+        //return getValueAt(0, c).getClass();
+        if (c == 3) {
+            return new Integer(5).getClass();
+        } else {
+        	String s = "";
+            return s.getClass();
+        }
+    } 
+
 }

@@ -275,13 +275,13 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
 		for (int i = 0; i < dependencyTable.getColumnCount(); i++) {
 		    column = dependencyTable.getColumnModel().getColumn(i);
 		    if (i == 0) {
-			column.setPreferredWidth(360); // From
+			column.setPreferredWidth(350); // From
 		    } else if (i == 1) {
-			column.setPreferredWidth(360); // To
+			column.setPreferredWidth(350); // To
 		    } else if (i == 2) {
 			column.setPreferredWidth(70); // Type
 		    } else if (i == 3) {
-			column.setPreferredWidth(30); // Line
+			column.setPreferredWidth(50); // Line
 		    } else if (i == 4) {
 			column.setPreferredWidth(50); // Direct
 		    }
