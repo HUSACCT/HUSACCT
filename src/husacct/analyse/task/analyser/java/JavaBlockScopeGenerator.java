@@ -16,6 +16,14 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
 
+        /* Test helper
+       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType")){
+    		if (tree.getLine() == 44) {
+//    			if (child.getType() == JavaParser.METHOD_CALL) {		
+    				boolean breakpoint1 = true;
+    			}
+//    		}
+    	} */ 
         walkThroughBlockScope(tree);
     }
     
@@ -24,15 +32,6 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        Tree child = tree.getChild(i);
 	        int treeType = child.getType();
 	        boolean walkThroughChildren = true;
-	
-	        /* Test helper
-	       	if (this.belongsToClass.equals("husacct.define.presentation.jdialog.AddModuleValuesJDialog")){
-	    		if (child.getLine() == 44) {
-	//    			if (child.getType() == JavaParser.METHOD_CALL) {		
-	    				boolean breakpoint1 = true;
-	    			}
-	//    		}
-	    	} */ 
 	
 	        switch(treeType) {
 	        case JavaParser.VAR_DECLARATION:

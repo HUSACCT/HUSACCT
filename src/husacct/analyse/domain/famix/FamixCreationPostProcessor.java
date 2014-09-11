@@ -349,12 +349,12 @@ class FamixCreationPostProcessor {
             	String toString = "";
             	FamixInvocation theInvocation = null;
 
-                // Test helpers
+                /* Test helpers
             	if (association.from.contains("AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide")){
             		if (association.lineNumber == 10) {
             			boolean breakpoint = true;
         			}
-            	} //
+            	} */
 
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {
@@ -546,7 +546,7 @@ class FamixCreationPostProcessor {
             			}
 						addToModel(association);
 					} else {
-	        			numberOfNotConnectedWaitingAssociations ++;
+	        			// Do nothing
 					}
 					if (association instanceof FamixInvocation) {
 						if (chainingInvocation) { // If true, create an association to identify dependencies to the remaining parts of the chain. Store it temporarily; it is processed in a separate method. 
@@ -561,10 +561,16 @@ class FamixCreationPostProcessor {
 		                    indirectAssociation.nameOfInstance = theInvocation.nameOfInstance;
 		                    waitingDerivedAssociations.add(indirectAssociation);
 						} else {
+		        			// Do nothing
 						}
 					}
                 } else {
-        			numberOfNotConnectedWaitingAssociations ++;
+                	if (!chainingInvocation) { 
+                		numberOfNotConnectedWaitingAssociations ++;
+                	} else {
+                		// Do nothing
+                	}
+                	
                 }
     			
                 calculateProgress();
@@ -594,7 +600,7 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.equals("Limada.Tests.ThingGraphs.Sample4Test")){
+        	if (invocation.from.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType")){
         		if (invocation.lineNumber == 27) {
         			boolean breakpoint = true;
     			}
@@ -767,12 +773,12 @@ class FamixCreationPostProcessor {
 			boolean breakpoint = true;
 		} */
 
-    	// First, if methodNameAsInInvocation matches with a method unique name, return that method. 
+    	// 1) If methodNameAsInInvocation matches with a method unique name, return that method. 
     	String searchKey = invokedClassName + "." + invokedMethodName;
     	if (theModel.behaviouralEntities.containsKey(searchKey)) {
     		return (FamixMethod) theModel.behaviouralEntities.get(searchKey);
     	}
- 
+    	// 2) Find out if there are more methods with the same name of the invoked class. If only one method is found, then return this method.  
     	String methodName = invokedMethodName.substring(0, invokedMethodName.indexOf("(")); // Methodname without signature
     	 searchKey = invokedClassName + "." + methodName;
     	if (sequencesPerMethod.containsKey(searchKey)){
@@ -782,12 +788,12 @@ class FamixCreationPostProcessor {
     		} else if (methodsList.size() == 1) {
     			// FamixMethod result1 = methodsList.get(0);
     			return methodsList.get(0);
-    		} else {
+    		} else { // 3) if there are more methods with the same name, then compare the invocation arguments with the method parameters.
     			String invocationSignature = invokedMethodName.substring(invokedMethodName.indexOf("("));;
     			String contentsInvocationSignature = invocationSignature.substring(invocationSignature.indexOf("(") + 1, invocationSignature.indexOf(")")); 
     			String[] invocationArguments = contentsInvocationSignature.split(",");
     			int numberOfArguments = invocationArguments.length;
-    			// If there is only one method with the same number of parameters as invocationArguments, then return this method
+    			// 3a) If there is only one method with the same number of parameters as invocationArguments, then return this method
     			List<FamixMethod> matchingMethods1 = new ArrayList<FamixMethod>();
 	    		for (FamixMethod method : methodsList){
 	    			if ((method.signature != null) && (!method.signature.equals(""))) {
@@ -803,7 +809,7 @@ class FamixCreationPostProcessor {
 	    		if (matchingMethods1.size() == 1)
 	    			return matchingMethods1.get(0);
     			
-    			// If there is only one method where the first parameter type == the first argument type, then return this method  
+    			// 3b) If there is only one method where the first parameter type == the first argument type, then return this method  
     			List<FamixMethod> matchingMethods2 = new ArrayList<FamixMethod>();
     			if (numberOfArguments >= 1) {
     				// Replace the argument string by a type, in case of an attribute
@@ -829,13 +835,13 @@ class FamixCreationPostProcessor {
     				matchingMethods1.clear();
     				// Replace the argument string by a type, in case of an attribute
     				invocationArguments[1] = getTypeOfAttribute(fromClass, fromMethod, invocationArguments[1]);
-    	    		for (FamixMethod matchingMethod1 : matchingMethods2){
-    	    			String contentsmethodParameter = matchingMethod1.signature.substring(matchingMethod1.signature.indexOf("(") + 1, matchingMethod1.signature.indexOf(")")); 
+    	    		for (FamixMethod matchingMethod2 : matchingMethods2){
+    	    			String contentsmethodParameter = matchingMethod2.signature.substring(matchingMethod2.signature.indexOf("(") + 1, matchingMethod2.signature.indexOf(")")); 
     	    			String[] methodParameters = contentsmethodParameter.split(",");
     	    			if (methodParameters.length >= 2) {
         	    			methodParameters[1] = getfullPathOfDeclaredType(fromClass, methodParameters[1]);
     	    				if (methodParameters[1].equals(invocationArguments[1])) {
-    	    					matchingMethods1.add(matchingMethod1);
+    	    					matchingMethods1.add(matchingMethod2);
     	    				}
     	    			}
     	    			

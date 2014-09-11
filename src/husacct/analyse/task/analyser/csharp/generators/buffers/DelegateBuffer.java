@@ -8,6 +8,7 @@ import org.antlr.runtime.tree.CommonTree;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.task.analyser.csharp.generators.CSharpParameterGenerator;
+import husacct.analyse.task.analyser.csharp.generators.SkippableTypes;
 
 import java.util.Stack;
 
@@ -58,6 +59,10 @@ public class DelegateBuffer {
 		boolean isAbstract = true;
 		boolean hasClassScope = true;
 		int lineNumber = delegateTree.getLine();
-		modelService.createMethod(name, uniqueName, accessControlQualifier, params, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+		if(SkippableTypes.isSkippable(returntype)){
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, params, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+        } else {
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, params, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+        }
 	}
 }

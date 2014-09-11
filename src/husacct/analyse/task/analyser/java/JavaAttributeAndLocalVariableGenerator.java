@@ -69,8 +69,8 @@ class JavaAttributeAndLocalVariableGenerator {
             case JavaParser.METHOD_CALL:
             	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                	javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
-            walkThroughChildren = false;
-            break;
+	            walkThroughChildren = false;
+	            break;
             case JavaParser.CLASS_CONSTRUCTOR_CALL:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, belongsToMethod);

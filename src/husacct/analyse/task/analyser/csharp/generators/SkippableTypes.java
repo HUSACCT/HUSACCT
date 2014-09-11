@@ -2,7 +2,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import java.util.EnumSet;
 
-enum SkippableTypes {
+public enum SkippableTypes {
 
 	STRING1("string"),
 	STRING2("String"),

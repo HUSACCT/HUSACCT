@@ -546,8 +546,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
-		// This test case should assert false, conform the algorithm of FamixCreationPostProcessor.findMethodOnName(); 2014-08-28.
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test

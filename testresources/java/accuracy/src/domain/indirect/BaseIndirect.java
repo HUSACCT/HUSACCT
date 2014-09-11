@@ -14,7 +14,7 @@ public class BaseIndirect {
 		
 	}
 
-	public subDao getProfileInformation(int i, String s){
+	public CallInstanceSubClassDOA getProfileInformation(int i, String s){
 		return subDao;
 	}
 
@@ -22,15 +22,15 @@ public class BaseIndirect {
 		return new POI();
 	}
 
-	public subDao getMethodCorrectlyByDerivedArgumentType(String s, String j, int j){
-		return subDao;
-	}
-
-	public POI getMethodCorrectlyByDerivedArgumentType(String s, int i, int j){
+	public POI getMethodCorrectlyByDerivedArgumentType(String s, String j, int j){
 		return new POI();
 	}
 
-	public subDao getMethodCorrectlyByHeuristic(int i, String s, int j){
+	public CallInstanceSubClassDOA getMethodCorrectlyByDerivedArgumentType(String s, int i, int j){
+		return subDao;
+	}
+
+	public CallInstanceSubClassDOA getMethodCorrectlyByHeuristic(int i, String s, int j){
 		return subDao;
 	}
 

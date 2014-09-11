@@ -98,7 +98,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         addToModel(fImport);
     }
 
-    public void createMethod(String name, String uniqueName, String accessControlQualifier,
+    public void createMethodOnly(String name, String uniqueName, String accessControlQualifier,
             String signature, boolean isPureAccessor, String declaredReturnType,
             String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
 
@@ -106,7 +106,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixMethod.name = name;
         famixMethod.uniqueName = uniqueName;
         famixMethod.accessControlQualifier = accessControlQualifier;
-        if (signature.equals("") || signature.equals("")) {
+        if (signature.equals("")) {
             signature = "()";
         }
         famixMethod.signature = signature;
@@ -117,7 +117,14 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixMethod.isAbstract = isAbstract;
         famixMethod.hasClassScope = hasClassScope;
         addToModel(famixMethod);
+    }
 
+    public void createMethod(String name, String uniqueName, String accessControlQualifier,
+            String signature, boolean isPureAccessor, String declaredReturnType,
+            String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
+
+    	createMethodOnly(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+    	
         if ((declaredReturnType != null) && (!declaredReturnType.equals(""))) {
             FamixAssociation fAssocation = new FamixAssociation();
             fAssocation.from = belongsToClass;
@@ -145,16 +152,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     @Override
     public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass,
             String declareType, String name, String uniqueName, int line) {
-
-        FamixAttribute famixAttribute = new FamixAttribute();
-        famixAttribute.hasClassScope = classScope;
-        famixAttribute.accessControlQualifier = accesControlQualifier;
-        famixAttribute.belongsToClass = belongsToClass;
-        famixAttribute.declareType = declareType;
-        famixAttribute.name = name;
-        famixAttribute.uniqueName = uniqueName;
-        famixAttribute.lineNumber = line;
-        model.waitingStructuralEntities.add(famixAttribute);
+    	
+    	createAttributeOnly(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line);
         
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -168,14 +167,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     public void createLocalVariable(String belongsToClass, String declareType, String name,
             String uniqueName, int lineNumber, String belongsToMethodString) {
 
-        FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
-        famixLocalVariable.belongsToMethod = belongsToMethodString;
-        famixLocalVariable.belongsToClass = belongsToClass;
-        famixLocalVariable.declareType = declareType;
-        famixLocalVariable.name = name;
-        famixLocalVariable.uniqueName = uniqueName;
-        famixLocalVariable.lineNumber = lineNumber;
-        model.waitingStructuralEntities.add(famixLocalVariable);
+    	createLocalVariableOnly(belongsToClass, declareType, name, uniqueName, lineNumber, belongsToMethodString);
 
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -215,7 +207,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     @Override
     public void createParameter(String name, String uniqueName, String declareType, String belongsToClass, 
     		int lineNumber, String belongsToMethod, List<String> declareTypes) {
-        this.createParameterOnly(name, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, declareTypes);
+
+    	this.createParameterOnly(name, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, declareTypes);
 
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -330,15 +323,15 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         createClassesAndLibrariesBasedOnImports();
         this.logger.info(new Date().toString() + " Finished: distinguisAndCreateLibraries(), Nr of Libraries = " + model.libraries.size());
         int associationsNumber = model.associations.size();
-        this.logger.info(new Date().toString() + " Starting: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntities.size());
+        this.logger.info(new Date().toString() + " Starting: processWaitingStructuralEntities(), Model.entities = " + model.structuralEntities.size() + ", WaitingStructuralEntities = " + model.waitingStructuralEntities.size());
         creationPostProcessor.processWaitingStructuralEntities();
-        this.logger.info(new Date().toString() + " Finished: connectStructuralDependencies(), Model.entities = " + model.structuralEntities.size() + ", Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
+        this.logger.info(new Date().toString() + " Finished: processWaitingStructuralEntities(), Model.entities = " + model.structuralEntities.size() + ", Model.associations = " + model.associations.size() + ", WaitingAssociations = " + model.waitingAssociations.size());
         creationPostProcessor.processBehaviouralEntities();
         creationPostProcessor.processInheritanceAssociations();
         creationPostProcessor.processWaitingAssociations();
         creationPostProcessor.processWaitingDerivedAssociations();
         associationsNumber = model.associations.size();
-        this.logger.info(new Date().toString() + " Finished: connectSAssociationDependencies(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());
+        this.logger.info(new Date().toString() + " Finished: processWaitingAssociations(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());
     }
 
     private void createClassesAndLibrariesBasedOnImports() {

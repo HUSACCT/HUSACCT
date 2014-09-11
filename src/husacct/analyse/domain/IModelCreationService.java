@@ -25,6 +25,11 @@ public interface IModelCreationService {
             String belongsToClass, boolean isConstructor, boolean isAbstract,
             boolean hasClassScope, int lineNumber);
 
+    public void createMethodOnly(String name, String uniqueName, String accessControlQualifier, String signature,
+            boolean isPureAccessor, String declaredReturnType,
+            String belongsToClass, boolean isConstructor, boolean isAbstract,
+            boolean hasClassScope, int lineNumber);
+
     public void createInheritanceDefinition(String from, String to, int lineNumber);
 
     public void createImplementsDefinition(String from, String to, int lineNumber);

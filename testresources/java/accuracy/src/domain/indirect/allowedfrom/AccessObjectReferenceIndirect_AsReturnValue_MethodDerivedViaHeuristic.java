@@ -1,4 +1,4 @@
-package domain.indirect.violatingfrom;
+package domain.indirect.allowedfrom;
 
 import domain.indirect.BaseIndirect;
 import domain.indirect.intermediate.ServiceTwo;

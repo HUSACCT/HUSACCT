@@ -106,7 +106,11 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 		String argumentTypes = createArgumentString(argTypes);
 		argTypes.clear();
 		this.uniqueName = getMethodUniqueName(belongsToClass, name, argumentTypes);
-		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		if(SkippableTypes.isSkippable(returnType)){
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+        } else {
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+        }
 	}
 
 	private String createArgumentString(Stack<String> argTypes) {

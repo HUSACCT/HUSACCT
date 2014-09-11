@@ -14,7 +14,7 @@ namespace Domain.Indirect
 		{
 		}
 
-	public subDao getProfileInformation(int i, string s){
+	public CallInstanceSubClassDOA getProfileInformation(int i, string s){
 		return subDao;
 	}
 
@@ -22,15 +22,15 @@ namespace Domain.Indirect
 		return new POI();
 	}
 
-	public subDao getMethodCorrectlyByDerivedArgumentType(string s, string j, int j){
-		return subDao;
-	}
-
-	public POI getMethodCorrectlyByDerivedArgumentType(string s, int i, int j){
+	public POI getMethodCorrectlyByDerivedArgumentType(string s, string j, int j){
 		return new POI();
 	}
 
-	public subDao getMethodCorrectlyByHeuristic(int i, string s, int j){
+	public CallInstanceSubClassDOA getMethodCorrectlyByDerivedArgumentType(string s, int i, int j){
+		return subDao;
+	}
+
+	public CallInstanceSubClassDOA getMethodCorrectlyByHeuristic(int i, string s, int j){
 		return subDao;
 	}
 

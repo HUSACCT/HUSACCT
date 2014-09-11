@@ -7,7 +7,7 @@ namespace Domain.Indirect.ViolatingFrom
 
 	{
 	public string initializeProfileInformation() {
-		String profile = "profiled";
+		string profile = "profiled";
 		BaseIndirect baseClass = new BaseIndirect();
 		Object o = baseClass.getMethodCorrectlyByDerivedArgumentType("tsja", profile, 3);
 		return o;	}

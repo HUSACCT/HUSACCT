@@ -1,7 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
@@ -68,6 +67,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
     private void WalkThroughMethod(Tree tree) {
         for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
             Tree child = tree.getChild(childCount);
+	        boolean walkThroughChildren = true;
             int treeType = child.getType();
             
             switch(treeType) {
@@ -88,40 +88,42 @@ class JavaMethodGeneratorController extends JavaGenerator {
             	break;
             case JavaParser.TYPE: 
             	getReturnType(child); 
-            	deleteTreeChild(child); 
+	            walkThroughChildren = false;
             	break;
             case JavaParser.IDENT: 
             	name = child.getText(); 
             	break;
             case JavaParser.THROW: 
             	delegateException(child); 
-            	deleteTreeChild(child); 
+	            walkThroughChildren = false;
             	break;
             case JavaParser.THROWS: 
             	delegateException(child); 
-            	deleteTreeChild(child); 
+	            walkThroughChildren = false;
             	break;
             case JavaParser.THROWS_CLAUSE: 
             	delegateException(child); 
-            	deleteTreeChild(child); 
+	            walkThroughChildren = false;
             	break;
             case JavaParser.FORMAL_PARAM_LIST: 
             	if (child.getChildCount() > 0) {
                     JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
                     signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
-                    deleteTreeChild(child);
+    	            walkThroughChildren = false;
                 }
             	break;
             case JavaParser.BLOCK_SCOPE: {
             	setSignature();
                 JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
                 javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.name + signature);
-                deleteTreeChild(child);
+	            walkThroughChildren = false;
                 break;
             }
             default: break;
             }
-            WalkThroughMethod(child);
+	        if (walkThroughChildren) {
+	        	WalkThroughMethod(child);
+	        }
         }
     }
 
@@ -146,14 +148,12 @@ class JavaMethodGeneratorController extends JavaGenerator {
        	}
     }
 
-    private void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
-        }
-    }
-
     private void createMethodObject() {
         uniqueName = belongsToClass + "." + this.name + signature;
-        modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		if(SkippedTypes.isSkippable(declaredReturnType)){
+	        modelService.createMethodOnly(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+        } else {
+            modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+        }
     }
 }

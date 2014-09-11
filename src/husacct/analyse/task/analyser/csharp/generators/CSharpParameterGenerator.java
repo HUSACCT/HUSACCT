@@ -88,10 +88,15 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	private void writeParameterToDomain() {
 		String uniqueParentName = createUniqueParentName();
-
 		for (Argument arg : arguments) {
 			String uniqueName = uniqueParentName + "." + arg.name;
-			modelService.createParameter(arg.name, uniqueName, arg.type, packageAndClassName, lineNumber, uniqueParentName, arg.genericType);
+			if ((arg.type != null) && (arg.type != "")) {
+				if(SkippableTypes.isSkippable(arg.type)){
+					modelService.createParameterOnly(arg.name, uniqueName, arg.type, packageAndClassName, lineNumber, uniqueParentName, arg.genericType);
+		        } else {
+					modelService.createParameter(arg.name, uniqueName, arg.type, packageAndClassName, lineNumber, uniqueParentName, arg.genericType);
+				}
+			}
 		}
 	}
 

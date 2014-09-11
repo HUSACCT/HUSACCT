@@ -4,6 +4,7 @@ import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.csharp.generators.CSharpBlockScopeGenerator;
+import husacct.analyse.task.analyser.csharp.generators.SkippableTypes;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 import java.util.ArrayList;
@@ -65,7 +66,11 @@ public class BufferService {
 		boolean isAbstract = false;
 		boolean hasClassScope = checkClassScope(belongsToMethod);
 		int lineNumber = lambdaBuffer.lambdaTree.getLine();
-		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+		if(SkippableTypes.isSkippable(returnTypes)){
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+        } else {
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+        }
 	}
 
 	private void combineDelegateAndLambdaToMethodAndSendToBlockScope(DelegateBuffer delegateBuffer, LambdaBuffer lambdaBuffer) {
