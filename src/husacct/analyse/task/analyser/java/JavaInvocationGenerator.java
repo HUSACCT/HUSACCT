@@ -91,6 +91,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
      */
     public String getCompleteToString(CommonTree tree) {  
     	String returnValue = "";
+    	if (tree == null) {
+    		return returnValue;
+    	}
     	try {
     		int treeType = tree.getType();
     		if (tree.getText().equals("STATIC_ARRAY_CREATOR")) {
@@ -112,23 +115,24 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	    		returnValue += left1 + "(" + right1 + ")";
 	            break;
 	        case JavaParser.CLASS_CONSTRUCTOR_CALL: 
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+	        	String left2 = getCompleteToString((CommonTree) tree.getChild(0));
+	        	String right2 = getCompleteToString((CommonTree) tree.getChild(1));
+	    		returnValue += left2 + "(" + right2 + ")";
 	            break;
-	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST: case JavaParser.TYPE:
+	        case JavaParser.SUPER_CONSTRUCTOR_CALL: 
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case JavaParser.STATIC_ARRAY_CREATOR: 
 	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == JavaParser.IDENT))) {
-		        	String left2 = getCompleteToString((CommonTree) tree.getChild(0));
-		        	String right2 = getCompleteToString((CommonTree) tree.getChild(1));
-		        	if (right2 == "") {
-		        		returnValue += left2;
-		        	} else {
-			    		returnValue += left2 + "(" + right2 + ")";
-		        	}
+		        	String left3 = getCompleteToString((CommonTree) tree.getChild(0));
+		        	String right3 = getCompleteToString((CommonTree) tree.getChild(1));
+		    		returnValue += left3 + "(" + right3 + ")";
 	        	} else {
 	        		returnValue += "";
 	        	}
+	            break;
+	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST: case JavaParser.TYPE:
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case JavaParser.EXPR: case JavaParser.PARENTESIZED_EXPR:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));

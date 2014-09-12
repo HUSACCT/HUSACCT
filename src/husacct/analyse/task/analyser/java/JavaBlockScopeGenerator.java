@@ -15,24 +15,22 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
-
-        /* Test helper
-       	if (this.belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType")){
-    		if (tree.getLine() == 44) {
-//    			if (child.getType() == JavaParser.METHOD_CALL) {		
-    				boolean breakpoint1 = true;
-    			}
-//    		}
-    	} */ 
         walkThroughBlockScope(tree);
     }
     
     private void walkThroughBlockScope(Tree tree) {
 	    for (int i = 0; i < tree.getChildCount(); i++) {
-	        Tree child = tree.getChild(i);
+	    	CommonTree child = (CommonTree) tree.getChild(i);
 	        int treeType = child.getType();
 	        boolean walkThroughChildren = true;
-	
+
+	        /* Test helper
+	       	if (this.belongsToClass.contains("husacct.define.presentation.jdialog.ExceptionRuleJDialog")){
+	    		if (belongsToMethod.contains("ExceptionRuleJDialog()")) {
+	    				boolean breakpoint1 = true;
+	    		}
+	    	} */ 
+
 	        switch(treeType) {
 	        case JavaParser.VAR_DECLARATION:
 	            if (child.getChildCount() > 0) {
@@ -42,9 +40,9 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	            break;
 	        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.SUPER_CONSTRUCTOR_CALL:
 	            delegateInvocation(child, "invocConstructor");
-	            //walkThroughChildren = false;
+	            walkThroughChildren = false;
 	            break;
-	        case JavaParser.CAST_EXPR: case JavaParser.ASSIGN: case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: 
+	        case JavaParser.RETURN: case JavaParser.CAST_EXPR: case JavaParser.ASSIGN: case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: 
         	case JavaParser.LESS_OR_EQUAL: case JavaParser.LESS_THAN: case JavaParser.GREATER_THAN:
 	            delegateInvocation(child, "accessPropertyOrField");
 	            walkThroughChildren = false;
@@ -64,6 +62,14 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 		    }
 	        if (walkThroughChildren) {
 	        	walkThroughBlockScope(child);
+	        } else {
+	        	int ttype = child.getType();
+	        	if ((ttype != JavaParser.FOR_EACH) && (ttype != JavaParser.FOR) && (ttype != JavaParser.WHILE)) {
+		        	Tree descendant = child.getFirstChildWithType(JavaParser.BLOCK_SCOPE);
+			        if ((descendant != null) || (child.getType() == JavaParser.BLOCK_SCOPE)) {
+			        	walkThroughBlockScope(child);
+			        }
+	        	}
 	        }
 	    }
     }

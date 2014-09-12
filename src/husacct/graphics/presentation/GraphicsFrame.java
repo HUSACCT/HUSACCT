@@ -374,6 +374,8 @@ public class GraphicsFrame extends HelpableJInternalFrame implements
 		showProperties();
 		DependencyTable propertiesTable = new DependencyTable(dependencyDTOs);
 		propertiesScrollPane.setViewportView(propertiesTable);
+		propertiesTable.setAutoCreateRowSorter(true);
+
 	}
 	
 	@Override

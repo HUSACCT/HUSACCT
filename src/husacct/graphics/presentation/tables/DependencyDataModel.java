@@ -7,7 +7,6 @@ import husacct.common.locale.ILocaleService;
 import java.util.HashMap;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
 
 public class DependencyDataModel extends AbstractTableModel {
 	private static final long		serialVersionUID	= -298507387139026205L;
@@ -59,4 +58,14 @@ public class DependencyDataModel extends AbstractTableModel {
 		return value;
 	}
 	
+    //JTable uses this method to determine the default renderer/editor for each cell.  
+    @Override
+    public Class getColumnClass(int c) {
+        if (c == 3) {
+            return new Integer(5).getClass();
+        } else {
+        	String s = "";
+            return s.getClass();
+        }
+    } 
 }

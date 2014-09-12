@@ -5,15 +5,10 @@ import husacct.common.Resource;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -21,12 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -41,7 +32,7 @@ public class AboutDialog extends JDialog{
 	private JPanel logoPanel, textPanel, gitForkPanel;
 	private JLabel forkLabel,pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
 	private JButton okButton, creditsButton;
-	private String versionNumber = "3.2";
+	private String versionNumber = "3.3";
 	private MainController mainController;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private JPanel forkLabelPanel;

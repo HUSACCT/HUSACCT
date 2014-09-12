@@ -92,6 +92,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
             	break;
             case JavaParser.IDENT: 
             	name = child.getText(); 
+            	lineNumber = child.getLine();
             	break;
             case JavaParser.THROW: 
             	delegateException(child); 

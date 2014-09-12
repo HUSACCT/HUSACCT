@@ -350,9 +350,9 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide")){
-            		if (association.lineNumber == 10) {
-            			boolean breakpoint = true;
+            	if (association.from.contains("husacct.define.presentation.jdialog.ExceptionRuleJDialog")) {
+            		if (association.lineNumber == 74) {
+    	    				boolean breakpoint = true;
         			}
             	} */
 
@@ -509,14 +509,13 @@ class FamixCreationPostProcessor {
     	    			}
     	            }
     	            if (!methodFound) {
-    	            	// Check if the method is a constructor call of a library class
+    	            	// Check if the method is a constructor call
     	            	String className = association.to.substring(0, association.to.indexOf("("));
 	                    toString = findClassInImports(association.from, className);
 	                    if (!toString.equals("")) {
 	    	            		association.to = toString;
 	    	            		association.type = "InvocMethod";
 		            			toExists = true;
-		            			chainingInvocation = false;
 	    	            	}
     	            }
     	            if (methodFound) {
