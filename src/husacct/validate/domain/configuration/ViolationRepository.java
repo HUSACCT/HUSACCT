@@ -9,12 +9,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
+
 import org.apache.log4j.Logger;
 
 class ViolationRepository {
 
 	private List<Violation> violationsList;
 	private HashMap<String, HashMap<String, Violation>> violationFromToHashMap;
+	private TreeMap<String, List<Violation>> violationsPerRuleTreeMap;
 	private Calendar repositoryCalendar;
 	private final Logger logger = Logger.getLogger(ViolationRepository.class);
     
@@ -48,29 +51,10 @@ class ViolationRepository {
 		return foundViolations;
 	}
 
-	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
-		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
-		for (Violation violation : violationsList) {
-			// Note: message refers to moduleFrom and moduleTo of the original rule, while the violation may refer to another moduleFrom or moduleTo 
-			if (violation.getMessage().getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().equals(moduleFrom)) { 
-				if (!moduleFrom.equals(moduleTo)) {
-					if (violation.getMessage().getLogicalModules().getLogicalModuleTo().getLogicalModulePath().equals(moduleTo) && violation.getRuletypeKey().equals(ruleTypeKey)) {
-						foundViolations.add(violation);
-					}
-				} else {
-					if (violation.getRuletypeKey().equals(ruleTypeKey)) {
-						foundViolations.add(violation);
-					}
-				}
-			}
-		}
-		return foundViolations;
-	}
-
-	
+	// Objectives: 1) create and fill violationFromToHashMap, 2) remove duplicates.
 	void filterAndSortAllViolations(){
 		int beforeNrOfViolations = violationsList.size();
-		ArrayList<Violation> sortedViolationsList = new ArrayList<Violation>();
+		ArrayList<Violation> filteredViolationsList = new ArrayList<Violation>();
 		String violationFromToKey;
 		String violationDetailsKey;
 		violationFromToHashMap = new HashMap<String, HashMap<String, Violation>>();
@@ -90,34 +74,73 @@ class ViolationRepository {
 						// Do nothing; violation is already registered
 					} else {
 						violationDetailsHashMap.put(violationDetailsKey, violation);
-						sortedViolationsList.add(violation);
+						filteredViolationsList.add(violation);
 					}
 				}
 				else{
 					violationDetailsHashMap = new HashMap<String, Violation>();
 					violationDetailsHashMap.put(violationDetailsKey, violation);
 					violationFromToHashMap.put(violationFromToKey, violationDetailsHashMap);
-					sortedViolationsList.add(violation);
+					filteredViolationsList.add(violation);
 				}
 			} catch (Exception e) {
 				this.logger.error(new Date().toString() + " Exception:  " + e);
 			}
 		}
 		
-        violationsList = sortedViolationsList;  
+        violationsList = filteredViolationsList;
+        sortViolationsPerRule();
         this.logger.info(new Date().toString() + " Before/After filterAndSortAllViolations:  " + beforeNrOfViolations + "/" + violationsList.size());
 	}
 	
+	// Objectives: 1) create and fill violationsPerRuleHashMap.
+	private void sortViolationsPerRule() {
+		violationsPerRuleTreeMap = new TreeMap<String, List<Violation>>();
+		List<Violation> violationsPerRuleList;
+		String moduleFrom;
+		String moduleTo;
+		String searchKey;
+		for (Violation violation : violationsList) {
+			// Note: message refers to moduleFrom and moduleTo of the original rule, while the violation itself may refer to another moduleFrom or moduleTo 
+			moduleFrom = violation.getMessage().getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+			moduleTo = violation.getMessage().getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+			searchKey = "";
+			searchKey = moduleFrom + "|" + moduleTo + "|" + violation.getRuletypeKey();
+			if(violationsPerRuleTreeMap.containsKey(searchKey)) {
+				violationsPerRuleList = violationsPerRuleTreeMap.get(searchKey);
+				violationsPerRuleList.add(violation);
+				violationsPerRuleTreeMap.put(searchKey, violationsPerRuleList);
+			} else {
+				violationsPerRuleList = new ArrayList<Violation>();
+				violationsPerRuleList.add(violation);
+				violationsPerRuleTreeMap.put(searchKey, violationsPerRuleList);
+			}
+		}
+		for (String rule : violationsPerRuleTreeMap.keySet()) {
+			violationsPerRuleList = violationsPerRuleTreeMap.get(rule);
+			logger.info(violationsPerRuleList.size() + " violations for rule: " + rule);
+		}
+	}
+
+	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
+		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
+		String searchKey = moduleFrom + "|" + moduleTo + "|" + ruleTypeKey;
+		if(violationsPerRuleTreeMap.containsKey(searchKey)) {
+			foundViolations.addAll(violationsPerRuleTreeMap.get(searchKey));
+		}
+		return foundViolations;
+	}
+
 	SimpleEntry<Calendar, List<Violation>> getAllViolations() {
 		return new SimpleEntry<Calendar, List<Violation>>(getCurrentCalendar(), violationsList);
 	}
 	
-	Calendar getCurrentCalendar() {
-		return Calendar.getInstance();
-	}
-
 	void clear() {
 		this.violationsList = new ArrayList<Violation>();
+	}
+
+	Calendar getCurrentCalendar() {
+		return Calendar.getInstance();
 	}
 
 	Calendar getRepositoryCalendar() {
