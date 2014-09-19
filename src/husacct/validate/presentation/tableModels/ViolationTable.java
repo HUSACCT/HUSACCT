@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.validation.Severity;
 
 import javax.swing.JTable;
@@ -13,8 +12,6 @@ import javax.swing.table.TableColumn;
 
 public class ViolationTable extends JTable {
 	private static final long	serialVersionUID	= -1359180631818542012L;
-	private ViolationDataModel	data;
-	
 	public ViolationTable() {
 		setColumnWidths();
 		setAutoCreateRowSorter(true);
@@ -28,7 +25,7 @@ public class ViolationTable extends JTable {
 					if (lineNumber == 0) {
 						lineNumber = 1;
 					}
-					ServiceProvider.getInstance().getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.LIGHT_GRAY));
+					ServiceProvider.getInstance().getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.ORANGE));
 				}
 			}
 			@Override

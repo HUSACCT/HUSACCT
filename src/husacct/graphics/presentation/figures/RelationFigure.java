@@ -30,14 +30,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private TextFigure				amountFigure;
 	private boolean					violationRelation;
 	
-	public RelationFigure(String name, boolean violated, int amount) {
+	public RelationFigure(String name, boolean violated, String amount) {
 		super(name);
 		violationRelation = violated;
 		
 		line = new LineConnectionFigure();
 		add(line);
 		
-		amountFigure = new TextFigure(Integer.toString(amount));
+		amountFigure = new TextFigure(amount);
 		add(amountFigure);
 		
 		line.addFigureListener(this);

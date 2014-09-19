@@ -27,7 +27,7 @@ public class ViolationTable extends JTable {
 					int row = getSelectedRow();
 					String cls = getValueAt(row, 0).toString();
 					int lineNumber = (int) getValueAt(row, 4);
-					ServiceProvider.getInstance().getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.LIGHT_GRAY));
+					ServiceProvider.getInstance().getControlService().displayErrorInFile(cls, lineNumber, new Severity("test", Color.ORANGE));
 				}
 			}
 			@Override

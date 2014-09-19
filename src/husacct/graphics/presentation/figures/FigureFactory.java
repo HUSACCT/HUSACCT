@@ -30,18 +30,25 @@ public final class FigureFactory {
 		return createdFigure;
 	}
 	
-	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
+	public RelationFigure createRelationFigure(DependencyDTO[] dependencyDTOs) {
 		if (dependencyDTOs.length <= 0) throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
-		return new RelationFigure("Dependency from " + dependencyDTOs[0].from + " to " + dependencyDTOs[0].to, false, dependencyDTOs.length);
+		return new RelationFigure("Dependency from " + dependencyDTOs[0].from + " to " + dependencyDTOs[0].to, false, Integer.toString(dependencyDTOs.length));
 	}
 	
+	public RelationFigure createRelationFigureWithViolations(DependencyDTO[] dependencyDTOs, ViolationDTO[] violationDTOs) {
+		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " + violationDTOs[0].fromClasspath
+						+ " to " + violationDTOs[0].toClasspath, true, violationDTOs.length + "/" + dependencyDTOs.length);
+		violatedRelationFigure.addDecorator(createViolationsDecorator());
+		return violatedRelationFigure;
+	}
+
 	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {
 		if (violationDTOs.length == 0) throw new RuntimeException(
 				"No violations received. Cannot create a violation figure.");
 		
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " + violationDTOs[0].fromClasspath
-						+ " to " + violationDTOs[0].toClasspath, true, violationDTOs.length);
-		violatedRelationFigure.addDecorator(createViolationsDecorator(violationDTOs));
+						+ " to " + violationDTOs[0].toClasspath, true, Integer.toString(violationDTOs.length));
+		violatedRelationFigure.addDecorator(createViolationsDecorator());
 		return violatedRelationFigure;
 	}
 	
@@ -81,17 +88,7 @@ public final class FigureFactory {
 		return new ParentFigure(parentName);
 	}
 	
-	public ViolationsDecorator createViolationsDecorator(
-			ViolationDTO[] violationDTOs) {
-		Color highestColor = null;
-		if (violationDTOs.length <= 0) logger.warn("No violations received. Cannot create a violation figure.");
-		else {
-			highestColor = violationDTOs[0].severityColor;
-			if (highestColor == null) {
-				logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
-				highestColor = Color.RED;
-			}
-		}
-		return new ViolationsDecorator(highestColor);
+	public ViolationsDecorator createViolationsDecorator() {
+		return new ViolationsDecorator(Color.RED);
 	}
 }

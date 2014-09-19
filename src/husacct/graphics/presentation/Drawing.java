@@ -211,18 +211,6 @@ public class Drawing extends QuadTreeDrawing {
 		return output;
 	}
 
-	private void updateLineFigureThicknesses(RelationFigure[] figures) {
-		int maxAmount = figureMap.getMaxAll();
-		for (RelationFigure figure : figures) {
-			double weight = (double) figure.getAmount() / maxAmount;
-			if (weight < 0.25) figure.setLineThickness(1);
-			else if (weight < 0.50) figure.setLineThickness(2);
-			else if (weight < 0.75) figure.setLineThickness(4);
-			else
-				figure.setLineThickness(5);
-		}
-	}
-	
 	public void updateLineFigureThicknesses() {
 		RelationFigure[] figures = getShownLines();
 		int maxAmount = figureMap.getMaxAll();

@@ -1,7 +1,6 @@
 package husacct.validate.presentation.tableModels;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Violation;
 
@@ -10,15 +9,10 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.log4j.Logger;
-
 public class ViolationDataModel extends AbstractTableModel {
 	private static final long		serialVersionUID	= 7993526243751581611L;
-	private Logger					logger				= Logger.getLogger(ViolationDataModel.class);
-	
 	private ILocaleService			localeService;
 	private Violation[]				data;
-	
 	private HashMap<String, String>	columnNames;
 	private String[]				columnKeys;
 	

@@ -19,8 +19,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.org.jvnet.fastinfoset.stax.LowLevelFastInfosetStreamWriter;
-
 public class AnalysedController extends DrawingController {
 	private final Logger			logger			= Logger.getLogger(AnalysedController.class);
 	protected IAnalyseService		analyseService;

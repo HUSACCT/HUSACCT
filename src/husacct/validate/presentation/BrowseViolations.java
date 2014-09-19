@@ -22,7 +22,6 @@ import husacct.validate.presentation.threadTasks.LoadViolationHistoryPointsTask;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -38,7 +37,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -49,8 +47,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
 import org.apache.log4j.Logger;
 
 public class BrowseViolations extends HelpableJInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
@@ -67,7 +63,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	private JTable chooseViolationHistoryTable;
 	private JScrollPane statisticsScrollPane, violationsTableScrollPane, chooseViolationHistoryTableScrollPane, informationScrollPane;
 	private JPanel rightSidePane, leftSidePane;
-	private JSplitPane splitPane;
+	private JSplitPane splitPane; // It is used in the in version 3.2 disabled code in initComponents()
 	private ViolationDataModel violationTableModel;
 	private DefaultTableModel chooseViolationHistoryTableModel;
 	private ViolationHistory selectedViolationHistory;
@@ -93,7 +89,6 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		setClosable(true);
 		setMaximizable(true);
 		setIconifiable(true);
-		//setSize(new Dimension(1000, 600));
 
 		splitPane = new JSplitPane();
 		leftSidePane = new JPanel();

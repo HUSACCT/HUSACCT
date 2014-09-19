@@ -20,8 +20,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 
-import org.apache.log4j.Logger;
-
 public class ViolationInformationPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 8505333261388149299L;
@@ -30,8 +28,6 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 	private JButton detailShowErrorBtn;
 	private String sourceClassPath = "";
 	private int sourceLine = 1;
-	private Severity sourceSeverity;
-	private static Logger logger = Logger.getLogger(ServiceProvider.class);
 
 	public ViolationInformationPanel(TaskServiceImpl task) {
 		this.task = task;
@@ -152,9 +148,7 @@ public class ViolationInformationPanel extends JPanel implements ActionListener 
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
 
-			//sourceClassPath = violation.getClassPathFrom();
 			sourceClassPath = violation.getClassPathFrom();
-			sourceSeverity = violation.getSeverity();
 			sourceLine = violation.getLinenumber();
 			
 			String message = task.getMessage(violation.getMessage(), violation);
