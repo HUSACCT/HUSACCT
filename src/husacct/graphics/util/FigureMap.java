@@ -18,10 +18,7 @@ public class FigureMap {
 	private final HashMap<BaseFigure, AbstractDTO>			moduleFigureDTOMap		= new HashMap<BaseFigure, AbstractDTO>();
 	private final HashMap<RelationFigure, DependencyDTO[]>	dependencyLineDTOMap	= new HashMap<RelationFigure, DependencyDTO[]>();
 	private final HashMap<RelationFigure, ViolationDTO[]>	violationLineDTOMap		= new HashMap<RelationFigure, ViolationDTO[]>();
-	private final HashMap<BaseFigure, ViolationDTO[]>		violatedFigureDTOMap	= new HashMap<BaseFigure, ViolationDTO[]>();
-	
-	private int												maxDependencies,
-			maxViolations, maxAll;
+	private int	maxDependencies, maxViolations, maxAll;
 	
 	public FigureMap() {
 		clearAll();
@@ -39,7 +36,6 @@ public class FigureMap {
 	
 	public void clearAllViolations() {
 		violationLineDTOMap.clear();
-		violatedFigureDTOMap.clear();
 	}
 	
 	public boolean containsModule(String path) {
@@ -70,17 +66,6 @@ public class FigureMap {
 		return moduleFigureDTOMap.get(figure);
 	}
 	
-	public ViolationDTO[] getViolatedDTOs(BaseFigure figure) {
-		return violatedFigureDTOMap.get(figure);
-	}
-	
-	public ArrayList<BaseFigure> getViolatedFigures() {
-		ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-		for (BaseFigure figure : violatedFigureDTOMap.keySet())
-			figures.add(figure);
-		return figures;
-	}
-	
 	public ViolationDTO[] getViolationDTOs(BaseFigure figure) {
 		return violationLineDTOMap.get(figure);
 	}
@@ -94,10 +79,6 @@ public class FigureMap {
 	
 	public boolean isDependencyLine(BaseFigure figure) {
 		return dependencyLineDTOMap.containsKey(figure);
-	}
-	
-	public boolean isViolatedFigure(BaseFigure figure) {
-		return violatedFigureDTOMap.containsKey(figure);
 	}
 	
 	public boolean isViolationLine(BaseFigure figure) {
@@ -125,10 +106,6 @@ public class FigureMap {
 			ProjectDTO pd = (ProjectDTO) dto;
 			moduleFiguresByName.put(pd.name, figure);
 		}
-	}
-	
-	public void linkViolatedModule(BaseFigure figure, ViolationDTO[] dtos) {
-		violatedFigureDTOMap.put(figure, dtos);
 	}
 	
 	public void linkViolations(RelationFigure figure, ViolationDTO[] dtos) {

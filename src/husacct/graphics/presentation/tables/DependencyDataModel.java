@@ -46,17 +46,15 @@ public class DependencyDataModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		String value = null;
 		String columnKey = columnKeys[columnIndex];
 		DependencyDTO row = data[rowIndex];
-		if (columnKey.equals(columnKeys[0])) value = row.from;
-		else if (columnKey.equals(columnKeys[1])) value = row.to;
-		else if (columnKey.equals(columnKeys[2])) value = localeService.getTranslatedString(row.type);
-		else if (columnKey.equals(columnKeys[3])) value = "" + row.lineNumber;
-		else if (columnKey.equals(columnKeys[4])) value = row.isIndirect ? localeService.getTranslatedString("Indirect") : localeService
-				.getTranslatedString("Direct");
-		return value;
-	}
+		if (columnKey.equals(columnKeys[0])) return row.from;
+		else if (columnKey.equals(columnKeys[1])) return row.to;
+		else if (columnKey.equals(columnKeys[2])) return localeService.getTranslatedString(row.type);
+		else if (columnKey.equals(columnKeys[3])) return row.lineNumber;
+		else if (columnKey.equals(columnKeys[4])) return row.isIndirect ? localeService.getTranslatedString("Indirect") : localeService.getTranslatedString("Direct");
+		else return null;
+    }
 	
     //JTable uses this method to determine the default renderer/editor for each cell.  
     @Override

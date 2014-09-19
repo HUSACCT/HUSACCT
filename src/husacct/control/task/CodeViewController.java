@@ -151,11 +151,7 @@ public class CodeViewController {
 			}
 		}
 		
-		// If not found log
-		if(filePath == "")
-			logger.info("No valid file path could be found for: " + fileName);
-		
-		// Return path, empty if not found.
+		// Return path; empty if no source is found.
 		return filePath;
 	}
 }

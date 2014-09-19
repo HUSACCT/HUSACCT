@@ -15,6 +15,8 @@ import husacct.validate.presentation.browseViolations.FilterPanel;
 import husacct.validate.presentation.browseViolations.StatisticsPanel;
 import husacct.validate.presentation.browseViolations.ViolationInformationPanel;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
+import husacct.validate.presentation.tableModels.ViolationDataModel;
+import husacct.validate.presentation.tableModels.ViolationTable;
 import husacct.validate.presentation.threadTasks.CheckConformanceTask;
 import husacct.validate.presentation.threadTasks.LoadViolationHistoryPointsTask;
 import husacct.validate.task.TaskServiceImpl;
@@ -61,11 +63,13 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	private JButton buttonLatestViolations;
 	private JButton buttonDeleteViolationHistoryPoint;
 	private JButton buttonValidateNow;
-	private JTable chooseViolationHistoryTable, violationsTable;
+	private ViolationTable violationTable;
+	private JTable chooseViolationHistoryTable;
 	private JScrollPane statisticsScrollPane, violationsTableScrollPane, chooseViolationHistoryTableScrollPane, informationScrollPane;
 	private JPanel rightSidePane, leftSidePane;
 	private JSplitPane splitPane;
-	private DefaultTableModel chooseViolationHistoryTableModel, violationsTableModel;
+	private ViolationDataModel violationTableModel;
+	private DefaultTableModel chooseViolationHistoryTableModel;
 	private ViolationHistory selectedViolationHistory;
 	private FilterPanel filterPane;
 	private StatisticsPanel statisticsPanel;
@@ -106,7 +110,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		informationScrollPane = new JScrollPane(violationInformationPanel);
 		statisticsScrollPane = new JScrollPane();
 		statisticsPanel = new StatisticsPanel();
-		violationsTable = new JTable();
+		violationTable = new ViolationTable();
 
 		getContentPane().add(rightSidePane, BorderLayout.CENTER);
 		//getContentPane().add(splitPane, BorderLayout.CENTER);
@@ -116,7 +120,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		//splitPane.setRightComponent(rightSidePane);
 		statisticsScrollPane.setBorder(null);
 		statisticsScrollPane.setViewportView(statisticsPanel);
-		violationsTableScrollPane.setViewportView(violationsTable);
+		violationsTableScrollPane.setViewportView(violationTable);
 
 		createBaseLayout();
 	}
@@ -209,10 +213,10 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	private void addListeneners() {
-		violationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		violationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-				violationInformationPanel.update(arg0, violationsTable, shownViolations);
+				violationInformationPanel.update(arg0, violationTable, shownViolations);
 			}
 		});
 		chooseViolationHistoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -264,7 +268,6 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 				if (selectedViolationHistory != null) {
 					taskServiceImpl.removeViolationHistory(selectedViolationHistory.getDate());
 					chooseViolationHistoryTable.clearSelection();
-					clearViolationsTableModelRows();
 					fillChooseViolationHistoryTable();
 					selectedViolationHistory = null;
 				} else {
@@ -327,47 +330,13 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	private void loadViolationsTableModel() {
-		String[] columnNames = {localeService.getTranslatedString("Source"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("RuleType"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Direct"), localeService.getTranslatedString("Severity")};
-
-		violationsTableModel = new DefaultTableModel(columnNames, 0) {
-			private static final long serialVersionUID = 7993526243751581611L;
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return String.class;
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		};
-		violationsTable.setFillsViewportHeight(true);
-		violationsTable.setModel(violationsTableModel);
-		violationsTable.setAutoCreateRowSorter(true);
-		violationsTable.getTableHeader().setReorderingAllowed(false);
-		violationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		setColumnWidths();
-	}
-
-    protected void setColumnWidths() {
-	TableColumn column = null;
-		for (int i = 0; i < violationsTable.getColumnCount(); i++) {
-		    column = violationsTable.getColumnModel().getColumn(i);
-		    if (i == 0) {
-			column.setPreferredWidth(290); // From
-		    } else if (i == 1) {
-			column.setPreferredWidth(290); // To
-		    } else if (i == 2) {
-			column.setPreferredWidth(150); // Rule
-		    } else if (i == 3) {
-			column.setPreferredWidth(70); // DependencyKind
-		    } else if (i == 4) {
-			column.setPreferredWidth(50); // Direct
-		    } else if (i == 5) {
-			column.setPreferredWidth(50); // Severity
-		    }
-		}
+		violationTableModel = new ViolationDataModel();
+		violationTable.setFillsViewportHeight(true);
+		violationTable.setModel(violationTableModel);
+		violationTable.setAutoCreateRowSorter(true);
+		violationTable.getTableHeader().setReorderingAllowed(false);
+		violationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		violationTable.setColumnWidths();
 	}
 
 	private void loadChooseViolationHistoryTableModel() {
@@ -398,16 +367,13 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	public void fillViolationsTable(List<Violation> violations) {
-		violationsTable.setRowSorter(null);
-		violationsTable.setAutoCreateRowSorter(false);
-		violationsTable.clearSelection();
-		clearViolationsTableModelRows();
+		violationTable.setRowSorter(null);
+		violationTable.setAutoCreateRowSorter(false);
+		violationTable.clearSelection();
 		shownViolations = violations;
-		for (Violation violation : violations) {
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), violation.getClassPathTo(), localeService.getTranslatedString(violation.getRuletypeKey()), localeService.getTranslatedString(violation.getViolationTypeKey()), (violation.isIndirect() ? localeService.getTranslatedString("Indirect") : localeService.getTranslatedString("Direct")), violation.getSeverity().toString()});
-			violationsTable.revalidate();
-		}
-		violationsTable.setAutoCreateRowSorter(true);
+		violationTableModel.setData(violations);
+		violationTable.revalidate();
+		violationTable.setAutoCreateRowSorter(true);
 	}
 
 	public void loadInformationPanel() {
@@ -455,11 +421,6 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		while (chooseViolationHistoryTableModel.getRowCount() > 0) {
 			chooseViolationHistoryTableModel.removeRow(0);
 		}
-	}
-
-	private void clearViolationsTableModelRows() {
-		violationsTableModel.getDataVector().removeAllElements();
-		violationsTable.revalidate();
 	}
 
 	public ViolationHistory getSelectedViolationHistory() {

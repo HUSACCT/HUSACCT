@@ -32,20 +32,16 @@ import javax.swing.JSplitPane;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsFrame extends HelpableJInternalFrame implements
-		UserInputListener {
+public class GraphicsFrame extends HelpableJInternalFrame implements UserInputListener {
 	private static final long				serialVersionUID	= -4683140198375851034L;
-	protected ILocaleService				localeService		= ServiceProvider
-																		.getInstance()
-																		.getLocaleService();
+	protected ILocaleService				localeService		= ServiceProvider.getInstance().getLocaleService();
 	protected Logger						logger				= Logger.getLogger(GraphicsFrame.class);
 	
 	private DrawingView						drawingView;
 	private GraphicsMenuBar					menuBar;
 	private ZoomLocationBar					locationBar;
 	private String[]						currentPaths;
-	private JScrollPane						drawingScrollPane,
-			propertiesScrollPane, locationScrollPane;
+	private JScrollPane						drawingScrollPane, propertiesScrollPane, locationScrollPane;
 	private JSplitPane						centerPane;
 	private String							ROOT_LEVEL;
 	private boolean							showingProperties	= false;
@@ -195,29 +191,22 @@ public class GraphicsFrame extends HelpableJInternalFrame implements
 	
 	private void initializeComponents() {
 		drawingScrollPane = new JScrollPane();
-		drawingScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		drawingScrollPane
-				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		drawingScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		drawingScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		drawingScrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		
 		drawingScrollPane.setViewportView(drawingView);
-		
+
 		propertiesScrollPane = new JScrollPane();
-		propertiesScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		propertiesScrollPane
-				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		propertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		propertiesScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		createMenuBar();
 		createLocationBar();
 		
 		locationScrollPane = new JScrollPane(locationBar);
-		locationScrollPane.setPreferredSize(new Dimension(900, 35));
-		locationScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		locationScrollPane
-				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		locationScrollPane.setPreferredSize(new Dimension(600, 35));
+		locationScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		locationScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
 		setLayout(new BorderLayout());
 		add(menuBar, BorderLayout.NORTH);
@@ -304,7 +293,8 @@ public class GraphicsFrame extends HelpableJInternalFrame implements
 	private void positionLayoutComponents() {
 		if (showingProperties) {
 			centerPane.setSize(getWidth(), getHeight());
-			int smallerSize = centerPane.getSize().height / 5 * 3;
+			drawingScrollPane.setPreferredSize(new Dimension(600, 900));
+			int smallerSize = getHeight() / 2;
 			centerPane.setDividerLocation(smallerSize);
 			centerPane.setDividerSize(10);
 			centerPane.validate();
@@ -371,11 +361,10 @@ public class GraphicsFrame extends HelpableJInternalFrame implements
 	}
 	
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
-		showProperties();
 		DependencyTable propertiesTable = new DependencyTable(dependencyDTOs);
 		propertiesScrollPane.setViewportView(propertiesTable);
 		propertiesTable.setAutoCreateRowSorter(true);
-
+		showProperties();
 	}
 	
 	@Override

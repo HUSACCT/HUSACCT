@@ -247,7 +247,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		} catch (Exception e) {
 			logger.error("Could not attach decorator to figure to indicate internal violations.", e);
 		}
-		figureMap.linkViolatedModule(figureFrom, violations);
 	}
 	
 	@Override
@@ -263,9 +262,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
-		if (figureMap.isViolatedFigure(selectedFigure)) 
-			graphicsFrame.showViolationsProperties(figureMap.getViolatedDTOs(selectedFigure));
-		else if (figureMap.isViolationLine(selectedFigure)) 
+		if (figureMap.isViolationLine(selectedFigure)) 
 			graphicsFrame.showViolationsProperties(figureMap.getViolationDTOs(selectedFigure));
 		else if (figureMap.isDependencyLine(selectedFigure)) 
 			graphicsFrame.showDependenciesProperties(figureMap.getDependencyDTOs(selectedFigure));
@@ -352,7 +349,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void hideViolations() {
 		super.hideViolations();
 		graphicsFrame.turnOffViolations();
-		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 	
 	private void initializeComponents() {
