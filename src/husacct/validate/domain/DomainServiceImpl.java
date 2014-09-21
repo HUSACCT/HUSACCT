@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -94,6 +95,10 @@ public class DomainServiceImpl {
 		checkModuleTypeFactoryInstance();
 		List<RuleType> moduleRuleTypes = moduleFactory.getAllowedRuleTypesOfModule(moduleType);
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
+	}
+	
+	public Set<String> getViolatedRules() {
+		return configuration.getViolatedRules();
 	}
 	
 	public void setDefaultRuleTypeOfModule(String moduleType, String ruleTypeKey, boolean value) {

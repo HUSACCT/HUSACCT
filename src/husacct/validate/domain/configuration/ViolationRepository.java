@@ -38,7 +38,7 @@ class ViolationRepository {
 	// returns a List of Violations; it is empty if no Violation is registered for the specific combination of from-to
 	public List<Violation> getViolationsFromTo(String physicalPathFrom, String physicalPathTo) {
 		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
-		String violationFromToKey = physicalPathFrom + "|" + physicalPathTo;
+		String violationFromToKey = physicalPathFrom + "::" + physicalPathTo;
 		violationFromToKey.toLowerCase();
 		HashMap<String, Violation> violationDetailsHashMap;
 		if(violationFromToHashMap.containsKey(violationFromToKey)){
@@ -64,8 +64,8 @@ class ViolationRepository {
 				violationFromToKey = "";
 				violationDetailsKey = "";
 				violationDetailsHashMap = null;
-				violationFromToKey = violation.getClassPathFrom() + "|" + violation.getClassPathTo();
-				violationDetailsKey = violation.getRuletypeKey() + "|" + violation.getLinenumber() + "|" + violation.getViolationTypeKey();
+				violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();
+				violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.getViolationTypeKey();
 				violationFromToKey.toLowerCase();
 				violationDetailsKey.toLowerCase();
 				if(violationFromToHashMap.containsKey(violationFromToKey)){
@@ -89,7 +89,7 @@ class ViolationRepository {
 		}
 		
         violationsList = filteredViolationsList;
-        sortViolationsPerRule();
+        sortViolationsPerRule(); // Do this afterwards, to prevent duplicate violations.
         this.logger.info(new Date().toString() + " Before/After filterAndSortAllViolations:  " + beforeNrOfViolations + "/" + violationsList.size());
 	}
 	
@@ -105,7 +105,7 @@ class ViolationRepository {
 			moduleFrom = violation.getMessage().getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 			moduleTo = violation.getMessage().getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 			searchKey = "";
-			searchKey = moduleFrom + "|" + moduleTo + "|" + violation.getRuletypeKey();
+			searchKey = moduleFrom + "::" + moduleTo + "::" + violation.getRuletypeKey();
 			if(violationsPerRuleTreeMap.containsKey(searchKey)) {
 				violationsPerRuleList = violationsPerRuleTreeMap.get(searchKey);
 				violationsPerRuleList.add(violation);
@@ -116,15 +116,28 @@ class ViolationRepository {
 				violationsPerRuleTreeMap.put(searchKey, violationsPerRuleList);
 			}
 		}
+		
+		// Test helpers
 		for (String rule : violationsPerRuleTreeMap.keySet()) {
 			violationsPerRuleList = violationsPerRuleTreeMap.get(rule);
 			logger.info(violationsPerRuleList.size() + " violations for rule: " + rule);
 		}
+		// Test that the provided services present the same result
+		for (String rule : getViolatedRules()) {
+			String[] ruleString = rule.split("::");
+			List<Violation> violationsPerRule = getViolationsByRule(ruleString[0], ruleString[1], ruleString[2]);
+			logger.info(violationsPerRule.size() + " violations for rule: " + rule);
+		}
+
 	}
 
+	public Set<String> getViolatedRules() {
+		return violationsPerRuleTreeMap.keySet();
+	}
+	
 	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
 		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
-		String searchKey = moduleFrom + "|" + moduleTo + "|" + ruleTypeKey;
+		String searchKey = moduleFrom + "::" + moduleTo + "::" + ruleTypeKey;
 		if(violationsPerRuleTreeMap.containsKey(searchKey)) {
 			foundViolations.addAll(violationsPerRuleTreeMap.get(searchKey));
 		}

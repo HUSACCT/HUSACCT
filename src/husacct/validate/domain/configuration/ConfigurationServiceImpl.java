@@ -1,8 +1,6 @@
 package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.RuleDTO;
-import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
@@ -16,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 public final class ConfigurationServiceImpl extends Observable {
 
@@ -66,6 +65,10 @@ public final class ConfigurationServiceImpl extends Observable {
 	// returns a List of Violations; it is empty if no Violation is registered for the specific combination of from-to
 	public List<Violation> getViolationsFromTo(String physicalPathFrom, String physicalPathTo) {
 		return violationRepository.getViolationsFromTo(physicalPathFrom, physicalPathTo);
+	}
+	
+	public Set<String> getViolatedRules() {
+		return violationRepository.getViolatedRules();
 	}
 	
 	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {

@@ -29,9 +29,9 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 		try {
 			Thread.sleep(1);
 
-			int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
-			ViolationHistory selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
-			browseViolations.setSelectedViolationHistory(selectedViolationHistory);
+			//int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
+			//ViolationHistory selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
+			//browseViolations.setSelectedViolationHistory(selectedViolationHistory);
 			browseViolations.loadAfterChange();
 			browseViolations.updateFilterValues();
 			applyFilter.setSelected(false);
