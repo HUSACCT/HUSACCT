@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -65,6 +66,9 @@ public class TaskServiceImpl {
 		return filterController.getViolationsByRule(appliedRule);
 	}
 	
+	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
+		return configuration.getViolationsByRule(moduleFrom, moduleTo, ruleTypeKey);
+	}
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
 		return filterController.getViolationsPerSeverity(shownViolations, severities);
 	}
@@ -171,6 +175,10 @@ public class TaskServiceImpl {
 		configuration.createHistoryPoint(description);
 	}
 
+	public Set<String> getViolatedRules() {
+		return configuration.getViolatedRules();
+	}
+	
 	public void removeViolationHistory(Calendar date) {
 		configuration.removeViolationHistory(date);
 	}

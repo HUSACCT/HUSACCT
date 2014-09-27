@@ -101,7 +101,7 @@ public class FilterPanel extends JPanel {
 		applyFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				browseViolations.loadAfterChange();
+				browseViolations.reloadAllViolationPanelsAfterChange();
 			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
@@ -124,7 +124,7 @@ public class FilterPanel extends JPanel {
 					public void run() {
 						try {
 							Thread.sleep(1);
-							browseViolations.loadAfterChange();
+							browseViolations.reloadAllViolationPanelsAfterChange();
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
@@ -145,7 +145,7 @@ public class FilterPanel extends JPanel {
 							Thread.sleep(1);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									browseViolations.loadAfterChange();
+									browseViolations.reloadAllViolationPanelsAfterChange();
 								}
 							});
 						} catch (InterruptedException e) {
@@ -168,7 +168,7 @@ public class FilterPanel extends JPanel {
 							Thread.sleep(1);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									browseViolations.loadAfterChange();
+									browseViolations.reloadAllViolationPanelsAfterChange();
 								}
 							});
 						} catch (InterruptedException e) {

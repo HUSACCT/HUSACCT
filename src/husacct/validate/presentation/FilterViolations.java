@@ -328,7 +328,7 @@ public final class FilterViolations extends HelpableJDialog {
 		}
 		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter, pathsfilter);
 		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
-		filterViolationsObserver.updateViolationsTable();
+		filterViolationsObserver.updateViolationTables();
 		dispose();
 	}
 

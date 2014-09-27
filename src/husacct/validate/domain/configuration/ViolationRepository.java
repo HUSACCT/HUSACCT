@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -122,17 +123,14 @@ class ViolationRepository {
 			violationsPerRuleList = violationsPerRuleTreeMap.get(rule);
 			logger.info(violationsPerRuleList.size() + " violations for rule: " + rule);
 		}
-		// Test that the provided services present the same result
-		for (String rule : getViolatedRules()) {
-			String[] ruleString = rule.split("::");
-			List<Violation> violationsPerRule = getViolationsByRule(ruleString[0], ruleString[1], ruleString[2]);
-			logger.info(violationsPerRule.size() + " violations for rule: " + rule);
-		}
-
 	}
 
 	public Set<String> getViolatedRules() {
-		return violationsPerRuleTreeMap.keySet();
+		if (violationsPerRuleTreeMap != null) {
+			return violationsPerRuleTreeMap.keySet();
+		} else {
+			return new HashSet<String>();
+		}
 	}
 	
 	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {

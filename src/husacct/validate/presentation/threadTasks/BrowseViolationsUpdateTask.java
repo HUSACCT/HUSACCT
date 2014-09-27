@@ -21,7 +21,7 @@ public class BrowseViolationsUpdateTask implements Runnable {
 		// Therefor this thread can never be interrupted.
 		try {
 			Thread.sleep(1);
-			browseViolations.updateViolationsTable();
+			browseViolations.updateViolationTables();
 		} catch (InterruptedException exception) {
 			logger.debug("Validate interupted");
 		}

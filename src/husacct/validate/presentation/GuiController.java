@@ -50,7 +50,7 @@ public class GuiController {
 
 	public void violationChanged() {
 		if (browseViolations != null) {
-			browseViolations.loadAfterChange();
+			browseViolations.reloadAllViolationPanelsAfterChange();
 		}
 	}
 
