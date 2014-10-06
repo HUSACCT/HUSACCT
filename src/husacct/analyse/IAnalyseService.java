@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
@@ -65,10 +66,6 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     
     public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
     
-    public int getAmountOfDependencies();
-
-    public int getAmountOfPackages();
-    
-    public int getAmountOfClasses();
+    public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
     
 }

@@ -16,7 +16,7 @@ class JavaInterfaceGenerator extends JavaGenerator {
         this.belongsToPackage = uniquePackageName;
     }
 
-    public String generateToDomain(String sourceFilePath, CommonTree commonTree) {
+    public String generateToDomain(String sourceFilePath, int linesOfCode, CommonTree commonTree) {
         setVisibillityFromTree(commonTree);
         this.name = commonTree.getChild(1).toString();
         if (belongsToPackage.equals("")) {
@@ -24,7 +24,7 @@ class JavaInterfaceGenerator extends JavaGenerator {
         } else {
             this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
         }
-        modelService.createClass(sourceFilePath, uniqueName, name, belongsToPackage, false, false, "", visibillity, true);
+        modelService.createClass(sourceFilePath, linesOfCode, uniqueName, name, belongsToPackage, false, false, "", visibillity, true);
         return uniqueName;
     }
 

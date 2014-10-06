@@ -11,6 +11,7 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
 public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
@@ -155,19 +156,13 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
         persistencyService.loadModel(analyseElement);
     }
 
+	@Override
     public HashMap<String, DependencyDTO> mapDependencies() {
         return queryService.mapDependencies();
     }
     
-    public int getAmountOfDependencies() {
-    	return queryService.getAmountOfDependencies();
-    }
-    
-    public int getAmountOfPackages() {
-    	return queryService.getAmountOfPackages();
-    }
-    
-    public int getAmountOfClasses() {
-    	return queryService.getAmountOfClasses();
-    }
+	@Override
+	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
+		return queryService.getAnalysisStatistics(selectedModule);
+	}
 }

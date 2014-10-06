@@ -15,6 +15,7 @@ import org.antlr.runtime.tree.Tree;
 
 public class CSharpTreeConvertController {
 	String sourceFilePath = "";
+    int numberOfLinesOfCode = 0;
 	CSharpUsingGenerator csUsingGenerator;
 	CSharpNamespaceGenerator csNamespaceGenerator;
 	CSharpClassGenerator csClassGenerator;
@@ -41,8 +42,9 @@ public class CSharpTreeConvertController {
 		csLamdaGenerator = new CSharpLamdaGenerator();
 	}
 
-	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser, String sourceFilePath) throws RecognitionException {
+	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser, String sourceFilePath, int nrOfLinesOfCode) throws RecognitionException {
 		this.sourceFilePath = sourceFilePath;
+		this.numberOfLinesOfCode = nrOfLinesOfCode;
 		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
 		delegateASTToGenerators(compilationCommonTree);
 	}
@@ -136,13 +138,13 @@ public class CSharpTreeConvertController {
 	private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface) {
 		String analysedClass;
 		if (isInnerClass) {
-			analysedClass = csClassGenerator.generateToModel(sourceFilePath, classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface);
+			analysedClass = csClassGenerator.generateToModel(sourceFilePath, numberOfLinesOfCode, classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface);
 			if (analysedClass == null){
 				analysedClass = "";
 	    		// logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));
 			}
 		} else {
-			analysedClass = csClassGenerator.generateToDomain(sourceFilePath, classTree, getParentName(namespaceStack), isInterface);
+			analysedClass = csClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, getParentName(namespaceStack), isInterface);
 		}
 		return analysedClass;
 	}

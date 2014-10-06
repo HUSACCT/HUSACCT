@@ -11,6 +11,7 @@ import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.TypeFilter;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
@@ -184,18 +185,8 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	}
 	
 	@Override
-	public int getAmountOfDependencies() {
-    	return service.getAmountOfDependencies();
-    }
-    
-	@Override
-    public int getAmountOfPackages() {
-    	return service.getAmountOfPackages();
-    }
-    
-	@Override
-    public int getAmountOfClasses() {
-    	return service.getAmountOfClasses();
-    }
-    
+	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
+		return service.getAnalysisStatistics(selectedModule);
+	}
+
 }

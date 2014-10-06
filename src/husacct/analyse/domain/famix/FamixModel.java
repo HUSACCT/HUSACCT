@@ -33,6 +33,7 @@ class FamixModel extends FamixObject {
     public String parsedSystemName;
     public String extractionLevel;
     public String sourceLanguage;
+	private int totalNumberOfLinesOfCode;
     public String sourceDialect;
 
     private FamixModel() {
@@ -48,6 +49,7 @@ class FamixModel extends FamixObject {
         libraries = new HashMap<String, FamixLibrary>();
         structuralEntities = new HashMap<String, FamixStructuralEntity>();
         behaviouralEntities = new HashMap<String, FamixBehaviouralEntity>();
+        totalNumberOfLinesOfCode = 0;
     }
 
     public static FamixModel getInstance() {
@@ -99,6 +101,10 @@ class FamixModel extends FamixObject {
 		                	parent = packages.get(parentUniqueName);
 		                	parent.children.add(((FamixEntity) e).uniqueName);
 		                }
+	                }
+	                int loc = ((FamixClass) e).linesOfCode;
+	                if (loc > 0) { 
+	                	totalNumberOfLinesOfCode = totalNumberOfLinesOfCode + loc;
 	                }
                 }
             } else if (e instanceof FamixLibrary) {
@@ -221,6 +227,10 @@ class FamixModel extends FamixObject {
         throw new Exception("The unit (or a part of it) '" + typeVariable + " or " + uniqueVarName + "' is not found or defined.");
     }
     
+    public int getTotalNumberOfLinesOfCode() {
+    	return totalNumberOfLinesOfCode;
+    }
+    
     public String toString() {
         return "\n ------------Packages------------- \n" + packages
                 + "\n ------------Classes------------- \n" + classes
@@ -243,5 +253,6 @@ class FamixModel extends FamixObject {
         currentInstance.imports.clear();
         currentInstance.structuralEntities.clear();
         currentInstance.behaviouralEntities.clear();
+        totalNumberOfLinesOfCode = 0;
     }
 }

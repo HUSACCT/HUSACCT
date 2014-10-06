@@ -32,7 +32,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 
-public class ViolationPerRulePanel extends HelpableJPanel implements ActionListener {
+public class ViolationPerRulePanel extends HelpableJPanel {
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
 	private final TaskServiceImpl taskServiceImpl;
@@ -89,31 +89,7 @@ public class ViolationPerRulePanel extends HelpableJPanel implements ActionListe
         violationsScrollPane.setBackground(PANELBACKGROUND);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-    }
-    
-/*    private void toggleDependencies(boolean indirect, boolean direct){
-    	List<DependencyDTO> filteredList = new ArrayList<DependencyDTO>();
-        List<DependencyDTO> allDependencies = dataControl.listDependencies(fromSelected, toSelected);
-        for (DependencyDTO dependency : allDependencies) {
-        	if(indirect){
-        		if(dependency.isIndirect)
-        			filteredList.add(dependency);
-        	}
-        	if(direct){
-        		if(!dependency.isIndirect)
-        			filteredList.add(dependency);
-        	}
-        }
-        violationTable.setModel(new ViolationDataModel());
-        setColumnWidths();
-        violationTable.setAutoCreateRowSorter(true);
-        violationTable.repaint();
-    }
-*/    
     public void reload() {
-    	// Reload violationsPerRuleTable
         violationsPerRuleDataModel = new ViolationsPerRuleDataModel(taskServiceImpl);
     	violationsPerRuleTable.setModel(violationsPerRuleDataModel);
     	violationsPerRuleTable.setColumnWidths();

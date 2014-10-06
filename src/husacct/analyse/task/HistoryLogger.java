@@ -3,6 +3,7 @@ package husacct.analyse.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.OSDetector;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.task.configuration.ConfigurationManager;
@@ -207,21 +208,22 @@ public class HistoryLogger {
 
 		analyse.appendChild(path);
 
+		AnalysisStatisticsDTO statistics = service.getAnalysisStatistics(null);
 		//packages
 		Element packages = doc.createElement("packages");
-		packages.appendChild(doc.createTextNode(service.getAmountOfPackages() + ""));
+		packages.appendChild(doc.createTextNode(statistics.totalNrOfPackages + ""));
 
 		analyse.appendChild(packages);
 
 		//classes
 		Element classes = doc.createElement("classes");
-		classes.appendChild(doc.createTextNode(service.getAmountOfClasses() + ""));
+		classes.appendChild(doc.createTextNode(statistics.totalNrOfClasses + ""));
 
 		analyse.appendChild(classes);
 
 		//dependencies
 		Element dependencies = doc.createElement("dependencies");
-		dependencies.appendChild(doc.createTextNode(service.getAmountOfDependencies() + ""));
+		dependencies.appendChild(doc.createTextNode(statistics.totalNrOfDependencies + ""));
 
 		analyse.appendChild(dependencies);
 

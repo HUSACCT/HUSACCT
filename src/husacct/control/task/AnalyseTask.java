@@ -2,6 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 
@@ -54,14 +55,11 @@ public class AnalyseTask implements Runnable {
 				}
 				mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
 				ServiceProvider.getInstance().getControlService().finishPreAnalysing();
-				logger.info(new Date().toString() + " Control-AnalyseTask is Starting: getDefineService().analyze()");
 				ServiceProvider.getInstance().getDefineService().analyze();
 
-				logger.info(new Date().toString() + " Control-AnalyseTask has Finished: Analyse application; state isAnalyzing=false");
-				logger.info(new Date().toString() + " Added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes");
-				int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies();
-				logger.info(new Date().toString() + " Added: " + nrOfDependencies + " dependencies");
-				mainController.getActionLogController().addAction("Analysing finished, added: " + ServiceProvider.getInstance().getAnalyseService().getAmountOfPackages() + " packages; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfClasses() + " classes; " + ServiceProvider.getInstance().getAnalyseService().getAmountOfDependencies() + " dependencies");
+				AnalysisStatisticsDTO statistics = ServiceProvider.getInstance().getAnalyseService().getAnalysisStatistics(null);
+				logger.info(new Date().toString() + " Finished: Analyse application. Added: " + statistics.totalNrOfPackages + " packages; " + statistics.totalNrOfClasses + " classes; " + statistics.totalNrOfDependencies + " dependencies");
+				mainController.getActionLogController().addAction("Analysing finished, added: " + statistics.totalNrOfPackages + " packages; " + statistics.totalNrOfClasses + " classes; " + statistics.totalNrOfDependencies + " dependencies");
 				
 				String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 				ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
@@ -69,6 +67,8 @@ public class AnalyseTask implements Runnable {
 					ServiceProvider.getInstance().resetAnalyseService();
 				}
 				this.mainController.getStateController().setAnalysing(false);
+				this.mainController.getViewController().showApplicationOverviewGui();
+
 			} else {
 				logger.info(new Date().toString() + " No project specified, or no project path specified");
 			}

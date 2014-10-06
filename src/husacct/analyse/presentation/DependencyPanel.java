@@ -1,5 +1,6 @@
 package husacct.analyse.presentation;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -21,6 +22,7 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -44,18 +46,16 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     private HelpableJTable dependencyTable;
     private JCheckBox indirectFilterBox;
     private JCheckBox directFilterBox;
-    private JPanel filterPanel;
-    private AbstractTableModel tableModel;
+    private JPanel numberOfDependenciesPanel, filterPanel;
+	private JLabel totalDependenciesLabel, totalDependenciesNumber;
+	private AbstractTableModel tableModel;
     private List<AnalysedModuleDTO> fromSelected = new ArrayList<AnalysedModuleDTO>();
     private List<AnalysedModuleDTO> toSelected = new ArrayList<AnalysedModuleDTO>();
+    private List<DependencyDTO> filteredList;
     private AnalyseUIController dataControl;
 
     public DependencyPanel() {
         dataControl = new AnalyseUIController();
-        this.indirectFilterBox = new JCheckBox(dataControl.translate("ShowIndirectDependencies"));
-        this.indirectFilterBox.addActionListener(this);
-        this.directFilterBox = new JCheckBox(dataControl.translate("ShowDirectDependencies"));
-        this.directFilterBox.addActionListener(this);
         createLayout();
 
         dependencyTable = new HelpableJTable();
@@ -154,18 +154,41 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     private void createLayout() {
         fromModuleScrollPane = new HelpableJScrollPane();
         fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
+        fromModuleScrollPane.setBackground(PANELBACKGROUND);
 
         toModuleScrollPane = new HelpableJScrollPane();
         toModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("ToModuleTreeTitle")));
+        toModuleScrollPane.setBackground(PANELBACKGROUND);
+
+        numberOfDependenciesPanel = new JPanel();
+        FlowLayout flowLayout1 = (FlowLayout) numberOfDependenciesPanel.getLayout();
+        flowLayout1.setAlignment(FlowLayout.LEFT);
+        numberOfDependenciesPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        numberOfDependenciesPanel.setBorder(new TitledBorder(dataControl.translate("NumberOfDependencies")));
+		totalDependenciesLabel = new JLabel();
+		numberOfDependenciesPanel.add(totalDependenciesLabel);
+		totalDependenciesNumber = new JLabel("0");
+		numberOfDependenciesPanel.add(totalDependenciesNumber);
+        
+        filterPanel = new JPanel();
+        FlowLayout flowLayout2 = (FlowLayout) filterPanel.getLayout();
+        flowLayout2.setAlignment(FlowLayout.LEFT);
+        filterPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
+        directFilterBox = new JCheckBox(dataControl.translate("ShowDirectDependencies"));
+        directFilterBox.addActionListener(this);
+        directFilterBox.setSelected(true);
+        directFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
+        filterPanel.add(directFilterBox);
+        indirectFilterBox = new JCheckBox(dataControl.translate("ShowIndirectDependencies"));
+        indirectFilterBox.addActionListener(this);
+        indirectFilterBox.setSelected(true);
+        indirectFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
+        filterPanel.add(indirectFilterBox);
 
         dependencyScrollPane = new HelpableJScrollPane();
         dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
-
-        this.filterPanel = new JPanel();
-        FlowLayout flowLayout = (FlowLayout) filterPanel.getLayout();
-        flowLayout.setAlignment(FlowLayout.LEFT);
-        filterPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
+        dependencyScrollPane.setBackground(PANELBACKGROUND);
 
         theLayout = new GroupLayout(this);
         theLayout.setHorizontalGroup(
@@ -173,35 +196,31 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
                 .addGroup(theLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(theLayout.createParallelGroup(Alignment.TRAILING)
-                .addComponent(dependencyScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
-                .addComponent(filterPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
-                .addGroup(theLayout.createSequentialGroup()
-                .addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                .addGap(18)
-                .addComponent(toModuleScrollPane, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)))
+	                .addComponent(dependencyScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+	                .addGroup(theLayout.createSequentialGroup()
+	        		.addGroup(theLayout.createParallelGroup(Alignment.TRAILING)
+		                .addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+		                .addComponent(numberOfDependenciesPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+	                .addGap(18)
+	                .addGroup(theLayout.createParallelGroup(Alignment.TRAILING)
+		        		.addComponent(toModuleScrollPane, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+		                .addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                 .addContainerGap()));
         theLayout.setVerticalGroup(
                 theLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(theLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(theLayout.createParallelGroup(Alignment.LEADING)
-                .addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
-                .addComponent(toModuleScrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+	                .addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+	                .addComponent(toModuleScrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(ComponentPlacement.RELATED)
-                .addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGroup(theLayout.createParallelGroup(Alignment.LEADING)
+    	            .addComponent(numberOfDependenciesPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+	                .addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(ComponentPlacement.RELATED)
                 .addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addContainerGap()));
 
-        directFilterBox.setSelected(true);
-        directFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
-        filterPanel.add(directFilterBox);
-        indirectFilterBox.setSelected(true);
-        indirectFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
-        filterPanel.add(indirectFilterBox);
-        fromModuleScrollPane.setBackground(PANELBACKGROUND);
-        toModuleScrollPane.setBackground(PANELBACKGROUND);
-        dependencyScrollPane.setBackground(PANELBACKGROUND);
     }
 
     @Override
@@ -221,22 +240,18 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
                 toSelected.add(selectedModule);
             }
         }
-        updateTableModel();
-    }
-
-    private void updateTableModel() {
-    	toggleDependencies(this.indirectFilterBox.isSelected(), this.directFilterBox.isSelected());
+        updateDependencyTable(indirectFilterBox.isSelected(), directFilterBox.isSelected());
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == this.indirectFilterBox || event.getSource() == this.directFilterBox) {
-            toggleDependencies(this.indirectFilterBox.isSelected(), this.directFilterBox.isSelected());
+        if (event.getSource() == indirectFilterBox || event.getSource() == directFilterBox) {
+            updateDependencyTable(indirectFilterBox.isSelected(), directFilterBox.isSelected());
         }
     }
     
-    private void toggleDependencies(boolean indirect, boolean direct){
-    	List<DependencyDTO> filteredList = new ArrayList<DependencyDTO>();
+    private void updateDependencyTable(boolean indirect, boolean direct){
+    	filteredList = new ArrayList<DependencyDTO>();
         List<DependencyDTO> allDependencies = dataControl.listDependencies(fromSelected, toSelected);
         for (DependencyDTO dependency : allDependencies) {
         	if(indirect){
@@ -252,21 +267,25 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         setColumnWidths();
         dependencyTable.setAutoCreateRowSorter(true);
         dependencyTable.repaint();
+		totalDependenciesNumber.setText(filteredList.size() + "");
+        numberOfDependenciesPanel.repaint();
     }
     
     public void reload() {
-        tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>(), dataControl);
+    	updateDependencyTable(indirectFilterBox.isSelected(), directFilterBox.isSelected());
         fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
         toModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("ToModuleTreeTitle")));
-        dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
+		totalDependenciesLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NumberOfDependenciesBetweenSelectedModules") + ":");
+		totalDependenciesNumber.setText(filteredList.size() + "");
         filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
-        this.indirectFilterBox.setText(dataControl.translate("ShowIndirectDependencies"));
-        this.directFilterBox.setText(dataControl.translate("ShowDirectDependencies"));
+        indirectFilterBox.setText(dataControl.translate("ShowIndirectDependencies"));
+        directFilterBox.setText(dataControl.translate("ShowDirectDependencies"));
+        dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
         toModuleScrollPane.repaint();
         fromModuleScrollPane.repaint();
-        dependencyScrollPane.repaint();
+        numberOfDependenciesPanel.repaint();
         filterPanel.repaint();
-        updateTableModel();
+        dependencyScrollPane.repaint();
         this.repaint();
     }
     

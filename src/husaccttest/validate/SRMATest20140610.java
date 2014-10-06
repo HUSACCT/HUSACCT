@@ -86,7 +86,7 @@ public class SRMATest20140610 {
 		boolean isAnalysedCorrectly = false;
 		int numberOfDependencies = 0;
 		try {
-			numberOfDependencies = analyse.getAmountOfDependencies();
+			numberOfDependencies = analyse.getAnalysisStatistics(null).totalNrOfDependencies;
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}

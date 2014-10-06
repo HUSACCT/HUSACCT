@@ -59,11 +59,12 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
     
     @Override
-    public void createClass(String sourceFilePath, String uniqueName, String name, String belongsToPackage,
+    public void createClass(String sourceFilePath, int linesOfCode, String uniqueName, String name, String belongsToPackage,
             boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility, boolean isInterface) {
     	if ((uniqueName != null) && !uniqueName.equals("") && (name != null) && !name.equals("") && (belongsToPackage != null) && !belongsToPackage.equals("") && (belongsToClass != null)) { 
 	    	FamixClass fClass = new FamixClass();
 	    	fClass.sourceFilePath = sourceFilePath;
+	    	fClass.linesOfCode = linesOfCode;
 	        fClass.uniqueName = uniqueName.trim();
 	        fClass.isAbstract = isAbstract;
 	        fClass.belongsToPackage = belongsToPackage.trim();

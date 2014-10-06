@@ -17,7 +17,7 @@ import javax.swing.UIManager;
 public class AnalyseInternalFrame extends HelpableJInternalFrame implements ActionListener, IServiceListener {
 
     private static final long serialVersionUID = 1L;
-    private ApplicationStructurePanel treePanel;
+    private ApplicationStructurePanel applicationStructurePanel;
     private DependencyPanel dependencyPanel;
     private JTabbedPane tabPanel;
     private AnalyseUIController controller;
@@ -38,9 +38,9 @@ public class AnalyseInternalFrame extends HelpableJInternalFrame implements Acti
         setIconifiable(true);
         setVisible(true);
 
-        treePanel = new ApplicationStructurePanel();
+        applicationStructurePanel = new ApplicationStructurePanel();
         dependencyPanel = new DependencyPanel();
-        tabPanel.addTab(controller.translate("SourceOverview"), null, treePanel, null);
+        tabPanel.addTab(controller.translate("SourceOverview"), null, applicationStructurePanel, null);
         tabPanel.addTab(controller.translate("DependencyOverview"), null, dependencyPanel, null);
 
         cancelPanel = new JPanel();
@@ -70,7 +70,7 @@ public class AnalyseInternalFrame extends HelpableJInternalFrame implements Acti
         exportDependenciesButton.repaint();
         cancelButton.repaint();
         dependencyPanel.reload();
-        treePanel.reload();
+        applicationStructurePanel.reload();
         tabPanel.repaint();
         this.invalidate();
         this.revalidate();

@@ -90,9 +90,11 @@ abstract public class AbstractViewContainer {
 	
 	private void updateView(){
 		updateInternalFrame();
-		mainController.getMainGui().getDesktopPane().add(internalFrame);
-		setupFrame();	
-		internalFrame.setSize(AbstractViewContainer.defaultDimension);
+		if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
+			mainController.getMainGui().getDesktopPane().add(internalFrame);
+			setupFrame();	
+			internalFrame.setSize(AbstractViewContainer.defaultDimension);
+		}
 	}
 
 	private Rectangle getBounds(JInternalFrame internalFrame){
@@ -129,14 +131,14 @@ abstract public class AbstractViewContainer {
 	}	
 
 	public void showView(){
-		Point newPosition = getNewPosition(internalFrame);
-		Rectangle rect = getBounds(internalFrame);
-		resetFrame();
-		updateView();
-		setBounds(internalFrame, rect);
-		setNewPosition(internalFrame, newPosition);
-		internalFrame.setVisible(true);
-		internalFrame.toFront();
+			Point newPosition = getNewPosition(internalFrame);
+			Rectangle rect = getBounds(internalFrame);
+			resetFrame();
+			updateView();
+			setBounds(internalFrame, rect);
+			setNewPosition(internalFrame, newPosition);
+			internalFrame.setVisible(true);
+			internalFrame.toFront();
 	}
 	
 	abstract public JInternalFrame getInternalFrame();

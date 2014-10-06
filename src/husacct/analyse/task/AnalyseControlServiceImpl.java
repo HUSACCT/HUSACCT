@@ -6,7 +6,9 @@ import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
+
 import org.jdom2.Element;
 
 public class AnalyseControlServiceImpl implements IAnalyseControlService {
@@ -131,16 +133,8 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
         exportController.export(path);
     }
     
-    public int getAmountOfDependencies() {
-    	return domainService.getAmountOfDependencies();
-    }
-    
-    public int getAmountOfPackages() {
-    	return domainService.getAmountOfPackages();
-    }
-    
-    public int getAmountOfClasses() {
-    	return domainService.getAmountOfClasses();
-    }
-
+	@Override
+	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
+		return domainService.getAnalysisStatistics(selectedModule);
+	}
 }

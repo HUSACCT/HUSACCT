@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
+
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
 public class FamixQueryServiceImpl implements IModelQueryService {
@@ -85,7 +87,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         return dependencies;
     }
     
-    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    // Returns unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
     @Override
     public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
 		TreeSet<String> uniqueNamesAllFoundTypes = new TreeSet<String>();
@@ -102,7 +104,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 		return uniqueNamesAllFoundTypes;
     }
 
-    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    // Returns unique names of all packages with uniqueName or within this SoftwareUnit  
     @Override
     public TreeSet<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
 		TreeSet<String> uniqueNamesAllFoundPackages = new TreeSet<String>();
@@ -168,15 +170,45 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         return dependencyMap;
     }
     
-    public int getAmountOfDependencies() {
-    	return getAllDependencies().length;
+    @Override
+	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
+		AnalysisStatisticsDTO returnValue;
+		if (selectedModule == null) {
+			returnValue = new AnalysisStatisticsDTO(theModel.packages.size(), theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, 0, 0, 0);
+		} else {
+			int packages = 0;
+			int classes = 0;
+			int linesOfCode = 0;
+			if (selectedModule.type.equals("package")) {
+				if (theModel.packages.containsKey(selectedModule.uniqueName)) {
+					packages = getAllPhysicalPackagePathsOfSoftwareUnit(selectedModule.uniqueName).size();
+					TreeSet<String> classesSet = getAllPhysicalClassPathsOfSoftwareUnit(selectedModule.uniqueName);
+					classes = classesSet.size();
+					for (String typeName : classesSet) {
+						if (theModel.classes.containsKey(typeName)) {
+							FamixClass selected = theModel.classes.get(typeName);
+							linesOfCode = linesOfCode + selected.linesOfCode;
+						}
+					}
+				}
+			} else if (selectedModule.type.equals("class") || selectedModule.type.equals("interface")) {
+				if (theModel.classes.containsKey(selectedModule.uniqueName)) {
+					FamixClass selected = theModel.classes.get(selectedModule.uniqueName);
+					linesOfCode = selected.linesOfCode;
+					if (selected.hasInnerClasses) {
+						TreeSet<String> classesSet = getAllPhysicalClassPathsOfSoftwareUnit(selectedModule.uniqueName);
+						classes = classesSet.size();
+					} else {
+						classes = 1;
+					}
+				}
+				packages = 0;
+			} else {
+				// A library is selected, so return default 0-values.
+			}
+			returnValue = new AnalysisStatisticsDTO(theModel.packages.size(), theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, packages, classes, linesOfCode);
+		}
+        return returnValue;
     }
-    
-    public int getAmountOfPackages() {
-    	return theModel.packages.size();
-    }
-    
-    public int getAmountOfClasses() {
-    	return theModel.classes.size();
-    }
+
 }

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 class JavaTreeConvertController {
 	private String sourceFilePath = "";
+    private int numberOfLinesOfCode = 0;
     private String theClass = null;
     private String thePackage = null;
     private String currentClass = null;
@@ -35,9 +36,10 @@ class JavaTreeConvertController {
         implementsGenerator = new JavaImplementsDefinitionGenerator();
     }
 
-    public void delegateASTToGenerators(String sourceFilePath, JavaParser javaParser) throws RecognitionException {
+    public void delegateASTToGenerators(String sourceFilePath, int nrOfLinesOfCode, JavaParser javaParser) throws RecognitionException {
     	try {
     		this.sourceFilePath = sourceFilePath;
+        	this.numberOfLinesOfCode = nrOfLinesOfCode;
 	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
 	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 	        createClassInformation(compilationUnitTree);
@@ -171,15 +173,15 @@ class JavaTreeConvertController {
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
         String analysedClass;
         if (isInnerClass) {
-            analysedClass = javaClassGenerator.generateToModel(sourceFilePath, classTree, parentClass);
+            analysedClass = javaClassGenerator.generateToModel(sourceFilePath, 0, classTree, parentClass);
         } else {
-            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, classTree);
+            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree);
         }
         return analysedClass;
     }
 
     private String delegateInterface(CommonTree interfaceTree) {
-        return javaInterfaceGenerator.generateToDomain(sourceFilePath, interfaceTree);
+        return javaInterfaceGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, interfaceTree);
     }
 
     private String delegateAnnotation(CommonTree annotationTree) {

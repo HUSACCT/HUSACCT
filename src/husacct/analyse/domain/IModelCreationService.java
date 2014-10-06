@@ -8,7 +8,7 @@ public interface IModelCreationService {
 
     public void clearModel();
 
-    public void createClass(String sourceFilePath, String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity, boolean isInterface);
+    public void createClass(String sourceFilePath, int linesOfCode, String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity, boolean isInterface);
 
     public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 

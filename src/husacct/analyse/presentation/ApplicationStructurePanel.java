@@ -2,6 +2,7 @@ package husacct.analyse.presentation;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.help.presentation.HelpableJPanel;
+import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.common.help.presentation.HelpableJTree;
 
 import java.awt.Color;
@@ -9,9 +10,9 @@ import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,22 +24,24 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
     private HelpableJTree analysedCodeTree;
-    private JScrollPane jScrollPaneTree;
-    private DefaultTreeCellRenderer renderer;
+    private HelpableJScrollPane jScrollPaneTree;
+    private StatisticsPanel statisticsPanel;
     private AnalyseUIController dataControl;
 
     public ApplicationStructurePanel() {
         dataControl = new AnalyseUIController();
-        renderer = new SoftwareTreeCellRenderer(dataControl);
-        createPanel();
+        createLayout();
+        createanalysedCodeTree();
     }
 
-    private void createPanel() {
+    private void createanalysedCodeTree() {
 
         AnalysedModuleDTO rootModule = new AnalysedModuleDTO("", "", "", "");
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootModule);
-        this.analysedCodeTree = new HelpableJTree(root);
-        this.createTreeLayout(analysedCodeTree);
+        analysedCodeTree = new HelpableJTree(root);
+        createTreeLayout(analysedCodeTree);
+        analysedCodeTree.addTreeSelectionListener(this);
+        analysedCodeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();
         for (AnalysedModuleDTO module : rootModules) {
@@ -47,13 +50,8 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
             fillNode(rootNode);
         }
         this.expandLeaf(analysedCodeTree, 1);
-
-        analysedCodeTree.setBackground(UIManager.getColor("Panel.background"));
-        analysedCodeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        analysedCodeTree.addTreeSelectionListener(this);
-        jScrollPaneTree = new JScrollPane(analysedCodeTree);
-
-        createLayout();
+        
+        jScrollPaneTree.setViewportView(analysedCodeTree);
 
     }
 
@@ -77,52 +75,58 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
 
     private void createTreeLayout(JTree theTree) {
         DefaultTreeCellRenderer moduleNodeRenderer = new SoftwareTreeCellRenderer(dataControl);
-        moduleNodeRenderer.setBackground(UIManager.getColor("Panel.background"));
-        moduleNodeRenderer.setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
+        moduleNodeRenderer.setBackground(PANELBACKGROUND);
+        moduleNodeRenderer.setBackgroundNonSelectionColor(PANELBACKGROUND);
         moduleNodeRenderer.setBackgroundSelectionColor(UIManager.getColor("Table.sortIconColor"));
-        moduleNodeRenderer.setTextNonSelectionColor(UIManager.getColor("Panel.background"));
+        moduleNodeRenderer.setTextNonSelectionColor(PANELBACKGROUND);
         moduleNodeRenderer.setTextSelectionColor(UIManager.getColor("Table.sortIconColor"));
         theTree.setCellRenderer(moduleNodeRenderer);
         theTree.setBackground(PANELBACKGROUND);
     }
 
     private void createLayout() {
-        jScrollPaneTree.setBackground(UIManager.getColor("Panel.background"));
-        jScrollPaneTree.setBorder(null);
-        jScrollPaneTree.setBackground(getBackground());
+        jScrollPaneTree = new HelpableJScrollPane();
+    	jScrollPaneTree.setBackground(PANELBACKGROUND);
+        jScrollPaneTree.setBorder(new TitledBorder(dataControl.translate("ApplicationComposition")));
+
+        statisticsPanel = new StatisticsPanel(dataControl);
 
         GroupLayout groupLayout = new GroupLayout(this);
         groupLayout.setHorizontalGroup(
                 groupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(groupLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPaneTree, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addComponent(jScrollPaneTree, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addGap(18)
+                .addComponent(statisticsPanel, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addContainerGap()));
         groupLayout.setVerticalGroup(
                 groupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(groupLayout.createSequentialGroup()
-                .addGap(5)
+        		.addContainerGap()
+                .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
                 .addComponent(jScrollPaneTree, GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                .addComponent(statisticsPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap()));
 
-        analysedCodeTree.setCellRenderer(renderer);
         setLayout(groupLayout);
     }
 
     public void valueChanged(TreeSelectionEvent eventTree) {
-    	//Returns the last path element of the selection.
-    	//This method is useful only when the selection model allows a single selection.
-    	    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-    	                      analysedCodeTree.getLastSelectedPathComponent();
-
-    	    if (node == null)
-    	    //Nothing is selected.     
-    	    return;
+    	    DefaultMutableTreeNode selected = (DefaultMutableTreeNode) analysedCodeTree.getLastSelectedPathComponent();
+            if (selected != null) {
+                AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
+                statisticsPanel.reload(selectedModule);
+                jScrollPaneTree.repaint();
+                repaint();
+            }
     }
 
     public void reload() {
-        renderer = new SoftwareTreeCellRenderer(dataControl);
-        analysedCodeTree.setCellRenderer(renderer);
-        repaint();
+        statisticsPanel.reload(null);
+        jScrollPaneTree.repaint();
+        this.invalidate();
+        this.revalidate();
+        this.repaint();
     }
 }

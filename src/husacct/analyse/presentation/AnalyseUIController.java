@@ -82,4 +82,9 @@ public class AnalyseUIController {
     public IControlService getControlService(){
     	return this.controlService;
     }
+
+    public IAnalyseService getAnalyseService(){
+    	return this.analyseService;
+    }
+
 }

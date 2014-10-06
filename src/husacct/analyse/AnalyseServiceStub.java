@@ -1,6 +1,7 @@
 package husacct.analyse;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
@@ -561,21 +562,9 @@ public class AnalyseServiceStub implements IAnalyseService {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public int getAmountOfDependencies() {
-		return 1;
+	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
+		return new AnalysisStatisticsDTO(1,10,100,1000,2,20,200);
 	}
-
-	@Override
-	public int getAmountOfPackages() {
-		return 1;
-	}
-
-	@Override
-	public int getAmountOfClasses() {
-		return 1;
-	}
-
 	@Override
 	public DependencyDTO[] getAllUnfilteredDependencies() {
 		return this.getDependencies("", "");

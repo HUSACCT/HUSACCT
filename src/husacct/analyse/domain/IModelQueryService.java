@@ -1,7 +1,9 @@
 package husacct.analyse.domain;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
@@ -44,9 +46,5 @@ public interface IModelQueryService {
     
     public void buildCache();
     
-    public int getAmountOfDependencies();
-    
-    public int getAmountOfPackages();
-    
-    public int getAmountOfClasses();
+    public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
 }
