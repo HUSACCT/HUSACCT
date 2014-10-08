@@ -72,29 +72,34 @@ public class FilterPanel extends JPanel {
 		horizontalRadioButtonGroup.addPreferredGap(ComponentPlacement.RELATED);
 		horizontalRadioButtonGroup.addComponent(radioButtonIndirect);
 
-		GroupLayout.ParallelGroup horizontalGroup = filterPane.createParallelGroup(Alignment.LEADING);
-		horizontalGroup.addComponent(buttonEditFilter);
-		horizontalGroup.addComponent(applyFilter);
-		horizontalGroup.addGroup(horizontalRadioButtonGroup);
-
-		filterPane.setHorizontalGroup(horizontalGroup);
+		filterPane.setHorizontalGroup(filterPane.createParallelGroup(Alignment.LEADING).
+				addGroup(filterPane.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(filterPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(filterPane.createSequentialGroup()
+						.addComponent(applyFilter)
+						.addGap(30)
+						.addGroup(filterPane.createParallelGroup(Alignment.TRAILING).addComponent(buttonEditFilter)))
+					.addGroup(horizontalRadioButtonGroup))
+					.addContainerGap()));
 
 		GroupLayout.ParallelGroup verticalRadioButtonGroup = filterPane.createParallelGroup(Alignment.LEADING, false);
 		verticalRadioButtonGroup.addComponent(radioButtonAll);
 		verticalRadioButtonGroup.addComponent(radioButtonDirect);
 		verticalRadioButtonGroup.addComponent(radioButtonIndirect);
 
-		GroupLayout.SequentialGroup verticalGroup = filterPane.createSequentialGroup();
-		verticalGroup.addComponent(applyFilter);
-		verticalGroup.addPreferredGap(ComponentPlacement.RELATED);
-		verticalGroup.addComponent(buttonEditFilter);
-		verticalGroup.addPreferredGap(ComponentPlacement.RELATED);
-		verticalGroup.addGroup(verticalRadioButtonGroup);
-
-		filterPane.setVerticalGroup(verticalGroup);
-
+		filterPane.setVerticalGroup(
+			filterPane.createParallelGroup(Alignment.LEADING).addGroup(
+				filterPane.createSequentialGroup()
+					.addGap(3)
+					.addGroup(filterPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(applyFilter)
+							.addComponent(buttonEditFilter))
+					.addGap(3)
+					.addGroup(verticalRadioButtonGroup)
+					.addGap(3)));
+						
 		setLayout(filterPane);
-
 	}
 
 	private void addListeners() {

@@ -11,6 +11,7 @@ import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class WorkspaceController {
 	}
 	
 	public void createWorkspace(String name){
-		logger.info("New workspace: " + name);
+		logger.info( new Date().toString() + " New workspace: " + name);
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		currentWorkspace = workspace;

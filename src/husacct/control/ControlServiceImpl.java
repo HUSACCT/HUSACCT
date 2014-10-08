@@ -103,13 +103,18 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
+		String languageName = "en";
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
-			String languageName = workspaceData.getAttributeValue("language");
+			languageName = workspaceData.getAttributeValue("language");
 			workspaceController.createWorkspace(workspaceName);
-			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
+		}
+		try {
+			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
+		} catch (Exception e){
+			logger.info(" LocaleService not found at specified path ");
 		}
 	}
 	

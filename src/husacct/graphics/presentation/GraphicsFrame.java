@@ -64,7 +64,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		
 		initializeComponents();
 		
-		logger.info("listeners added");
+		//logger.info("listeners added");
 		
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override

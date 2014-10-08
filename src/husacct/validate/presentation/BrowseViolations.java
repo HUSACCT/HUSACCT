@@ -110,28 +110,27 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		GroupLayout rightSideGroupLayout = new GroupLayout(allViolationsPanel);
 		rightSideGroupLayout.setHorizontalGroup(
 			rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
-				.addComponent(informationScrollPane).addGroup(
-					rightSideGroupLayout.createSequentialGroup().addGroup(
-						rightSideGroupLayout.createParallelGroup(Alignment.TRAILING).addGroup(
-							Alignment.LEADING, rightSideGroupLayout
-								.createSequentialGroup()
-								.addComponent(statisticsScrollPane, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
-								.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
-						)
-						.addGap(1)
-		));
-		rightSideGroupLayout.setVerticalGroup(rightSideGroupLayout
-			.createParallelGroup(Alignment.LEADING).addGroup(
-				rightSideGroupLayout.createSequentialGroup().addGroup(
-					rightSideGroupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-						.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-						.addComponent(informationScrollPane, 190, 190, 190)
+				.addGroup(rightSideGroupLayout.createSequentialGroup()
+	                .addContainerGap()
+					.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(rightSideGroupLayout.createSequentialGroup()
+							.addComponent(statisticsScrollPane, 507, 507, Short.MAX_VALUE)
+							.addGap(10)
+							.addComponent(filterPane, 300, 300, Short.MAX_VALUE))
+						.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+						.addComponent(informationScrollPane))
+		                .addContainerGap()));
+		rightSideGroupLayout.setVerticalGroup(
+			rightSideGroupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(rightSideGroupLayout.createSequentialGroup()
+	                .addContainerGap()
+					.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(statisticsScrollPane, 85, 85, 85)
+						.addComponent(filterPane, 85, 85, 85))
+					.addGap(10)
+					.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+					.addGap(10)
+					.addComponent(informationScrollPane, 150, 150, 150)
 		));
 		allViolationsPanel.setLayout(rightSideGroupLayout);
 	}

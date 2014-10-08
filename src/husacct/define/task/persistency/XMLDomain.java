@@ -41,7 +41,7 @@ public class XMLDomain {
 
 	public Application createApplication() {
 		try {
-			logger.info("Loading application from storage");
+			logger.info(new Date().toString() + " Loading application from storage");
 			List<Element> applicationProperties = workspace.getChildren();
 
 			Element name = applicationProperties.get(0);

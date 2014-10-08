@@ -70,15 +70,15 @@ public class ViolationPerRulePanel extends HelpableJPanel {
         violationsScrollPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violations")));
 
         theLayout = new GroupLayout(this);
-        theLayout.setHorizontalGroup(
-                theLayout.createParallelGroup(Alignment.TRAILING)
-                .addGroup(theLayout.createSequentialGroup()
+        theLayout.setHorizontalGroup(theLayout.createParallelGroup(Alignment.TRAILING)
+            .addGroup(theLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(theLayout.createParallelGroup(Alignment.TRAILING)
-                .addComponent(ruleScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
-                .addComponent(violationsScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE))));
-        theLayout.setVerticalGroup(
-                theLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(theLayout.createSequentialGroup()
+	                .addComponent(ruleScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+	                .addComponent(violationsScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE))
+                .addContainerGap()));
+        theLayout.setVerticalGroup(theLayout.createParallelGroup(Alignment.LEADING)
+            .addGroup(theLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(ruleScrollPane, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                 .addPreferredGap(ComponentPlacement.RELATED)

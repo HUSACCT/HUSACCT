@@ -17,7 +17,8 @@ public class StatisticsPanelWholeApplication extends HelpableJPanel {
 	private static final long serialVersionUID = 8505356261388679299L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
     private AnalyseUIController dataControl;
-    private JLabel totalPackagesLabel, totalPackagesNumber, totalClassesLabel, totalClassesNumber, totalLinesOfCodeLabel, totalLinesOfCodeNumber, nrOfDependenciesLabel, nrOfDependenciesNumber;
+    private JLabel totalPackagesLabel, totalPackagesNumber, totalClassesLabel, totalClassesNumber, totalLinesOfCodeLabel, 
+    	totalLinesOfCodeNumber, nrOfDependenciesLabel, nrOfDependenciesNumber, emtyLabelSettingTheSize1, emtyLabelSettingTheSize2;
     private GroupLayout groupLayout;
 
     public StatisticsPanelWholeApplication(AnalyseUIController uiController) {
@@ -34,21 +35,15 @@ public class StatisticsPanelWholeApplication extends HelpableJPanel {
         this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         this.setBorder(new TitledBorder(dataControl.translate("FullApplication")));
 		totalPackagesLabel = new JLabel();
-		this.add(totalPackagesLabel);
 		totalPackagesNumber = new JLabel("-");
-		this.add(totalPackagesNumber);
 		totalClassesLabel = new JLabel();
-		this.add(totalClassesLabel);
 		totalClassesNumber = new JLabel("-");
-		this.add(totalClassesNumber);
 		totalLinesOfCodeLabel = new JLabel();
-		this.add(totalLinesOfCodeLabel);
 		totalLinesOfCodeNumber = new JLabel("-");
-		this.add(totalLinesOfCodeNumber);
 		nrOfDependenciesLabel = new JLabel();
-		this.add(nrOfDependenciesLabel);
 		nrOfDependenciesNumber = new JLabel("-");
-		this.add(nrOfDependenciesNumber);
+		emtyLabelSettingTheSize1 = new JLabel("");
+		emtyLabelSettingTheSize2 = new JLabel("");
 	}
 
 	private void createLayout() {
@@ -61,13 +56,14 @@ public class StatisticsPanelWholeApplication extends HelpableJPanel {
 	                	.addComponent(totalPackagesLabel)
 	            		.addComponent(totalClassesLabel)
 	            		.addComponent(totalLinesOfCodeLabel)
-	            		.addComponent(nrOfDependenciesLabel))
-	                .addGap(20)
+	            		.addComponent(nrOfDependenciesLabel)
+	            		.addComponent(emtyLabelSettingTheSize1, 90, 90, 90))
 	                .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 	            		.addComponent(totalPackagesNumber)
 	            		.addComponent(totalClassesNumber)
 	            		.addComponent(totalLinesOfCodeNumber)
-	            		.addComponent(nrOfDependenciesNumber))
+	            		.addComponent(nrOfDependenciesNumber)
+	            		.addComponent(emtyLabelSettingTheSize1, 80, 80, 80))
 	                .addContainerGap()));
         groupLayout.setVerticalGroup(
     		groupLayout.createParallelGroup(Alignment.LEADING)
@@ -88,6 +84,9 @@ public class StatisticsPanelWholeApplication extends HelpableJPanel {
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 		        		.addComponent(nrOfDependenciesLabel)
 		        		.addComponent(nrOfDependenciesNumber))
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+		        		.addComponent(emtyLabelSettingTheSize1)
+		        		.addComponent(emtyLabelSettingTheSize1))
 				.addContainerGap()));
 	}
 

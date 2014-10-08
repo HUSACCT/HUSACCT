@@ -589,7 +589,7 @@ class FamixCreationPostProcessor {
         	addToModel(indirectAssociation);
         }
 
-        this.logger.info(" Connected via 1) Import: " + numberOfConnectedViaImport + ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Variable: " + numberOfConnectedViaAttribute  
+        this.logger.info(new Date().toString() + " Connected via 1) Import: " + numberOfConnectedViaImport + ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Variable: " + numberOfConnectedViaAttribute  
         		+ ", 4) Local var: " + numberOfConnectedViaLocalVariable + ", 5) Method: " +  numberOfConnectedViaMethod +  ", 6) Inherited var/method: " + numberOfDerivedAssociations);
     }
     
@@ -722,7 +722,7 @@ class FamixCreationPostProcessor {
     	if (addedInvocations.size() > 0) {
     		waitingDerivedAssociations.addAll(addedInvocations);
     		addedInvocations.clear();
-        	this.logger.info(" Number of derived invocations: " + numberOfDerivedAssociations);
+        	this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
     		processWaitingDerivedAssociations();
     	}
     }

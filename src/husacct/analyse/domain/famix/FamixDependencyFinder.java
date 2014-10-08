@@ -235,7 +235,7 @@ class FamixDependencyFinder extends FamixFinder {
 	        //e.printStackTrace();
 	    }
 		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
-		this.logger.info(" Filtered associations without existing from or to object: " + numberOfFilteredDependencies + "; duplicate associations: " + numberOfDuplicateAssociations);
+		//this.logger.info(new Date().toString() + " Filtered associations without existing from or to object: " + numberOfFilteredDependencies + "; duplicate associations: " + numberOfDuplicateAssociations);
 		return resultToReturn;
 	}
 

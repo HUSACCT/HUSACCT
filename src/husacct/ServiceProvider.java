@@ -1,5 +1,7 @@
 package husacct;
 
+import java.util.Date;
+
 import husacct.analyse.AnalyseServiceImpl;
 import husacct.analyse.IAnalyseService;
 import husacct.common.locale.ILocaleService;
@@ -41,14 +43,14 @@ public final class ServiceProvider {
 	
 	public static ServiceProvider getInstance() {
 		if (ServiceProvider._instance == null) {
-			logger.info("Creating new serviceprovider");
+			logger.info(new Date().toString() + " Creating new serviceprovider");
 			new ServiceProvider();
 		}
 		return ServiceProvider._instance;
 	}
 
 	public void resetServices(){
-		logger.info("Resetting services");
+		logger.info(new Date().toString() + " Resetting services");
 		if(this.controlService == null) this.controlService = new ControlServiceImpl();
 		if(this.localeService == null) this.localeService = new LocaleServiceImpl();
 		this.analyseService = new AnalyseServiceImpl();

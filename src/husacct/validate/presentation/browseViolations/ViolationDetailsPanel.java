@@ -49,52 +49,55 @@ public class ViolationDetailsPanel extends JPanel implements ActionListener {
 		GroupLayout gl_violationDetailPane = new GroupLayout(this);
 		gl_violationDetailPane.setHorizontalGroup(
 			gl_violationDetailPane.createParallelGroup(Alignment.LEADING).addGroup(
-				gl_violationDetailPane.createSequentialGroup().addContainerGap().addGroup(
-					gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(detailLogicalModuleToLabel)
-						.addComponent(detailsMessageLabel)
-						.addComponent(detailsSeverityLabel)
-						.addComponent(detailShowSourceCodeBtn).addGroup(
-					gl_violationDetailPane.createSequentialGroup().addComponent(detailsLogicalModuleFromLabel).addGap(53).addGroup(
-						gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
+				gl_violationDetailPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(detailsLogicalModuleFromLabel, 160, 160, 160)
+						.addComponent(detailLogicalModuleToLabel, 160, 160, 160)
+						.addComponent(detailsMessageLabel, 160, 160, 160)
+						.addComponent(detailsSeverityLabel, 160, 160, 160)
+						.addComponent(detailShowSourceCodeBtn))
+					.addGap(10)
+					.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 							.addComponent(detailLogicalModuleFromValue)
 							.addComponent(detailLogicalModuleToValue)
 							.addComponent(detailMessageValue)
-							.addComponent(detailSeverityValue))))
-					.addContainerGap(397, Short.MAX_VALUE)));
+							.addComponent(detailSeverityValue)))
+					.addGap(10));
 		
 		gl_violationDetailPane.setVerticalGroup(
 			gl_violationDetailPane.createParallelGroup(Alignment.LEADING).addGroup(
-				gl_violationDetailPane.createSequentialGroup().addContainerGap().addGroup(
+				gl_violationDetailPane.createSequentialGroup()
+				.addGap(3).addGroup(
 					gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(detailsLogicalModuleFromLabel)
 						.addComponent(detailLogicalModuleFromValue))
-				.addPreferredGap(ComponentPlacement.UNRELATED).addGroup(
+				.addGap(3).addGroup(
 					gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(detailLogicalModuleToLabel)
 						.addComponent(detailLogicalModuleToValue))
-				.addPreferredGap(ComponentPlacement.UNRELATED).addGroup(
+				.addGap(3).addGroup(
 					gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(detailsMessageLabel)
 						.addComponent(detailMessageValue))
-				.addPreferredGap(ComponentPlacement.UNRELATED).addGroup(
+				.addGap(3).addGroup(
 					gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(detailsSeverityLabel)
 						.addComponent(detailSeverityValue))
-				.addPreferredGap(ComponentPlacement.UNRELATED).addGroup(
+				.addGap(7).addGroup(
 					gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(detailShowSourceCodeBtn))
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+				.addGap(5)));
 		
 		setLayout(gl_violationDetailPane);
 	}
 
 	public void loadGuiText() {
 		setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Details")));
-		detailsLogicalModuleFromLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LogicalModuleFrom"));
-		detailLogicalModuleToLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LogicalModuleTo"));
-		detailsMessageLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Message"));
-		detailsSeverityLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity"));
+		detailsLogicalModuleFromLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LogicalModuleFrom") + ":");
+		detailLogicalModuleToLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LogicalModuleTo") + ":");
+		detailsMessageLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Message") + ":");
+		detailsSeverityLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity") + ":");
 		detailShowSourceCodeBtn.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ShowCode"));
 	}
 
@@ -104,13 +107,11 @@ public class ViolationDetailsPanel extends JPanel implements ActionListener {
 			Violation violation = shownViolations.get(row);
 			detailLogicalModuleFromValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
+			detailMessageValue.setText(task.getMessage(violation.getMessage(), violation));
 			detailSeverityValue.setText("" + violation.getSeverity());
-
+			// Set data needed in case the source code viewer is activated
 			sourceClassPath = violation.getClassPathFrom();
 			sourceLine = violation.getLinenumber();
-			
-			String message = task.getMessage(violation.getMessage(), violation);
-			detailMessageValue.setText(message);
 		} else {
 			detailSeverityValue.setText("");
 			detailLogicalModuleFromValue.setText("");

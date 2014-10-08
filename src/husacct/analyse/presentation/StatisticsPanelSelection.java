@@ -17,7 +17,8 @@ public class StatisticsPanelSelection extends HelpableJPanel {
 	private static final long serialVersionUID = 8505356261336679299L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
     private AnalyseUIController dataControl;
-    private JLabel selectionPackagesLabel, selectionPackagesNumber, selectionClassesLabel, selectionClassesNumber, selectionLinesOfCodeLabel, selectionLinesOfCodeNumber;
+    private JLabel selectionPackagesLabel, selectionPackagesNumber, selectionClassesLabel, selectionClassesNumber, 
+    	selectionLinesOfCodeLabel, selectionLinesOfCodeNumber, emtyLabelSettingTheSize1, emtyLabelSettingTheSize2;
     private GroupLayout groupLayout;
 
     public StatisticsPanelSelection(AnalyseUIController uiController) {
@@ -34,17 +35,13 @@ public class StatisticsPanelSelection extends HelpableJPanel {
         this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         this.setBorder(new TitledBorder(dataControl.translate("Selection")));
 		selectionPackagesLabel = new JLabel();
-		this.add(selectionPackagesLabel);
 		selectionPackagesNumber = new JLabel("-");
-		this.add(selectionPackagesNumber);
 		selectionClassesLabel = new JLabel();
-		this.add(selectionClassesLabel);
 		selectionClassesNumber = new JLabel("-");
-		this.add(selectionClassesNumber);
 		selectionLinesOfCodeLabel = new JLabel();
-		this.add(selectionLinesOfCodeLabel);
 		selectionLinesOfCodeNumber = new JLabel("-");
-		this.add(selectionLinesOfCodeNumber);
+		emtyLabelSettingTheSize1 = new JLabel("");
+		emtyLabelSettingTheSize2 = new JLabel("");
 	}
 
 	private void createLayout() {
@@ -54,14 +51,15 @@ public class StatisticsPanelSelection extends HelpableJPanel {
 	    		.addGroup(groupLayout.createSequentialGroup()
 	                .addContainerGap()
 	                .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-	                	.addComponent(selectionPackagesLabel)
-	            		.addComponent(selectionClassesLabel)
-	            		.addComponent(selectionLinesOfCodeLabel))
-	                .addGap(22)
+	                	.addComponent(selectionPackagesLabel, 90, 90, 90)
+	            		.addComponent(selectionClassesLabel, 90, 90, 90)
+	            		.addComponent(selectionLinesOfCodeLabel, 90, 90, 90)
+	            		.addComponent(emtyLabelSettingTheSize1, 90, 90, 90))
 	                .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 	            		.addComponent(selectionPackagesNumber)
 	            		.addComponent(selectionClassesNumber)
-	            		.addComponent(selectionLinesOfCodeNumber))
+	            		.addComponent(selectionLinesOfCodeNumber)
+	            		.addComponent(emtyLabelSettingTheSize2, 80, 80, 80))
 	                .addContainerGap()));
         groupLayout.setVerticalGroup(
     		groupLayout.createParallelGroup(Alignment.LEADING)
@@ -78,6 +76,9 @@ public class StatisticsPanelSelection extends HelpableJPanel {
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 		        		.addComponent(selectionLinesOfCodeLabel)
 		        		.addComponent(selectionLinesOfCodeNumber))
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+		        		.addComponent(emtyLabelSettingTheSize1)
+		        		.addComponent(emtyLabelSettingTheSize2))
 				.addContainerGap()));
 	}
 

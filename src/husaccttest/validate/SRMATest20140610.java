@@ -379,7 +379,7 @@ public class SRMATest20140610 {
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
 			if(workspaceController.isOpenWorkspace()){
-				logger.info(String.format("Workspace %s loaded", location));
+				logger.info(String.format(new Date().toString() + " Workspace %s loaded", location));
 			} else {
 				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));
 			}

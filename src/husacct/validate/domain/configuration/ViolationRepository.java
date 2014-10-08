@@ -118,11 +118,11 @@ class ViolationRepository {
 			}
 		}
 		
-		// Test helpers
+		/* Test helpers
 		for (String rule : violationsPerRuleTreeMap.keySet()) {
 			violationsPerRuleList = violationsPerRuleTreeMap.get(rule);
 			logger.info(violationsPerRuleList.size() + " violations for rule: " + rule);
-		}
+		} */
 	}
 
 	public Set<String> getViolatedRules() {
