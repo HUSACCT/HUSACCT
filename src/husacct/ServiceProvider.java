@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 
 public final class ServiceProvider {
 
-	private static Logger logger = Logger.getLogger(ServiceProvider.class);
+	private static final Logger logger = Logger.getLogger(ServiceProvider.class);
 	
 	private static ServiceProvider _instance;
 

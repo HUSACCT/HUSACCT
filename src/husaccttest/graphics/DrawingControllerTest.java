@@ -9,17 +9,12 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.PhysicalPathDTO;
 import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.ClassFigure;
-import husacct.graphics.presentation.figures.ComponentFigure;
 import husacct.graphics.presentation.figures.InterfaceFigure;
-import husacct.graphics.presentation.figures.LayerFigure;
-import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
-import husacct.graphics.presentation.figures.SubsystemFigure;
 import husacct.graphics.task.AnalysedController;
 
 import java.util.ArrayList;
@@ -42,7 +37,7 @@ public class DrawingControllerTest {
 		AnalysedModuleDTO layerDTO = new AnalysedModuleDTO("test.layer", "analysedLayer", "layer", "public");
 		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", "subsystem", new ModuleDTO[] {});
 		ModuleDTO componentDTO = new ModuleDTO("test.component", "component", new ModuleDTO[] {});
-		AnalysedModuleDTO externalLibraryDTO = new AnalysedModuleDTO("test.externalLibrary", "analysedLibrary", "externallibrary", "public");
+		ModuleDTO externalLibraryDTO = new ModuleDTO("xLibrary.externalLibrary", "library", new ModuleDTO[] {});
 
 		analysedController.drawSingleLevelModules(new AbstractDTO[] { layerDTO, subsystemDTO, componentDTO, externalLibraryDTO });
 
@@ -56,18 +51,6 @@ public class DrawingControllerTest {
 			BaseFigure baseF = (BaseFigure) f;
 
 			assertTrue("module figure says not to be a module", baseF.isModule());
-
-			if (f instanceof LayerFigure) {
-				assertSame("wrong dto for layer figure", layerDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof SubsystemFigure) {
-				assertSame("wrong dto for subsystem figure", subsystemDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof ComponentFigure) {
-				assertSame("wrong dto for component figure", componentDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof ModuleFigure) {
-				assertSame("wrong dto for external library figure", externalLibraryDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else {
-				fail("unexpected type of figure found in drawing");
-			}
 		}
 	}
 

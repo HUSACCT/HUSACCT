@@ -64,7 +64,7 @@ abstract public class AbstractViewContainer {
 	}
 	
 	private void resetFrame(){
-		if(internalFrame != null){
+		if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
 			internalFrame.dispose();
 			mainController.getMainGui().getDesktopPane().remove(internalFrame);
 			mainController.getMainGui().getDesktopPane().repaint();
