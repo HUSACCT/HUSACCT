@@ -5,7 +5,6 @@ import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -132,7 +131,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 	}
 
 	private void addRule() {
-		long moduleId = DomainGateway.getInstance().getSelectedModuleId();
+		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
 			DialogUtils.alignCenter(appliedRuleFrame);
@@ -281,7 +280,6 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 					selectedRules.add(datahelper.getId());
 				}
 			}
-			DomainGateway.getInstance().removeRules(selectedRules);
 			DefinitionController.getInstance().removeRules(selectedRules);
 		}
 	}

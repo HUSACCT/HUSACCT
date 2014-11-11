@@ -40,46 +40,52 @@ public class CheckConformanceController {
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules) {
-		this.logger.info(new Date().toString() + " Start ConformanceCheck");
-		ServiceProvider.getInstance().getControlService().updateProgress(0);
-		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-		for (ProjectDTO project : applicationDetails.projects) {
-			if (project.programmingLanguage != null && !project.programmingLanguage.isEmpty()) {
-				configuration.clearViolations();
-				ruleCache.clear();
-				List<Violation> violationList = new ArrayList<Violation>();
-				appliedRulesHandled = 0;
-				for (RuleDTO appliedRule : appliedRules) {
-					// Abort, when state != VALIDATING
-					if (!ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)) {
-						break;
-					}
-					// Update progress
-					ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100) / appliedRules.length);
-					
-					try {
-						if (!appliedRule.isException){
-							List<Violation> newViolations = null;
-							RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-							newViolations = rule.check(configuration, appliedRule, appliedRule);
-							violationList.addAll(newViolations);
+		try {
+			this.logger.info(new Date().toString() + " Start ConformanceCheck");
+			ServiceProvider.getInstance().getControlService().updateProgress(0);
+			final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
+			for (ProjectDTO project : applicationDetails.projects) {
+				if (project.programmingLanguage != null && !project.programmingLanguage.isEmpty()) {
+					configuration.clearViolations();
+					ruleCache.clear();
+					List<Violation> violationList = new ArrayList<Violation>();
+					appliedRulesHandled = 0;
+					for (RuleDTO appliedRule : appliedRules) {
+						// Abort, when state != VALIDATING
+						if (!ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)) {
+							break;
 						}
-
-					} catch (RuleTypeNotFoundException e) {
-						logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-					} catch (RuleInstantionException e) {
-						logger.warn(String.format("RuleTypeKey: %s can not be instantiated, rules of this type will not be validated", appliedRule.ruleTypeKey));
+						// Update progress
+						ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100) / appliedRules.length);
+						
+						try {
+							if (!appliedRule.isException){
+								List<Violation> newViolations = null;
+								RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+								newViolations = rule.check(configuration, appliedRule, appliedRule);
+								violationList.addAll(newViolations);
+							}
+	
+						} catch (RuleTypeNotFoundException e) {
+							logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+						} catch (RuleInstantionException e) {
+							logger.warn(String.format("RuleTypeKey: %s can not be instantiated, rules of this type will not be validated", appliedRule.ruleTypeKey));
+						}
 					}
+					configuration.addViolations(violationList);
+					configuration.filterAndSortAllViolations();
+					this.logger.info(new Date().toString() + " Finished ConformanceCheck");
+	
+				} else {
+					logger.error(String.format(" Programming language not found for project: " + project.name));
+					throw new ProgrammingLanguageNotFoundException();
 				}
-				configuration.addViolations(violationList);
-				configuration.filterAndSortAllViolations();
-				this.logger.info(new Date().toString() + " Finished ConformanceCheck");
-
-			} else {
-				logger.error(String.format(" Programming language not found for project: " + project.name));
-				throw new ProgrammingLanguageNotFoundException();
 			}
-		}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        //e.printStackTrace();
+        }
+
 	}
 
 	private RuleType getRuleType(String ruleTypeKey) throws RuleInstantionException {

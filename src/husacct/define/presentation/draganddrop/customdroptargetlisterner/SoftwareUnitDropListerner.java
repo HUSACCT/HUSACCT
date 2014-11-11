@@ -1,9 +1,8 @@
 package husacct.define.presentation.draganddrop.customdroptargetlisterner;
 
-import husacct.define.domain.services.DomainGateway;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.utils.DragAndDropHelper;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -83,7 +82,7 @@ public class SoftwareUnitDropListerner implements DropTargetListener {
 			ArrayList<String> names = (ArrayList<String>) namesAndTypes[0];
 			ArrayList<String> types = (ArrayList<String>) namesAndTypes[1];
 			
-           DomainGateway.getInstance().removeSoftwareUnits(names, types);
+           DefinitionController.getInstance().removeSoftwareUnits(names, types);
 		} catch (Exception e) {
 
 		}

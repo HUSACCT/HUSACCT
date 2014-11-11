@@ -84,7 +84,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	//Only to be used to add child modules (rootmodules) to the top module (root)
-	public long addModule(ModuleStrategy module) {
+	public long addModuleToRoot(ModuleStrategy module) {
 		long moduleId = module.getId();
 		try {
 			if (!hasModule(module.getName())) {
@@ -101,8 +101,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return moduleId;
 	}
 
-	//Only to be used to add child modules to the top module 
-	public String addModule(long parentModuleId, ModuleStrategy module) {
+	//Only to be used to add child modules to a parent module 
+	public String addModuleToParent(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
 		registerModule(module);
  		return parentModule.addSubModule(module);
@@ -462,6 +462,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		removeRecursively(moduleToRemove, toBeRemoved);
 		Collections.reverse(toBeRemoved);
 		JtreeController.instance().restoreTreeItems(moduleToRemove);
+
 		for (ModuleStrategy module : toBeRemoved) {
 			ModuleStrategy parent = module.getparent();
 			ArrayList<AppliedRuleStrategy> moduleRules = removeRelatedRules(module);
@@ -471,8 +472,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
             JtreeController.instance().restoreTreeItems(module);
 			parent.getSubModules().remove(index);
 			toBeSaved.add(new Object[] { module, moduleRules });
-			WarningMessageService.getInstance().removeImplementationWarning(
-					module);
+			WarningMessageService.getInstance().removeImplementationWarning(module);
 		}
 
 		boolean moduleFound = true;
@@ -484,21 +484,15 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 	}
 
-	private void removeRecursively(ModuleStrategy module,
-			ArrayList<ModuleStrategy> childrens) {
+	private void removeRecursively(ModuleStrategy module, ArrayList<ModuleStrategy> childrens) {
 		if (module.getSubModules().size() == 0) {
 			childrens.add(module);
-
 		} else if (module.getSubModules().size() > 0) {
-
 			childrens.add(module);
 			for (ModuleStrategy m : module.getSubModules()) {
-
 				removeRecursively(m, childrens);
 			}
-
 		}
-
 	}
 
 	private void removeFromRegistry(ModuleStrategy module) {
@@ -598,7 +592,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		modules.remove(index);
 		modules.add(index, updatedModule);
 		if (updatedModule instanceof Component) {
-			SoftwareArchitecture.getInstance().addModule(updatedModule.getId(),updatedModule.getSubModules().get(0));
+			SoftwareArchitecture.getInstance().addModuleToParent(updatedModule.getId(),updatedModule.getSubModules().get(0));
 		}
 		
 	}

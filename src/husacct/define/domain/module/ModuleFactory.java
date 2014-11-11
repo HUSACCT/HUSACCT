@@ -34,11 +34,11 @@ public class ModuleFactory {
 		Blank.class
 	};
 
-	public ModuleStrategy createModule(String choice){
+	public ModuleStrategy createModule(String moduleType){
 		for(int i = 0; i < moduleTypes.length; i++){
-			if(moduleTypes[i].equalsIgnoreCase(choice)) try{
+			if(moduleTypes[i].equalsIgnoreCase(moduleType)) try{
 				ModuleStrategy newModule = (ModuleStrategy)moduleTypeClasses[i].newInstance();
-				newModule.setType(choice);
+				newModule.setType(moduleType);
 				return newModule;
 			}catch (InstantiationException ex) {
 				logger.error("Instantiation Error in ModuleFactory: " + ex.toString());
@@ -68,14 +68,13 @@ public class ModuleFactory {
 	}
 
 
-	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,String choice){
-		ModuleStrategy newModule = createModule(choice);
+	public ModuleStrategy updateModuleType(ModuleStrategy oldModule, String moduleType){
+		ModuleStrategy newModule = createModule(moduleType);
 		oldModule.copyValuestoNewCompont(newModule);
-		if (choice.toLowerCase().equals("component")) {
+		if (moduleType.toLowerCase().equals("component")) {
 			ModuleStrategy facade=	this.createModule("Facade");
 			facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
 			newModule.addSubModule(0, facade);
-			
 		}	
 		return newModule;		
 	}

@@ -386,6 +386,10 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		newModule.setRegExUnits(this.getRegExUnits());
 		newModule.setUnits(this.getUnits());
 		newModule.fromStorage=(this.getFromStorage());
+		if(newModule.getType().toLowerCase().equals("layer")) {
+			Layer newLayer = (Layer) newModule;
+			newLayer.setNewHierarchicalLevel();
+		}
 	}
 
 	public void setParent(ModuleStrategy moduleParent) {

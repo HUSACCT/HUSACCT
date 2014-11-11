@@ -4,14 +4,9 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitDropListerner;
 import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
-import husacct.define.presentation.moduletree.CombinedModuleTree;
-import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
-import husacct.define.presentation.utils.DefaultMessages;
-import husacct.define.presentation.utils.ExpressionEngine;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
@@ -36,17 +31,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -228,7 +218,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	 */
 
 	private void getSoftwareDefinationTree() {
-		this.softwareDefinitionTree = new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
+		this.softwareDefinitionTree = new AnalyzedModuleTree(JtreeController.instance().getRootOfModel());
 		this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
 		this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
 		SoftwareUnitDropListerner dropListener = new SoftwareUnitDropListerner(softwareDefinitionTree);
@@ -370,7 +360,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
 			units.add(selectedComponent);
 		}
-		canclose = DomainGateway.getInstance().saveAnalzedModule(units);
+		canclose = DefinitionController.getInstance().saveAnalzedModule(units);
 		if (canclose) {
 			this.dispose();
 		}

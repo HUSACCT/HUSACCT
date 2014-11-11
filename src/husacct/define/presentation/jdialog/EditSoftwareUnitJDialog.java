@@ -5,7 +5,6 @@ import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
@@ -139,8 +138,6 @@ public class EditSoftwareUnitJDialog extends HelpableJDialog implements ActionLi
 	    components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 	}
 	//this.softwareUnitController.editRegEx(components, editingRegEx);
-	DomainGateway.getInstance().editRegEx(components, editingRegEx);
-	
 	this.dispose();
     }
 

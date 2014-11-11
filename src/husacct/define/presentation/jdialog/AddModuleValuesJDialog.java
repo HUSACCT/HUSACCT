@@ -5,7 +5,6 @@ import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.ValueInputController;
@@ -204,14 +203,9 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
 			String moduleDescription = this.moduleDescriptionField.getText();			
-			
-			boolean hasBeenAdded = DomainGateway.getInstance().addModule(moduleName, moduleDescription, moduleType);
-			if (hasBeenAdded){
-			
-				
-				this.modulePanel.updateModuleTree();
-				this.dispose();
-			}
+			DefinitionController.getInstance().addModule(moduleName, moduleDescription, moduleType);			
+			this.modulePanel.updateModuleTree();
+			this.dispose();
 		}		
 	}
 	

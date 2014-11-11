@@ -1,7 +1,7 @@
 package husacct.define.presentation.utils;
 
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -102,8 +102,7 @@ public class ExpressionEngine {
 					if (module.getType().equals("PACKAGE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ DomainGateway.getInstance()
-											.getSelectedModuleId());
+									+ DefinitionController.getInstance().getSelectedModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
@@ -122,8 +121,7 @@ public class ExpressionEngine {
 							|| module.getType().equals("INTERFACE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ DomainGateway.getInstance()
-											.getSelectedModuleId());
+									+ DefinitionController.getInstance().getSelectedModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
@@ -162,8 +160,7 @@ public class ExpressionEngine {
 				if (module.getType().equals("PACKAGE")) {
 					while (matcher.find()) {
 						logger.info("Adding software unit to module with id "
-								+ DomainGateway.getInstance()
-										.getSelectedModuleId());
+								+ DefinitionController.getInstance().getSelectedModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
@@ -219,8 +216,7 @@ public class ExpressionEngine {
 					if (module.getType().equals("PACKAGE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ DomainGateway.getInstance()
-											.getSelectedModuleId());
+									+ DefinitionController.getInstance().getSelectedModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
@@ -238,8 +234,7 @@ public class ExpressionEngine {
 							|| module.getType().equals("INTERFACE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ DomainGateway.getInstance()
-											.getSelectedModuleId());
+									+ DefinitionController.getInstance().getSelectedModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
@@ -255,8 +250,7 @@ public class ExpressionEngine {
 				else if (packageClass.equals("PC")) {
 					while (matcher.find()) {
 						logger.info("Adding software unit to module with id "
-								+ DomainGateway.getInstance()
-										.getSelectedModuleId());
+								+ DefinitionController.getInstance().getSelectedModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
@@ -276,8 +270,7 @@ public class ExpressionEngine {
 				if (module.getType().equals("PACKAGE")) {
 					while (matcher.find()) {
 						logger.info("Adding software unit to module with id "
-								+ DomainGateway.getInstance()
-										.getSelectedModuleId());
+								+ DefinitionController.getInstance().getSelectedModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
@@ -304,8 +297,7 @@ public class ExpressionEngine {
 								packagesOnly, true);
 					} else {
 						logger.info("Adding software unit to module with id "
-								+ DomainGateway.getInstance()
-										.getSelectedModuleId());
+								+ DefinitionController.getInstance().getSelectedModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);

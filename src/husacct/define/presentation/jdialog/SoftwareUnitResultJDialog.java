@@ -5,7 +5,6 @@ import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -27,31 +26,24 @@ import javax.swing.tree.TreeSelectionModel;
 public class SoftwareUnitResultJDialog extends HelpableJDialog implements ActionListener {
 
 	private static final long serialVersionUID = 7060253504620240808L;
-	
-
 	private String enteredRegEx;
-	
 	private JButton saveButton;
 	private JButton backButton;
 	private JButton selectAllButton;
 	private JButton deSelectAllButton;
-	
 	private AnalyzedModuleTree resultTree;
 	private SoftwareUnitJDialog previousSoftwareUnitJDialog;
 	
 	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree resultTree, String enteredRegEx, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.resultTree = resultTree;
-		
 		this.enteredRegEx = enteredRegEx;
 		this.previousSoftwareUnitJDialog = previousSoftwareUnitJDialog;
-		
 		initUI();
 	}
 	
 	private void initUI() {
 		try {
-		
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ResultsTitle"));
 			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
@@ -135,8 +127,8 @@ public class SoftwareUnitResultJDialog extends HelpableJDialog implements Action
 		for (TreePath path : paths.getSelectionPaths()){
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}
-		
-		DomainGateway.getInstance().saveRegEx(components, enteredRegEx);
+		//SoftwareUnitController unitController = new SoftwareUnitController(DefinitionController.getInstance().getSelectedModuleId());
+		//unitController.saveRegEx(components, enteredRegEx);
 		this.dispose();
 	}
 	

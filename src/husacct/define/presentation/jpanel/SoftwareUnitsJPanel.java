@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitTableDropListener;
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
@@ -274,7 +273,7 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 				selectedModules.add(softwareUnitName);
 				types.add(type);
 			}
-			DomainGateway.getInstance().removeSoftwareUnits(selectedModules, types);
+			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
 
 		} else {
 			JOptionPane.showMessageDialog(this,ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"),

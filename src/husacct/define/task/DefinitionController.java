@@ -13,6 +13,7 @@ import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
@@ -391,6 +392,7 @@ import org.apache.log4j.Logger;
 							moduleDescription);
 				}
 				this.notifyObservers();
+				definitionJPanel.modulePanel.updateModuleTree();
 			} catch (Exception e) {
 				logger.error("updateModule() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
@@ -399,13 +401,13 @@ import org.apache.log4j.Logger;
 			}
 		}
 
-		public void updateModuleType(String moduleName, String moduleDescription,
-				String type) {
-			moduleService.updateModuleType(getSelectedModuleId(), moduleName,
-					moduleDescription, type);
+		public void updateModuleType(String type) {
+			moduleService.updateModuleType(getSelectedModuleId(), type);
 			this.notifyObservers();
+			definitionJPanel.modulePanel.updateModuleTree();
 		}
 
+		// Changes the name of the facade subsequently after a module with type "Component"	has its name changed. 
 		public void updateFacade(String moduleName){
 			logger.info("Updating facade " + moduleName +"Facade");
 			try {
@@ -415,6 +417,7 @@ import org.apache.log4j.Logger;
 					moduleService.updateFacade(moduleId, moduleName);
 				}
 				this.notifyObservers();
+				definitionJPanel.modulePanel.updateModuleTree();
 			} catch (Exception e) {
 				logger.error("updateFacade() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
@@ -427,14 +430,19 @@ import org.apache.log4j.Logger;
 			ModuleStrategy module= moduleService.createNewModule(type);
 			module.set(name, description);
 			if (module instanceof Component) {
-			
 				ModuleStrategy facade=	moduleService.createNewModule("Facade");
 				facade.set("Interface<"+name+">", "This module represents the interface(s) of the component.");
 				module.addSubModule(facade);
 			}
-			
 			this.passModuleToService(getSelectedModuleId(), module);
-			
-			
 		}
+		
+		public boolean saveAnalzedModule(ArrayList<AnalyzedModuleComponent> units) {
+			long id = DefinitionController.getInstance().getSelectedModuleId();
+			SoftwareUnitController softwareUnitController = new SoftwareUnitController(id);
+			softwareUnitController.save(units);
+			return true;
+		}
+
+
 	}

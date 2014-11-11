@@ -4,8 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.domain.services.DomainGateway;
-import husacct.define.presentation.draganddrop.customdroptargetlisterner.ModuleDropTarget;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
@@ -257,15 +255,13 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	public void moveLayerDown() {
 		long layerId = getSelectedModuleId();
-		DomainGateway.getInstance().moveLayerDown(layerId);
-
+		DefinitionController.getInstance().moveLayerDown(layerId);
 		updateModuleTree();
 	}
 
 	public void moveLayerUp() {
 		long layerId = getSelectedModuleId();
-		DomainGateway.getInstance().moveLayerUp(layerId);
-
+		DefinitionController.getInstance().moveLayerUp(layerId);
 		updateModuleTree();
 	}
 

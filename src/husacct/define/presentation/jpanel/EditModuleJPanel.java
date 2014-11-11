@@ -3,7 +3,6 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
-import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.EditpanelDropListener;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
@@ -31,7 +30,6 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		IServiceListener {
 
 	private static final long serialVersionUID = -9020336576931490389L;
-	private int currentSelection;
 	private String _type;
 	private JLabel descriptionLabel;
 	private JScrollPane descriptionScrollPane;
@@ -39,26 +37,6 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	private String[] facadeType = { "Facade" };
 	private JComboBox<?> moduleTypeComboBox;
 	private EditpanelDropListener listener = new EditpanelDropListener(this);
-	ActionListener moduleTypeComboboxOnChangeListener = new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			String type_ = (String) moduleTypeComboBox.getSelectedItem();
-			if (!_type.equals(type_) &&!type_.toLowerCase().equals("facade")) {
-				String moduleName = nameTextfield.getText();
-				String moduleDescription = descriptionTextArea.getText();
-				String type = (String) moduleTypeComboBox
-						.getItemAt(moduleTypeComboBox.getSelectedIndex());
-          
-				
-				DomainGateway.getInstance().updateModule(moduleName, moduleDescription, type);
-				//DefinitionController.getInstance().updateModule(moduleName,
-			//			moduleDescription, type);
-			}
-
-		}
-	};
 	private JLabel moduleTypeLabel;
 	private String[] moduleTypes = {
 			ServiceProvider.getInstance().getLocaleService()
@@ -70,12 +48,22 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 			ServiceProvider.getInstance().getLocaleService()
 					.getTranslatedString("ExternalLibrary") };
 	private JLabel nameLabel;
-
 	private JTextField nameTextfield;
 
 	public EditModuleJPanel() {
 		super();
 	}
+
+	ActionListener moduleTypeComboboxOnChangeListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String type_ = (String) moduleTypeComboBox.getSelectedItem();
+			if (!_type.equals(type_) &&!type_.toLowerCase().equals("facade")) {
+				String type = (String) moduleTypeComboBox.getItemAt(moduleTypeComboBox.getSelectedIndex());
+				DefinitionController.getInstance().updateModuleType(type);
+			}
+		}
+	};
 
 	private void addModuleDescriptionComponent() {
 		descriptionLabel = new JLabel();
@@ -138,14 +126,11 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	}
 
 	private int getModuleType(String type) {
-		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
-				moduleTypes);
+		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(moduleTypes);
 		moduleTypeComboBox.setModel(defaultModel);
 		_type= type;
 		for (int i = 0; i < moduleTypes.length; i++) {
 			if (type.equalsIgnoreCase(moduleTypes[i])) {
-				currentSelection = i;
-				
 				return i;
 			}
 		}
@@ -178,7 +163,12 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		updateModule();
+		String moduleName = nameTextfield.getText();
+		String moduleDescription = descriptionTextArea.getText();
+		DefinitionController.getInstance().updateModule(moduleName, moduleDescription);
+		if (moduleTypeComboBox.getSelectedItem().toString().equalsIgnoreCase(moduleTypes[2])) {
+			DefinitionController.getInstance().updateFacade(moduleName);
+		}
 	}
 
 	@Override
@@ -214,35 +204,23 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	@Override
 	public void update(Observable o, Object arg) {
 		resetGUI();
-	try{
-		Long moduleId = Long.parseLong(arg.toString());
-		if (moduleId != -1) {
-			HashMap<String, Object> moduleDetails = DefinitionController
-					.getInstance().getModuleDetails(moduleId);
-			nameTextfield.setText((String) moduleDetails.get("name"));
-			descriptionTextArea.setText((String) moduleDetails
-					.get("description"));
-			String type = ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString((String) moduleDetails.get("type"));
-			moduleTypeComboBox.setEnabled(true);
-			moduleTypeComboBox.setSelectedIndex(getModuleType(type));
+		try{
+			Long moduleId = Long.parseLong(arg.toString());
+			if (moduleId != -1) {
+				HashMap<String, Object> moduleDetails = DefinitionController
+						.getInstance().getModuleDetails(moduleId);
+				nameTextfield.setText((String) moduleDetails.get("name"));
+				descriptionTextArea.setText((String) moduleDetails
+						.get("description"));
+				String type = ServiceProvider.getInstance().getLocaleService()
+						.getTranslatedString((String) moduleDetails.get("type"));
+				moduleTypeComboBox.setEnabled(true);
+				moduleTypeComboBox.setSelectedIndex(getModuleType(type));
+			}
+			this.repaint();
+		}catch(NumberFormatException e) {
+			
 		}
-		this.repaint();
-	}catch(NumberFormatException e)
-	{
-		
-	}
 	}
 
-	private void updateModule() {
-		String moduleName = nameTextfield.getText();
-		String moduleDescription = descriptionTextArea.getText();
-		DomainGateway.getInstance().updateModule(moduleName, moduleDescription);
-		if (moduleTypeComboBox.getSelectedItem().toString()
-				.equalsIgnoreCase(moduleTypes[2])) {
-			DomainGateway.getInstance().updateFacade(moduleName);
-		}
-	}
-	
-	
 }

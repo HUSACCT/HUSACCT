@@ -17,7 +17,7 @@ public class ModuleDomainService {
 	private ModuleFactory factory = new ModuleFactory();
 
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
-        SoftwareArchitecture.getInstance().addModule(parentModuleId, module);
+        SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId, module);
 		StateService.instance().addModule(module);
 		long moduleId = module.getId();
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
@@ -26,16 +26,17 @@ public class ModuleDomainService {
 
 
 	public long addModuleToRoot(ModuleStrategy module) {
-		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+		long moduleId = SoftwareArchitecture.getInstance().addModuleToRoot(module);
 		StateService.instance().addModule(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 
 	public String addNewModuleToParent(long parentModuleId,	ModuleStrategy module) {
+		String message = SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId,module);
 		StateService.instance().addModule(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		return SoftwareArchitecture.getInstance().addModule(parentModuleId,module);
+		return message;
 	}
 	
 	public ModuleStrategy createNewModule(String type) {
@@ -154,8 +155,7 @@ public class ModuleDomainService {
       try{
 		SoftwareArchitecture.getInstance().removeModule(module);
 	    JtreeController.instance().registerTreeRemoval(module);
-      }catch(Exception e)
-      {
+      }catch(Exception e) {
     	  e.printStackTrace();
       }
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
@@ -178,17 +178,27 @@ public class ModuleDomainService {
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
-	public void updateModuleType(long moduleId, String moduleName, String moduleDescription, String newType) {
+	public void updateModuleType(long moduleId, String newType) {
 
-		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		if(module.getId() > 0){
-			if (module.getType() != newType){
+		ModuleStrategy oldModule = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		if(oldModule.getId() > 0){
+			if (oldModule.getType() != newType){
 				DefaultRuleDomainService service = new DefaultRuleDomainService();
-				service.removeDefaultRules(module);
-				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(module, newType);
+				service.removeDefaultRules(oldModule);
+				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(oldModule, newType);
+				//ModuleStrategy updatedModule = new ModuleFactory().updateModuleType(oldModule, newType);
 				service.addDefaultRules(updatedModule);
 				service.updateModuleRules(updatedModule);
-				StateService.instance().addUpdateModule(module, updatedModule);
+				
+				/*
+				removeModuleById(oldModule.getId());
+				if (oldModule.getparent().getId() != -1) {
+					addModuleToParent(oldModule.getparent().getId(), updatedModule);
+				} else {
+					addModuleToRoot(updatedModule);
+				}
+				*/
+				StateService.instance().addUpdateModule(oldModule, updatedModule);
 			}
 		}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();

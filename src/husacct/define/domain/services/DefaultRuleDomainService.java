@@ -41,45 +41,11 @@ public class DefaultRuleDomainService {
 			if(!_module.getType().equals("Root")){
 				String type = _module.getType();
 				defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(type);
-				// When not bootstrapping, service returns nothing.
-				if(defaultRuleTypeDTOs.length < 1){
-			        //this.logger.warn(new Date().toString() + " DefaultRuleTypes not received from Validate component ");
-					defaultRuleTypeDTOs = dirtyHack(_module.getType());
-				}
 			}
         } catch (Exception e) {
-	        this.logger.error(new Date().toString() + " DefaultRuleTypes not retrieved correctly: "  + e );
+	        this.logger.error(new Date().toString() + " DefaultRuleTypes not retrieved correctly from Validate: "  + e );
 	        //e.printStackTrace();
         }
-
-	}
-
-	public RuleTypeDTO[] dirtyHack(String moduleType) {
-		ArrayList<RuleTypeDTO> returnhack = new ArrayList<RuleTypeDTO>();
-		switch (moduleType) {
-		case "SubSystem":
-			;
-			break;
-		case "Layer":
-			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeSkipCall",
-							"A layer should not access other layers other than the adjectent below",
-							null, null));
-			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeBackCall",
-							"A layer should not access other layers above",
-							null, null));
-			break;
-		case "Component":
-			//returnhack.add(new RuleTypeDTO("VisibilityConvention", "",null,null));
-			returnhack.add(new RuleTypeDTO("FacadeConvention", "",null,null));
-			break;
-		case "ExternalLibrary":
-			//returnhack.add(new RuleTypeDTO("VisibilityConvention", "", null, null));
-			break;
-		}
-
-		RuleTypeDTO[] _temp = new RuleTypeDTO[returnhack.size()];
-		_temp = returnhack.toArray(_temp);
-		return _temp;
 	}
 
 	private void generateRules() {

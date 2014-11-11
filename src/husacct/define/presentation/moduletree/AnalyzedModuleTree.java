@@ -23,10 +23,10 @@ public class AnalyzedModuleTree extends JTree {
 				TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 	}
 
-	public void restoreTreeItem(
-			AnalyzedModuleComponent analyzedsoftwarecomponent) {
-
-		analyzedsoftwarecomponent.unfreeze();
+	public void restoreTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent) {
+		if(analyzedsoftwarecomponent != null) {
+			analyzedsoftwarecomponent.unfreeze();
+		}
 	}
 
 	public void removeTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent) {
