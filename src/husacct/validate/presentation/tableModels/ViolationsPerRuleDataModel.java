@@ -84,9 +84,9 @@ public class ViolationsPerRuleDataModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 			String columnKey = columnKeys[columnIndex];
-			if ((columnKey.equals(columnKeys[0])) || (columnKey.equals(columnKeys[1])) || (columnKey.equals(columnKeys[2])) || (columnKey.equals(columnKeys[4]))) 
+			if ((columnKey.equals(columnKeys[0])) || (columnKey.equals(columnKeys[1])) || (columnKey.equals(columnKeys[3])) || (columnKey.equals(columnKeys[4]))) 
 				return data[rowIndex][columnIndex];
-			else if (columnKey.equals(columnKeys[3]))
+			else if (columnKey.equals(columnKeys[2]))
 				return localeService.getTranslatedString((String) data[rowIndex][columnIndex]);
 			else
 				return null;

@@ -152,7 +152,7 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	}
 	
 	private void setLocaleFromString(String locale){
-		logger.debug("User sets language to: " + locale);
+		logger.info("User sets language to: " + locale);
 		localeService.setLocale(new Locale(locale, locale));
 	}
 	
