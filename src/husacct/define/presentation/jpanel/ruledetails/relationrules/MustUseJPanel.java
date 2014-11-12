@@ -59,7 +59,7 @@ public class MustUseJPanel extends AbstractDetailsJPanel {
 		0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 		GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 
-	moduleToPanelComponent = new ModuleToPanelComponent(
+	moduleToPanelComponent = new ModuleToPanelComponent(isException,
 		appliedRuleController);
 	this.add(moduleToPanelComponent, new GridBagConstraints(0, 1, 2, 1,
 		0.0, 0.0, GridBagConstraints.FIRST_LINE_START,

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<husacct version="1">
+<husacct version="3.4.1">
   <husacct.control.ControlServiceImpl>
-    <workspace name="SrmaTest-2014-05-22 with Exceptions" language="en" />
+    <workspace name="SrmaTest_2014-11-12" language="en" />
   </husacct.control.ControlServiceImpl>
   <husacct.define.DefineServiceImpl>
     <Application>
-      <name>SrmaTest2013-08-23 with Exceptions</name>
+      <name>SrmaTest2014-11-12 with Exceptions</name>
       <version>1.0</version>
       <projects>
         <Project>
-          <name>SrmaTest2013-08-23 with Exceptions</name>
+          <name>SrmaTest2014-11-12 with Exceptions</name>
           <paths>
-            <path>testresources\java\SRMA20140522\</path>
+            <path>testresources\java\SRMA20141112\src</path>
           </paths>
           <programmingLanguage>Java</programmingLanguage>
           <version>1.0</version>
@@ -27,7 +27,7 @@
             <description />
             <id>1</id>
             <name>Presentation</name>
-            <HierarchicalLevel>4</HierarchicalLevel>
+            <HierarchicalLevel>17</HierarchicalLevel>
             <SoftwareUnitDefinitions>
               <SoftwareUnitDefinition>
                 <name>presentation</name>
@@ -94,7 +94,7 @@
             <description />
             <id>14</id>
             <name>Domain</name>
-            <HierarchicalLevel>5</HierarchicalLevel>
+            <HierarchicalLevel>18</HierarchicalLevel>
             <SoftwareUnitDefinitions>
               <SoftwareUnitDefinition>
                 <name>domain</name>
@@ -257,6 +257,21 @@
                       </ModuleStrategy>
                     </SubModules>
                   </ModuleStrategy>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>61</id>
+                    <name>IsTheOnlyModuleAllowedToUseExc</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>domain.relationrules.is_the_only_module_allowed_to_use_Exc</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>domain.relationrules.is_the_only_module_allowed_to_use_Exc</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
                 </SubModules>
               </ModuleStrategy>
             </SubModules>
@@ -266,7 +281,7 @@
             <description />
             <id>4</id>
             <name>Technology</name>
-            <HierarchicalLevel>6</HierarchicalLevel>
+            <HierarchicalLevel>19</HierarchicalLevel>
             <SoftwareUnitDefinitions>
               <SoftwareUnitDefinition>
                 <name>technology</name>
@@ -730,12 +745,12 @@ IsNotAllowedToMakeBackCallDescription</description>
             <description />
             <regex />
             <dependencies>
-              <dependency>Access</dependency>
-              <dependency>Annotation</dependency>
-              <dependency>Call</dependency>
-              <dependency>Declaration</dependency>
               <dependency>Import</dependency>
+              <dependency>Call</dependency>
+              <dependency>Annotation</dependency>
               <dependency>Inheritance</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Access</dependency>
             </dependencies>
             <isException>false</isException>
           </AppliedRule>
@@ -748,12 +763,12 @@ IsNotAllowedToMakeBackCallDescription</description>
             <description />
             <regex />
             <dependencies>
-              <dependency>Access</dependency>
-              <dependency>Annotation</dependency>
-              <dependency>Call</dependency>
-              <dependency>Declaration</dependency>
               <dependency>Import</dependency>
+              <dependency>Call</dependency>
+              <dependency>Annotation</dependency>
               <dependency>Inheritance</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Access</dependency>
             </dependencies>
             <isException>false</isException>
           </AppliedRule>
@@ -971,6 +986,44 @@ IsNotAllowedToMakeBackCallDescription</description>
             <dependencies />
             <isException>false</isException>
           </AppliedRule>
+          <AppliedRule>
+            <id>59</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>61</moduleFrom>
+            <moduleTo>22</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies>
+              <dependency>Import</dependency>
+              <dependency>Call</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Inheritance</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Access</dependency>
+            </dependencies>
+            <isException>true</isException>
+            <parentAppliedRuleId>18</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>61</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>27</moduleFrom>
+            <moduleTo>56</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies>
+              <dependency>Import</dependency>
+              <dependency>Call</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Inheritance</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Access</dependency>
+            </dependencies>
+            <isException>true</isException>
+            <parentAppliedRuleId>16</parentAppliedRuleId>
+          </AppliedRule>
         </rules>
       </Architecture>
     </Application>
@@ -985,17 +1038,17 @@ IsNotAllowedToMakeBackCallDescription</description>
       <severities>
         <severity>
           <severityKey>Low</severityKey>
-          <id>d2ef6262-8ebd-4322-8307-d5c699161591</id>
+          <id>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</id>
           <color>-65536</color>
         </severity>
         <severity>
           <severityKey>Medium</severityKey>
-          <id>1926a49e-9bcf-46f3-902c-0cf454bf8243</id>
+          <id>b8705d50-c808-4235-b216-a631f3733803</id>
           <color>-65536</color>
         </severity>
         <severity>
           <severityKey>High</severityKey>
-          <id>506260e5-f0bf-4be2-a520-4d9b7cf16cad</id>
+          <id>01a8d361-cd43-41da-99d2-eec204f7f49a</id>
           <color>-65536</color>
         </severity>
       </severities>
@@ -1003,106 +1056,112 @@ IsNotAllowedToMakeBackCallDescription</description>
         <severityPerTypePerProgrammingLanguage language="C#">
           <severityPerType>
             <typeKey>Import</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>default</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>protected</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>default</typeKey>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Call</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Annotation</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>package</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>class</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Access</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>Inheritance</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Declaration</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Inheritance</typeKey>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>public</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>private</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
         </severityPerTypePerProgrammingLanguage>
         <severityPerTypePerProgrammingLanguage language="Java">
           <severityPerType>
             <typeKey>Import</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>default</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>protected</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Call</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Annotation</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>package</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>class</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>Inheritance</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
-          </severityPerType>
-          <severityPerType>
-            <typeKey>Declaration</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>Access</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Inheritance</typeKey>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Declaration</typeKey>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>public</typeKey>
-            <severityId>1926a49e-9bcf-46f3-902c-0cf454bf8243</severityId>
+            <severityId>b8705d50-c808-4235-b216-a631f3733803</severityId>
           </severityPerType>
           <severityPerType>
             <typeKey>private</typeKey>
-            <severityId>d2ef6262-8ebd-4322-8307-d5c699161591</severityId>
+            <severityId>9f7e9260-2afc-4f75-a651-ba1afd52e6e7</severityId>
           </severityPerType>
         </severityPerTypePerProgrammingLanguage>
       </severitiesPerTypesPerProgrammingLanguages>
       <activeViolationTypes>
         <activeViolationType language="C#">
+          <ruleType type="FacadeConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="InheritanceConvention">
+            <violationTypes />
+          </ruleType>
           <ruleType type="NamingConvention">
             <violationTypes>
               <violationType>
@@ -1115,9 +1174,6 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
-          <ruleType type="FacadeConvention">
-            <violationTypes />
-          </ruleType>
           <ruleType type="NamingConventionException">
             <violationTypes>
               <violationType>
@@ -1129,9 +1185,6 @@ IsNotAllowedToMakeBackCallDescription</description>
                 <enabled>true</enabled>
               </violationType>
             </violationTypes>
-          </ruleType>
-          <ruleType type="InheritanceConvention">
-            <violationTypes />
           </ruleType>
           <ruleType type="VisibilityConvention">
             <violationTypes>
@@ -1173,7 +1226,35 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
-          <ruleType type="IsNotAllowedToMakeSkipCall">
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeBackCall">
             <violationTypes>
               <violationType>
                 <violationKey>Call</violationKey>
@@ -1229,7 +1310,7 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
-          <ruleType type="IsNotAllowedToMakeBackCall">
+          <ruleType type="IsNotAllowedToMakeSkipCall">
             <violationTypes>
               <violationType>
                 <violationKey>Call</violationKey>
@@ -1369,7 +1450,63 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
           <ruleType type="IsTheOnlyModuleAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
             <violationTypes>
               <violationType>
                 <violationKey>Call</violationKey>
@@ -1427,6 +1564,12 @@ IsNotAllowedToMakeBackCallDescription</description>
           </ruleType>
         </activeViolationType>
         <activeViolationType language="Java">
+          <ruleType type="FacadeConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="InheritanceConvention">
+            <violationTypes />
+          </ruleType>
           <ruleType type="NamingConvention">
             <violationTypes>
               <violationType>
@@ -1439,9 +1582,6 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
-          <ruleType type="FacadeConvention">
-            <violationTypes />
-          </ruleType>
           <ruleType type="NamingConventionException">
             <violationTypes>
               <violationType>
@@ -1453,9 +1593,6 @@ IsNotAllowedToMakeBackCallDescription</description>
                 <enabled>true</enabled>
               </violationType>
             </violationTypes>
-          </ruleType>
-          <ruleType type="InheritanceConvention">
-            <violationTypes />
           </ruleType>
           <ruleType type="VisibilityConvention">
             <violationTypes>
@@ -1497,7 +1634,35 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
-          <ruleType type="IsNotAllowedToMakeSkipCall">
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeBackCall">
             <violationTypes>
               <violationType>
                 <violationKey>Call</violationKey>
@@ -1553,7 +1718,7 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
-          <ruleType type="IsNotAllowedToMakeBackCall">
+          <ruleType type="IsNotAllowedToMakeSkipCall">
             <violationTypes>
               <violationType>
                 <violationKey>Call</violationKey>
@@ -1693,7 +1858,63 @@ IsNotAllowedToMakeBackCallDescription</description>
               </violationType>
             </violationTypes>
           </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
           <ruleType type="IsTheOnlyModuleAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
             <violationTypes>
               <violationType>
                 <violationKey>Call</violationKey>
@@ -1755,7 +1976,7 @@ IsNotAllowedToMakeBackCallDescription</description>
   </husacct.validate.ValidateServiceImpl>
   <husacct.graphics.GraphicsServiceImpl>
     <ArchitecureGraphicsService>
-      <analysedController showDependencies="true" showViolations="true" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
+      <analysedController showDependencies="true" showViolations="false" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
       <definedController showDependencies="true" showViolations="false" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
     </ArchitecureGraphicsService>
   </husacct.graphics.GraphicsServiceImpl>

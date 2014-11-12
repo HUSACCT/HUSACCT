@@ -16,11 +16,12 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class IsOnlyAllowedToUse extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
 	public IsOnlyAllowedToUse(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, exceptionRuleTypes, severity);
@@ -34,19 +35,23 @@ public class IsOnlyAllowedToUse extends RuleType {
 		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
 		
 		// Create HashMap with all allowed to-classes (including the from-classes)
-		HashMap<String, Mapping> fromMap = new HashMap<String, Mapping>();
+		HashMap<String, Mapping> allowedMap = new HashMap<String, Mapping>();
 		for(Mapping from : fromMappings){
-			fromMap.put(from.getPhysicalPath(), from);
+			allowedMap.put(from.getPhysicalPath(), from);
 		}
 		for(Mapping to : toMappings){
-			fromMap.put(to.getPhysicalPath(), to);
+			allowedMap.put(to.getPhysicalPath(), to);
 		}
+
+		// Create a HashMap with all allowed from-to combinations, based on the exception rules.  
+		HashSet<String> allExceptionFromTos = getAllExceptionFromTos(currentRule);
 
 		for (Mapping classPathFrom : fromMappings) {
 			// Get all dependencies with dependency.classPathFrom = classPathFrom 
 			DependencyDTO[] allDependenciesFrom = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), "");
 			for (DependencyDTO dependency : allDependenciesFrom) {
-				if(fromMap.containsKey(dependency.to)){
+				String fromToCombi = classPathFrom.getPhysicalPath() + "|" + dependency.to; 
+				if(allowedMap.containsKey(dependency.to) || allExceptionFromTos.contains(fromToCombi)){
 					// Do nothing
 				}
 				else{

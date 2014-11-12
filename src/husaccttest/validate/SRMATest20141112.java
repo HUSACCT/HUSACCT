@@ -25,12 +25,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SRMATest20140610 {
+public class SRMATest20141112 {
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
-	private final static String workspace = "SrmaTest2014-06-10 HUSACCT_3.1.xml";
-	private static Logger logger = Logger.getLogger(SRMATest20140610.class);
+	private final static String workspace = "SrmaTest-2014-11-12.xml";
+	private static Logger logger = Logger.getLogger(SRMATest20141112.class);
 
 
 	@BeforeClass
@@ -90,7 +90,7 @@ public class SRMATest20140610 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}
-		assertEquals(369, numberOfDependencies);
+		assertEquals(385, numberOfDependencies);
 	}
 
 

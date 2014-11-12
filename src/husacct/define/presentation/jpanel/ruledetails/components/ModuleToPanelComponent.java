@@ -17,13 +17,22 @@ import javax.swing.event.TreeSelectionListener;
 public class ModuleToPanelComponent extends AbstractPanelComponent implements TreeSelectionListener {
     private static final long serialVersionUID = -4800834732055260518L;
     private AppliedRuleController appliedRuleController;
-    private JLabel moduleToJLabel;
+    private JLabel moduleToJLabel, moduleToContentsJLabel;
     private CombinedModuleTree moduleToTree;
+    private boolean isException;
 
-    public ModuleToPanelComponent(AppliedRuleController appliedRuleController) {
+    public ModuleToPanelComponent(boolean isException, AppliedRuleController appliedRuleController) {
 		super();
 		this.appliedRuleController = appliedRuleController;
+		this.isException = isException;
 		initGUI();
+    }
+
+    private void createToModuleContentsJLabel() {
+		moduleToContentsJLabel = new JLabel();
+		long toId = appliedRuleController.getModuleToId();
+		String currentModuleName = appliedRuleController.getModuleName(toId);
+		moduleToContentsJLabel.setText(currentModuleName);
     }
 
     private JScrollPane createToModuleScrollPane() {
@@ -48,7 +57,13 @@ public class ModuleToPanelComponent extends AbstractPanelComponent implements Tr
     
     @Override
     public Object getValue() {
-    	return moduleToTree.getSelectedTreeValue();
+		Object returnObject;
+		if (!showScrollPane()) {
+				returnObject = appliedRuleController.getModuleToId();
+			} else {
+				returnObject = moduleToTree.getSelectedTreeValue();
+			}
+		return returnObject;
     }
 
     @Override
@@ -67,7 +82,12 @@ public class ModuleToPanelComponent extends AbstractPanelComponent implements Tr
 		this.add(moduleToJLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		this.add(createToModuleScrollPane(), gridBagConstraints);
+		if (showScrollPane()) {
+		    this.add(createToModuleScrollPane(), gridBagConstraints);
+		} else {
+			createToModuleContentsJLabel();
+		    this.add(moduleToContentsJLabel, gridBagConstraints);
+		}
     }
 
     
@@ -77,11 +97,25 @@ public class ModuleToPanelComponent extends AbstractPanelComponent implements Tr
 		initDetails();
     }
 
+    private boolean showScrollPane(){
+    	boolean result = true;
+		String exceptionToRuleType = appliedRuleController.getSelectedRuleTypeKey();
+		if (isException && exceptionToRuleType.equals("IsTheOnlyModuleAllowedToUse")) {
+			result = false;
+		}
+    	return result;
+    }
+    
     @Override
     protected void setLayout() {
 		GridBagLayout ruleDetailsLayout = new GridBagLayout();
 		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0 };
-		ruleDetailsLayout.rowHeights = new int[] { 120, 30 };
+		if (showScrollPane()) {
+			ruleDetailsLayout.rowHeights = new int[] { 120, 30 };
+		} else {
+			// max total height = 290
+			ruleDetailsLayout.rowHeights = new int[] { 0, 0 };
+		}
 		ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.0 };
 		ruleDetailsLayout.columnWidths = new int[] { 130, 660 };
 		this.setLayout(ruleDetailsLayout);

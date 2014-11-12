@@ -19,7 +19,7 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
     private static final long serialVersionUID = 5436437579750820119L;
     private AppliedRuleController appliedRuleController;
     private boolean isException;
-    private JLabel moduleFromJLabel;
+    private JLabel moduleFromJLabel, moduleFromContentsJLabel;
     private CombinedModuleTree moduleFromTree;
 
     public ModuleFromPanelComponent(boolean isException, AppliedRuleController appliedRuleController) {
@@ -29,10 +29,10 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 		initGUI();
     }
 
-    private void createFromModuleJLabel() {
-		moduleFromJLabel = new JLabel();
+    private void createFromModuleContentsJLabel() {
+		moduleFromContentsJLabel = new JLabel();
 		String currentModuleName = appliedRuleController.getCurrentModuleName();
-		moduleFromJLabel.setText(currentModuleName);
+		moduleFromContentsJLabel.setText(currentModuleName);
     }
 
     private JScrollPane createFromModuleScrollPane() {
@@ -73,15 +73,15 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 		if (showScrollPane()) {
 		    this.add(createFromModuleScrollPane(), gridBagConstraints);
 		} else {
-		    createFromModuleJLabel();
-		    this.add(moduleFromJLabel, gridBagConstraints);
+		    createFromModuleContentsJLabel();
+		    this.add(moduleFromContentsJLabel, gridBagConstraints);
 		}
     }
 
     private boolean showScrollPane(){
     	boolean result = false;
-		String ExceptionToFacadeConvention = appliedRuleController.getSelectedRuleTypeKey();
-		if (isException && ExceptionToFacadeConvention.equals("FacadeConvention")) {
+		String exceptionToRuleType = appliedRuleController.getSelectedRuleTypeKey();
+		if (isException && ((exceptionToRuleType.equals("FacadeConvention")) || (exceptionToRuleType.equals("IsTheOnlyModuleAllowedToUse")))) {
 			result = true;
 		}
     	return result;
