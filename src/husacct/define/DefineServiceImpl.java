@@ -41,12 +41,14 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
 	private DomainToDtoParser domainParser = new DomainToDtoParser();
 	private ModuleDomainService moduleService = new ModuleDomainService();
+	private boolean isMapped;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 
 
 	public DefineServiceImpl() {
 		super();
 		reset();
+		isMapped = false;
 	}
 
 	@Override
@@ -262,12 +264,12 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public boolean isMapped() {
-		boolean isMapped = false;
-		ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance()
-				.getModules();
-		for (ModuleStrategy module : modules) {
-			if (module.isMapped()) {
-				isMapped = true;
+		if(!isMapped) {
+			ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance().getModules();
+			for (ModuleStrategy module : modules) {
+				if (module.isMapped()) {
+					isMapped = true;
+				}
 			}
 		}
 		return isMapped;

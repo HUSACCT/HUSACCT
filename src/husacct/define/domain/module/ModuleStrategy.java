@@ -324,7 +324,14 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		boolean isMapped = false;
 		if (mappedSUunits.size() > 0){
 			isMapped = true;
-		}		
+		} 
+		else {
+			for (ModuleStrategy module : getSubModules()) {
+				if (module.isMapped()) {
+					isMapped = true;
+				}
+			}
+		}
 		return isMapped;
 	}
 
