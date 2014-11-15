@@ -115,6 +115,8 @@ public class ApplicationController {
 		
 	}
 	public void showHelpGUI(Component component) {
-		new HelpDialog(mainController, component);
+		// HelpGUI deactivated in release 3.4.1, since the documentation was not up to date nor context specific.
+		//new HelpDialog(mainController, component);
+		new DocumentationDialog(mainController);
 	}
 }
