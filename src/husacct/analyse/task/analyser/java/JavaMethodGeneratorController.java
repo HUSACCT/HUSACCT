@@ -71,56 +71,56 @@ class JavaMethodGeneratorController extends JavaGenerator {
             int treeType = child.getType();
             
             switch(treeType) {
-            case JavaParser.ABSTRACT: 
-            	isAbstract = true;
-            	break;
-            case JavaParser.FINAL: 
-            	hasClassScope = true; 
-            	break;
-            case JavaParser.PUBLIC: 
-            	accessControlQualifier = "public"; 
-            	break;
-            case JavaParser.PRIVATE: 
-            	accessControlQualifier = "private"; 
-            	break;
-            case JavaParser.PROTECTED: 
-            	accessControlQualifier = "protected"; 
-            	break;
-            case JavaParser.TYPE: 
-            	getReturnType(child); 
-	            walkThroughChildren = false;
-            	break;
-            case JavaParser.IDENT: 
-            	name = child.getText(); 
-            	lineNumber = child.getLine();
-            	break;
-            case JavaParser.THROW: 
-            	delegateException(child); 
-	            walkThroughChildren = false;
-            	break;
-            case JavaParser.THROWS: 
-            	delegateException(child); 
-	            walkThroughChildren = false;
-            	break;
-            case JavaParser.THROWS_CLAUSE: 
-            	delegateException(child); 
-	            walkThroughChildren = false;
-            	break;
-            case JavaParser.FORMAL_PARAM_LIST: 
-            	if (child.getChildCount() > 0) {
-                    JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
-                    signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
-    	            walkThroughChildren = false;
-                }
-            	break;
-            case JavaParser.BLOCK_SCOPE: {
-            	setSignature();
-                JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
-                javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.name + signature);
-	            walkThroughChildren = false;
-                break;
-            }
-            default: break;
+	            case JavaParser.ABSTRACT: 
+	            	isAbstract = true;
+	            	break;
+	            case JavaParser.FINAL: 
+	            	hasClassScope = true; 
+	            	break;
+	            case JavaParser.PUBLIC: 
+	            	accessControlQualifier = "public"; 
+	            	break;
+	            case JavaParser.PRIVATE: 
+	            	accessControlQualifier = "private"; 
+	            	break;
+	            case JavaParser.PROTECTED: 
+	            	accessControlQualifier = "protected"; 
+	            	break;
+	            case JavaParser.TYPE: 
+	            	getReturnType(child); 
+		            walkThroughChildren = false;
+	            	break;
+	            case JavaParser.IDENT: 
+	            	name = child.getText(); 
+	            	lineNumber = child.getLine();
+	            	break;
+	            case JavaParser.THROW: 
+	            	delegateException(child); 
+		            walkThroughChildren = false;
+	            	break;
+	            case JavaParser.THROWS: 
+	            	delegateException(child); 
+		            walkThroughChildren = false;
+	            	break;
+	            case JavaParser.THROWS_CLAUSE: 
+	            	delegateException(child); 
+		            walkThroughChildren = false;
+	            	break;
+	            case JavaParser.FORMAL_PARAM_LIST: 
+	            	if (child.getChildCount() > 0) {
+	                    JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
+	                    signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
+	    	            walkThroughChildren = false;
+	                }
+	            	break;
+	            case JavaParser.BLOCK_SCOPE: {
+	            	setSignature();
+	                JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
+	                javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.name + signature);
+		            walkThroughChildren = false;
+	                break;
+	            }
+	            default: break;
             }
 	        if (walkThroughChildren) {
 	        	WalkThroughMethod(child);

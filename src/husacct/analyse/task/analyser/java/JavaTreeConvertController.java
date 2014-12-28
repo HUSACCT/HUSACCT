@@ -49,7 +49,7 @@ class JavaTreeConvertController {
     	}
     	catch (Exception e) {
     		logger.error("Exception: "+ e);
-    		// e.printStackTrace();
+    		e.printStackTrace();
     	}
     }
 
@@ -110,56 +110,46 @@ class JavaTreeConvertController {
 
     private void delegateASTToGenerators(CommonTree tree) {
         if (isTreeAvailable(tree)) {
-        	CommonTree treeNode;
+        	CommonTree childNode;
             for (int i = 0; i < tree.getChildCount(); i++) {
-                treeNode = (CommonTree) tree.getChild(i);
-                int nodeType = treeNode.getType();
+                childNode = (CommonTree) tree.getChild(i);
+                int nodeType = childNode.getType();
 
                 switch (nodeType) {
                     case JavaParser.CLASS: case JavaParser.ENUM: case JavaParser.INTERFACE:	
                         if (classCount > 0) {
-                            CommonTree innerClassTree = (CommonTree) treeNode;
+                            CommonTree innerClassTree = childNode;
                             this.parentClass = currentClass;
                             this.currentClass = delegateClass(innerClassTree, true);
                             delegateASTToGenerators(innerClassTree);
                             this.currentClass = parentClass;
                         } else {
                             classCount++;
+                            delegateASTToGenerators(childNode);
                         }
                         break;
                     case JavaParser.IMPORT:
-                        if (nodeType == JavaParser.IMPORT) {
-                            delegateImport((CommonTree) treeNode);
-                            deleteTreeChild(treeNode);
-                        }
+                        delegateImport(childNode);
                         break;
                     case JavaParser.IMPLEMENTS_CLAUSE:
-                        delegateImplementsDefinition((CommonTree) treeNode);
-                        deleteTreeChild(treeNode);
+                        delegateImplementsDefinition(childNode);
                         break;
                     case JavaParser.EXTENDS_CLAUSE:
-                        delegateInheritanceDefinition((CommonTree) treeNode);
-                        deleteTreeChild(treeNode);
+                        delegateInheritanceDefinition(childNode);
                         break;
                     case JavaParser.VAR_DECLARATION:
-                        delegateAttribute(treeNode);
-                        deleteTreeChild(treeNode);
+                        delegateAttribute(childNode);
                         break;
                     case JavaParser.FUNCTION_METHOD_DECL:
                     case JavaParser.CONSTRUCTOR_DECL:
                     case JavaParser.VOID_METHOD_DECL:
-                        delegateMethod(treeNode);
-                        deleteTreeChild(treeNode);
+                        delegateMethod(childNode);
+                        break;
+    	            default: 
+                        delegateASTToGenerators(childNode);
                         break;
                 }
-                delegateASTToGenerators((CommonTree) tree.getChild(i));
             }
-        }
-    }
-
-    private void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
         }
     }
 
@@ -173,7 +163,7 @@ class JavaTreeConvertController {
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
         String analysedClass;
         if (isInnerClass) {
-            analysedClass = javaClassGenerator.generateToModel(sourceFilePath, 0, classTree, parentClass);
+            analysedClass = javaClassGenerator.generateToModel(sourceFilePath, 0, classTree, true, parentClass);
         } else {
             analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree);
         }
@@ -193,7 +183,7 @@ class JavaTreeConvertController {
     }
 
     private void delegateInheritanceDefinition(CommonTree treeNode) {
-        javaInheritanceDefinitionGenerator.generateToDomain(treeNode, this.theClass);
+    	javaInheritanceDefinitionGenerator.generateToDomain(treeNode, this.currentClass);
     }
 
     private void delegateImport(CommonTree importTree) {

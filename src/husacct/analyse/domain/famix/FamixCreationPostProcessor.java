@@ -253,9 +253,10 @@ class FamixCreationPostProcessor {
 	        	FamixAssociation association = (FamixAssociation) i.next();
 		        String uniqueNameFrom = association.from;
 
-            	/* Test helper
-            	if (association.from.startsWith("Limaki.Actions.Command")){
-            		boolean breakpoint = true;
+            	/* //Test helper
+            	if (association.from.startsWith("husacct.analyse.infrastructure.antlr.java.JavaParser")){
+            		if(association.lineNumber == 355) {
+            			boolean breakpoint = true; }
             	} */
 
 		        if (association instanceof FamixInheritanceDefinition){
@@ -856,6 +857,12 @@ class FamixCreationPostProcessor {
     }
     
     private String findClassInImports(String importingClass, String typeDeclaration) {
+    	if (theModel.classes.containsKey(importingClass)) {
+	    	FamixClass fromClass = theModel.classes.get(importingClass);
+	    	if (fromClass.isInnerClass == true) {
+	    		importingClass = fromClass.belongsToClass;
+	    	}
+    	}
     	List<FamixImport> importsOfClass = importsPerEntity.get(importingClass);
     	if (importsOfClass != null){
 	        for (FamixImport fImport : importsOfClass) {
