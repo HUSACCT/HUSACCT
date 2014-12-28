@@ -1,36 +1,38 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.EnumSet;
+
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 
 class JavaAnnotationGenerator extends JavaGenerator {
 
     private String name;
-    private String uniqueName = "";
-    private String belongsToPackage;
-    private int lineNumber = 0;
+    private String uniqueName;
+    private int lineNumber;
 
-    public JavaAnnotationGenerator(String uniquePackageName) {
-        this.belongsToPackage = uniquePackageName;
+    public JavaAnnotationGenerator() {
     }
 
-    public String generateToDomain(CommonTree commonTree) {
-        this.setName(commonTree);
-        this.setUniquename();
-        modelService.createAnnotation(this.belongsToPackage, this.name, this.name, this.uniqueName, this.lineNumber);
-        return this.uniqueName;
-    }
-
-    public void generateMethod(CommonTree commonTree) {
-        this.setName(commonTree);
-        this.setUniquename();
-        this.setLinenumber(commonTree);
-        modelService.createAnnotation(this.belongsToPackage, this.name, this.name, this.uniqueName, this.lineNumber);
+    public void generateToDomain(CommonTree annotationTree, String belongsToClass) {
+        if (isTreeExisting(annotationTree) && (belongsToClass != null) && !belongsToClass.equals("")) {
+        	name = "";
+        	uniqueName = "";
+        	lineNumber = 0;
+        	
+	    	this.setName(annotationTree);
+	    	if (!isSkippable(name)) { 
+		        this.uniqueName = belongsToClass + "." + this.name; 
+		        this.setLinenumber(annotationTree);
+		        modelService.createAnnotation(belongsToClass, this.name, this.name, this.uniqueName, this.lineNumber);
+	    	}
+    	}
     }
 
     private void setName(CommonTree commonTree) {
         CommonTree IdentNode = (CommonTree) commonTree.getFirstChildWithType(JavaParser.IDENT);
-        if (isTreeAvailable(IdentNode)) {
+        if (isTreeExisting(IdentNode)) {
             this.name = IdentNode.getText();
         } else {
             CommonTree nameTree = (CommonTree) commonTree.getFirstChildWithType(JavaParser.DOT);
@@ -41,12 +43,12 @@ class JavaAnnotationGenerator extends JavaGenerator {
     private String parseDottedTreeToName(CommonTree nameTree) {
         String result = "";
 
-        if (!isTreeAvailable(nameTree)) {
+        if (!isTreeExisting(nameTree)) {
             return "";
         }
 
         CommonTree dottedChild = (CommonTree) nameTree.getFirstChildWithType(JavaParser.DOT);
-        if (isTreeAvailable(dottedChild)) {
+        if (isTreeExisting(dottedChild)) {
             result += parseDottedTreeToName(dottedChild);
         }
 
@@ -61,26 +63,47 @@ class JavaAnnotationGenerator extends JavaGenerator {
         return result;
     }
 
-    private void setUniquename() {
-        this.uniqueName += this.belongsToPackage + getDotAfterUniquename();
-        this.uniqueName += this.name;
-    }
-
     private void setLinenumber(CommonTree lineTree) {
         this.lineNumber = lineTree.getLine();
     }
 
-    private String getDotAfterUniquename() {
-        if (!this.belongsToPackage.equals("")) {
-            return ".";
-        }
-        return "";
-    }
-
-    private boolean isTreeAvailable(CommonTree tree) {
+    private boolean isTreeExisting(CommonTree tree) {
      if (tree != null) {
     	         return true;
           }
     	    return false; 
     }
+    
+    private boolean isSkippable(String type) {
+		for(SkippedTypes skippedType : EnumSet.allOf(SkippedTypes.class)){
+			if(skippedType.toString().equals(type)){
+				return true;
+			}
+		}
+		return false;    }
+    
+    enum SkippedTypes {
+    	
+    	Override("Override"),
+    	Author("Author"),
+    	SuppressWarnings("SuppressWarnings"),
+    	Deprecated("Deprecated"),
+    	SafeVarargs ("SafeVarargs"),
+    	FunctionalInterface ("FunctionalInterface"),
+    	Interned ("Interned"),
+    	NonNull ("NonNull"),
+    	Readonly ("Readonly");
+     	
+    	private final String type;
+    	
+    	private SkippedTypes(String type){
+    		this.type = type;
+    	}
+    	
+    	@Override
+    	public String toString(){
+    		return type;
+    	}
+    }	
+
 }

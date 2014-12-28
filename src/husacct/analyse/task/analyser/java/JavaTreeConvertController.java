@@ -34,6 +34,7 @@ class JavaTreeConvertController {
         javaImportGenerator = new JavaImportGenerator();
         javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
         implementsGenerator = new JavaImplementsDefinitionGenerator();
+        javaAnnotationGenerator = new JavaAnnotationGenerator();
     }
 
     public void delegateASTToGenerators(String sourceFilePath, int nrOfLinesOfCode, JavaParser javaParser) throws RecognitionException {
@@ -43,7 +44,7 @@ class JavaTreeConvertController {
 	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
 	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 	        createClassInformation(compilationUnitTree);
-	        if (this.theClass != null) {
+	        if ((this.theClass != null) && !this.theClass.equals("")) {
 	        	delegateASTToGenerators(compilationUnitTree);
 	        } 
     	}
@@ -62,16 +63,13 @@ class JavaTreeConvertController {
         }
 
         CommonTree classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.CLASS);
-        if (!isTreeAvailable(classTree)) {
+        if (!isTreeExisting(classTree)) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.INTERFACE);
         }
-        if (!isTreeAvailable(classTree)) {
-            classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.AT);
-        }
-        if (!isTreeAvailable(classTree)) {
+        if (!isTreeExisting(classTree)) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.ENUM);
         }
-        if (isTreeAvailable(classTree)) {
+        if (isTreeExisting(classTree)) {
             int classType = classTree.getType();
             switch (classType) {
                 case JavaParser.CLASS:
@@ -79,9 +77,6 @@ class JavaTreeConvertController {
                     break;
                 case JavaParser.INTERFACE:
                     this.theClass = this.currentClass = delegateInterface(classTree);
-                    break;
-                case JavaParser.AT:
-                    this.theClass = this.currentClass = delegateAnnotation(classTree);
                     break;
                 case JavaParser.ENUM:
                     this.theClass = this.currentClass = delegateClass(classTree, false);
@@ -92,7 +87,7 @@ class JavaTreeConvertController {
         } else {
             int typeid = 0;
             CommonTree warnTree = (CommonTree) completeTree.getChild(2);
-            if (isTreeAvailable(warnTree)) {
+            if (isTreeExisting(warnTree)) {
                 typeid = warnTree.getType();
             }
             this.warnNotSupportedClassType(typeid, classTree);
@@ -109,7 +104,7 @@ class JavaTreeConvertController {
     }
 
     private void delegateASTToGenerators(CommonTree tree) {
-        if (isTreeAvailable(tree)) {
+        if (isTreeExisting(tree)) {
         	CommonTree childNode;
             for (int i = 0; i < tree.getChildCount(); i++) {
                 childNode = (CommonTree) tree.getChild(i);
@@ -130,6 +125,9 @@ class JavaTreeConvertController {
                         break;
                     case JavaParser.IMPORT:
                         delegateImport(childNode);
+                        break;
+                    case JavaParser.AT:
+                        delegateAnnotation(childNode);
                         break;
                     case JavaParser.IMPLEMENTS_CLAUSE:
                         delegateImplementsDefinition(childNode);
@@ -157,15 +155,14 @@ class JavaTreeConvertController {
         this.thePackage = javaPackageGenerator.generateModel(packageTree);
         javaClassGenerator = new JavaClassGenerator(thePackage);
         javaInterfaceGenerator = new JavaInterfaceGenerator(thePackage);
-        javaAnnotationGenerator = new JavaAnnotationGenerator(thePackage);
     }
 
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
         String analysedClass;
         if (isInnerClass) {
-            analysedClass = javaClassGenerator.generateToModel(sourceFilePath, 0, classTree, true, parentClass);
+            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, true, parentClass);
         } else {
-            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree);
+            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, false, "");
         }
         return analysedClass;
     }
@@ -174,12 +171,12 @@ class JavaTreeConvertController {
         return javaInterfaceGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, interfaceTree);
     }
 
-    private String delegateAnnotation(CommonTree annotationTree) {
-        return javaAnnotationGenerator.generateToDomain(annotationTree);
+    private void delegateAnnotation(CommonTree annotationTree) {
+        javaAnnotationGenerator.generateToDomain(annotationTree, this.currentClass);
     }
 
     private void delegateImplementsDefinition(CommonTree treeNode) {
-        implementsGenerator.generateToDomain(treeNode, this.theClass);
+        implementsGenerator.generateToDomain(treeNode, this.currentClass);
     }
 
     private void delegateInheritanceDefinition(CommonTree treeNode) {
@@ -202,7 +199,7 @@ class JavaTreeConvertController {
         return tree.getFirstChildWithType(JavaParser.PACKAGE) != null;
     }
 
-    private boolean isTreeAvailable(Tree tree) {
+    private boolean isTreeExisting(Tree tree) {
     	return tree != null;
     }
 }

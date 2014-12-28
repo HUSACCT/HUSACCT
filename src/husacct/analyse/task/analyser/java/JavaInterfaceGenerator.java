@@ -9,7 +9,7 @@ class JavaInterfaceGenerator extends JavaGenerator {
 
     private String name;
     private String uniqueName;
-    private String belongsToPackage = "";
+    private String belongsToPackage;
     private String visibillity = VisibilitySet.DEFAULT.toString();
 
     public JavaInterfaceGenerator(String uniquePackageName) {
@@ -17,6 +17,10 @@ class JavaInterfaceGenerator extends JavaGenerator {
     }
 
     public String generateToDomain(String sourceFilePath, int linesOfCode, CommonTree commonTree) {
+    	name = "";
+    	uniqueName = "";
+    	visibillity = VisibilitySet.DEFAULT.toString();
+    	
         setVisibillityFromTree(commonTree);
         this.name = commonTree.getChild(1).toString();
         if (belongsToPackage.equals("")) {

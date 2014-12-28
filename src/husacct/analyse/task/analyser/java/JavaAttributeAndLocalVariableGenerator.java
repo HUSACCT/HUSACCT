@@ -77,8 +77,8 @@ class JavaAttributeAndLocalVariableGenerator {
                 walkThroughChildren = false;
             	break;
             case JavaParser.AT:
-                annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
-                annotationGenerator.generateMethod((CommonTree) child);
+                annotationGenerator = new JavaAnnotationGenerator();
+                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass);
             	break;
             }
             if (walkThroughChildren) {
