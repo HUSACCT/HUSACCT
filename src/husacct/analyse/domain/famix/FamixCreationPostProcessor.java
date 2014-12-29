@@ -351,8 +351,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("husacct.define.presentation.jdialog.ExceptionRuleJDialog")) {
-            		if (association.lineNumber == 74) {
+            	if (association.from.contains("org.dtangler.core.analysisresult.Violation")) {
+            		if (association.lineNumber == 21) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -431,7 +431,7 @@ class FamixCreationPostProcessor {
                 	}
                 }
 	                    
-                // 2) Find out or association.to refers to a type in the same package as the from class.
+                // 2) Find out or association.to refers to a type in the same package as the from class, including nested classes.
                 if (fromExists && !toExists && toHasValue){
                 	if (!association.to.contains(".")) {
 	                	String belongsToPackage = theModel.classes.get(association.from).belongsToPackage;
@@ -869,6 +869,17 @@ class FamixCreationPostProcessor {
 	            if (!fImport.importsCompletePackage) {
 	                if (fImport.to.endsWith("." + typeDeclaration)) {
 	                    return fImport.to;
+	                } else {
+	                	FamixClass importedClass = theModel.classes.get(fImport.to);
+	        			if (importedClass != null){
+	        				if (importedClass.hasInnerClasses){
+	        					for (String innerClass : importedClass.children) {
+		        	                if (innerClass.endsWith("." + typeDeclaration)) {
+		        	                    return innerClass;
+		        	                }
+	        					}
+	        				}
+	        			}
 	                }
 	            } 
 	            else {

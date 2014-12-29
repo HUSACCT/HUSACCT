@@ -11,8 +11,8 @@ class JavaClassGenerator extends JavaGenerator {
     private String name;
     private String uniqueName;
     private String belongsToPackage;
-    private String belongsToClass = null;
-    private boolean isAbstract = false;
+    private String belongsToClass;
+    private boolean isAbstract;
     private int nrOfLinesOfCode;
     private String visibility;
 
@@ -31,8 +31,8 @@ class JavaClassGenerator extends JavaGenerator {
         	
             this.name = commonTree.getChild(1).toString();
             if (isNestedClass) {
-                this.uniqueName = belongsToClass + "." + name;
                 this.belongsToClass = parentClassName;
+                this.uniqueName = belongsToClass + "." + name;
             	this.nrOfLinesOfCode = 0;
             } else {
                 if (belongsToPackage.equals("")) {
