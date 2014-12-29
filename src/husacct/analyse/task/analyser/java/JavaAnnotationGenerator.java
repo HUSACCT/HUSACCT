@@ -84,17 +84,17 @@ class JavaAnnotationGenerator extends JavaGenerator {
     
     enum SkippedTypes {
     	
-    	Override("Override"),
-    	Author("Author"),
-    	SuppressWarnings("SuppressWarnings"),
-    	Deprecated("Deprecated"),
+    	Override ("Override"),
+    	Author ("Author"),
+    	SuppressWarnings ("SuppressWarnings"),
+    	Deprecated ("Deprecated"),
     	SafeVarargs ("SafeVarargs"),
     	FunctionalInterface ("FunctionalInterface"),
     	Interned ("Interned"),
     	NonNull ("NonNull"),
     	Readonly ("Readonly");
      	
-    	private final String type;
+    	private String type;
     	
     	private SkippedTypes(String type){
     		this.type = type;

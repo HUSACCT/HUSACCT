@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
@@ -73,6 +74,10 @@ class JavaMethodGeneratorController extends JavaGenerator {
             switch(treeType) {
 	            case JavaParser.ABSTRACT: 
 	            	isAbstract = true;
+	            	break;
+	            case JavaParser.AT:
+	            	JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator();
+	                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass);
 	            	break;
 	            case JavaParser.FINAL: 
 	            	hasClassScope = true; 
