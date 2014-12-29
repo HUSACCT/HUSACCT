@@ -37,4 +37,21 @@ public class CallInstanceOuterClassDAO {
             return retValue;
         }
     }
+    
+    public enum InnerEnumeration {
+    	ONE,TWO,THREE,FOUR;
+    }
+    
+    public interface CallInstanceInnerInterfaceDAO {
+    	public void InterfaceMethod();
+    }
+
+    public static class StaticNestedClass { 
+    	CallInstanceOuterClassDAO outer; 
+ 
+		public CallInstanceOuterClassDAO getOuter() { 
+			return outer; 
+		} 
+	} 
+
 }

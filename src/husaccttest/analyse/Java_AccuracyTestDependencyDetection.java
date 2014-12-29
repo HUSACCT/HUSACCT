@@ -117,6 +117,25 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessInnerEnumeration(){
+		String fromModule = "domain.direct.violating.AccessInnerEnumeration";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.InnerEnumeration";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void AccessAndInheritanceFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromOuterClass.CallingInnerClass";
+		String toModule = "domain.direct.Base";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		typesToFind.add("Inheritance");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void AccessInstanceVariableRead(){
 		String fromModule = "domain.direct.violating.AccessInstanceVariableRead";
 		String toModule = "technology.direct.dao.ProfileDAO";
@@ -252,9 +271,27 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructorInnerClass(){
+		String fromModule = "domain.direct.violating.CallConstructorInnerClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void CallConstructorLibraryClass(){
 		String fromModule = "domain.direct.violating.CallConstructorLibraryClass";
 		String toModule = "xLibraries.fi.foyt.foursquare.api.FoursquareApi";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromOuterClass.CallingInnerClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -273,6 +310,15 @@ public class Java_AccuracyTestDependencyDetection {
 	public void CallInstanceInnerClass(){
 		String fromModule = "domain.direct.violating.CallInstanceInnerClass";
 		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallInstanceInnerInterface(){
+		String fromModule = "domain.direct.violating.CallInstanceInnerInterface";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -333,6 +379,24 @@ public class Java_AccuracyTestDependencyDetection {
 	public void DeclarationExceptionThrows(){
 		String fromModule = "domain.direct.violating.DeclarationExceptionThrows";
 		String toModule = "technology.direct.dao.StaticsException";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationInnerClass(){
+		String fromModule = "domain.direct.Base";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationOuterClassByStaticNestedClass(){
+		String fromModule = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));

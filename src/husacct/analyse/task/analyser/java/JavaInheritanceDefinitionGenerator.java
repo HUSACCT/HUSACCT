@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -32,7 +33,7 @@ public class JavaInheritanceDefinitionGenerator extends JavaGenerator {
                     lineNumber = tree.getLine();
                 }
                 if (tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT) {
-                    to = tree.getChild(i).getText() + ".";
+                    to += tree.getChild(i).getText() + ".";
                 }
                 createInheritanceDefinitionDetails(tree.getChild(i));
             }
