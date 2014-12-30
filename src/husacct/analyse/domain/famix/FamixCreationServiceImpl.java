@@ -1,10 +1,14 @@
 package husacct.analyse.domain.famix;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.naming.directory.InvalidAttributesException;
+
 import org.apache.log4j.Logger;
+
 import husacct.analyse.domain.IModelCreationService;
 import husacct.common.dto.AnalysedModuleDTO;
 
@@ -348,7 +352,21 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 			completeImportStrings.put(foundImport.completeImportString, foundImport.importsCompletePackage);
 		}
 		// Get a list of the root units.
-		List<AnalysedModuleDTO> rootModules = (new FamixModuleFinder(model)).getRootModules();
+		FamixModuleFinder fmf = new FamixModuleFinder(model);
+		List<AnalysedModuleDTO> rootModules = fmf.getRootModules();
+		ArrayList<String> rootNames = new ArrayList<String>();
+		for (AnalysedModuleDTO rootModule : rootModules) {
+			String name = rootModule.uniqueName;
+			if (name.equals("org") || name.equals("com")) {
+				List<AnalysedModuleDTO> rootSubModules = fmf.getChildModulesInModule(name);
+				for (AnalysedModuleDTO rootSubModule : rootSubModules) {
+					String subName = rootSubModule.uniqueName;
+					rootNames.add(subName);
+				}
+			} else {
+				rootNames.add(name);
+			}
+		}
 		
 		// Check for each completeImportString if it is an internal class. If not, create a FamixLibrary or package if it refers to a complete package or namespace.
 		for(String completeImportString : completeImportStrings.keySet()){
@@ -357,10 +375,10 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 				//	Determine if the complete import string starts with a root module and refers to an internal type. 
 				boolean isExternal = true;
 				String rootModuleUniqueName = "";
-				for (AnalysedModuleDTO rootModule : rootModules){
-					if (completeImportString.startsWith(rootModule.uniqueName)){
+				for (String rootName : rootNames){
+					if (completeImportString.startsWith(rootName)){
 						isExternal =  false;
-						rootModuleUniqueName = rootModule.uniqueName;
+						rootModuleUniqueName = rootName;
 						break;
 					}
 				}
