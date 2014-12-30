@@ -173,8 +173,14 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     @Override
 	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
 		AnalysisStatisticsDTO returnValue;
+		// Determine totalNrOfPackages, minus 1 for package xLibraries, since that one is created within the analysis process. 
+		int totalNrOfPackages = 0;
+		totalNrOfPackages = theModel.packages.size();
+		if (theModel.packages.containsKey("xLibraries")) {
+			totalNrOfPackages --;
+		}
 		if (selectedModule == null) {
-			returnValue = new AnalysisStatisticsDTO(theModel.packages.size(), theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, 0, 0, 0);
+			returnValue = new AnalysisStatisticsDTO(totalNrOfPackages, theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, 0, 0, 0);
 		} else {
 			int packages = 0;
 			int classes = 0;
@@ -206,7 +212,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			} else {
 				// A library is selected, so return default 0-values.
 			}
-			returnValue = new AnalysisStatisticsDTO(theModel.packages.size(), theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, packages, classes, linesOfCode);
+			returnValue = new AnalysisStatisticsDTO(totalNrOfPackages, theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, packages, classes, linesOfCode);
 		}
         return returnValue;
     }
