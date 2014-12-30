@@ -14,18 +14,35 @@ class JavaImportGenerator extends JavaGenerator {
     private String completeImportDeclaration;
     private boolean isCompletePackageImport;
     private int lineNumber;
+    private boolean isStatic = false;
 
     public void generateToDomain(CommonTree importTree, String className) {
         this.importingClass = className;
-        fillImportObject(importTree);
-        modelService.createImport(importingClass, importedModule, lineNumber, completeImportDeclaration, isCompletePackageImport);
+        this.lineNumber = importTree.getLine();
+        //Test code
+        if(importingClass.equals("domain.direct.violating.ImportDependencyStatic")) {
+        	int breakpoint = 1; }
+        if (importTree.getType() == nodeType) {
+        	CommonTree staticExpression = (CommonTree) importTree.getFirstChildWithType(JavaParser.STATIC);
+        	if (staticExpression != null) {
+        		isStatic = true;
+                int childCount = importTree.getChildCount();
+                for (int currentChild = 0; currentChild < childCount; currentChild++) {
+                    CommonTree childNode = (CommonTree) importTree.getChild(currentChild);
+                    if (childNode.getType() == JavaParser.STATIC) {
+                        importTree.deleteChild(currentChild);
+                        break;
+                    }
+                }
+        	}
+            fillImportObject(importTree);
+            modelService.createImport(importingClass, importedModule, lineNumber, completeImportDeclaration, isCompletePackageImport);
+        }
     }
 
     private void fillImportObject(CommonTree importTree) {
         String importDetails = createImportDetails(importTree, "--");
         String declaration = convertToImportDeclaration(importDetails, "--");
-
-        this.lineNumber = importTree.getLine();
         this.completeImportDeclaration = declaration;
         this.isCompletePackageImport = isPackageImport(declaration);
         if (isCompletePackageImport) {

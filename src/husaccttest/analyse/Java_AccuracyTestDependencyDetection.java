@@ -484,6 +484,15 @@ public class Java_AccuracyTestDependencyDetection {
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
+	@Test
+	public void ImportDependencyStatic(){
+		String fromModule = "domain.direct.violating.ImportDependencyStatic";
+		String toModule = "technology.direct.dao.AccountDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Import");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
 	// Inheritance
 	@Test
 	public void InheritanceExtends(){
