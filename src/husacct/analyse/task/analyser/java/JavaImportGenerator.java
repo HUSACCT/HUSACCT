@@ -19,9 +19,6 @@ class JavaImportGenerator extends JavaGenerator {
     public void generateToDomain(CommonTree importTree, String className) {
         this.importingClass = className;
         this.lineNumber = importTree.getLine();
-        //Test code
-        if(importingClass.equals("domain.direct.violating.ImportDependencyStatic")) {
-        	int breakpoint = 1; }
         if (importTree.getType() == nodeType) {
         	CommonTree staticExpression = (CommonTree) importTree.getFirstChildWithType(JavaParser.STATIC);
         	if (staticExpression != null) {

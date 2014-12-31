@@ -131,9 +131,16 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        		returnValue += "";
 	        	}
 	            break;
-	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST: case JavaParser.TYPE:
+	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
+	        case JavaParser.TYPE: case JavaParser.QUALIFIED_TYPE_IDENT:
+	            int childCount = tree.getChildCount();
+	            returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+	            for (int currentChild = 1; currentChild < childCount; currentChild++) {
+		        	returnValue += "." + getCompleteToString((CommonTree) tree.getChild(currentChild));
+	            }
+	        	break;
 	        case JavaParser.EXPR: case JavaParser.PARENTESIZED_EXPR:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
@@ -154,9 +161,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	            break;
 	        case JavaParser.IDENT:
 	        	returnValue = tree.getText();
-	            break;
-	        case JavaParser.QUALIFIED_TYPE_IDENT:
-	        	returnValue = tree.getChild(0).getText();
 	            break;
 	        case JavaParser.THIS: case JavaParser.SUPER:
 	        	returnValue = "";

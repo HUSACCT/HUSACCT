@@ -53,5 +53,20 @@ namespace Technology.Direct.Dao
                 
 			}
 		}
+
+    		public enum InnerEnumeration {ONE,TWO,THREE,FOUR};
+
+    		public interface CallInstanceInnerInterfaceDAO {
+    			public void InterfaceMethod();
+    		}
+
+    		public class StaticNestedClass { 
+    			CallInstanceOuterClassDAO outer; 
+ 
+			public CallInstanceOuterClassDAO getOuter() { 
+			return outer; 
+			} 
+		} 
+    
 	}
 }

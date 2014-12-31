@@ -1,6 +1,7 @@
 namespace Domain.Direct.Violating
+using Technology.Direct.Dao;
 {
-    public class InheritanceExtends : Technology.Direct.Dao.HistoryDAO
+    public class InheritanceExtends : HistoryDAO
 	{
 	}
 }

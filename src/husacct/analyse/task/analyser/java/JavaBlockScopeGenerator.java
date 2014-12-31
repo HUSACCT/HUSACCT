@@ -25,8 +25,8 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        boolean walkThroughChildren = true;
 
 	        /* Test helper
-	       	if (this.belongsToClass.contains("husacct.define.presentation.jdialog.ExceptionRuleJDialog")){
-	    		if (belongsToMethod.contains("ExceptionRuleJDialog()")) {
+	       	if (this.belongsToClass.contains("domain.direct.violating.CallConstructorInnerClass")){
+	    		if (belongsToMethod.contains("CallConstructorInnerClass()")) {
 	    				boolean breakpoint1 = true;
 	    		}
 	    	} */ 

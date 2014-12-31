@@ -12,6 +12,10 @@ namespace Domain.Direct
 
 		protected internal CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerDao;
 
+		protected CallInstanceInnerClassDAO innerDao;
+
+		protected CallInstanceInnerInterfaceDAO innerInterfaceDao;		
+		
 		protected internal CallInstanceInterfaceDAO interfaceDao;
 
 		protected internal FoursquareApi fourApi;

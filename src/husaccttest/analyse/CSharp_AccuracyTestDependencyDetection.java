@@ -120,6 +120,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessEnumerationInner(){
+		String fromModule = "domain.direct.violating.AccessInnerEnumeration";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.InnerEnumeration";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void AccessInstanceVariableRead(){
 		String fromModule = "Domain.Direct.Violating.AccessInstanceVariableRead";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
@@ -181,6 +190,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "domain.direct.Base";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+@Test
 	public void AccessInstanceVariable_SetArgumentValue(){
 		String fromModule = "Domain.Direct.Violating.AccessInstanceVariable_SetArgumentValue";
 		String toModule = "Technology.Direct.Dao.CheckInDAO";
@@ -255,12 +273,30 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructorInnerClass(){
+		String fromModule = "domain.direct.violating.CallConstructorInnerClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void CallConstructorLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
 		String fromModule = "Domain.Direct.Violating.CallConstructorLibraryClass";
 		String toModule = "FI.Foyt.Foursquare.Api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	@Test
@@ -276,6 +312,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceInnerClass(){
 		String fromModule = "Domain.Direct.Violating.CallInstanceInnerClass";
 		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallInstanceInnerInterface(){
+		String fromModule = "domain.direct.violating.CallInstanceInnerInterface";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -338,6 +383,24 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationExceptionThrows(){
 		String fromModule = "Domain.Direct.Violating.DeclarationExceptionThrows";
 		String toModule = "Technology.Direct.Dao.StaticsException";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationInnerClass(){
+		String fromModule = "domain.direct.Base";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationOuterClassByInnerClass(){
+		String fromModule = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -442,6 +505,14 @@ public class CSharp_AccuracyTestDependencyDetection {
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
+
+	@Test
+	public void InheritanceExtendsFullPath(){
+		String fromModule = "domain.direct.violating.InheritanceExtendsFullPath";
+		String toModule = "technology.direct.dao.HistoryDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Inheritance");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
 
 	@Test
 	public void InheritanceImplementsInterface(){
@@ -743,6 +814,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
+	public void InheritanceFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "domain.direct.Base";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Inheritance");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	@Test

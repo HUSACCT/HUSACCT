@@ -89,7 +89,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
     private void createAttributeObject() {
     	if ((declareType != null) && (declareType != "")) {
-    		if (declareType.contains(".")) {
+    		if (declareType.endsWith(".")) {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {
@@ -103,7 +103,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
     private void createLocalVariableObject() {
     	if ((declareType != null) && (declareType != "")) {
-	        if (declareType.contains(".")) {
+	        if (declareType.endsWith(".")) {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {

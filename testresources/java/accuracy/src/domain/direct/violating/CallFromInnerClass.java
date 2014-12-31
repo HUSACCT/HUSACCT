@@ -1,11 +1,11 @@
-package domain.direct.allowed;
+package domain.direct.violating;
 
-public class CallFromOuterClass {
+public class CallFromInnerClass {
     // create an array
     private final static int SIZE = 15;
     private int[] arrayOfInts = new int[SIZE];
     
-    public CallFromOuterClass() {
+    public CallFromInnerClass() {
         // fill the array with ascending integer values
         for (int i = 0; i < SIZE; i++) {
             arrayOfInts[i] = i;

@@ -351,8 +351,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("org.dtangler.core.analysisresult.Violation")) {
-            		if (association.lineNumber == 21) {
+            	if (association.from.contains("domain.direct.violating.CallConstructorInnerClass")) {
+            		if (association.lineNumber == 8) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -428,6 +428,22 @@ class FamixCreationPostProcessor {
                 			toExists = true;
                 			numberOfConnectedViaImport ++;
 	                    }
+                	} else {
+		            	String[] allSubstrings = association.to.split("\\.");
+		            	if (allSubstrings.length > 1) {
+		                    toString = findClassInImports(association.from, allSubstrings[0]);
+		                    if (!toString.equals("")) {
+		                    	String concTo = toString + "." + allSubstrings[1];
+			                    for (int i = 2; i < allSubstrings.length ; i++) {
+			                    	concTo = concTo + "." + allSubstrings[i];
+			                    }
+		                    	if (theModel.classes.containsKey(concTo)) {
+			                        association.to = concTo;
+		                			toExists = true;
+		                			numberOfConnectedViaImport ++;
+		                    	}
+		                    }
+		            	}
                 	}
                 }
 	                    
@@ -600,8 +616,8 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType")){
-        		if (invocation.lineNumber == 27) {
+        	if (invocation.from.equals("domain.direct.violating.CallConstructorInnerClass")){
+        		if (invocation.lineNumber == 8) {
         			boolean breakpoint = true;
     			}
         	} */
@@ -666,7 +682,7 @@ class FamixCreationPostProcessor {
             
         	/* 3) Determine if the second substring is an (inherited) method. If so determine the return type of the method. 
         	 * If not a primitive type, but an FamixClass or FamixLibrary,set this type as invocation.to. */
-            if (invocation.to.endsWith(")")) {
+            if ((!addInvocation) && invocation.to.endsWith(")")) {
                 // Try to find the method; first as a method of the originalToType class
                 boolean methodFound = false;
                 FamixMethod foundMethod = findInvokedMethodOnName(invocation.from, invocation.belongsToMethod, originalToType, nextToString);
@@ -685,22 +701,33 @@ class FamixCreationPostProcessor {
 	                    }
 	    			}
 	            }
-            	// This current association should be added as a call dependency on the original to-type
-    			invocation.to = originalToType;
-    			invocation.type = "InvocMethod";
-    			invocation.invocationName = nextToString;
-    			addInvocation = true;
-	            if (methodFound) {
-        			// Determine if a next invocation in the chain needs to be created
-	            	if (foundMethod.declaredReturnType != null && !foundMethod.declaredReturnType.equals("")){
-	            		toTypeNewIndirectInvocation = foundMethod.declaredReturnType;
-	        		} else {
-	        			continueChaining = false;
-	        		}
-	        	}
+            	// 3.1) Determine if the second substring is a default constructor of an inner class. 
+	        	String methodName = nextToString.substring(0, nextToString.indexOf("(")); // Methodname without signature
+	        	String searchKey = originalToType + "." + methodName;
+		    	if (!methodFound && theModel.classes.containsKey(searchKey)){
+	            	// This current association should be added as a call dependency on the original to-type
+	    			invocation.to = searchKey;
+	    			invocation.type = "InvocMethod";
+	    			invocation.invocationName = nextToString;
+	    			addInvocation = true;
+	    			continueChaining = false;
+		    	} else { // The current association should be added as a call dependency on the original to-type
+	    			invocation.to = originalToType;
+	    			invocation.type = "InvocMethod";
+	    			invocation.invocationName = nextToString;
+	    			addInvocation = true;
+		            if (methodFound) {
+	        			// Determine if a next invocation in the chain needs to be created
+		            	if (foundMethod.declaredReturnType != null && !foundMethod.declaredReturnType.equals("")){
+		            		toTypeNewIndirectInvocation = foundMethod.declaredReturnType;
+		        		} else {
+		        			continueChaining = false;
+		        		}
+		        	}
+                } 
          	}
             
-    		if (addInvocation) { 
+            if (addInvocation) { 
     			if (!invocation.from.equals(invocation.to) && (theModel.classes.containsKey(invocation.to) || theModel.libraries.containsKey("xLibraries." + invocation.to))) {
 	    			addToModel(invocation);
 					if (continueChaining) { 
@@ -780,7 +807,7 @@ class FamixCreationPostProcessor {
     	}
     	// 2) Find out if there are more methods with the same name of the invoked class. If only one method is found, then return this method.  
     	String methodName = invokedMethodName.substring(0, invokedMethodName.indexOf("(")); // Methodname without signature
-    	 searchKey = invokedClassName + "." + methodName;
+    	searchKey = invokedClassName + "." + methodName;
     	if (sequencesPerMethod.containsKey(searchKey)){
     		ArrayList<FamixMethod> methodsList = sequencesPerMethod.get(searchKey);
     		if (methodsList.size() == 0) {
@@ -852,7 +879,7 @@ class FamixCreationPostProcessor {
     	    			return matchingMethods1.get(0);
     			}
     		}
-		}
+		} 
     	return result; 
     }
     

@@ -117,7 +117,7 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void AccessInnerEnumeration(){
+	public void AccessEnumerationInner(){
 		String fromModule = "domain.direct.violating.AccessInnerEnumeration";
 		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.InnerEnumeration";
 		ArrayList<String> typesToFind = new ArrayList<String>();
@@ -126,12 +126,11 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void AccessAndInheritanceFromInnerClass(){
-		String fromModule = "domain.direct.violating.CallFromOuterClass.CallingInnerClass";
+	public void AccessFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
 		String toModule = "domain.direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -290,7 +289,7 @@ public class Java_AccuracyTestDependencyDetection {
 
 	@Test
 	public void CallFromInnerClass(){
-		String fromModule = "domain.direct.violating.CallFromOuterClass.CallingInnerClass";
+		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
 		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
@@ -510,6 +509,14 @@ public class Java_AccuracyTestDependencyDetection {
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
+
+	@Test
+	public void InheritanceExtendsFullPath(){
+		String fromModule = "domain.direct.violating.InheritanceExtendsFullPath";
+		String toModule = "technology.direct.dao.HistoryDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Inheritance");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
 
 	@Test
 	public void InheritanceImplementsInterface(){
@@ -811,6 +818,15 @@ public class Java_AccuracyTestDependencyDetection {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+	}
+
+	@Test
+	public void InheritanceFromInnerClass(){
+		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "domain.direct.Base";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Inheritance");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	@Test
