@@ -1,4 +1,4 @@
-package domain.direct.allowed;
+package domain.direct.violating;
 
 import fi.foyt.foursquare.api.FoursquareApi;
 

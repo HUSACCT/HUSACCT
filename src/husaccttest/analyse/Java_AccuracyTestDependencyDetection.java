@@ -279,6 +279,24 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructorInnerClassDefault(){
+		String fromModule = "domain.direct.violating.CallConstructorInnerClassDefault";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallConstructorInnerClassFromOtherInnerClass(){
+		String fromModule = "technology.direct.dao.CallInstanceOuterClassDAO.TestConstructorCallOfInnerClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void CallConstructorLibraryClass(){
 		String fromModule = "domain.direct.violating.CallConstructorLibraryClass";
 		String toModule = "xLibraries.fi.foyt.foursquare.api.FoursquareApi";

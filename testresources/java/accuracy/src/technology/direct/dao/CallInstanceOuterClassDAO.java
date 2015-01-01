@@ -20,10 +20,27 @@ public class CallInstanceOuterClassDAO {
         }
     }
     
+    public void callConstructorInnerClass() {
+    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
+    }
+
+    public void callDefaultConstructorInnerClass() {
+    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
+    }
+    
     // inner class implements the Iterator pattern
     public class CallInstanceInnerClassDAO {
         // start stepping through the array from the beginning
         private int next = 0;
+        private TestConstructorCallOfInnerClass otherInnerClass;
+        private String text;
+        
+        public CallInstanceInnerClassDAO(String s) {
+        	this.text = s;
+        }
+        public CallInstanceInnerClassDAO(TestConstructorCallOfInnerClass otherInner) {
+        	this.otherInnerClass = otherInner;
+        }
         
         public boolean hasNext() {
             return true ;
@@ -36,6 +53,7 @@ public class CallInstanceOuterClassDAO {
             next += 2;
             return retValue;
         }
+        
     }
     
     public enum InnerEnumeration {
@@ -53,5 +71,9 @@ public class CallInstanceOuterClassDAO {
 			return outer; 
 		} 
 	} 
+    
+    public class TestConstructorCallOfInnerClass {
+    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO(this);
+    }
 
 }

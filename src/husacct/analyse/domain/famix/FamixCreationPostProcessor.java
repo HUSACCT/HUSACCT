@@ -351,8 +351,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 // Test helpers
-            	if (association.from.contains("husacct.graphics.presentation.figures.ParentFigure")) {
-            		if (association.lineNumber == 135) {
+            	if (association.from.contains("husacct.analyse.infrastructure.antlr.java.JavaParser")) {
+            		if (association.lineNumber == 2723) {
     	    				boolean breakpoint = true;
         			}
             	} //
@@ -528,6 +528,13 @@ class FamixCreationPostProcessor {
 	    	            	// Check if the method is a constructor call
 	    	            	String className = association.to.substring(0, association.to.indexOf("("));
 		                    toString = findClassInImports(association.from, className);
+		                    if (toString.equals("")) {
+		                    	// Check if the method is a constructor of an inner class
+		        	        	String searchKey = association.from + "." + className;
+		        		    	if (theModel.classes.containsKey(searchKey)){
+		        		    		toString = searchKey;
+		        		    	}
+		                    }
 		                    if (!toString.equals("")) {
 		    	            		association.to = toString;
 		    	            		association.type = "InvocMethod";
@@ -701,17 +708,17 @@ class FamixCreationPostProcessor {
 	                    }
 	    			}
 	            }
-            	// 3.1) Determine if the second substring is a default constructor of an inner class. 
+            	// 3.1) Determine if the second substring is a constructor of an inner class. 
 	        	String methodName = nextToString.substring(0, nextToString.indexOf("(")); // Methodname without signature
 	        	String searchKey = originalToType + "." + methodName;
 		    	if (!methodFound && theModel.classes.containsKey(searchKey)){
-	            	// This current association should be added as a call dependency on the original to-type
 	    			invocation.to = searchKey;
 	    			invocation.type = "InvocConstructor";
 	    			invocation.invocationName = nextToString;
 	    			addInvocation = true;
 	    			continueChaining = false;
-		    	} else { // The current association should be added as a call dependency on the original to-type
+		    	} else { 
+		    		// The current association should be added as a call dependency on the original to-type
 	    			invocation.to = originalToType;
 	    			invocation.type = "InvocMethod";
 	    			invocation.invocationName = nextToString;

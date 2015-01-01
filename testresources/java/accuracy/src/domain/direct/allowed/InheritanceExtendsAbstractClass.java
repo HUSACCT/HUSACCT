@@ -1,4 +1,4 @@
-package domain.direct.allowed;
+package domain.direct.violating;
 
 import technology.direct.dao.FriendsDAO;
 
