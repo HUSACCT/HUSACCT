@@ -132,6 +132,9 @@ public class JavaParameterGenerator extends JavaGenerator {
         for (ArrayList<Object> object : saveParameterQueue) {
             ArrayList<Object> currentParam = object;
             String type = (String) currentParam.get(0);
+            if (type.endsWith(".")) {
+            	type = type.substring(0, type.length() - 1); //deleting the last point
+            }
             String name = (String) currentParam.get(1);
             ArrayList<String> types = (ArrayList<String>) currentParam.get(2);
             this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;

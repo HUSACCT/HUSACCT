@@ -140,6 +140,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	            for (int currentChild = 1; currentChild < childCount; currentChild++) {
 		        	returnValue += "." + getCompleteToString((CommonTree) tree.getChild(currentChild));
 	            }
+	            if (returnValue.endsWith(".")) {
+	            	returnValue = returnValue.substring(0, returnValue.length() - 1); //deleting the last point
+	            }
 	        	break;
 	        case JavaParser.EXPR: case JavaParser.PARENTESIZED_EXPR:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
@@ -202,13 +205,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
     }
 
     private void createPropertyOrFieldInvocationDomainObject() {
-        if ((to != null) && (to != "") && !SkippedTypes.isSkippable(to)) {
+        if ((to != null) && (to.trim() != "") && !SkippedTypes.isSkippable(to)) {
             modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
         }
     }
     
     private void createPropertyOrFieldInvocationDomainObject(String invocationTo, CommonTree tree) {
-        if ((invocationTo != null) && (invocationTo != "") && !SkippedTypes.isSkippable(invocationTo)) {
+        if ((invocationTo != null) && (invocationTo.trim() != "") && !SkippedTypes.isSkippable(invocationTo)) {
             modelService.createPropertyOrFieldInvocation(from, invocationTo, tree.getLine(), invocationTo, belongsToMethod, invocationTo);
         }
     }

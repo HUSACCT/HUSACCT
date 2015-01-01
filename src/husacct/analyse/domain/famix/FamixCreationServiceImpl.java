@@ -297,7 +297,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             String invocationName, String belongsToMethod, String nameOfInstance, String type) {
 
         FamixInvocation famixInvocation = new FamixInvocation();
-        famixInvocation.type = "InvocMethod";
+        famixInvocation.type = type; // "InvocMethod" or "InvocConstructor" 
         famixInvocation.from = from;
         famixInvocation.lineNumber = lineNumber;
         famixInvocation.to = to;
