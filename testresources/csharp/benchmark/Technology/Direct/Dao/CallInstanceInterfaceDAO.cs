@@ -1,6 +1,6 @@
 namespace Technology.Direct.Dao
 {
-	public interface CallInstanceInterfaceDAO
+	interface CallInstanceInterfaceDAO
 	{
 		void InterfaceMethod();
 	}

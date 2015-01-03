@@ -1,6 +1,6 @@
 using FI.Foyt.Foursquare.Api.FoursquareApi;
 
-namespace Domain.Direct.Allowed
+namespace Domain.Direct.Violating
 {
 	public class CallConstructorLibraryClass
 	{

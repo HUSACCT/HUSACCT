@@ -121,8 +121,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void AccessEnumerationInner(){
-		String fromModule = "domain.direct.violating.AccessInnerEnumeration";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.InnerEnumeration";
+		String fromModule = "Domain.Direct.Violating.AccessInnerEnumeration";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.InnerEnumeration";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -191,8 +191,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void AccessFromInnerClass(){
-		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "domain.direct.Base";
+		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "Domain.Direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -274,8 +274,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void CallConstructorInnerClass(){
-		String fromModule = "domain.direct.violating.CallConstructorInnerClass";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromModule = "Domain.Direct.Violating.CallConstructorInnerClass";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -292,8 +292,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void CallFromInnerClass(){
-		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -318,9 +318,27 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructorInnerClassDefault(){
+		String fromModule = "Domain.Direct.Violating.CallConstructorInnerClassDefault";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallConstructorInnerClassFromOtherInnerClass(){
+		String fromModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.TestConstructorCallOfInnerClass";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void CallInstanceInnerInterface(){
-		String fromModule = "domain.direct.violating.CallInstanceInnerInterface";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
+		String fromModule = "Domain.Direct.Violating.CallInstanceInnerInterface";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -390,8 +408,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void DeclarationInnerClass(){
-		String fromModule = "domain.direct.Base";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromModule = "Domain.Direct.Base";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -399,8 +417,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void DeclarationOuterClassByInnerClass(){
-		String fromModule = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO";
+		String fromModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.StaticNestedClass";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -508,8 +526,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void InheritanceExtendsFullPath(){
-		String fromModule = "domain.direct.violating.InheritanceExtendsFullPath";
-		String toModule = "technology.direct.dao.HistoryDAO";
+		String fromModule = "Domain.Direct.Violating.InheritanceExtendsFullPath";
+		String toModule = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
@@ -818,8 +836,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void InheritanceFromInnerClass(){
-		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "domain.direct.Base";
+		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
+		String toModule = "Domain.Direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));

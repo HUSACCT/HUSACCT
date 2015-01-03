@@ -172,11 +172,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 			}
 		}
 		if (!bodyString.equals("")) {
-			if (!argumentString.equals("")) {
-				returnValue = bodyString + "(" + argumentString + ")";
-			} else {
-				returnValue = bodyString;
-			}
+			returnValue = bodyString + "(" + argumentString + ")";
 		}
     	return returnValue;
     }

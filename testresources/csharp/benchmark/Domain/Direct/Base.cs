@@ -12,9 +12,7 @@ namespace Domain.Direct
 
 		protected internal CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerDao;
 
-		protected CallInstanceInnerClassDAO innerDao;
-
-		protected CallInstanceInnerInterfaceDAO innerInterfaceDao;		
+		protected internal CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO innerInterfaceDao;		
 		
 		protected internal CallInstanceInterfaceDAO interfaceDao;
 

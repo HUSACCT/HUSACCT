@@ -31,7 +31,17 @@ namespace Technology.Direct.Dao
 		{
 			private readonly CallInstanceOuterClassDAO _enclosing;
 			private int next = 0;
+        		private TestConstructorCallOfInnerClass otherInnerClass;
+        		private String text;
+        
+        		public CallInstanceInnerClassDAO(String s) {
+        			this.text = s;
+        		}
 
+        		public CallInstanceInnerClassDAO(TestConstructorCallOfInnerClass otherInner) {
+        			this.otherInnerClass = otherInner;
+        		}
+        
 			// start stepping through the array from the beginning
 			public virtual bool HasNext()
 			{
@@ -54,19 +64,22 @@ namespace Technology.Direct.Dao
 			}
 		}
 
-    		public enum InnerEnumeration {ONE,TWO,THREE,FOUR};
+		public enum InnerEnumeration {ONE,TWO,THREE,FOUR};
 
-    		public interface CallInstanceInnerInterfaceDAO {
-    			public void InterfaceMethod();
+    		interface CallInstanceInnerInterfaceDAO {
+    			void InterfaceMethod();
     		}
 
     		public class StaticNestedClass { 
-    			CallInstanceOuterClassDAO outer; 
+    			private CallInstanceOuterClassDAO outer; 
  
 			public CallInstanceOuterClassDAO getOuter() { 
-			return outer; 
+				return outer; 
 			} 
-		} 
-    
+		}
+
+    		public class TestConstructorCallOfInnerClass {
+    			CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO(this);
+    		} 
 	}
 }
