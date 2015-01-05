@@ -18,6 +18,10 @@ class JavaAttributeAndLocalVariableGenerator {
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
+        /* Test helpers
+    	if (belongsToClass.contains("domain.direct.allowed.CallFromInnerClass")) {
+    				boolean breakpoint = true;
+    	} */
         this.belongsToClass = belongsToClass;
         startFiltering(attributeTree, belongsToClass);
         createAttributeObject();

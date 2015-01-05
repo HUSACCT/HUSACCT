@@ -1,4 +1,4 @@
-package domain.direct.violating;
+package domain.direct.allowed;
 
 import technology.direct.dao.VenueDAO;
 public class DeclarationReturnType {

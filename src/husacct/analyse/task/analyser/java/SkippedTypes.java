@@ -9,7 +9,8 @@ enum SkippedTypes {
     BOOLEAN("boolean"),
     OBJECT("Object"),
     BYTE("byte"),
-    CHAR("char");
+    CHAR("char"),
+    CLASS("Class");
     private final String type;
 
     private SkippedTypes(String type) {

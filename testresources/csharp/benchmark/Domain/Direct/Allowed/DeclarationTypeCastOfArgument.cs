@@ -1,4 +1,4 @@
-namespace Domain.Direct.Violating
+namespace Domain.Direct.Allowed
 {
 	public class DeclarationTypeCastOfArgument
 	{

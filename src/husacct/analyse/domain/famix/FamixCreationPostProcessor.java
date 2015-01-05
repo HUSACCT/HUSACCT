@@ -351,8 +351,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("Domain.Direct.Violating.CallConstructor")) {
-            		if (association.lineNumber == 7) {
+            	if (association.from.contains("domain.direct.violating.CallConstructorInnerClass")) {
+            		if (association.lineNumber == 8) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -369,31 +369,34 @@ class FamixCreationPostProcessor {
                     	if (association.type.startsWith("Invoc")) {
                     		typeIsAccess = false;
                     	}
-                 	} else { // Check if a part of association.to refers to an existing class or library 
-                        if (association.to.contains(".")) {
+                 	} else { // Check if a part of association.to refers to an existing class or library.  
+                        if (association.to.contains(".") && (association instanceof FamixInvocation)) {
 			            	String[] allSubstrings = association.to.split("\\.");
 			            	toString = allSubstrings[0];
+			            	boolean isMethodInvocation = false;
 		                    for (int i = 1; i < allSubstrings.length ; i++) {
 		                    	toString += "."+ allSubstrings[i];
 		                    	if (toString.contains("(")) {
-		                    		typeIsAccess = false;
 		                    		toString = toString.substring(0, toString.indexOf("("));
+		                    		isMethodInvocation = true;
 		                    	}
-		                    	if (theModel.classes.containsKey(toString) || theModel.libraries.containsKey("xLibraries." + toString)) {
-		                    		if ((association instanceof FamixInvocation)) {
-		                                theInvocation = (FamixInvocation) association;
-		                                association.to = toString;
-			                    		toExists = true;
-					                    // Put the remainder in a variable; needed to create a separate indirect association later on remainder substrings
-			                    		if (allSubstrings.length > i + 1) {
-				                    		chainingInvocation = true;
-			                    			i++;
-				                    		toRemainderChainingInvocation = allSubstrings[i];
-						                    for (int j = i + 1; j < allSubstrings.length ; j++) {
-						                    	toRemainderChainingInvocation = toRemainderChainingInvocation + "." + allSubstrings[j];
-						                    }
-			                    		}
+		                    	if (theModel.classes.containsKey(toString)) {
+	                                association.to = toString;
+		                    		toExists = true;
+	                                theInvocation = (FamixInvocation) association;
+		                        	if (isMethodInvocation) {
+		                        		typeIsAccess = false;
+		                        	}
+				                    // Put the remainder in a variable; needed to create a separate indirect association later on remainder substrings
+		                    		if (allSubstrings.length > i + 1) {
+			                    		chainingInvocation = true;
+		                    			i++;
+			                    		toRemainderChainingInvocation = allSubstrings[i];
+					                    for (int j = i + 1; j < allSubstrings.length ; j++) {
+					                    	toRemainderChainingInvocation = toRemainderChainingInvocation + "." + allSubstrings[j];
+					                    }
 		                    		}
+		                    		break;
 		                    	}
 		                    }
                         }
@@ -637,8 +640,8 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.equals("Domain.Direct.Violating.CallConstructor")){
-        		if (invocation.lineNumber == 7) {
+        	if (invocation.from.equals("domain.direct.violating.CallConstructorInnerClass")){
+        		if (invocation.lineNumber == 8) {
         			boolean breakpoint = true; 
     			}
         	} */
@@ -739,7 +742,6 @@ class FamixCreationPostProcessor {
 	    			invocation.type = "InvocConstructor";
 	    			invocation.invocationName = nextToString;
 	    			addInvocation = true;
-	    			toTypeNewIndirectInvocation = searchKey2;
 		    	} else { // If so, nextToString is a method of originalToType.
 	    			invocation.to = originalToType;
 	    			invocation.type = "InvocMethod";

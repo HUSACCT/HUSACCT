@@ -1,4 +1,4 @@
-package domain.direct.violating;
+package domain.direct.allowed;
 
 public class CallFromInnerClass {
     // create an array

@@ -25,7 +25,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        boolean walkThroughChildren = true;
 
 	        /* Test helper
-	       	if (this.belongsToClass.contains("domain.direct.violating.CallConstructorInnerClass")){
+	       	if (this.belongsToClass.contains("domain.direct.allowed.CallFromInnerClass")){
 	    		if (belongsToMethod.contains("CallConstructorInnerClass()")) {
 	    				boolean breakpoint1 = true;
 	    		}

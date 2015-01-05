@@ -1,8 +1,8 @@
-package domain.direct.violating;
+package domain.direct.allowed;
 
 import technology.direct.dao.CallInstanceOuterClassDAO;
 
-public class CallConstructorInnerClass extends Base{
+public class CallConstructorInnerClass{
 	
 	public CallConstructorInnerClass() {
 		CallInstanceOuterClassDAO.CallInstanceInnerClassDAO v = new CallInstanceOuterClassDAO.CallInstanceInnerClassDAO("test");
