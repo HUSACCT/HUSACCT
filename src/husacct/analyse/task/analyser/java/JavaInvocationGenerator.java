@@ -30,7 +30,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         	String invocTo = getCompleteToString(commonTree);
         	this.to = invocTo;
         	this.nameOfInstance = to;
-            if (to != null && to != "" && !SkippedTypes.isSkippable(to)) {
+            if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocConstructor");
             }
         }
@@ -44,7 +44,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         	this.to = invocTo;
         	this.nameOfInstance = to;
         	this.invocationName = to;
-            if (to != null && to != "" && !SkippedTypes.isSkippable(to)) {
+            if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocMethod");
             }
         }
@@ -203,15 +203,15 @@ public class JavaInvocationGenerator extends JavaGenerator {
     	}
         return returnValue;
     }
-
+    
     private void createPropertyOrFieldInvocationDomainObject() {
-        if ((to != null) && (to.trim() != "") && !SkippedTypes.isSkippable(to)) {
+        if ((to != null) && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
             modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
         }
     }
     
     private void createPropertyOrFieldInvocationDomainObject(String invocationTo, CommonTree tree) {
-        if ((invocationTo != null) && (invocationTo.trim() != "") && !SkippedTypes.isSkippable(invocationTo)) {
+        if ((invocationTo != null) && !invocationTo.trim().equals("") && !SkippedTypes.isSkippable(invocationTo)) {
             modelService.createPropertyOrFieldInvocation(from, invocationTo, tree.getLine(), invocationTo, belongsToMethod, invocationTo);
         }
     }

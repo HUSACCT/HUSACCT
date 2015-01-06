@@ -28,7 +28,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
         	this.to = invocTo;
         	this.nameOfInstance = to;
         	this.invocationName = to;
-            if (to != null && to != "" && !SkippableTypes.isSkippable(to)) {
+            if (to != null && !to.equals("") && !SkippableTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocMethod");
             }
         }
@@ -101,7 +101,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(CSharpParser.TYPE);
 	        	if (typeChild != null) {
 	        		String typeCastTo = getCompleteToString(typeChild);
-        	        if ((typeCastTo != null) && (typeCastTo != "") && !SkippableTypes.isSkippable(typeCastTo)) {
+        	        if ((typeCastTo != null) && !typeCastTo.equals("") && !SkippableTypes.isSkippable(typeCastTo)) {
         	            modelService.createDeclarationTypeCast(from, typeCastTo, typeChild.getLine());
         	        }
 	        	}
@@ -178,7 +178,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
     }
     
     private void createPropertyOrFieldInvocationDomainObject(String invocationTo, int line) {
-        if ((invocationTo != null) && (invocationTo != "") && !SkippableTypes.isSkippable(invocationTo)) {
+        if ((invocationTo != null) && !invocationTo.equals("") && !SkippableTypes.isSkippable(invocationTo)) {
             modelService.createPropertyOrFieldInvocation(from, invocationTo, line, invocationTo, belongsToMethod, invocationTo);
         }
     }

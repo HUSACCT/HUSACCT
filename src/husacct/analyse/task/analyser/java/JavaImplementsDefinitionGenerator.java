@@ -7,10 +7,14 @@ import org.antlr.runtime.tree.Tree;
 public class JavaImplementsDefinitionGenerator extends JavaGenerator {
 
     private String from;
-    private String to = "";
+    private String to;
     private int lineNumber;
 
     public void generateToDomain(CommonTree tree, String belongsToClass) {
+    	this.from = "";
+    	this.to = "";
+    	this.lineNumber = 0;
+    	
         from = belongsToClass;
         createImplementsDetails(tree);
     }
@@ -39,7 +43,7 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator {
 
     private void createDomainObject() {
         to = to.substring(0, to.length() - 1); 
-        if (!SkippedTypes.isSkippable(to)) {
+        if ((to != null) && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
             modelService.createInheritanceDefinition(from, to, lineNumber);
         }
     }

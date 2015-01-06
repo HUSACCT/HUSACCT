@@ -14,6 +14,11 @@ class JavaExceptionGenerator extends JavaGenerator {
     private int lineNumber;
 
     public void generateToDomain(CommonTree tree, String theClass) {
+    	this.fromClass = "";
+    	this.exceptionClass = "";
+    	this.exceptionType = "";
+    	this.lineNumber = 0;
+    	
         this.lineNumber = tree.getLine();
         this.fromClass = theClass;
 
@@ -27,7 +32,9 @@ class JavaExceptionGenerator extends JavaGenerator {
             this.exceptionType = "throws";
         }
 
-        modelService.createException(fromClass, exceptionClass, lineNumber, exceptionType);
+        if (!fromClass.equals("") && !exceptionClass.equals("")) {
+        	modelService.createException(fromClass, exceptionClass, lineNumber, exceptionType);
+        }
     }
 
     private void setExceptionClass(CommonTree tree) {

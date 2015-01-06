@@ -351,8 +351,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("domain.direct.violating.CallConstructorInnerClass")) {
-            		if (association.lineNumber == 8) {
+            	if (association.from.contains("domain.direct.allowed.CallFromInnerClass")) {
+            		if (association.lineNumber == 6) {
     	    				boolean breakpoint = true;
         			}
             	} */

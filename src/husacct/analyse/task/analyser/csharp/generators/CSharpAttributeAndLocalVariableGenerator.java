@@ -39,7 +39,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	private void createAttributeObject() {
-		if ((declareType != null) && (declareType != "")) {
+		if ((declareType != null) && !declareType.equals("")) {
 			if(SkippableTypes.isSkippable(declareType)){
 				modelService.createAttributeOnly(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
 	        } else {
@@ -50,7 +50,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	private void createLocalVariableObject() {
-		if ((declareType != null) && (declareType != "")) {
+		if ((declareType != null) && !declareType.equals("")) {
 			if(SkippableTypes.isSkippable(declareType)){
 				modelService.createLocalVariableOnly(packageAndClassName, declareType, name, packageAndClassName + "." + belongsToMethod + "." + name, lineNumber, belongsToMethod);
 	        } else {

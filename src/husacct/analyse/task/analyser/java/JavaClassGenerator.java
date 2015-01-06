@@ -48,7 +48,9 @@ class JavaClassGenerator extends JavaGenerator {
             	this.isAbstract = isAbstract(modifierList);
                 this.visibility = getVisibillityFromTree(modifierList);
             }
-            modelService.createClass(sourceFilePath, nrOfLinesOfCode, uniqueName, name, belongsToPackage, isAbstract, isNestedClass, belongsToClass, visibility, isInterface);
+            if (!name.equals("") && !belongsToPackage.equals("")) {
+            	modelService.createClass(sourceFilePath, nrOfLinesOfCode, uniqueName, name, belongsToPackage, isAbstract, isNestedClass, belongsToClass, visibility, isInterface);
+            }
             return uniqueName;
         } else {
         	return "";
