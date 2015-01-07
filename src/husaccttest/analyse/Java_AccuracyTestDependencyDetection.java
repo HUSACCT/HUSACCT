@@ -306,6 +306,14 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructorSuper(){
+		String fromModule = "domain.direct.violating.CallConstructorSuper";
+		String toModule = "technology.direct.dao.HistoryDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
+
+	@Test
 	public void CallFromInnerClass(){
 		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
 		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
@@ -358,6 +366,14 @@ public class Java_AccuracyTestDependencyDetection {
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
+
+	@Test
+	public void CallInstanceOfSuperOverridden(){
+		String fromModule = "domain.direct.violating.CallInstanceOfSuperOverridden";
+		String toModule = "technology.direct.dao.HistoryDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
 
 	@Test
 	public void CallInstanceSuperClass(){

@@ -23,6 +23,12 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	int lineNumber;
 
 	public void generateMethodToDomain(CommonTree methodTree, String currentUniqueClassName) {
+		/* Test helper
+       	if (currentUniqueClassName.equals("Domain.Direct.Violating.CallConstructorSuper")){
+//    		if (child.getLine() == 8) {
+    				boolean breakpoint1 = true;
+//    		}
+    	} */
 		belongsToClass = currentUniqueClassName;
 		accessControlQualifier = getVisibility(methodTree);
 		lineNumber = methodTree.getLine();

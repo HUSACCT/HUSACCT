@@ -25,6 +25,7 @@ class FamixCreationPostProcessor {
     private FamixModel theModel;
     private HashMap<String, ArrayList<FamixImport>> importsPerEntity;
     private HashMap<String, ArrayList<FamixMethod>> sequencesPerMethod;
+    private HashMap<String, String> firstSuperClassPerClass; // get(uniqueClassName) will return the uniqueName of the internal base/super class (no interface, no external class).
     private HashMap<String, HashSet<String>> inheritanceAssociationsPerClass;
     private List<FamixAssociation> indirectAssociations = new ArrayList<FamixAssociation>();
     private List<FamixInvocation> waitingDerivedAssociations = new ArrayList<FamixInvocation>();
@@ -242,7 +243,9 @@ class FamixCreationPostProcessor {
 		FamixAssociation foundInheritance;
 		HashSet<String> foundInheritanceList;
 		HashSet<String> alreadyIncludedInheritanceList;
+		firstSuperClassPerClass = new HashMap<String, String>(); 
 		inheritanceAssociationsPerClass = new HashMap<String, HashSet<String>>();
+		
 		try{
 			Iterator<FamixAssociation> iterator = theModel.waitingAssociations.iterator();
 	        for (Iterator<FamixAssociation> i=iterator ; i.hasNext();) {
@@ -266,61 +269,67 @@ class FamixCreationPostProcessor {
 			        if (theModel.classes.containsKey(uniqueNameFrom)) {
 			        	fromExists = true;
 			        }
-            	}
-            	if (inheritanceAssociation && fromExists) {
-			        if ((association.to != null) && (!association.to.equals(""))) {
-			        	toHasValue = true;
-				        if (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)) {
-				        	toExists = true;
+	            	if (fromExists) {
+				        if ((association.to != null) && (!association.to.equals(""))) {
+				        	toHasValue = true;
+					        if (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)) {
+					        	toExists = true;
+					        }
 				        }
-			        }
-            	}
-		        // If association.to is not a unique name of an existing type, try to replace it by the complete unique name.
-	        	// Determine the type of association.to, first based on imports, and second based on package contents.
-	        	if (inheritanceAssociation && fromExists && !toExists && toHasValue) {
-                    String to = findClassInImports(association.from, association.to);
-                    if (!to.equals("")) {
-                        association.to = to;
-                    }
-                    else {
-	                	String belongsToPackage = theModel.classes.get(association.from).belongsToPackage;
-	                    to = findClassInPackage(association.to, belongsToPackage);
-	                    if (!to.equals("")) { // So, in case association.to shares the same package as association.from 
-	                        association.to = to;
-	                    }
-                    }
-    		        if (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)) {
-    		        	toExists = true;
-    		        }
-            	}
-	        	if (inheritanceAssociation && fromExists && toExists && !theModel.associations.contains(association)) {
-		        	// Add the inheritance association to the FamixModel, but only if to and from are equal. 
-	            	if (!association.from.equals(association.to)) { 
-	            		addToModel(association);
-	            	}
+				        // If association.to is not a unique name of an existing type, try to replace it by the complete unique name.
+			        	// Determine the type of association.to, first based on imports, and second based on package contents.
+			        	if (!toExists && toHasValue) {
+		                    String to = findClassInImports(association.from, association.to);
+		                    if (!to.equals("")) {
+		                        association.to = to;
+		                    }
+		                    else {
+			                	String belongsToPackage = theModel.classes.get(association.from).belongsToPackage;
+			                    to = findClassInPackage(association.to, belongsToPackage);
+			                    if (!to.equals("")) { // So, in case association.to shares the same package as association.from 
+			                        association.to = to;
+			                    }
+		                    }
+		    		        if (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)) {
+		    		        	toExists = true;
+		    		        }
+		            	}
+			        	if (toExists && !association.from.equals(association.to)) {
+				        	// Add the inheritance association to the FamixModel 
+			            	if (!theModel.associations.contains(association)) { 
+			            		addToModel(association);
+			            	}
 
-	            	// Fill the HashMap inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 
-	            	alreadyIncludedInheritanceList = null;
-	            	foundInheritance = null;
-	            	foundInheritanceList = null;
-	            	alreadyIncludedInheritanceList = null;
-	            	foundInheritance = association;
-	            	if(inheritanceAssociationsPerClass.containsKey(uniqueNameFrom)){
-	            		alreadyIncludedInheritanceList = inheritanceAssociationsPerClass.get(uniqueNameFrom);
-	            		if (!alreadyIncludedInheritanceList.contains(association.to)) {
-	            			alreadyIncludedInheritanceList.add(foundInheritance.to);
-	            		}
-	            		inheritanceAssociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
+			            	//Add the inheritance to hashmap , if association-to refers to an internal class (not an interface, not an external class).
+			        		if (theModel.classes.containsKey(association.to)) {
+				        		FamixClass superClass = theModel.classes.get(association.to);
+				        		if (!superClass.isInterface) {
+				        			firstSuperClassPerClass.put(association.from, association.to);
+				        		}
+			            	}
+			            	
+			            	// Fill the HashMap inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 
+			            	foundInheritance = null;
+			            	foundInheritanceList = null;
+			            	alreadyIncludedInheritanceList = null;
+			            	foundInheritance = association;
+			            	if(inheritanceAssociationsPerClass.containsKey(uniqueNameFrom)){
+			            		alreadyIncludedInheritanceList = inheritanceAssociationsPerClass.get(uniqueNameFrom);
+			            		if (!alreadyIncludedInheritanceList.contains(association.to)) {
+			            			alreadyIncludedInheritanceList.add(foundInheritance.to);
+			            		}
+			            		inheritanceAssociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
+			            	}
+			            	else{
+				            	foundInheritanceList = new HashSet<String>();
+				            	foundInheritanceList.add(foundInheritance.to);
+				            	inheritanceAssociationsPerClass.put(uniqueNameFrom, foundInheritanceList);
+			            	}
+			        	}
 	            	}
-	            	else{
-		            	foundInheritanceList = new HashSet<String>();
-		            	foundInheritanceList.add(foundInheritance.to);
-		            	inheritanceAssociationsPerClass.put(uniqueNameFrom, foundInheritanceList);
-	            	}
-	            	
 	            	// Remove from waitingAssociations afterwards, to enhance the performance.    	
 			        i.remove();
-	        	}
+            	}
 	        }
 		} catch(Exception e) {
 	        this.logger.debug(new Date().toString() + "Exception may result in incomplete dependency list. Exception:  " + e);
@@ -360,7 +369,16 @@ class FamixCreationPostProcessor {
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {
             		fromExists = true;
-            	} 
+            	}
+            	// Check if association.to contains keyword "superBaseClass". If so, replace it by the name of the super class.
+            	if (association.to != null && association.to.contains("superBaseClass")) {
+            		String superClass = indirectAssociations_findSuperClass_FirstAbove(association.from);
+            		if (!superClass.equals("")) {
+            			toString = association.to.replace("superBaseClass", superClass);
+                		association.to = toString;
+            		}
+            	}
+            	
             	// Check if association.to (or a part of it) refers to an existing class or library
                 if ((association.to != null) && !association.to.equals("") && !association.to.trim().equals(".")){ 
                 	toHasValue = true;
@@ -1087,6 +1105,14 @@ class FamixCreationPostProcessor {
     		} 
     	}
     	return result; 
+    }
+    
+    private String indirectAssociations_findSuperClass_FirstAbove(String uniqueClassName) {
+    	String result = "";
+    	if (firstSuperClassPerClass.containsKey(uniqueClassName)) { 
+    		result = firstSuperClassPerClass.get(uniqueClassName);
+    	}
+    	return result;     	
     }
     
 	private FamixInvocation indirectAssociations_AddIndirectInvocation(String type, String from, String to, int lineNumber, String belongsToMethod, String invocationName, String nameOfInstance, boolean isIndirect) {

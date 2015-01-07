@@ -290,6 +290,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
+	/* @Test
+	public void CallConstructorSuper(){
+		String fromModule = "Domain.Direct.Violating.CallConstructorSuper";
+		String toModule = "Technology.Direct.Dao.HistoryDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
+		*/
+
 	@Test
 	public void CallFromInnerClass(){
 		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
@@ -361,6 +370,14 @@ public class CSharp_AccuracyTestDependencyDetection {
 		typesToFind.add("Call");
 		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
+
+	@Test
+	public void CallInstanceOfSuperOverridden(){
+		String fromModule = "Domain.Direct.Violating.CallInstanceOfSuperOverridden";
+		String toModule = "Technology.Direct.Dao.HistoryDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
 
 	@Test
 	public void CallInstanceSuperClass(){

@@ -80,6 +80,9 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	        case CSharpParser.THIS: 
 	        	returnValue = "";
 	            break;
+	        case CSharpParser.BASE: 
+	        	returnValue = "superBaseClass";
+	            break;
 	        case CSharpParser.INT: case CSharpParser.INTEGER_LITERAL: case CSharpParser.Decimal_integer_literal: //?
 	        	returnValue += "int";
 	            break;
@@ -130,7 +133,11 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		for (int i = 0; i < tree.getChildCount(); i++) {
 			String argTo = getCompleteToString((CommonTree) tree.getChild(i));
 			if (tree.getChild(i).getType() != CSharpParser.ARGUMENT) {
-				bodyString = argTo;
+				if (i == 0) {
+					bodyString = argTo;
+				} else {
+					bodyString = bodyString + "." + argTo;
+				}
 			} else {
 				if (argTo.contains(".") || argTo.contains(",")) { // Currently, arguments with a "." or "," disable the indirect dependency detection algorithm. In case of future improvements: create a FamixArgument object per argument. 
 					argTo = "";

@@ -22,8 +22,8 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
             boolean walkThroughChildren = true;
 
 			/* Test helper
-	       	if (this.packageAndClassName.equals("Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod")){
-//	    		if (child.getLine() == 44) {
+	       	if (this.packageAndClassName.equals("Domain.Direct.Violating.CallConstructorSuper")){
+//	    		if (child.getLine() == 8) {
 	    				boolean breakpoint1 = true;
 //	    		}
 	    	} */

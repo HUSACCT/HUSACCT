@@ -120,7 +120,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	    		returnValue += left2 + "(" + right2 + ")";
 	            break;
 	        case JavaParser.SUPER_CONSTRUCTOR_CALL: 
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+	        	returnValue += "superBaseClass" + "(" + getCompleteToString((CommonTree) tree.getChild(0)) + ")";
 	            break;
 	        case JavaParser.STATIC_ARRAY_CREATOR: 
 	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == JavaParser.IDENT))) {
@@ -165,8 +165,11 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        case JavaParser.IDENT:
 	        	returnValue = tree.getText();
 	            break;
-	        case JavaParser.THIS: case JavaParser.SUPER:
+	        case JavaParser.THIS:
 	        	returnValue = "";
+	            break;
+	        case JavaParser.SUPER:
+	        	returnValue = "superBaseClass";
 	            break;
 	        case JavaParser.DECIMAL_LITERAL: case JavaParser.INT: 
 	        	returnValue += "int";
