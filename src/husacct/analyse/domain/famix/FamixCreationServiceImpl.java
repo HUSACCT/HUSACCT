@@ -177,7 +177,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "DeclarationVariableWithinMethod";
+        fAssocation.type = "DeclarationLocalVariable";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
     }

@@ -11,6 +11,7 @@ public class JavaLoopGenerator extends JavaGenerator {
     private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
     private String belongsToClass;
     private String belongsToMethod;
+    private String variableTypeForLoop;
     JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
     JavaInvocationGenerator javaInvocationGenerator;
     JavaBlockScopeGenerator javaBlockScopeGenerator;
@@ -18,6 +19,7 @@ public class JavaLoopGenerator extends JavaGenerator {
     public void generateToDomainFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod) {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
+    	variableTypeForLoop = "";
         javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
         if (loopTree.getType() == JavaParser.FOR || loopTree.getType() == JavaParser.WHILE) {
             walkForAndWhileAST(loopTree);
@@ -63,6 +65,31 @@ public class JavaLoopGenerator extends JavaGenerator {
             child = tree.getChild(childCount);
             int treeType = child.getType();
             switch(treeType) {
+            case JavaParser.VAR_DECLARATION:
+                javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
+                deleteTreeChild(child);
+                break;
+            case JavaParser.TYPE:
+            	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+                if (foundType != null) {
+                    this.variableTypeForLoop = foundType;
+                }
+                deleteTreeChild(child);
+                break;
+            case JavaParser.IDENT:
+            	String foundName = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+            	int lineNumber = 0;
+                if (foundName != null) {
+                    lineNumber = child.getLine();
+                } else {
+                	foundName = "";
+               	}
+                if (!foundName.trim().equals("") && !variableTypeForLoop.trim().equals("")) {
+                	javaLocalVariableGenerator.generateLocalVariableForLoopToDomain(belongsToClass, belongsToMethod, foundName, variableTypeForLoop, lineNumber);
+                	variableTypeForLoop = "";
+                }
+                deleteTreeChild(child);
+                break;
             case JavaParser.CAST_EXPR:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);

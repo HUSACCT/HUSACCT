@@ -34,6 +34,15 @@ class JavaAttributeAndLocalVariableGenerator {
         createLocalVariableObject();
     }
 
+    public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
+        this.belongsToClass = belongsToClass;
+        this.belongsToMethod = belongsToMethod;
+        this.name = name;
+        this.declareType = type;
+        this.lineNumber = line;
+        createLocalVariableObject();
+    }
+
     private void startFiltering(Tree attributeTree, String belongsToClass) {
         CommonTree currentTree = (CommonTree) attributeTree;
         CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);

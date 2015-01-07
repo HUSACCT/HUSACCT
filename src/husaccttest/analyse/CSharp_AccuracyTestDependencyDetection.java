@@ -290,14 +290,13 @@ public class CSharp_AccuracyTestDependencyDetection {
 		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
-	/* @Test
+	@Test
 	public void CallConstructorSuper(){
 		String fromModule = "Domain.Direct.Violating.CallConstructorSuper";
 		String toModule = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
-		*/
 
 	@Test
 	public void CallFromInnerClass(){
@@ -507,6 +506,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void DeclarationVariableLocal_Initialized(){
 		String fromModule = "Domain.Direct.Violating.DeclarationVariableLocal_Initialized";
+		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationVariableWithinForStatement(){
+		String fromModule = "Domain.Direct.Violating.DeclarationVariableWithinForStatement";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");

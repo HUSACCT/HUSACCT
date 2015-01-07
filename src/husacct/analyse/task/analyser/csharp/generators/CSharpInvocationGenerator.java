@@ -34,6 +34,19 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
         }
     }
 
+    // Is used for call and access; during post-processing, the dependency type is determined. 
+    public void generateInvocationBaseConstructorToDomain(CommonTree treeNode, String belongsToMethod) {
+        this.belongsToMethod = belongsToMethod;
+        lineNumber = treeNode.getLine();
+    	this.to = "superBaseClass()";
+    	this.nameOfInstance = to;
+    	this.invocationName = to;
+        if (to != null && !to.equals("") && !SkippableTypes.isSkippable(to)) {
+            modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocConstructor");
+        }
+    }
+
+    
     /* Returns the complete string of an expression of a variable, also in case of chaining call/access combinations.
      * In case of a type cast, it does not include the type cast in the returnValue, but it creates a declaration association.
      * Use this method to determine the to-string in case in the following cases: 

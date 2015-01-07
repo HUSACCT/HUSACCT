@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -38,6 +39,14 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		createLocalVariableObject();
 	}
 
+    public void generateLocalVariableForEachLoopToDomain(String packageAndClassName, String belongsToMethod, String name, String type, int line) {
+        this.packageAndClassName = packageAndClassName;
+        this.belongsToMethod = belongsToMethod;
+        this.name = name;
+        this.declareType = type;
+        this.lineNumber = line;
+        createLocalVariableObject();
+    }
 	private void createAttributeObject() {
 		if ((declareType != null) && !declareType.equals("")) {
 			if(SkippableTypes.isSkippable(declareType)){

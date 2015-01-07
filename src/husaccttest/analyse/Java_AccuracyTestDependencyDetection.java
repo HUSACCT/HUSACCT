@@ -507,6 +507,15 @@ public class Java_AccuracyTestDependencyDetection {
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
+	@Test
+	public void DeclarationVariableWithinForStatement(){
+		String fromModule = "domain.direct.violating.DeclarationVariableWithinForStatement";
+		String toModule = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
 	// Import
 	@Test
 	public void ImportDependencyUnused(){

@@ -19,6 +19,7 @@ public class Base {
 	protected FoursquareApi fourApi;
 	protected CallInstanceSubClassDOA subDao;
 	protected CallInstanceSubSubClassDOA subSubDao;
+	protected ArrayList<ProfileDAO> profileDAOs;
 	
 
 	public Base(){

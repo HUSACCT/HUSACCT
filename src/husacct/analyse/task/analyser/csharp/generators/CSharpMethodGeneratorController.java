@@ -91,6 +91,10 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					argTypes = csParameterGenerator.generateParameterObjects((CommonTree) child, name, belongsToClass);
 					deleteTreeChild(child);
 					break;
+				case CSharpParser.BASE:
+					CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
+					csharpInvocationGenerator.generateInvocationBaseConstructorToDomain((CommonTree) child, this.name);
+					break;
 				case CSharpParser.BLOCK:
 					CommonTree blockTree = (CommonTree) child;
 					stepIntoBlock(blockTree);

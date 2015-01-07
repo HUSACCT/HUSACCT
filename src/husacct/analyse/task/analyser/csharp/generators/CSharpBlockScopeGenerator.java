@@ -22,10 +22,10 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
             boolean walkThroughChildren = true;
 
 			/* Test helper
-	       	if (this.packageAndClassName.equals("Domain.Direct.Violating.CallConstructorSuper")){
-//	    		if (child.getLine() == 8) {
+	       	if (this.packageAndClassName.equals("Domain.Direct.Violating.DeclarationVariableWithinForStatement")){
+	    		if (child.getLine() == 9) {
 	    				boolean breakpoint1 = true;
-//	    		}
+	    		}
 	    	} */
 
 			switch (child.getType()) {

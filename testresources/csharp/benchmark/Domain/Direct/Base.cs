@@ -21,6 +21,9 @@ namespace Domain.Direct
 		protected internal CallInstanceSubClassDOA subDao;
 
 		protected internal CallInstanceSubSubClassDOA subSubDao;
+		
+		protected internal List<ProfileDAO> profileDAOs;
+
 
 		public Base()
 		{

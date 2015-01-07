@@ -25,8 +25,8 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        boolean walkThroughChildren = true;
 
 	        /* Test helper
-	       	if (this.belongsToClass.contains("domain.direct.violating.CallInstanceOfSuperOverridden")){
-	    		if (belongsToMethod.contains("printMethod()")) {
+	       	if (this.belongsToClass.contains("domain.direct.violating.DeclarationVariableWithinForStatement")){
+	    		if (belongsToMethod.contains("getProfileInformation()")) {
 	    				boolean breakpoint1 = true;
 	    		}
 	    	} */ 
