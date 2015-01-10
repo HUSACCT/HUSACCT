@@ -213,7 +213,7 @@ class FamixDependencyFinder extends FamixFinder {
 							if (theModel.libraries.containsKey((libraryRoot + association.to))) {
 								association.to = libraryRoot + association.to; // Prefix it with the libraryRoot to present  external systems everywhere the same to the tool users.
 							}							
-							String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type);
+							String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type + Boolean.toString(association.isIndirect));
 							fromClassPath = association.from;
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
@@ -335,7 +335,7 @@ class FamixDependencyFinder extends FamixFinder {
             			boolean found = false;
             			for(DependencyDTO matchingDependency : matchingDependencies){
 	            			if((matchingDependency.from == dependency.from) && (matchingDependency.to == dependency.to)){
-	            				if((matchingDependency.type == dependency.type) && (matchingDependency.lineNumber == dependency.lineNumber)){
+	            				if((matchingDependency.type == dependency.type) && (matchingDependency.lineNumber == dependency.lineNumber) && (matchingDependency.isIndirect == dependency.isIndirect)){
 	            					// Do nothing, dependency already exists
 	            					found = true;
 	            					break;

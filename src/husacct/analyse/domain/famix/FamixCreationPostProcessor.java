@@ -360,8 +360,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("domain.direct.allowed.CallFromInnerClass")) {
-            		if (association.lineNumber == 6) {
+            	if (association.from.contains("plugins.script.ScriptingEngine")) {
+            		if (association.lineNumber >= 155 && association.lineNumber <= 163) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -578,21 +578,14 @@ class FamixCreationPostProcessor {
 		                        String belongsToPackage = theModel.classes.get(association.from).belongsToPackage;
 		                        toString = findClassInPackage(association.to, belongsToPackage);
 		                    }
-		                    /*if (toString.equals("")) {
-		                    	// Check if the method is a constructor of an inner class
-		        	        	String searchKey = association.from + "." + className;
-		        		    	if (theModel.classes.containsKey(searchKey)){
-		        		    		toString = searchKey;
-		        		    	}
-		                    } */
 		                    if (!toString.equals("")) {
 		    	            		association.to = toString;
 		    	            		association.type = "InvocConstructor";
 			            			toExists = true;
 			    	            	typeIsAccess = false;
+			    	            	nextAssociationIsIndirect = true;
 	    	            	}
 	    	            }
-
 	             	}
 	            }
                 
@@ -660,8 +653,7 @@ class FamixCreationPostProcessor {
         	/* Test helper
         	if (invocation.from.equals("domain.direct.violating.CallConstructorInnerClass")){
         		if (invocation.lineNumber == 8) {
-        			boolean breakpoint = true; 
-    			}
+        			int breakpoint = 1;
         	} */
         	
         	// 1) Split invocationName. Precondition: invocation.to is a type and invocationName contains the remainder of the string (determined in the previous process step).
