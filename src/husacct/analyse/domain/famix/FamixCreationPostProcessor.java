@@ -361,7 +361,7 @@ class FamixCreationPostProcessor {
 
                 /* Test helpers
             	if (association.from.contains("plugins.script.ScriptingEngine")) {
-            		if (association.lineNumber >= 155 && association.lineNumber <= 163) {
+            		if (association.lineNumber >= 229 && association.lineNumber <= 266) {
     	    				boolean breakpoint = true;
         			}
             	} */

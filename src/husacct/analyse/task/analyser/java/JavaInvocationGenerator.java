@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 public class JavaInvocationGenerator extends JavaGenerator {

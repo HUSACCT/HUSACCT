@@ -26,7 +26,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 
 	        /* Test helper
 	       	if (this.belongsToClass.contains("plugins.script.ScriptingEngine")){
-	    		if (child.getLine() == 154) {
+	    		if (child.getLine() == 233) {
 	    				boolean breakpoint1 = true;
 	    		}
 	    	} */ 
@@ -34,6 +34,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        switch(treeType) {
 	        case JavaParser.VAR_DECLARATION:
 	            if (child.getChildCount() > 0) {
+	            	detectAndProcessAnonymousClass(child);
 	            	javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
 		            walkThroughChildren = false;
 	            }
@@ -95,4 +96,18 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         JavaLoopGenerator forEachLoopGenerator = new JavaLoopGenerator();
         forEachLoopGenerator.generateToDomainFromLoop((CommonTree) tree, this.belongsToClass, this.belongsToMethod);
     }
+    
+    private void detectAndProcessAnonymousClass(Tree tree) {
+    	int treeType;
+    	for (int i = 0; i < tree.getChildCount(); i++) {
+	    	CommonTree child = (CommonTree) tree.getChild(i);
+	        treeType = child.getType();
+        	if (treeType == JavaParser.CLASS_TOP_LEVEL_SCOPE) {
+        		walkThroughBlockScope(child);
+        		break;
+        	}
+        	detectAndProcessAnonymousClass(child);
+	    }
+    }
+
 }
