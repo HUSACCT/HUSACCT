@@ -163,6 +163,11 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	                } 
 	    		}
 	            break;
+	        case JavaParser.PLUS:
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+    			String argTo= getCompleteToString((CommonTree) tree.getChild(1));
+	        	createPropertyOrFieldInvocationDomainObject(argTo, (CommonTree) tree.getChild(1));
+	        	break;
 	        case JavaParser.IDENT:
 	        	returnValue = tree.getText();
 	            break;

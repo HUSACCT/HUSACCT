@@ -26,7 +26,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 
 	        /* Test helper
 	       	if (this.belongsToClass.contains("plugins.script.ScriptingEngine")){
-	    		if (child.getLine() == 233) {
+	    		if (child.getLine() == 323) {
 	    				boolean breakpoint1 = true;
 	    		}
 	    	} */ 
