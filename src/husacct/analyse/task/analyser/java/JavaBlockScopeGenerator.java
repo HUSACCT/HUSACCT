@@ -25,8 +25,8 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        boolean walkThroughChildren = true;
 
 	        /* Test helper
-	       	if (this.belongsToClass.contains("plugins.script.ScriptingEngine")){
-	    		if (child.getLine() == 323) {
+	       	if (this.belongsToClass.contains("husacct.analyse.presentation.ExportDependenciesDialog")){
+	    		if (child.getLine() == 69) {
 	    				boolean breakpoint1 = true;
 	    		}
 	    	} */ 
@@ -40,6 +40,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	            }
 	            break;
 	        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.SUPER_CONSTRUCTOR_CALL:
+            	detectAndProcessAnonymousClass(child);
 	            delegateInvocation(child, "invocConstructor");
 	            walkThroughChildren = false;
 	            break;
@@ -49,6 +50,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	            walkThroughChildren = false;
 	            break;
 	        case JavaParser.METHOD_CALL: 
+            	detectAndProcessAnonymousClass(child);
 	            delegateInvocation(child, "invocMethod");
 	            walkThroughChildren = false;
 	            break;

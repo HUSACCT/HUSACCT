@@ -1,7 +1,7 @@
-﻿namespace Technology.Direct.Dao
+namespace Technology.Direct.Dao
 {
-    public class SettingsAnnotation : System.Attribute
+    public class SettingsAnnotation
     {
-        public System.String author = "Themaopdracht 7 tester";
+        public String author = "Themaopdracht 7 tester";
     }
 }

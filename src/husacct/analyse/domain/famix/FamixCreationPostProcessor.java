@@ -360,8 +360,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("plugins.script.ScriptingEngine")) {
-            		if (association.lineNumber >= 323 && association.lineNumber <= 325) {
+            	if (association.from.contains("husacct.analyse.presentation.ExportDependenciesDialog")) {
+            		if (association.lineNumber >= 73 && association.lineNumber <= 74) {
     	    				boolean breakpoint = true;
         			}
             	} */

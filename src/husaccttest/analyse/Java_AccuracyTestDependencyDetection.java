@@ -135,6 +135,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessInstanceVariableInPlusExpression(){
+		String fromModule = "domain.direct.violating.AccessInstanceVariableInPlusExpression";
+		String toModule = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void AccessInstanceVariableRead(){
 		String fromModule = "domain.direct.violating.AccessInstanceVariableRead";
 		String toModule = "technology.direct.dao.ProfileDAO";
@@ -210,6 +219,15 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void AccessInstanceWithinAnonymousClass(){
+		String fromModule = "domain.direct.violating.CallInstanceWithinAnonymousClass";
+		String toModule = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -350,6 +368,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallInstanceInPlusExpression(){
+		String fromModule = "domain.direct.violating.CallInstanceInPlusExpression";
+		String toModule = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void CallInstanceInterface(){
 		String fromModule = "domain.direct.violating.CallInstanceInterface";
 		String toModule = "technology.direct.dao.CallInstanceInterfaceDAO";
@@ -405,6 +432,15 @@ public class Java_AccuracyTestDependencyDetection {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
+	}
+
+	@Test
+	public void CallInstanceWithinAnonymousClass(){
+		String fromModule = "domain.direct.violating.CallInstanceWithinAnonymousClass";
+		String toModule = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
 	// Declaration
