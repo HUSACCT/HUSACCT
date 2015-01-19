@@ -26,25 +26,20 @@ public class JavaParameterGenerator extends JavaGenerator {
         this.currentTypes = new ArrayList<String>();
         this.belongsToMethod = belongsToMethod;
         this.belongsToClass = belongsToClass;
-        setLineNumber(allParametersTree);
 
         /* Test helper
-       	if (this.belongsToClass.equals("domain.direct.violating.AccessLocalVariable_Argument")){
-    		if (lineNumber == 7) {
+       	if (this.belongsToClass.equals("plugins.script.ScriptingEngine")){
+    		if (belongsToMethod.contains("performExternalScript")) {
     				boolean breakpoint1 = true;
     		}
     	} */
 
-       	DelegateParametersFromTree(allParametersTree);
+       	delegateParametersFromTree(allParametersTree);
         writeParameterToDomain();
         return signature;
     }
 
-    private void setLineNumber(Tree linenumberTree) {
-        this.lineNumber = linenumberTree.getLine();
-    }
-
-    private void DelegateParametersFromTree(Tree allParametersTree) {
+    private void delegateParametersFromTree(Tree allParametersTree) {
         int totalParameters = allParametersTree.getChildCount();
         for (int currentChild = 0; currentChild < totalParameters; currentChild++) {
             CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
@@ -53,13 +48,14 @@ public class JavaParameterGenerator extends JavaGenerator {
                 getAttributeName(child);
                 getParameterAttributes(child, 1);
                 if (this.nameFound && this.declareTypeFound) {
+                    setLineNumber(child);
                     this.addToQueue();
                 }
                 deleteTreeChild(child);
                 nameFound = false;
                 declareTypeFound = false;
             }
-            DelegateParametersFromTree(child);
+            delegateParametersFromTree(child);
         }
     }
 
@@ -86,6 +82,10 @@ public class JavaParameterGenerator extends JavaGenerator {
             }
         }
         return "";
+    }
+
+    private void setLineNumber(CommonTree linenumberTree) {
+        this.lineNumber = linenumberTree.getFirstChildWithType(JavaParser.IDENT).getLine();
     }
 
     private void setDeclareType(Tree typeTree) {
@@ -120,6 +120,7 @@ public class JavaParameterGenerator extends JavaGenerator {
         ArrayList<Object> myParam = new ArrayList<Object>();
         myParam.add(this.declareType);
         myParam.add(this.declareName);
+        myParam.add(this.lineNumber);
         myParam.add(this.currentTypes);
         saveParameterQueue.add(myParam);
         this.declareType = null;
@@ -136,14 +137,15 @@ public class JavaParameterGenerator extends JavaGenerator {
             	type = type.substring(0, type.length() - 1); //deleting the last point
             }
             String name = (String) currentParam.get(1);
-            ArrayList<String> types = (ArrayList<String>) currentParam.get(2);
+            int lineNr =  (int) currentParam.get(2);
+            ArrayList<String> types = (ArrayList<String>) currentParam.get(3);
             this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
             String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")";
             if ((type != null) && !type.trim().equals("")) {
 	            if (SkippedTypes.isSkippable(type)) {
-	                modelService.createParameterOnly(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
+	                modelService.createParameterOnly(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough, types);
 	            } else {
-	                modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
+	                modelService.createParameter(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough, types);
 	            	
 	            }
             }
