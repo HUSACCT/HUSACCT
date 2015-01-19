@@ -696,7 +696,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test

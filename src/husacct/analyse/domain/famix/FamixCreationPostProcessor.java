@@ -360,8 +360,8 @@ class FamixCreationPostProcessor {
             	FamixInvocation theInvocation = null;
 
                 /* Test helpers
-            	if (association.from.contains("husacct.analyse.presentation.ExportDependenciesDialog")) {
-            		if (association.lineNumber >= 73 && association.lineNumber <= 74) {
+            	if (association.from.contains("plugins.script.ScriptingEngine")) {
+            		if (association.lineNumber >= 90 && association.lineNumber <= 90) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -566,8 +566,9 @@ class FamixCreationPostProcessor {
 		    	                	waitingDerivedAssociations.add(theInvocation);
 	    	                	} else {
 									// The invocation is added  as an access invocation to the referred type; the return value of the complete string.
-		    	                	association.type = "AccessPropertyOrField";
+		    	                	association.type = "AccessObjectReferenceReturnValue";
 			            			toExists = true;
+			            			association.isIndirect = true;
 								}
 	    	        		}
 	    	        	} else {

@@ -647,7 +647,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 	@Test
