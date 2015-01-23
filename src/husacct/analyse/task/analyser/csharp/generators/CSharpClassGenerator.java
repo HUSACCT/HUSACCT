@@ -32,12 +32,38 @@ public class CSharpClassGenerator extends CSharpGenerator {
 
     private String getClassName(CommonTree classTree) {
     	String returnValue = null;
+    	String parameters = "";
 		try {
 			int nrOfChildren = classTree.getChildCount();
 	        for (int i = 0; i < nrOfChildren; i++) {
 	            if (classTree.getChild(i).getType() == CSharpParser.IDENTIFIER) {
 	                CommonTree mTree = (CommonTree) classTree.getChild(i);
 	                returnValue = mTree.token.getText();
+	            } else if ((classTree.getChild(i).getType() == CSharpParser.TYPE_PARAMETERS) || (classTree.getChild(i).getType() == CSharpParser.VARIANT_TYPE_PARAMETERS)) { // In case of generic classes or interfaces, add the parameters as ,p1>, <p1, p2>, etc.
+	            	CommonTree parametersTree = (CommonTree) classTree.getChild(i);
+	            	int nrOfParameters = parametersTree.getChildCount();
+	            	if (nrOfParameters > 0) {
+	            		for (int f = 0; f < nrOfParameters; f++) {
+			            	CommonTree parameterTree = (CommonTree) parametersTree.getChild(f);
+			            	boolean childFound = false;
+			            	if (parameterTree.getType() == CSharpParser.IDENTIFIER) {
+			            		childFound = true;
+			            	} else {
+			            		CommonTree IdentTree = (CommonTree) parameterTree.getFirstChildWithType(CSharpParser.IDENTIFIER);
+			            		if (IdentTree != null) {
+			            			childFound = true;
+			            		}
+			            	}
+			            	if (childFound) {
+			            		if (f == 0) {
+			            			parameters += "p" + 1;
+			            		} else {
+			            			parameters += ", p" + (f+1);
+			            		}
+			            	}
+	            		}
+	            	}
+            		returnValue += "<"+ parameters + ">";
 	            }
 	        }
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
@@ -54,24 +55,48 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
      */
     public String getCompleteToString(CommonTree tree) {  
     	String returnValue = "";
+    	if (tree == null) {
+    		return returnValue;
+    	}
     	try {
     		int treeType = tree.getType();
     		switch(treeType) {
-	        case CSharpParser.MEMBER_ACCESS: case CSharpParser.NAMESPACE_OR_TYPE_NAME:
+	        case CSharpParser.MEMBER_ACCESS: case CSharpParser.NAMESPACE_OR_TYPE_NAME: case CSharpParser.NAMESPACE_OR_TYPE_PART:
 	    		boolean isFirstSubString = true;
 	        	for (int i = 0; i < tree.getChildCount(); i++) {
 	    			String subString= getCompleteToString((CommonTree) tree.getChild(i));
-	    			if (!subString.equals("")) {
+	    			if ((subString != null) && !subString.equals("")) {
 		        		if (isFirstSubString) { 
 		                	returnValue += subString;
 		                	isFirstSubString = false;
 		                } else {
-		                	returnValue += "." + subString;
+		                	if (tree.getChild(i).getType() == CSharpParser.TYPE_ARGUMENT_LIST) { // In case of generic classes, add the parameters as <p1>, <p1, p2>, etc.
+		                		returnValue += subString;
+		                	} else {
+		                		returnValue += "." + subString;
+		                	}
 		                } 
 	    			}
 	    		}
 	            break;
-	        case CSharpParser.SIMPLE_NAME: case CSharpParser.ARGUMENT_VALUE: case CSharpParser.UNARY_EXPRESSION: case CSharpParser.TYPE: case CSharpParser.NAMESPACE_OR_TYPE_PART: case CSharpParser.EXPRESSION_STATEMENT: case CSharpParser.VARIABLE_INITIALIZER:
+	        case CSharpParser.TYPE_ARGUMENT_LIST: // In case of generic classes, add the parameters as <p1>, <p1, p2>, etc.
+	        	String parameters = "";
+            	int nrOfParameters = tree.getChildCount();
+            	if (nrOfParameters > 0) {
+            		for (int f = 0; f < nrOfParameters; f++) {
+    	    			String subString= getCompleteToString((CommonTree) tree.getChild(f));
+		            	if ((subString != null) && subString != null) {
+		            		if (f == 0) {
+		            			parameters += "p" + 1;
+		            		} else {
+		            			parameters += ", p" + (f+1);
+		            		}
+		            	}
+            		}
+            	}
+        		returnValue += "<"+ parameters + ">";
+	        	break;
+	        case CSharpParser.SIMPLE_NAME: case CSharpParser.ARGUMENT_VALUE: case CSharpParser.UNARY_EXPRESSION: case CSharpParser.TYPE: case CSharpParser.EXPRESSION_STATEMENT: case CSharpParser.VARIABLE_INITIALIZER:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
 	            break;
 	        case CSharpParser.METHOD_INVOCATION:

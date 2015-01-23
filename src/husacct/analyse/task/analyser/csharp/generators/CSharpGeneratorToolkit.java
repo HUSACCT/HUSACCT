@@ -161,33 +161,24 @@ public class CSharpGeneratorToolkit {
      * 'public A.B.MyClass mc = new A.B.MyClass();')
      */
     public static String getTypeNameAndParts(CommonTree tree) {
-		String s = EMPTYSTRING;
+    	String returnValue = EMPTYSTRING;
     	try {
     		if (tree != null) {
 				CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME); // NAMESPACE_OR_TYPE_NAME
 				if (typenameTree != null) {
-					CommonTree ident = (CommonTree) typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER);
-					if (ident != null) {
-						s += ident.getText();
-						for (int i = 0; i < typenameTree.getChildCount(); i++) {
-							Tree t = typenameTree.getChild(i);
-							if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
-								s += DOT + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
-							}
-						}
-					}
+					returnValue = getComplete_NAMESPACE_OR_TYPE_NAME_String(typenameTree);
 				} else {
 					typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.STRING);
 					if (typenameTree != null) {
-						s += tree.getFirstChildWithType(CSharpParser.STRING).getText();
+						returnValue += tree.getFirstChildWithType(CSharpParser.STRING).getText();
 					} else { 
 						typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.INT);
 						if (typenameTree != null) {
-							s += tree.getFirstChildWithType(CSharpParser.INT).getText();
+							returnValue += tree.getFirstChildWithType(CSharpParser.INT).getText();
 						} else {
 							typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.BOOL);
 							if (typenameTree != null) {
-								s += tree.getFirstChildWithType(CSharpParser.BOOL).getText();
+								returnValue += tree.getFirstChildWithType(CSharpParser.BOOL).getText();
 							} 
 						}
 					}
@@ -197,8 +188,76 @@ public class CSharpGeneratorToolkit {
 	        logger.warn("Exception: "  + e + ", in getTypeNameAndParts()");
 	        //e.printStackTrace();
         }
-		return s;
+		return returnValue;
 	}
+
+    public static String getComplete_NAMESPACE_OR_TYPE_NAME_String(CommonTree tree) {  
+    	String returnValue = "";
+    	try {
+    		int treeType = tree.getType();
+    		switch(treeType) {
+	        case CSharpParser.NAMESPACE_OR_TYPE_NAME: case CSharpParser.NAMESPACE_OR_TYPE_PART:
+	    		boolean isFirstSubString = true;
+	        	for (int i = 0; i < tree.getChildCount(); i++) {
+	    			String subString= getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(i));
+	    			if ((subString != null) && !subString.equals("")) {
+		        		if (isFirstSubString) { 
+		                	returnValue += subString;
+		                	isFirstSubString = false;
+		                } else {
+		                	if (tree.getChild(i).getType() == CSharpParser.TYPE_ARGUMENT_LIST) { // In case of generic classes, add the parameters as <p1>, <p1, p2>, etc.
+		                		returnValue += subString;
+		                	} else {
+		                		returnValue += "." + subString;
+		                	}
+		                } 
+	    			}
+	    		}
+	            break;
+	        case CSharpParser.TYPE_ARGUMENT_LIST: // In case of generic classes, add the parameters as <p1>, <p1, p2>, etc.
+	        	String parameters = "";
+            	int nrOfParameters = tree.getChildCount();
+            	if (nrOfParameters > 0) {
+            		for (int f = 0; f < nrOfParameters; f++) {
+    	    			String subString= getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(f));
+		            	if ((subString != null) && subString != null) {
+		            		if (f == 0) {
+		            			parameters += "p" + 1;
+		            		} else {
+		            			parameters += ", p" + (f+1);
+		            		}
+		            	}
+            		}
+            	}
+        		returnValue += "<"+ parameters + ">";
+	        	break;
+	        case CSharpParser.IDENTIFIER:
+	        	returnValue += tree.getText();
+	            break;
+	        case CSharpParser.QUALIFIED_IDENTIFIER: // ? Not encountered within test with Limaki
+	        	returnValue = tree.getChild(0).getText();
+	            break;
+	        case CSharpParser.THIS: 
+	        	returnValue = "";
+	            break;
+	        case CSharpParser.BASE: 
+	        	returnValue = "superBaseClass";
+	            break;
+	        case CSharpParser.DOT: // "."
+	        	String left = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(0));
+	        	String right = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(1));
+	        	if ((left == "") || (right == "")) {
+	        		returnValue += left + right;
+	        	} else {
+		    		returnValue += left + "." + right;
+	        	}
+	            break;
+	        }
+    	} catch (Exception e) {
+    		logger.error("Exception: "+ e);
+    	}
+        return returnValue;
+    }
 
     /**
      * Checks whether or not a tree is of a certain type, including null-check

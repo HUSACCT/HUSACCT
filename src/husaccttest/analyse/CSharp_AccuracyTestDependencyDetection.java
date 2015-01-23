@@ -317,6 +317,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallInstanceGeneric(){
+		String fromModule = "Domain.Direct.Violating.CallInstanceGeneric";
+		String toModule = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void CallInstanceInnerClass(){
 		String fromModule = "Domain.Direct.Violating.CallInstanceInnerClass";
 		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
@@ -356,6 +365,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceInterface(){
 		String fromModule = "Domain.Direct.Violating.CallInstanceInterface";
 		String toModule = "Technology.Direct.Dao.CallInstanceInterfaceDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void CallInstanceInterfaceGenericInterface(){
+		String fromModule = "Domain.Direct.Violating.CallInstanceInterfaceGenericInterface";
+		String toModule = "Technology.Direct.Dao.CallInstanceInterfaceDAO<p1>";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
@@ -471,6 +489,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationTypeCastOfArgument(){
 		String fromModule = "Domain.Direct.Violating.DeclarationTypeCastOfArgument";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationVariableInstanceGeneric(){
+		String fromModule = "Domain.Direct.Violating.DeclarationVariableInstanceGeneric";
+		String toModule = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));

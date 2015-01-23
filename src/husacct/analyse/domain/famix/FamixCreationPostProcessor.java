@@ -346,6 +346,7 @@ class FamixCreationPostProcessor {
 		int numberOfConnectedViaAttribute = 0;
 		int numberOfConnectedViaLocalVariable = 0;
 		int numberOfConnectedViaMethod = 0;
+		int numberofAssociationsAddedToModel = 0;
 
         for (FamixAssociation association : theModel.waitingAssociations) {
             try {
@@ -359,19 +360,20 @@ class FamixCreationPostProcessor {
             	String toString = "";
             	FamixInvocation theInvocation = null;
 
-                /* Test helpers
-            	if (association.from.contains("plugins.script.ScriptingEngine")) {
-            		if (association.lineNumber >= 90 && association.lineNumber <= 90) {
-    	    				boolean breakpoint = true;
-        			}
-            	} */
-
             	// Check if association.from refers to an existing class
             	if (theModel.classes.containsKey(association.from)) {
             		fromExists = true;
             	}
+
+                /* Test helper
+            	if (fromExists && association.from.contains("DeclarationVariableInstanceGeneric")) {
+            		if (association.lineNumber == 5) {
+    	    				boolean breakpoint = true;
+        			}
+            	} */
+
             	// Check if association.to contains keyword "superBaseClass". If so, replace it by the name of the super class.
-            	if (association.to != null && association.to.contains("superBaseClass")) {
+            	if (fromExists && association.to != null && association.to.contains("superBaseClass")) {
             		String superClass = indirectAssociations_findSuperClass_FirstAbove(association.from);
             		if (!superClass.equals("")) {
             			toString = association.to.replace("superBaseClass", superClass);
@@ -380,7 +382,7 @@ class FamixCreationPostProcessor {
             	}
             	
             	// Check if association.to (or a part of it) refers to an existing class or library
-                if ((association.to != null) && !association.to.equals("") && !association.to.trim().equals(".")){ 
+                if (fromExists && (association.to != null) && !association.to.equals("") && !association.to.trim().equals(".")){ 
                 	toHasValue = true;
                 	if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to)) {
                 		toExists = true;
@@ -597,6 +599,7 @@ class FamixCreationPostProcessor {
             				association.type = "AccessPropertyOrField";
             			}
 						addToModel(association);
+						numberofAssociationsAddedToModel ++;
 					} else {
 	        			// Do nothing
 					}
@@ -643,7 +646,7 @@ class FamixCreationPostProcessor {
         }
 
         this.logger.info(new Date().toString() + " Connected via 1) Import: " + numberOfConnectedViaImport + ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Variable: " + numberOfConnectedViaAttribute  
-        		+ ", 4) Local var: " + numberOfConnectedViaLocalVariable + ", 5) Method: " +  numberOfConnectedViaMethod +  ", 6) Inherited var/method: " + numberOfDerivedAssociations);
+        		+ ", 4) Local var: " + numberOfConnectedViaLocalVariable + ", 5) Method: " +  numberOfConnectedViaMethod +  ", 6) Inherited var/method: " + numberOfDerivedAssociations + ", 7) added to Model: " + numberofAssociationsAddedToModel);
     }
     
 	// Objective: Identify dependencies to the remaining parts of the chain in a chaining invocation (assignment or call).
@@ -772,17 +775,16 @@ class FamixCreationPostProcessor {
             if (addInvocation) { 
     			if (!invocation.from.equals(invocation.to) && (theModel.classes.containsKey(invocation.to) || theModel.libraries.containsKey("xLibraries." + invocation.to))) {
 	    			addToModel(invocation);
-					if (continueChaining) { 
+	    			numberOfDerivedAssociations ++;
+	    			if (continueChaining) { 
 						// Create an indirect association to identify dependencies to the remaining parts of the chain. Store it temporarily; it is processed in a separate method. 
 						FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("Undetermined", invocation.from, toTypeNewIndirectInvocation, invocation.lineNumber, invocation.belongsToMethod, toRemainderChainingInvocation, invocation.nameOfInstance, true);
 	                    addedInvocations.add(newIndirectInvocation);
-		    			numberOfDerivedAssociations ++;
 					} else {
 						if (toRemainderChainingInvocation.equals("") && !toTypeNewIndirectInvocation.equals("")) {
 							// Create an access invocation to the referred type; the return value of the complete string.
 							FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", invocation.from, toTypeNewIndirectInvocation, invocation.lineNumber, invocation.belongsToMethod, toRemainderChainingInvocation, invocation.nameOfInstance, true);
 		                    addedInvocations.add(newIndirectInvocation);
-			    			numberOfDerivedAssociations ++;
 						}
 					}
     			}

@@ -10,11 +10,15 @@ namespace Domain.Direct
 
 		protected internal ProfileDAO profileDao;
 
+		protected internal ProfileDAO<K, V> profileDao_Generic;
+
 		protected internal CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerDao;
 
-		protected internal CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO innerInterfaceDao;		
+		protected internal CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO innerInterfaceDao;
 		
 		protected internal CallInstanceInterfaceDAO interfaceDao;
+
+		protected internal CallInstanceInterfaceDAO<K> interfaceDao_Generic;
 
 		protected internal FoursquareApi fourApi;
 

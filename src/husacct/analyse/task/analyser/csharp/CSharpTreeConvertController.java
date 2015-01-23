@@ -55,6 +55,11 @@ public class CSharpTreeConvertController {
 	}
 
 	private void delegateASTToGenerators(CommonTree tree) {
+		/* Test and Debug
+		if (sourceFilePath.contains("DeclarationVariableInstanceGeneric.cs")) {
+			boolean breakpoint = true;
+		} */
+		
 		if (isTreeAvailable(tree)) {
 			for (int i = 0; i < tree.getChildCount(); i++) {
 				CommonTree treeNode = (CommonTree) tree.getChild(i);

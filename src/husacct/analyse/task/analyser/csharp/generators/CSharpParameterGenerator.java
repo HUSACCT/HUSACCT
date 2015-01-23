@@ -17,14 +17,16 @@ public class CSharpParameterGenerator extends CSharpGenerator {
     private final Logger logger = Logger.getLogger(CSharpParameterGenerator.class);
 
 	public Stack<String> generateParameterObjects(CommonTree argumentTree, String name, String classUniqueName) {
+		Stack<String> returnvalue = new Stack<String>();
 		packageAndClassName = classUniqueName;
 		methodName = name;
-		lineNumber = argumentTree.getLine();
-
-		getArgumentsInformation(argumentTree);
-		writeParameterToDomain();
-
-		return getArgumentTypes(arguments);
+		if (argumentTree != null) {
+			lineNumber = argumentTree.getLine();
+			getArgumentsInformation(argumentTree);
+			writeParameterToDomain();
+			returnvalue = getArgumentTypes(arguments);
+		}
+		return returnvalue;
 	}
 
 	private void getArgumentsInformation(CommonTree argumentTree) {
@@ -49,7 +51,8 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	private String getFormalParameter(CommonTree childTree) {
 		if (childTree.getType() == CSharpParser.FIXED_PARAMETER) {
-			return getTypeNameAndParts((CommonTree) childTree.getChild(0));
+			String returnValue = getTypeNameAndParts((CommonTree) childTree.getChild(0));
+			return returnValue;
 			}
 		return null;
 	}

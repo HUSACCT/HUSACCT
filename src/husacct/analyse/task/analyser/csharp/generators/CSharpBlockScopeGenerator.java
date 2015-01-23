@@ -12,8 +12,9 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	public void walkThroughBlockScope(CommonTree tree, String packageAndClassName, String belongsToMethod) {
 		this.packageAndClassName = packageAndClassName;
 		this.belongsToMethod = belongsToMethod;
-
-		walkThroughBlockScope(tree);		
+		if (tree != null) {
+			walkThroughBlockScope(tree);		
+		}
 	}
 
 	private void walkThroughBlockScope(Tree tree) {
@@ -22,8 +23,8 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
             boolean walkThroughChildren = true;
 
 			/* Test helper
-	       	if (this.packageAndClassName.equals("Domain.Direct.Violating.DeclarationVariableWithinForStatement")){
-	    		if (child.getLine() == 9) {
+	       	if (this.packageAndClassName.equals("Limaki.Playground.View.AlignerPrototyper")){
+	    		if (child.getLine() == 351) {
 	    				boolean breakpoint1 = true;
 	    		}
 	    	} */
