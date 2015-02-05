@@ -5,9 +5,6 @@ import husacct.analyse.abstraction.export.NoDataException;
 import husacct.analyse.abstraction.export.excel.ExcelExporter;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.common.dto.DependencyDTO;
-
-import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 
 public class DependencyExportController {
@@ -15,7 +12,7 @@ public class DependencyExportController {
     private Logger husacctLogger = Logger.getLogger(DependencyExportController.class);
     private IAnalyseDomainService analysedDomain;
     private AbstractFileExporter fileExporter;
-    private HashMap<String, DependencyDTO> exportData;
+    private DependencyDTO[] exportData;
 
     public DependencyExportController() {
     }
@@ -26,7 +23,7 @@ public class DependencyExportController {
 
     public void export(String path) {
         exportData = analysedDomain.mapDependencies();
-        fileExporter = new ExcelExporter(exportData);
+        fileExporter = new ExcelExporter(exportData, analysedDomain);
         try {
             fileExporter.writeToFile(path);
         } catch (NoDataException noDataException) {

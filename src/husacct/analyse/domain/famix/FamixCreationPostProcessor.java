@@ -432,7 +432,7 @@ class FamixCreationPostProcessor {
                  * If the type of the first substring is identified, replace the substring by the type in the next association, and store this association to be processed later on.   
                  * */
                 if (fromExists && !toExists && toHasValue){
-                	if ((association instanceof FamixInvocation)) {
+                	if (association instanceof FamixInvocation) {
                         theInvocation = (FamixInvocation) association;
                         if (association.to.contains(".")) {
 			            	String[] allSubstrings = association.to.split("\\.");
@@ -492,9 +492,11 @@ class FamixCreationPostProcessor {
 	    	        	String classOfAttribute = findAttribute(association.from, association.to);
 	    	            if (!classOfAttribute.equals("")) {
 		        			if (!classOfAttribute.equals(association.from)) { // classOfAttribute refers to a super class  
+		        				association.isInheritanceRelated = true;
 			                	// Create an access dependency on the superclass.
 			    				FamixInvocation newIndirectInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", association.from, classOfAttribute, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, false);
-			                	addToModel(newIndirectInvocation);  
+			    				newIndirectInvocation.isInheritanceRelated = true;
+			    				addToModel(newIndirectInvocation);  
 				    			numberOfDerivedAssociations ++;
 		                    }
 	    	        		FamixStructuralEntity entity = theModel.structuralEntities.get(classOfAttribute + "." + association.to);
@@ -544,8 +546,10 @@ class FamixCreationPostProcessor {
 	    	                	foundMethod = findInvokedMethodOnName(association.from, theInvocation.belongsToMethod, superClassName, association.to);
 	    	    	            if (foundMethod != null) {
 	    	    	            	methodFound = true;
+	    	    	            	association.isInheritanceRelated = true;
 	    		                	// Create a call dependency on the superclass;
 	    		    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("InvocMethod", theInvocation.from, superClassName, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, false);
+	    		    				newInvocation.isInheritanceRelated = true;
 	    		                	addToModel(newInvocation);  
 	    			    			numberOfDerivedAssociations ++;
 	    	                    }
@@ -701,9 +705,11 @@ class FamixCreationPostProcessor {
 	        		if ((superClassName != null) && !superClassName.equals("")) {
 	        			searchKey = superClassName + "." + nextToString;
 	        			if (theModel.structuralEntities.containsKey(searchKey)) {
-	                    	attributeFound = true;
+	        				invocation.isInheritanceRelated = true;
+	        				attributeFound = true;
 		                	// Create an access dependency on the superclass;
 		    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", invocation.from, superClassName, invocation.lineNumber, invocation.belongsToMethod, invocation.to, invocation.nameOfInstance, true);
+		    				newInvocation.isInheritanceRelated = true;
 		                	addToModel(newInvocation);  
 			    			numberOfDerivedAssociations ++;
 	                    }
@@ -740,9 +746,11 @@ class FamixCreationPostProcessor {
 	        		if ((superClassName != null) && !superClassName.equals("")) {
 	        			foundMethod = findInvokedMethodOnName(invocation.from, invocation.belongsToMethod, superClassName, nextToString);
 	                    if (foundMethod != null) {
+	        				invocation.isInheritanceRelated = true;
 	        				methodFound = true;
 		                	// Create a call dependency on the superclass;
 		    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("InvocMethod", invocation.from, superClassName, invocation.lineNumber, invocation.belongsToMethod, invocation.to, invocation.nameOfInstance, true);
+		    				newInvocation.isInheritanceRelated = true;
 		                	addToModel(newInvocation);  
 			    			numberOfDerivedAssociations ++;
 	                    }
@@ -1039,6 +1047,7 @@ class FamixCreationPostProcessor {
 					newAssociation.lineNumber = lineNumber;
 					newAssociation.type = EXTENDS_INDIRECT;
 					newAssociation.isIndirect = true;
+					newAssociation.isInheritanceRelated = true;
 					indirectInheritanceAssociations.add(newAssociation);
 					if (inheritanceAssociationsPerClass.containsKey(newAssociation.to) ){
 		    			indirectInheritanceAssociations.addAll(indirectAssociations_AddIndirectInheritanceAssociation(newAssociation.from, newAssociation.to, newAssociation.lineNumber));

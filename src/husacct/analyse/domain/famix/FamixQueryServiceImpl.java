@@ -158,19 +158,21 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public HashMap<String, DependencyDTO> mapDependencies() {
-        List<DependencyDTO> cache = this.getDependencies("", "");
-        HashMap<String, DependencyDTO> dependencyMap = new HashMap<String, DependencyDTO>();
+    public DependencyDTO[] mapDependencies() {
+        DependencyDTO[] cache = this.getAllDependencies();
+        
+        /* HashMap<String, DependencyDTO> dependencyMap = new HashMap<String, DependencyDTO>();
         //TODO Analyse Persistency to file - Do Sorting of the list here!
         int counter = 0;
         for (DependencyDTO dependency : cache) {
             dependencyMap.put("" + counter, dependency);
             counter++;
-        }
-        return dependencyMap;
+        } */
+        return cache;
     }
     
     @Override
+    // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. 
 	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
 		AnalysisStatisticsDTO returnValue;
 		// Determine totalNrOfPackages, minus 1 for package xLibraries, since that one is created within the analysis process. 

@@ -1,4 +1,4 @@
-package husacct.analyse.task;
+package husacct.analyse.domain.famix;
 
 import husacct.common.dto.DependencyDTO;
 import java.util.ArrayList;
@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.log4j.Logger;
 
 public class TypeFilter {	
@@ -42,7 +41,7 @@ public class TypeFilter {
 		return dto;
 	}
 
-	private static String getSimpleType(String complexType) throws NoSimpleTypeFoundException {
+	public static String getSimpleType(String complexType) throws NoSimpleTypeFoundException {
 		for (String simpleTypeAsKey : DICTIONARY_KEYS)
 			for (String subcat : TYPE_DICTIONARY.get(simpleTypeAsKey))
 				if (complexType.startsWith(subcat))

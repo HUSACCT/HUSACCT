@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
+
 import org.apache.log4j.Logger;
 
 class FamixDependencyFinder extends FamixFinder {
@@ -188,7 +190,7 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter){
-	    HashMap<String, DependencyDTO> result = new HashMap<String, DependencyDTO>();
+	    TreeMap<String, DependencyDTO> result = new TreeMap<String, DependencyDTO>();
 		List<DependencyDTO> resultToReturn = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
 		String fromClassPath;
@@ -212,14 +214,21 @@ class FamixDependencyFinder extends FamixFinder {
 						else {
 							if (theModel.libraries.containsKey((libraryRoot + association.to))) {
 								association.to = libraryRoot + association.to; // Prefix it with the libraryRoot to present  external systems everywhere the same to the tool users.
-							}							
-							String uniqueName = (association.from + String.valueOf(association.lineNumber) + association.to + association.type + Boolean.toString(association.isIndirect));
+							}
+							String type = TypeFilter.getSimpleType(association.type); // Replace internal association.type for external type (simple type)
+							String uniqueName = (association.from + association.to + association.lineNumber + type + Boolean.toString(association.isIndirect));
 							fromClassPath = association.from;
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
 								// Create Dependency and add to result
-								DependencyDTO foundDirectDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.lineNumber, association.isIndirect);
-								result.put(uniqueName, foundDirectDependency);
+								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, type, association.lineNumber, association.isIndirect);
+								if (association.isInheritanceRelated) {
+									foundDependency.isInheritanceRelated = true;
+								}
+								if (theModel.classes.get(association.from).isInnerClass || (!theModel.libraries.containsKey(association.to) && theModel.classes.get(association.to).isInnerClass)) {
+									foundDependency.isInnerClassRelated = true;
+								}
+								result.put(uniqueName, foundDependency);
 							}
 							else {
 								numberOfDuplicateAssociations ++; }
@@ -234,8 +243,11 @@ class FamixDependencyFinder extends FamixFinder {
 	        this.logger.error(" Exception: "  + e);
 	        //e.printStackTrace();
 	    }
-		resultToReturn = (List<DependencyDTO>) new ArrayList<DependencyDTO>(result.values());
-		//this.logger.info(new Date().toString() + " Filtered associations without existing from or to object: " + numberOfFilteredDependencies + "; duplicate associations: " + numberOfDuplicateAssociations);
+		// Convert the result ThreeMap into a sorted ArrayList<DependencyDTO>
+		for(String key: result.keySet()) {
+			DependencyDTO dependency = result.get(key);
+			resultToReturn.add(dependency);
+		}
 		return resultToReturn;
 	}
 

@@ -42,9 +42,10 @@ public interface IModelQueryService {
 
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 
-    public HashMap<String, DependencyDTO> mapDependencies();
+    public DependencyDTO[] mapDependencies();
     
     public void buildCache();
     
+    // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned.
     public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
 }

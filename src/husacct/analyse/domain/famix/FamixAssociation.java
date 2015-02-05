@@ -7,7 +7,7 @@ class FamixAssociation extends FamixObject {
     public String to;
     public int lineNumber;
 	public boolean isIndirect = false;
-
+	public boolean isInheritanceRelated = false; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends
 
     public String toString() {
         String s = "";

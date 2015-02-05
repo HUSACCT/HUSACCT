@@ -53,8 +53,9 @@ public interface IAnalyseDomainService {
 
     public void loadModel(Element analyseElement);
 
-    public HashMap<String, DependencyDTO> mapDependencies();
+    public DependencyDTO[] mapDependencies();
     
+    // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned.
     public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
 
 	public void buildCache();

@@ -18,32 +18,20 @@ class FamixModel extends FamixObject {
     public List<FamixAssociation> waitingAssociations;
     public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
     public HashMap<String, FamixStructuralEntity> structuralEntities;
-    //public HashMap<String, FamixPackage> packages;
     public TreeMap<String, FamixPackage> packages;
-    //public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixImport> imports;
     public HashMap<String, FamixLibrary> libraries;
     public ArrayList<FamixAssociation> associations;
-    public String exporterName;
-    public String exporterVersion;
-    public String exporterDate;
-    public String exporterTime;
-    public String publisherName;
-    public String parsedSystemName;
-    public String extractionLevel;
-    public String sourceLanguage;
+    public String modelCreationDate;
 	private int totalNumberOfLinesOfCode;
-    public String sourceDialect;
 
     private FamixModel() {
-        this.exporterDate = new Date().toString();
+        this.modelCreationDate = new Date().toString();
         waitingAssociations = new ArrayList<FamixAssociation>();
         waitingStructuralEntities = new ArrayList<FamixStructuralEntity>();
         associations = new ArrayList<FamixAssociation>();
-        //classes = new HashMap<String, FamixClass>();
         classes = new HashMap<String, FamixClass>();
-        //packages = new HashMap<String, FamixPackage>();
         packages = new TreeMap<String, FamixPackage>();
         imports = new HashMap<String, FamixImport>();
         libraries = new HashMap<String, FamixLibrary>();

@@ -51,7 +51,7 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
 	private AbstractTableModel tableModel;
     private List<AnalysedModuleDTO> fromSelected = new ArrayList<AnalysedModuleDTO>();
     private List<AnalysedModuleDTO> toSelected = new ArrayList<AnalysedModuleDTO>();
-    private List<DependencyDTO> filteredList;
+    protected List<DependencyDTO> filteredList;
     private AnalyseUIController dataControl;
 
     public DependencyPanel() {
@@ -218,7 +218,7 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     	            .addComponent(numberOfDependenciesPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 	                .addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(ComponentPlacement.RELATED)
-                .addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                 .addContainerGap()));
 
     }

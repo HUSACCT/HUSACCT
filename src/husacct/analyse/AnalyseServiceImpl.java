@@ -9,7 +9,6 @@ import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.AnalyseControlServiceImpl;
 import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
-import husacct.analyse.task.TypeFilter;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
@@ -43,14 +42,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public String[] getAvailableLanguages() {
         return service.getAvailableLanguages();
-    }
-
-    @Deprecated
-    public void analyseApplication(String[] paths, String programmingLanguage) {
-        service.analyseApplication(paths, programmingLanguage);
-        this.analyseInternalFrame = new AnalyseInternalFrame();
-        this.isAnalysed = true;
-        super.notifyServiceListeners();
     }
 
 	@Override
@@ -109,7 +100,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
     @Override
     public DependencyDTO[] getAllDependencies() {
-        return TypeFilter.filterDependencies(service.getAllDependencies());
+        return service.getAllDependencies();
     }
     
     @Override
@@ -129,22 +120,22 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
     @Override
     public DependencyDTO[] getDependencies(String from, String to) {
-        return TypeFilter.filterDependencies(service.getDependencies(from, to));
+        return service.getDependencies(from, to);
     }
 
     @Override
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
-        return TypeFilter.filterDependencies(service.getDependencies(from, to, dependencyFilter));
+        return service.getDependencies(from, to, dependencyFilter);
     }
 
     @Override
     public DependencyDTO[] getDependenciesFrom(String from) {
-        return TypeFilter.filterDependencies(service.getDependenciesFrom(from));
+        return service.getDependenciesFrom(from);
     }
 
     @Override
     public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
-        return TypeFilter.filterDependencies(service.getDependenciesFrom(from, dependencyFilter));
+        return service.getDependenciesFrom(from, dependencyFilter);
     }
 
     @Override
@@ -154,12 +145,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	
     @Override
     public DependencyDTO[] getDependenciesTo(String to) {
-        return TypeFilter.filterDependencies(service.getDependenciesTo(to));
+        return service.getDependenciesTo(to);
     }
 
     @Override
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
-        return TypeFilter.filterDependencies(service.getDependenciesTo(to, dependencyFilter));
+        return service.getDependenciesTo(to, dependencyFilter);
     }
 
     @Override

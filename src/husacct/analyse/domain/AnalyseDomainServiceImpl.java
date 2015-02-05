@@ -157,7 +157,7 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
 
 	@Override
-    public HashMap<String, DependencyDTO> mapDependencies() {
+    public DependencyDTO[] mapDependencies() {
         return queryService.mapDependencies();
     }
     

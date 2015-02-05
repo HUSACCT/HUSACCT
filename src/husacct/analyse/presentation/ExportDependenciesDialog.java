@@ -42,7 +42,7 @@ class ExportDependenciesDialog extends JDialog {
     }
 
     private void addComponents() {
-        pathLabel = new JLabel(uiController.translate("PathLabel"));
+        pathLabel = new JLabel(uiController.translate("PathLabelShort"));
         pathField = new JTextField(20);
         browseButton = new JButton(uiController.translate("BrowseButton"));
         exportButton = new JButton(uiController.translate("ExportButton"));
@@ -65,7 +65,7 @@ class ExportDependenciesDialog extends JDialog {
         });
         exportButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                if (validateData()) {
+                if (validateSelectedFile()) {
                     dispose();
                     ThreadedDependencyExport dependencyExport = new ThreadedDependencyExport(uiController, selectedFile.getAbsolutePath());
                     ThreadWithLoader analyseExportThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExportingDependencies"), dependencyExport);
@@ -77,7 +77,7 @@ class ExportDependenciesDialog extends JDialog {
 
     private void showFileDialog() {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("xls", "xls", "xls");
-        FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, uiController.translate("Open"), filter);
+        FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, uiController.translate("OpenButton"), filter);
         int returnVal = fileDialog.showDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             if (fileDialog.getSelectedFile().exists()) {
@@ -94,7 +94,7 @@ class ExportDependenciesDialog extends JDialog {
         exportButton.setEnabled(true);
     }
 
-    public boolean validateData() {
+    public boolean validateSelectedFile() {
         if (selectedFile == null) {
             ServiceProvider.getInstance().getControlService().showErrorMessage(uiController.translate("NoFileLocationError"));
             return false;

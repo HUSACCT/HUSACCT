@@ -6,18 +6,18 @@ import java.util.HashMap;
 
 public abstract class AbstractFileExporter {
 
-    protected HashMap<String, DependencyDTO> data;
+    protected DependencyDTO[] data;
 
     protected String translate(String key) {
         return ServiceProvider.getInstance().getLocaleService().getTranslatedString(key);
     }
 
-    public AbstractFileExporter(HashMap<String, DependencyDTO> data) {
+    public AbstractFileExporter(DependencyDTO[] data) {
         this.data = data;
     }
 
     public void writeToFile(String path) throws NoDataException {
-        if (data.isEmpty()) {
+        if (data == null || data.length == 0) {
             throw new NoDataException();
         } else {
             write(path);

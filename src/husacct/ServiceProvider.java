@@ -14,12 +14,11 @@ import husacct.graphics.GraphicsServiceImpl;
 import husacct.graphics.IGraphicsService;
 import husacct.validate.IValidateService;
 import husacct.validate.ValidateServiceImpl;
-
 import org.apache.log4j.Logger;
 
 public final class ServiceProvider {
 
-	private static final Logger logger = Logger.getLogger(ServiceProvider.class);
+	private final Logger logger = Logger.getLogger(ServiceProvider.class);
 	
 	private static ServiceProvider _instance;
 
@@ -43,7 +42,6 @@ public final class ServiceProvider {
 	
 	public static ServiceProvider getInstance() {
 		if (ServiceProvider._instance == null) {
-			logger.info(new Date().toString() + " Creating new serviceprovider");
 			new ServiceProvider();
 		}
 		return ServiceProvider._instance;
