@@ -195,12 +195,16 @@ class FamixDependencyFinder extends FamixFinder {
 		List<FamixAssociation> allAssociations = theModel.associations;
 		String fromClassPath;
 		String toClassPath;
+		String type;
 		numberOfNotComplyingAssociations = 0;
 		numberOfIncompleteAssociations = 0;
 		numberOfDuplicateAssociations = 0;
 		numberOfFilteredDependencies = 0;
 		try {
 			for(FamixAssociation association : allAssociations){
+				fromClassPath = "";
+				toClassPath = "";
+				type = "";
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
 					if (association.from == null || association.from.equals("") || association.to == null || association.to.equals("") ||association.lineNumber == 0 || association.type == null){
 						numberOfIncompleteAssociations ++;
@@ -215,7 +219,7 @@ class FamixDependencyFinder extends FamixFinder {
 							if (theModel.libraries.containsKey((libraryRoot + association.to))) {
 								association.to = libraryRoot + association.to; // Prefix it with the libraryRoot to present  external systems everywhere the same to the tool users.
 							}
-							String type = TypeFilter.getSimpleType(association.type); // Replace internal association.type for external type (simple type)
+							type = TypeFilter.getSimpleType(association.type); // Replace internal association.type for external type (simple type)
 							String uniqueName = (association.from + association.to + association.lineNumber + type + Boolean.toString(association.isIndirect));
 							fromClassPath = association.from;
 							toClassPath = association.to;

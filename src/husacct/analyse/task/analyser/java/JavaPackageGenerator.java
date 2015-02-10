@@ -46,4 +46,12 @@ class JavaPackageGenerator extends JavaGenerator {
         modelService.createPackage(uniqueName, belongsToPackage, name);
     }
 
+    public String generateNoPackage_Package() {
+        String uniqueName = "no_package";
+        String belongsToPackage = "";
+        String name = "noPackage_HusacctDefined";
+        createPackage(name, uniqueName, belongsToPackage);
+        return uniqueName;
+    }
+
 }

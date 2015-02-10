@@ -336,6 +336,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         creationPostProcessor.processWaitingAssociations();
         creationPostProcessor.processWaitingDerivedAssociations();
         associationsNumber = model.associations.size();
+        model.clearAfterPostProcessing();
         this.logger.info(new Date().toString() + " Finished: processWaitingAssociations(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());
     }
 
@@ -351,20 +352,16 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 			FamixImport foundImport = model.imports.get(importKey);
 			completeImportStrings.put(foundImport.completeImportString, foundImport.importsCompletePackage);
 		}
-		// Get a list of the root units.
+		// Get a list of the root units with their submodules.
+		ArrayList<String> rootNames = new ArrayList<String>();
 		FamixModuleFinder fmf = new FamixModuleFinder(model);
 		List<AnalysedModuleDTO> rootModules = fmf.getRootModules();
-		ArrayList<String> rootNames = new ArrayList<String>();
 		for (AnalysedModuleDTO rootModule : rootModules) {
 			String name = rootModule.uniqueName;
-			if (name.equals("org") || name.equals("com")) {
-				List<AnalysedModuleDTO> rootSubModules = fmf.getChildModulesInModule(name);
-				for (AnalysedModuleDTO rootSubModule : rootSubModules) {
-					String subName = rootSubModule.uniqueName;
-					rootNames.add(subName);
-				}
-			} else {
-				rootNames.add(name);
+			List<AnalysedModuleDTO> rootSubModules = fmf.getChildModulesInModule(name);
+			for (AnalysedModuleDTO rootSubModule : rootSubModules) {
+				String subName = rootSubModule.uniqueName;
+				rootNames.add(subName);
 			}
 		}
 		

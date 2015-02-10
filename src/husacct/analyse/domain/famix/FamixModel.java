@@ -243,4 +243,9 @@ class FamixModel extends FamixObject {
         currentInstance.behaviouralEntities.clear();
         totalNumberOfLinesOfCode = 0;
     }
+    
+    public void clearAfterPostProcessing() {
+        currentInstance.waitingAssociations.clear();
+        currentInstance.waitingStructuralEntities.clear();
+    }
 }

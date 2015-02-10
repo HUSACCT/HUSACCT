@@ -37,14 +37,18 @@ class JavaTreeConvertController {
     }
 
     public void delegateASTToGenerators(String sourceFilePath, int nrOfLinesOfCode, JavaParser javaParser) throws RecognitionException {
+    	compilationUnit_return compilationUnit;
+    	CommonTree compilationUnitTree;
     	try {
     		this.sourceFilePath = sourceFilePath;
         	this.numberOfLinesOfCode = nrOfLinesOfCode;
-	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
-	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
-	        createClassInformation(compilationUnitTree);
-	        if ((this.theClass != null) && !this.theClass.equals("")) {
-	        	delegateASTToGenerators(compilationUnitTree);
+	        compilationUnit = javaParser.compilationUnit();
+	        if (compilationUnit != null) {
+	        	compilationUnitTree = (CommonTree) compilationUnit.getTree();
+	        	createClassInformation(compilationUnitTree);
+		        if ((this.theClass != null) && !this.theClass.equals("")) {
+		        	delegateASTToGenerators(compilationUnitTree);
+		        }
 	        } 
     	}
     	catch (Exception e) {
@@ -56,10 +60,11 @@ class JavaTreeConvertController {
     private void createClassInformation(CommonTree completeTree) {
         CommonTree packageTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.PACKAGE);
         if (hasPackageElement(completeTree)) {
-            delegatePackage(packageTree);
+            this.thePackage = javaPackageGenerator.generateModel(packageTree);
         } else {
-            this.thePackage = "";
+    		this.thePackage = javaPackageGenerator.generateNoPackage_Package();
         }
+        javaClassGenerator = new JavaClassGenerator(thePackage);
 
         CommonTree classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.CLASS);
         if (!isTreeExisting(classTree)) {
@@ -99,7 +104,7 @@ class JavaTreeConvertController {
     		warnMessage += " [Probably type id " + typeId + " ]";
     	if(classTree != null)
     		warnMessage += " Info: " + classTree.toString();
-    	logger.warn(warnMessage);
+    	//logger.warn(warnMessage); //Deactivated 2012-02-10, since warnings were generated for annotation expressions like @interface.
     }
 
     private void delegateASTToGenerators(CommonTree tree) {
@@ -154,13 +159,8 @@ class JavaTreeConvertController {
         }
     }
 
-    private void delegatePackage(CommonTree packageTree) {
-        this.thePackage = javaPackageGenerator.generateModel(packageTree);
-        javaClassGenerator = new JavaClassGenerator(thePackage);
-    }
-
     private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface) {
-        String analysedClass;
+        String analysedClass = null;
         if (isInnerClass) {
             analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, true, parentClass, isInterface);
         } else {
