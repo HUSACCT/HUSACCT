@@ -52,8 +52,8 @@ public class HusacctSavePanel extends SaverPanel{
 	private void addComponents(){
 		
 		descriptionLabel = new JLabel(localeService.getTranslatedString("SaveToHusacct"));
-		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
-		pathText = new JTextField(20);
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabelShort"));
+		pathText = new JTextField(25);
 		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
 		

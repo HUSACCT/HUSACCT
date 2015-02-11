@@ -49,7 +49,7 @@ public class HusacctLoadPanel extends LoaderPanel{
 	private void addComponents(){
 		
 		descriptionLabel = new JLabel(localeService.getTranslatedString("OpenFromHusacct"));
-		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabelShort"));
 		pathText = new JTextField(20);
 		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);

@@ -70,7 +70,7 @@ public class XmlSavePanel extends SaverPanel{
 	private void addComponents(){
 		
 		descriptionLabel = new JLabel(localeService.getTranslatedString("SaveToXML"));
-		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabelShort"));
 		pathText = new JTextField(20);
 		
 		
