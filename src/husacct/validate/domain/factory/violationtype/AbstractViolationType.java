@@ -10,6 +10,7 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
+import husacct.validate.domain.validation.violationtype.ViolationTypes;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public abstract class AbstractViolationType {
 		this.allViolationKeys = generator.getAllViolationTypes(createViolationTypesMetaData());
 	}
 
-	protected List<ViolationType> generateViolationTypes(String ruleTypeKey, EnumSet<?> enums) {
+	protected List<ViolationType> generateViolationTypes(String ruleTypeKey, EnumSet<ViolationTypes> enums) {
 		List<ViolationType> violationtypes = new ArrayList<ViolationType>();
 		for (Enum<?> enumValue : enums) {
 			ViolationType violationtype = generateViolationType(ruleTypeKey, enumValue);
