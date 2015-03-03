@@ -506,6 +506,7 @@ class FamixCreationPostProcessor {
 	    	                	if (chainingInvocation) { 
 	    	                		// The invocation is not added to the model yet, because it reflects an invisible access of the type of variable. Creating a new derived invocation is redundant.
 		    	                	association.type = "Undetermined";
+	    	    	            	association.isInheritanceRelated = false;
 		    	                	theInvocation.invocationName = toRemainderChainingInvocation;
 		    	                	waitingDerivedAssociations.add(theInvocation);
 	    	                	} else {
@@ -568,6 +569,7 @@ class FamixCreationPostProcessor {
 	    	                	if (chainingInvocation) { 
 	    	                		// The invocation is not added to the model yet, to prevent redundant dependencies on the return type of the method.
 		    	                	association.type = "Undetermined";
+	    	    	            	association.isInheritanceRelated = false;
 		    	                	theInvocation.invocationName = toRemainderChainingInvocation;
 		    	                	waitingDerivedAssociations.add(theInvocation);
 	    	                	} else {
