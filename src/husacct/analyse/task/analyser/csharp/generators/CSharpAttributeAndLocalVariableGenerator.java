@@ -1,21 +1,24 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
-	private Boolean hasClassScope = false;
+	private boolean hasClassScope;
+	private boolean isFinal;
 	private String name;
 	private String accessControlQualifier;
 	private String packageAndClassName; 
-	private String declareType = "";  //int, string, CustomClass etc
+	private String declareType;  //int, string, CustomClass etc
 	private int lineNumber;
-	private String belongsToMethod = ""; //alleen voor local variables
+	private String belongsToMethod; //alleen voor local variables
 
 	public void generateLocalVariableToDomain(Tree treeNode, String packageAndClassName, String belongsToMethod) {
+		this.declareType = "";
 		this.packageAndClassName = packageAndClassName;
 		this.belongsToMethod = belongsToMethod;
 		setMembers(treeNode);
@@ -24,19 +27,12 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	public void generateAttributeToDomain(Tree treeNode, String packageAndClassName) {
+		this.declareType = "";
+		this.belongsToMethod = "";
 		this.packageAndClassName = packageAndClassName;
 		setMembers(treeNode);
 		treeNodeTypeFilter(treeNode);
 		createAttributeObject();
-	}
-
-	public void generateLocalLoopVariable(String packageAndClassName, String belongsToMethod, String declareType, String name, int lineNumber) {
-		this.packageAndClassName = packageAndClassName;
-		this.belongsToMethod = packageAndClassName + "." + belongsToMethod;
-		this.declareType = declareType;
-		this.name = name;
-		this.lineNumber = lineNumber;
-		createLocalVariableObject();
 	}
 
     public void generateLocalVariableForEachLoopToDomain(String packageAndClassName, String belongsToMethod, String name, String type, int line) {
@@ -50,9 +46,9 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	private void createAttributeObject() {
 		if ((declareType != null) && !declareType.equals("")) {
 			if(SkippableTypes.isSkippable(declareType)){
-				modelService.createAttributeOnly(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+				modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
 	        } else {
-	        	modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+	        	modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
 			}
 		}
 		declareType = "";
@@ -85,8 +81,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
             boolean walkThroughChildren = true;
 			switch(child.getType()){
 			case CSharpParser.MODIFIERS:
-				setAccessControlQualifier(treeNode);
-				setClassScope(child);
+				setModifiers(child);
 				break;
 			case CSharpParser.TYPE:
 				setDeclareType(child);		
@@ -117,24 +112,32 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
         } 
 	}
 
-	private void setClassScope(Tree modifierList) {
-		for(int i = 0; i < modifierList.getChildCount(); i++){
-			if(modifierList.getChild(i).getType() == CSharpParser.STATIC){
-				hasClassScope = true;
-				break;
-			}
-		}
-	}
-
-	private void setAccessControlQualifier(Tree treeNode) {
-		Tree ModifierList = treeNode.getChild(0);
-		Tree Modifier = ModifierList.getChild(0);
-		if(Modifier != null){
-			accessControlQualifier = Modifier.getText();			
-		}else{
-			accessControlQualifier = "Package";
-		}
-	}
+    private void setModifiers(Tree ModifierList) {
+    	accessControlQualifier = "package";
+    	hasClassScope = false;
+    	isFinal = false;
+        for (int i = 0; i < ModifierList.getChildCount(); i++) {
+            int treeType = ModifierList.getChild(i).getType();
+            switch(treeType)
+            {
+	            case JavaParser.PRIVATE:
+	            	accessControlQualifier = "private";
+	            	break;
+	            case JavaParser.PUBLIC:
+	            	accessControlQualifier = "public";
+	            	break;
+	            case JavaParser.PROTECTED:
+	            	accessControlQualifier = "protected";
+	            	break;
+	            case JavaParser.STATIC:
+	            	hasClassScope = true;
+	            	break;
+	            case JavaParser.FINAL:
+	                isFinal = true;
+	            	break;
+        	}
+        }
+    }
 
 
 }

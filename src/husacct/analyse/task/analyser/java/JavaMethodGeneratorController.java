@@ -79,7 +79,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
 	            	JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator();
 	                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass);
 	            	break;
-	            case JavaParser.FINAL: 
+	            case JavaParser.STATIC: 
 	            	hasClassScope = true; 
 	            	break;
 	            case JavaParser.PUBLIC: 

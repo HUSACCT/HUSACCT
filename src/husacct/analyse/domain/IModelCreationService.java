@@ -12,9 +12,9 @@ public interface IModelCreationService {
 
     public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 
-    public void createAttributeOnly(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
+    public void createAttributeOnly(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 
-    public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
+    public void createAttribute(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 
     public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber);
 
@@ -43,9 +43,9 @@ public interface IModelCreationService {
     public void createLocalVariable(String belongsToClass,
             String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString);
 
-    public void createLocalVariableOnly(String belongsToClass, String declareType, String name,
-            String uniqueName, int lineNumber, String belongsToMethodString);
-
+    public void createLocalVariableOnly(String belongsToClass, String declareType, String name, String uniqueName, 
+    		int lineNumber, String belongsToMethodString);
+    
 	public void createParameterOnly(String name, String uniqueName, String declareType,
             String belongsToClass, int lineNumber, String belongsToMethod, List<String> declareTypes);
 

@@ -11,7 +11,8 @@ public class DependencyDTO extends AbstractDTO{
 	//class path of the to-class file; in case of inner classes classPathFrom is shorter than from 
 	public String toClassPath;
 	public String via;
-	public String type;
+	public String type = "";
+    public String subType = "";
 	public int lineNumber;
 	public boolean isIndirect;
 	public boolean isInheritanceRelated = false; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends. 
@@ -27,12 +28,13 @@ public class DependencyDTO extends AbstractDTO{
 		this.isIndirect = false;
 	}
 	
-	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, int lineNumber, boolean indirect){
+	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, String subType, int lineNumber, boolean indirect){
 		this.from = from;
 		this.fromClassPath = fromClassPath;
 		this.to = to;
 		this.toClassPath = toClassPath;
 		this.type = type;
+		this.subType = subType;
 		this.lineNumber = lineNumber;
 		this.isIndirect = indirect;
 	}

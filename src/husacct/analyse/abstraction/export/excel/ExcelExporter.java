@@ -127,10 +127,11 @@ public class ExcelExporter extends AbstractFileExporter {
         addCellBold(sheet, 0, 0, super.translate("DependencyFrom"));
         addCellBold(sheet, 1, 0, super.translate("DependencyTo"));
         addCellBold(sheet, 2, 0, super.translate("DependencyType"));
-        addCellBold(sheet, 3, 0, super.translate("Linenumber"));
-        addCellBold(sheet, 4, 0, super.translate("Direct") + "/" + super.translate("Indirect"));
-        addCellBold(sheet, 5, 0, super.translate("InheritanceRelated"));
-        addCellBold(sheet, 6, 0, super.translate("InnerClassRelated"));
+        addCellBold(sheet, 3, 0, super.translate("DependencySubType"));
+        addCellBold(sheet, 4, 0, super.translate("Linenumber"));
+        addCellBold(sheet, 5, 0, super.translate("Direct") + "/" + super.translate("Indirect"));
+        addCellBold(sheet, 6, 0, super.translate("InheritanceRelated"));
+        addCellBold(sheet, 7, 0, super.translate("InnerClassRelated"));
     }
 
     private void createContent(WritableSheet sheet) throws WriteException, RowsExceededException {
@@ -158,20 +159,22 @@ public class ExcelExporter extends AbstractFileExporter {
         Label fromLabel = new Label(0, row, dependency.from, times);
         Label toLabel = new Label(1, row, dependency.to, times);
         Label typeLabel = new Label(2, row, dependency.type, times);
-        Label lineLabel = new Label(3, row, "" + dependency.lineNumber, times);
+        Label subTypeLabel = new Label(3, row, dependency.subType, times);
+        Label lineLabel = new Label(4, row, "" + dependency.lineNumber, times);
         Label directLabel;
         if (dependency.isIndirect) {
-            directLabel = new Label(4, row, super.translate("Indirect"), times);
+            directLabel = new Label(5, row, super.translate("Indirect"), times);
         } else {
-            directLabel = new Label(4, row, super.translate("Direct"), times);
+            directLabel = new Label(5, row, super.translate("Direct"), times);
         }
-        Label inheritanceLabel = new Label(5, row, "" + dependency.isInheritanceRelated, times);
-        Label innerClassLabel = new Label(6, row, "" + dependency.isInnerClassRelated, times);
+        Label inheritanceLabel = new Label(6, row, "" + dependency.isInheritanceRelated, times);
+        Label innerClassLabel = new Label(7, row, "" + dependency.isInnerClassRelated, times);
         
         List<Label> labelArray = new ArrayList<Label>();
         labelArray.add(fromLabel);
         labelArray.add(toLabel);
         labelArray.add(typeLabel);
+        labelArray.add(subTypeLabel);
         labelArray.add(lineLabel);
         labelArray.add(directLabel);
         labelArray.add(inheritanceLabel);

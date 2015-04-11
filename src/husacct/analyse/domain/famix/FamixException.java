@@ -3,7 +3,8 @@ package husacct.analyse.domain.famix;
 class FamixException extends FamixAssociation {
 
     public FamixException() {
-        super.type = "Exception";
+        super.type = "Declaration";
+        super.subType = "Exception";
     }
     public String exceptionType;
 

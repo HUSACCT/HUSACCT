@@ -8,9 +8,10 @@ import org.antlr.runtime.tree.Tree;
 
 class JavaAttributeAndLocalVariableGenerator {
 
-    private Boolean classScope = false;
+    private boolean hasClassScope;
+    private boolean isFinal;
     private String name;
-    private String AccesControlQualifier;
+    private String accessControlQualifier;
     private String belongsToClass;
     private String declareType;
     private int lineNumber;
@@ -19,7 +20,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
         /* Test helpers
-    	if (belongsToClass.contains("domain.direct.allowed.CallFromInnerClass")) {
+    	if (belongsToClass.contains("technology.direct.dao.UserDAO")) {
     				boolean breakpoint = true;
     	} */
         this.belongsToClass = belongsToClass;
@@ -63,8 +64,7 @@ class JavaAttributeAndLocalVariableGenerator {
             switch(treeType)
             {
             case JavaParser.MODIFIER_LIST:
-                setAccesControllQualifier(tree);
-                setClassScope(child);
+                setModifiers(child);
             	break;
             case JavaParser.TYPE:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
@@ -106,9 +106,9 @@ class JavaAttributeAndLocalVariableGenerator {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {
-	            modelService.createAttributeOnly(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+	            modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	        } else {
-	            modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+	            modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	        }
 	        declareType = "";
     	}
@@ -141,22 +141,30 @@ class JavaAttributeAndLocalVariableGenerator {
         }
    	}
 
-    private void setAccesControllQualifier(Tree tree) {
-        Tree ModifierList = tree.getChild(0);
-        Tree Modifier = ModifierList.getChild(0);
-        if (Modifier != null) {
-            AccesControlQualifier = Modifier.getText();
-        } else {
-            AccesControlQualifier = "Package";
-        }
-    }
-
-    private void setClassScope(Tree ModifierList) {
+    private void setModifiers(Tree ModifierList) {
+    	accessControlQualifier = "package";
+    	hasClassScope = false;
+    	isFinal = false;
         for (int i = 0; i < ModifierList.getChildCount(); i++) {
-            if (ModifierList.getChild(i).getType() == JavaParser.STATIC) {
-                classScope = true;
-                break;
-            }
+            int treeType = ModifierList.getChild(i).getType();
+            switch(treeType)
+            {
+	            case JavaParser.PRIVATE:
+	            	accessControlQualifier = "private";
+	            	break;
+	            case JavaParser.PUBLIC:
+	            	accessControlQualifier = "public";
+	            	break;
+	            case JavaParser.PROTECTED:
+	            	accessControlQualifier = "protected";
+	            	break;
+	            case JavaParser.STATIC:
+	            	hasClassScope = true;
+	            	break;
+	            case JavaParser.FINAL:
+	                isFinal = true;
+	            	break;
+        	}
         }
     }
 

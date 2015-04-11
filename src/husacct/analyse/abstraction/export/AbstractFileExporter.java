@@ -2,7 +2,6 @@ package husacct.analyse.abstraction.export;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
-import java.util.HashMap;
 
 public abstract class AbstractFileExporter {
 

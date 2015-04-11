@@ -83,7 +83,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 				case CSharpParser.ABSTRACT:
 					isAbstract = true;
 					break;
-				case CSharpParser.SEALED:
+				case CSharpParser.STATIC:
 					hasClassScope = true;
 					break;
 				case CSharpParser.FORMAL_PARAMETER_LIST:

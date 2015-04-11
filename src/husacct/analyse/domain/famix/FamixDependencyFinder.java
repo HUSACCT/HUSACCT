@@ -189,6 +189,7 @@ class FamixDependencyFinder extends FamixFinder {
 			return queryCache(findFunction, from, to, applyFilter);
 	}
 	
+	// Returns a list of filtered  and sorted DependencyDTOs.
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter){
 	    TreeMap<String, DependencyDTO> result = new TreeMap<String, DependencyDTO>();
 		List<DependencyDTO> resultToReturn = new ArrayList<DependencyDTO>();
@@ -220,12 +221,13 @@ class FamixDependencyFinder extends FamixFinder {
 								association.to = libraryRoot + association.to; // Prefix it with the libraryRoot to present  external systems everywhere the same to the tool users.
 							}
 							type = TypeFilter.getSimpleType(association.type); // Replace internal association.type for external type (simple type)
-							String uniqueName = (association.from + association.to + association.lineNumber + type + Boolean.toString(association.isIndirect));
+							// Filter-out duplicate associations of same type at same line.
+							String uniqueName = (association.from + association.to + association.lineNumber + type + association.subType + Boolean.toString(association.isIndirect));
 							fromClassPath = association.from;
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
 								// Create Dependency and add to result
-								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, type, association.lineNumber, association.isIndirect);
+								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, type, association.subType ,association.lineNumber, association.isIndirect);
 								if (association.isInheritanceRelated) {
 									foundDependency.isInheritanceRelated = true;
 								}
@@ -337,7 +339,7 @@ class FamixDependencyFinder extends FamixFinder {
     // Fill HashMap dependenciesOnFromTo 
 	public void initializeDependencyHashMap(){
 		this.dependenciesOnFromTo = new HashMap<String, HashMap<String, ArrayList<DependencyDTO>>>();
-		DependencyDTO[] dependencies = ServiceProvider.getInstance().getAnalyseService(). getAllDependencies();
+		DependencyDTO[] dependencies = ServiceProvider.getInstance().getAnalyseService().getAllDependencies();
 		HashMap<String, ArrayList<DependencyDTO>> toMap;
 		try{
 	        for(DependencyDTO dependency : dependencies) {
