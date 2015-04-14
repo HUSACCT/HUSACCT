@@ -5,6 +5,7 @@ class FamixClass extends FamixDecompositionEntity {
 	public int linesOfCode = 0;
     public boolean isInterface = false;
     public boolean isInnerClass = false;
+    public boolean isEnumeration = false;
     public boolean isAbstract = false;
     public boolean hasInnerClasses = false;
     public String belongsToClass = null;
@@ -20,7 +21,7 @@ class FamixClass extends FamixDecompositionEntity {
         classRepresentation += "\nBelongs to Package: " + belongsToPackage;
         classRepresentation += "\nSourceFilePath: " + sourceFilePath + ", LOC: " + linesOfCode;
         if (isInterface) {
-            classRepresentation += "\nisInterface: true";
+            classRepresentation += "\nisInterface: true" + ", isEnumeration: " + isEnumeration;
         } else {
             classRepresentation += "\nisInterface: false";
         }

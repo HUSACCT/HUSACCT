@@ -64,7 +64,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     
     @Override
     public void createClass(String sourceFilePath, int linesOfCode, String uniqueName, String name, String belongsToPackage,
-            boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility, boolean isInterface) {
+            boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility, boolean isInterface, boolean isEnumeration) {
     	if ((uniqueName != null) && !uniqueName.equals("") && (name != null) && !name.equals("") && (belongsToPackage != null) && !belongsToPackage.equals("") && (belongsToClass != null)) { 
 	    	FamixClass fClass = new FamixClass();
 	    	fClass.sourceFilePath = sourceFilePath;
@@ -81,6 +81,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 	            fClass.visibility = visibility;
 	        }
 	        fClass.isInterface = isInterface;
+	        fClass.isEnumeration = isEnumeration;
 	        addToModel(fClass);
     	} else {
     		// String breakpoint = "true"; // Test helper

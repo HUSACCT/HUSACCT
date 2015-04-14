@@ -113,7 +113,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.TipDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Enumeration", false));
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.InnerEnumeration";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Enumeration", false));
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference", false));
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", false));
 	}
 
 	@Test
@@ -210,7 +210,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference TypeOfUsedVariable", true));
 	}
 
 	@Test
@@ -246,7 +246,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Object Reference TypeOfVariable", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference TypeOfUsedVariable", true));
 	}
 
 	@Test
@@ -255,7 +255,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference TypeOfUsedVariable", false));
 	}
 
 	// Annotation	
@@ -696,7 +696,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference ReturnTypeUsedMethod", true));
 	}
 
 	@Test

@@ -196,7 +196,6 @@ class FamixDependencyFinder extends FamixFinder {
 		List<FamixAssociation> allAssociations = theModel.associations;
 		String fromClassPath;
 		String toClassPath;
-		String type;
 		numberOfNotComplyingAssociations = 0;
 		numberOfIncompleteAssociations = 0;
 		numberOfDuplicateAssociations = 0;
@@ -205,7 +204,6 @@ class FamixDependencyFinder extends FamixFinder {
 			for(FamixAssociation association : allAssociations){
 				fromClassPath = "";
 				toClassPath = "";
-				type = "";
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
 					if (association.from == null || association.from.equals("") || association.to == null || association.to.equals("") ||association.lineNumber == 0 || association.type == null){
 						numberOfIncompleteAssociations ++;
@@ -220,14 +218,13 @@ class FamixDependencyFinder extends FamixFinder {
 							if (theModel.libraries.containsKey((libraryRoot + association.to))) {
 								association.to = libraryRoot + association.to; // Prefix it with the libraryRoot to present  external systems everywhere the same to the tool users.
 							}
-							type = TypeFilter.getSimpleType(association.type); // Replace internal association.type for external type (simple type)
 							// Filter-out duplicate associations of same type at same line.
-							String uniqueName = (association.from + association.to + association.lineNumber + type + association.subType + Boolean.toString(association.isIndirect));
+							String uniqueName = (association.from + association.to + association.lineNumber + association.type + association.subType + Boolean.toString(association.isIndirect));
 							fromClassPath = association.from;
 							toClassPath = association.to;
 							if (!result.containsKey(uniqueName)){
 								// Create Dependency and add to result
-								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, type, association.subType ,association.lineNumber, association.isIndirect);
+								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.subType ,association.lineNumber, association.isIndirect);
 								if (association.isInheritanceRelated) {
 									foundDependency.isInheritanceRelated = true;
 								}

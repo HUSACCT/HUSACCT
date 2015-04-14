@@ -20,7 +20,7 @@ class JavaClassGenerator extends JavaGenerator {
         this.belongsToPackage = uniquePackageName;
     }
 
-    public String generateToDomain(String sourceFilePath, int linesOfCode, CommonTree commonTree, boolean isNestedClass, String parentClassName, boolean isInterface) {
+    public String generateToDomain(String sourceFilePath, int linesOfCode, CommonTree commonTree, boolean isNestedClass, String parentClassName, boolean isInterface, boolean isEnumeration) {
         if ((commonTree.getChildCount() > 1) &&  commonTree.getChild(1) != null) {
         	name = "";
         	uniqueName = "";
@@ -49,7 +49,7 @@ class JavaClassGenerator extends JavaGenerator {
                 this.visibility = getVisibillityFromTree(modifierList);
             }
             if (!name.equals("") && !belongsToPackage.equals("")) {
-            	modelService.createClass(sourceFilePath, nrOfLinesOfCode, uniqueName, name, belongsToPackage, isAbstract, isNestedClass, belongsToClass, visibility, isInterface);
+            	modelService.createClass(sourceFilePath, nrOfLinesOfCode, uniqueName, name, belongsToPackage, isAbstract, isNestedClass, belongsToClass, visibility, isInterface, isEnumeration);
             }
             return uniqueName;
         } else {

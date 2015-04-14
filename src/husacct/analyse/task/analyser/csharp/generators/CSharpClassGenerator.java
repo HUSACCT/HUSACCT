@@ -10,23 +10,22 @@ public class CSharpClassGenerator extends CSharpGenerator {
     private static final Logger logger = Logger.getLogger(CSharpGenerator.class);
 
 
-    public String generateToDomain(String sourceFilePath, int numberOfLinesOfCode, CommonTree classTree, String namespace, boolean isInterface) {
+    public String generateToDomain(String sourceFilePath, int numberOfLinesOfCode, CommonTree classTree, String namespace, boolean isInterface, boolean isEnumeration) {
         String name = getClassName(classTree);
         String uniqueName = getUniqueName(namespace, name);
         String visibility = getVisibility(classTree);
         boolean isAbstract = isAbstract(classTree);
-        modelService.createClass(sourceFilePath, numberOfLinesOfCode, uniqueName, name, namespace, isAbstract, false, "", visibility, isInterface);
+        modelService.createClass(sourceFilePath, numberOfLinesOfCode, uniqueName, name, namespace, isAbstract, false, "", visibility, isInterface, isEnumeration);
         return name;
     }
 
-    public String generateToModel(String sourceFilePath, int numberOfLinesOfCode, CommonTree classTree, String namespace, String parentClassNames, boolean isInterface) {
+    public String generateToModel(String sourceFilePath, int numberOfLinesOfCode, CommonTree classTree, String namespace, String parentClassNames, boolean isInterface, boolean isEnumeration) {
         String name = getClassName(classTree);
 	        String belongsToClass = belongsToClass(namespace, parentClassNames);
 	        String uniqueName = getUniqueName(belongsToClass, name);
 	        String visibility = getVisibility(classTree);
 	        boolean isAbstract = isAbstract(classTree);
-	
-	        modelService.createClass(sourceFilePath, numberOfLinesOfCode, uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility, isInterface);
+	        modelService.createClass(sourceFilePath, numberOfLinesOfCode, uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility, isInterface, isEnumeration);
         return name;
     }
 

@@ -12,7 +12,7 @@ class FamixAssociation extends FamixObject {
 
     public String toString() {
         String s = "";
-        s += "Assocation Type: " + type + ", Indirect: " + isIndirect;
+        s += "Assocation Type: " + type + ", subType: " + subType + ", Indirect: " + isIndirect;
         s += "\nFrom: " + from;
         s += "\nTo: " + to;
         s += "\nLinenumber: " + lineNumber;

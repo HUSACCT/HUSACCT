@@ -77,13 +77,13 @@ class JavaTreeConvertController {
             int classType = classTree.getType();
             switch (classType) {
                 case JavaParser.CLASS:
-                    this.theClass = this.currentClass = delegateClass(classTree, false, false);
+                    this.theClass = this.currentClass = delegateClass(classTree, false, false, false);
                     break;
                 case JavaParser.INTERFACE:
-                    this.theClass = this.currentClass = delegateClass(classTree, false, true);
+                    this.theClass = this.currentClass = delegateClass(classTree, false, true, false);
                     break;
                 case JavaParser.ENUM:
-                    this.theClass = this.currentClass = delegateClass(classTree, false, false);
+                    this.theClass = this.currentClass = delegateClass(classTree, false, false, true);
                     break;
                 default:
                     this.warnNotSupportedClassType(classType, classTree);
@@ -120,9 +120,11 @@ class JavaTreeConvertController {
                             CommonTree innerClassTree = childNode;
                             this.parentClass = currentClass;
                             if (nodeType == JavaParser.INTERFACE) {
-                            	this.currentClass = delegateClass(innerClassTree, true, true);
+                            	this.currentClass = delegateClass(innerClassTree, true, true, false);
+                            } else if (nodeType == JavaParser.ENUM){
+                            	this.currentClass = delegateClass(innerClassTree, true, false, true);
                             } else {
-                            	this.currentClass = delegateClass(innerClassTree, true, false);
+                            	this.currentClass = delegateClass(innerClassTree, true, false, false);
                             }
                             delegateASTToGenerators(innerClassTree);
                             this.currentClass = parentClass;
@@ -159,12 +161,12 @@ class JavaTreeConvertController {
         }
     }
 
-    private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface) {
+    private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface, boolean isEnumeration) {
         String analysedClass = null;
         if (isInnerClass) {
-            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, true, parentClass, isInterface);
+            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, true, parentClass, isInterface, isEnumeration);
         } else {
-            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, false, "", isInterface);
+            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, false, "", isInterface, isEnumeration);
         }
         return analysedClass;
     }
