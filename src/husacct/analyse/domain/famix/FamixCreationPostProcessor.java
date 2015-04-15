@@ -253,8 +253,8 @@ class FamixCreationPostProcessor {
 		        String uniqueNameFrom = association.from;
 
             	/* //Test helper
-            	if (association.from.startsWith("husacct.analyse.infrastructure.antlr.java.JavaParser")){
-            		if(association.lineNumber == 355) {
+            	if (association.from.contains("InheritanceExtendsLibraryClass")){
+            		if(association.lineNumber == 5) {
             			boolean breakpoint = true; }
             	} */
 
@@ -268,7 +268,7 @@ class FamixCreationPostProcessor {
 	            	if (fromExists) {
 				        if ((association.to != null) && (!association.to.equals(""))) {
 				        	toHasValue = true;
-					        if (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)) {
+					        if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to)) {
 					        	toExists = true;
 					        }
 				        }
@@ -286,7 +286,7 @@ class FamixCreationPostProcessor {
 			                        association.to = to;
 			                    }
 		                    }
-		    		        if (theModel.classes.containsKey(association.to) || theModel.classes.containsKey("xLibraries." + association.to)) {
+		    		        if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to)) {
 		    		        	toExists = true;
 		    		        }
 		            	}
@@ -611,7 +611,7 @@ class FamixCreationPostProcessor {
                 if (fromExists && toExists) {
 					if (!association.from.equals(association.to) && (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to))) {
             			if (typeIsAccess && association.type.startsWith("Invoc")) {
-            				// In case the full invocation is a method call, but the first element in the chain is a reference
+            				// In case the full invocation is a method call, but the first element in the chain is a reference. Needed if type is detected in step 1) or 2).
         					association.type = "AccessPropertyOrField";
             			}
         				if (association.type.startsWith("Access") & chainingInvocation) {
@@ -676,8 +676,8 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.contains("AccessInstanceVariableSuperClass")){
-        		if (invocation.lineNumber == 10) {
+        	if (invocation.from.contains("AccessInstanceWithinAnonymousClass")){
+        		if (invocation.lineNumber == 21) {
         			int breakpoint = 1;
         		}
         	} */
@@ -740,14 +740,14 @@ class FamixCreationPostProcessor {
 			    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("AccessPropertyOrField", invocation.from, superClassName, invocation.lineNumber, invocation.belongsToMethod, invocation.to, invocation.nameOfInstance, true);
 			    				newInvocation.isInheritanceRelated = true;
 				        		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
-				        		newInvocation.type = determineDependencyTypeBasedOnFoundAttribute(entity);
+				        		newInvocation.type = determineDependencyTypeBasedOnFoundAttribute(invocation.from, entity);
 				    			determineDependencyTypeAndOrSubType(newInvocation);
 			                	addToModel(newInvocation);  
 				    			numberOfDerivedAssociations ++;
 		                    }
 		    			}
 		        	}
-	            	// This current association should be added as an access call dependency on the original to-type or on the superclass
+	            	// This current association should be added as an access dependency on the original to-type or on the superclass
 	    			if (!innerClassFound) {
 	    		        invocation.to = originalToType;
 	    			}
@@ -757,7 +757,7 @@ class FamixCreationPostProcessor {
 		            if (attributeFound && !innerClassFound) {
 	        			// Determine if a next invocation in the chain needs to be created
 		        		FamixStructuralEntity entity = theModel.structuralEntities.get(searchKey);
-	    				invocation.type = determineDependencyTypeBasedOnFoundAttribute(entity);
+	    				invocation.type = determineDependencyTypeBasedOnFoundAttribute(invocation.from, entity);
 		        		if (entity.declareType != null && !entity.declareType.equals("")){
 		        			toTypeNewIndirectInvocation = entity.declareType;
 		        		} else {
@@ -876,7 +876,7 @@ class FamixCreationPostProcessor {
             	}
             } else {
                 if (theModel.libraries.containsKey("xLibraries." + association.to)) {
-                	association.subType = "Extends Library Class";
+                	association.subType = "From Library Class";
                 }
             }
         // Call
@@ -886,6 +886,8 @@ class FamixCreationPostProcessor {
             if (theClass != null) {
             	if (theClass.isInterface) {
             		association.subType = "Interface Method";
+            	} else if (theClass.isEnumeration) {
+            		association.subType = "Enumeration Method";
             	} else {
                     switch(association.type) {
     	            case "InvocConstructor":
@@ -921,7 +923,7 @@ class FamixCreationPostProcessor {
 	            	if (theClass.isInterface) {
 	            		association.subType = "Interface Variable";
 	            	} else if (theClass.isEnumeration) {
-		            		association.subType = "Enumeration";
+		            		association.subType = "Enumeration Variable";
 	            	} else {
 	                    switch(association.type) {
 	        	            case "AccessInstanceAttribute":
@@ -935,12 +937,6 @@ class FamixCreationPostProcessor {
 	        	            	break;
 	        	            case "AccessClassAttributeConstant":
 	        	            	association.subType = "Class Variable Constant";
-	        	            	break;
-	        	            case "AccessLocalVariable":
-	        	            	association.subType = "Local Variable";
-	        	            	break;
-	        	            case "AccessParameter":
-	        	            	association.subType = "Parameter";
 	        	            	break;
 	                    }
 	            	}
@@ -964,11 +960,13 @@ class FamixCreationPostProcessor {
 		return returnValue;
     }
 
-    private String determineDependencyTypeBasedOnFoundAttribute(FamixStructuralEntity foundEntity) {
+    private String determineDependencyTypeBasedOnFoundAttribute(String fromClass , FamixStructuralEntity foundEntity) {
     	String returnValue = "Access";
     	if (foundEntity instanceof FamixAttribute) {
 	    	FamixAttribute foundAttribute= (FamixAttribute) foundEntity;
-			if (foundAttribute.hasClassScope) {
+	    	if (foundAttribute.belongsToClass.equals(fromClass)) {
+	    		return "AccessReference";
+	    	} else if (foundAttribute.hasClassScope) {
 				if (foundAttribute.isFinal) {
 					returnValue = "AccessClassAttributeConstant";
 					
@@ -983,10 +981,6 @@ class FamixCreationPostProcessor {
 					returnValue = "AccessInstanceAttribute";
 				}
 			}
-    	} else if (foundEntity instanceof FamixLocalVariable) {
-			returnValue = "AccessLocalVariable";
-    	} else if (foundEntity instanceof FamixFormalParameter) {
-			returnValue = "AccessParameter";
     	}
 		return returnValue;
     }
