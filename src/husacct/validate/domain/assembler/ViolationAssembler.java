@@ -84,6 +84,7 @@ public class ViolationAssembler {
 			final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 			final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 			final String message = messageBuilder.createMessage(violation.getMessage(), violation);
+			final String dependencySubType = violation.getDependencySubType();
 			final int linenumber = violation.getLinenumber();
 
 			if (violation.getSeverity() != null) {
@@ -93,9 +94,9 @@ public class ViolationAssembler {
 				final int severityValue = configuration.getSeverityValue(violation.getSeverity());
 				final boolean isIndirect = violation.isIndirect();
 
-				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, severityName, severityValue, isIndirect);
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, dependencySubType, linenumber, color, severityName, severityValue, isIndirect);
 			} else {
-				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", 0, false);
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, dependencySubType, linenumber, Color.BLACK, "", 0, false);
 			}
 		} catch (ViolationTypeNotFoundException e) {
 			throw new ViolationTypeNotFoundException();

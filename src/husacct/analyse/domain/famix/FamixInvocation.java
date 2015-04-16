@@ -8,7 +8,7 @@ class FamixInvocation extends FamixAssociation {
 
     public String toString() {
         String string = "";
-        string += "\n\ntype: " + super.type + ", subType: " + super.subType  + "\n";
+        string += "\n\ntype: " + super.type + ", subType: " + super.subType + "\n";
         string += "from: " + super.from + "\n";
         string += "to: " + super.to + "\n";
         string += "linenumber: " + super.lineNumber + "\n";

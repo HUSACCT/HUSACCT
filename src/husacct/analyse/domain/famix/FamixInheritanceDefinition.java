@@ -10,7 +10,7 @@ class FamixInheritanceDefinition extends FamixAssociation {
 
     public String toString() {
         String inheritRepesentation = "";
-        inheritRepesentation += "\ntype: " + type;
+        inheritRepesentation += "\ntype: " + type + ", subType: " + super.subType;
         inheritRepesentation += "\nfrom: " + super.from;
         inheritRepesentation += "\nto: " + super.to;
         inheritRepesentation += "\nlineNumber: " + super.lineNumber;

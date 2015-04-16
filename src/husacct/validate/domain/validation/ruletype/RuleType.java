@@ -149,6 +149,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
 				.setViolationTypeKey(dependency.type)
+				.setdependencySubType(dependency.subType)
 				.setClassPathFrom(dependency.from)
 				.setClassPathTo(dependency.to)
 				.setInDirect(dependency.isIndirect)

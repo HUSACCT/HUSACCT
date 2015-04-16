@@ -66,7 +66,7 @@ class ViolationRepository {
 				violationDetailsKey = "";
 				violationDetailsHashMap = null;
 				violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();
-				violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.isIndirect() + "::" + violation.getViolationTypeKey();
+				violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.isIndirect() + "::" + violation.getViolationTypeKey() + "::" + violation.getDependencySubType();
 				violationFromToKey.toLowerCase();
 				violationDetailsKey.toLowerCase();
 				if(violationFromToHashMap.containsKey(violationFromToKey)){
@@ -94,7 +94,7 @@ class ViolationRepository {
         this.logger.info(new Date().toString() + " Before/After filterAndSortAllViolations:  " + beforeNrOfViolations + "/" + violationsList.size());
 	}
 	
-	// Objectives: 1) create and fill violationsPerRuleHashMap.
+	// Objectives: 1) create and fill violationsPerRuleTreeMap.
 	private void sortViolationsPerRule() {
 		violationsPerRuleTreeMap = new TreeMap<String, List<Violation>>();
 		List<Violation> violationsPerRuleList;

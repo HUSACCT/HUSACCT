@@ -17,6 +17,7 @@ public class Violation {
 	private String classPathTo;
 	private LogicalModules logicalModules;
 	private Message message;
+	private String dependencySubType;
 	private boolean inDirect;
 	private Calendar occured;
 
@@ -35,6 +36,7 @@ public class Violation {
 		this.violationTypeKey = "";
 		this.classPathFrom = "";
 		this.classPathTo = "";
+		this.dependencySubType = "";
 		this.inDirect = false;
 		this.occured = Calendar.getInstance();
 		this.logicalModules = null;
@@ -74,13 +76,18 @@ public class Violation {
 		return this;
 	}
 	
+	public Violation setdependencySubType(String dependencySubType){
+		this.dependencySubType = dependencySubType;
+		return this;
+	}
+	
 	// inDirect is by default false
 	public Violation setInDirect(boolean inDirect){
 		this.inDirect = inDirect;
 		return this;
 	}
 	
-	// Occured is by default "now".
+	// Occurred is by default "now".
 	public Violation setOccured(Calendar occured){
 		this.occured = occured;
 		return this;
@@ -115,6 +122,10 @@ public class Violation {
 		return classPathTo;
 	}
 
+	public String getDependencySubType() {
+		return dependencySubType;
+	}
+
 	public boolean isIndirect() {
 		return inDirect;
 	}
@@ -147,7 +158,7 @@ public class Violation {
         representation += "\nlogicalModuleTo: " + logicalModules.getLogicalModuleTo().getLogicalModulePath();
         representation += "\nruleType: " + ruletypeKey;
         representation += ", line: " + linenumber;
-        representation += ", violationType: " + violationTypeKey;
+        representation += ", violationType: " + violationTypeKey + ", subType: " + dependencySubType;
         representation += ", indirect: " + inDirect;
         representation += "\n";
         return representation;

@@ -10,7 +10,8 @@ class FamixException extends FamixAssociation {
 
     public String toString() {
         String representation = "";
-        representation += "Exception from class: " + super.from;
+        representation += "\ntype: " + type + ", subType: " + super.subType;
+        representation += "From class: " + super.from;
         representation += "\nException class referred: " + super.to;
         representation += "\nLinenumber in code: " + super.lineNumber;
         representation += "\nType of exception: " + exceptionType + "\n\n";

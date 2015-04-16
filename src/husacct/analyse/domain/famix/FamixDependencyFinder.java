@@ -345,16 +345,14 @@ class FamixDependencyFinder extends FamixFinder {
             	if(dependenciesOnFromTo.containsKey(uniqueNameFrom)){
             		toMap = dependenciesOnFromTo.get(uniqueNameFrom);
             		if(toMap.containsKey(uniqueNameTo)){
-            			// Check if there is a dependency with the same Type and LineNr in the ArrayList
+            			// Check if there is a dependency with the same Type, subType, lineNr and isIndirect in the ArrayList
             			ArrayList<DependencyDTO> matchingDependencies = toMap.get(uniqueNameTo);
             			boolean found = false;
             			for(DependencyDTO matchingDependency : matchingDependencies){
-	            			if((matchingDependency.from == dependency.from) && (matchingDependency.to == dependency.to)){
-	            				if((matchingDependency.type == dependency.type) && (matchingDependency.lineNumber == dependency.lineNumber) && (matchingDependency.isIndirect == dependency.isIndirect)){
-	            					// Do nothing, dependency already exists
-	            					found = true;
-	            					break;
-	            				}
+            				if((matchingDependency.lineNumber == dependency.lineNumber) && (matchingDependency.type == dependency.type) && (matchingDependency.subType == dependency.subType) && (matchingDependency.lineNumber == dependency.lineNumber) && (matchingDependency.isIndirect == dependency.isIndirect)){
+            					// Do nothing, dependency already exists
+            					found = true;
+            					break;
             				}
             			}
 	            		if(!found){

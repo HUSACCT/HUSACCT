@@ -11,13 +11,14 @@ public class ViolationDTO extends AbstractDTO {
 	public final ViolationTypeDTO violationType;
 	public final String message;
 	public final int linenumber;
+	public String dependencySubType;
 	public final boolean indirect;
 	
 	public final Color severityColor;
 	public final String severityName;
 	public final int severityValue;
 
-	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message , int linenumber, Color severityColor, String severityName, int severityValue, boolean isIndirect) {
+	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message, String dependencySubType, int linenumber, Color severityColor, String severityName, int severityValue, boolean isIndirect) {
 		this.indirect = isIndirect;
 		this.fromClasspath = fromClasspath;
 		this.toClasspath = toClasspath;
@@ -26,6 +27,7 @@ public class ViolationDTO extends AbstractDTO {
 		this.violationType = violationType;
 		this.ruleType = ruleType;
 		this.message = message;
+		this.dependencySubType = dependencySubType;
 		this.linenumber = linenumber;
 		this.severityColor = severityColor;
 		this.severityName = severityName;
@@ -39,8 +41,8 @@ public class ViolationDTO extends AbstractDTO {
         representation += "\ntoClasspath: " + toClasspath;
         representation += "\nlogicalModuleFrom: " + logicalModuleFrom;
         representation += "\nlogicalModuleTo: " + logicalModuleTo;
-        representation += "\nruleType: " + ruleType;
-        representation += ", linenumber: " + linenumber;
+        representation += ruleType.toString();
+        representation += "linenumber: " + linenumber + ", dependencySubType: " + dependencySubType;
         representation += ", indirect: " + indirect;
         representation += "\n";
         return representation;
