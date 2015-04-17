@@ -2,7 +2,6 @@ package husaccttest.analyse.java.blackbox;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.control.task.States;
 import husaccttest.analyse.java.TestCaseExtended;
 

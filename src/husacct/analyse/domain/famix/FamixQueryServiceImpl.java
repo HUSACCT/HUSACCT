@@ -1,8 +1,8 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import husacct.analyse.domain.IModelQueryService;
@@ -72,19 +72,23 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public List<DependencyDTO> getDependencies(String from, String to) {
+        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
     	TreeSet<String> allFromTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(from);
     	TreeSet<String> allToTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(to);
-        List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
         for (String fromTypeName : allFromTypeNames) {
             for (String toTypeName : allToTypeNames) {
                 for (DependencyDTO dependency : dependencyFinder.getDependenciesFromTo(fromTypeName, toTypeName)) {
-                    if (!dependencies.contains(dependency)) {
-                        dependencies.add(dependency);
-                    }
+					// Filter-out duplicate dependencies
+					String uniqueName = (dependency.from + dependency.to + dependency.lineNumber + dependency.type + dependency.subType + Boolean.toString(dependency.isIndirect));
+					if (!foundDependenciesTreeMap.containsKey(uniqueName)){
+						foundDependenciesTreeMap.put(uniqueName, dependency);
+					}
                 }
             }
         }
-        return dependencies;
+        foundDependenciesReturnList.addAll(foundDependenciesTreeMap.values());
+        return foundDependenciesReturnList;
     }
     
     // Returns unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
@@ -142,7 +146,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
 	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
-		return dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
+    	ArrayList<DependencyDTO> result = dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
+        DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
+        return allDependencies;
 	}
 	
     @Override

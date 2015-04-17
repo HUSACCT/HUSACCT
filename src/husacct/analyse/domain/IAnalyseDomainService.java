@@ -1,6 +1,5 @@
 package husacct.analyse.domain;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -21,6 +20,8 @@ public interface IAnalyseDomainService {
     // Returns unique names of all subpackages of the SoftwareUnit with uniqueName  
     public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
     
+	// Returns an array of dependencies between the fromModule and toModule.
+    // Fast function, based on HashMap get-search. At least one of the argument must match with an analysedModule, which may be a composite one. 
     public DependencyDTO[] getDependencies(String from, String to);
 
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
@@ -29,8 +30,8 @@ public interface IAnalyseDomainService {
 
     public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
 
-	// Returns a list of dependencies between the fromClass and toClass.
-    // Fast function, based on HashMap get-search. Both class paths should match exactly to a uniqueName of a type! 
+	// Returns an array of dependencies between the fromClass and toClass.
+    // Fast function, based on HashMap get-search. Both arguments should match exactly with the class path of a type! 
     public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo);
 
     public DependencyDTO[] getDependenciesTo(String to);

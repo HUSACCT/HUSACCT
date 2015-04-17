@@ -4,7 +4,6 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 

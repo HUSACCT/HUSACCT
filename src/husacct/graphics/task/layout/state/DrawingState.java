@@ -2,7 +2,6 @@ package husacct.graphics.task.layout.state;
 
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -40,9 +39,6 @@ public class DrawingState {
 		if (dto instanceof ModuleDTO) {
 			ModuleDTO moduleDto = (ModuleDTO) dto;
 			return moduleDto.logicalPath;
-		} else if (dto instanceof ExternalSystemDTO) {
-			ExternalSystemDTO extSystemDTO = (ExternalSystemDTO) dto;
-			return extSystemDTO.systemPackage;
 		} else {
 			AnalysedModuleDTO analysedDto = (AnalysedModuleDTO) dto;
 			return analysedDto.uniqueName;

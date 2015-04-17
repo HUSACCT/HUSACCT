@@ -34,11 +34,13 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     
     public DependencyDTO[] getAllUnfilteredDependencies();
 
+	// Returns an array of dependencies between the fromModule and toModule.
+    // Fast function, based on HashMap get-search. At least one of the argument must match with an analysedModule, which may be a composite one. 
     public DependencyDTO[] getDependencies(String from, String to);
 
     public DependencyDTO[] getDependenciesFrom(String from);
 
-	// Returns a list of dependencies between the fromClass and toClass.
+	// Returns an array of dependencies between the fromClass and toClass.
     // Fast function, based on HashMap get-search. Both class paths should match exactly to a uniqueName of a type! 
     public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo);
 	

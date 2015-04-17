@@ -3,7 +3,6 @@ package husacct.graphics.util;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
@@ -99,9 +98,6 @@ public class FigureMap {
 		} else if (dto instanceof AnalysedModuleDTO) {
 			AnalysedModuleDTO md = (AnalysedModuleDTO) dto;
 			moduleFiguresByName.put(md.uniqueName, figure);
-		} else if (dto instanceof ExternalSystemDTO) {
-			ExternalSystemDTO es = (ExternalSystemDTO) dto;
-			moduleFiguresByName.put(es.systemPackage, figure);
 		} else if (dto instanceof ProjectDTO) {
 			ProjectDTO pd = (ProjectDTO) dto;
 			moduleFiguresByName.put(pd.name, figure);

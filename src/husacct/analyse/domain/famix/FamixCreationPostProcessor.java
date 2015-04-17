@@ -1,7 +1,6 @@
 package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import husacct.control.task.States;
 
 import java.util.ArrayList;
@@ -363,8 +362,8 @@ class FamixCreationPostProcessor {
             	}
 
                 /* Test helper
-            	if (fromExists && association.from.contains("AccessObjectReferenceWithinIfStatement")) {
-            		if (association.lineNumber == 8) {
+            	if (fromExists && association.from.contains("domain.direct.violating.CallFromInnerClass.CallingInnerClass")) {
+            		if (association.lineNumber == 34) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -382,10 +381,7 @@ class FamixCreationPostProcessor {
                 if (fromExists && (association.to != null) && !association.to.equals("") && !association.to.trim().equals(".")){ 
                 	toHasValue = true;
                 	if (theModel.classes.containsKey(association.to) || theModel.libraries.containsKey("xLibraries." + association.to)) {
-                		toExists = true;
-                    	if (association.type.startsWith("Invoc")) {
-                    		typeIsAccess = false;
-                    	}
+                		toExists = true; // E.g., in case of declarations. 
                  	} else { // Check if a part of association.to refers to an existing class or library.  
                         if (association.to.contains(".") && (association instanceof FamixInvocation)) {
 			            	String[] allSubstrings = association.to.split("\\.");
@@ -615,26 +611,28 @@ class FamixCreationPostProcessor {
         					association.type = "AccessPropertyOrField";
             			}
         				if (association.type.startsWith("Access") & chainingInvocation) {
-        					association.type = "AccessReference";
+	                		// The invocation is not added to the model yet, to avoid redundant access dependencies: this association (for the first string) only refers to a type.
+        					// A derived association is created below, which will result in an access or call dependency. 
+        				} else {
+		    				determineDependencyTypeAndOrSubType(association);
+							addToModel(association);
+							numberofAssociationsAddedToModel ++;
         				}
-	    				determineDependencyTypeAndOrSubType(association);
-						addToModel(association);
-						numberofAssociationsAddedToModel ++;
 					} else {
 	        			// Do nothing
 					}
 					if (association instanceof FamixInvocation) {
 						if (chainingInvocation) { // If true, create an association to identify dependencies to the remaining parts of the chain. Store it temporarily; it is processed in a separate method. 
-		                    FamixInvocation indirectAssociation = new FamixInvocation();
-		                    indirectAssociation.type = "Undetermined";
-		                    indirectAssociation.isIndirect = nextAssociationIsIndirect;
-		                    indirectAssociation.from = association.from;
-		                    indirectAssociation.lineNumber = association.lineNumber;
-		                    indirectAssociation.to = association.to;
-		                    indirectAssociation.invocationName = toRemainderChainingInvocation;
-		                    indirectAssociation.belongsToMethod = theInvocation.belongsToMethod;
-		                    indirectAssociation.nameOfInstance = theInvocation.nameOfInstance;
-		                    waitingDerivedAssociations.add(indirectAssociation);
+		                    FamixInvocation derivedAssociation = new FamixInvocation();
+		                    derivedAssociation.type = "Undetermined";
+		                    derivedAssociation.isIndirect = nextAssociationIsIndirect;
+		                    derivedAssociation.from = association.from;
+		                    derivedAssociation.lineNumber = association.lineNumber;
+		                    derivedAssociation.to = association.to;
+		                    derivedAssociation.invocationName = toRemainderChainingInvocation;
+		                    derivedAssociation.belongsToMethod = theInvocation.belongsToMethod;
+		                    derivedAssociation.nameOfInstance = theInvocation.nameOfInstance;
+		                    waitingDerivedAssociations.add(derivedAssociation);
 						} else {
 		        			// Do nothing
 						}
@@ -676,8 +674,8 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.contains("AccessInstanceWithinAnonymousClass")){
-        		if (invocation.lineNumber == 21) {
+        	if (invocation.from.contains("domain.direct.violating.CallFromInnerClass.CallingInnerClass")){
+        		if (invocation.lineNumber == 34) {
         			int breakpoint = 1;
         		}
         	} */

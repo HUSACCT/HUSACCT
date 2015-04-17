@@ -253,15 +253,19 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     private void updateDependencyTable(boolean indirect, boolean direct){
     	filteredList = new ArrayList<DependencyDTO>();
         List<DependencyDTO> allDependencies = dataControl.listDependencies(fromSelected, toSelected);
-        for (DependencyDTO dependency : allDependencies) {
-        	if(indirect){
-        		if(dependency.isIndirect)
-        			filteredList.add(dependency);
-        	}
-        	if(direct){
-        		if(!dependency.isIndirect)
-        			filteredList.add(dependency);
-        	}
+        if (indirect && direct) {
+        	filteredList.addAll(allDependencies);
+        } else {
+	        for (DependencyDTO dependency : allDependencies) {
+	        	if(indirect){
+	        		if(dependency.isIndirect)
+	        			filteredList.add(dependency);
+	        	}
+	        	if(direct){
+	        		if(!dependency.isIndirect)
+	        			filteredList.add(dependency);
+	        	}
+	        }
         }
         dependencyTable.setModel(new DependencyTableModel(filteredList, dataControl));
         setColumnWidths();

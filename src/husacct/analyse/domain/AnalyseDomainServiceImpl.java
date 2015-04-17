@@ -1,7 +1,6 @@
 package husacct.analyse.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -98,14 +97,8 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     
     @Override
     public DependencyDTO[] getDependencies(String from, String to) {
-        List<DependencyDTO> dependencyList = queryService.getDependencies(from, to);
-        DependencyDTO[] dependencies = new DependencyDTO[dependencyList.size()];
-        int count = 0;
-        for (DependencyDTO dependency : dependencyList) {
-            dependencies[count] = dependency;
-            count++;
-        }
-        return dependencies;
+        List<DependencyDTO> dependencies = queryService.getDependencies(from, to);
+        return dependencies.toArray(new DependencyDTO[dependencies.size()]);
     }
 
     @Override
