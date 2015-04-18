@@ -58,7 +58,29 @@ class FamixModuleFinder extends FamixFinder {
     	return children;
     }
 
-    public List<AnalysedModuleDTO> getChildModulesInModule(String module) {
+	// Get a list of rootPackagesWithClass: the first packages (starting from the root) that contain one or more classes.
+	// These rootPackagesWithClasses identify the paths to the systems internal classes. 
+	public List<String> getRootPackagesWithClass(String module) {
+    	List<String> rootPackagesWithClassList = new ArrayList<String>();
+		List<AnalysedModuleDTO> children = getChildModulesInModule(module);
+		boolean isRootPackageWithClass = false;
+		for (AnalysedModuleDTO child : children) {
+			if (child.type != "package") {
+				isRootPackageWithClass = true;
+				break;
+			}
+		}
+		if (isRootPackageWithClass) {
+			rootPackagesWithClassList.add(module); 
+		} else {
+			for (AnalysedModuleDTO child : children) {
+				rootPackagesWithClassList = getRootPackagesWithClass(child.uniqueName);
+			}
+		}
+		return rootPackagesWithClassList;
+	}
+
+	public List<AnalysedModuleDTO> getChildModulesInModule(String module) {
     	List<AnalysedModuleDTO> result = new ArrayList<AnalysedModuleDTO>();
     	TreeSet<String> children = getChildModulesNamesInModule(module);
     	AnalysedModuleDTO current;

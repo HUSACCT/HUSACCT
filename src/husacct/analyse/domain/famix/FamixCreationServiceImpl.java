@@ -17,6 +17,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     private FamixModel model;
     private FamixCreationPostProcessor creationPostProcessor;
     private final Logger logger = Logger.getLogger(FamixCreationServiceImpl.class);
+	int numberOfInternalClassesAddedBasedOnImports = 0;
     
 
     public FamixCreationServiceImpl() {
@@ -351,7 +352,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         creationPostProcessor.processWaitingDerivedAssociations();
         associationsNumber = model.associations.size();
         model.clearAfterPostProcessing();
-        this.logger.info(new Date().toString() + " Finished: processWaitingAssociations(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations());
+        this.logger.info(new Date().toString() + " Finished: processWaitingAssociations(), Model.associations = " + associationsNumber + ", Not connected associations = " + creationPostProcessor.getNumberOfRejectedWaitingAssociations() + ", NumberOfInternalClassesAddedBasedOnImports = "  + numberOfInternalClassesAddedBasedOnImports);
     }
 
     private void createClassesAndLibrariesBasedOnImports() {
@@ -366,17 +367,13 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 			FamixImport foundImport = model.imports.get(importKey);
 			completeImportStrings.put(foundImport.completeImportString, foundImport.importsCompletePackage);
 		}
-		// Get a list of the root units with their submodules.
-		ArrayList<String> rootNames = new ArrayList<String>();
+		// Get a list of rootPackagesWithClasses: the first packages (starting from the root) that contain one or more classes.
+		// These rootPackagesWithClasses identify the paths to the systems internal classes. 
+		ArrayList<String> rootPackagesWithClassList = new ArrayList<String>();
 		FamixModuleFinder fmf = new FamixModuleFinder(model);
 		List<AnalysedModuleDTO> rootModules = fmf.getRootModules();
 		for (AnalysedModuleDTO rootModule : rootModules) {
-			String name = rootModule.uniqueName;
-			List<AnalysedModuleDTO> rootSubModules = fmf.getChildModulesInModule(name);
-			for (AnalysedModuleDTO rootSubModule : rootSubModules) {
-				String subName = rootSubModule.uniqueName;
-				rootNames.add(subName);
-			}
+			rootPackagesWithClassList.addAll(fmf.getRootPackagesWithClass(rootModule.uniqueName));
 		}
 		
 		// Check for each completeImportString if it is an internal class. If not, create a FamixLibrary or package if it refers to a complete package or namespace.
@@ -386,17 +383,18 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 				//	Determine if the complete import string starts with a root module and refers to an internal type. 
 				boolean isExternal = true;
 				String rootModuleUniqueName = "";
-				for (String rootName : rootNames){
+				for (String rootName : rootPackagesWithClassList){
 					if (completeImportString.startsWith(rootName)){
 						isExternal =  false;
 						rootModuleUniqueName = rootName;
 						break;
 					}
 				}
-				if (isExternal == false) { // completeImportString refers to an internal package of type. If it's not a package, it must be a class (assuming that all packages are created). If the type is not registered yet, create it.
+				if (isExternal == false) { // completeImportString refers to an internal package or type. If it's not a package, it must be a class (assuming that all packages are created). If the type is not registered yet, create it.
 					if (!importsCompletePackage && !model.packages.containsKey(completeImportString)){
 						if(!model.classes.containsKey(completeImportString)){
 							createClassWithParentsBasedOnImport(completeImportString, rootModuleUniqueName);
+							numberOfInternalClassesAddedBasedOnImports ++;
 						} else {
 							// Do nothing: class exists already
 						}
