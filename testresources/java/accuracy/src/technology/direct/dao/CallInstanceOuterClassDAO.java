@@ -33,7 +33,7 @@ public class CallInstanceOuterClassDAO {
         // start stepping through the array from the beginning
         private int next = 0;
         private TestConstructorCallOfInnerClass otherInnerClass;
-        private String text;
+        public String text;
         
         public CallInstanceInnerClassDAO(String s) {
         	this.text = s;

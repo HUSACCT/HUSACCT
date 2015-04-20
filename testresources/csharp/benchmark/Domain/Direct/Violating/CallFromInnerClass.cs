@@ -1,3 +1,5 @@
+using Technology.Direct.Dao;
+
 namespace Domain.Direct.Violating
 {
 	public class CallFromInnerClass
@@ -20,6 +22,8 @@ namespace Domain.Direct.Violating
 		{
 			private readonly CallFromInnerClass _enclosing;
 			private int next = 0;
+			CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerClassDao;
+
 
 			// start stepping through the array from the beginning
 			public virtual bool HasNext()
@@ -44,8 +48,10 @@ namespace Domain.Direct.Violating
 			
 	    	public int CallMethodInstanceInnerClass() {
 	    		int b;
-	    		b = innerDao.getNext();
-	    		return b;
+	    		b = innerClassDao.getNext();
+
+			int c = innerDao.getText();
+	    		return c;
 	    	}
 
 		}

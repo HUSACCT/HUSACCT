@@ -1,9 +1,12 @@
 namespace Domain.Direct.Violating
 {
 	using Domain.Direct;	
+	using Technology.Direct.Dao;
 
-	public class AccessObjectReferenceWithinIfStatement : Base
+	public class AccessObjectReferenceWithinIfStatement
 	{
+		private ProfileDAO profileDao;
+
 		public AccessObjectReferenceWithinIfStatement()
 		{
 			if (profileDao != null)

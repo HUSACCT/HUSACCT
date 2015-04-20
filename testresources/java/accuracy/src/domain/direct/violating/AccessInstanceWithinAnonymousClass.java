@@ -4,10 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
-import domain.direct.Base;
+import technology.direct.dao.ProfileDAO;
 
-public class AccessInstanceWithinAnonymousClass extends Base{
+public class AccessInstanceWithinAnonymousClass {
 	
+	private ProfileDAO profileDao;
+
 	private JButton browseButton;
 	
 	public AccessInstanceWithinAnonymousClass(){

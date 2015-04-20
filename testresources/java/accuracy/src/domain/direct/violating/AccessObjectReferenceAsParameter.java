@@ -1,9 +1,10 @@
 package domain.direct.violating;
 
-import domain.direct.Base;
+import technology.direct.dao.ProfileDAO;
 
-public class AccessObjectReferenceAsParameter extends Base{
+public class AccessObjectReferenceAsParameter{
 	
+	private ProfileDAO profileDao;
 	private DeclarationParameter declaration;
 
 	public AccessObjectReferenceAsParameter(){

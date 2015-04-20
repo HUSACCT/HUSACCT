@@ -1,8 +1,9 @@
 package domain.direct.violating;
 
-import domain.direct.Base;
+import technology.direct.dao.UserDAO;
 
-public class AccessInstanceVariableConstant extends Base {
+public class AccessInstanceVariableConstant {
+	private UserDAO userDao;
 	public String sniName;
 	public String sniMessage;
 	

@@ -163,9 +163,9 @@ public class CSharp_AccuracyTestDependencyDetection {
 		typesToFind.add("Access");
 		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
 		toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
+		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true)) {
+		if ((outcome1 == true) && (outcome2 == true)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -178,12 +178,10 @@ public class CSharp_AccuracyTestDependencyDetection {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
 		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "Technology.Direct.Subclass.CallInstanceSubClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
 		toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		boolean outcome3 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
+		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true) || (outcome3 == true)) {
+		if (outcome1 && outcome2) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -195,7 +193,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toModule = "Domain.Direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
 @Test

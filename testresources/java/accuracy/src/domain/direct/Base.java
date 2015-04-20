@@ -13,7 +13,7 @@ public class Base {
 	protected UserDAO userDao;
 	protected ProfileDAO profileDao;
 	protected CallInstanceOuterClassDAO outerDao;
-	protected CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerDao; // Declaration of inner class, while only the outer class is imported
+	protected CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerAttribute; // Declaration of inner class, while only the outer class is imported
 	protected CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO innerInterfaceDao;
 	protected CallInstanceInterfaceDAO interfaceDao;
 	protected FoursquareApi fourApi;

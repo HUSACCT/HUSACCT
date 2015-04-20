@@ -128,10 +128,10 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void AccessFromInnerClass(){
 		String fromModule = "domain.direct.violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "domain.direct.Base";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", false));
 	}
 
 	@Test
@@ -192,11 +192,11 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.subclass.CallInstanceSubSubClassDOA";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", false); 
+		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", true); 
 		toModule = "technology.direct.subclass.CallInstanceSubClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", false); 
+		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", true); 
 		toModule = "technology.direct.dao.CallInstanceSuperClassDAO";
-		boolean outcome3 = areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", false); 
+		boolean outcome3 = areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", true); 
 		boolean totalOutcome = false;
 		if ((outcome1 == true) || (outcome2 == true) || (outcome3 == true)) {
 			totalOutcome = true;

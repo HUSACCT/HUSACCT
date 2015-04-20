@@ -1,9 +1,11 @@
 package domain.direct.violating;
 
-import domain.direct.Base;
+import technology.direct.dao.ProfileDAO;
 
-public class AccessInstanceVariableWrite extends Base {
+public class AccessInstanceVariableWrite {
 	
+	private ProfileDAO profileDao;
+
 	public AccessInstanceVariableWrite(){
 
 		String s = "profit";
