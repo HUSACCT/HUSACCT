@@ -74,7 +74,7 @@ class FamixModuleFinder extends FamixFinder {
 			rootPackagesWithClassList.add(module); 
 		} else {
 			for (AnalysedModuleDTO child : children) {
-				rootPackagesWithClassList = getRootPackagesWithClass(child.uniqueName);
+				rootPackagesWithClassList.addAll(getRootPackagesWithClass(child.uniqueName));
 			}
 		}
 		return rootPackagesWithClassList;

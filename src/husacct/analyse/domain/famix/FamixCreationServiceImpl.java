@@ -385,12 +385,12 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 				String rootModuleUniqueName = "";
 				for (String rootName : rootPackagesWithClassList){
 					if (completeImportString.startsWith(rootName)){
-						isExternal =  false;
+						isExternal = false;
 						rootModuleUniqueName = rootName;
 						break;
 					}
 				}
-				if (isExternal == false) { // completeImportString refers to an internal package or type. If it's not a package, it must be a class (assuming that all packages are created). If the type is not registered yet, create it.
+				if (!isExternal) { // completeImportString refers to an internal package or type. If it's not a package, it must be a class (assuming that all packages are created). If the type is not registered yet, create it.
 					if (!importsCompletePackage && !model.packages.containsKey(completeImportString)){
 						if(!model.classes.containsKey(completeImportString)){
 							createClassWithParentsBasedOnImport(completeImportString, rootModuleUniqueName);

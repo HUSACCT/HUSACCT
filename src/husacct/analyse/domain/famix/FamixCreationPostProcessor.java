@@ -351,7 +351,6 @@ class FamixCreationPostProcessor {
             	boolean toHasValue = false;
             	boolean chainingInvocation = false;
             	boolean typeIsAccess = true;
-            	boolean nextAssociationIsIndirect = false;
             	String toRemainderChainingInvocation = "";
             	String toString = "";
             	FamixInvocation theInvocation = null;
@@ -493,8 +492,9 @@ class FamixCreationPostProcessor {
 		    	        	// 3.2 Determine if association.to refers to an inherited attribute
 		        			if (!classOfAttribute.equals(association.from)) { // classOfAttribute refers to a super class  
 		        				association.isInheritanceRelated = true;
+		        				association.isIndirect = true;
 			                	// Create an access dependency on the superclass.
-			    				FamixInvocation newDirectInvocation = indirectAssociations_AddIndirectInvocation(association.type, association.from, classOfAttribute, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, false);
+			    				FamixInvocation newDirectInvocation = indirectAssociations_AddIndirectInvocation(association.type, association.from, classOfAttribute, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, true);
 			    				newDirectInvocation.isInheritanceRelated = true;
 			    				newDirectInvocation.type = "AccessReference";
 			            		determineDependencyTypeAndOrSubType(newDirectInvocation);
@@ -549,7 +549,6 @@ class FamixCreationPostProcessor {
 	    	            		association.type = "InvocConstructor";
 		            			toExists = true;
 		    	            	typeIsAccess = false;
-		    	            	nextAssociationIsIndirect = true;
 		    	            	numberOfConnectedViaMethod++;
 	                    }
 	                    
@@ -567,8 +566,9 @@ class FamixCreationPostProcessor {
 		    	    	            if (foundMethod != null) {
 		    	    	            	methodFound = true;
 		    	    	            	association.isInheritanceRelated = true;
+		    	    	            	association.isIndirect = true;
 		    		                	// Create a call dependency on the superclass;
-		    		    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("InvocInstanceMethod", theInvocation.from, superClassName, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, false);
+		    		    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation("InvocInstanceMethod", theInvocation.from, superClassName, theInvocation.lineNumber, theInvocation.belongsToMethod, association.to, theInvocation.nameOfInstance, true);
 		    		    				newInvocation.isInheritanceRelated = true;
 		    		    				newInvocation.type = determineDependencyTypeBasedOnFoundMethod(foundMethod);
 					            		determineDependencyTypeAndOrSubType(newInvocation);
@@ -623,16 +623,15 @@ class FamixCreationPostProcessor {
 					}
 					if (association instanceof FamixInvocation) {
 						if (chainingInvocation) { // If true, create an association to identify dependencies to the remaining parts of the chain. Store it temporarily; it is processed in a separate method. 
-		                    FamixInvocation derivedAssociation = new FamixInvocation();
-		                    derivedAssociation.type = "Undetermined";
-		                    derivedAssociation.isIndirect = nextAssociationIsIndirect;
-		                    derivedAssociation.from = association.from;
-		                    derivedAssociation.lineNumber = association.lineNumber;
-		                    derivedAssociation.to = association.to;
-		                    derivedAssociation.invocationName = toRemainderChainingInvocation;
-		                    derivedAssociation.belongsToMethod = theInvocation.belongsToMethod;
-		                    derivedAssociation.nameOfInstance = theInvocation.nameOfInstance;
-		                    waitingDerivedAssociations.add(derivedAssociation);
+		                    FamixInvocation derivedInvocation = new FamixInvocation();
+		                    derivedInvocation.type = "Undetermined";
+		                    derivedInvocation.from = association.from;
+		                    derivedInvocation.lineNumber = association.lineNumber;
+		                    derivedInvocation.to = association.to;
+		                    derivedInvocation.invocationName = toRemainderChainingInvocation;
+		                    derivedInvocation.belongsToMethod = theInvocation.belongsToMethod;
+		                    derivedInvocation.nameOfInstance = theInvocation.nameOfInstance;
+		                    waitingDerivedAssociations.add(derivedInvocation);
 						} else {
 		        			// Do nothing
 						}
@@ -674,8 +673,8 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.contains("domain.direct.violating.CallFromInnerClass.CallingInnerClass")){
-        		if (invocation.lineNumber == 34) {
+        	if (invocation.from.contains("ScriptingEngine")){
+        		if (invocation.lineNumber == 69) {
         			int breakpoint = 1;
         		}
         	} */
@@ -690,7 +689,7 @@ class FamixCreationPostProcessor {
         	if (invocation.invocationName.equals("")) {
         		// In case of the final indirect invocation in a chain to the type of the last attribute or the return type of the last method.
 				String typeNewIndirectInvocation = "AccessReference_TypeOfVariable";
-				if (invocation.type.startsWith("Invoc")) {
+				if (invocation.type.startsWith("Call")) {
 					typeNewIndirectInvocation = "AccessReference_ReturnType";
 				}
 				invocation.type = typeNewIndirectInvocation;

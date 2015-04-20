@@ -131,7 +131,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference", true));
 	}
 
 	@Test
