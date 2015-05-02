@@ -39,7 +39,7 @@ public class PDFReportWriter extends ReportWriter {
 	@Override
 	public void createReport() throws DocumentException, MalformedURLException, IOException {
 		document = new Document();
-		checkDirsExist();
+		createFile();
 
 		final String fileName = getFileName();
 		PdfWriter.getInstance(document, new FileOutputStream(fileName));
@@ -140,7 +140,7 @@ public class PDFReportWriter extends ReportWriter {
 
 			// DependencyKind
 			if (violation.getViolationTypeKey() != null) {
-				addCellToTable(pdfTable, getDependencyKindValue(violation.getViolationTypeKey(), violation.isIndirect()), BaseColor.WHITE, false);
+				addCellToTable(pdfTable, getDependencyKindValue(violation.getViolationTypeKey(), violation.getIsIndirect()), BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}

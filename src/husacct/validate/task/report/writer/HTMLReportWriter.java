@@ -27,7 +27,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 	@Override
 	public void createReport() throws IOException, URISyntaxException {
-		checkDirsExist();
+		createFile();
 		createResources();
 		writer = new FileWriter(getFileName());
 		html = new BufferedWriter(writer);
@@ -151,7 +151,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 			// Dependency Kind
 			if (violation.getViolationTypeKey() != null) {
-				createColumn(getDependencyKindValue(violation.getViolationTypeKey(), violation.isIndirect()));
+				createColumn(getDependencyKindValue(violation.getViolationTypeKey(), violation.getIsIndirect()));
 			} else {
 				createColumn("");
 			}

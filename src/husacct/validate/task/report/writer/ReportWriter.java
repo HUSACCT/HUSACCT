@@ -57,7 +57,7 @@ public abstract class ReportWriter {
 		return new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
 	}
 
-	protected void checkDirsExist() {
+	protected void createFile() {
 		File file = new File(path);
 		file.mkdirs();
 	}
@@ -65,4 +65,9 @@ public abstract class ReportWriter {
 	protected String getFileName() {
 		return path + File.separator + fileName;
 	}
+
+	protected String translate(String key) {
+        return ServiceProvider.getInstance().getLocaleService().getTranslatedString(key);
+    }
+
 }

@@ -8,6 +8,7 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
+import husacct.validate.task.report.writer.ExcelReportWriter;
 import husacct.validate.task.report.writer.HTMLReportWriter;
 import husacct.validate.task.report.writer.PDFReportWriter;
 import husacct.validate.task.report.writer.ReportWriter;
@@ -33,6 +34,8 @@ public class ExportReportFactory {
 		try {
 			if (fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {
 				writer = new XMLReportWriter(report, path, name);
+			} else if (fileType.toLowerCase().equals(ExtensionType.XLS.getExtension().toLowerCase())) {
+				writer = new ExcelReportWriter(report, path, name);
 			} else if (fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
 				writer = new HTMLReportWriter(report, path, name);
 			} else if (fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {

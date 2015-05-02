@@ -97,6 +97,7 @@ public class ValidateTest {
 		String[] exportExtensions = new String[] { 
 				ExtensionType.PDF.getExtension(), 
 				ExtensionType.HTML.getExtension(),
+				ExtensionType.XLS.getExtension(),
 				ExtensionType.XML.getExtension()				
 		};
 		

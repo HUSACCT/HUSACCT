@@ -92,7 +92,7 @@ public class ViolationAssembler {
 				final Color color = severity.getColor();
 				final String severityName = severity.getSeverityName();
 				final int severityValue = configuration.getSeverityValue(violation.getSeverity());
-				final boolean isIndirect = violation.isIndirect();
+				final boolean isIndirect = violation.getIsIndirect();
 
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, dependencySubType, linenumber, color, severityName, severityValue, isIndirect);
 			} else {

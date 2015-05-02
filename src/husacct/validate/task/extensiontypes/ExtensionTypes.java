@@ -3,7 +3,8 @@ package husacct.validate.task.extensiontypes;
 public class ExtensionTypes {
 	public enum ExtensionType {
 		PDF("pdf"),
-		HTML("html"), 
+		HTML("html"),
+		XLS("xls"),
 		XML("xml");
 		
 		private String extension;

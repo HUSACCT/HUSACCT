@@ -19,6 +19,8 @@ public class Violation {
 	private Message message;
 	private String dependencySubType;
 	private boolean inDirect;
+	private boolean isInheritanceRelated; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends. 
+	private boolean isInnerClassRelated; // True, if the from-class or to-class is an inner class
 	private Calendar occured;
 
 	// =======================================
@@ -38,7 +40,9 @@ public class Violation {
 		this.classPathTo = "";
 		this.dependencySubType = "";
 		this.inDirect = false;
-		this.occured = Calendar.getInstance();
+		this.isInheritanceRelated = false;
+		this.isInnerClassRelated = false;
+		this.occured = Calendar.getInstance(); 	// Occurred is by default "now".
 		this.logicalModules = null;
 		this.message = null;
 	}
@@ -81,13 +85,21 @@ public class Violation {
 		return this;
 	}
 	
-	// inDirect is by default false
+	public Violation setIsInheritanceRelated(boolean isInheritanceRelated){
+		this.isInheritanceRelated = isInheritanceRelated;
+		return this;
+	}
+	
+	public Violation setIsInnerClassRelated(boolean isInnerClassRelated){
+		this.isInnerClassRelated = isInnerClassRelated;
+		return this;
+	}
+	
 	public Violation setInDirect(boolean inDirect){
 		this.inDirect = inDirect;
 		return this;
 	}
 	
-	// Occurred is by default "now".
 	public Violation setOccured(Calendar occured){
 		this.occured = occured;
 		return this;
@@ -126,7 +138,15 @@ public class Violation {
 		return dependencySubType;
 	}
 
-	public boolean isIndirect() {
+	public boolean getIsInheritanceRelated() {
+		return isInheritanceRelated;
+	}
+
+	public boolean getIsInnerClassRelated() {
+		return isInnerClassRelated;
+	}
+
+	public boolean getIsIndirect() {
 		return inDirect;
 	}
 
@@ -159,7 +179,7 @@ public class Violation {
         representation += "\nruleType: " + ruletypeKey;
         representation += ", line: " + linenumber;
         representation += ", violationType: " + violationTypeKey + ", subType: " + dependencySubType;
-        representation += ", indirect: " + inDirect;
+        representation += ", indirect: " + inDirect + ", isInheritanceRelated: " + isInheritanceRelated + ", isInnerClassRelated: " + isInnerClassRelated;
         representation += "\n";
         return representation;
     }

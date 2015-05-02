@@ -1,4 +1,4 @@
-package husacct.analyse.abstraction.export.excel;
+package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
 import husacct.analyse.abstraction.export.AbstractFileExporter;
@@ -6,13 +6,19 @@ import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.validate.domain.factory.message.Messagebuilder;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -25,13 +31,17 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+
 import org.apache.log4j.Logger;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.DocumentException;
 
-public class ExcelExporter extends AbstractFileExporter {
+
+public class ExcelReportWriter extends ReportWriter {
 
     private IAnalyseDomainService analysedDomain;
-    private Logger husacctLogger = Logger.getLogger(ExcelExporter.class);
+    private Logger husacctLogger = Logger.getLogger(ExcelReportWriter.class);
     private WritableWorkbook workbook;
     private WritableCellFormat timesBold;
     private WritableCellFormat timesBold_AlignmentRight;
@@ -109,22 +119,22 @@ public class ExcelExporter extends AbstractFileExporter {
     
     
     
-    public ExcelExporter(DependencyDTO[] data, IAnalyseDomainService analyseDomainService) {
-        super(data);
-    	this.analysedDomain = analyseDomainService;
-        numberOfAllDependencies_Total = data.length;
+    public ExcelReportWriter(Report report, String path, String fileName) {
+    	super(report, path, fileName, ExtensionType.XLS);
+        numberOfAllDependencies_Total = report.getViolations().getValue().size();
     }
 
     @Override
-    protected void write(String path) {
-        File file = new File(path);
+    public void createReport() throws DocumentException, MalformedURLException, IOException {
+        String fullPath = path + "\\" + fileName;
+    	File file = new File(fullPath);
         WorkbookSettings documentSettings = new WorkbookSettings();
         documentSettings.setLocale(ServiceProvider.getInstance().getLocaleService().getLocale());
         try {
             workbook = Workbook.createWorkbook(file);
             workbook.createSheet(super.translate("Statistics"), 0);
             WritableSheet statisticsSheet = workbook.getSheet(0);
-            workbook.createSheet(super.translate("Dependencies") + "_1", 1);
+            workbook.createSheet(super.translate("Violations") + "_1", 1);
             WritableSheet dependenciesSheet = workbook.getSheet(1);
             createLayoutDefaults();
             createLabels(dependenciesSheet);
@@ -157,23 +167,24 @@ public class ExcelExporter extends AbstractFileExporter {
     }
     
     private void createLabels(WritableSheet sheet) throws WriteException {
-        addCellBold(sheet, 0, 0, super.translate("DependencyFrom"));
-        addCellBold(sheet, 1, 0, super.translate("DependencyTo"));
+        addCellBold(sheet, 0, 0, super.translate("From"));
+        addCellBold(sheet, 1, 0, super.translate("To"));
         addCellBold(sheet, 2, 0, super.translate("DependencyType"));
         addCellBold(sheet, 3, 0, super.translate("DependencySubType"));
         addCellBold(sheet, 4, 0, super.translate("Linenumber"));
         addCellBold(sheet, 5, 0, super.translate("Direct") + "/" + super.translate("Indirect"));
         addCellBold(sheet, 6, 0, super.translate("InheritanceRelated"));
         addCellBold(sheet, 7, 0, super.translate("InnerClassRelated"));
+        addCellBold(sheet, 8, 0, super.translate("Rule"));
     }
 
     private void createContent(WritableSheet sheet) throws WriteException, RowsExceededException {
     	int sheetNr = 1;
     	int row = 1;
         try {
-	        for (DependencyDTO dependency : data) {
-	            writeDependency(sheet, row, dependency);
-	            updateStatistics(dependency);
+    		for (Violation violation : report.getViolations().getValue()) {
+	            writeDependency(sheet, row, violation);
+	            updateStatistics(violation);
 	            row++;
 	            if (row == 60001) {
 	            	sheetNr ++;
@@ -188,30 +199,38 @@ public class ExcelExporter extends AbstractFileExporter {
         }
     }
 
-    private void writeDependency(WritableSheet sheet, int row, DependencyDTO dependency) throws RowsExceededException, WriteException {
-        Label fromLabel = new Label(0, row, dependency.from, times);
-        Label toLabel = new Label(1, row, dependency.to, times);
-        Label typeLabel = new Label(2, row, dependency.type, times);
-        Label subTypeLabel = new Label(3, row, dependency.subType, times);
-        Label lineLabel = new Label(4, row, "" + dependency.lineNumber, times);
+    private void writeDependency(WritableSheet sheet, int row, Violation violation) throws RowsExceededException, WriteException {
+        Label fromLabel = new Label(0, row, violation.getClassPathFrom(), times);
+        Label toLabel = new Label(1, row, violation.getClassPathTo(), times);
+        Label typeLabel = new Label(2, row, violation.getViolationTypeKey(), times);
+        Label dependencySubTypeLabel = new Label(3, row, violation.getDependencySubType(), times);
+        Label lineLabel = new Label(4, row, "" + violation.getLinenumber(), times);
         Label directLabel;
-        if (dependency.isIndirect) {
+        if (violation.getIsIndirect()) {
             directLabel = new Label(5, row, super.translate("Indirect"), times);
         } else {
             directLabel = new Label(5, row, super.translate("Direct"), times);
         }
-        Label inheritanceLabel = new Label(6, row, "" + dependency.isInheritanceRelated, times);
-        Label innerClassLabel = new Label(7, row, "" + dependency.isInnerClassRelated, times);
-        
+        Label inheritanceLabel = new Label(6, row, "" + violation.getIsInheritanceRelated(), times);
+        Label innerClassLabel = new Label(7, row, "" + violation.getIsInnerClassRelated(), times);
+		// Rule
+        Label ruleLabel;
+		if (violation.getMessage() != null) {
+			String message = new Messagebuilder().createMessage(violation.getMessage(), violation);
+			ruleLabel = new Label(8, row, message, times);
+		} else {
+			ruleLabel = new Label(8, row, "-", times);
+		}
         List<Label> labelArray = new ArrayList<Label>();
         labelArray.add(fromLabel);
         labelArray.add(toLabel);
         labelArray.add(typeLabel);
-        labelArray.add(subTypeLabel);
+        labelArray.add(dependencySubTypeLabel);
         labelArray.add(lineLabel);
         labelArray.add(directLabel);
         labelArray.add(inheritanceLabel);
         labelArray.add(innerClassLabel);
+        labelArray.add(ruleLabel);
         
         for(Label label : labelArray){
         	sheet.addCell(label);
@@ -228,17 +247,17 @@ public class ExcelExporter extends AbstractFileExporter {
         }
     }
 
-    private void updateStatistics(DependencyDTO dependency) throws RowsExceededException, WriteException {
-    	if (dependency.isIndirect) {
+    private void updateStatistics(Violation violation) throws RowsExceededException, WriteException {
+    	if (violation.getIsIndirect()) {
     		numberOfAllDependencies_Indirect ++;
     	} else {
     		numberOfAllDependencies_Direct ++;
     	}
     	
-    	switch (dependency.type) {
+    	switch (violation.getViolationTypeKey()) {
     	case "Import":
     	    numberOfAllDependencies_Import ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfAllDependencies_Import_Indirect ++;
         	} else {
         		numberOfAllDependencies_Import_Direct ++;
@@ -246,30 +265,30 @@ public class ExcelExporter extends AbstractFileExporter {
     	    break;
     	case "Declaration":
     	    numberOfAllDependencies_Declaration ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfAllDependencies_Declaration_Indirect ++;
         	} else {
         		numberOfAllDependencies_Declaration_Direct ++;
         	}
-        	if (dependency.subType.equals("Instance Variable")) {
+        	if (violation.getDependencySubType().equals("Instance Variable")) {
         		numberOff_Declaration_InstanceVariable ++;
-        	} else if (dependency.subType.equals("Local Variable")) {
+        	} else if (violation.getDependencySubType().equals("Local Variable")) {
         		numberOff_Declaration_LocalVariable ++;
-        	} else if (dependency.subType.equals("Class Variable")) {
+        	} else if (violation.getDependencySubType().equals("Class Variable")) {
         		numberOff_Declaration_ClassVariable ++;
-        	} else if (dependency.subType.equals("Parameter")) {
+        	} else if (violation.getDependencySubType().equals("Parameter")) {
         		numberOff_Declaration_Parameter ++;
-        	} else if (dependency.subType.equals("Return Type")) {
+        	} else if (violation.getDependencySubType().equals("Return Type")) {
         		numberOff_Declaration_ReturnType ++;
-        	} else if (dependency.subType.equals("Type Cast")) {
+        	} else if (violation.getDependencySubType().equals("Type Cast")) {
         		numberOff_Declaration_TypeCast ++;
-        	} else if (dependency.subType.equals("Exception")) {
+        	} else if (violation.getDependencySubType().equals("Exception")) {
         		numberOff_Declaration_Exception ++;
         	}
     	    break;
     	case "Annotation":
     	    numberOfAllDependencies_Annotation ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfAllDependencies_Annotation_Indirect ++;
         	} else {
         		numberOfAllDependencies_Annotation_Direct ++;
@@ -277,39 +296,39 @@ public class ExcelExporter extends AbstractFileExporter {
     	    break;
     	case "Access":
     		numberOfAllDependencies_Access ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfAllDependencies_Access_Indirect ++;
         	} else {
         		numberOfAllDependencies_Access_Direct ++;
         	}
-        	if (dependency.subType.equals("Variable")) {
+        	if (violation.getDependencySubType().equals("Variable")) {
         		numberOff_Access_Variable ++;
-        	} else if (dependency.subType.equals("Instance Variable")) {
+        	} else if (violation.getDependencySubType().equals("Instance Variable")) {
         		numberOff_Access_InstanceVariable ++;
-        	} else if (dependency.subType.equals("Instance Variable Constant")) {
+        	} else if (violation.getDependencySubType().equals("Instance Variable Constant")) {
         		numberOff_Access_InstanceVariableConstant ++;
-        	} else if (dependency.subType.equals("Class Variable")) {
+        	} else if (violation.getDependencySubType().equals("Class Variable")) {
         		numberOff_Access_ClassVariable ++;
-        	} else if (dependency.subType.equals("Class Variable Constant")) {
+        	} else if (violation.getDependencySubType().equals("Class Variable Constant")) {
         		numberOff_Access_ClassVariableConstant ++;
-        	} else if (dependency.subType.equals("Enumeration Variable")) {
+        	} else if (violation.getDependencySubType().equals("Enumeration Variable")) {
         		numberOff_Access_EnumerationVariable ++;
-        	} else if (dependency.subType.equals("Interface Variable")) {
+        	} else if (violation.getDependencySubType().equals("Interface Variable")) {
         		numberOff_Access_InterfaceVariable ++;
-        	} else if (dependency.subType.equals("Library Variable")) {
+        	} else if (violation.getDependencySubType().equals("Library Variable")) {
         		numberOff_Access_LibraryVariable ++;
-        	} else if (dependency.subType.equals("Reference")) {
+        	} else if (violation.getDependencySubType().equals("Reference")) {
         		numberOff_Access_Reference ++;
-        	} else if (dependency.subType.equals("Reference ReturnTypeUsedMethod")) {
+        	} else if (violation.getDependencySubType().equals("Reference ReturnTypeUsedMethod")) {
         		numberOff_Access_ReferenceReturnTypeUsedMethod ++;
-        		if (dependency.isIndirect) {
+        		if (violation.getIsIndirect()) {
         			numberOff_Access_ReferenceReturnTypeUsedMethod_Indirect ++;
         		} else {
         			numberOff_Access_ReferenceReturnTypeUsedMethod_Direct ++;
         		}
-        	} else if (dependency.subType.equals("Reference TypeOfUsedVariable")) {
+        	} else if (violation.getDependencySubType().equals("Reference TypeOfUsedVariable")) {
         		numberOff_Access_ReferenceTypeOfUsedVariable ++;
-        		if (dependency.isIndirect) {
+        		if (violation.getIsIndirect()) {
         			numberOff_Access_ReferenceTypeOfUsedVariable_Indirect ++;
         		} else {
         			numberOff_Access_ReferenceTypeOfUsedVariable_Direct ++;
@@ -318,63 +337,63 @@ public class ExcelExporter extends AbstractFileExporter {
         	break;
     	case "Call":
     		numberOfAllDependencies_Call ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfAllDependencies_Call_Indirect ++;
         	} else {
         		numberOfAllDependencies_Call_Direct ++;
         	}
-        	if (dependency.subType.equals("Method")) {
+        	if (violation.getDependencySubType().equals("Method")) {
         		numberOff_Call_Method ++;
-        	} else if (dependency.subType.equals("Instance Method")) {
+        	} else if (violation.getDependencySubType().equals("Instance Method")) {
         		numberOff_Call_InstanceMethod ++;
-        	} else if (dependency.subType.equals("Class Method")) {
+        	} else if (violation.getDependencySubType().equals("Class Method")) {
         		numberOff_Call_ClassMethod ++;
-        	} else if (dependency.subType.equals("Constructor")) {
+        	} else if (violation.getDependencySubType().equals("Constructor")) {
         		numberOff_Call_Constructor ++;
-        	} else if (dependency.subType.equals("Enumeration Method")) {
+        	} else if (violation.getDependencySubType().equals("Enumeration Method")) {
         		numberOff_Call_EnumerationMethod ++;
-        	} else if (dependency.subType.equals("Interface Method")) {
+        	} else if (violation.getDependencySubType().equals("Interface Method")) {
         		numberOff_Call_InterfaceMethod ++;
-        	} else if (dependency.subType.equals("Library Method")) {
+        	} else if (violation.getDependencySubType().equals("Library Method")) {
         		numberOff_Call_LibraryMethod ++;
         	}
         	break;
     	case "Inheritance":
     		numberOfAllDependencies_Inheritance ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfAllDependencies_Inheritance_Indirect ++;
         	} else {
         		numberOfAllDependencies_Inheritance_Direct ++;
         	}
-        	if (dependency.subType.equals("Extends Class")) {
+        	if (violation.getDependencySubType().equals("Extends Class")) {
         		numberOff_Inheritance_ExtendsClass ++;
-        	} else if (dependency.subType.equals("Extends Abstract Class")) {
+        	} else if (violation.getDependencySubType().equals("Extends Abstract Class")) {
         		numberOff_Inheritance_ExtendsAbstractClass ++;
-        	} else if (dependency.subType.equals("Ïmplements Interface")) {
+        	} else if (violation.getDependencySubType().equals("Ïmplements Interface")) {
         		numberOff_Inheritance_ÏmplementsInterface ++;
-        	} else if (dependency.subType.equals("From Library Class")) {
+        	} else if (violation.getDependencySubType().equals("From Library Class")) {
         		numberOff_Inheritance_FromLibraryClass ++;
         	}
         	break;
     	}
 
-    	if (dependency.isInheritanceRelated) {
+    	if (violation.getIsInheritanceRelated()) {
     		numberOfInheritanceRelatedDependencies_Total ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfInheritanceRelatedDependencies_Total_Indirect ++;
         	} else {
         		numberOfInheritanceRelatedDependencies_Total_Direct ++;
         	}
-        	if (dependency.type.equals("Access")) {
+        	if (violation.getViolationTypeKey().equals("Access")) {
         		numberOfInheritanceRelatedDependencies_Access ++;
-            	if (dependency.isIndirect) {
+            	if (violation.getIsIndirect()) {
             		numberOfInheritanceRelatedDependencies_Access_Indirect ++;
             	} else {
             		numberOfInheritanceRelatedDependencies_Access_Direct ++;
             	}
-        	} else if (dependency.type.equals("Call")) {
+        	} else if (violation.getViolationTypeKey().equals("Call")) {
         		numberOfInheritanceRelatedDependencies_Call ++;
-            	if (dependency.isIndirect) {
+            	if (violation.getIsIndirect()) {
             		numberOfInheritanceRelatedDependencies_Call_Indirect ++;
             	} else {
             		numberOfInheritanceRelatedDependencies_Call_Direct ++;
@@ -382,9 +401,9 @@ public class ExcelExporter extends AbstractFileExporter {
         	} 
     	}
         	
-    	if (dependency.isInnerClassRelated) {
+    	if (violation.getIsInnerClassRelated()) {
     		numberOfInnerClassRelatedDependencies_Total ++;
-        	if (dependency.isIndirect) {
+        	if (violation.getIsIndirect()) {
         		numberOfInnerClassRelatedDependencies_Total_Indirect ++;
         	} else {
         		numberOfInnerClassRelatedDependencies_Total_Direct ++;
@@ -394,7 +413,7 @@ public class ExcelExporter extends AbstractFileExporter {
     
     private void writeStatistics(WritableSheet sheet) throws WriteException {
 		ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
-    	AnalysisStatisticsDTO stat = analysedDomain.getAnalysisStatistics(null);
+    	AnalysisStatisticsDTO stat = ServiceProvider.getInstance().getAnalyseService().getAnalysisStatistics(null);
     	
         addCellBold(sheet, 0, 0, super.translate("Application") + ": " + applicationDTO.name);
         addCellBold_AlignmentRight(sheet, 1, 0, "Total");
@@ -506,15 +525,15 @@ public class ExcelExporter extends AbstractFileExporter {
         }
 
         addCellDefault(sheet, 0, 21, "----------------------------------------------------");
-        addCellBold(sheet, 0, 23, "Number of Dependencies per subType");
+        addCellBold(sheet, 0, 23, "Number of Dependencies per dependencySubType");
         addCellBold(sheet, 0, 25, "Access");
-        int accessTotalSubTypes = numberOff_Access_Variable + numberOff_Access_InstanceVariable + numberOff_Access_InstanceVariableConstant 
+        int accessTotaldependencySubTypes = numberOff_Access_Variable + numberOff_Access_InstanceVariable + numberOff_Access_InstanceVariableConstant 
         		+ numberOff_Access_ClassVariable + numberOff_Access_ClassVariableConstant + numberOff_Access_EnumerationVariable
         		+ numberOff_Access_InterfaceVariable + numberOff_Access_LibraryVariable + numberOff_Access_Reference
         		+ numberOff_Access_ReferenceReturnTypeUsedMethod + numberOff_Access_ReferenceTypeOfUsedVariable;
-        addCellNumber(sheet, 1, 25, accessTotalSubTypes);
-        if (accessTotalSubTypes != numberOfAllDependencies_Access) {
-            addCellDefault(sheet, 2, 25, "Warning: Total of subTypes does not match total of types");
+        addCellNumber(sheet, 1, 25, accessTotaldependencySubTypes);
+        if (accessTotaldependencySubTypes != numberOfAllDependencies_Access) {
+            addCellDefault(sheet, 2, 25, "Warning: Total of dependencySubTypes does not match total of types");
         }
         addCellDefault(sheet, 0, 26, "Variable");
         addCellNumber(sheet, 1, 26, numberOff_Access_Variable);
@@ -544,12 +563,12 @@ public class ExcelExporter extends AbstractFileExporter {
         addCellNumber(sheet, 3, 36, numberOff_Access_ReferenceTypeOfUsedVariable_Indirect);
 
         addCellBold(sheet, 0, 38, "Call");
-        int callTotalSubTypes = numberOff_Call_Method + numberOff_Call_InstanceMethod + numberOff_Call_ClassMethod 
+        int callTotaldependencySubTypes = numberOff_Call_Method + numberOff_Call_InstanceMethod + numberOff_Call_ClassMethod 
         		+ numberOff_Call_Constructor + numberOff_Call_EnumerationMethod + numberOff_Call_InterfaceMethod
         		+ numberOff_Call_LibraryMethod;
-        addCellNumber(sheet, 1, 38, callTotalSubTypes);
-        if (callTotalSubTypes != numberOfAllDependencies_Call) {
-            addCellDefault(sheet, 2, 38, "Warning: Total of subTypes does not match total of types");
+        addCellNumber(sheet, 1, 38, callTotaldependencySubTypes);
+        if (callTotaldependencySubTypes != numberOfAllDependencies_Call) {
+            addCellDefault(sheet, 2, 38, "Warning: Total of dependencySubTypes does not match total of types");
         }
         addCellDefault(sheet, 0, 39, "Method");
         addCellNumber(sheet, 1, 39, numberOff_Call_Method);
@@ -567,12 +586,12 @@ public class ExcelExporter extends AbstractFileExporter {
         addCellNumber(sheet, 1, 45, numberOff_Call_LibraryMethod);
 
         addCellBold(sheet, 0, 47, "Declaration");
-        int declarationTotalSubTypes = numberOff_Declaration_ClassVariable + numberOff_Declaration_Exception + numberOff_Declaration_InstanceVariable 
+        int declarationTotaldependencySubTypes = numberOff_Declaration_ClassVariable + numberOff_Declaration_Exception + numberOff_Declaration_InstanceVariable 
         		+ numberOff_Declaration_LocalVariable + numberOff_Declaration_Parameter + numberOff_Declaration_ReturnType
         		+ numberOff_Declaration_TypeCast;
-        addCellNumber(sheet, 1, 47, declarationTotalSubTypes);
-        if (declarationTotalSubTypes != numberOfAllDependencies_Declaration) {
-            addCellDefault(sheet, 2, 47, "Warning: Total of subTypes does not match total of types");
+        addCellNumber(sheet, 1, 47, declarationTotaldependencySubTypes);
+        if (declarationTotaldependencySubTypes != numberOfAllDependencies_Declaration) {
+            addCellDefault(sheet, 2, 47, "Warning: Total of dependencySubTypes does not match total of types");
         }
         addCellDefault(sheet, 0, 48, "Class Variable");
         addCellNumber(sheet, 1, 48, numberOff_Declaration_ClassVariable);
@@ -590,11 +609,11 @@ public class ExcelExporter extends AbstractFileExporter {
         addCellNumber(sheet, 1, 54, numberOff_Declaration_TypeCast);
 
         addCellBold(sheet, 0, 56, "Inheritance");
-        int InheritanceTotalSubTypes = numberOff_Inheritance_ExtendsClass + numberOff_Inheritance_ExtendsAbstractClass 
+        int InheritanceTotaldependencySubTypes = numberOff_Inheritance_ExtendsClass + numberOff_Inheritance_ExtendsAbstractClass 
         		+ numberOff_Inheritance_ÏmplementsInterface + numberOff_Inheritance_FromLibraryClass;
-        addCellNumber(sheet, 1, 56, InheritanceTotalSubTypes);
-        if (InheritanceTotalSubTypes != numberOfAllDependencies_Inheritance) {
-            addCellDefault(sheet, 2, 56, "Warning: Total of subTypes does not match total of types");
+        addCellNumber(sheet, 1, 56, InheritanceTotaldependencySubTypes);
+        if (InheritanceTotaldependencySubTypes != numberOfAllDependencies_Inheritance) {
+            addCellDefault(sheet, 2, 56, "Warning: Total of dependencySubTypes does not match total of types");
         }
         addCellDefault(sheet, 0, 57, "Extends Class");
         addCellNumber(sheet, 1, 57, numberOff_Inheritance_ExtendsClass);

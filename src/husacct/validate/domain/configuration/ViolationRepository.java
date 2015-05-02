@@ -66,7 +66,7 @@ class ViolationRepository {
 				violationDetailsKey = "";
 				violationDetailsHashMap = null;
 				violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();
-				violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.isIndirect() + "::" + violation.getViolationTypeKey() + "::" + violation.getDependencySubType();
+				violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.getIsIndirect() + "::" + violation.getViolationTypeKey() + "::" + violation.getDependencySubType();
 				violationFromToKey.toLowerCase();
 				violationDetailsKey.toLowerCase();
 				if(violationFromToHashMap.containsKey(violationFromToKey)){

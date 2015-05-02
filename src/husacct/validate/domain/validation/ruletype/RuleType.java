@@ -127,7 +127,6 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 				.setRuletypeKey(this.key)
 				.setClassPathFrom(classPathFrom.getPhysicalPath())
 				.setClassPathTo(classPathTo.getPhysicalPath())
-				.setInDirect(false)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
 		return newViolation;
@@ -153,6 +152,8 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 				.setClassPathFrom(dependency.from)
 				.setClassPathTo(dependency.to)
 				.setInDirect(dependency.isIndirect)
+				.setIsInheritanceRelated(dependency.isInheritanceRelated)
+				.setIsInnerClassRelated(dependency.isInnerClassRelated)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
 		return newViolation;
@@ -169,7 +170,6 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 				.setClassPathTo(logicalModules.getLogicalModuleTo().getLogicalModulePath())
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setInDirect(false)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
 		return newViolation;
@@ -189,7 +189,6 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
 				.setClassPathFrom(classPathFrom.getPhysicalPath())
-				.setInDirect(false)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
 		return newViolation;
@@ -211,7 +210,6 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 				.setRuletypeKey(this.key)
 				.setViolationTypeKey(violationTypeKey)
 				.setClassPathFrom(classPathFrom.getPhysicalPath())
-				.setInDirect(false)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
 		return newViolation;

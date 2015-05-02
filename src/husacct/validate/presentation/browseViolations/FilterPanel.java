@@ -195,13 +195,13 @@ public class FilterPanel extends JPanel {
 			return violations;
 		} else if (radioButtonIndirect.isSelected()) {
 			for (Violation violation : violations) {
-				if (violation.isIndirect()) {
+				if (violation.getIsIndirect()) {
 					selectedViolations.add(violation);
 				}
 			}
 		} else if (radioButtonDirect.isSelected()) {
 			for (Violation violation : violations) {
-				if (!violation.isIndirect()) {
+				if (!violation.getIsIndirect()) {
 					selectedViolations.add(violation);
 				}
 			} 

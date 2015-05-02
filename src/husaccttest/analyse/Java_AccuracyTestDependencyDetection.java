@@ -696,7 +696,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference ReturnTypeUsedMethod", true));
 	}
 
 	@Test
@@ -741,7 +741,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Reference ReturnTypeUsedMethod", true));
 	}
 
 	@Test
