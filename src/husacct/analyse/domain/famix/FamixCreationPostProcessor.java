@@ -373,6 +373,7 @@ class FamixCreationPostProcessor {
             		if (!superClass.equals("")) {
             			toString = association.to.replace("superBaseClass", superClass);
                 		association.to = toString;
+                		association.isInheritanceRelated = true;
             		}
             	}
             	
@@ -595,7 +596,6 @@ class FamixCreationPostProcessor {
 										// The invocation is added  as an indirect access invocation to the return value of the method.
 			    	                	association.type = "AccessReference_ReturnType";
 				            			toExists = true;
-				            			association.isIndirect = true;
 									}
 		    	        		}
 		    	        	}
