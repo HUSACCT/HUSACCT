@@ -5,7 +5,7 @@ import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 
@@ -326,7 +326,7 @@ public final class FilterViolations extends HelpableJDialog {
 		if (!checkPathsNames()) {
 			return;
 		}
-		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter, pathsfilter);
+		FilterSettingsDTO dto = new FilterSettingsDTO(ruletypesfilter, violationtypesfilter, pathsfilter);
 		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
 		filterViolationsObserver.updateViolationTables();
 		dispose();

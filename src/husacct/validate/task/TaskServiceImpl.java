@@ -13,7 +13,7 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
@@ -73,7 +73,7 @@ public class TaskServiceImpl {
 		return filterController.getViolationsPerSeverity(shownViolations, severities);
 	}
 
-	public void setFilterValues(PathDTO dto, boolean hideFilter, Calendar date) {
+	public void setFilterValues(FilterSettingsDTO dto, boolean hideFilter, Calendar date) {
 		filterController.setFilterValues(dto, hideFilter, getHistoryViolations(date));
 	}
 	
@@ -94,11 +94,13 @@ public class TaskServiceImpl {
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
-		return filterController.loadRuletypes(getHistoryViolations(date));
+		List<Violation> violations = getHistoryViolations(date);
+		return filterController.loadRuletypes(violations);
 	}
 
 	public ArrayList<String> loadViolationtypesForFilter(Calendar date) {
-		return filterController.loadViolationtypes(getHistoryViolations(date));
+		List<Violation> violations = getHistoryViolations(date);
+		return filterController.loadViolationtypes(violations);
 	}
 
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {

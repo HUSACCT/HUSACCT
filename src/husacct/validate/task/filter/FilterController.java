@@ -12,7 +12,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class FilterController {
 		this.configuration = configuration;
 	}
 
-	public void setFilterValues(PathDTO dto, boolean hideFilter, List<Violation> violations) {
+	public void setFilterValues(FilterSettingsDTO dto, boolean hideFilter, List<Violation> violations) {
 		ArrayList<String> modulesFilter = new ArrayList<String>();
 		for (Violation violation : violations) {
 			for (String path : dto.getPaths()) {
@@ -86,7 +86,6 @@ public class FilterController {
 					appliedViolationtypes.add(localeService.getTranslatedString(violationTypeKey));
 				}
 			}
-			appliedViolationtypes.add("-");
 		}
 		return appliedViolationtypes;
 	}
