@@ -640,7 +640,7 @@ public class ExcelReportWriter extends ReportWriter {
         addCellNumber(sheet, 1, 54, numberOf_Inheritance_ExtendsClass);
         addCellDefault(sheet, 0, 55, "Extends Abstract Class");
         addCellNumber(sheet, 1, 55, numberOf_Inheritance_ExtendsAbstractClass);
-        addCellDefault(sheet, 0, 56, "Ïmplements Interface");
+        addCellDefault(sheet, 0, 56, "Implements Interface");
         addCellNumber(sheet, 1, 56, numberOf_Inheritance_ÏmplementsInterface);
         addCellDefault(sheet, 0, 57, "From Library Class");
         addCellNumber(sheet, 1, 57, numberOf_Inheritance_FromLibraryClass);
