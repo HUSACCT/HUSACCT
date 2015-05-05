@@ -210,7 +210,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "TypeOfVariable", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", true));
 	}
 
 	@Test
@@ -219,7 +219,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "TypeOfVariable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", false));
 	}
 
 	@Test
@@ -246,7 +246,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "TypeOfVariable", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", true));
 	}
 
 	@Test
@@ -255,7 +255,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "TypeOfVariable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", false));
 	}
 
 	// Annotation	
@@ -612,7 +612,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao.IMapDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Ïmplements Interface", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Implements Interface", false));
 	}
 
 	//TESTS
@@ -696,7 +696,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "TypeOfVariable", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", true));
 	}
 
 	@Test
@@ -705,7 +705,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "ReturnType", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Return Type", true));
 	}
 
 	@Test
@@ -714,7 +714,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "ReturnType", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Return Type", true));
 	}
 
 	@Test
@@ -723,7 +723,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "ReturnType", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Return Type", true));
 	}
 
 	@Test
@@ -732,7 +732,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "ReturnType", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Return Type", true));
 	}
 
 	@Test
@@ -741,7 +741,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "TypeOfVariable", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", true));
 	}
 
 	@Test
@@ -750,7 +750,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "ReturnType", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Return Type", true));
 	}
 
 	@Test
@@ -914,7 +914,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.IPreferences";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Ïmplements Interface", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Implements Interface", true));
 	}
 
 	@Test
@@ -941,7 +941,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto.IPreferences";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Ïmplements Interface", true));
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Implements Interface", true));
 	}
 
 	// Violations: Test if all found violating dependencies are reported as violations
