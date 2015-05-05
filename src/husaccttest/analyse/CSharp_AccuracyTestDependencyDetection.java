@@ -201,7 +201,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Direct.Violating.AccessInstanceVariable_SetArgumentValue";
 		String toModule = "Technology.Direct.Dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -210,7 +210,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Direct.Violating.AccessObjectReferenceAsParameter";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -228,7 +228,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Direct.Violating.AccessLocalVariable_SetArgumentValue";
 		String toModule = "Technology.Direct.Dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -237,7 +237,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Direct.Violating.AccessObjectReferenceWithinIfStatement";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -662,7 +662,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter_POI";
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -671,7 +671,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -680,7 +680,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -689,7 +689,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -698,7 +698,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter";
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -707,7 +707,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament_POI";
 		String toModule = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 
@@ -716,7 +716,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament";
 		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Access");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
 	}
 

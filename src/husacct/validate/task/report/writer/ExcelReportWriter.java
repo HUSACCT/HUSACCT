@@ -1,11 +1,8 @@
 package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
-import husacct.analyse.abstraction.export.AbstractFileExporter;
-import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.DependencyDTO;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
@@ -34,13 +31,11 @@ import jxl.write.biff.RowsExceededException;
 
 import org.apache.log4j.Logger;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 
 
 public class ExcelReportWriter extends ReportWriter {
 
-    private IAnalyseDomainService analysedDomain;
     private Logger husacctLogger = Logger.getLogger(ExcelReportWriter.class);
     private WritableWorkbook workbook;
     private WritableCellFormat timesBold;
@@ -52,24 +47,27 @@ public class ExcelReportWriter extends ReportWriter {
     private int numberOfAllDependencies_Total = 0;
     private int numberOfAllDependencies_Direct = 0;
     private int numberOfAllDependencies_Indirect = 0;
-    private int numberOfAllDependencies_Import = 0;
-    private int numberOfAllDependencies_Import_Direct = 0;
-    private int numberOfAllDependencies_Import_Indirect = 0;
-    private int numberOfAllDependencies_Declaration = 0;
-    private int numberOfAllDependencies_Declaration_Direct = 0;
-    private int numberOfAllDependencies_Declaration_Indirect = 0;
-    private int numberOfAllDependencies_Annotation = 0;
-    private int numberOfAllDependencies_Annotation_Direct = 0;
-    private int numberOfAllDependencies_Annotation_Indirect = 0;
     private int numberOfAllDependencies_Access = 0;
     private int numberOfAllDependencies_Access_Direct = 0;
     private int numberOfAllDependencies_Access_Indirect = 0;
+    private int numberOfAllDependencies_Annotation = 0;
+    private int numberOfAllDependencies_Annotation_Direct = 0;
+    private int numberOfAllDependencies_Annotation_Indirect = 0;
     private int numberOfAllDependencies_Call = 0;
     private int numberOfAllDependencies_Call_Direct = 0;
     private int numberOfAllDependencies_Call_Indirect = 0;
+    private int numberOfAllDependencies_Declaration = 0;
+    private int numberOfAllDependencies_Declaration_Direct = 0;
+    private int numberOfAllDependencies_Declaration_Indirect = 0;
+    private int numberOfAllDependencies_Import = 0;
+    private int numberOfAllDependencies_Import_Direct = 0;
+    private int numberOfAllDependencies_Import_Indirect = 0;
     private int numberOfAllDependencies_Inheritance = 0;
     private int numberOfAllDependencies_Inheritance_Direct = 0;
     private int numberOfAllDependencies_Inheritance_Indirect = 0;
+    private int numberOfAllDependencies_Reference = 0;
+    private int numberOfAllDependencies_Reference_Direct = 0;
+    private int numberOfAllDependencies_Reference_Indirect = 0;
     private int numberOfInheritanceRelatedDependencies_Total = 0;
     private int numberOfInheritanceRelatedDependencies_Total_Direct = 0;
     private int numberOfInheritanceRelatedDependencies_Total_Indirect = 0;
@@ -79,43 +77,46 @@ public class ExcelReportWriter extends ReportWriter {
     private int numberOfInheritanceRelatedDependencies_Call = 0;
     private int numberOfInheritanceRelatedDependencies_Call_Direct = 0;
     private int numberOfInheritanceRelatedDependencies_Call_Indirect = 0;
+    private int numberOfInheritanceRelatedDependencies_Reference = 0;
+    private int numberOfInheritanceRelatedDependencies_Reference_Direct = 0;
+    private int numberOfInheritanceRelatedDependencies_Reference_Indirect = 0;
     private int numberOfInnerClassRelatedDependencies_Total = 0;
     private int numberOfInnerClassRelatedDependencies_Total_Direct = 0;
     private int numberOfInnerClassRelatedDependencies_Total_Indirect = 0;
     // Variables for statistics: dependency.type
-    private int numberOff_Access_Variable = 0;
-    private int numberOff_Access_EnumerationVariable = 0;
-    private int numberOff_Access_InterfaceVariable = 0;
-    private int numberOff_Access_LibraryVariable = 0;
-    private int numberOff_Access_InstanceVariable = 0;
-    private int numberOff_Access_InstanceVariableConstant = 0;
-    private int numberOff_Access_ClassVariable = 0;
-    private int numberOff_Access_ClassVariableConstant = 0;
-    private int numberOff_Access_Reference = 0;
-    private int numberOff_Access_ReferenceReturnTypeUsedMethod = 0;
-    private int numberOff_Access_ReferenceReturnTypeUsedMethod_Direct = 0;
-    private int numberOff_Access_ReferenceReturnTypeUsedMethod_Indirect = 0;
-    private int numberOff_Access_ReferenceTypeOfUsedVariable = 0;
-    private int numberOff_Access_ReferenceTypeOfUsedVariable_Direct = 0;
-    private int numberOff_Access_ReferenceTypeOfUsedVariable_Indirect = 0;
-    private int numberOff_Call_Method = 0;
-    private int numberOff_Call_EnumerationMethod = 0;
-    private int numberOff_Call_InterfaceMethod = 0;
-    private int numberOff_Call_LibraryMethod = 0;
-    private int numberOff_Call_Constructor = 0;
-    private int numberOff_Call_ClassMethod = 0;
-    private int numberOff_Call_InstanceMethod = 0;
-    private int numberOff_Declaration_ClassVariable = 0; 
-    private int numberOff_Declaration_InstanceVariable = 0;
-    private int numberOff_Declaration_LocalVariable = 0;
-    private int numberOff_Declaration_Parameter = 0;
-    private int numberOff_Declaration_ReturnType = 0;
-    private int numberOff_Declaration_TypeCast = 0;
-    private int numberOff_Declaration_Exception = 0;
-    private int numberOff_Inheritance_ExtendsClass = 0;
-    private int numberOff_Inheritance_ExtendsAbstractClass = 0;
-    private int numberOff_Inheritance_ÏmplementsInterface = 0;
-    private int numberOff_Inheritance_FromLibraryClass = 0;
+    private int numberOf_Access_Variable = 0;
+    private int numberOf_Access_EnumerationVariable = 0;
+    private int numberOf_Access_InterfaceVariable = 0;
+    private int numberOf_Access_LibraryVariable = 0;
+    private int numberOf_Access_InstanceVariable = 0;
+    private int numberOf_Access_InstanceVariableConstant = 0;
+    private int numberOf_Access_ClassVariable = 0;
+    private int numberOf_Access_ClassVariableConstant = 0;
+    private int numberOf_Call_Method = 0;
+    private int numberOf_Call_EnumerationMethod = 0;
+    private int numberOf_Call_InterfaceMethod = 0;
+    private int numberOf_Call_LibraryMethod = 0;
+    private int numberOf_Call_Constructor = 0;
+    private int numberOf_Call_ClassMethod = 0;
+    private int numberOf_Call_InstanceMethod = 0;
+    private int numberOf_Declaration_ClassVariable = 0; 
+    private int numberOf_Declaration_InstanceVariable = 0;
+    private int numberOf_Declaration_LocalVariable = 0;
+    private int numberOf_Declaration_Parameter = 0;
+    private int numberOf_Declaration_ReturnType = 0;
+    private int numberOf_Declaration_TypeCast = 0;
+    private int numberOf_Declaration_Exception = 0;
+    private int numberOf_Inheritance_ExtendsClass = 0;
+    private int numberOf_Inheritance_ExtendsAbstractClass = 0;
+    private int numberOf_Inheritance_ÏmplementsInterface = 0;
+    private int numberOf_Inheritance_FromLibraryClass = 0;
+    private int numberOf_Reference_Type = 0;
+    private int numberOf_Reference_ReferenceReturnTypeUsedMethod = 0;
+    private int numberOf_Reference_ReferenceReturnTypeUsedMethod_Direct = 0;
+    private int numberOf_Reference_ReferenceReturnTypeUsedMethod_Indirect = 0;
+    private int numberOf_Reference_ReferenceTypeOfUsedVariable = 0;
+    private int numberOf_Reference_ReferenceTypeOfUsedVariable_Direct = 0;
+    private int numberOf_Reference_ReferenceTypeOfUsedVariable_Indirect = 0;
     
     
     
@@ -271,19 +272,19 @@ public class ExcelReportWriter extends ReportWriter {
         		numberOfAllDependencies_Declaration_Direct ++;
         	}
         	if (violation.getDependencySubType().equals("Instance Variable")) {
-        		numberOff_Declaration_InstanceVariable ++;
+        		numberOf_Declaration_InstanceVariable ++;
         	} else if (violation.getDependencySubType().equals("Local Variable")) {
-        		numberOff_Declaration_LocalVariable ++;
+        		numberOf_Declaration_LocalVariable ++;
         	} else if (violation.getDependencySubType().equals("Class Variable")) {
-        		numberOff_Declaration_ClassVariable ++;
+        		numberOf_Declaration_ClassVariable ++;
         	} else if (violation.getDependencySubType().equals("Parameter")) {
-        		numberOff_Declaration_Parameter ++;
+        		numberOf_Declaration_Parameter ++;
         	} else if (violation.getDependencySubType().equals("Return Type")) {
-        		numberOff_Declaration_ReturnType ++;
+        		numberOf_Declaration_ReturnType ++;
         	} else if (violation.getDependencySubType().equals("Type Cast")) {
-        		numberOff_Declaration_TypeCast ++;
+        		numberOf_Declaration_TypeCast ++;
         	} else if (violation.getDependencySubType().equals("Exception")) {
-        		numberOff_Declaration_Exception ++;
+        		numberOf_Declaration_Exception ++;
         	}
     	    break;
     	case "Annotation":
@@ -302,36 +303,45 @@ public class ExcelReportWriter extends ReportWriter {
         		numberOfAllDependencies_Access_Direct ++;
         	}
         	if (violation.getDependencySubType().equals("Variable")) {
-        		numberOff_Access_Variable ++;
+        		numberOf_Access_Variable ++;
         	} else if (violation.getDependencySubType().equals("Instance Variable")) {
-        		numberOff_Access_InstanceVariable ++;
+        		numberOf_Access_InstanceVariable ++;
         	} else if (violation.getDependencySubType().equals("Instance Variable Constant")) {
-        		numberOff_Access_InstanceVariableConstant ++;
+        		numberOf_Access_InstanceVariableConstant ++;
         	} else if (violation.getDependencySubType().equals("Class Variable")) {
-        		numberOff_Access_ClassVariable ++;
+        		numberOf_Access_ClassVariable ++;
         	} else if (violation.getDependencySubType().equals("Class Variable Constant")) {
-        		numberOff_Access_ClassVariableConstant ++;
+        		numberOf_Access_ClassVariableConstant ++;
         	} else if (violation.getDependencySubType().equals("Enumeration Variable")) {
-        		numberOff_Access_EnumerationVariable ++;
+        		numberOf_Access_EnumerationVariable ++;
         	} else if (violation.getDependencySubType().equals("Interface Variable")) {
-        		numberOff_Access_InterfaceVariable ++;
+        		numberOf_Access_InterfaceVariable ++;
         	} else if (violation.getDependencySubType().equals("Library Variable")) {
-        		numberOff_Access_LibraryVariable ++;
-        	} else if (violation.getDependencySubType().equals("Reference")) {
-        		numberOff_Access_Reference ++;
-        	} else if (violation.getDependencySubType().equals("Reference ReturnTypeUsedMethod")) {
-        		numberOff_Access_ReferenceReturnTypeUsedMethod ++;
+        		numberOf_Access_LibraryVariable ++;
+        	} 
+        	break;
+    	case "Reference":
+    		numberOfAllDependencies_Reference ++;
+    		if (violation.getIsIndirect()) {
+    			numberOfAllDependencies_Reference_Indirect ++;
+    		} else {
+    			numberOfAllDependencies_Reference_Direct ++;
+    		}
+        	if (violation.getDependencySubType().equals("Type")) {
+        		numberOf_Reference_Type ++;
+        	} else if (violation.getDependencySubType().equals("Return Type")) {
+        		numberOf_Reference_ReferenceReturnTypeUsedMethod ++;
         		if (violation.getIsIndirect()) {
-        			numberOff_Access_ReferenceReturnTypeUsedMethod_Indirect ++;
+        			numberOf_Reference_ReferenceReturnTypeUsedMethod_Indirect ++;
         		} else {
-        			numberOff_Access_ReferenceReturnTypeUsedMethod_Direct ++;
+        			numberOf_Reference_ReferenceReturnTypeUsedMethod_Direct ++;
         		}
-        	} else if (violation.getDependencySubType().equals("Reference TypeOfUsedVariable")) {
-        		numberOff_Access_ReferenceTypeOfUsedVariable ++;
+        	} else if (violation.getDependencySubType().equals("Type of Variable")) {
+        		numberOf_Reference_ReferenceTypeOfUsedVariable ++;
         		if (violation.getIsIndirect()) {
-        			numberOff_Access_ReferenceTypeOfUsedVariable_Indirect ++;
+        			numberOf_Reference_ReferenceTypeOfUsedVariable_Indirect ++;
         		} else {
-        			numberOff_Access_ReferenceTypeOfUsedVariable_Direct ++;
+        			numberOf_Reference_ReferenceTypeOfUsedVariable_Direct ++;
         		}
         	}
         	break;
@@ -343,19 +353,19 @@ public class ExcelReportWriter extends ReportWriter {
         		numberOfAllDependencies_Call_Direct ++;
         	}
         	if (violation.getDependencySubType().equals("Method")) {
-        		numberOff_Call_Method ++;
+        		numberOf_Call_Method ++;
         	} else if (violation.getDependencySubType().equals("Instance Method")) {
-        		numberOff_Call_InstanceMethod ++;
+        		numberOf_Call_InstanceMethod ++;
         	} else if (violation.getDependencySubType().equals("Class Method")) {
-        		numberOff_Call_ClassMethod ++;
+        		numberOf_Call_ClassMethod ++;
         	} else if (violation.getDependencySubType().equals("Constructor")) {
-        		numberOff_Call_Constructor ++;
+        		numberOf_Call_Constructor ++;
         	} else if (violation.getDependencySubType().equals("Enumeration Method")) {
-        		numberOff_Call_EnumerationMethod ++;
+        		numberOf_Call_EnumerationMethod ++;
         	} else if (violation.getDependencySubType().equals("Interface Method")) {
-        		numberOff_Call_InterfaceMethod ++;
+        		numberOf_Call_InterfaceMethod ++;
         	} else if (violation.getDependencySubType().equals("Library Method")) {
-        		numberOff_Call_LibraryMethod ++;
+        		numberOf_Call_LibraryMethod ++;
         	}
         	break;
     	case "Inheritance":
@@ -366,13 +376,13 @@ public class ExcelReportWriter extends ReportWriter {
         		numberOfAllDependencies_Inheritance_Direct ++;
         	}
         	if (violation.getDependencySubType().equals("Extends Class")) {
-        		numberOff_Inheritance_ExtendsClass ++;
+        		numberOf_Inheritance_ExtendsClass ++;
         	} else if (violation.getDependencySubType().equals("Extends Abstract Class")) {
-        		numberOff_Inheritance_ExtendsAbstractClass ++;
-        	} else if (violation.getDependencySubType().equals("Ïmplements Interface")) {
-        		numberOff_Inheritance_ÏmplementsInterface ++;
+        		numberOf_Inheritance_ExtendsAbstractClass ++;
+        	} else if (violation.getDependencySubType().equals("Implements Interface")) {
+        		numberOf_Inheritance_ÏmplementsInterface ++;
         	} else if (violation.getDependencySubType().equals("From Library Class")) {
-        		numberOff_Inheritance_FromLibraryClass ++;
+        		numberOf_Inheritance_FromLibraryClass ++;
         	}
         	break;
     	}
@@ -397,6 +407,13 @@ public class ExcelReportWriter extends ReportWriter {
             		numberOfInheritanceRelatedDependencies_Call_Indirect ++;
             	} else {
             		numberOfInheritanceRelatedDependencies_Call_Direct ++;
+            	}
+        	} else if (violation.getViolationTypeKey().equals("Reference")) {
+        		numberOfInheritanceRelatedDependencies_Reference ++;
+            	if (violation.getIsIndirect()) {
+            		numberOfInheritanceRelatedDependencies_Reference_Indirect ++;
+            	} else {
+            		numberOfInheritanceRelatedDependencies_Reference_Direct ++;
             	}
         	} 
     	}
@@ -424,7 +441,7 @@ public class ExcelReportWriter extends ReportWriter {
         addCellDefault(sheet, 0, 3, super.translate("LinesOfCode"));
         addCellNumber(sheet, 1, 3, stat.totalNrOfLinesOfCode);
         addCellDefault(sheet, 0, 4, "----------------------------------------------------");
-        
+        addCellBold(sheet, 0, 5, "Violating Dependencies:");
         addCellBold_AlignmentRight(sheet, 1, 5, "Total");
         addCellBold_AlignmentRight(sheet, 2, 5, "Direct");
         addCellBold_AlignmentRight(sheet, 3, 5, "Indirect");
@@ -437,23 +454,23 @@ public class ExcelReportWriter extends ReportWriter {
             addCellDefault(sheet, 4, 6, "Warning: Total does not match direct + indirect");
         }
         int derivedAll = numberOfAllDependencies_Import + numberOfAllDependencies_Declaration + numberOfAllDependencies_Call 
-        		+ numberOfAllDependencies_Access + numberOfAllDependencies_Inheritance + numberOfAllDependencies_Annotation;
+        		+ numberOfAllDependencies_Access + numberOfAllDependencies_Inheritance + numberOfAllDependencies_Annotation + numberOfAllDependencies_Reference;
         if (derivedAll != numberOfAllDependencies_Total) {
             addCellDefault(sheet, 5, 6, "Warning: Total does not match total of types");
         }
-        addCellDefault(sheet, 0, 7, "Import");
-        addCellNumber(sheet, 1, 7, numberOfAllDependencies_Import);
-        addCellNumber(sheet, 2, 7, numberOfAllDependencies_Import_Direct);
-        addCellNumber(sheet, 3, 7, numberOfAllDependencies_Import_Indirect);
-        if (numberOfAllDependencies_Import != (numberOfAllDependencies_Import_Direct + numberOfAllDependencies_Import_Indirect)) {
+        addCellDefault(sheet, 0, 7, "Access");
+        addCellNumber(sheet, 1, 7, numberOfAllDependencies_Access);
+        addCellNumber(sheet, 2, 7, numberOfAllDependencies_Access_Direct);
+        addCellNumber(sheet, 3, 7, numberOfAllDependencies_Access_Indirect);
+        if (numberOfAllDependencies_Access != (numberOfAllDependencies_Access_Direct + numberOfAllDependencies_Access_Indirect)) {
             addCellDefault(sheet, 4, 7, "Warning: Total does not match direct + indirect");
         }
-        addCellDefault(sheet, 0, 8, "Declaration");
-        addCellNumber(sheet, 1, 8, numberOfAllDependencies_Declaration);
-        addCellNumber(sheet, 2, 8, numberOfAllDependencies_Declaration_Direct);
-        addCellNumber(sheet, 3, 8, numberOfAllDependencies_Declaration_Indirect);
-        if (numberOfAllDependencies_Declaration != (numberOfAllDependencies_Declaration_Direct + numberOfAllDependencies_Declaration_Indirect)) {
-            addCellDefault(sheet, 4, 8, "Warning: Total does not match direct + indirect");
+        addCellDefault(sheet, 0, 8, "Annotation");
+        addCellNumber(sheet, 1, 8, numberOfAllDependencies_Annotation);
+        addCellNumber(sheet, 2, 8, numberOfAllDependencies_Annotation_Direct);
+        addCellNumber(sheet, 3, 8, numberOfAllDependencies_Annotation_Indirect);
+        if (numberOfAllDependencies_Annotation != (numberOfAllDependencies_Annotation_Direct + numberOfAllDependencies_Annotation_Indirect)) {
+            addCellDefault(sheet, 4, 18, "Warning: Total does not match direct + indirect");
         }
         addCellDefault(sheet, 0, 9, "Call");
         addCellNumber(sheet, 1, 9, numberOfAllDependencies_Call);
@@ -462,168 +479,191 @@ public class ExcelReportWriter extends ReportWriter {
         if (numberOfAllDependencies_Call != (numberOfAllDependencies_Call_Direct + numberOfAllDependencies_Call_Indirect)) {
             addCellDefault(sheet, 4, 9, "Warning: Total does not match direct + indirect");
         }
-        addCellDefault(sheet, 0, 10, "Access");
-        addCellNumber(sheet, 1, 10, numberOfAllDependencies_Access);
-        addCellNumber(sheet, 2, 10, numberOfAllDependencies_Access_Direct);
-        addCellNumber(sheet, 3, 10, numberOfAllDependencies_Access_Indirect);
-        if (numberOfAllDependencies_Access != (numberOfAllDependencies_Access_Direct + numberOfAllDependencies_Access_Indirect)) {
+        addCellDefault(sheet, 0, 10, "Declaration");
+        addCellNumber(sheet, 1, 10, numberOfAllDependencies_Declaration);
+        addCellNumber(sheet, 2, 10, numberOfAllDependencies_Declaration_Direct);
+        addCellNumber(sheet, 3, 10, numberOfAllDependencies_Declaration_Indirect);
+        if (numberOfAllDependencies_Declaration != (numberOfAllDependencies_Declaration_Direct + numberOfAllDependencies_Declaration_Indirect)) {
             addCellDefault(sheet, 4, 10, "Warning: Total does not match direct + indirect");
         }
-        addCellDefault(sheet, 0, 11, "Inheritance");
-        addCellNumber(sheet, 1, 11, numberOfAllDependencies_Inheritance);
-        addCellNumber(sheet, 2, 11, numberOfAllDependencies_Inheritance_Direct);
-        addCellNumber(sheet, 3, 11, numberOfAllDependencies_Inheritance_Indirect);
-        if (numberOfAllDependencies_Inheritance != (numberOfAllDependencies_Inheritance_Direct + numberOfAllDependencies_Inheritance_Indirect)) {
+        addCellDefault(sheet, 0, 11, "Import");
+        addCellNumber(sheet, 1, 11, numberOfAllDependencies_Import);
+        addCellNumber(sheet, 2, 11, numberOfAllDependencies_Import_Direct);
+        addCellNumber(sheet, 3, 11, numberOfAllDependencies_Import_Indirect);
+        if (numberOfAllDependencies_Import != (numberOfAllDependencies_Import_Direct + numberOfAllDependencies_Import_Indirect)) {
             addCellDefault(sheet, 4, 11, "Warning: Total does not match direct + indirect");
         }
-        addCellDefault(sheet, 0, 12, "Annotation");
-        addCellNumber(sheet, 1, 12, numberOfAllDependencies_Annotation);
-        addCellNumber(sheet, 2, 12, numberOfAllDependencies_Annotation_Direct);
-        addCellNumber(sheet, 3, 12, numberOfAllDependencies_Annotation_Indirect);
-        if (numberOfAllDependencies_Annotation != (numberOfAllDependencies_Annotation_Direct + numberOfAllDependencies_Annotation_Indirect)) {
+        addCellDefault(sheet, 0, 12, "Inheritance");
+        addCellNumber(sheet, 1, 12, numberOfAllDependencies_Inheritance);
+        addCellNumber(sheet, 2, 12, numberOfAllDependencies_Inheritance_Direct);
+        addCellNumber(sheet, 3, 12, numberOfAllDependencies_Inheritance_Indirect);
+        if (numberOfAllDependencies_Inheritance != (numberOfAllDependencies_Inheritance_Direct + numberOfAllDependencies_Inheritance_Indirect)) {
             addCellDefault(sheet, 4, 12, "Warning: Total does not match direct + indirect");
         }
+        addCellDefault(sheet, 0, 13, "Reference");
+        addCellNumber(sheet, 1, 13, numberOfAllDependencies_Reference);
+        addCellNumber(sheet, 2, 13, numberOfAllDependencies_Reference_Direct);
+        addCellNumber(sheet, 3, 13, numberOfAllDependencies_Reference_Indirect);
+        if (numberOfAllDependencies_Annotation != (numberOfAllDependencies_Annotation_Direct + numberOfAllDependencies_Annotation_Indirect)) {
+            addCellDefault(sheet, 4, 13, "Warning: Total does not match direct + indirect");
+        }
 
-        addCellBold(sheet, 0, 14, "Inheritance related dependencies, all");
-        addCellNumber(sheet, 1, 14, numberOfInheritanceRelatedDependencies_Total);
-        addCellNumber(sheet, 2, 14, numberOfInheritanceRelatedDependencies_Total_Direct);
-        addCellNumber(sheet, 3, 14, numberOfInheritanceRelatedDependencies_Total_Indirect);
+        addCellBold(sheet, 0, 15, "Inheritance related dependencies, all");
+        addCellNumber(sheet, 1, 15, numberOfInheritanceRelatedDependencies_Total);
+        addCellNumber(sheet, 2, 15, numberOfInheritanceRelatedDependencies_Total_Direct);
+        addCellNumber(sheet, 3, 15, numberOfInheritanceRelatedDependencies_Total_Indirect);
         if (numberOfInheritanceRelatedDependencies_Total != (numberOfInheritanceRelatedDependencies_Total_Direct + numberOfInheritanceRelatedDependencies_Total_Indirect)) {
-            addCellDefault(sheet, 4, 14, "Warning: Total does not match direct + indirect");
-        }
-        if (numberOfInheritanceRelatedDependencies_Total != (numberOfAllDependencies_Inheritance + numberOfInheritanceRelatedDependencies_Access + numberOfInheritanceRelatedDependencies_Call)) {
-            addCellDefault(sheet, 5, 14, "Warning: Total does not match the totals per type");
-        }
-        addCellDefault(sheet, 0, 15, "Inheritance relation");
-        addCellNumber(sheet, 1, 15, numberOfAllDependencies_Inheritance);
-        addCellNumber(sheet, 2, 15, numberOfAllDependencies_Inheritance_Direct);
-        addCellNumber(sheet, 3, 15, numberOfAllDependencies_Inheritance_Indirect);
-        if (numberOfAllDependencies_Inheritance != (numberOfAllDependencies_Inheritance_Direct + numberOfAllDependencies_Inheritance_Indirect)) {
             addCellDefault(sheet, 4, 15, "Warning: Total does not match direct + indirect");
         }
-        addCellDefault(sheet, 0, 16, "Access of inherited variable");
-        addCellNumber(sheet, 1, 16, numberOfInheritanceRelatedDependencies_Access);
-        addCellNumber(sheet, 2, 16, numberOfInheritanceRelatedDependencies_Access_Direct);
-        addCellNumber(sheet, 3, 16, numberOfInheritanceRelatedDependencies_Access_Indirect);
-        if (numberOfInheritanceRelatedDependencies_Access != (numberOfInheritanceRelatedDependencies_Access_Direct + numberOfInheritanceRelatedDependencies_Access_Indirect)) {
+        if (numberOfInheritanceRelatedDependencies_Total != (numberOfAllDependencies_Inheritance + numberOfInheritanceRelatedDependencies_Access 
+        		+ numberOfInheritanceRelatedDependencies_Call) + numberOfInheritanceRelatedDependencies_Reference) {
+            addCellDefault(sheet, 5, 15, "Warning: Total does not match the totals per type");
+        }
+        addCellDefault(sheet, 0, 16, "Inheritance relation");
+        addCellNumber(sheet, 1, 16, numberOfAllDependencies_Inheritance);
+        addCellNumber(sheet, 2, 16, numberOfAllDependencies_Inheritance_Direct);
+        addCellNumber(sheet, 3, 16, numberOfAllDependencies_Inheritance_Indirect);
+        if (numberOfAllDependencies_Inheritance != (numberOfAllDependencies_Inheritance_Direct + numberOfAllDependencies_Inheritance_Indirect)) {
             addCellDefault(sheet, 4, 16, "Warning: Total does not match direct + indirect");
         }
-        addCellDefault(sheet, 0, 17, "Call of inherited method");
-        addCellNumber(sheet, 1, 17, numberOfInheritanceRelatedDependencies_Call);
-        addCellNumber(sheet, 2, 17, numberOfInheritanceRelatedDependencies_Call_Direct);
-        addCellNumber(sheet, 3, 17, numberOfInheritanceRelatedDependencies_Call_Indirect);
-        if (numberOfInheritanceRelatedDependencies_Call != (numberOfInheritanceRelatedDependencies_Call_Direct + numberOfInheritanceRelatedDependencies_Call_Indirect)) {
+        addCellDefault(sheet, 0, 17, "Access of inherited variable");
+        addCellNumber(sheet, 1, 17, numberOfInheritanceRelatedDependencies_Access);
+        addCellNumber(sheet, 2, 17, numberOfInheritanceRelatedDependencies_Access_Direct);
+        addCellNumber(sheet, 3, 17, numberOfInheritanceRelatedDependencies_Access_Indirect);
+        if (numberOfInheritanceRelatedDependencies_Access != (numberOfInheritanceRelatedDependencies_Access_Direct + numberOfInheritanceRelatedDependencies_Access_Indirect)) {
             addCellDefault(sheet, 4, 17, "Warning: Total does not match direct + indirect");
         }
-
-        addCellBold(sheet, 0, 19, "Inner class related dependencies, all");
-        addCellNumber(sheet, 1, 19, numberOfInnerClassRelatedDependencies_Total);
-        addCellNumber(sheet, 2, 19, numberOfInnerClassRelatedDependencies_Total_Direct);
-        addCellNumber(sheet, 3, 19, numberOfInnerClassRelatedDependencies_Total_Indirect);
-        if (numberOfInnerClassRelatedDependencies_Total != (numberOfInnerClassRelatedDependencies_Total_Direct + numberOfInnerClassRelatedDependencies_Total_Indirect)) {
+        addCellDefault(sheet, 0, 18, "Call of inherited method");
+        addCellNumber(sheet, 1, 18, numberOfInheritanceRelatedDependencies_Call);
+        addCellNumber(sheet, 2, 18, numberOfInheritanceRelatedDependencies_Call_Direct);
+        addCellNumber(sheet, 3, 18, numberOfInheritanceRelatedDependencies_Call_Indirect);
+        if (numberOfInheritanceRelatedDependencies_Call != (numberOfInheritanceRelatedDependencies_Call_Direct + numberOfInheritanceRelatedDependencies_Call_Indirect)) {
+            addCellDefault(sheet, 4, 18, "Warning: Total does not match direct + indirect");
+        }
+        addCellDefault(sheet, 0, 19, "Reference");
+        addCellNumber(sheet, 1, 19, numberOfInheritanceRelatedDependencies_Reference);
+        addCellNumber(sheet, 2, 19, numberOfInheritanceRelatedDependencies_Reference_Direct);
+        addCellNumber(sheet, 3, 19, numberOfInheritanceRelatedDependencies_Reference_Indirect);
+        if (numberOfInheritanceRelatedDependencies_Call != (numberOfInheritanceRelatedDependencies_Call_Direct + numberOfInheritanceRelatedDependencies_Call_Indirect)) {
             addCellDefault(sheet, 4, 19, "Warning: Total does not match direct + indirect");
         }
 
-        addCellDefault(sheet, 0, 21, "----------------------------------------------------");
-        addCellBold(sheet, 0, 23, "Number of Dependencies per dependencySubType");
+        addCellBold(sheet, 0, 21, "Inner class related dependencies, all");
+        addCellNumber(sheet, 1, 21, numberOfInnerClassRelatedDependencies_Total);
+        addCellNumber(sheet, 2, 21, numberOfInnerClassRelatedDependencies_Total_Direct);
+        addCellNumber(sheet, 3, 21, numberOfInnerClassRelatedDependencies_Total_Indirect);
+        if (numberOfInnerClassRelatedDependencies_Total != (numberOfInnerClassRelatedDependencies_Total_Direct + numberOfInnerClassRelatedDependencies_Total_Indirect)) {
+            addCellDefault(sheet, 4, 21, "Warning: Total does not match direct + indirect");
+        }
+
+        addCellDefault(sheet, 0, 22, "----------------------------------------------------");
+        addCellBold(sheet, 0, 24, "Number of Dependencies per subType");
         addCellBold(sheet, 0, 25, "Access");
-        int accessTotaldependencySubTypes = numberOff_Access_Variable + numberOff_Access_InstanceVariable + numberOff_Access_InstanceVariableConstant 
-        		+ numberOff_Access_ClassVariable + numberOff_Access_ClassVariableConstant + numberOff_Access_EnumerationVariable
-        		+ numberOff_Access_InterfaceVariable + numberOff_Access_LibraryVariable + numberOff_Access_Reference
-        		+ numberOff_Access_ReferenceReturnTypeUsedMethod + numberOff_Access_ReferenceTypeOfUsedVariable;
-        addCellNumber(sheet, 1, 25, accessTotaldependencySubTypes);
-        if (accessTotaldependencySubTypes != numberOfAllDependencies_Access) {
-            addCellDefault(sheet, 2, 25, "Warning: Total of dependencySubTypes does not match total of types");
+        int accessTotalSubTypes = numberOf_Access_Variable + numberOf_Access_InstanceVariable + numberOf_Access_InstanceVariableConstant 
+        		+ numberOf_Access_ClassVariable + numberOf_Access_ClassVariableConstant + numberOf_Access_EnumerationVariable
+        		+ numberOf_Access_InterfaceVariable + numberOf_Access_LibraryVariable;
+        addCellNumber(sheet, 1, 25, accessTotalSubTypes);
+        if (accessTotalSubTypes != numberOfAllDependencies_Access) {
+            addCellDefault(sheet, 2, 25, "Warning: Total of subTypes does not match total of types");
         }
         addCellDefault(sheet, 0, 26, "Variable");
-        addCellNumber(sheet, 1, 26, numberOff_Access_Variable);
+        addCellNumber(sheet, 1, 26, numberOf_Access_Variable);
         addCellDefault(sheet, 0, 27, "Instance Variable");
-        addCellNumber(sheet, 1, 27, numberOff_Access_InstanceVariable);
+        addCellNumber(sheet, 1, 27, numberOf_Access_InstanceVariable);
         addCellDefault(sheet, 0, 28, "Instance Variable Constant");
-        addCellNumber(sheet, 1, 28, numberOff_Access_InstanceVariableConstant);
+        addCellNumber(sheet, 1, 28, numberOf_Access_InstanceVariableConstant);
         addCellDefault(sheet, 0, 29, "Class Variable");
-        addCellNumber(sheet, 1, 29, numberOff_Access_ClassVariable);
+        addCellNumber(sheet, 1, 29, numberOf_Access_ClassVariable);
         addCellDefault(sheet, 0, 30, "Class Variable Constant");
-        addCellNumber(sheet, 1, 30, numberOff_Access_ClassVariableConstant);
+        addCellNumber(sheet, 1, 30, numberOf_Access_ClassVariableConstant);
         addCellDefault(sheet, 0, 31, "Enumeration Variable");
-        addCellNumber(sheet, 1, 31, numberOff_Access_EnumerationVariable);
+        addCellNumber(sheet, 1, 31, numberOf_Access_EnumerationVariable);
         addCellDefault(sheet, 0, 32, "Interface Variable");
-        addCellNumber(sheet, 1, 32, numberOff_Access_InterfaceVariable);
+        addCellNumber(sheet, 1, 32, numberOf_Access_InterfaceVariable);
         addCellDefault(sheet, 0, 33, "Library Variable");
-        addCellNumber(sheet, 1, 33, numberOff_Access_LibraryVariable);
-        addCellDefault(sheet, 0, 34, "Reference");
-        addCellNumber(sheet, 1, 34, numberOff_Access_Reference);
-        addCellDefault(sheet, 0, 35, "Reference ReturnTypeUsedMethod");
-        addCellNumber(sheet, 1, 35, numberOff_Access_ReferenceReturnTypeUsedMethod);
-        addCellNumber(sheet, 2, 35, numberOff_Access_ReferenceReturnTypeUsedMethod_Direct);
-        addCellNumber(sheet, 3, 35, numberOff_Access_ReferenceReturnTypeUsedMethod_Indirect);
-        addCellDefault(sheet, 0, 36, "Reference TypeOfUsedVariable");
-        addCellNumber(sheet, 1, 36, numberOff_Access_ReferenceTypeOfUsedVariable);
-        addCellNumber(sheet, 2, 36, numberOff_Access_ReferenceTypeOfUsedVariable_Direct);
-        addCellNumber(sheet, 3, 36, numberOff_Access_ReferenceTypeOfUsedVariable_Indirect);
+        addCellNumber(sheet, 1, 33, numberOf_Access_LibraryVariable);
 
-        addCellBold(sheet, 0, 38, "Call");
-        int callTotaldependencySubTypes = numberOff_Call_Method + numberOff_Call_InstanceMethod + numberOff_Call_ClassMethod 
-        		+ numberOff_Call_Constructor + numberOff_Call_EnumerationMethod + numberOff_Call_InterfaceMethod
-        		+ numberOff_Call_LibraryMethod;
-        addCellNumber(sheet, 1, 38, callTotaldependencySubTypes);
-        if (callTotaldependencySubTypes != numberOfAllDependencies_Call) {
-            addCellDefault(sheet, 2, 38, "Warning: Total of dependencySubTypes does not match total of types");
+        addCellBold(sheet, 0, 35, "Call");
+        int callTotalSubTypes = numberOf_Call_Method + numberOf_Call_InstanceMethod + numberOf_Call_ClassMethod 
+        		+ numberOf_Call_Constructor + numberOf_Call_EnumerationMethod + numberOf_Call_InterfaceMethod
+        		+ numberOf_Call_LibraryMethod;
+        addCellNumber(sheet, 1, 35, callTotalSubTypes);
+        if (callTotalSubTypes != numberOfAllDependencies_Call) {
+            addCellDefault(sheet, 2, 35, "Warning: Total of subTypes does not match total of types");
         }
-        addCellDefault(sheet, 0, 39, "Method");
-        addCellNumber(sheet, 1, 39, numberOff_Call_Method);
-        addCellDefault(sheet, 0, 40, "Instance Method");
-        addCellNumber(sheet, 1, 40, numberOff_Call_InstanceMethod);
-        addCellDefault(sheet, 0, 41, "Class Method");
-        addCellNumber(sheet, 1, 41, numberOff_Call_ClassMethod);
-        addCellDefault(sheet, 0, 42, "Constructor");
-        addCellNumber(sheet, 1, 42, numberOff_Call_Constructor);
-        addCellDefault(sheet, 0, 43, "Enumeration Method");
-        addCellNumber(sheet, 1, 43, numberOff_Call_EnumerationMethod);
-        addCellDefault(sheet, 0, 44, "Interface Method");
-        addCellNumber(sheet, 1, 44, numberOff_Call_InterfaceMethod);
-        addCellDefault(sheet, 0, 45, "Library Method");
-        addCellNumber(sheet, 1, 45, numberOff_Call_LibraryMethod);
+        addCellDefault(sheet, 0, 36, "Method");
+        addCellNumber(sheet, 1, 36, numberOf_Call_Method);
+        addCellDefault(sheet, 0, 37, "Instance Method");
+        addCellNumber(sheet, 1, 37, numberOf_Call_InstanceMethod);
+        addCellDefault(sheet, 0, 38, "Class Method");
+        addCellNumber(sheet, 1, 38, numberOf_Call_ClassMethod);
+        addCellDefault(sheet, 0, 39, "Constructor");
+        addCellNumber(sheet, 1, 39, numberOf_Call_Constructor);
+        addCellDefault(sheet, 0, 40, "Enumeration Method");
+        addCellNumber(sheet, 1, 40, numberOf_Call_EnumerationMethod);
+        addCellDefault(sheet, 0, 41, "Interface Method");
+        addCellNumber(sheet, 1, 41, numberOf_Call_InterfaceMethod);
+        addCellDefault(sheet, 0, 42, "Library Method");
+        addCellNumber(sheet, 1, 42, numberOf_Call_LibraryMethod);
 
-        addCellBold(sheet, 0, 47, "Declaration");
-        int declarationTotaldependencySubTypes = numberOff_Declaration_ClassVariable + numberOff_Declaration_Exception + numberOff_Declaration_InstanceVariable 
-        		+ numberOff_Declaration_LocalVariable + numberOff_Declaration_Parameter + numberOff_Declaration_ReturnType
-        		+ numberOff_Declaration_TypeCast;
-        addCellNumber(sheet, 1, 47, declarationTotaldependencySubTypes);
-        if (declarationTotaldependencySubTypes != numberOfAllDependencies_Declaration) {
-            addCellDefault(sheet, 2, 47, "Warning: Total of dependencySubTypes does not match total of types");
+        addCellBold(sheet, 0, 44, "Declaration");
+        int declarationTotalSubTypes = numberOf_Declaration_ClassVariable + numberOf_Declaration_Exception + numberOf_Declaration_InstanceVariable 
+        		+ numberOf_Declaration_LocalVariable + numberOf_Declaration_Parameter + numberOf_Declaration_ReturnType
+        		+ numberOf_Declaration_TypeCast;
+        addCellNumber(sheet, 1, 44, declarationTotalSubTypes);
+        if (declarationTotalSubTypes != numberOfAllDependencies_Declaration) {
+            addCellDefault(sheet, 2, 44, "Warning: Total of subTypes does not match total of types");
         }
-        addCellDefault(sheet, 0, 48, "Class Variable");
-        addCellNumber(sheet, 1, 48, numberOff_Declaration_ClassVariable);
-        addCellDefault(sheet, 0, 49, "Exception");
-        addCellNumber(sheet, 1, 49, numberOff_Declaration_Exception);
-        addCellDefault(sheet, 0, 50, "Instance Variable");
-        addCellNumber(sheet, 1, 50, numberOff_Declaration_InstanceVariable);
-        addCellDefault(sheet, 0, 51, "Local Variable");
-        addCellNumber(sheet, 1, 51, numberOff_Declaration_LocalVariable);
-        addCellDefault(sheet, 0, 52, "Parameter");
-        addCellNumber(sheet, 1, 52, numberOff_Declaration_Parameter);
-        addCellDefault(sheet, 0, 53, "Return Type");
-        addCellNumber(sheet, 1, 53, numberOff_Declaration_ReturnType);
-        addCellDefault(sheet, 0, 54, "Type Cast");
-        addCellNumber(sheet, 1, 54, numberOff_Declaration_TypeCast);
+        addCellDefault(sheet, 0, 45, "Class Variable");
+        addCellNumber(sheet, 1, 45, numberOf_Declaration_ClassVariable);
+        addCellDefault(sheet, 0, 46, "Exception");
+        addCellNumber(sheet, 1, 46, numberOf_Declaration_Exception);
+        addCellDefault(sheet, 0, 47, "Instance Variable");
+        addCellNumber(sheet, 1, 47, numberOf_Declaration_InstanceVariable);
+        addCellDefault(sheet, 0, 48, "Local Variable");
+        addCellNumber(sheet, 1, 48, numberOf_Declaration_LocalVariable);
+        addCellDefault(sheet, 0, 49, "Parameter");
+        addCellNumber(sheet, 1, 49, numberOf_Declaration_Parameter);
+        addCellDefault(sheet, 0, 50, "Return Type");
+        addCellNumber(sheet, 1, 50, numberOf_Declaration_ReturnType);
+        addCellDefault(sheet, 0, 51, "Type Cast");
+        addCellNumber(sheet, 1, 51, numberOf_Declaration_TypeCast);
 
-        addCellBold(sheet, 0, 56, "Inheritance");
-        int InheritanceTotaldependencySubTypes = numberOff_Inheritance_ExtendsClass + numberOff_Inheritance_ExtendsAbstractClass 
-        		+ numberOff_Inheritance_ÏmplementsInterface + numberOff_Inheritance_FromLibraryClass;
-        addCellNumber(sheet, 1, 56, InheritanceTotaldependencySubTypes);
-        if (InheritanceTotaldependencySubTypes != numberOfAllDependencies_Inheritance) {
-            addCellDefault(sheet, 2, 56, "Warning: Total of dependencySubTypes does not match total of types");
+        addCellBold(sheet, 0, 53, "Inheritance");
+        int InheritanceTotalSubTypes = numberOf_Inheritance_ExtendsClass + numberOf_Inheritance_ExtendsAbstractClass 
+        		+ numberOf_Inheritance_ÏmplementsInterface + numberOf_Inheritance_FromLibraryClass;
+        addCellNumber(sheet, 1, 53, InheritanceTotalSubTypes);
+        if (InheritanceTotalSubTypes != numberOfAllDependencies_Inheritance) {
+            addCellDefault(sheet, 2, 53, "Warning: Total of subTypes does not match total of types");
         }
-        addCellDefault(sheet, 0, 57, "Extends Class");
-        addCellNumber(sheet, 1, 57, numberOff_Inheritance_ExtendsClass);
-        addCellDefault(sheet, 0, 58, "Extends Abstract Class");
-        addCellNumber(sheet, 1, 58, numberOff_Inheritance_ExtendsAbstractClass);
-        addCellDefault(sheet, 0, 59, "Ïmplements Interface");
-        addCellNumber(sheet, 1, 59, numberOff_Inheritance_ÏmplementsInterface);
-        addCellDefault(sheet, 0, 60, "From Library Class");
-        addCellNumber(sheet, 1, 60, numberOff_Inheritance_FromLibraryClass);
+        addCellDefault(sheet, 0, 54, "Extends Class");
+        addCellNumber(sheet, 1, 54, numberOf_Inheritance_ExtendsClass);
+        addCellDefault(sheet, 0, 55, "Extends Abstract Class");
+        addCellNumber(sheet, 1, 55, numberOf_Inheritance_ExtendsAbstractClass);
+        addCellDefault(sheet, 0, 56, "Ïmplements Interface");
+        addCellNumber(sheet, 1, 56, numberOf_Inheritance_ÏmplementsInterface);
+        addCellDefault(sheet, 0, 57, "From Library Class");
+        addCellNumber(sheet, 1, 57, numberOf_Inheritance_FromLibraryClass);
 
+        addCellBold(sheet, 0, 59, "Reference");
+        int referenceTotalSubTypes = numberOf_Reference_Type + numberOf_Reference_ReferenceReturnTypeUsedMethod 
+        		+ numberOf_Reference_ReferenceTypeOfUsedVariable;
+        addCellNumber(sheet, 1, 59, referenceTotalSubTypes);
+        if (referenceTotalSubTypes != numberOfAllDependencies_Reference) {
+            addCellDefault(sheet, 2, 59, "Warning: Total of subTypes does not match total of types");
+        }
+        addCellDefault(sheet, 0, 60, "Type");
+        addCellNumber(sheet, 1, 60, numberOf_Reference_Type);
+        addCellDefault(sheet, 0, 61, "Return Type");
+        addCellNumber(sheet, 1, 61, numberOf_Reference_ReferenceReturnTypeUsedMethod);
+        addCellNumber(sheet, 2, 61, numberOf_Reference_ReferenceReturnTypeUsedMethod_Direct);
+        addCellNumber(sheet, 3, 61, numberOf_Reference_ReferenceReturnTypeUsedMethod_Indirect);
+        addCellDefault(sheet, 0, 62, "Type of Variable");
+        addCellNumber(sheet, 1, 62, numberOf_Reference_ReferenceTypeOfUsedVariable);
+        addCellNumber(sheet, 2, 62, numberOf_Reference_ReferenceTypeOfUsedVariable_Direct);
+        addCellNumber(sheet, 3, 62, numberOf_Reference_ReferenceTypeOfUsedVariable_Indirect);
+
+        
         sheet.setColumnView(0, 40);
     	sheet.setColumnView(1, 10);
     	sheet.setColumnView(2, 10);

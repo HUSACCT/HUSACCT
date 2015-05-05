@@ -6,6 +6,7 @@ public class AccessLocalVariable_SetArgumentValue {
 	
 	public String theMethod(String s, int i) {
 		ProfileDAO profile;
+		// Access profile is direct, but of checkinvalue is indirect.
 		String pn = getProfileInformation(profile, "test", 4).checkinValue;
 		return pn;
 	}

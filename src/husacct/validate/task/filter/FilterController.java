@@ -16,7 +16,6 @@ import husacct.validate.domain.validation.internaltransferobjects.FilterSettings
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
