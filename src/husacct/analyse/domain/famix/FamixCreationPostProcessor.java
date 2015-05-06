@@ -784,8 +784,14 @@ class FamixCreationPostProcessor {
     			addInvocation = true;
                 // Try to find the method to determine the return type of the method.
                 // 3.1 Determine if nextToString is a (default) constructor of an inner class. 
-	        	String methodNameWithoutSignature = nextToString.substring(0, nextToString.indexOf("("));
-	        	String searchKey2 = originalToType + "." + methodNameWithoutSignature;
+    			String searchKey2;
+    			if (nextToString.indexOf("(") >= 0) {
+	    			String methodNameWithoutSignature = nextToString.substring(0, nextToString.indexOf("("));
+		        	searchKey2 = originalToType + "." + methodNameWithoutSignature;
+	        	} else {
+	        		searchKey2 = invocation.to; // Exceptional situation in case of errors in code, like in POI version 311.
+	            	this.logger.warn(new Date().toString() + " Inconsistent input for method in: " + invocation.from + ", line: " + invocation.lineNumber);
+	        	}
 	        	if (theModel.classes.containsKey(searchKey2)){ // If so, nextToString is a constructor of an inner class.
 	    			invocation.to = searchKey2;
 	    			invocation.type = "InvocConstructor";
@@ -845,12 +851,16 @@ class FamixCreationPostProcessor {
     			}
     		}
     	}
-    	waitingDerivedAssociations.clear();
     	if (addedInvocations.size() > 0) {
+        	waitingDerivedAssociations.clear();
     		waitingDerivedAssociations.addAll(addedInvocations);
     		addedInvocations.clear();
         	this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
     		processWaitingDerivedAssociations();
+    	} else {
+    		FamixInvocation lastInvocatioInLargeChain = waitingDerivedAssociations.get(waitingDerivedAssociations.size() - 1);
+        	this.logger.info(new Date().toString() + " Last large chain in: " + lastInvocatioInLargeChain.from  + " , line: " + lastInvocatioInLargeChain.lineNumber);
+        	waitingDerivedAssociations.clear();
     	}
     }
 
