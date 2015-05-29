@@ -479,7 +479,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Direct.Violating.DeclarationTypeCast";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 
@@ -488,7 +488,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromModule = "Domain.Direct.Violating.DeclarationTypeCastOfArgument";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
 	}
 

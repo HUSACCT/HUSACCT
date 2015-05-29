@@ -966,6 +966,11 @@ class FamixCreationPostProcessor {
 	            }
 	            association.type = "Access";
         	}
+            // Declaration
+        } else if (association.type.startsWith("Declaration")) {
+        	if (association.subType.equals("Type Cast")) {
+	    		association.type = "Reference";
+        	}
         }
     }
     

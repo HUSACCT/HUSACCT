@@ -503,7 +503,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.direct.violating.DeclarationTypeCast";
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type Cast", false));
 	}
 
@@ -512,7 +512,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromModule = "domain.direct.violating.DeclarationTypeCastOfArgument";
 		String toModule = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
+		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type Cast", false));
 	}
 
