@@ -34,9 +34,9 @@ public interface IModelCreationService {
 
     public void createImplementsDefinition(String from, String to, int lineNumber);
 
-    public void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
+    public void createVariableInvocation(String from, String to, int lineNumber, String belongsToMethod);
 
-    public void createMethodInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance, String type);
+    public void createMethodInvocation(String from, String to, int lineNumber, String belongsToMethod, String type);
 
     public void createDeclarationTypeCast(String from, String to, int lineNumber);
 

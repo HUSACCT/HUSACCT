@@ -20,7 +20,7 @@ public class AccessFieldTest extends RecognationExtended{
 				assertEquals(5, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				accessPropertyOrFieldFound = true;
 				assertEquals(8, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
@@ -43,7 +43,7 @@ public class AccessFieldTest extends RecognationExtended{
 				assertEquals(5, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				accessPropertyOrFieldFound = true;
 				assertEquals(8, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
@@ -69,7 +69,7 @@ public class AccessFieldTest extends RecognationExtended{
 				assertEquals(7, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				accessPropertyOrFieldFound = true;
 				assertEquals(10, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
@@ -101,7 +101,7 @@ public class AccessFieldTest extends RecognationExtended{
 				assertEquals(7, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				accessPropertyOrFieldFound = true;
 				assertEquals(10, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
@@ -133,7 +133,7 @@ public class AccessFieldTest extends RecognationExtended{
 				assertEquals(6, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				accessPropertyOrFieldFound = true;
 				assertEquals(6, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
@@ -160,7 +160,7 @@ public class AccessFieldTest extends RecognationExtended{
 				assertEquals(6, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				accessPropertyOrFieldFound = true;
 				assertEquals(6, dependency.lineNumber);
 				assertEquals("accessfield.a.TheOwner", dependency.to);

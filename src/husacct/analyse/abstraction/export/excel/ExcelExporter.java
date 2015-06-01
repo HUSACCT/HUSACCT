@@ -171,6 +171,7 @@ public class ExcelExporter extends AbstractFileExporter {
         addCellBold(sheet, 5, 0, super.translate("Direct") + "/" + super.translate("Indirect"));
         addCellBold(sheet, 6, 0, super.translate("InheritanceRelated"));
         addCellBold(sheet, 7, 0, super.translate("InnerClassRelated"));
+        addCellBold(sheet, 8, 0, "Used Entity (variable or method)");
     }
 
     private void createContent(WritableSheet sheet) throws WriteException, RowsExceededException {
@@ -208,6 +209,7 @@ public class ExcelExporter extends AbstractFileExporter {
         }
         Label inheritanceLabel = new Label(6, row, "" + dependency.isInheritanceRelated, times);
         Label innerClassLabel = new Label(7, row, "" + dependency.isInnerClassRelated, times);
+        Label usedEntityLabel = new Label(8, row, "" + dependency.usedEntity, times);
         
         List<Label> labelArray = new ArrayList<Label>();
         labelArray.add(fromLabel);
@@ -218,6 +220,7 @@ public class ExcelExporter extends AbstractFileExporter {
         labelArray.add(directLabel);
         labelArray.add(inheritanceLabel);
         labelArray.add(innerClassLabel);
+        labelArray.add(usedEntityLabel);
         
         for(Label label : labelArray){
         	sheet.addCell(label);

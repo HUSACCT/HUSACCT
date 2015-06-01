@@ -372,11 +372,11 @@ public abstract class TestCaseExtended{
 		famix.createClass("testresources\\csharp\\benchmark", 0, "indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door", false, false, "", "default", true, false);
 		famix.createClass("testresources\\csharp\\benchmark", 0, "indirect.houses.attributes.Door", "Door", "indirect.houses.attributes", false, false, "", "public", false, false);
 		
-		famix.createMethodInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "", "InvocConstructor");
+		famix.createMethodInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "AccountDAO()", "InvocConstructor");
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", 10);
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", 10);
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", 10);
-		famix.createMethodInvocation("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 11, "Account", "AccountDAO()", "",  "InvocConstructor");
+		famix.createMethodInvocation("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 11, "AccountDAO()", "InvocConstructor");
 		famix.createInheritanceDefinition("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", 10);
 		famix.createImplementsDefinition("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 10);
 		famix.createImplementsDefinition("domain.locationbased.latitude.Mapp", "infrastructure.socialmedia.locationbased.latitude.IMap", 10);

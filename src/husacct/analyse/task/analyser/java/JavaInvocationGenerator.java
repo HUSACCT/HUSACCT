@@ -13,9 +13,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
     private String leftVariableInAssignment = "";
     private String rightVariableInAssignment = "";
     private int lineNumber;
-    private String invocationName;
     private String belongsToMethod;
-    private String nameOfInstance = "";
     private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
 
 
@@ -24,15 +22,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
     }
 
     public void generateConstructorInvocToDomain(CommonTree commonTree, String belongsToMethod) {
-    	this.invocationName = "Constructor";
         this.belongsToMethod = belongsToMethod;
         this. lineNumber = commonTree.getLine();
        	if ((commonTree.getChildCount() > 0)) {
         	String invocTo = getCompleteToString(commonTree);
         	this.to = invocTo;
-        	this.nameOfInstance = to;
             if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
-                modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocConstructor");
+                modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocConstructor");
             }
         }
     }
@@ -43,10 +39,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
       	if ((treeNode.getChildCount() > 0)) {
         	String invocTo = getCompleteToString(treeNode);
         	this.to = invocTo;
-        	this.nameOfInstance = to;
-        	this.invocationName = to;
             if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
-                modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocMethod");
+                modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
             }
         }
     }
@@ -68,8 +62,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
     		
     		// Create invocation of variable at left side of =
     		this.to = leftVariableInAssignment;
-    		this.nameOfInstance = to;
-    		this.invocationName = to;
     		createPropertyOrFieldInvocationDomainObject();
     		
     		int treeType = treeNode.getType();
@@ -78,8 +70,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
         			|| (treeType == JavaParser.LESS_THAN) || (treeType == JavaParser.GREATER_THAN)){
         		// Create invocation of variable at right side of =
         		this.to = rightVariableInAssignment;
-        		this.nameOfInstance = to;
-        		this.invocationName = to;
         		createPropertyOrFieldInvocationDomainObject();
         	}
         }
@@ -215,13 +205,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
     
     private void createPropertyOrFieldInvocationDomainObject() {
         if ((to != null) && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
-            modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+            modelService.createVariableInvocation(from, to, lineNumber, belongsToMethod);
         }
     }
     
     private void createPropertyOrFieldInvocationDomainObject(String invocationTo, CommonTree tree) {
         if ((invocationTo != null) && !invocationTo.trim().equals("") && !SkippedTypes.isSkippable(invocationTo)) {
-            modelService.createPropertyOrFieldInvocation(from, invocationTo, tree.getLine(), invocationTo, belongsToMethod, invocationTo);
+            modelService.createVariableInvocation(from, invocationTo, tree.getLine(), belongsToMethod);
         }
     }
 }

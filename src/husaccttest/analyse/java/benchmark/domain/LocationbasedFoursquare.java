@@ -19,7 +19,7 @@ public class LocationbasedFoursquare extends BenchmarkExtended{
 				assertEquals(3, dependency.lineNumber);
 				assertEquals("infrastructure.socialmedia.locationbased.foursquare.EventDAO", dependency.to);
 			}
-			else if(dependency.type.equals("AccessPropertyOrField")){
+			else if(dependency.type.equals("AccessVariable")){
 				AccessPropertyOrFieldFound = true;
 				assertEquals(13, dependency.lineNumber);
 				assertEquals("infrastructure.socialmedia.locationbased.foursquare.EventDAO", dependency.to);

@@ -10,9 +10,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
     private String from;
     private String to = "";
     private int lineNumber;
-    private String invocationName;
     private String belongsToMethod;
-    private String nameOfInstance = "";
     private Logger logger = Logger.getLogger(CSharpInvocationGenerator.class);
 
 
@@ -27,10 +25,8 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
       	if ((treeNode.getChildCount() > 0)) {
         	String invocTo = getCompleteToString((CommonTree) treeNode.getChild(0));
         	this.to = invocTo;
-        	this.nameOfInstance = to;
-        	this.invocationName = to;
             if ((from != null) && (to != null) && !to.equals("") && !SkippableTypes.isSkippable(to)) {
-                modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocMethod");
+                modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
             }
         }
     }
@@ -40,10 +36,8 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
     	this.to = "superBaseClass()";
-    	this.nameOfInstance = to;
-    	this.invocationName = to;
         if ((from != null) && (to != null) && !to.equals("") && !SkippableTypes.isSkippable(to)) {
-            modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance, "InvocConstructor");
+            modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocConstructor");
         }
     }
 
@@ -224,7 +218,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
     
     private void createPropertyOrFieldInvocationDomainObject(String invocationTo, int line) {
         if ((from != null) && (invocationTo != null) && !invocationTo.equals("") && !SkippableTypes.isSkippable(invocationTo)) {
-            modelService.createPropertyOrFieldInvocation(from, invocationTo, line, invocationTo, belongsToMethod, invocationTo);
+            modelService.createVariableInvocation(from, invocationTo, line, belongsToMethod);
         }
     }
 }

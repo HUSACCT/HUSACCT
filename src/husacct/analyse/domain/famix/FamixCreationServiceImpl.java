@@ -308,32 +308,26 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void createMethodInvocation(String from, String to, int lineNumber,
-            String invocationName, String belongsToMethod, String nameOfInstance, String type) {
+    public void createMethodInvocation(String from, String to, int lineNumber, String belongsToMethod, String type) {
 
         FamixInvocation famixInvocation = new FamixInvocation();
         famixInvocation.type = type; // "InvocMethod" or "InvocConstructor" 
         famixInvocation.from = from;
         famixInvocation.lineNumber = lineNumber;
         famixInvocation.to = to;
-        famixInvocation.invocationName = invocationName;
         famixInvocation.belongsToMethod = belongsToMethod;
-        famixInvocation.nameOfInstance = nameOfInstance;
         model.waitingAssociations.add(famixInvocation);
     }
 
     @Override
-    public void createPropertyOrFieldInvocation(String from, String to, int lineNumber,
-            String invocationName, String belongsToMethod, String nameOfInstance) {
+    public void createVariableInvocation(String from, String to, int lineNumber, String belongsToMethod) {
 
         FamixInvocation famixInvocation = new FamixInvocation();
-        famixInvocation.type = "AccessPropertyOrField";
+        famixInvocation.type = "AccessVariable";
         famixInvocation.from = from;
         famixInvocation.lineNumber = lineNumber;
         famixInvocation.to = to;
-        famixInvocation.invocationName = invocationName;
         famixInvocation.belongsToMethod = belongsToMethod;
-        famixInvocation.nameOfInstance = nameOfInstance;
         model.waitingAssociations.add(famixInvocation);
     }
 

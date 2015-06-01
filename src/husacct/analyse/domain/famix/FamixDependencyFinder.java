@@ -2,6 +2,7 @@ package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -156,9 +157,10 @@ class FamixDependencyFinder extends FamixFinder {
 							toClassPath = association.to;
 							if (!foundDependenciesTreeMap.containsKey(uniqueName)){
 								// Create Dependency and add to result
-								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.subType ,association.lineNumber, association.isIndirect);
-								if (association.isInheritanceRelated) {
-									foundDependency.isInheritanceRelated = true;
+								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.subType ,association.lineNumber, association.isIndirect, association.isInheritanceRelated);
+								if (association instanceof FamixInvocation) {
+									FamixInvocation invocation = (FamixInvocation) association;
+									foundDependency.usedEntity = invocation.usedEntity;
 								}
 								if (theModel.classes.get(association.from).isInnerClass || (!theModel.libraries.containsKey(association.to) && theModel.classes.get(association.to).isInnerClass)) {
 									foundDependency.isInnerClassRelated = true;

@@ -46,7 +46,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	            break;
 	        case JavaParser.RETURN: case JavaParser.CAST_EXPR: case JavaParser.ASSIGN: case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: 
         	case JavaParser.LESS_OR_EQUAL: case JavaParser.LESS_THAN: case JavaParser.GREATER_THAN:
-	            delegateInvocation(child, "accessPropertyOrField");
+	            delegateInvocation(child, "AccessVariable");
 	            walkThroughChildren = false;
 	            break;
 	        case JavaParser.METHOD_CALL: 
@@ -84,7 +84,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
         } else if (type.equals("invocMethod")) {
             javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
-        } else if (type.equals("accessPropertyOrField")) {
+        } else if (type.equals("AccessVariable")) {
             javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
         }
     }
