@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.jdom2.Element;
-
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
@@ -17,12 +14,10 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
 
     private IModelQueryService queryService;
     private IModelCreationService creationService;
-    private IModelPersistencyService persistencyService;
 
     public AnalyseDomainServiceImpl() {
         this.queryService = new FamixQueryServiceImpl();
         this.creationService = new FamixCreationServiceImpl();
-        this.persistencyService = new FamixPersistencyServiceImpl();
     }
 
     public void clearModel() {
@@ -137,16 +132,6 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     public void buildCache(){
     	queryService.buildCache();
     	return;
-    }
-
-    @Override
-    public Element saveModel() {
-        return persistencyService.saveModel();
-    }
-
-    @Override
-    public void loadModel(Element analyseElement) {
-        persistencyService.loadModel(analyseElement);
     }
 
 	@Override

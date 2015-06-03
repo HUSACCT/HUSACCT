@@ -1,5 +1,7 @@
 package husacct.analyse.domain.famix;
 
+import husacct.analyse.abstraction.dto.ClassDTO;
+
 class FamixClass extends FamixDecompositionEntity {
 	public String sourceFilePath = "";
 	public int linesOfCode = 0;
@@ -15,6 +17,12 @@ class FamixClass extends FamixDecompositionEntity {
         return object instanceof FamixClass && super.uniqueName.equals(((FamixClass) object).uniqueName);
     }
 
+    public ClassDTO getDTO() {
+    	ClassDTO cDTO = new ClassDTO(name, uniqueName, visibility, external, belongsToPackage, sourceFilePath, linesOfCode, 
+    			isInterface, isInnerClass, isEnumeration, isAbstract, hasInnerClasses, belongsToClass);
+    	return cDTO;
+    }
+    
     public String toString() {
         String classRepresentation = "";
         classRepresentation += "\nName: " + super.name;

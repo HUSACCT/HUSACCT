@@ -84,6 +84,10 @@ public class ApplicationController {
 		analyseThread.run();	
 	}
 	
+	public void reconstructArchitecture(){
+		mainController.getExportController().showReportDependenciesGui(); // Try out, replace afterwards
+	}
+	
 	public LoadingDialog getCurrentLoader() {
 		return this.currentLoader;
 	}

@@ -3,10 +3,10 @@ package husacct.common.dto;
 public class DependencyDTO extends AbstractDTO{
 	
 	//unique name of the from-class
-	public String from;	//class path of the from-class file; in case of inner classes classPathFrom is shorter than from 
-	public String fromClassPath; //unique name of the to-class
-	public String to; //class path of the to-class file; in case of inner classes classPathFrom is shorter than from 
-	public String toClassPath;
+	public String from;	//class path of the from-class file; in case of inner classes classPathFrom is shorter than fromClassPath 
+	public String fromClassPath; //unique name of the from-class
+	public String to; //class path of the to-class file; in case of inner classes classPathFrom is shorter than toClassPath 
+	public String toClassPath; //unique name of the to-class
 	public String type = "";
     public String subType = "";
 	public int lineNumber;
@@ -47,6 +47,10 @@ public class DependencyDTO extends AbstractDTO{
 		result = result && (this.lineNumber == other.lineNumber);
 		result = result && (this.isIndirect == other.isIndirect);
 		return result;
+	}
+	
+	public String getFrom() {
+		return from;
 	}
 	
 	public String toString(){

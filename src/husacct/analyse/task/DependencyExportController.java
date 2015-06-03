@@ -1,6 +1,6 @@
 package husacct.analyse.task;
 
-import husacct.analyse.abstraction.export.AbstractFileExporter;
+import husacct.analyse.abstraction.export.AbstractReportFileExporter;
 import husacct.analyse.abstraction.export.NoDataException;
 import husacct.analyse.abstraction.export.excel.ExcelExporter;
 import husacct.analyse.domain.IAnalyseDomainService;
@@ -11,7 +11,7 @@ public class DependencyExportController {
 
     private Logger husacctLogger = Logger.getLogger(DependencyExportController.class);
     private IAnalyseDomainService analysedDomain;
-    private AbstractFileExporter fileExporter;
+    private AbstractReportFileExporter fileExporter;
     private DependencyDTO[] exportData;
 
     public DependencyExportController() {

@@ -1,7 +1,7 @@
 package husacct.analyse.abstraction.export.excel;
 
 import husacct.ServiceProvider;
-import husacct.analyse.abstraction.export.AbstractFileExporter;
+import husacct.analyse.abstraction.export.AbstractReportFileExporter;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
@@ -28,7 +28,7 @@ import jxl.write.biff.RowsExceededException;
 import org.apache.log4j.Logger;
 
 
-public class ExcelExporter extends AbstractFileExporter {
+public class ExcelExporter extends AbstractReportFileExporter {
 
     private IAnalyseDomainService analysedDomain;
     private Logger husacctLogger = Logger.getLogger(ExcelExporter.class);

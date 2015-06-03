@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class ExportArchitectureDialog extends JDialog {
+public class ReportDependenciesDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,10 +34,10 @@ public class ExportArchitectureDialog extends JDialog {
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public ExportArchitectureDialog(MainController mainController) {
+	public ReportDependenciesDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setTitle(localeService.getTranslatedString("ExportArchitecture"));
+		setTitle(localeService.getTranslatedString("ExportDependencies"));
 		setup();
 		addComponents();
 		setListeners();
@@ -77,7 +77,7 @@ public class ExportArchitectureDialog extends JDialog {
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(validateData()) {
-				mainController.getExportController().exportArchitecture(selectedFile);
+				mainController.getExportController().exportDependencies(selectedFile);
 				dispose();
 				}
 			}
@@ -85,7 +85,7 @@ public class ExportArchitectureDialog extends JDialog {
 	}
 
 	private void showFileDialog() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("XLS", "xls", "xls");
 		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filter);
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {

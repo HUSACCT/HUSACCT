@@ -3,7 +3,7 @@ package husacct.analyse.abstraction.export;
 import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 
-public abstract class AbstractFileExporter {
+public abstract class AbstractReportFileExporter {
 
     protected DependencyDTO[] data;
 
@@ -11,7 +11,7 @@ public abstract class AbstractFileExporter {
         return ServiceProvider.getInstance().getLocaleService().getTranslatedString(key);
     }
 
-    public AbstractFileExporter(DependencyDTO[] data) {
+    public AbstractReportFileExporter(DependencyDTO[] data) {
         this.data = data;
     }
 

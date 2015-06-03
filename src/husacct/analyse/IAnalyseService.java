@@ -1,8 +1,8 @@
 package husacct.analyse;
 
 import java.util.List;
-
 import javax.swing.JInternalFrame;
+import org.jdom2.Element;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
@@ -48,7 +48,7 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
 
-    public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
+    public DependencyDTO[] getDependenciesFrom(String to, String[] dependencyFilter);
 
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 
@@ -66,6 +66,8 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public void exportDependencies(String fullPath);
     
+    public Element exportAnalysisModel();
+
     public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
     
     public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);

@@ -9,8 +9,6 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
-import org.jdom2.Element;
-
 public class AnalyseControlServiceImpl implements IAnalyseControlService {
 
     private ApplicationAnalyser analyserService;
@@ -116,16 +114,6 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     @Override
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
         return domainService.getDependenciesTo(to, dependencyFilter);
-    }
-
-    @Override
-    public Element saveModel() {
-        return domainService.saveModel();
-    }
-
-    @Override
-    public void loadModel(Element analyseElement) {
-        domainService.loadModel(analyseElement);
     }
 
     @Override

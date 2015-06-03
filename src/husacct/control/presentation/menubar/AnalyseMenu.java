@@ -24,7 +24,10 @@ public class AnalyseMenu extends JMenu{
 	private JMenuItem analysedArchitectureDiagramItem;
 	private JMenuItem analysedApplicationOverviewItem;
 	private JMenuItem analysisHistoryItem;
-	private JMenuItem exportDependenciesItem;
+	private JMenuItem reportDependenciesItem;
+	private JMenuItem reconstructArchitectureItem;
+	private JMenuItem exportAnalysisModelItem;
+	private JMenuItem importAnalysisModelItem;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -54,16 +57,28 @@ public class AnalyseMenu extends JMenu{
 		
 		analysisHistoryItem = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
 		
-		exportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
-		exportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
-		exportDependenciesItem.setMnemonic(getMnemonicKeycode("ExportDependenciesMnemonic"));
+		reportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
+		reportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
+		reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
+		
+		reconstructArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReconstructArchitecture"));
+		reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
+		
+		exportAnalysisModelItem = new JMenuItem(localeService.getTranslatedString("ExportAnalysisModel"));
+		exportAnalysisModelItem.setMnemonic(getMnemonicKeycode("ExportAnalysisModelMnemonic"));
+		
+		importAnalysisModelItem = new JMenuItem(localeService.getTranslatedString("ImportAnalysisModel"));
+		importAnalysisModelItem.setMnemonic(getMnemonicKeycode("ImportAnalysisModelMnemonic"));
 		
 		this.add(setApplicationPropertiesItem);
 		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
 		this.add(analysisHistoryItem);
-		this.add(exportDependenciesItem);
+		this.add(reportDependenciesItem);
+		this.add(reconstructArchitectureItem);
+		this.add(exportAnalysisModelItem);
+		this.add(importAnalysisModelItem);
 	}
 	
 	private void setListeners() {
@@ -97,9 +112,21 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 		
-		exportDependenciesItem.addActionListener(new ActionListener(){
+		reportDependenciesItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getExportController().showExportDependenciesGui();
+				mainController.getExportController().showReportDependenciesGui();
+			}
+		});
+		
+		reconstructArchitectureItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getApplicationController().reconstructArchitecture();
+			}
+		});
+		
+		exportAnalysisModelItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getExportController().showExportAnalysisModelGui();
 			}
 		});
 		
@@ -110,7 +137,8 @@ public class AnalyseMenu extends JMenu{
 				analysedArchitectureDiagramItem.setEnabled(false);
 				analysedApplicationOverviewItem.setEnabled(false);
 				analysisHistoryItem.setEnabled(false);
-				exportDependenciesItem.setEnabled(false);
+				reportDependenciesItem.setEnabled(false);
+				reconstructArchitectureItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
 					setApplicationPropertiesItem.setEnabled(true);
@@ -122,8 +150,9 @@ public class AnalyseMenu extends JMenu{
 				if(states.contains(States.ANALYSED)){
 					analysedArchitectureDiagramItem.setEnabled(true);
 					analysedApplicationOverviewItem.setEnabled(true);
-					exportDependenciesItem.setEnabled(true);
+					reportDependenciesItem.setEnabled(true);
 					analysisHistoryItem.setEnabled(true);
+					reconstructArchitectureItem.setEnabled(true);
 				}
 			}
 		});
@@ -136,13 +165,15 @@ public class AnalyseMenu extends JMenu{
 				analyseNowItem.setText(localeService.getTranslatedString("AnalyseNow"));
 				analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
 				analysedApplicationOverviewItem.setText(localeService.getTranslatedString("AnalysedApplicationOverview"));
-				exportDependenciesItem.setText(localeService.getTranslatedString("ExportDependencies"));
+				reportDependenciesItem.setText(localeService.getTranslatedString("ExportDependencies"));
+				reconstructArchitectureItem.setText(localeService.getTranslatedString("ReconstructArchitecture"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 				analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
-				exportDependenciesItem.setMnemonic(getMnemonicKeycode("ExportDependenciesMnemonic"));
-			}
+				reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
+				reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
+			}	
 		});
 	}
 	

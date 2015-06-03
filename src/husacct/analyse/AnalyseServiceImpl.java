@@ -25,7 +25,7 @@ import org.jdom2.Element;
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable {
 
     private IAnalyseControlService service ;
-    private IModelPersistencyService persistService;
+    private IModelPersistencyService persistencyService;
     private AnalyseInternalFrame analyseInternalFrame;
     private HistoryLogger historyLogger;
     private final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
@@ -33,7 +33,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
     public AnalyseServiceImpl() {
         this.service = new AnalyseControlServiceImpl();
-        this.persistService = new FamixPersistencyServiceImpl();
+        this.persistencyService = new FamixPersistencyServiceImpl();
         this.historyLogger = new HistoryLogger();
         this.analyseInternalFrame = null;
         this.isAnalysed = false;
@@ -158,16 +158,21 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         service.exportDependencies(fullPath);
     }
     
-	@Override
+    public Element exportAnalysisModel() {
+    	return persistencyService.exportAnalysisModel();
+    }
+
+    
+    // Used for the generic mechanism to save workspace data of all components; e.g. configuration settings  
+	@Override // From ISaveable
 	public Element getWorkspaceData() {
-		Element rootElement = new Element("rootElement");
-		rootElement.addContent(persistService.saveModel());
-		return rootElement;
+		return persistencyService.getWorkspaceData();
 	}
 
-	@Override
+    // Used for the generic mechanism to load workspace data of all components; e.g. configuration settings  
+	@Override // From ISaveable
 	public void loadWorkspaceData(Element rootElement) {
-		persistService.loadModel(rootElement.getChild("AnalysedApplication"));
+		persistencyService.loadWorkspaceData(rootElement);
 	}
 
 	@Override

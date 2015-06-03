@@ -19,11 +19,12 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class ExportDependenciesDialog extends JDialog {
+public class ExportDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private MainController mainController;
+	private String typeOfExport;
 	
 	private JLabel pathLabel;
 	private JTextField pathText;
@@ -34,10 +35,15 @@ public class ExportDependenciesDialog extends JDialog {
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public ExportDependenciesDialog(MainController mainController) {
+	public ExportDialog(MainController mainController, String typeOfExport) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setTitle(localeService.getTranslatedString("ExportDependencies"));
+		this.typeOfExport = typeOfExport;
+		if (typeOfExport.equals("ExportArchitecture")) {
+			setTitle(localeService.getTranslatedString("ExportArchitecture"));
+		} else if (typeOfExport.equals("ExportAnalysisModel")) {
+			setTitle(localeService.getTranslatedString("ExportAnalysisModel"));
+		}
 		setup();
 		addComponents();
 		setListeners();
@@ -77,7 +83,11 @@ public class ExportDependenciesDialog extends JDialog {
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(validateData()) {
-				mainController.getExportController().exportDependencies(selectedFile);
+					if (typeOfExport.equals("ExportArchitecture")) {
+						mainController.getExportController().exportArchitecture(selectedFile);
+					} else if (typeOfExport.equals("ExportAnalysisModel")) {
+						mainController.getExportController().exportAnalysisModel(selectedFile);
+					}
 				dispose();
 				}
 			}
@@ -85,7 +95,7 @@ public class ExportDependenciesDialog extends JDialog {
 	}
 
 	private void showFileDialog() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("XLS", "xls", "xls");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
 		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filter);
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {

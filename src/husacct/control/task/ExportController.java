@@ -3,8 +3,8 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.control.IControlService;
-import husacct.control.presentation.util.ExportArchitectureDialog;
-import husacct.control.presentation.util.ExportDependenciesDialog;
+import husacct.control.presentation.util.ExportDialog;
+import husacct.control.presentation.util.ReportDependenciesDialog;
 import husacct.control.presentation.util.ExportViolationsReportDialog;
 import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
@@ -28,16 +28,35 @@ public class ExportController {
 		this.mainController = mainController;
 	}
 	
+	public void showExportAnalysisModelGui() {
+		new ExportDialog(mainController, "ExportAnalysisModel");
+	}
+
 	public void showExportArchitectureGui() {
-		new ExportArchitectureDialog(mainController);
+		new ExportDialog(mainController, "ExportArchitecture");
 	}
 
 	public void showExportViolationsReportGui() {
 		new ExportViolationsReportDialog(mainController);
 	}
 	
-	public void showExportDependenciesGui(){
-		new ExportDependenciesDialog(mainController);
+	public void showReportDependenciesGui(){
+		new ReportDependenciesDialog(mainController);
+	}
+	
+	public void exportAnalysisModel(File file){
+		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		resourceData.put("file", file);
+		IResource xmlResource = ResourceFactory.get("xml");
+		try {
+			Element logicalData = ServiceProvider.getInstance().getAnalyseService().exportAnalysisModel();
+			Document doc = new Document(logicalData);
+			
+			xmlResource.save(doc, resourceData);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.debug("Unable to export analysis model: " + e.getMessage());
+		}
 	}
 	
 	public void exportArchitecture(File file){

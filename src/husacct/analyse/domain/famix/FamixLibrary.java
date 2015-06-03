@@ -1,5 +1,7 @@
 package husacct.analyse.domain.famix;
 
+import husacct.analyse.abstraction.dto.LibraryDTO;
+
 public class FamixLibrary extends FamixDecompositionEntity {
 
     public boolean isPackage = true;
@@ -7,6 +9,11 @@ public class FamixLibrary extends FamixDecompositionEntity {
 
     public boolean equals(FamixLibrary other) {
         return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 
+    }
+
+    public LibraryDTO getDTO() {
+    	LibraryDTO dto = new LibraryDTO(name, uniqueName, visibility, external, belongsToPackage, isPackage, physicalPath);
+    	return dto;
     }
 
     @Override

@@ -1,12 +1,11 @@
 package husacct.analyse.domain.famix;
 
+import husacct.analyse.abstraction.export.XmlFileExporter;
 import husacct.analyse.domain.IModelPersistencyService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.Map;
-
 import javax.naming.directory.InvalidAttributesException;
 
 import org.jdom2.Element;
@@ -15,39 +14,39 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
 
     private FamixModel theModel;
     private Element rootNode, packages, libraries, classes, methods, variables, associations;
-    private HashMap<String, FamixPackage> packagesList;
-    private HashMap<String, FamixClass> classList;
+    private TreeMap<String, FamixPackage> packagesMap;
+    private TreeMap<String, FamixClass> classesTreeMap;
+    private TreeMap<String, FamixLibrary> librarieTreeMap;
     private HashMap<String, FamixBehaviouralEntity> methodsList;
     private HashMap<String, FamixStructuralEntity> variablesList;
-    private HashMap<String, FamixLibrary> librarieList;
     private ArrayList<FamixAssociation> associationList;
+    
+    XmlFileExporter xmlFileExporter;
+
+    // Used for the generic mechanism to save workspace data of all components; e.g. configuration settings  
+	@Override
+	public Element getWorkspaceData() {
+		Element rootElement = new Element("rootElementAnalyse");
+		// No configuration data are saved and loaded, currently.
+		return rootElement;
+	}
+
+    // Used for the generic mechanism to load workspace data of all components; e.g. configuration settings  
+	@Override
+	public void loadWorkspaceData(Element rootElement) {
+		// No configuration data are saved and loaded, currently.
+	}
 
     @Override
-    public Element saveModel() {
-        Element analysedProject = new Element("EmptyAnalysedApplication");
-    	//2014-01-21 Decision: Saving and loading analysed data is not useful
-    	boolean saveAnalysedData = false; 
-    	if (!saveAnalysedData)
-    		return analysedProject;
-    	else {
-         theModel = FamixModel.getInstance();
+    public Element exportAnalysisModel() {
+    	xmlFileExporter = new XmlFileExporter();
+        theModel = FamixModel.getInstance();
         initiateNodes();
         loadObjects();
-        return createXml();
-    	}
-    }
-
-    //Note - Reset was called in saveModel. Change the reset before implementing it, because the
-    //in-memory Famix-domain objects are all deleted now. The objects used in this class are not
-    //copies, but the real reference to the data in the memory, thus the complete model will be cleared
-    //when calling this function. Please fix this.
-    private void reset() {
-        this.packagesList = null;
-        this.librarieList = null;
-        this.classList = null;
-        this.methodsList = null;
-        this.variablesList = null;
-        this.associationList = null;
+        writePackagesToXML();
+        writeClassesToXML();
+        writeLibrariesToXML();
+        return xmlFileExporter.getXML();
     }
 
     private void initiateNodes() {
@@ -61,91 +60,35 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     }
 
     private void loadObjects() {
-    	Map<String, FamixClass> tempPackageList = (Map) theModel.classes;
-        this.packagesList = (HashMap) tempPackageList;
-        this.librarieList = theModel.libraries;
-        Map<String, FamixClass> tempClassList = (Map) theModel.classes;
-        this.classList = (HashMap) tempClassList;
+        this.packagesMap = theModel.packages;
+        this.librarieTreeMap = new TreeMap<String, FamixLibrary>(theModel.libraries);
+        this.classesTreeMap = new TreeMap<String, FamixClass>(theModel.classes);
         this.methodsList = theModel.behaviouralEntities;
         this.variablesList = theModel.structuralEntities;
         this.associationList = theModel.associations;
     }
 
-    private Element createXml() {
-        Element analysedProject = new Element("AnalysedApplication");
-
-        Element ElemPackages = new Element("Packages");
-        for (String famPackageKey : packagesList.keySet()) {
-            Element ElemPackage = new Element("Package");
-            ElemPackage.addContent(new Element("UniqueName").setText(packagesList.get(famPackageKey).uniqueName));
-            ElemPackage.addContent(new Element("Name").setText(packagesList.get(famPackageKey).name));
-            ElemPackage.addContent(new Element("BelongsToPackage").setText(packagesList.get(famPackageKey).belongsToPackage));
-            ElemPackages.addContent(ElemPackage);
+    private void writePackagesToXML() {
+        for (String packageKey : theModel.packages.keySet()) {
+        	FamixPackage fPackage = theModel.packages.get(packageKey);
+        	xmlFileExporter.writePackageToXml(fPackage.getDTO());
         }
-        analysedProject.addContent(ElemPackages);
-
-        Element ElemLibraries = new Element("Libraries");
-        for (String famLibrarieKey : librarieList.keySet()) {
-            Element ElemLibrary = new Element("Library");
-            ElemLibrary.addContent(new Element("UniqueName").setText(packagesList.get(famLibrarieKey).uniqueName));
-            ElemLibrary.addContent(new Element("Name").setText(packagesList.get(famLibrarieKey).name));
-            ElemLibrary.addContent(new Element("BelongsToPackage").setText(packagesList.get(famLibrarieKey).belongsToPackage));
-            ElemLibrary.addContent(ElemLibrary);
-        }
-        analysedProject.addContent(ElemLibraries);
-
-        Element elemClasses = new Element("Classes");
-        for (String famClassKey : classList.keySet()) {
-            Element elemClass = new Element("Class");
-            elemClass.addContent(new Element("UniqueName").setText(classList.get(famClassKey).uniqueName));
-            elemClass.addContent(new Element("Name").setText(classList.get(famClassKey).name));
-            elemClass.addContent(new Element("BelongsToPackage").setText(classList.get(famClassKey).belongsToPackage));
-            elemClass.addContent(new Element("IsAbstract").setText(new Boolean(classList.get(famClassKey).isAbstract).toString()));
-            elemClass.addContent(new Element("IsInnerClass").setText(new Boolean(classList.get(famClassKey).isInnerClass).toString()));
-            elemClasses.addContent(elemClass);
-        }
-        analysedProject.addContent(elemClasses);
-
-        Element elemMethods = new Element("Methods");
-        for (String famMethKey : methodsList.keySet()) {
-            Element elemMethod = new Element("Method");
-            elemMethod.addContent(new Element("UniqueName").setText(methodsList.get(famMethKey).uniqueName));
-            elemMethod.addContent(new Element("Name").setText(methodsList.get(famMethKey).name));
-            elemMethod.addContent(new Element("accessControlQualifier").setText(methodsList.get(famMethKey).accessControlQualifier));
-            elemMethod.addContent(new Element("signature").setText(methodsList.get(famMethKey).signature));
-            elemMethod.addContent(new Element("declaredReturnType").setText(methodsList.get(famMethKey).declaredReturnType));
-            elemMethods.addContent(elemMethod);
-        }
-        analysedProject.addContent(elemMethods);
-
-        Element elemVariables = new Element("Variables");
-        for (String famVarKey : variablesList.keySet()) {
-            Element elemVariable = new Element("Variable");
-            elemVariable.addContent(new Element("UniqueName").setText(variablesList.get(famVarKey).uniqueName));
-            elemVariable.addContent(new Element("Name").setText(variablesList.get(famVarKey).name));
-            elemVariable.addContent(new Element("BelongsToClass").setText(variablesList.get(famVarKey).belongsToClass));
-            elemVariable.addContent(new Element("declareType").setText(variablesList.get(famVarKey).declareType));
-            elemVariables.addContent(elemVariable);
-        }
-        analysedProject.addContent(elemVariables);
-
-        Element elemAssociations = new Element("Associations");
-        for (FamixAssociation famAssoCurrent : associationList) {
-            String From = famAssoCurrent.from;
-            String To = famAssoCurrent.to;
-            String Type = famAssoCurrent.type;
-            String LineNr = Integer.toString(famAssoCurrent.lineNumber);
-            Element elemAssociation = new Element("Association");
-            elemAssociation.addContent(new Element("From").setText(From));
-            elemAssociation.addContent(new Element("To").setText(To));
-            elemAssociation.addContent(new Element("Type").setText(Type));
-            elemAssociation.addContent(new Element("linenumber").setText(LineNr));
-            elemAssociations.addContent(elemAssociation);
-        }
-        analysedProject.addContent(elemAssociations);
-        return analysedProject;
     }
 
+    private void writeClassesToXML() {
+        for (String classKey : classesTreeMap.keySet()) {
+        	FamixClass fClass = classesTreeMap.get(classKey);
+        	xmlFileExporter.writeClassToXml(fClass.getDTO());
+        }
+    }
+
+    private void writeLibrariesToXML() {
+        for (String Key : librarieTreeMap.keySet()) {
+        	FamixLibrary f = librarieTreeMap.get(Key);
+        	xmlFileExporter.writeLibraryToXml(f.getDTO());
+        }
+    }
+    
     @Override
     public void loadModel(Element analyseElement) {
     	//2014-01-21 Decision: Saving and loading analysed data is not useful
@@ -278,4 +221,6 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     		}
     	}
     }
+    
+
 }
