@@ -25,11 +25,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         creationPostProcessor = new FamixCreationPostProcessor();
     }
 
-    @Override
-    public void clearModel() {
-        model.clear();
-    }
-
     public void createPackage(String uniqueName, String belongsToPackage, String name) {
         if (!model.packages.containsKey(uniqueName)){
 	        FamixPackage fPackage = new FamixPackage();

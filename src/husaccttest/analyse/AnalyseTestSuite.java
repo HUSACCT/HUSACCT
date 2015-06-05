@@ -7,7 +7,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	Java_AccuracyTestDependencyDetection.class,
-	CSharp_AccuracyTestDependencyDetection.class
+	CSharp_AccuracyTestDependencyDetection.class,
+	ExportImportAnalysedModelTest.class
 })
 public class AnalyseTestSuite {
 }

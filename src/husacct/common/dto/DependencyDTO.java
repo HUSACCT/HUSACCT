@@ -15,6 +15,10 @@ public class DependencyDTO extends AbstractDTO{
 	public boolean isInheritanceRelated = false; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends. 
 	public boolean isInnerClassRelated = false; // True, if the from-class or to-class is an inner class
 	
+	public DependencyDTO() {
+		
+	}
+	
 	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, int lineNumber){
 		this.from = from;
 		this.fromClassPath = fromClassPath;

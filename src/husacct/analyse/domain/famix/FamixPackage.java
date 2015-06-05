@@ -17,9 +17,9 @@ class FamixPackage extends FamixDecompositionEntity {
     @Override
     public String toString() {
         String packageRepresentation = "";
-        packageRepresentation += "\nUnique Name: " + super.uniqueName;
-        packageRepresentation += "\nBelongs to Package: " + belongsToPackage;
-        packageRepresentation += "\nName: " + super.name + "\n\n";
+        packageRepresentation += "\nname: " + name + ", uniqueName: " + uniqueName;
+        packageRepresentation += "\nbelongsToPackage: " + belongsToPackage;
+        packageRepresentation += "\nvisibility: " + visibility + ", external: " + external + "\n\n";
         return packageRepresentation;
     }
 }

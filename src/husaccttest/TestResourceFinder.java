@@ -30,6 +30,7 @@ public class TestResourceFinder {
 		}
 		return selectedPath + File.separator;
 	}
+
 	/**Function to find the workspace file, holding in account if the build or the normal JUnit tests is requesting the path. 
 	 * Build tests will run from a different location, thus the path will be different. */
 	// Requires two versions of the workspace: 1) JUnit version with project path = directory name within projectResources; 2) Build version with the project path = "..\" + directory name within projectResources
@@ -46,7 +47,24 @@ public class TestResourceFinder {
 			// buildIsRunning = true;
 			selectedPath = pathFromBuild + "_build";
 		}
+		return selectedPath + File.separator;
+	}
+
+	public static String findHusacctExportFile(String languageFolder, String exportFile){
+		
+		String buildPrefix = ".." + File.separator;
+		String simplePath = testprojectFolder + File.separator + languageFolder + File.separator + "export" + File.separator + exportFile;
+		String pathFromBuild = buildPrefix + simplePath;
+		
+		String selectedPath = simplePath;
+		// Determine if the build is running the test
+		File pathFromBuildDirectory = new File(pathFromBuild);
+		if (pathFromBuildDirectory.isDirectory()) {
+			// buildIsRunning = true;
+			selectedPath = pathFromBuild + "_build";
+		}
 		
 		return selectedPath + File.separator;
 	}
+
 }

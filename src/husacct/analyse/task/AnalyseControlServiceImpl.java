@@ -2,7 +2,6 @@ package husacct.analyse.task;
 
 import java.util.List;
 
-import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -15,8 +14,8 @@ public class AnalyseControlServiceImpl implements IAnalyseControlService {
     private IAnalyseDomainService domainService;
     private DependencyExportController exportController;
 
-    public AnalyseControlServiceImpl() {
-        this.domainService = new AnalyseDomainServiceImpl();
+    public AnalyseControlServiceImpl(IAnalyseDomainService domainService) {
+        this.domainService = domainService;
         this.analyserService = new ApplicationAnalyser();
         this.exportController = new DependencyExportController(domainService);
     }

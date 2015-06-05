@@ -18,14 +18,25 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     public FamixQueryServiceImpl() {
         this.theModel = FamixModel.getInstance();
+        clearModel();
         this.moduleFinder = new FamixModuleFinder(theModel);
-        this.dependencyFinder = new FamixDependencyFinder(this.theModel);
+        this.dependencyFinder = new FamixDependencyFinder(theModel);
     }
     
     @Override
+    public void clearModel() {
+    	theModel.clear();
+        this.dependencyFinder = new FamixDependencyFinder(theModel);
+    }
+
+    @Override
     public void buildCache(){
     	dependencyFinder.buildCache();
-    	return;
+    }
+
+    @Override
+    public void importDependencies(List<DependencyDTO> dependencies){
+    	dependencyFinder.importDependencies(dependencies);
     }
 
     @Override

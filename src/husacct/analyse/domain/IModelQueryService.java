@@ -9,6 +9,12 @@ import java.util.TreeSet;
 
 public interface IModelQueryService {
 
+    public void clearModel();
+
+    public void buildCache();
+    
+    public void importDependencies(List<DependencyDTO> dependencies);
+    
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 
     public String getSourceFilePathOfClass(String uniquename);
@@ -42,8 +48,6 @@ public interface IModelQueryService {
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 
     public DependencyDTO[] mapDependencies();
-    
-    public void buildCache();
     
     // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned.
     public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);

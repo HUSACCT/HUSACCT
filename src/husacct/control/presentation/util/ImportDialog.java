@@ -18,11 +18,12 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class ImportArchitectureDialog extends JDialog {
+public class ImportDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private MainController mainController;
+	private String typeOfImport;
 	
 	private JLabel pathLabel;
 	private JTextField pathText;
@@ -32,10 +33,15 @@ public class ImportArchitectureDialog extends JDialog {
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
-	public ImportArchitectureDialog(MainController mainController) {
+	public ImportDialog(MainController mainController, String typeOfImport) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setTitle(localeService.getTranslatedString("ImportArchitecture"));
+		this.typeOfImport = typeOfImport;
+		if (typeOfImport.equals("ImportArchitecture")) {
+			setTitle(localeService.getTranslatedString("ImportArchitecture"));
+		} else if (typeOfImport.equals("ImportAnalysisModel")) {
+			setTitle(localeService.getTranslatedString("ImportAnalysisModel"));
+		}
 		setup();
 		addComponents();
 		setListeners();
@@ -74,7 +80,11 @@ public class ImportArchitectureDialog extends JDialog {
 		});
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				mainController.getImportController().importArchitecture(selectedFile);
+				if (typeOfImport.equals("ImportArchitecture")) {
+					mainController.getImportController().importArchitecture(selectedFile);
+				} else if (typeOfImport.equals("ImportAnalysisModel")) {
+					mainController.getImportController().importAnalysisModel(selectedFile);
+				}
 				dispose();
 			}
 		});

@@ -35,7 +35,11 @@ class FamixDependencyFinder extends FamixFinder {
 		return;
 	}
 	
-	public List<DependencyDTO> getAllDependencies(){
+    public void importDependencies(List<DependencyDTO> dependencies){
+    	dependencyCache = dependencies;
+    }
+
+    public List<DependencyDTO> getAllDependencies(){
 		if(dependencyCache == null)
 			dependencyCache = findDependencies(FinderFunction.ALL, "", "");
 		return dependencyCache;

@@ -66,9 +66,13 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public void exportDependencies(String fullPath);
     
+    public void reconstructArchitecture();
+    
     public Element exportAnalysisModel();
 
-    public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
+	public void importAnalysisModel(Element analyseElement);
+
+	public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
     
     public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
     

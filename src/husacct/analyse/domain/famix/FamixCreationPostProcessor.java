@@ -334,7 +334,7 @@ class FamixCreationPostProcessor {
 	        //e.printStackTrace();
 		}
 		indirectAssociations_DeriveIndirectInheritance();
-        this.logger.info(new Date().toString() + " Finished: processInheritanceAssociations()");
+        //this.logger.info(new Date().toString() + " Finished: processInheritanceAssociations()");
     }
 
 	// Objective: Check references to FamixObjects and try to replace missing information (focusing on the to object).
@@ -698,8 +698,8 @@ class FamixCreationPostProcessor {
         	addToModel(indirectAssociation);
         }
 
-        this.logger.info(new Date().toString() + " Connected via 1) Import: " + numberOfConnectedViaImport + ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Variable: " + numberOfConnectedViaAttribute  
-        		+ ", 4) Local var: " + numberOfConnectedViaLocalVariable + ", 5) Method: " +  numberOfConnectedViaMethod +  ", 6) Inherited var/method: " + numberOfDerivedAssociations + ", 7) added to Model: " + numberofAssociationsAddedToModel);
+        /*this.logger.info(new Date().toString() + " Connected via 1) Import: " + numberOfConnectedViaImport + ", 2) Package: " + numberOfConnectedViaPackage + ", 3) Variable: " + numberOfConnectedViaAttribute  
+        		+ ", 4) Local var: " + numberOfConnectedViaLocalVariable + ", 5) Method: " +  numberOfConnectedViaMethod +  ", 6) Inherited var/method: " + numberOfDerivedAssociations + ", 7) added to Model: " + numberofAssociationsAddedToModel); */
     }
     
 	// Objective: Identify dependencies to the remaining parts of the chain in a chaining invocation (assignment or call).
@@ -885,7 +885,7 @@ class FamixCreationPostProcessor {
         	waitingDerivedAssociations.clear();
     		waitingDerivedAssociations.addAll(addedInvocations);
     		addedInvocations.clear();
-        	this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
+        	//this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
     		processWaitingDerivedAssociations();
     	} else {
     		FamixInvocation lastInvocatioInLargeChain = waitingDerivedAssociations.get(waitingDerivedAssociations.size() - 1);

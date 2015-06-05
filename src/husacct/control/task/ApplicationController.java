@@ -9,7 +9,6 @@ import husacct.control.IControlService;
 import husacct.control.presentation.util.AboutDialog;
 import husacct.control.presentation.util.ConfigurationDialog;
 import husacct.control.presentation.util.DocumentationDialog;
-import husacct.control.presentation.util.HelpDialog;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
 import husacct.control.task.threading.ThreadWithLoader;
@@ -18,7 +17,6 @@ import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -85,7 +83,7 @@ public class ApplicationController {
 	}
 	
 	public void reconstructArchitecture(){
-		mainController.getExportController().showReportDependenciesGui(); // Try out, replace afterwards
+		ServiceProvider.getInstance().getAnalyseService().reconstructArchitecture(); // Try out, replace afterwards
 	}
 	
 	public LoadingDialog getCurrentLoader() {

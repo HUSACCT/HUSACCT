@@ -12,5 +12,5 @@ public interface IModelPersistencyService {
 
     public Element exportAnalysisModel();
 
-    public void loadModel(Element analyseElement);
+    public void importAnalysisModel(Element analyseElement);
 }

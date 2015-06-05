@@ -1,13 +1,6 @@
 package husacct.analyse.abstraction.export;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
@@ -18,22 +11,24 @@ import husacct.analyse.abstraction.dto.LibraryDTO;
 import husacct.analyse.abstraction.dto.PackageDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.DependencyDTO;
 
-public class XmlFileExporter {
+public class XmlFileExporterAnalysedModel {
 
     private Element analysisModelElement;
     private Element applicationElement;
     private Element packagesElement;
     private Element classesElement;
     private Element librariesElement;
-    private Logger husacctLogger = Logger.getLogger(XmlFileExporter.class);
+    private Element dependenciesElement;
+    private Logger husacctLogger = Logger.getLogger(XmlFileExporterAnalysedModel.class);
 
-    public XmlFileExporter() {
-        analysisModelElement = new Element("AnalysisModel");
+    public XmlFileExporterAnalysedModel() {
         writeApplicationElement();
 		packagesElement = new Element("Packages");
 		classesElement = new Element("Classes");
 		librariesElement = new Element("Libraries");
+		dependenciesElement = new Element("Dependencies");
     }
 
     private void writeApplicationElement() {
@@ -42,13 +37,13 @@ public class XmlFileExporter {
 		applicationElement.addContent(new Element("ApplicationName").setText(applicationDTO.name));
     }
     
-    public void writePackageToXml(PackageDTO pDTO) {
-    	Element packageElement = writeDtoToXml("Package", pDTO);
+    public void writePackageToXml(PackageDTO dto) {
+    	Element packageElement = writeDtoToXml("Package", dto);
     	packagesElement.addContent(packageElement);
     }
     
-    public void writeClassToXml(ClassDTO cDTO) {
-    	Element classElement = writeDtoToXml("Class", cDTO);
+    public void writeClassToXml(ClassDTO dto) {
+    	Element classElement = writeDtoToXml("Class", dto);
     	classesElement.addContent(classElement);
     }
     
@@ -57,7 +52,12 @@ public class XmlFileExporter {
     	librariesElement.addContent(libraryElement);
     }
     
-     public Element writeDtoToXml(String elementName, AbstractDTO dto) {
+    public void writeDependencyToXml(DependencyDTO dto) {
+    	Element dependencyElement = writeDtoToXml("Dependency", dto);
+    	dependenciesElement.addContent(dependencyElement);
+    }
+
+    public Element writeDtoToXml(String elementName, AbstractDTO dto) {
     	Element dtoElement = new Element(elementName);
     	Class<?> d = dto.getClass();
     	try {
@@ -78,13 +78,14 @@ public class XmlFileExporter {
 		}
         return dtoElement;
     }
-
     
     public Element getXML() {
+        analysisModelElement = new Element("AnalysisModel");
 		analysisModelElement.addContent(applicationElement);
     	analysisModelElement.addContent(packagesElement);
     	analysisModelElement.addContent(classesElement);
     	analysisModelElement.addContent(librariesElement);
+    	analysisModelElement.addContent(dependenciesElement);
     	return analysisModelElement;
     }
     
@@ -98,10 +99,5 @@ public class XmlFileExporter {
 
     protected void write(String path) {
     }
-
-    protected String translate(String key) {
-        return ServiceProvider.getInstance().getLocaleService().getTranslatedString(key);
-    }
-
 
 }

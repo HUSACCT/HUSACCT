@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
@@ -13,16 +11,13 @@ import husacct.common.dto.DependencyDTO;
 public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
 
     private IModelQueryService queryService;
-    private IModelCreationService creationService;
 
-    public AnalyseDomainServiceImpl() {
-        this.queryService = new FamixQueryServiceImpl();
-        this.creationService = new FamixCreationServiceImpl();
+    public AnalyseDomainServiceImpl(IModelQueryService queryService) {
+        this.queryService = queryService;
     }
 
     public void clearModel() {
-        this.queryService = new FamixQueryServiceImpl();
-        creationService.clearModel();
+        queryService.clearModel();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.control.presentation.util.ImportArchitectureDialog;
+import husacct.control.presentation.util.ImportDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -22,7 +22,11 @@ public class ImportController {
 	}
 	
 	public void showImportArchitectureGui(){
-		new ImportArchitectureDialog(mainController);
+		new ImportDialog(mainController, "ImportArchitecture");
+	}
+	
+	public void showImportAnalyseModelGui(){
+		new ImportDialog(mainController, "ImportAnalysisModel");
 	}
 	
 	public void importArchitecture(File file){
@@ -35,6 +39,20 @@ public class ImportController {
 			ServiceProvider.getInstance().getDefineService().loadLogicalArchitectureData(logicalData);
 		} catch (Exception e) {
 			logger.debug("Unable to import logical architecture: " + e.getMessage());
+		}
+	}
+
+	public void importAnalysisModel(File file){
+		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		resourceData.put("file", file);
+		IResource xmlResource = ResourceFactory.get("xml");
+		try {
+			Document doc = xmlResource.load(resourceData);	
+			Element logicalData = doc.getRootElement();
+			ServiceProvider.getInstance().getAnalyseService().importAnalysisModel(logicalData);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.debug("Unable to export analysis model: " + e.getMessage());
 		}
 	}
 

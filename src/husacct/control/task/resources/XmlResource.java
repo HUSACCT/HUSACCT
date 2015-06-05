@@ -65,7 +65,7 @@ public class XmlResource implements IResource{
 			XMLOutputter xout;
 			if(doCompress) {
 				System.out.println("compress");
-				xout = new XMLOutputter(Format.getRawFormat());
+				xout = new XMLOutputter(Format.getCompactFormat());
 			}
 			else {
 				xout = new XMLOutputter(Format.getPrettyFormat());
@@ -117,7 +117,7 @@ public class XmlResource implements IResource{
 	@Override
 	public boolean save(Document doc, HashMap<String, Object> dataValues) {
 		HashMap<String,Object> config = new HashMap<String, Object>();
-		config.put("doCompress", false);
+		config.put("doCompress", true);
 		config.put("doPasswordProtection", false);
 		save(doc, dataValues, config);
 		return false;

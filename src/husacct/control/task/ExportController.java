@@ -58,7 +58,7 @@ public class ExportController {
 			logger.debug("Unable to export analysis model: " + e.getMessage());
 		}
 	}
-	
+
 	public void exportArchitecture(File file){
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", file);

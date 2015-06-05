@@ -47,10 +47,6 @@ class FamixModel extends FamixObject {
         return currentInstance;
     }
 
-    public void clearModel() {
-        currentInstance = new FamixModel();
-    }
-
     public void addObject(FamixObject e) throws InvalidAttributesException {
         try{
     	if (e instanceof FamixEntity) {

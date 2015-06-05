@@ -76,7 +76,7 @@ public class AnalyseMenu extends JMenu{
 		this.add(analysedArchitectureDiagramItem);
 		this.add(analysisHistoryItem);
 		this.add(reportDependenciesItem);
-		this.add(reconstructArchitectureItem);
+		//this.add(reconstructArchitectureItem);
 		this.add(exportAnalysisModelItem);
 		this.add(importAnalysisModelItem);
 	}
@@ -130,6 +130,12 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 		
+		importAnalysisModelItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getImportController().showImportAnalyseModelGui();
+			}
+		});
+
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				setApplicationPropertiesItem.setEnabled(false);
@@ -139,6 +145,8 @@ public class AnalyseMenu extends JMenu{
 				analysisHistoryItem.setEnabled(false);
 				reportDependenciesItem.setEnabled(false);
 				reconstructArchitectureItem.setEnabled(false);
+				exportAnalysisModelItem.setEnabled(false);
+				importAnalysisModelItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
 					setApplicationPropertiesItem.setEnabled(true);
@@ -146,6 +154,7 @@ public class AnalyseMenu extends JMenu{
 				}
 				if(states.contains(States.APPSET) && (!states.contains(States.VALIDATING))){
 					analyseNowItem.setEnabled(true);
+					importAnalysisModelItem.setEnabled(true);
 				}
 				if(states.contains(States.ANALYSED)){
 					analysedArchitectureDiagramItem.setEnabled(true);
@@ -153,6 +162,7 @@ public class AnalyseMenu extends JMenu{
 					reportDependenciesItem.setEnabled(true);
 					analysisHistoryItem.setEnabled(true);
 					reconstructArchitectureItem.setEnabled(true);
+					exportAnalysisModelItem.setEnabled(true);
 				}
 			}
 		});

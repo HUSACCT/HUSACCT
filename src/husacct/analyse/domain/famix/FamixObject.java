@@ -19,7 +19,7 @@ abstract class FamixObject {
         return string.toString();
     }
 
-    private ArrayList<Field> getFields(java.lang.Class<? extends java.lang.Object> theClass) {
+    public ArrayList<Field> getFields(java.lang.Class<? extends java.lang.Object> theClass) {
         ArrayList<Field> fields = new ArrayList<Field>();
         if (theClass.getSuperclass() != null) {
             fields.addAll(getFields(theClass.getSuperclass()));

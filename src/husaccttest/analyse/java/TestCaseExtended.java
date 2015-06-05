@@ -50,7 +50,8 @@ public abstract class TestCaseExtended{
 	
 	@After
 	public void tearDown(){
-		famix.clearModel();
+		service = null;
+		famix = null;
 	}
 	
 	

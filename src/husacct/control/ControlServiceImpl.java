@@ -114,7 +114,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		try {
 			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
 		} catch (Exception e){
-			logger.info(" LocaleService not found at specified path ");
+			logger.warn(" LocaleService not found at specified path ");
 		}
 	}
 	
