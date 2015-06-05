@@ -120,19 +120,19 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
             int treeType = ModifierList.getChild(i).getType();
             switch(treeType)
             {
-	            case JavaParser.PRIVATE:
+	            case CSharpParser.PRIVATE:
 	            	accessControlQualifier = "private";
 	            	break;
-	            case JavaParser.PUBLIC:
+	            case CSharpParser.PUBLIC:
 	            	accessControlQualifier = "public";
 	            	break;
-	            case JavaParser.PROTECTED:
+	            case CSharpParser.PROTECTED:
 	            	accessControlQualifier = "protected";
 	            	break;
-	            case JavaParser.STATIC:
+	            case CSharpParser.STATIC:
 	            	hasClassScope = true;
 	            	break;
-	            case JavaParser.FINAL:
+	            case CSharpParser.READONLY: case CSharpParser.CONST: 
 	                isFinal = true;
 	            	break;
         	}
