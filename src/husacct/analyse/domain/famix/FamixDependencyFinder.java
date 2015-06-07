@@ -86,7 +86,7 @@ class FamixDependencyFinder extends FamixFinder {
 								ArrayList<DependencyDTO> dependencyList = fromMap.get(keyTo);
 								if(dependencyList != null){
 									for(DependencyDTO dependency : dependencyList){
-										if((theModel.classes.containsKey(dependency.toClassPath)) || (theModel.libraries.containsKey(dependency.toClassPath))){
+										if((theModel.classes.containsKey(dependency.to)) || (theModel.libraries.containsKey(dependency.to))){
 											foundDependencies.add(dependency);
 										}
 									}
@@ -139,8 +139,6 @@ class FamixDependencyFinder extends FamixFinder {
 		numberOfDuplicateAssociations = 0;
 		try {
 			for(FamixAssociation association : theModel.associations){
-				fromClassPath = "";
-				toClassPath = "";
 				if(compliesWithFunction(association, findFunction, from, to) && compliesWithFilter(association, applyFilter)){
 					if (association.from == null || association.from.equals("") || association.to == null || association.to.equals("") ||association.lineNumber == 0 || association.type == null){
 						// Do not add the association as a dependency, since it is incomplete.
@@ -157,14 +155,14 @@ class FamixDependencyFinder extends FamixFinder {
 							}
 							// Filter-out duplicate associations.
 							String uniqueName = (association.from + association.to + association.lineNumber + association.type + association.subType + Boolean.toString(association.isIndirect));
-							fromClassPath = association.from;
-							toClassPath = association.to;
 							if (!foundDependenciesTreeMap.containsKey(uniqueName)){
 								// Create Dependency and add to result
-								DependencyDTO foundDependency = new DependencyDTO(association.from, fromClassPath, association.to, toClassPath, association.type, association.subType ,association.lineNumber, association.isIndirect, association.isInheritanceRelated);
+								DependencyDTO foundDependency = new DependencyDTO(association.from, association.to, association.type, association.subType ,association.lineNumber, association.isIndirect, association.isInheritanceRelated);
 								if (association instanceof FamixInvocation) {
 									FamixInvocation invocation = (FamixInvocation) association;
 									foundDependency.usedEntity = invocation.usedEntity;
+									foundDependency.belongsToMethod = invocation.belongsToMethod;
+									foundDependency.statement = invocation.statement;
 								}
 								if (theModel.classes.get(association.from).isInnerClass || (!theModel.libraries.containsKey(association.to) && theModel.classes.get(association.to).isInnerClass)) {
 									foundDependency.isInnerClassRelated = true;
@@ -275,8 +273,8 @@ class FamixDependencyFinder extends FamixFinder {
 		HashMap<String, ArrayList<DependencyDTO>> toMap;
 		try{
 	        for(DependencyDTO dependency : dependencies) {
-            	String uniqueNameFrom = dependency.fromClassPath;
-            	String uniqueNameTo = dependency.toClassPath;
+            	String uniqueNameFrom = dependency.from;
+            	String uniqueNameTo = dependency.to;
             	// Fill dependenciesMapFromTo
             	if(dependenciesMapFromTo.containsKey(uniqueNameFrom)){
             		toMap = dependenciesMapFromTo.get(uniqueNameFrom);

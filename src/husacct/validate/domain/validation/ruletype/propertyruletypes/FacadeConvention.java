@@ -61,7 +61,7 @@ public class FacadeConvention extends RuleType {
 			// Get all dependencies with matching dependency.classPathTo 
 			DependencyDTO[] dependencies = analyseService.getDependenciesFromTo("", hiddenClassPath);
 			for (DependencyDTO dependency : dependencies) {
-				String fromToCombi = dependency.fromClassPath + "|" + dependency.toClassPath; 
+				String fromToCombi = dependency.from + "|" + dependency.to; 
 				if ((allInComponentMap.containsKey(dependency.from)) || (allExceptionFromTos.contains(fromToCombi))){
 					// Do not add a violation, since the dependency is allowed. 
 				} else{

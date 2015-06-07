@@ -95,7 +95,7 @@ public class XmlFileImporterAnalysedModel {
     		int valueInt = 0;
     		Field[] fields = d.getDeclaredFields();
     		for( Field field : fields ){
-    			propertyName = field.getName().toString();
+    			propertyName = field.getName();
     			if (element.getChildText(propertyName) != null) {
 	    			propertyType = field.getType();
 	        		if (propertyType == String.class) {

@@ -61,18 +61,24 @@ public class XmlFileExporterAnalysedModel {
     	Element dtoElement = new Element(elementName);
     	Class<?> d = dto.getClass();
     	try {
-			String propertyName;
-    		String valueString;
+			String propertyName = "";
+    		String valueString = "";
     		Field[] fields = d.getDeclaredFields();
     		for( Field field : fields ){
-    			propertyName = field.getName().toString();
-    			valueString = field.get(dto).toString();
+    			propertyName = field.getName();
+    			Object value = field.get(dto);
+    			if (value != null) {
+    				valueString = field.get(dto).toString();
+    			}
     			dtoElement.addContent(new Element(propertyName).setText(valueString));
     		 }
 		} catch (IllegalAccessException e) {
             husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
 			//e.printStackTrace();
 		} catch (IllegalArgumentException e) {
+            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
+			//e.printStackTrace();
+		} catch (Exception e) {
             husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
 			//e.printStackTrace();
 		}

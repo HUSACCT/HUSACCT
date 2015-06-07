@@ -115,8 +115,8 @@ public class DrawingControllerTest {
 
 		analysedController.drawSingleLevelModules(new AbstractDTO[] { dtoFrom, dtoTo });
 
-		DependencyDTO dep1 = new DependencyDTO("from", "from", "to", "to", "test", 20);
-		DependencyDTO dep2 = new DependencyDTO("from", "from", "to", "to", "test", 21);
+		DependencyDTO dep1 = new DependencyDTO("from", "to", "Call", "method", 20, false, false);
+		DependencyDTO dep2 = new DependencyDTO("from", "to", "Call", "method", 21, false, false);
 
 		BaseFigure figFrom = null;
 		BaseFigure figTo = null;

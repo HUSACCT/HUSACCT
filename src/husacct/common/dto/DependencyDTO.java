@@ -1,17 +1,18 @@
 package husacct.common.dto;
 
 public class DependencyDTO extends AbstractDTO{
-	
-	//unique name of the from-class
-	public String from;	//class path of the from-class file; in case of inner classes classPathFrom is shorter than fromClassPath 
-	public String fromClassPath; //unique name of the from-class
-	public String to; //class path of the to-class file; in case of inner classes classPathFrom is shorter than toClassPath 
-	public String toClassPath; //unique name of the to-class
+	//from FamixAssociation
+	public String from = "";	//unique name of the from-class 
+	public String to = ""; //unique name of the to-class 
 	public String type = "";
     public String subType = "";
-	public int lineNumber;
-	public boolean isIndirect;
+	public int lineNumber = 0;
+	public boolean isIndirect = false;
+	// From FamixInvocation
 	public String usedEntity = ""; // uniqueName of used FamixStructuralEntity, FamixBehaviouralEntity, or “” (not found)
+	public String belongsToMethod = "";	// Unique name of the method of the from-class that contains the association-causing statement.
+	public String statement = ""; // Part of originalToString that causes association
+	// Derived attributes
 	public boolean isInheritanceRelated = false; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends. 
 	public boolean isInnerClassRelated = false; // True, if the from-class or to-class is an inner class
 	
@@ -19,21 +20,9 @@ public class DependencyDTO extends AbstractDTO{
 		
 	}
 	
-	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, int lineNumber){
+	public DependencyDTO(String from, String to, String type, String subType, int lineNumber, boolean indirect, boolean inheritanceRelated){
 		this.from = from;
-		this.fromClassPath = fromClassPath;
 		this.to = to;
-		this.toClassPath = toClassPath;
-		this.type = type;
-		this.lineNumber = lineNumber;
-		this.isIndirect = false;
-	}
-	
-	public DependencyDTO(String from, String fromClassPath, String to, String toClassPath, String type, String subType, int lineNumber, boolean indirect, boolean inheritanceRelated){
-		this.from = from;
-		this.fromClassPath = fromClassPath;
-		this.to = to;
-		this.toClassPath = toClassPath;
 		this.type = type;
 		this.subType = subType;
 		this.lineNumber = lineNumber;
@@ -44,11 +33,10 @@ public class DependencyDTO extends AbstractDTO{
 	public boolean equals(DependencyDTO other){
 		boolean result = true;
 		result = result && (this.from == other.from);
-		result = result && (this.fromClassPath == other.fromClassPath);
 		result = result && (this.to == other.to);
-		result = result && (this.toClassPath == other.toClassPath);
-		result = result && (this.type == other.type);
 		result = result && (this.lineNumber == other.lineNumber);
+		result = result && (this.type == other.type);
+		result = result && (this.subType == other.subType);
 		result = result && (this.isIndirect == other.isIndirect);
 		return result;
 	}
@@ -59,12 +47,12 @@ public class DependencyDTO extends AbstractDTO{
 	
 	public String toString(){
 		String result = "";
-		result += "\nFrom: " + from + ", ClassPathfrom: " + fromClassPath + ", ";
-		result += "\nTo: " + to + ", ClassPathTo: " + toClassPath + ", ";
-		result += "\nType: " + type + ", SubType: " + subType + ", ";
-		result += "Line: " + lineNumber + ", ";
-		result += "Indirect : " + isIndirect + ".";
+		result += "\nFrom: " + from;
+		result += "\nTo: " + to;
+		result += "\nType: " + type + ", SubType: " + subType;
+		result += "\nLine: " + lineNumber + ", statement: " + statement + ", belongsToMethod: " + belongsToMethod;
 		result += "\nusedEntity: " + usedEntity;
+		result += "\nIndirect : " + isIndirect + ", isInheritanceRelated: " + isInheritanceRelated + ", isInnerClassRelated: " + isInnerClassRelated;
 		result += "\n";
 		return result;
 	}
