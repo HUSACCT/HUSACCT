@@ -136,6 +136,9 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(CSharpParser.TYPE);
 	        	if (typeChild != null) {
 	        		String typeCastTo = getCompleteToString(typeChild);
+                    for (int i = 1; i < typeChild.getChildCount(); i++) { // In case of inner classes
+                    	typeCastTo = typeCastTo + "." + typeChild.getChild(i).getText();
+                    }
         	        if ((typeCastTo != null) && !typeCastTo.equals("") && !SkippableTypes.isSkippable(typeCastTo)) {
         	            modelService.createDeclarationTypeCast(from, typeCastTo, typeChild.getLine());
         	        }

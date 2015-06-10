@@ -190,6 +190,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        		CommonTree identChild = (CommonTree) typeChild.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
 	        		if ((identChild != null) && (identChild.getChildCount() > 0)) {
 	        			String typeCastTo = identChild.getChild(0).getText();
+	                    for (int i = 1; i < identChild.getChildCount(); i++) { // In case of inner classes
+	                    	typeCastTo = typeCastTo + "." + identChild.getChild(i).getText();
+	                    }
 	        	        if ((typeCastTo != null) && (typeCastTo != "") && !SkippedTypes.isSkippable(typeCastTo)) {
 	        	            modelService.createDeclarationTypeCast(from, typeCastTo, tree.getLine());
 	        	        }

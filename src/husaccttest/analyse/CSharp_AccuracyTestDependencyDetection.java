@@ -484,6 +484,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void DeclarationTypeCastToInnerClass(){
+		String fromModule = "Domain.Direct.Violating.DeclarationTypeCastToInnerClass";
+		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+	}
+
+	@Test
 	public void DeclarationTypeCastOfArgument(){
 		String fromModule = "Domain.Direct.Violating.DeclarationTypeCastOfArgument";
 		String toModule = "Technology.Direct.Dao.ProfileDAO";

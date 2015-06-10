@@ -508,6 +508,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void DeclarationTypeCastToInnerClass(){
+		String fromModule = "domain.direct.violating.DeclarationTypeCastToInnerClass";
+		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type Cast", false));
+	}
+
+	@Test
 	public void DeclarationTypeCastOfArgument(){
 		String fromModule = "domain.direct.violating.DeclarationTypeCastOfArgument";
 		String toModule = "technology.direct.dao.ProfileDAO";
