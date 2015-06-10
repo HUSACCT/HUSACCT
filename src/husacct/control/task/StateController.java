@@ -19,7 +19,6 @@ public class StateController {
 
 	private WorkspaceController workspaceController;
 
-	private boolean isPreAnalysed = false;
 	private boolean isAnalysing = false;
 	private boolean isValidating = false;
 
@@ -69,9 +68,6 @@ public class StateController {
 
 		if(analyseService.isAnalysed()){
 			newStates.add(States.ANALYSED);
-		}
-		if(isPreAnalysed) {
-			newStates.add(States.PREANALYSED);
 		}
 
 		if(isAnalysing()) {
@@ -147,9 +143,4 @@ public class StateController {
 		checkState();
 	}
 
-	public void setPreAnalysed(boolean preAnalysed) {
-		this.isPreAnalysed = preAnalysed;
-		checkState();
-
-	}
 }

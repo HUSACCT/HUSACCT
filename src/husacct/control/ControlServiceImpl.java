@@ -153,16 +153,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public void finishPreAnalysing() {
-		mainController.getStateController().addState(States.PREANALYSED);
-	}
-	
-	@Override
-	public boolean isPreAnalysed() {
-		return getState().contains(States.PREANALYSED);
-	}
-	
-	@Override
 	public List<States> getState() {
 		return this.getMainController().getStateController().getState();
 	}

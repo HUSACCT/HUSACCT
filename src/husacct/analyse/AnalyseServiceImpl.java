@@ -3,6 +3,7 @@ package husacct.analyse;
 import java.util.Date;
 import java.util.List;
 
+import husacct.ServiceProvider;
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.domain.IModelPersistencyService;
@@ -178,6 +179,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public void importAnalysisModel(Element analyseElement) {
         this.logger.info(new Date().toString() + " Starting: Import Analysis Model");
     	persistencyService.importAnalysisModel(analyseElement);
+        this.analyseInternalFrame = new AnalyseInternalFrame();
         this.isAnalysed = true;
         super.notifyServiceListeners();
         this.logger.info(new Date().toString() + " Finished: Import Analysis Model; State isAnalysed = true");

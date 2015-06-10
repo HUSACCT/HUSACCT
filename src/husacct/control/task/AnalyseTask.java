@@ -28,7 +28,6 @@ public class AnalyseTask implements Runnable {
 		try {
 			if ((this.applicationDTO.projects.size() > 0) && (this.applicationDTO.projects.get(0).paths.size() > 0)) {
 				this.mainController.getStateController().setAnalysing(true);
-				this.mainController.getStateController().setPreAnalysed(false);
 				Thread.sleep(1);
 				this.mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(this.applicationDTO.projects.size());
 				
@@ -54,7 +53,6 @@ public class AnalyseTask implements Runnable {
 					}
 				}
 				mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
-				ServiceProvider.getInstance().getControlService().finishPreAnalysing();
 				ServiceProvider.getInstance().getDefineService().analyze();
 
 				AnalysisStatisticsDTO statistics = ServiceProvider.getInstance().getAnalyseService().getAnalysisStatistics(null);

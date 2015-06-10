@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.control.task.States;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
@@ -161,7 +162,7 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		if (ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+		if (ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSED)) {
 			JtreeController.instance().setLoadState(true);
 			JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
 		}
