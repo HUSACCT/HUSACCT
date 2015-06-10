@@ -146,7 +146,7 @@ public class CSharpTreeConvertController {
 	private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface, boolean isEnumeration) {
 		String analysedClass;
 		if (isInnerClass) {
-			analysedClass = csClassGenerator.generateToModel(sourceFilePath, numberOfLinesOfCode, classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface, isEnumeration);
+			analysedClass = csClassGenerator.generateToModel(sourceFilePath, 0, classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface, isEnumeration);
 			if (analysedClass == null){
 				analysedClass = "";
 	    		// logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));

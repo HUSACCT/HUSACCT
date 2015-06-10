@@ -72,6 +72,7 @@ class FamixModel extends FamixObject {
 	            	classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
 	                String parentUniqueName;
 	                if (((FamixClass) e).isInnerClass) {
+	                	((FamixClass) e).linesOfCode = 0;
 	                	parentUniqueName = ((FamixClass) e).belongsToClass;
 	            		if ((!parentUniqueName.equals("")) && (classes.containsKey(parentUniqueName))){
 	            			FamixClass parent = classes.get(parentUniqueName);
