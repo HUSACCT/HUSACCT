@@ -7,6 +7,7 @@ import husacct.validate.domain.exception.ReportException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.TaskServiceImpl;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.task.report.writer.ExcelReportWriter;
 import husacct.validate.task.report.writer.HTMLReportWriter;
@@ -24,8 +25,13 @@ import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
 
+	private final TaskServiceImpl taskServiceImpl;
 	private ReportWriter writer;
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+
+	public ExportReportFactory(TaskServiceImpl taskServiceImpl) {
+		this.taskServiceImpl = taskServiceImpl;
+	}
 
 	public void exportReport(String fileType, SimpleEntry<Calendar, List<Violation>> violations, String name, String path, List<Severity> severities) {
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
@@ -35,7 +41,7 @@ public class ExportReportFactory {
 			if (fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {
 				writer = new XMLReportWriter(report, path, name);
 			} else if (fileType.toLowerCase().equals(ExtensionType.XLS.getExtension().toLowerCase())) {
-				writer = new ExcelReportWriter(report, path, name);
+				writer = new ExcelReportWriter(report, path, name, taskServiceImpl);
 			} else if (fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
 				writer = new HTMLReportWriter(report, path, name);
 			} else if (fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {

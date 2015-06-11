@@ -18,7 +18,7 @@ public class ReportServiceImpl implements IReportService {
 	private final TaskServiceImpl taskServiceImpl;
 
 	public ReportServiceImpl(TaskServiceImpl taskServiceImpl) {
-		this.reportFactory = new ExportReportFactory();
+		this.reportFactory = new ExportReportFactory(taskServiceImpl);
 		this.taskServiceImpl = taskServiceImpl;
 	}
 

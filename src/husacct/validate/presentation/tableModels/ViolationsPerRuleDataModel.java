@@ -49,7 +49,7 @@ public class ViolationsPerRuleDataModel extends AbstractTableModel {
 			data [nrOfRules] [0] = nrOfRules + 1;
 			data [nrOfRules] [1] = ruleString[0];
 			data [nrOfRules] [2] = ruleString[2];
-			if (ruleString[0].equals(ruleString[1])){
+			if (ruleString[0].equals(ruleString[1]) && !ruleString[2].equals("IsOnlyAllowedToUse")){
 				data [nrOfRules] [3] = "";
 			} else {
 				data [nrOfRules] [3] = ruleString[1];
