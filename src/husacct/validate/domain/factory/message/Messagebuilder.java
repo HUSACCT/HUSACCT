@@ -22,9 +22,11 @@ public class Messagebuilder {
 	}
 
 	public String createMessage(Message message, Violation violation) {
-		return generateMessage(message, violation);
+		return generateSingleMessage(message, violation);
+		// return generateMessage(message, violation);
 	}
 
+	// Generates full message with exceptions	
 	private String generateMessage(Message message, Violation violation) {
 		String messageText = generateSingleMessage(message, violation);
 
@@ -38,6 +40,7 @@ public class Messagebuilder {
 		return messageText;
 	}
 
+	// Generates message with main rule only	
 	private String generateSingleMessage(Message message, Violation violation) {
 		final String left = generateLeftMessage(message, violation);
 		final String right = generateRightMessage(message, violation);

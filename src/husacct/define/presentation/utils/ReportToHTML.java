@@ -117,6 +117,7 @@ public class ReportToHTML {
 	private HashMap<String, String> getSoftwareUnits(ModuleStrategy module){ 
 		return module.getSoftwareUnitNames();
 	}
+
 	private HashMap<String, Boolean> getAppliedRules(long moduleId){
 		HashMap<String, Boolean> appliedRules = new HashMap<String, Boolean>();
 		for(AppliedRuleStrategy rule : ruleService.getAllMainRules()){

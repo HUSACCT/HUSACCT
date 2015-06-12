@@ -10,6 +10,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,29 +21,29 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class ExportDialog extends JDialog {
+public class ExportImportDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private MainController mainController;
-	private String typeOfExport;
+	private String typeOfFunction;
 	
 	private JLabel pathLabel;
 	private JTextField pathText;
-	private JButton browseButton, exportButton;
+	private JButton browseButton, exportImportButton;
 
 	private File selectedFile;
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public ExportDialog(MainController mainController, String typeOfExport) {
+	public ExportImportDialog(MainController mainController, String typeOfFunction) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		this.typeOfExport = typeOfExport;
-		if (typeOfExport.equals("ExportArchitecture")) {
+		this.typeOfFunction = typeOfFunction;
+		if (typeOfFunction.equals("ExportArchitecture")) {
 			setTitle(localeService.getTranslatedString("ExportArchitecture"));
-		} else if (typeOfExport.equals("ExportAnalysisModel")) {
+		} else if (typeOfFunction.equals("ExportAnalysisModel")) {
 			setTitle(localeService.getTranslatedString("ExportAnalysisModel"));
 		}
 		setup();
@@ -62,16 +64,21 @@ public class ExportDialog extends JDialog {
 		pathLabel = new JLabel(localeService.getTranslatedString("PathLabelShort"));
 		pathText = new JTextField(20);
 		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
-		exportButton = new JButton(localeService.getTranslatedString("ExportButton"));
-		exportButton.setEnabled(false);
+		if (typeOfFunction.startsWith("Export") || typeOfFunction.startsWith("Report")) {
+			exportImportButton = new JButton(localeService.getTranslatedString("ExportButton"));
+		} else if (typeOfFunction.startsWith("Import")) {
+			exportImportButton = new JButton(localeService.getTranslatedString("ImportButton"));
+		}
+
+		exportImportButton.setEnabled(false);
 		pathText.setEnabled(false);
 		
-		getRootPane().setDefaultButton(exportButton);
+		getRootPane().setDefaultButton(exportImportButton);
 		
 		add(pathLabel);
 		add(pathText);
 		add(browseButton);
-		add(exportButton);
+		add(exportImportButton);
 	}
 
 	private void setListeners(){
@@ -80,14 +87,27 @@ public class ExportDialog extends JDialog {
 				showFileDialog();				
 			}
 		});
-		exportButton.addActionListener(new ActionListener() {
+		exportImportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(validateData()) {
-					if (typeOfExport.equals("ExportArchitecture")) {
-						mainController.getExportController().exportArchitecture(selectedFile);
-					} else if (typeOfExport.equals("ExportAnalysisModel")) {
-						mainController.getExportController().exportAnalysisModel(selectedFile);
+					if (typeOfFunction.equals("ExportArchitecture")) {
+						mainController.getExportImportController().exportArchitecture(selectedFile);
+					} else if (typeOfFunction.equals("ImportArchitecture")) {
+						mainController.getExportImportController().importArchitecture(selectedFile);
+					} else if (typeOfFunction.equals("ReportArchitecture")) {
+						mainController.getExportImportController().reportArchitecture(selectedFile);
+					} else if (typeOfFunction.equals("ExportAnalysisModel")) {
+						mainController.getExportImportController().exportAnalysisModel(selectedFile);
+					} else if (typeOfFunction.equals("ImportAnalysisModel")) {
+						mainController.getExportImportController().importAnalysisModel(selectedFile);
+					} else if (typeOfFunction.equals("ReportDependencies")) {
+						mainController.getExportImportController().reportDependencies(selectedFile);
+					} else if (typeOfFunction.equals("ExportViolations")) {
+						mainController.getExportImportController().exportViolationsReport(selectedFile);
+					} else if (typeOfFunction.equals("ReportViolations")) {
+						mainController.getExportImportController().exportViolationsReport(selectedFile);
 					}
+
 				dispose();
 				}
 			}
@@ -95,8 +115,26 @@ public class ExportDialog extends JDialog {
 	}
 
 	private void showFileDialog() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "XML", "xml");
+		List<FileNameExtensionFilter> filters = new ArrayList<FileNameExtensionFilter>();
+		if (typeOfFunction.startsWith("Report")) {
+			if (typeOfFunction.equals("ReportViolations")) {
+				String[] fileExtensions = mainController.getExportImportController().getExportExtensionsValidate();
+				for(String extension : fileExtensions){
+					filters.add(new FileNameExtensionFilter(extension, extension));
+				}
+			} else {
+				filter = new FileNameExtensionFilter("xls", "XLS", "xls");
+			}
+		}
+
 		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filter);
+		if (typeOfFunction.startsWith("Import")) {
+			fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ImportButton"), filter);
+		} else if (typeOfFunction.equals("ReportViolations")) {
+			fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filters);
+		}
+
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			if(fileDialog.getSelectedFile().exists()){
@@ -110,7 +148,7 @@ public class ExportDialog extends JDialog {
 	private void setFile(File file) {
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
-		exportButton.setEnabled(true);
+		exportImportButton.setEnabled(true);
 	}
 	
 	public boolean validateData() {

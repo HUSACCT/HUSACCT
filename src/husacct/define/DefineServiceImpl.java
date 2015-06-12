@@ -24,6 +24,8 @@ import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.persistency.PersistentDomain;
 import husacct.define.task.persistency.PersistentDomain.DomainElement;
+import husacct.define.task.report.ReportArchitectureAbstract;
+import husacct.define.task.report.ReportArchitectureToExcel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -306,6 +308,11 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());
+	}
+
+	public void reportArchitecture(String fullFilePath) {
+		ReportArchitectureAbstract reporter = new ReportArchitectureToExcel();
+		reporter.write(fullFilePath);
 	}
 
 }

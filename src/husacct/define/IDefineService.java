@@ -144,4 +144,9 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 *            is an element with workspace data
 	 */
 	public void loadLogicalArchitectureData(Element e);
+	
+	/**
+	 * Creates and saves architecture report
+	 */
+	public void reportArchitecture(String fullFilePath);
 }

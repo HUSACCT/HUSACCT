@@ -20,7 +20,8 @@ import javax.swing.KeyStroke;
 public class ValidateMenu extends JMenu{
 	private MainController mainController;
 	private JMenuItem validateItem;
-	private JMenuItem exportViolationReportItem;
+	private JMenuItem exportViolationsItem;
+	private JMenuItem reportViolationsItem;
 	
 	ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -37,11 +38,15 @@ public class ValidateMenu extends JMenu{
 		validateItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
 		validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
 				
-		exportViolationReportItem = new JMenuItem(localeService.getTranslatedString("ViolationReport"));
-		exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
+		exportViolationsItem = new JMenuItem(localeService.getTranslatedString("ValidateExport"));
+		exportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateExportMnemonic"));
+		
+		reportViolationsItem = new JMenuItem(localeService.getTranslatedString("ValidateReport"));
+		reportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateReportMnemonic"));
 		
 		this.add(validateItem);
-		this.add(exportViolationReportItem);
+		this.add(exportViolationsItem);
+		this.add(reportViolationsItem);
 	}
 	
 	private void setListeners() {
@@ -51,19 +56,25 @@ public class ValidateMenu extends JMenu{
 			}
 		});
 		
-		exportViolationReportItem.addActionListener(new ActionListener(){
+		exportViolationsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getExportController().showExportViolationsReportGui();
+				mainController.getExportImportController().showExportViolationsGui();;
+			}
+		});
+		
+		reportViolationsItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getExportImportController().showReportViolationsGui();
 			}
 		});
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				validateItem.setEnabled(false);
-				exportViolationReportItem.setEnabled(false);
+				reportViolationsItem.setEnabled(false);
 				
 				if(states.contains(States.VALIDATED)){
-					exportViolationReportItem.setEnabled(true);
+					reportViolationsItem.setEnabled(true);
 				}
 				
 				if(states.contains(States.MAPPED) && states.contains(States.ANALYSED) || states.contains(States.VALIDATED)){
@@ -77,19 +88,11 @@ public class ValidateMenu extends JMenu{
 			public void update() {
 				validateMenu.setText(localeService.getTranslatedString("Validate"));
 				validateItem.setText(localeService.getTranslatedString("ValidateNow"));
-				exportViolationReportItem.setText(localeService.getTranslatedString("ViolationReport"));
 				validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
-				exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
+				reportViolationsItem.setText(localeService.getTranslatedString("ValidateReport"));
+				reportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateReportMnemonic"));
 			}
 		});
-	}
-	
-	public JMenuItem getValidateItem(){
-		return validateItem;
-	}
-
-	public JMenuItem getExportViolationReportItem(){
-		return exportViolationReportItem;
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {
@@ -97,4 +100,9 @@ public class ValidateMenu extends JMenu{
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}
+
+	public JMenuItem getValidateItem(){
+		return validateItem;
+	}
+	
 }

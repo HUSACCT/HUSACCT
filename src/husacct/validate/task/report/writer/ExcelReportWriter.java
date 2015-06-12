@@ -154,10 +154,6 @@ public class ExcelReportWriter extends ReportWriter {
             WritableSheet statisticsSheet = workbook.getSheet(sheetNr);
             sheetNr ++;
             writeStatistics(statisticsSheet);
-            workbook.createSheet(super.translate("AllRulesWithExceptions"), sheetNr);
-            WritableSheet allRulesSheet = workbook.getSheet(sheetNr);
-            sheetNr ++;
-            writeAllRulesWithExceptions(allRulesSheet);
             workbook.write();
             workbook.close();
         } catch (IOException e) {
@@ -776,84 +772,6 @@ public class ExcelReportWriter extends ReportWriter {
     	sheet.setColumnView(3, 10);
     }
     
-    private void writeAllRulesWithExceptions(WritableSheet sheet) throws WriteException {
-    	// Write Application Name
-    	ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
-        addCellBold(sheet, 0, 1, super.translate("AllRulesWithExceptionsOfApplication") + ": " + applicationDTO.name);
-        // Write all Rules
-        writeAllRulesWithExceptionsTableHeaders(sheet, 3);
-        int row = 4;
-		RuleDTO[] allRules = super.getAllRulesWithExceptions();
-		TreeMap<String, RuleDTO> rulesMap = new TreeMap<String ,RuleDTO>();
-        for (RuleDTO rule : allRules) {
-			String searchKey =  rule.moduleFrom.logicalPath + "::" + rule.moduleTo.logicalPath + "::" + rule.ruleTypeKey;
-				rulesMap.put(searchKey, rule);
-        }
-        int id = 1;
-        for (String searchKey : rulesMap.keySet()) {
-        	RuleDTO rule = rulesMap.get(searchKey);
-        	if (!rule.isException) {
-            	writeRuleOrException(sheet, row, Integer.toString(id), "", rule.moduleFrom.logicalPath, rule.ruleTypeKey, rule.moduleTo.logicalPath);
-            	id ++;
-            	row ++;
-            	RuleDTO[] exceptionRules = rule.exceptionRules;
-            	for (RuleDTO exceptionRule : exceptionRules) {
-            		writeRuleOrException(sheet, row, "", super.translate("Exception"), exceptionRule.moduleFrom.logicalPath, exceptionRule.ruleTypeKey, exceptionRule.moduleTo.logicalPath);
-                	row ++;
-            	}
-        	}
-        }
-        sheet.setColumnView(0, 10);
-        sheet.setColumnView(1, 10);
-        sheet.setColumnView(2, 10);
-    }
-
-	private void writeAllRulesWithExceptionsTableHeaders(WritableSheet sheet, int row) {
-        try {
-	        Label idLabel = new Label(1, row, super.translate("Id"), timesBold_AlignmentCentre);
-	        Label exceptionsLabel = new Label(2, row, super.translate("Exceptions"), timesBold);
-	        Label fromLabel = new Label(3, row, super.translate("LogicalModuleFrom"), timesBold);
-	        Label ruleTypeLabel = new Label(4, row, super.translate("RuleType"), timesBold);
-	        Label toLabel = new Label(5, row, super.translate("LogicalModuleTo"), timesBold);
-	        sheet.addCell(idLabel);
-	        sheet.addCell(exceptionsLabel);
-	        sheet.addCell(fromLabel);
-	        sheet.addCell(ruleTypeLabel);
-	        sheet.addCell(toLabel);
-        } catch (Exception e) {
-            husacctLogger.error("ExceptionMessage: " + e.getMessage());
-        }
-	}
-    
-    private void writeRuleOrException(WritableSheet sheet, int row, String id, String exception, String from, String ruleType, String to) throws RowsExceededException, WriteException {
-        Label idLabel = new Label(1, row, id, times_AlignmentCentre);
-        Label exceptionLabel = new Label(2, row, exception, times);
-        Label fromLabel = new Label(3, row, from, times);
-        Label ruleTypeLabel = new Label(4, row, super.translate(ruleType), times);
-        Label toLabel = new Label(5, row, to, times);
-
-        List<Label> labelArray = new ArrayList<Label>();
-        labelArray.add(idLabel);
-        labelArray.add(exceptionLabel);
-        labelArray.add(fromLabel);
-        labelArray.add(ruleTypeLabel);
-        labelArray.add(toLabel);
-        
-        for(Label label : labelArray){
-        	sheet.addCell(label);
-        	if(dimensions.get(label.getColumn()) == null || dimensions.get(label.getColumn()) < label.getString().length()){
-        		if(label.getString().length() < 10)
-        			dimensions.put(label.getColumn(), 10);
-        		else
-        			dimensions.put(label.getColumn(), label.getString().length() - 3);
-            }
-        }
-        
-        for(int i : dimensions.keySet()){
-        	sheet.setColumnView(i, dimensions.get(i));
-        }
-    }
-
     private void addCellBold(WritableSheet sheet, int column, int row, String s) throws RowsExceededException, WriteException {
         Label label;
         label = new Label(column, row, s, timesBold);
@@ -871,9 +789,11 @@ public class ExcelReportWriter extends ReportWriter {
         number = new Number(column, row, value, times);
         sheet.addCell(number);
     }
+
     private void addCellDefault(WritableSheet sheet, int column, int row, String s) throws RowsExceededException, WriteException {
         Label label;
         label = new Label(column, row, s, times);
         sheet.addCell(label);
     }
+
 }

@@ -21,6 +21,7 @@ public class DefineMenu extends JMenu{
 	private MainController mainController;
 	private JMenuItem defineArchitectureItem;
 	private JMenuItem definedArchitectureDiagramItem;
+	private JMenuItem reportArchitectureItem;
 	private JMenuItem exportArchitectureItem;
 	private JMenuItem importArchitectureItem;
 
@@ -43,16 +44,20 @@ public class DefineMenu extends JMenu{
 		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
 		definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 				
+		exportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ExportArchitecture"));
+		exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));		
+				
 		importArchitectureItem = new JMenuItem(localeService.getTranslatedString("ImportArchitecture"));
 		importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
 				
-		exportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ExportArchitecture"));
-		exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));		
+		reportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReportArchitecture"));
+		reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
 		
 		this.add(defineArchitectureItem);
 		this.add(definedArchitectureDiagramItem);
-		this.add(importArchitectureItem);
 		this.add(exportArchitectureItem);
+		this.add(importArchitectureItem);
+		this.add(reportArchitectureItem);
 	}
 	
 	private void setListeners() {
@@ -68,16 +73,22 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
+		exportArchitectureItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getExportImportController().showExportArchitectureGui();
+			}
+		});
+		
 		importArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportController().showImportArchitectureGui();
+				mainController.getExportImportController().showImportArchitectureGui();
 				mainController.getViewController().showDefineArchitecture();
 			}
 		});
 		
-		exportArchitectureItem.addActionListener(new ActionListener(){
+		reportArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getExportController().showExportArchitectureGui();
+				mainController.getExportImportController().showReportArchitectureGui();
 			}
 		});
 		

@@ -215,14 +215,14 @@ public class ExportImportAnalysedModelTest {
 		File file = new File(exportFilePath);
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
-		mainController.getExportController().exportAnalysisModel(file);
+		mainController.getExportImportController().exportAnalysisModel(file);
 	}
 
 	private static void importAnalysisModel() {
 		File file = new File(exportFilePath);
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
-		mainController.getImportController().importAnalysisModel(file);
+		mainController.getExportImportController().importAnalysisModel(file);
 	}
 
 	private boolean areDependencyTypesDetected(String moduleFrom, String moduleTo, ArrayList<String> dependencyTypes, boolean isIndirect) {

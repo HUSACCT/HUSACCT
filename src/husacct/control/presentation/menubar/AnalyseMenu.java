@@ -57,10 +57,6 @@ public class AnalyseMenu extends JMenu{
 		
 		analysisHistoryItem = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
 		
-		reportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
-		reportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
-		reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
-		
 		reconstructArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReconstructArchitecture"));
 		reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
 		
@@ -70,15 +66,19 @@ public class AnalyseMenu extends JMenu{
 		importAnalysisModelItem = new JMenuItem(localeService.getTranslatedString("ImportAnalysisModel"));
 		importAnalysisModelItem.setMnemonic(getMnemonicKeycode("ImportAnalysisModelMnemonic"));
 		
+		reportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
+		reportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
+		reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
+		
 		this.add(setApplicationPropertiesItem);
 		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
 		this.add(analysisHistoryItem);
-		this.add(reportDependenciesItem);
 		//this.add(reconstructArchitectureItem);
 		this.add(exportAnalysisModelItem);
 		this.add(importAnalysisModelItem);
+		this.add(reportDependenciesItem);
 	}
 	
 	private void setListeners() {
@@ -114,7 +114,7 @@ public class AnalyseMenu extends JMenu{
 		
 		reportDependenciesItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getExportController().showReportDependenciesGui();
+				mainController.getExportImportController().showReportDependenciesGui();
 			}
 		});
 		
@@ -126,13 +126,13 @@ public class AnalyseMenu extends JMenu{
 		
 		exportAnalysisModelItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getExportController().showExportAnalysisModelGui();
+				mainController.getExportImportController().showExportAnalysisModelGui();
 			}
 		});
 		
 		importAnalysisModelItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportController().showImportAnalyseModelGui();
+				mainController.getExportImportController().showImportAnalyseModelGui();
 			}
 		});
 

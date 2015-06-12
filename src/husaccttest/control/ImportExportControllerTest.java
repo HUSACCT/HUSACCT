@@ -3,8 +3,7 @@ package husaccttest.control;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
-import husacct.control.task.ExportController;
-import husacct.control.task.ImportController;
+import husacct.control.task.ExportImportController;
 import husacct.control.task.MainController;
 
 import java.io.File;
@@ -18,16 +17,14 @@ import org.junit.Test;
 
 public class ImportExportControllerTest {
 	
-	ImportController importController;
-	ExportController exportController;
+	ExportImportController exportImportController;
 	
 	File testFile = new File("importExportTestFile.xml");
 	
 	@Before
 	public void setup(){
 		MainController mainController = new MainController();
-		importController = mainController.getImportController();
-		exportController = mainController.getExportController();
+		exportImportController = mainController.getExportImportController();
 	}
 	
 	@After
@@ -37,14 +34,14 @@ public class ImportExportControllerTest {
 	
 	@Test
 	public void testExport(){
-		exportController.exportArchitecture(testFile);
+		exportImportController.exportArchitecture(testFile);
 		assertTrue(testFile.exists());
 	}
 	
 	@Test
 	public void testImport(){
-		exportController.exportArchitecture(testFile);
-		importController.importArchitecture(testFile);
+		exportImportController.exportArchitecture(testFile);
+		exportImportController.importArchitecture(testFile);
 		SAXBuilder sax = new SAXBuilder();
 		Document testDoc = new Document();
 		try {
