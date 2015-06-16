@@ -894,7 +894,7 @@ class FamixCreationPostProcessor {
     		addedInvocations.clear();
         	//this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
     		processWaitingDerivedAssociations();
-    	} else {
+    	} else if ((waitingDerivedAssociations != null) && (waitingDerivedAssociations.size() > 0)) {
     		FamixInvocation lastInvocatioInLargeChain = waitingDerivedAssociations.get(waitingDerivedAssociations.size() - 1);
         	this.logger.info(new Date().toString() + " Last large chain in: " + lastInvocatioInLargeChain.from  + " , line: " + lastInvocatioInLargeChain.lineNumber);
         	waitingDerivedAssociations.clear();

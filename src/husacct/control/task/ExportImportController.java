@@ -163,6 +163,7 @@ public class ExportImportController {
 			}
 			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
 			ServiceProvider.getInstance().getDefineService().analyze();
+			mainController.getViewController().showApplicationOverviewGui();
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.debug("Unable to export analysis model: " + e.getMessage());
