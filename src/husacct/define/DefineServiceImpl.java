@@ -28,6 +28,7 @@ import husacct.define.task.report.ReportArchitectureAbstract;
 import husacct.define.task.report.ReportArchitectureToExcel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,7 @@ import java.util.TreeMap;
 
 import javax.swing.JInternalFrame;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class DefineServiceImpl extends ObservableService implements IDefineService {
@@ -45,6 +47,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private boolean isMapped;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+	private Logger logger = Logger.getLogger(DefineServiceImpl.class);
 
 
 	public DefineServiceImpl() {
@@ -134,20 +137,25 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
-		ModuleStrategy[] modules = null;
-		// 1 Get the module(s)
-		if (logicalPath.equals("**")) {
-			modules = moduleService.getRootModules();
-		} else {
-			modules = new ModuleStrategy[1];
-			modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
-		}
-		// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
-		for (ModuleStrategy module : modules){
-			HashMap<String, SoftwareUnitDefinition> softwareUnits = module.getAllAssignedSoftwareUnitsInTree();
-			if(softwareUnits != null)
-				allAssignedSoftwareUnits.putAll(softwareUnits);
-		}
+		try {
+			ModuleStrategy[] modules = null;
+			// 1 Get the module(s)
+			if (logicalPath.equals("**")) {
+				modules = moduleService.getRootModules();
+			} else {
+				modules = new ModuleStrategy[1];
+				modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
+			}
+			// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+			for (ModuleStrategy module : modules){
+				HashMap<String, SoftwareUnitDefinition> softwareUnits = module.getAllAssignedSoftwareUnitsInTree();
+				if(softwareUnits != null)
+					allAssignedSoftwareUnits.putAll(softwareUnits);
+			}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        //e.printStackTrace();
+        }
 		return allAssignedSoftwareUnits;
 	}
 	

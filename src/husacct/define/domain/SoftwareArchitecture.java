@@ -192,12 +192,12 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			for (ModuleStrategy module : rootModule.getSubModules()) {
 				if (module.getName().equals(moduleNames[i])) {
 					currentModule = module;
-
-					for (int j = i; j < moduleNames.length; j++) {
-						for (ModuleStrategy subModule : currentModule
-								.getSubModules()) {
-							if (subModule.getName().equals(moduleNames[j])) {
-								currentModule = subModule;
+					if (moduleNames.length > 1) {
+						for (int j = 1; j < moduleNames.length; j++) {
+							for (ModuleStrategy subModule : currentModule.getSubModules()) {
+								if (subModule.getName().equals(moduleNames[j])) {
+									currentModule = subModule;
+								}
 							}
 						}
 					}
@@ -205,8 +205,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			}
 			if (currentModule == null || !currentModule.getName().equals(moduleNames[moduleNames.length - 1])) {
 				logger.warn(String.format(" Module not found; logical path: " + logicalPath));
-				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService()
-						.getTranslatedString("ModuleNotFound"));
+				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleNotFound"));
 			}
 		}
 		return currentModule;
