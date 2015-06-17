@@ -14,11 +14,13 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 
 public class NamingConvention extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.noneOf(RuleTypes.class);
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.NAMING_CONVENTION);
+	private HashMap<String, String> exceptionRegExes = new HashMap<String, String>();
 
 	public NamingConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, exceptionRuleTypes, severity);
@@ -27,6 +29,14 @@ public class NamingConvention extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations.clear();
+		if (currentRule.exceptionRules.length > 0) {
+			for (RuleDTO exception : currentRule.exceptionRules) {
+				if ((exception.regex != null) && !exception.regex.equals("")) {
+					String value = Regex.makeRegexString(exception.regex);
+					exceptionRegExes.put(exception.regex, value);
+				}
+			}
+		}
 		if (arrayContainsValue(currentRule.violationTypeKeys, "package")) {
 			checkPackageConvention(currentRule, rootRule, configuration);
 		}
@@ -43,7 +53,7 @@ public class NamingConvention extends RuleType {
 
 		for (Mapping fromMapping : fromMappings) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(fromMapping.getPhysicalPath());
-			if (!Regex.matchRegex(regex, analysedModule.name)) {
+			if (!Regex.matchRegex(regex, analysedModule.name) && nameDoesNotMatchException(analysedModule.name)) {
 				if (analysedModule.type.toLowerCase().equals("package")){
 					Violation violation = createViolation(rootRule, fromMapping, configuration);
 					violations.add(violation);
@@ -60,7 +70,7 @@ public class NamingConvention extends RuleType {
 		
 		for (Mapping physicalClasspathFrom : fromMappings) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
-			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("class")) {
+			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("class") && nameDoesNotMatchException(analysedModule.name)) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
@@ -75,5 +85,15 @@ public class NamingConvention extends RuleType {
 			}
 		}
 		return false;
+	}
+	
+	private boolean nameDoesNotMatchException(String name) {
+		boolean nameDoesNotMatchException = true;
+		for (String exceptionRegExe : exceptionRegExes.values()) {
+			if (Regex.matchRegex(exceptionRegExe, name)) {
+				nameDoesNotMatchException = false;
+			}
+		}
+		return nameDoesNotMatchException;
 	}
 }

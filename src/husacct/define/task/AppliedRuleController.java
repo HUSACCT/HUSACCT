@@ -524,12 +524,16 @@ public class AppliedRuleController extends PopUpController {
 			long parentAppliedRuleId = currentAppliedRuleId;
 			String ruleTypeKey = (String) exceptionRule.get("ruleTypeKey");
 			String description = (String) exceptionRule.get("description");
+			String regex = "";
+			if (exceptionRule.containsKey("regex")) {
+				 regex = (String) exceptionRule.get("regex");
+			}
 			String[] dependencies = (String[]) exceptionRule.get("dependencies");
 			Object from = exceptionRule.get("moduleFromId");
 			Object to = exceptionRule.get("moduleToId");
 			ModuleStrategy moduleFrom = assignToCorrectModule(from);
 			ModuleStrategy moduleTo = assignToCorrectModule(to);
-			appliedRuleService.addExceptionToAppliedRule(parentAppliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo, dependencies);
+			appliedRuleService.addExceptionToAppliedRule(parentAppliedRuleId, ruleTypeKey, description, regex, moduleFrom, moduleTo, dependencies);
 			DefinitionController.getInstance().notifyObservers(currentModuleId);
 			return message;
 		} catch (Exception e) {

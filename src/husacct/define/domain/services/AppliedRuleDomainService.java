@@ -214,7 +214,7 @@ public class AppliedRuleDomainService {
 	 
 	 // Exception rules
 	    public void addExceptionToAppliedRule(long parentRuleId, String ruleTypeKey, String description, 
-	        	ModuleStrategy moduleFrom, ModuleStrategy moduleTo, String[] dependencies) {
+	        	String regex, ModuleStrategy moduleFrom, ModuleStrategy moduleTo, String[] dependencies) {
 	        	try{
 	    			AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
 	    			String parentRuleType = parentRule.getRuleTypeKey(); 
@@ -227,7 +227,6 @@ public class AppliedRuleDomainService {
 	    	        	} 
 	    	        } 
 	        	    // Create exception rule
-	    	        String regex = null;
 	    	        boolean isEnabled = true;
 	    	        boolean isException = true;
 	    			long exceptionRuleId = addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled, isException, parentRule);
