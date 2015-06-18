@@ -26,9 +26,12 @@ ActionListener {
 	protected AppliedRuleController appliedRuleController;
 	protected int componentCount;
 	private JButton configureViolationTypesJButton;
-	protected boolean isException;
+	protected boolean showconfigureViolationTypesJButton = false;
+	private String ruleTypeKey = ""; // Needed in case showconfigureViolationTypesJButton = true (e.g., NamingConvention and VisibilityConvention)
+	protected boolean violationTypesAreLanguageDependent = true;
+	
+	protected boolean isException = false;
 	protected Logger logger;
-	protected boolean showFilterConfigurationButton;
 
 	protected ViolationTypesJDialog violationTypesJDialog;
 
@@ -36,8 +39,6 @@ ActionListener {
 		super();
 		this.appliedRuleController = appliedRuleController;
 		logger = Logger.getLogger(AbstractDetailsJPanel.class);
-		isException = false;
-		showFilterConfigurationButton = true;
 	}
 
 	@Override
@@ -84,8 +85,7 @@ ActionListener {
 
 	private void initViolationTypeJDialog() {
 		if (violationTypesJDialog == null) {
-			violationTypesJDialog = new ViolationTypesJDialog(
-					appliedRuleController);
+			violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController, ruleTypeKey);
 		}
 		violationTypesJDialog.initGUI();
 		DialogUtils.alignCenter(violationTypesJDialog);
@@ -97,27 +97,26 @@ ActionListener {
 				.getInstance().getLocaleService()
 				.getTranslatedString("ConfigureFilter"));
 		configureViolationTypesJButton.addActionListener(this);
-		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
+		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController, ruleTypeKey);
 
 		GridBagConstraints gbc = new GridBagConstraints(1, componentCount++, 1,
 				1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 		this.add(configureViolationTypesJButton, gbc);
 
-		if (appliedRuleController.isAnalysed()) {
-			configureViolationTypesJButton.setEnabled(true);
-			configureViolationTypesJButton.setToolTipText(ServiceProvider
-					.getInstance().getLocaleService()
-					.getTranslatedString("ValidateOnSpecificDependencies"));
-		} else {
+		if (violationTypesAreLanguageDependent && !appliedRuleController.isAnalysed()) {
 			configureViolationTypesJButton.setEnabled(false);
 			configureViolationTypesJButton.setToolTipText(ServiceProvider
 					.getInstance().getLocaleService()
 					.getTranslatedString("NeedToAnalyseFirst"));
+		} else {
+			configureViolationTypesJButton.setEnabled(true);
+			configureViolationTypesJButton.setToolTipText(ServiceProvider
+					.getInstance().getLocaleService()
+					.getTranslatedString("ValidateOnSpecificDependencies"));
 		}
 
-		configureViolationTypesJButton
-		.setVisible(showFilterConfigurationButton);
+		configureViolationTypesJButton.setVisible(showconfigureViolationTypesJButton);
 	}
 
 	private HashMap<String, Object> saveDefaultDataToHashMap() {
@@ -151,4 +150,9 @@ ActionListener {
 	public void updateDetails(HashMap<String, Object> ruleDetails) {
 		violationTypesJDialog.load(ruleDetails);
 	}
+
+	protected void setRuleTypeKey(String ruleTypeKey) {
+		this.ruleTypeKey = ruleTypeKey;
+	}
+
 }

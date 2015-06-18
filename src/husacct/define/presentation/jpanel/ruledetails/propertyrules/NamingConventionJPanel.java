@@ -23,6 +23,9 @@ public class NamingConventionJPanel extends AbstractDetailsJPanel {
 
 	public NamingConventionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
+		super.showconfigureViolationTypesJButton = true;
+		super.setRuleTypeKey("NamingConvention");
+		super.violationTypesAreLanguageDependent = false;
 	}
 
 	@Override

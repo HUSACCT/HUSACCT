@@ -116,7 +116,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return resultClasses;
 	}
 
-	@Override
+	@Override // Returns all paths of subpackages (and subsub, etc) within the assigned software units, but not the paths of these assigned software units
 	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath){
 		HashSet<String> resultPackages = new HashSet<String>();
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
@@ -126,11 +126,10 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
 			String suType = softwareUnit.getType().toString();
 			if (suType.toLowerCase().equals("package")){
-				resultPackages.add(suName);
+				// Get all underlying packages from AnalyseService and add them to resultPackages
+				List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalPackagePathsOfSoftwareUnit(suName); 
+				resultPackages.addAll(AllPhysicalClassPaths); 
 			}
-			// Get all underlying packages from AnalyseService and add them to resultPackages
-			List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(suName); 
-			resultPackages.addAll(AllPhysicalClassPaths); 
 		}
 		return resultPackages;
 	}

@@ -14,6 +14,7 @@ public enum ViolationTypes implements IViolationType {
 	PROTECTED("protected", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	DEFAULT("default", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
 	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
+
 	PACKAGE("package", ViolationCategories.PACKAGING, DefaultSeverities.LOW),
 	CLASS("class", ViolationCategories.PACKAGING, DefaultSeverities.LOW);
 	

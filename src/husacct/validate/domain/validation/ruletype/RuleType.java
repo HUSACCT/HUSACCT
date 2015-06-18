@@ -6,7 +6,6 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.check.util.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
@@ -94,6 +93,17 @@ public abstract class RuleType {
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 
+	protected ArrayList<Mapping> getAllPhysicalPackagePathsOfModule(ModuleDTO module, String[] violationTypeKeys) {
+		HashSet<Mapping> packagePathsFrom = new HashSet<Mapping>();
+		List<String> physicalPackagePaths = new ArrayList<String>();
+		physicalPackagePaths.addAll(defineService.getModule_AllPhysicalPackagePathsOfModule(module.logicalPath));
+		for (String classpath : physicalPackagePaths) {
+			Mapping mapping = new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys);
+			packagePathsFrom.add(mapping);
+		}
+		return new ArrayList<Mapping>(packagePathsFrom);
+	}
+
 	protected HashSet<String> getAllExceptionFromTos(RuleDTO rule){
 		HashSet<String> exceptionClassPathFromTos = new HashSet<String>();
 		if (rule.exceptionRules.length > 0){
@@ -119,7 +129,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 		LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
-		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
+		Severity severity = getSeverity(configuration, this.severity, null);
 
 		Violation newViolation = new Violation();
 		newViolation = newViolation
@@ -141,7 +151,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
 		final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
+		Severity severity = getSeverity(configuration, this.severity, violationTypeSeverity);
 
 		Violation newViolation = new Violation()
 				.setLineNumber(dependency.lineNumber)
@@ -162,7 +172,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
-		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
+		Severity severity = getSeverity(configuration, this.severity, null);
 
 		Violation newViolation = new Violation();
 		newViolation = newViolation
@@ -182,7 +192,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
 
-		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
+		Severity severity = getSeverity(configuration, this.severity, null);
 
 		Violation newViolation = new Violation();
 		newViolation = newViolation
@@ -202,7 +212,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 
 		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);
 
-		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
+		Severity severity = getSeverity(configuration, this.severity, violationTypeSeverity);
 
 		Violation newViolation = new Violation();
 		newViolation = newViolation
@@ -228,6 +238,36 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private Severity getSeverity(ConfigurationServiceImpl configuration, Severity ruleTypeSeverity, Severity violationTypeSeverity) {
+		if (violationTypeSeverity == null && ruleTypeSeverity == null) {
+			return null;
+		}
+
+		int ruleTypeValue = -1;
+		int violationTypeValue = -1;
+
+		if (ruleTypeSeverity != null) {
+			ruleTypeValue = configuration.getSeverityValue(ruleTypeSeverity);
+		}
+		if (violationTypeSeverity != null) {
+			violationTypeValue = configuration.getSeverityValue(violationTypeSeverity);
+		}
+
+		if (ruleTypeValue == -1 && violationTypeValue != -1) {
+			return violationTypeSeverity;
+		} else if (ruleTypeValue != -1 && violationTypeValue == -1) {
+			return ruleTypeSeverity;
+		} else if (ruleTypeValue != -1 && violationTypeValue != -1) {
+			if (ruleTypeValue >= violationTypeValue) {
+				return ruleTypeSeverity;
+			} else {
+				return violationTypeSeverity;
+			}
+		} else {
+			return null;
+		}
 	}
 
 	public boolean equals(RuleTypes desiredRuleType) {

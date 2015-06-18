@@ -21,6 +21,8 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel {
 
 	public VisibilityConventionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
+		super.showconfigureViolationTypesJButton = true;
+		super.setRuleTypeKey(ruleTypeKey);
 	}
 
 	@Override

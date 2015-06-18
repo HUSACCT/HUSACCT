@@ -3,7 +3,6 @@ package husacct.validate.domain.validation.ruletype.propertyruletypes;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.util.CheckConformanceUtilPackage;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
@@ -13,13 +12,14 @@ import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
 public class NamingConvention extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.NAMING_CONVENTION);
+	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION);
 	private HashMap<String, String> exceptionRegExes = new HashMap<String, String>();
 
 	public NamingConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
@@ -48,14 +48,14 @@ public class NamingConvention extends RuleType {
 	}
 
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		fromMappings = CheckConformanceUtilPackage.getAllPackagepathsFromModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
+		ArrayList<Mapping> packageMappings = getAllPhysicalPackagePathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		String regex = Regex.makeRegexString(currentRule.regex);
 
-		for (Mapping fromMapping : fromMappings) {
-			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(fromMapping.getPhysicalPath());
+		for (Mapping currentPackage : packageMappings) {
+			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(currentPackage.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && nameDoesNotMatchException(analysedModule.name)) {
 				if (analysedModule.type.toLowerCase().equals("package")){
-					Violation violation = createViolation(rootRule, fromMapping, configuration);
+					Violation violation = createViolation(rootRule, currentPackage, configuration);
 					violations.add(violation);
 					
 				}

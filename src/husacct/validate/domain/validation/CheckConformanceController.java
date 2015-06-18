@@ -1,4 +1,4 @@
-package husacct.validate.domain.check;
+package husacct.validate.domain.validation;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
@@ -11,7 +11,6 @@ import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
-import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;

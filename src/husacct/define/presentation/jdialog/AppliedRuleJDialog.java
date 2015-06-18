@@ -129,11 +129,10 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 	}
 
 	private void refreshRuleDetailsJPanel() {
-		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
 		}
 		this.mainPanel.remove(this.ruleDetailsJPanel);
-		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
+		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, getSelectedRuleTypeKey());
 		this.ruleDetailsJPanel.initGui();
 		// updating panel!
 		if(this.getComponentCount() > 0) {
@@ -142,6 +141,10 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		this.repaint();
 		this.update();
+	}
+	
+	public String getSelectedRuleTypeKey() {
+		return this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 	}
 
 	private JPanel createExceptionsPanel() {

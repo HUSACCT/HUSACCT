@@ -119,16 +119,19 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 		return uniqueNamesAllFoundTypes;
     }
 
-    // Returns unique names of all packages with uniqueName or within this SoftwareUnit  
+    // Returns unique names of all packages within this SoftwareUnit  
     @Override
     public TreeSet<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
 		TreeSet<String> uniqueNamesAllFoundPackages = new TreeSet<String>();
 		if (theModel.packages.containsKey(uniqueName)) { // Add only packages
-			uniqueNamesAllFoundPackages.add(uniqueName);
+			//uniqueNamesAllFoundPackages.add(uniqueName);
 		}
 		TreeSet<String> children = (moduleFinder.getChildModulesNamesInModule(uniqueName));
     	if ((children != null) && (children.size() > 0)){
 	    	for (String child : children){
+	    		if (theModel.packages.containsKey(child)) { // Add only packages
+	    			uniqueNamesAllFoundPackages.add(child);
+	    		}
 	    		TreeSet<String> validChildName = getAllPhysicalPackagePathsOfSoftwareUnit(child);
 	    		uniqueNamesAllFoundPackages.addAll(validChildName);
 	    	}

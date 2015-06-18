@@ -11,12 +11,15 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -26,20 +29,21 @@ public class ViolationTypesJDialog extends JDialog{
 
 	private static final long serialVersionUID = 6413960215557327449L;
 	private HashMap<String, JCheckBox> violationCheckBoxHashMap;
+	private String selectedRuleTypeKey = "";
 	protected AppliedRuleController appliedRuleController;
+	private JPanel buttonPanel;
+	private JButton closeButton;
 	
-	public ViolationTypesJDialog(AppliedRuleController appliedRuleController) {
+	public ViolationTypesJDialog(AppliedRuleController appliedRuleController, String selectedRuleTypeKey) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.appliedRuleController = appliedRuleController;
+		this.selectedRuleTypeKey = selectedRuleTypeKey;
 		violationCheckBoxHashMap = new HashMap<String, JCheckBox>();
 		initDetails();
 	}
 	
 	private void initDetails(){
-		//TODO imo the DTO should not be known in presentation layer
-		String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
 		ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
-		
 		for (ViolationTypeDTO vt : violationTypeDtoList){
 			JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
 			jCheckBox.setSelected(vt.isDefault);
@@ -52,9 +56,16 @@ public class ViolationTypesJDialog extends JDialog{
 			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			this.setTitle("Violation Types");
 			this.setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
-			
+
+			buttonPanel = new JPanel();
+			closeButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Close"));
+			getRootPane().setDefaultButton(closeButton);
+			buttonPanel.add(closeButton);
+
 			this.getContentPane().removeAll();
 			getContentPane().add(this.createViolationPanel(), BorderLayout.CENTER);
+			this.add(buttonPanel, BorderLayout.SOUTH);
+			setListeners();
 			
 			this.setResizable(false);
 			this.pack();
@@ -124,4 +135,13 @@ public class ViolationTypesJDialog extends JDialog{
 		String[] dependencies = dependencyList.toArray(new String[dependencyList.size()]);
 		return dependencies;
 	}
+	
+	private void setListeners(){
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+	}
+
 }
