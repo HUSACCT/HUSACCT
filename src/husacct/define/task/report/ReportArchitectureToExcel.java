@@ -115,13 +115,22 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
         int id = 1;
         for (String searchKey : rulesMap.keySet()) {
         	RuleDTO rule = rulesMap.get(searchKey);
+        	String ruleTypeKey = rule.ruleTypeKey;
+        	String toModuleReported = "";
+			if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) || (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) 
+					|| (ruleTypeKey.equals("InheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
+				toModuleReported = rule.moduleTo.logicalPath;
+			} else {
+				toModuleReported = ""; //Do not show the module to. Logically there is no module to, but technically module to is the same as module from.
+			}
+        	
         	if (!rule.isException) {
-            	writeRuleOrException(sheet, row, Integer.toString(id), "", rule.moduleFrom.logicalPath, rule.ruleTypeKey, rule.moduleTo.logicalPath);
+            	writeRuleOrException(sheet, row, Integer.toString(id), "", rule.moduleFrom.logicalPath, rule.ruleTypeKey, toModuleReported, rule.regex);
             	id ++;
             	row ++;
             	RuleDTO[] exceptionRules = rule.exceptionRules;
             	for (RuleDTO exceptionRule : exceptionRules) {
-            		writeRuleOrException(sheet, row, "", super.translate("Exception"), exceptionRule.moduleFrom.logicalPath, exceptionRule.ruleTypeKey, exceptionRule.moduleTo.logicalPath);
+            		writeRuleOrException(sheet, row, "", super.translate("Exception"), exceptionRule.moduleFrom.logicalPath, exceptionRule.ruleTypeKey, exceptionRule.moduleTo.logicalPath, exceptionRule.regex);
                 	row ++;
             	}
         	}
@@ -138,22 +147,26 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
 	        Label fromLabel = new Label(3, row, super.translate("LogicalModuleFrom"), timesBold);
 	        Label ruleTypeLabel = new Label(4, row, super.translate("RuleType"), timesBold);
 	        Label toLabel = new Label(5, row, super.translate("LogicalModuleTo"), timesBold);
+	        Label expressionLabel = new Label(6, row, super.translate("RegularExpression"), timesBold);
+	        
 	        sheet.addCell(idLabel);
 	        sheet.addCell(exceptionsLabel);
 	        sheet.addCell(fromLabel);
 	        sheet.addCell(ruleTypeLabel);
 	        sheet.addCell(toLabel);
+	        sheet.addCell(expressionLabel);
         } catch (Exception e) {
             husacctLogger.error("ExceptionMessage: " + e.getMessage());
         }
 	}
     
-    private void writeRuleOrException(WritableSheet sheet, int row, String id, String exception, String from, String ruleType, String to) throws RowsExceededException, WriteException {
+    private void writeRuleOrException(WritableSheet sheet, int row, String id, String exception, String from, String ruleType, String to, String expression) throws RowsExceededException, WriteException {
         Label idLabel = new Label(1, row, id, times_AlignmentCentre);
         Label exceptionLabel = new Label(2, row, exception, times);
         Label fromLabel = new Label(3, row, from, times);
         Label ruleTypeLabel = new Label(4, row, super.translate(ruleType), times);
         Label toLabel = new Label(5, row, to, times);
+        Label expressionLabel = new Label(6, row, expression, times);
 
         List<Label> labelArray = new ArrayList<Label>();
         labelArray.add(idLabel);
@@ -161,6 +174,7 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
         labelArray.add(fromLabel);
         labelArray.add(ruleTypeLabel);
         labelArray.add(toLabel);
+        labelArray.add(expressionLabel);
         
         for(Label label : labelArray){
         	sheet.addCell(label);

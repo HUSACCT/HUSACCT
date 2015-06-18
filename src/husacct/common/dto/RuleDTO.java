@@ -6,7 +6,7 @@ public class RuleDTO extends AbstractDTO {
 	public String[] violationTypeKeys;
 	public ModuleDTO moduleFrom;
 	public ModuleDTO moduleTo;
-	public String regex;
+	public String regex = "";
 	public boolean isException;
 	public RuleDTO[] exceptionRules;
 	
