@@ -102,12 +102,12 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	 */
 	@Override
 	public void checkConformance() {
-		RuleDTO[] appliedRules = defineService.getDefinedRules();
+		RuleDTO[] allEnabledAppliedRules = defineService.getDefinedRules();
 
 		// Filter out disabled rules
 		ArrayList<RuleDTO> intermediate = new ArrayList<RuleDTO>();
-		for(RuleDTO appliedRule : appliedRules){
-			if((appliedRule != null) && (appliedRule.enabled)){
+		for(RuleDTO appliedRule : allEnabledAppliedRules){
+			if (appliedRule != null){
 				intermediate.add(appliedRule);
 			}
 		}

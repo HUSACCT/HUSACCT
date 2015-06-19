@@ -115,22 +115,15 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
         int id = 1;
         for (String searchKey : rulesMap.keySet()) {
         	RuleDTO rule = rulesMap.get(searchKey);
-        	String ruleTypeKey = rule.ruleTypeKey;
-        	String toModuleReported = "";
-			if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) || (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) 
-					|| (ruleTypeKey.equals("InheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
-				toModuleReported = rule.moduleTo.logicalPath;
-			} else {
-				toModuleReported = ""; //Do not show the module to. Logically there is no module to, but technically module to is the same as module from.
-			}
-        	
+        	String toModuleReported = determineReportedModuleTo(rule);
         	if (!rule.isException) {
             	writeRuleOrException(sheet, row, Integer.toString(id), "", rule.moduleFrom.logicalPath, rule.ruleTypeKey, toModuleReported, rule.regex);
             	id ++;
             	row ++;
             	RuleDTO[] exceptionRules = rule.exceptionRules;
             	for (RuleDTO exceptionRule : exceptionRules) {
-            		writeRuleOrException(sheet, row, "", super.translate("Exception"), exceptionRule.moduleFrom.logicalPath, exceptionRule.ruleTypeKey, exceptionRule.moduleTo.logicalPath, exceptionRule.regex);
+                	String toModuleReportedException = determineReportedModuleTo(exceptionRule);
+            		writeRuleOrException(sheet, row, "", super.translate("Exception"), exceptionRule.moduleFrom.logicalPath, exceptionRule.ruleTypeKey, toModuleReportedException, exceptionRule.regex);
                 	row ++;
             	}
         	}
@@ -140,14 +133,26 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
         sheet.setColumnView(2, 10);
     }
 
-	private void writeAllRulesWithExceptionsTableHeaders(WritableSheet sheet, int row) {
+    private String determineReportedModuleTo(RuleDTO rule) {
+    	String ruleTypeKey = rule.ruleTypeKey;
+     	String toModuleReported = "";
+		if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) || (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) 
+				|| (ruleTypeKey.equals("InheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
+			toModuleReported = rule.moduleTo.logicalPath;
+		} else {
+			toModuleReported = ""; //Do not show the module to. Logically there is no module to, but technically module to is the same as module from.
+		}
+		return toModuleReported;
+    }
+    
+    private void writeAllRulesWithExceptionsTableHeaders(WritableSheet sheet, int row) {
         try {
 	        Label idLabel = new Label(1, row, super.translate("Id"), timesBold_AlignmentCentre);
-	        Label exceptionsLabel = new Label(2, row, super.translate("Exceptions"), timesBold);
-	        Label fromLabel = new Label(3, row, super.translate("LogicalModuleFrom"), timesBold);
+	        Label exceptionsLabel = new Label(2, row, super.translate("Exception"), timesBold);
+	        Label fromLabel = new Label(3, row, super.translate("FromModule"), timesBold);
 	        Label ruleTypeLabel = new Label(4, row, super.translate("RuleType"), timesBold);
-	        Label toLabel = new Label(5, row, super.translate("LogicalModuleTo"), timesBold);
-	        Label expressionLabel = new Label(6, row, super.translate("RegularExpression"), timesBold);
+	        Label toLabel = new Label(5, row, super.translate("ToModule"), timesBold);
+	        Label expressionLabel = new Label(6, row, super.translate("Expression"), timesBold);
 	        
 	        sheet.addCell(idLabel);
 	        sheet.addCell(exceptionsLabel);

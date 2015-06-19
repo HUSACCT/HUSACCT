@@ -79,7 +79,7 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public JInternalFrame getDefinedGUI();
 
 	/**
-	 * Returns all the defined rules
+	 * Returns all the defined, enabled rules
 	 * 
 	 * @return an array of RuleDTO's (the defined rules)
 	 */

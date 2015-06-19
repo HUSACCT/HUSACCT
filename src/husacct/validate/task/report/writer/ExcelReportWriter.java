@@ -200,7 +200,8 @@ public class ExcelReportWriter extends ReportWriter {
         int row = 5;
         for (Integer i : violatedRules.keySet()) {
         	RuleWithNrOfViolationsDTO ruleDTO = violatedRules.get(i);
-        	writeRuleRow(sheet, row, ruleDTO.getId(), ruleDTO.getLogicalModuleFrom(), ruleDTO.getRuleType(), ruleDTO.getLogicalModuleTo(), ruleDTO.getNrOfViolations());
+        	String toModuleReported = determineReportedModuleTo(ruleDTO);
+        	writeRuleRow(sheet, row, ruleDTO.getId(), ruleDTO.getLogicalModuleFrom(), ruleDTO.getRuleType(), toModuleReported, ruleDTO.getNrOfViolations());
         	totalNumberOfViolations = totalNumberOfViolations + ruleDTO.getNrOfViolations();
         	row ++;
         }
@@ -218,13 +219,26 @@ public class ExcelReportWriter extends ReportWriter {
         int id = 1;
         for (String i : nonViolatedRules.keySet()) {
         	RuleWithNrOfViolationsDTO ruleDTO = nonViolatedRules.get(i);
-        	writeRuleRow(sheet, row, id, ruleDTO.getLogicalModuleFrom(), ruleDTO.getRuleType(), ruleDTO.getLogicalModuleTo(), ruleDTO.getNrOfViolations());
+        	String toModuleReported = determineReportedModuleTo(ruleDTO);
+        	writeRuleRow(sheet, row, id, ruleDTO.getLogicalModuleFrom(), ruleDTO.getRuleType(), toModuleReported, ruleDTO.getNrOfViolations());
         	row ++;
         	id ++;
         }
     }
 
-	private void writeViolationsPerRuleTableHeaders(WritableSheet sheet, int row) {
+    private String determineReportedModuleTo(RuleWithNrOfViolationsDTO rule) {
+    	String ruleTypeKey = rule.getRuleType();
+     	String toModuleReported = "";
+		if ((ruleTypeKey.equals("IsNotAllowedToUse")) || (ruleTypeKey.equals("IsOnlyAllowedToUse")) || (ruleTypeKey.equals("IsTheOnlyModuleAllowedToUse")) 
+				|| (ruleTypeKey.equals("InheritanceConvention")) || (ruleTypeKey.equals("MustUse")) || (ruleTypeKey.equals("IsAllowedToUse"))){
+			toModuleReported = rule.getLogicalModuleTo();
+		} else {
+			toModuleReported = ""; //Do not show the module to. Logically there is no module to, but technically module to is the same as module from.
+		}
+		return toModuleReported;
+    }
+    
+    private void writeViolationsPerRuleTableHeaders(WritableSheet sheet, int row) {
         try {
 	        Label idLabel = new Label(1, row, super.translate("Id"), timesBold_AlignmentCentre);
 	        Label fromLabel = new Label(2, row, super.translate("LogicalModuleFrom"), timesBold);
@@ -261,7 +275,7 @@ public class ExcelReportWriter extends ReportWriter {
         		if(label.getString().length() < 10)
         			dimensions.put(label.getColumn(), 10);
         		else
-        			dimensions.put(label.getColumn(), label.getString().length() - 3);
+        			dimensions.put(label.getColumn(), label.getString().length());
             }
         }
         

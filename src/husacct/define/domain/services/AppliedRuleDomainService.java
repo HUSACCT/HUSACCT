@@ -71,6 +71,18 @@ public class AppliedRuleDomainService {
 		return ruleList;
 	}
 
+	// Returns a flat list of main rules and exception rules
+	public ArrayList<AppliedRuleStrategy> getAllEnabledAppliedRules() {
+		ArrayList<AppliedRuleStrategy> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
+		ArrayList<AppliedRuleStrategy> enabledRuleList = new ArrayList<AppliedRuleStrategy>();
+		for (AppliedRuleStrategy ar : ruleList) {
+			if (ar.isEnabled()) {
+				enabledRuleList.add(ar);
+			}
+		}
+		return enabledRuleList;
+	}
+
 	// Returns all main rules, enabled or disabled (so no exception rules)
 	public AppliedRuleStrategy[] getAllMainRules() {
 		ArrayList<AppliedRuleStrategy> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();

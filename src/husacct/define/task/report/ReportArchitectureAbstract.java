@@ -37,7 +37,7 @@ public abstract class ReportArchitectureAbstract {
 	
 	protected HashMap<String, Boolean> getAppliedRules(long moduleId){
 		HashMap<String, Boolean> appliedRules = new HashMap<String, Boolean>();
-		for(AppliedRuleStrategy rule : ruleService.getAllMainRules()){
+		for(AppliedRuleStrategy rule : ruleService.getAllEnabledMainRules()){
 			if(rule.getModuleFrom().getId() == moduleId){
 				appliedRules.put(rule.getRuleTypeKey(), rule.isEnabled());
 			}			

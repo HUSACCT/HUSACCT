@@ -184,7 +184,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public RuleDTO[] getDefinedRules() {
-		ArrayList<AppliedRuleStrategy> rules = appliedRuleService.getAllAppliedRules();
+		ArrayList<AppliedRuleStrategy> rules = appliedRuleService.getAllEnabledAppliedRules();
 		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
 		return ruleDTOs;
 	}
