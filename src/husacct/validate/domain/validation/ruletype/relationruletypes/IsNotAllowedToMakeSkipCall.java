@@ -55,7 +55,7 @@ public class IsNotAllowedToMakeSkipCall extends RuleType {
 						if (allExceptionFromTos.contains(fromToCombi)){
 							// Do not add violations, since this usage is allowed. 
 						} else{
-							DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+							DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 							if(violatingDependencies != null){
 								for(DependencyDTO dependency : violatingDependencies){
 									Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);

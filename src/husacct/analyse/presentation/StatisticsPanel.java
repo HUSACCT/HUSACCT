@@ -1,6 +1,6 @@
 package husacct.analyse.presentation;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 
@@ -50,7 +50,7 @@ public class StatisticsPanel extends HelpableJPanel {
         setLayout(group1Layout);
 	}
 
-    public void reload(AnalysedModuleDTO selectedModule) {
+    public void reload(SoftwareUnitDTO selectedModule) {
     	AnalysisStatisticsDTO statistics;
     	if ((selectedModule != null) && !selectedModule.name.equals("xLibraries")) {
 	    	statistics = dataControl.getAnalyseService().getAnalysisStatistics(selectedModule);

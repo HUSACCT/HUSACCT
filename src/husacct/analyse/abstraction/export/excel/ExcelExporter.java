@@ -2,7 +2,7 @@ package husacct.analyse.abstraction.export.excel;
 
 import husacct.ServiceProvider;
 import husacct.analyse.abstraction.export.AbstractReportFileExporter;
-import husacct.analyse.domain.IAnalyseDomainService;
+import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -25,12 +26,13 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+
 import org.apache.log4j.Logger;
 
 
 public class ExcelExporter extends AbstractReportFileExporter {
 
-    private IAnalyseDomainService analysedDomain;
+    private IModelQueryService queryService;
     private Logger husacctLogger = Logger.getLogger(ExcelExporter.class);
     private WritableWorkbook workbook;
     private WritableCellFormat timesBold;
@@ -115,9 +117,9 @@ public class ExcelExporter extends AbstractReportFileExporter {
     
     
     
-    public ExcelExporter(DependencyDTO[] data, IAnalyseDomainService analyseDomainService) {
+    public ExcelExporter(DependencyDTO[] data, IModelQueryService queryService) {
         super(data);
-    	this.analysedDomain = analyseDomainService;
+    	this.queryService = queryService;
         numberOfAllDependencies_Total = data.length;
     }
 
@@ -419,7 +421,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
     
     private void writeStatistics(WritableSheet sheet) throws WriteException {
 		ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
-    	AnalysisStatisticsDTO stat = analysedDomain.getAnalysisStatistics(null);
+    	AnalysisStatisticsDTO stat = queryService.getAnalysisStatistics(null);
     	
         addCellBold(sheet, 0, 0, super.translate("Application") + ": " + applicationDTO.name);
         addCellBold_AlignmentRight(sheet, 1, 0, "Total");

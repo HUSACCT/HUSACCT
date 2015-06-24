@@ -1,13 +1,13 @@
 package husacct.define.task;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 
 import java.util.Comparator;
 
-public class AnalysedModuleComparator implements Comparator<AnalysedModuleDTO> {
+public class AnalysedModuleComparator implements Comparator<SoftwareUnitDTO> {
 
     @Override
-    public int compare(AnalysedModuleDTO dto1, AnalysedModuleDTO dto2) {
+    public int compare(SoftwareUnitDTO dto1, SoftwareUnitDTO dto2) {
     	int result;
     	if ( dto1 == null){
     		result = 1;

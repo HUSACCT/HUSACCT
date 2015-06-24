@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import husacct.analyse.domain.IModelQueryService;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
@@ -40,7 +40,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
+    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename) {
         return moduleFinder.getModuleForUniqueName(uniquename);
     }
 
@@ -54,23 +54,26 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public List<AnalysedModuleDTO> getRootModules() {
-        return moduleFinder.getRootModules();
+    public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
+    	List<SoftwareUnitDTO> rootModules = moduleFinder.getRootModules();
+        return rootModules.toArray(new SoftwareUnitDTO[rootModules.size()]);
     }
 
     @Override
-    public List<AnalysedModuleDTO> getChildModulesInModule(String from) {
-        return moduleFinder.getChildModulesInModule(from);
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from) {
+    	SoftwareUnitDTO[] children;
+    	List<SoftwareUnitDTO> childModules = moduleFinder.getChildModulesInModule(from);
+        int numberOfChildren = childModules.size();
+        if ((childModules != null) && numberOfChildren > 0) {
+	        children = childModules.toArray(new SoftwareUnitDTO[childModules.size()]);
+        } else {
+        	children = new SoftwareUnitDTO[0];
+        }
+	    return children;
     }
 
     @Override
-    public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-        List<AnalysedModuleDTO> moduleList = moduleFinder.getChildModulesInModule(from, depth);
-        return moduleList.toArray(new AnalysedModuleDTO[moduleList.size()]);
-    }
-
-    @Override
-    public AnalysedModuleDTO getParentModuleForModule(String child) {
+    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String child) {
         return moduleFinder.getParentModuleForModule(child);
     }
 
@@ -82,11 +85,11 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public List<DependencyDTO> getDependencies(String from, String to) {
+    public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
         List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
 	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
-    	TreeSet<String> allFromTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(from);
-    	TreeSet<String> allToTypeNames = getAllPhysicalClassPathsOfSoftwareUnit(to);
+    	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
+    	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
         for (String fromTypeName : allFromTypeNames) {
             for (String toTypeName : allToTypeNames) {
                 for (DependencyDTO dependency : dependencyFinder.getDependenciesFromTo(fromTypeName, toTypeName)) {
@@ -99,12 +102,25 @@ public class FamixQueryServiceImpl implements IModelQueryService {
             }
         }
         foundDependenciesReturnList.addAll(foundDependenciesTreeMap.values());
-        return foundDependenciesReturnList;
+        return foundDependenciesReturnList.toArray(new DependencyDTO[foundDependenciesReturnList.size()]);
     }
     
-    // Returns unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
     @Override
-    public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
+	public DependencyDTO[] getDependenciesFromClassToClass(String classPathFrom, String classPathTo){
+    	ArrayList<DependencyDTO> result = dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
+        DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
+        return allDependencies;
+	}
+	
+    // Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
+    @Override
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
+    	List<String> returnValue = new ArrayList<String>(getPhysicalClassPathsOfSoftwareUnit(uniqueName)); 
+    	return returnValue;
+    }
+    
+    // Returns TreeSet with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
+    private TreeSet<String> getPhysicalClassPathsOfSoftwareUnit(String uniqueName){
 		TreeSet<String> uniqueNamesAllFoundTypes = new TreeSet<String>();
 		if (!theModel.packages.containsKey(uniqueName)) { // Add only classes and libraries
 			uniqueNamesAllFoundTypes.add(uniqueName);
@@ -112,16 +128,22 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 		TreeSet<String> children = (moduleFinder.getChildModulesNamesInModule(uniqueName));
     	if ((children != null) && (children.size() > 0)){
 	    	for (String child : children){
-	    		TreeSet<String> validChildName = getAllPhysicalClassPathsOfSoftwareUnit(child);
+	    		TreeSet<String> validChildName = getPhysicalClassPathsOfSoftwareUnit(child);
 	    		uniqueNamesAllFoundTypes.addAll(validChildName);
 	    	}
     	}
 		return uniqueNamesAllFoundTypes;
     }
 
-    // Returns unique names of all packages within this SoftwareUnit  
+    // Returns List with unique names of all packages within this SoftwareUnit  
     @Override
-    public TreeSet<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
+    	List<String> returnValue = new ArrayList<String>(getPhysicalPackagePathsOfSoftwareUnit(uniqueName)); 
+    	return returnValue;
+    }
+    
+    // Returns TreeSet with unique names of all packages within this SoftwareUnit  
+    private TreeSet<String> getPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
 		TreeSet<String> uniqueNamesAllFoundPackages = new TreeSet<String>();
 		if (theModel.packages.containsKey(uniqueName)) { // Add only packages
 			//uniqueNamesAllFoundPackages.add(uniqueName);
@@ -132,7 +154,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 	    		if (theModel.packages.containsKey(child)) { // Add only packages
 	    			uniqueNamesAllFoundPackages.add(child);
 	    		}
-	    		TreeSet<String> validChildName = getAllPhysicalPackagePathsOfSoftwareUnit(child);
+	    		TreeSet<String> validChildName = getPhysicalPackagePathsOfSoftwareUnit(child);
 	    		uniqueNamesAllFoundPackages.addAll(validChildName);
 	    	}
     	}
@@ -140,60 +162,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
-        List<DependencyDTO> result = dependencyFinder.getDependencies(from, to, dependencyFilter);
-        DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
-        return allDependencies;
-    }
-
-    @Override
-    public List<DependencyDTO> getDependenciesFrom(String from) {
-        return dependencyFinder.getDependenciesFrom(from);
-    }
-
-    @Override
-    public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
-        List<DependencyDTO> result = dependencyFinder.getDependenciesFrom(from, dependencyFilter);
-        DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
-        return allDependencies;
-    }
-
-    @Override
-	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
-    	ArrayList<DependencyDTO> result = dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
-        DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
-        return allDependencies;
-	}
-	
-    @Override
-    public List<DependencyDTO> getDependenciesTo(String to) {
-        return dependencyFinder.getDependenciesTo(to);
-    }
-
-    @Override
-    public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
-        List<DependencyDTO> result = dependencyFinder.getDependenciesTo(to, dependencyFilter);
-        DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
-        return allDependencies;
-    }
-
-    @Override
-    public DependencyDTO[] mapDependencies() {
-        DependencyDTO[] cache = this.getAllDependencies();
-        
-        /* HashMap<String, DependencyDTO> dependencyMap = new HashMap<String, DependencyDTO>();
-        //TODO Analyse Persistency to file - Do Sorting of the list here!
-        int counter = 0;
-        for (DependencyDTO dependency : cache) {
-            dependencyMap.put("" + counter, dependency);
-            counter++;
-        } */
-        return cache;
-    }
-    
-    @Override
     // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. 
-	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
+	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
 		AnalysisStatisticsDTO returnValue;
 		// Determine totalNrOfPackages, minus 1 for package xLibraries, since that one is created within the analysis process. 
 		int totalNrOfPackages = 0;
@@ -209,8 +179,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			int linesOfCode = 0;
 			if (selectedModule.type.equals("package")) {
 				if (theModel.packages.containsKey(selectedModule.uniqueName)) {
-					packages = getAllPhysicalPackagePathsOfSoftwareUnit(selectedModule.uniqueName).size();
-					TreeSet<String> classesSet = getAllPhysicalClassPathsOfSoftwareUnit(selectedModule.uniqueName);
+					packages = getPhysicalPackagePathsOfSoftwareUnit(selectedModule.uniqueName).size();
+					TreeSet<String> classesSet = getPhysicalClassPathsOfSoftwareUnit(selectedModule.uniqueName);
 					classes = classesSet.size();
 					for (String typeName : classesSet) {
 						if (theModel.classes.containsKey(typeName)) {
@@ -224,7 +194,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 					FamixClass selected = theModel.classes.get(selectedModule.uniqueName);
 					linesOfCode = selected.linesOfCode;
 					if (selected.hasInnerClasses) {
-						TreeSet<String> classesSet = getAllPhysicalClassPathsOfSoftwareUnit(selectedModule.uniqueName);
+						TreeSet<String> classesSet = getPhysicalClassPathsOfSoftwareUnit(selectedModule.uniqueName);
 						classes = classesSet.size();
 					} else {
 						classes = 1;

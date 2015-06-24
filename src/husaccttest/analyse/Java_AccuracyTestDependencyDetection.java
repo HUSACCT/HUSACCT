@@ -960,7 +960,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule, toModule).length;
 		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
@@ -971,7 +971,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "fi.foyt.foursquare.api";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule, toModule).length;
 		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
@@ -982,7 +982,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "domain.indirect.indirectto";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule, toModule).length;
 		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
@@ -993,7 +993,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toModule = "technology.direct.dao";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule, toModule).length;
 		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
@@ -1048,7 +1048,7 @@ public class Java_AccuracyTestDependencyDetection {
 		boolean dependencyTypesDetected = false;
 		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromTo(moduleFrom, moduleTo);
+		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(moduleFrom, moduleTo);
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;

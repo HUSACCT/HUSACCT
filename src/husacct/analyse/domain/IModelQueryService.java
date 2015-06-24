@@ -1,6 +1,6 @@
 package husacct.analyse.domain;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
@@ -15,40 +15,39 @@ public interface IModelQueryService {
     
     public void importDependencies(List<DependencyDTO> dependencies);
     
-    public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
+    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename);
 
     public String getSourceFilePathOfClass(String uniquename);
 
-    public List<AnalysedModuleDTO> getRootModules();
+    public SoftwareUnitDTO[] getSoftwareUnitsInRoot();
 
-    public List<AnalysedModuleDTO> getChildModulesInModule(String from);
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from);
 
-    public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
-
-    public AnalysedModuleDTO getParentModuleForModule(String child);
+    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String child);
 
     public DependencyDTO[] getAllDependencies();
 
-    public TreeSet<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
+    /** Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName 
+    */  
+    public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
-    public TreeSet<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
+    /** Returns List with unique names of all packages within this SoftwareUnit 
+    */  
+    public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
     
-    public List<DependencyDTO> getDependencies(String from, String to);
+	/** Returns an array of dependencies between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
+    * Relatively fast function, based on HashMap. At least one of the argument must match with an analysedModule.
+    */  
+    public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
 
-    public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
+	/** Returns all dependencies for the exact match from classPathFrom and classPathTo. Fast function, based on HashMap.
+	* Either classPathTFrom or classPathTo should refer to a class or library class and have a value other than "", otherwise an empty array is returned.
+	* If classPathTFrom = "", then all dependencies to classPathTo are returned, which refer to existing classPathFrom's.
+	* If classPathTo = "", then all dependencies from classPathFrom are returned, which refer to existing classPathTo's.
+	*/ 
+    public DependencyDTO[] getDependenciesFromClassToClass(String classPathFrom, String classPathTo);
 
-    public List<DependencyDTO> getDependenciesFrom(String from);
-
-    public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
-
-    public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo);
-
-    public List<DependencyDTO> getDependenciesTo(String to);
-
-    public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
-
-    public DependencyDTO[] mapDependencies();
-    
-    // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned.
-    public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
+    /** If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. 
+    */
+    public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
 }

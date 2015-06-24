@@ -1,6 +1,6 @@
 package husacct.analyse.presentation;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.common.help.presentation.HelpableJTree;
@@ -36,15 +36,15 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
 
     private void createanalysedCodeTree() {
 
-        AnalysedModuleDTO rootModule = new AnalysedModuleDTO("", "", "", "");
+        SoftwareUnitDTO rootModule = new SoftwareUnitDTO("", "", "", "");
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootModule);
         analysedCodeTree = new HelpableJTree(root);
         createTreeLayout(analysedCodeTree);
         analysedCodeTree.addTreeSelectionListener(this);
         analysedCodeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();
-        for (AnalysedModuleDTO module : rootModules) {
+        List<SoftwareUnitDTO> rootModules = dataControl.getRootModules();
+        for (SoftwareUnitDTO module : rootModules) {
             DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(module);
             root.add(rootNode);
             fillNode(rootNode);
@@ -62,10 +62,10 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
     }
 
     private void fillNode(DefaultMutableTreeNode node) {
-        AnalysedModuleDTO module = (AnalysedModuleDTO) node.getUserObject();
-        List<AnalysedModuleDTO> children = dataControl.getModulesInModules(module.uniqueName);
+        SoftwareUnitDTO module = (SoftwareUnitDTO) node.getUserObject();
+        List<SoftwareUnitDTO> children = dataControl.getModulesInModules(module.uniqueName);
         if (!children.isEmpty()) {
-            for (AnalysedModuleDTO child : children) {
+            for (SoftwareUnitDTO child : children) {
                 DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
                 fillNode(childNode);
                 node.add(childNode);
@@ -115,7 +115,7 @@ class ApplicationStructurePanel extends HelpableJPanel implements TreeSelectionL
     public void valueChanged(TreeSelectionEvent eventTree) {
     	    DefaultMutableTreeNode selected = (DefaultMutableTreeNode) analysedCodeTree.getLastSelectedPathComponent();
             if (selected != null) {
-                AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
+                SoftwareUnitDTO selectedModule = (SoftwareUnitDTO) selected.getUserObject();
                 statisticsPanel.reload(selectedModule);
                 jScrollPaneTree.repaint();
                 repaint();

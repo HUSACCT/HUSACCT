@@ -8,11 +8,11 @@ public class ProjectDTO extends AbstractDTO {
 	public String programmingLanguage;
 	public String version;
 	public String description;
-	public ArrayList<AnalysedModuleDTO> analysedModules;
+	public ArrayList<SoftwareUnitDTO> analysedModules;
 	
 	public ProjectDTO(String name, ArrayList<String> paths,
 			String programmingLanguage, String version, String description,
-			ArrayList<AnalysedModuleDTO> analysedModules) {
+			ArrayList<SoftwareUnitDTO> analysedModules) {
 		super();
 		this.name = name;
 		this.paths = paths;

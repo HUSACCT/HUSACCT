@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -52,7 +52,7 @@ public class NamingConvention extends RuleType {
 		String regex = Regex.makeRegexString(currentRule.regex);
 
 		for (Mapping currentPackage : packageMappings) {
-			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(currentPackage.getPhysicalPath());
+			SoftwareUnitDTO analysedModule = analyseService.getSoftwareUnitByUniqueName(currentPackage.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && nameDoesNotMatchException(analysedModule.name)) {
 				if (analysedModule.type.toLowerCase().equals("package")){
 					Violation violation = createViolation(rootRule, currentPackage, configuration);
@@ -69,7 +69,7 @@ public class NamingConvention extends RuleType {
 		String regex = Regex.makeRegexString(currentRule.regex);
 		
 		for (Mapping physicalClasspathFrom : fromMappings) {
-			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
+			SoftwareUnitDTO analysedModule = analyseService.getSoftwareUnitByUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("class") && nameDoesNotMatchException(analysedModule.name)) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);

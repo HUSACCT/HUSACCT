@@ -113,7 +113,7 @@ public class DefinedController extends DrawingController {
 		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) 
 			for (String physicalClassPathFrom : physicalClassPathsFrom){
 				for (String physicalClassPathTo : physicalClassPathsTo) {
-					DependencyDTO[] foundDependencies = analyseService.getDependenciesFromTo(physicalClassPathFrom, physicalClassPathTo);
+					DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(physicalClassPathFrom, physicalClassPathTo);
 					for (DependencyDTO tempDependency : foundDependencies)
 						dependencies.add(tempDependency);
 				}

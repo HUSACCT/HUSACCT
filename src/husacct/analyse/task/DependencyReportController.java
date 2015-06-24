@@ -3,27 +3,28 @@ package husacct.analyse.task;
 import husacct.analyse.abstraction.export.AbstractReportFileExporter;
 import husacct.analyse.abstraction.export.NoDataException;
 import husacct.analyse.abstraction.export.excel.ExcelExporter;
-import husacct.analyse.domain.IAnalyseDomainService;
+import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.DependencyDTO;
+
 import org.apache.log4j.Logger;
 
-public class DependencyExportController {
+public class DependencyReportController {
 
-    private Logger husacctLogger = Logger.getLogger(DependencyExportController.class);
-    private IAnalyseDomainService analysedDomain;
+    private Logger husacctLogger = Logger.getLogger(DependencyReportController.class);
+    private IModelQueryService queryService;
     private AbstractReportFileExporter fileExporter;
     private DependencyDTO[] exportData;
 
-    public DependencyExportController() {
+    public DependencyReportController() {
     }
     
-    public DependencyExportController(IAnalyseDomainService analyseDomainService){
-    	this.analysedDomain = analyseDomainService;
+    public DependencyReportController(IModelQueryService queryService){
+    	this.queryService = queryService;
     }
 
-    public void export(String path) {
-        exportData = analysedDomain.mapDependencies();
-        fileExporter = new ExcelExporter(exportData, analysedDomain);
+    public void createDependencyReport(String path) {
+        exportData = queryService.getAllDependencies();
+        fileExporter = new ExcelExporter(exportData, queryService);
         try {
             fileExporter.writeToFile(path);
         } catch (NoDataException noDataException) {

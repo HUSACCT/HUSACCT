@@ -6,7 +6,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.graphics.presentation.figures.AbstractClassFigure;
@@ -34,7 +34,7 @@ public class DrawingControllerTest {
 
 	@Test
 	public void drawSingleLevelModulesTest() {
-		AnalysedModuleDTO layerDTO = new AnalysedModuleDTO("test.layer", "analysedLayer", "layer", "public");
+		SoftwareUnitDTO layerDTO = new SoftwareUnitDTO("test.layer", "analysedLayer", "layer", "public");
 		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", "subsystem", new ModuleDTO[] {});
 		ModuleDTO componentDTO = new ModuleDTO("test.component", "component", new ModuleDTO[] {});
 		ModuleDTO externalLibraryDTO = new ModuleDTO("xLibrary.externalLibrary", "library", new ModuleDTO[] {});
@@ -62,7 +62,7 @@ public class DrawingControllerTest {
 		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", "interface", new ModuleDTO[] {});
 		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass","abstract", new ModuleDTO[] {});
 
-		AnalysedModuleDTO analysedClassDTO = new AnalysedModuleDTO("parent.analysedChild", "analysedChild", "class", "public");
+		SoftwareUnitDTO analysedClassDTO = new SoftwareUnitDTO("parent.analysedChild", "analysedChild", "class", "public");
 
 		ArrayList<AbstractDTO> childModules = new ArrayList<AbstractDTO>();
 		childModules.add(classDTO);
@@ -110,8 +110,8 @@ public class DrawingControllerTest {
 
 	@Test
 	public void drawDependenciesBetweenTest() {
-		AnalysedModuleDTO dtoFrom = new AnalysedModuleDTO("test.from", "from", "class", "public");
-		AnalysedModuleDTO dtoTo = new AnalysedModuleDTO("test.to", "to", "class", "public");
+		SoftwareUnitDTO dtoFrom = new SoftwareUnitDTO("test.from", "from", "class", "public");
+		SoftwareUnitDTO dtoTo = new SoftwareUnitDTO("test.to", "to", "class", "public");
 
 		analysedController.drawSingleLevelModules(new AbstractDTO[] { dtoFrom, dtoTo });
 

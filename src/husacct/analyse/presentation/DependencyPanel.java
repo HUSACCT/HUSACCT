@@ -1,7 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;
@@ -49,8 +49,8 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     private JPanel numberOfDependenciesPanel, filterPanel;
 	private JLabel totalDependenciesLabel, totalDependenciesNumber;
 	private AbstractTableModel tableModel;
-    private List<AnalysedModuleDTO> fromSelected = new ArrayList<AnalysedModuleDTO>();
-    private List<AnalysedModuleDTO> toSelected = new ArrayList<AnalysedModuleDTO>();
+    private List<SoftwareUnitDTO> fromSelected = new ArrayList<SoftwareUnitDTO>();
+    private List<SoftwareUnitDTO> toSelected = new ArrayList<SoftwareUnitDTO>();
     protected List<DependencyDTO> filteredList;
     private AnalyseUIController dataControl;
 
@@ -92,7 +92,7 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     }
 
     private void initialiseTrees() {
-        AnalysedModuleDTO rootModule = new AnalysedModuleDTO("", "", "", "");
+        SoftwareUnitDTO rootModule = new SoftwareUnitDTO("", "", "", "");
         DefaultMutableTreeNode rootTo = new DefaultMutableTreeNode(rootModule);
         DefaultMutableTreeNode rootFrom = new DefaultMutableTreeNode(rootModule);
 
@@ -104,8 +104,8 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         createTreeLayout(toModuleTree);
         toModuleTree.addTreeSelectionListener(this);
 
-        List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();
-        for (AnalysedModuleDTO module : rootModules) {
+        List<SoftwareUnitDTO> rootModules = dataControl.getRootModules();
+        for (SoftwareUnitDTO module : rootModules) {
             DefaultMutableTreeNode toNode = new DefaultMutableTreeNode(module);
             DefaultMutableTreeNode fromNode = new DefaultMutableTreeNode(module);
             rootTo.add(toNode);
@@ -134,10 +134,10 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
     }
 
     private void fillNode(DefaultMutableTreeNode node) {
-        AnalysedModuleDTO module = (AnalysedModuleDTO) node.getUserObject();
-        List<AnalysedModuleDTO> children = dataControl.getModulesInModules(module.uniqueName);
+        SoftwareUnitDTO module = (SoftwareUnitDTO) node.getUserObject();
+        List<SoftwareUnitDTO> children = dataControl.getModulesInModules(module.uniqueName);
         if (!children.isEmpty()) {
-            for (AnalysedModuleDTO child : children) {
+            for (SoftwareUnitDTO child : children) {
                 DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
                 fillNode(childNode);
                 node.add(childNode);
@@ -228,14 +228,14 @@ class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, A
         if (e.getSource() == fromModuleTree) {
             DefaultMutableTreeNode selected = (DefaultMutableTreeNode) fromModuleTree.getLastSelectedPathComponent();
             if (selected != null) {
-                AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
+                SoftwareUnitDTO selectedModule = (SoftwareUnitDTO) selected.getUserObject();
                 fromSelected.clear();
                 fromSelected.add(selectedModule);
             }
         } else if (e.getSource() == toModuleTree) {
             DefaultMutableTreeNode selected = (DefaultMutableTreeNode) toModuleTree.getLastSelectedPathComponent();
             if (selected != null) {
-                AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
+                SoftwareUnitDTO selectedModule = (SoftwareUnitDTO) selected.getUserObject();
                 toSelected.clear();
                 toSelected.add(selectedModule);
             }

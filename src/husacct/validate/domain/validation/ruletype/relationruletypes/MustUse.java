@@ -34,7 +34,7 @@ public class MustUse extends RuleType {
 				if(isUsingModule == true){
 					break;
 				}
-				DependencyDTO[] dependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 				if(dependencies != null && dependencies.length > 0){
 					for(DependencyDTO dependency : dependencies){
 						if(dependency != null){

@@ -1,7 +1,7 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -47,12 +47,12 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	private void addChildComponents(AnalyzedModuleComponent parentComponent,
-			AnalysedModuleDTO module) {
+			SoftwareUnitDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(
 				module.uniqueName, module.name, module.type, module.visibility);
-		AnalysedModuleDTO[] children = ServiceProvider.getInstance()
-				.getAnalyseService().getChildModulesInModule(module.uniqueName);
-		for (AnalysedModuleDTO subModule : children) {
+		SoftwareUnitDTO[] children = ServiceProvider.getInstance()
+				.getAnalyseService().getChildUnitsOfSoftwareUnit(module.uniqueName);
+		for (SoftwareUnitDTO subModule : children) {
 			addChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);
@@ -75,10 +75,10 @@ public class AppliedRuleController extends PopUpController {
 						softwareUnit.getName(), softwareUnit.getName(),
 						softwareUnit.getType().toString(), "public");
 
-				AnalysedModuleDTO[] children = ServiceProvider.getInstance()
+				SoftwareUnitDTO[] children = ServiceProvider.getInstance()
 						.getAnalyseService()
-						.getChildModulesInModule(softwareUnit.getName());
-				for (AnalysedModuleDTO subModule : children) {
+						.getChildUnitsOfSoftwareUnit(softwareUnit.getName());
+				for (SoftwareUnitDTO subModule : children) {
 					addChildComponents(analysedComponent, subModule);
 				}
 
@@ -349,9 +349,9 @@ public class AppliedRuleController extends PopUpController {
 			// Go recursive and look if the parent of the softwareunit is
 			// mapped.
 
-			AnalysedModuleDTO analysedModuleDTO = ServiceProvider.getInstance()
+			SoftwareUnitDTO analysedModuleDTO = ServiceProvider.getInstance()
 					.getAnalyseService()
-					.getParentModuleForModule(currentSoftwareUnit.getName());
+					.getParentUnitOfSoftwareUnit(currentSoftwareUnit.getName());
 			if (!analysedModuleDTO.name.equals("")) {
 				Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
 				SoftwareUnitDefinition parentSU = new SoftwareUnitDefinition(

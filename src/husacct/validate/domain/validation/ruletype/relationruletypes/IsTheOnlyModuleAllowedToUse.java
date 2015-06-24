@@ -47,7 +47,7 @@ public class IsTheOnlyModuleAllowedToUse extends RuleType {
 
 		for (Mapping classPathTo : toMappings) {
 			// Get all dependencies with matching dependency.classPathTo 
-			DependencyDTO[] dependenciesTo = analyseService.getDependenciesFromTo("", classPathTo.getPhysicalPath());
+			DependencyDTO[] dependenciesTo = analyseService.getDependenciesFromClassToClass("", classPathTo.getPhysicalPath());
 			for (DependencyDTO dependency : dependenciesTo) {
 				String fromToCombi = dependency.from + "|" + classPathTo.getPhysicalPath(); 
 				if(fromMap.containsKey(dependency.from) || allExceptionFromTos.contains(fromToCombi)){

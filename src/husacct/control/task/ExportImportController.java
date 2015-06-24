@@ -2,7 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.IControlService;
@@ -105,7 +105,7 @@ public class ExportImportController {
 	public void reportDependencies(File file){
 		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 		try {
-			analyseService.exportDependencies(file.getAbsolutePath());
+			analyseService.createDependencyReport(file.getAbsolutePath());
 		} catch (Exception exception){
 			IControlService controlService = ServiceProvider.getInstance().getControlService();
 			controlService.showErrorMessage(exception.getMessage());
@@ -151,9 +151,9 @@ public class ExportImportController {
 				ProjectDTO currentProject = applicationDTO.projects.get(i);
 				if (currentProject.paths.size() > 0) {
 					// Add analysed root modules to project
-					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
-					AnalysedModuleDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-					for (AnalysedModuleDTO analysedModule : analysedRootModules) {
+					currentProject.analysedModules = new ArrayList<SoftwareUnitDTO>();
+					SoftwareUnitDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getSoftwareUnitsInRoot();
+					for (SoftwareUnitDTO analysedModule : analysedRootModules) {
 						currentProject.analysedModules.add(analysedModule);
 					}
 					// Update project with analysedRootModules

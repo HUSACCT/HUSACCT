@@ -2,7 +2,7 @@ package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
@@ -22,50 +22,50 @@ public class AnalyseUIController {
         return husacctLocaleService.getTranslatedString(key);
     }
 
-    public List<AnalysedModuleDTO> getRootModules() {
-        List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
+    public List<SoftwareUnitDTO> getRootModules() {
+        List<SoftwareUnitDTO> rootModules = new ArrayList<SoftwareUnitDTO>();
 
-        for (AnalysedModuleDTO analysedModule : analyseService.getRootModules()) {
+        for (SoftwareUnitDTO analysedModule : analyseService.getSoftwareUnitsInRoot()) {
             rootModules.add(analysedModule);
         }
         return rootModules;
     }
 
-    public List<AnalysedModuleDTO> getModulesInModules(String currentModule) {
-        List<AnalysedModuleDTO> childModules = new ArrayList<AnalysedModuleDTO>();
-        for (AnalysedModuleDTO child : analyseService.getChildModulesInModule(currentModule)) {
+    public List<SoftwareUnitDTO> getModulesInModules(String currentModule) {
+        List<SoftwareUnitDTO> childModules = new ArrayList<SoftwareUnitDTO>();
+        for (SoftwareUnitDTO child : analyseService.getChildUnitsOfSoftwareUnit(currentModule)) {
             childModules.add(child);
         }
         return childModules;
     }
 
-    public List<AnalysedModuleDTO> listAllModules() {
-        List<AnalysedModuleDTO> allModules = new ArrayList<AnalysedModuleDTO>();
-        List<AnalysedModuleDTO> rootModules = getRootModules();
+    public List<SoftwareUnitDTO> listAllModules() {
+        List<SoftwareUnitDTO> allModules = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> rootModules = getRootModules();
         allModules.addAll(rootModules);
-        for (AnalysedModuleDTO rootModule : rootModules) {
+        for (SoftwareUnitDTO rootModule : rootModules) {
             allModules.addAll(listAllModulesInModule(rootModule.uniqueName));
         }
         return allModules;
     }
 
-    public List<AnalysedModuleDTO> listAllModulesInModule(String uniqueModuleName) {
-        List<AnalysedModuleDTO> allModulesInModule = new ArrayList<AnalysedModuleDTO>();
+    public List<SoftwareUnitDTO> listAllModulesInModule(String uniqueModuleName) {
+        List<SoftwareUnitDTO> allModulesInModule = new ArrayList<SoftwareUnitDTO>();
         if (uniqueModuleName != null && !uniqueModuleName.equals("")) {
-            List<AnalysedModuleDTO> innerModules = getModulesInModules(uniqueModuleName);
+            List<SoftwareUnitDTO> innerModules = getModulesInModules(uniqueModuleName);
             allModulesInModule.addAll(innerModules);
-            for (AnalysedModuleDTO module : innerModules) {
+            for (SoftwareUnitDTO module : innerModules) {
                 allModulesInModule.addAll(listAllModulesInModule(module.uniqueName));
             }
         }
         return allModulesInModule;
     }
     
-    public List<DependencyDTO> listDependencies(List<AnalysedModuleDTO> from, List<AnalysedModuleDTO> to) {
+    public List<DependencyDTO> listDependencies(List<SoftwareUnitDTO> from, List<SoftwareUnitDTO> to) {
         List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
-        for (AnalysedModuleDTO fromModule : from) {
-            for (AnalysedModuleDTO toModule : to) {
-                for (DependencyDTO dependency : analyseService.getDependencies(fromModule.uniqueName, toModule.uniqueName)) {
+        for (SoftwareUnitDTO fromModule : from) {
+            for (SoftwareUnitDTO toModule : to) {
+                for (DependencyDTO dependency : analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule.uniqueName, toModule.uniqueName)) {
                     if (!dependencies.contains(dependency)) {
                         dependencies.add(dependency);
                     }
@@ -76,7 +76,7 @@ public class AnalyseUIController {
     }
 
     public void exportDependencies(String path) {
-        analyseService.exportDependencies(path);
+        analyseService.createDependencyReport(path);
     }
     
     public IControlService getControlService(){

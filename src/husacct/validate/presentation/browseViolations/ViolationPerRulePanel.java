@@ -2,7 +2,7 @@ package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.AnalyseUIController;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;

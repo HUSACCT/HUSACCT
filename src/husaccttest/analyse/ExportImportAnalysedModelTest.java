@@ -233,7 +233,7 @@ public class ExportImportAnalysedModelTest {
 		boolean dependencyTypesDetected = false;
 		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromTo(moduleFrom, moduleTo);
+		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(moduleFrom, moduleTo);
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;

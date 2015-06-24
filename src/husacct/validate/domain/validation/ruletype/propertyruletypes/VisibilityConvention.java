@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
@@ -27,7 +27,7 @@ public class VisibilityConvention extends RuleType {
 
 		int violationCounter = 0;
 		for (Mapping physicalClasspathFrom : fromMappings) {
-			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
+			SoftwareUnitDTO analysedModule = analyseService.getSoftwareUnitByUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!analysedModule.type.toLowerCase().equals("package")) {
 				for (String violationKey : currentRule.violationTypeKeys) {
 					if (!analysedModule.visibility.toLowerCase().equals(violationKey.toLowerCase())) {

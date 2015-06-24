@@ -45,14 +45,12 @@ class FamixDependencyFinder extends FamixFinder {
 		return dependencyCache;
 	}
 	
-	public List<DependencyDTO> getDependencies(String from, String to, String[] dependencyFilter){
+	// Deprecated
+    public List<DependencyDTO> getDependencies(String from, String to, String[] dependencyFilter){
 		return findDependencies(FinderFunction.BOTH, from, to, dependencyFilter);
 	}
 	
-	public List<DependencyDTO> getDependenciesFrom(String from){
-		return getDependenciesFrom(from, null);
-	}
-	
+	// Deprecated
 	public List<DependencyDTO> getDependenciesFrom(String from, String[] dependencyFilter){
 		return findDependencies(FinderFunction.FROM, from, "", dependencyFilter);
 	}
@@ -111,10 +109,7 @@ class FamixDependencyFinder extends FamixFinder {
        	return foundDependencies;	
     }
 	
-	public List<DependencyDTO> getDependenciesTo(String to){
-		return getDependenciesTo(to, null);
-	}
-	
+	// Deprecated
 	public List<DependencyDTO> getDependenciesTo(String to, String[] dependencyFilter){
 		return findDependencies(FinderFunction.TO, "", to, dependencyFilter);
 	}
@@ -134,8 +129,6 @@ class FamixDependencyFinder extends FamixFinder {
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter){
 		List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
 	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
-		String fromClassPath;
-		String toClassPath;
 		numberOfDuplicateAssociations = 0;
 		try {
 			for(FamixAssociation association : theModel.associations){
@@ -269,10 +262,9 @@ class FamixDependencyFinder extends FamixFinder {
 	public void initializeDependencyHashMap(){
 		this.dependenciesMapFromTo = new HashMap<String, HashMap<String, ArrayList<DependencyDTO>>>();
 		this.dependenciesMapTo = new HashMap<String, ArrayList<DependencyDTO>>();
-		DependencyDTO[] dependencies = ServiceProvider.getInstance().getAnalyseService().getAllDependencies();
 		HashMap<String, ArrayList<DependencyDTO>> toMap;
 		try{
-	        for(DependencyDTO dependency : dependencies) {
+	        for(DependencyDTO dependency : getAllDependencies()) {
             	String uniqueNameFrom = dependency.from;
             	String uniqueNameTo = dependency.to;
             	// Fill dependenciesMapFromTo

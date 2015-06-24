@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleTypeDTO;
@@ -41,7 +41,7 @@ public class ValidateTest {
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
 			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "Java", "1.0", 
-					"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
+					"DESCRIPTION PROJECT " + counter, new ArrayList<SoftwareUnitDTO>()));
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 		validate = ServiceProvider.getInstance().getValidateService();
@@ -219,7 +219,7 @@ public class ValidateTest {
 	@Test
 	public void getViolationTypesNoLanguage() {
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		projects.add(new ProjectDTO("project", new ArrayList<String>(), "", "", "", new ArrayList<AnalysedModuleDTO>()));
+		projects.add(new ProjectDTO("project", new ArrayList<String>(), "", "", "", new ArrayList<SoftwareUnitDTO>()));
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 
 		CategoryDTO[] dtos = validate.getCategories();

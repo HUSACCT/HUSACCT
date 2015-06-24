@@ -48,7 +48,7 @@ public class IsOnlyAllowedToUse extends RuleType {
 
 		for (Mapping classPathFrom : fromMappings) {
 			// Get all dependencies with dependency.classPathFrom = classPathFrom 
-			DependencyDTO[] allDependenciesFrom = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), "");
+			DependencyDTO[] allDependenciesFrom = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), "");
 			for (DependencyDTO dependency : allDependenciesFrom) {
 				String fromToCombi = classPathFrom.getPhysicalPath() + "|" + dependency.to; 
 				if(allowedMap.containsKey(dependency.to) || allExceptionFromTos.contains(fromToCombi)){

@@ -10,7 +10,7 @@ import javax.naming.directory.InvalidAttributesException;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelCreationService;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 
 public class FamixCreationServiceImpl implements IModelCreationService {
 
@@ -360,8 +360,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 		// These rootPackagesWithClasses identify the paths to the systems internal classes. 
 		ArrayList<String> rootPackagesWithClassList = new ArrayList<String>();
 		FamixModuleFinder fmf = new FamixModuleFinder(model);
-		List<AnalysedModuleDTO> rootModules = fmf.getRootModules();
-		for (AnalysedModuleDTO rootModule : rootModules) {
+		List<SoftwareUnitDTO> rootModules = fmf.getRootModules();
+		for (SoftwareUnitDTO rootModule : rootModules) {
 			rootPackagesWithClassList.addAll(fmf.getRootPackagesWithClass(rootModule.uniqueName));
 		}
 		

@@ -1,10 +1,12 @@
 package husacct.analyse;
 
 import java.util.List;
+
 import javax.swing.JInternalFrame;
+
 import org.jdom2.Element;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
@@ -22,49 +24,35 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public JInternalFrame getJInternalFrame();
 
-    //The following function has been inserted due to performance issues. The function enables
-    //function-users to use cache-mechanisms and special search-algorithms
-    public DependencyDTO[] getAllDependencies();
-    
-    // Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName  
+    /** Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName */  
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
-    // Returns unique names of all subpackages of the SoftwareUnit with uniqueName  
+    /** Returns unique names of all subpackages of the SoftwareUnit with uniqueName */  
     public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName);
     
-    public DependencyDTO[] getAllUnfilteredDependencies();
+	/** Returns an array of dependencies between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
+     * Relatively fast function, based on HashMap. At least one of the argument must match with an analysedModule.
+     */  
+    public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
 
-	// Returns an array of dependencies between the fromModule and toModule.
-    // Fast function, based on HashMap get-search. At least one of the argument must match with an analysedModule, which may be a composite one. 
-    public DependencyDTO[] getDependencies(String from, String to);
-
-    public DependencyDTO[] getDependenciesFrom(String from);
-
-	// Returns an array of dependencies between the fromClass and toClass.
-    // Fast function, based on HashMap get-search. Both class paths should match exactly to a uniqueName of a type! 
-    public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo);
+	/** Returns all dependencies for the exact match from classPathFrom and classPathTo. Fast function, based on HashMap.
+	* Either classPathTFrom or classPathTo should refer to a class or library class and have a value other than "", otherwise an empty array is returned.
+	* If classPathTFrom = "", then all dependencies to classPathTo are returned, which refer to existing classPathFrom's.
+	* If classPathTo = "", then all dependencies from classPathFrom are returned, which refer to existing classPathTo's.
+	*/ 
+    public DependencyDTO[] getDependenciesFromClassToClass(String classPathFrom, String classPathTo);
 	
-    public DependencyDTO[] getDependenciesTo(String to);
-
-    public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
-
-    public DependencyDTO[] getDependenciesFrom(String to, String[] dependencyFilter);
-
-    public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
-
-    public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
+    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename);
     
     public String getSourceFilePathOfClass(String uniquename);
 
-    public AnalysedModuleDTO[] getRootModules();
+    public SoftwareUnitDTO[] getSoftwareUnitsInRoot();
     
-    public AnalysedModuleDTO[] getChildModulesInModule(String from);
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from);
 
-    public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
+    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String child);
 
-    public AnalysedModuleDTO getParentModuleForModule(String child);
-
-    public void exportDependencies(String fullPath);
+    public void createDependencyReport(String fullPath);
     
     public void reconstructArchitecture();
     
@@ -74,6 +62,7 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
     
-    public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule);
+    /** If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. */
+    public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
     
 }

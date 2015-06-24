@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -29,11 +29,11 @@ public class InheritanceConvention extends RuleType {
 
 		for (Mapping classPathFrom : fromMappings) {
 			for (Mapping classPathTo : toMappings) {
-				AnalysedModuleDTO from = analyseService.getModuleForUniqueName(classPathFrom.getPhysicalPath());
-				AnalysedModuleDTO to = analyseService.getModuleForUniqueName(classPathTo.getPhysicalPath());
+				SoftwareUnitDTO from = analyseService.getSoftwareUnitByUniqueName(classPathFrom.getPhysicalPath());
+				SoftwareUnitDTO to = analyseService.getSoftwareUnitByUniqueName(classPathTo.getPhysicalPath());
 				if((!from.type.equals("package")) && (!to.type.equals("package"))){
 					boolean classInherits = false;
-					DependencyDTO[] dependencies = analyseService.getDependenciesFromTo(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+					DependencyDTO[] dependencies = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 					if(dependencies != null && dependencies.length > 0){
 						for(DependencyDTO dependency : dependencies){
 							if((dependency != null) && (dependency.type.equals("Inheritance"))){

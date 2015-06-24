@@ -1,20 +1,14 @@
 package husacct.analyse;
 
-import java.util.Date;
 import java.util.List;
 
-import husacct.ServiceProvider;
-import husacct.analyse.domain.AnalyseDomainServiceImpl;
-import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
-import husacct.analyse.task.AnalyseControlServiceImpl;
-import husacct.analyse.task.HistoryLogger;
-import husacct.analyse.task.IAnalyseControlService;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.analyse.task.AnalyseTaskControl;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
@@ -24,49 +18,37 @@ import husacct.common.services.ObservableService;
 
 import javax.swing.JInternalFrame;
 
-import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable {
 
     private IModelQueryService queryService;
-    private IAnalyseDomainService domainService;
     private IModelPersistencyService persistencyService;
-    //private IModelCreationService creationService;
-	private IAnalyseControlService analyseApplicationService;
+	private AnalyseTaskControl analyseTaskControl;
     private AnalyseInternalFrame analyseInternalFrame;
-    private HistoryLogger historyLogger;
-    private final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
-    private boolean isAnalysed;
 
     public AnalyseServiceImpl() {
         this.queryService = new FamixQueryServiceImpl(); //Must be created as first, since it clears the model (needed in case of reloading workspaces). 
-    	this.domainService = new AnalyseDomainServiceImpl(queryService);
         this.persistencyService = new FamixPersistencyServiceImpl(queryService);
-        //this.creationService = new FamixCreationServiceImpl(); //to be used for analyseApplication()
-        this.analyseApplicationService = new AnalyseControlServiceImpl(domainService);
-        this.historyLogger = new HistoryLogger();
+        this.analyseTaskControl = new AnalyseTaskControl(persistencyService, queryService);
         this.analyseInternalFrame = null;
-        this.isAnalysed = false;
     }
 
     @Override
     public String[] getAvailableLanguages() {
-        return analyseApplicationService.getAvailableLanguages();
+        return analyseTaskControl.getAvailableLanguages();
     }
 
 	@Override
     public void analyseApplication(ProjectDTO project) {
-        this.analyseApplicationService.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
+        this.analyseTaskControl.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
         this.analyseInternalFrame = new AnalyseInternalFrame();
-        this.isAnalysed = true;
         super.notifyServiceListeners();
-        this.logger.info(new Date().toString() + " Finished: Analyse Application; ServiceListeners notified; State isAnalysed = true");
     }
 
     @Override
     public boolean isAnalysed() {
-        return this.isAnalysed;
+        return analyseTaskControl.isAnalysed();
     }
 
     @Override
@@ -78,116 +60,70 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
 
     @Override
-    public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
-        return analyseApplicationService.getModuleForUniqueName(uniquename);
+    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename) {
+        return queryService.getSoftwareUnitByUniqueName(uniquename);
     }
 
     @Override
     public String getSourceFilePathOfClass(String uniquename) {
-    	return analyseApplicationService.getSourceFilePathOfClass(uniquename);
+    	return queryService.getSourceFilePathOfClass(uniquename);
     }
 
     @Override
-    public AnalysedModuleDTO[] getRootModules() {
-        return analyseApplicationService.getRootModules();
+    public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
+        return queryService.getSoftwareUnitsInRoot();
     }
     
     @Override
-    public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-        return analyseApplicationService.getChildModulesInModule(from);
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from) {
+        return queryService.getChildUnitsOfSoftwareUnit(from);
     }
 
     @Override
-    public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-        return analyseApplicationService.getChildModulesInModule(from, depth);
+    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String child) {
+        return queryService.getParentUnitOfSoftwareUnit(child);
     }
 
-    @Override
-    public AnalysedModuleDTO getParentModuleForModule(String child) {
-        return analyseApplicationService.getParentModuleForModule(child);
-    }
-
-    @Override
-    public DependencyDTO[] getAllDependencies() {
-        return analyseApplicationService.getAllDependencies();
-    }
-    
     @Override
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
-    	return analyseApplicationService.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
+    	return queryService.getAllPhysicalClassPathsOfSoftwareUnit(uniqueName);
     }
 
     @Override
     public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
-    	return analyseApplicationService.getAllPhysicalPackagePathsOfSoftwareUnit(uniqueName);
+    	return queryService.getAllPhysicalPackagePathsOfSoftwareUnit(uniqueName);
     }
 
     @Override
-	public DependencyDTO[] getAllUnfilteredDependencies() {
-		return analyseApplicationService.getAllDependencies();
-	}
-
-    @Override
-    public DependencyDTO[] getDependencies(String from, String to) {
-        return analyseApplicationService.getDependencies(from, to);
+    public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
+        return queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }
 
     @Override
-    public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
-        return analyseApplicationService.getDependencies(from, to, dependencyFilter);
-    }
-
-    @Override
-    public DependencyDTO[] getDependenciesFrom(String from) {
-        return analyseApplicationService.getDependenciesFrom(from);
-    }
-
-    @Override
-    public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
-        return analyseApplicationService.getDependenciesFrom(from, dependencyFilter);
-    }
-
-    @Override
-	public DependencyDTO[] getDependenciesFromTo(String classPathFrom, String classPathTo){
-		return analyseApplicationService.getDependenciesFromTo(classPathFrom, classPathTo);
+	public DependencyDTO[] getDependenciesFromClassToClass(String classPathFrom, String classPathTo){
+		return queryService.getDependenciesFromClassToClass(classPathFrom, classPathTo);
 	}
 	
     @Override
-    public DependencyDTO[] getDependenciesTo(String to) {
-        return analyseApplicationService.getDependenciesTo(to);
-    }
-
-    @Override
-    public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
-        return analyseApplicationService.getDependenciesTo(to, dependencyFilter);
-    }
-
-    @Override
-    public void exportDependencies(String fullPath) {
-        analyseApplicationService.exportDependencies(fullPath);
+    public void createDependencyReport(String fullPath) {
+        analyseTaskControl.createDependencyReport(fullPath);
     }
     
     @Override
     public Element exportAnalysisModel() {
-        this.logger.info(new Date().toString() + " Starting: Export Analysis Model");
-        Element exportElement = persistencyService.exportAnalysisModel();
-        this.logger.info(new Date().toString() + " Finished: Export Analysis Model");
-    	return exportElement;
+    	return analyseTaskControl.exportAnalysisModel();
     }
 
     @Override
     public void importAnalysisModel(Element analyseElement) {
-        this.logger.info(new Date().toString() + " Starting: Import Analysis Model");
-    	persistencyService.importAnalysisModel(analyseElement);
+    	analyseTaskControl.importAnalysisModel(analyseElement);
         this.analyseInternalFrame = new AnalyseInternalFrame();
-        this.isAnalysed = true;
         super.notifyServiceListeners();
-        this.logger.info(new Date().toString() + " Finished: Import Analysis Model; State isAnalysed = true");
     }
 
 	@Override
     public void reconstructArchitecture() {
-    	// Waiting for implementation
+    	analyseTaskControl.reconstructArchitecture();
     }
     
     // Used for the generic mechanism to save workspace data of all components; e.g. configuration settings  
@@ -204,12 +140,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
 	@Override
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
-		historyLogger.logHistory(applicationDTO, workspaceName);
+		analyseTaskControl.logHistory(applicationDTO, workspaceName);
 	}
 	
 	@Override
-	public AnalysisStatisticsDTO getAnalysisStatistics(AnalysedModuleDTO selectedModule) {
-		return analyseApplicationService.getAnalysisStatistics(selectedModule);
+	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
+		return queryService.getAnalysisStatistics(selectedModule);
 	}
 
 }

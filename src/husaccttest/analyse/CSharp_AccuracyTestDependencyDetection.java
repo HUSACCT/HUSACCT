@@ -2,7 +2,7 @@ package husaccttest.analyse;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
@@ -970,7 +970,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(path);
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
 		ProjectDTO project = new ProjectDTO("C# Accuracy Test", paths, language, "version0", "for testing purposes", analysedModules);
 		projects.add(project);
 		return projects;
@@ -1020,7 +1020,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		boolean dependencyTypesDetected = false;
 		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromTo(moduleFrom, moduleTo);
+		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(moduleFrom, moduleTo);
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;

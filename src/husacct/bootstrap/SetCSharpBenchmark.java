@@ -1,6 +1,6 @@
 package husacct.bootstrap;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ProjectDTO;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class SetCSharpBenchmark extends AbstractBootstrap{
 			paths.add(PATH);
 		}
 		
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
 		ProjectDTO project = new ProjectDTO("CSharp", paths, "C#", "1.0", "Benchmark Project", analysedModules);
 		projects.add(project);
 		getDefineService().createApplication("CSharp", projects, "1.0");

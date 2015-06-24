@@ -1,7 +1,7 @@
 package husacct.graphics.util;
 
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
@@ -95,8 +95,8 @@ public class FigureMap {
 		if (dto instanceof ModuleDTO) {
 			ModuleDTO md = (ModuleDTO) dto;
 			moduleFiguresByName.put(md.logicalPath, figure);
-		} else if (dto instanceof AnalysedModuleDTO) {
-			AnalysedModuleDTO md = (AnalysedModuleDTO) dto;
+		} else if (dto instanceof SoftwareUnitDTO) {
+			SoftwareUnitDTO md = (SoftwareUnitDTO) dto;
 			moduleFiguresByName.put(md.uniqueName, figure);
 		} else if (dto instanceof ProjectDTO) {
 			ProjectDTO pd = (ProjectDTO) dto;

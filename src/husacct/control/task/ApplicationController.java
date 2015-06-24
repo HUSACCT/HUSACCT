@@ -1,7 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
@@ -45,7 +45,7 @@ public class ApplicationController {
 	
 	public ApplicationDTO createApplicationData(String name, String language, String version, ArrayList<String> paths){
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
 		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
 		projects.add(project);
 		

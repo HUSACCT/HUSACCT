@@ -1,7 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.common.Resource;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
@@ -34,7 +34,7 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
             boolean leaf, int row, boolean hasFocus) {
         try {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-            AnalysedModuleDTO moduleSelected = (AnalysedModuleDTO) node.getUserObject();
+            SoftwareUnitDTO moduleSelected = (SoftwareUnitDTO) node.getUserObject();
             ImageIcon icon;
             if(moduleSelected.uniqueName.equals("")){
             	icon = new ImageIcon(Resource.get(Resource.ICON_SOURCE));

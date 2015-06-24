@@ -1,7 +1,7 @@
 package husacct.graphics.presentation.figures;
 
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
@@ -59,9 +59,9 @@ public final class FigureFactory {
 		if (dto instanceof ModuleDTO) {
 			type = ((ModuleDTO) dto).type;
 			name = ((ModuleDTO) dto).logicalPath;
-		} else if (dto instanceof AnalysedModuleDTO) {
-			type = ((AnalysedModuleDTO) dto).type;
-			name = ((AnalysedModuleDTO) dto).name;
+		} else if (dto instanceof SoftwareUnitDTO) {
+			type = ((SoftwareUnitDTO) dto).type;
+			name = ((SoftwareUnitDTO) dto).name;
 		} else if (dto instanceof ProjectDTO) {
 			type = PROJECT_TYPE;
 			name = ((ProjectDTO) dto).name;

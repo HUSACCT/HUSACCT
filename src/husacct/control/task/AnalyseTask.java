@@ -1,7 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
@@ -41,9 +41,9 @@ public class AnalyseTask implements Runnable {
 						ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
 						
 						// Add analysed root modules to project
-						currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
-						AnalysedModuleDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-						for (AnalysedModuleDTO analysedModule : analysedRootModules) {
+						currentProject.analysedModules = new ArrayList<SoftwareUnitDTO>();
+						SoftwareUnitDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getSoftwareUnitsInRoot();
+						for (SoftwareUnitDTO analysedModule : analysedRootModules) {
 							currentProject.analysedModules.add(analysedModule);
 						}
 	

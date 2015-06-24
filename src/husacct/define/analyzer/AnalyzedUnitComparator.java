@@ -1,7 +1,7 @@
 package husacct.define.analyzer;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.task.States;
@@ -134,8 +134,8 @@ public class AnalyzedUnitComparator {
 		ApplicationDTO application = ServiceProvider.getInstance().getControlService().getApplicationDTO();
 		for (ProjectDTO project : application.projects) {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(project.name, project.name, "root", "public");
-			AnalysedModuleDTO[] moduleList = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-			for (AnalysedModuleDTO module : moduleList) {
+			SoftwareUnitDTO[] moduleList = ServiceProvider.getInstance().getAnalyseService().getSoftwareUnitsInRoot();
+			for (SoftwareUnitDTO module : moduleList) {
             	this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
@@ -144,9 +144,9 @@ public class AnalyzedUnitComparator {
 		return rootComponent;
 	}
 
-	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
+	private void addChildComponents(AnalyzedModuleComponent parentComponent, SoftwareUnitDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
-		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		SoftwareUnitDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildUnitsOfSoftwareUnit(module.uniqueName);
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
 		for (int i = 0 ; i < children.length; i++) {

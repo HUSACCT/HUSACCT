@@ -1,6 +1,6 @@
 package husacct.bootstrap;
 
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ProjectDTO;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class SetJavaBenchmark extends AbstractBootstrap{
 			paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "java" + File.separator + "benchmark");
 		}
 
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
 		ProjectDTO project = new ProjectDTO("Java Benchmark", paths, "Java", "1.0", "Benchmark Project", analysedModules);
 		projects.add(project);
 		getDefineService().createApplication("Java Benchmark", projects, "1.0");

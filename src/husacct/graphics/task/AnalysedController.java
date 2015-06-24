@@ -3,7 +3,7 @@ package husacct.graphics.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
@@ -41,17 +41,17 @@ public class AnalysedController extends DrawingController {
 
 		if (areExternalLibrariesShown) {
 			// Support of External libraries is improved in version 2.4 and does not require separate method calls.  
-			modules = analyseService.getRootModules();
+			modules = analyseService.getSoftwareUnitsInRoot();
 		} else {
-			AnalysedModuleDTO[] analysedModules = analyseService.getRootModules();
+			SoftwareUnitDTO[] analysedModules = analyseService.getSoftwareUnitsInRoot();
 			int nrOfInternalModules = 0;
-			for (AnalysedModuleDTO analysedModule : analysedModules){
+			for (SoftwareUnitDTO analysedModule : analysedModules){
 				if (!analysedModule.name.toLowerCase().equals("xlibraries"))
 					nrOfInternalModules++;
 			}
-			AbstractDTO[] internalModules = new AnalysedModuleDTO[nrOfInternalModules];
+			AbstractDTO[] internalModules = new SoftwareUnitDTO[nrOfInternalModules];
 			int i = 0;
-			for (AnalysedModuleDTO analysedModule : analysedModules){
+			for (SoftwareUnitDTO analysedModule : analysedModules){
 				if (!analysedModule.name.toLowerCase().equals("xlibraries")) {
 					internalModules[i] = analysedModule;
 					i++;	
@@ -106,8 +106,8 @@ public class AnalysedController extends DrawingController {
 				for (BaseFigure figure : analysedContextFigures)
 					if (!figure.isLine() && !figure.isParent()) {
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
-						if(dto instanceof AnalysedModuleDTO){
-							AnalysedModuleDTO moduleDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
+						if(dto instanceof SoftwareUnitDTO){
+							SoftwareUnitDTO moduleDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
 							for (String parentName : parentNames) {
 								//NOTE: A check to see if the current figure is part of the parents children.
 								String[] partParentName = parentName.split("\\.");
@@ -147,7 +147,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
-		AbstractDTO[] children = analyseService.getChildModulesInModule(parentName);
+		AbstractDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);
 
 		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
 
@@ -164,10 +164,10 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
+		SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
 		if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null && dtoTo != null){ 
-			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
+			return analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};
 	}
@@ -177,10 +177,10 @@ public class AnalysedController extends DrawingController {
 		//TODO This will always return a stacktrace of a nullpointerexception if there isn't a dependency, 
 		//This needs to be cleaner but we couldn't find a method in time.
 		try{
-			AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
-			AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+			SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
+			SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
 			if (dtoFrom != null && dtoTo != null && !dtoFrom.uniqueName.equals(dtoTo.uniqueName)){ 
-				if((analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0) || (analyseService.getDependencies(dtoTo.uniqueName, dtoFrom.uniqueName).length > 0)){
+				if((analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0) || (analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(dtoTo.uniqueName, dtoFrom.uniqueName).length > 0)){
 					b = true;
 				}
 			}
@@ -193,8 +193,8 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
+		SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
+		SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 
@@ -282,7 +282,7 @@ public class AnalysedController extends DrawingController {
 			saveSingleLevelFigurePositions();
 			resetContextFigures();
 			String firstCurrentPaths = getCurrentPaths()[0];
-			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(firstCurrentPaths);
+			SoftwareUnitDTO parentDTO = analyseService.getParentUnitOfSoftwareUnit(firstCurrentPaths);
 			if (parentDTO != null) this
 			.getAndDrawModulesIn(parentDTO.uniqueName);
 			else
@@ -327,7 +327,7 @@ public class AnalysedController extends DrawingController {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures){
 			if (figure.isModule() && !(figure.isContext()) &&(!(figure instanceof ProjectFigure))) try {				
-				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
+				SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
 				parentNames.add(parentDTO.uniqueName);
 			} catch (Exception e) {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
