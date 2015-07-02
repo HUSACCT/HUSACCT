@@ -1,5 +1,6 @@
 package husacct.graphics.task;
 
+
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
@@ -67,6 +68,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	protected ThreadMonitor						threadMonitor;
 	private final FigureMap						figureMap		= new FigureMap();
+	protected ArrayList<BaseFigure>				contextFigures; // List with all the figures with isContext = true, not being a line.
+	protected HashMap<String, String> 			parentFigureNameAndTypeMap; // Map with key = name of the parent figure and value = type. 
+
 	
 	public DrawingController() {
 		super();
@@ -83,6 +87,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			}
 		});
 		
+		parentFigureNameAndTypeMap = new HashMap<String,String>();
 		initializeComponents();
 		switchLayoutStrategy();
 		loadDefaultSettings();
@@ -154,6 +159,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 			ParentFigure parentFigure = null;
 			if (!parentName.isEmpty()) {
 				parentFigure = figureFactory.createParentFigure(parentName);
+				if (parentFigureNameAndTypeMap.containsKey(parentName)) {
+					String parentType = parentFigureNameAndTypeMap.get(parentName);
+					if ((parentType != null) && !parentType.equals("")) {
+						parentFigure.setType(parentType);
+					}
+				}
 				drawing.add(parentFigure);
 			}
 			for (AbstractDTO dto : modules.get(parentName))
@@ -354,13 +365,15 @@ public abstract class DrawingController extends DrawingSettingsController {
 		
 		if (selection.size() > 0) {
 			ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-			java.util.Collections.addAll(figures, selection.toArray(new BaseFigure[selection.size()]));
-			
-			for (BaseFigure f : figures)
-				if(f instanceof ParentFigure)
-					figures.remove(f);
-				else
+			for (Figure s : selection) {
+				if(s instanceof ParentFigure) {
+					// Don't add figures.remove(f);
+				} else {
+					BaseFigure f = (BaseFigure) s;
 					f.setContext(false); // minimizing potential side effects
+					figures.add(f);
+				}
+			}
 			
 			if(super.isZoomWithContextOn()){
 				drawingView.clearSelection();
@@ -376,9 +389,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 				
 				for(BaseFigure selected : figures){
 					for (BaseFigure module : contextModules){
-						if (!module.equals(selected))
-							if(hasDependencyBetween(selected, module))
+						if (!module.equals(selected)) {
+							if(hasDependencyBetween(selected, module)) {
 								module.setContext(true);
+							}
+						}							
 					}
 				}
 				

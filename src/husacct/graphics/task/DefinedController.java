@@ -1,5 +1,6 @@
 package husacct.graphics.task;
 
+
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
@@ -9,6 +10,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
@@ -88,7 +90,7 @@ public class DefinedController extends DrawingController {
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
-					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+					logger.info("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
 			}
 			setCurrentPaths(parentNames);
@@ -161,17 +163,25 @@ public class DefinedController extends DrawingController {
 		super.notifyServiceListeners();
 		definedFigures = new HashMap<String, BaseFigure>();
 		ArrayList<String> parentNames = new ArrayList<String>();
-		for (BaseFigure figure : figures)
-			if (figure.isModule()) try {
-				ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(figure);
-				parentNames.add(parentDTO.logicalPath);
-				definedFigures.put(parentDTO.logicalPath, figure);
+		for (BaseFigure figure : figures) {
+			try {
+				if (figure.isModule()) {
+					ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(figure);
+					parentNames.add(parentDTO.logicalPath);
+					definedFigures.put(parentDTO.logicalPath, figure);
+					parentFigureNameAndTypeMap.put(parentDTO.logicalPath, parentDTO.type);
+				} 
+				else if (figure.isContext() || !figure.isLine()) {
+					//definedFigures.put(parentDTO.logicalPath, figure);
+					boolean breakpoint = true;
+				} else {
+					logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
+				}
 			} catch (Exception e) {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				//e.printStackTrace();
 			}
-			else
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
+		}
 		
 		if (parentNames.size() > 0) {
 			saveSingleLevelFigurePositions();

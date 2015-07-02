@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.figures;
 
+
 import husacct.common.Resource;
 
 import java.awt.geom.Point2D;
@@ -20,10 +21,10 @@ import org.jhotdraw.draw.TextFigure;
 public class ModuleFigure extends BaseFigure {
 	private static final long	serialVersionUID	= -2743753116624138171L;
 	private RectangleFigure		body;
-	private TextFigure			moduleStereotype;
 	private TextFigure			moduleName;
+	private TextFigure			moduleStereotype;
 	private BufferedImage 		moduleIcon;
-	private ImageFigure 		moduleIconFig;
+	private ImageFigure 		moduleIconFigure;
 	private String type;					
 
 	public int					MIN_WIDTH			= 100;
@@ -47,9 +48,9 @@ public class ModuleFigure extends BaseFigure {
 		moduleName.set(AttributeKeys.FONT_BOLD, true);
 		children.add(moduleName);
 		
-		moduleIconFig = new ImageFigure();
-		moduleIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
-		moduleIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		moduleIconFigure = new ImageFigure();
+		moduleIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		moduleIconFigure.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		try {
 			URL componentImageURL = null;
 			if (type.toLowerCase().equals("layer")) {
@@ -70,11 +71,11 @@ public class ModuleFigure extends BaseFigure {
 			}
 			if(componentImageURL != null){
 				moduleIcon = ImageIO.read(componentImageURL);
-				moduleIconFig.setImage(null, moduleIcon);
-				children.add(moduleIconFig);
+				moduleIconFigure.setImage(null, moduleIcon);
+				children.add(moduleIconFigure);
 			}
 		} catch (Exception e) {
-			moduleIconFig = null;
+			moduleIconFigure = null;
 			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
 		}
 	}
@@ -90,14 +91,14 @@ public class ModuleFigure extends BaseFigure {
 		other.body = body.clone();
 		other.moduleName = moduleName.clone();
 		other.moduleStereotype = moduleStereotype.clone();
-		other.moduleIconFig = moduleIconFig.clone();
+		other.moduleIconFigure = moduleIconFigure.clone();
 		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.body);
 		other.children.add(other.moduleName);
 		other.children.add(other.moduleStereotype);
-		if (moduleIconFig != null)
-			other.children.add(other.moduleIconFig);
+		if (moduleIconFigure != null)
+			other.children.add(other.moduleIconFigure);
 		
 		return other;
 	}
@@ -137,12 +138,12 @@ public class ModuleFigure extends BaseFigure {
 		moduleNametextAnchor.y += plusY + moduleStereotype.getBounds().height;
 		moduleName.setBounds(moduleNametextAnchor, null);
 
-		if (moduleIconFig != null) {
+		if (moduleIconFigure != null) {
 			double iconAnchorX = lead.x - 3 - moduleIcon.getWidth();
 			double iconAnchorY = anchor.y + 4;
 			double iconLeadX = iconAnchorX + moduleIcon.getWidth();
 			double iconLeadY = iconAnchorY + moduleIcon.getHeight();
-			moduleIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+			moduleIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
 		}
 		
 		invalidate();
@@ -153,7 +154,6 @@ public class ModuleFigure extends BaseFigure {
         String representation = "";
         representation += "\nName: " + super.name;
         representation += "\nType: " + type;
-        representation += "\nIsContext: ";
         representation += "\n";
         return representation;
     }

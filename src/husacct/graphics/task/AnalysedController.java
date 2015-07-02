@@ -1,5 +1,6 @@
 package husacct.graphics.task;
 
+
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
@@ -9,6 +10,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -25,7 +27,6 @@ public class AnalysedController extends DrawingController {
 	protected IControlService		controlService;
 	protected IValidateService		validateService;
 
-	private ArrayList<BaseFigure>	analysedContextFigures;
 
 	public AnalysedController() {
 		super();
@@ -97,13 +98,12 @@ public class AnalysedController extends DrawingController {
 			for (String parentName : parentNames) {
 				compoundedNames.add(parentName);
 				ArrayList<AbstractDTO> knownChildren = getChildrenOf(parentName);
-				if (knownChildren.size() > 0) allChildren.put(parentName,
-						knownChildren);
+				if (knownChildren.size() > 0) allChildren.put(parentName, knownChildren);
 			}
 
-			if (analysedContextFigures.size() > 0) {
+			if (contextFigures.size() > 0) {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
-				for (BaseFigure figure : analysedContextFigures)
+				for (BaseFigure figure : contextFigures)
 					if (!figure.isLine() && !figure.isParent()) {
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
 						if(dto instanceof SoftwareUnitDTO){
@@ -125,9 +125,7 @@ public class AnalysedController extends DrawingController {
 								}
 							}
 						}
-					} else if (!figure.isLine() && !figure.isModule()) {
-						// NOTE: Pretty sure selected stuff that is both not a module and not a line
-						// is actually a ParentFigure (blue square thing)
+					} else if (figure.isParent()) {
 						ArrayList<AbstractDTO> knownChildren = getChildrenOf(figure.getName());
 						if (knownChildren.size() > 0) allChildren.put(figure.getName(), knownChildren);
 					}
@@ -241,7 +239,23 @@ public class AnalysedController extends DrawingController {
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
 		resetContextFigures();
-		ArrayList<String> parentNames = sortFiguresBasedOnZoomability(figures);
+		//parentFigureNameAndTypeMap = new HashMap<String,String>();
+		ArrayList<String> parentNames = new ArrayList<String>();
+		for (BaseFigure figure : figures){
+			if (figure.isModule() && !(figure.isContext()) &&(!(figure instanceof ProjectFigure))) try {				
+				SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
+				parentNames.add(parentDTO.uniqueName);
+				parentFigureNameAndTypeMap.put(parentDTO.uniqueName, parentDTO.type);
+			} catch (Exception e) {
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+				//e.printStackTrace();
+			}
+			else if (figure.isContext() || !figure.isLine()) {
+				contextFigures.add(figure);
+			} else {
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
+			}
+		}
 
 		if (parentNames.size() > 0) {
 			saveSingleLevelFigurePositions();
@@ -301,7 +315,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void resetContextFigures() {
-		analysedContextFigures = new ArrayList<BaseFigure>();
+		contextFigures = new ArrayList<BaseFigure>();
 	}
 
 	// TODO Breadcrumbs; Needs to be removed as soon as uniqueName of a
@@ -321,25 +335,6 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void showViolations() {
 		if (validateService.isValidated()) super.showViolations();
-	}
-
-	protected ArrayList<String> sortFiguresBasedOnZoomability(BaseFigure[] figures) {
-		ArrayList<String> parentNames = new ArrayList<String>();
-		for (BaseFigure figure : figures){
-			if (figure.isModule() && !(figure.isContext()) &&(!(figure instanceof ProjectFigure))) try {				
-				SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
-				parentNames.add(parentDTO.uniqueName);
-			} catch (Exception e) {
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
-				//e.printStackTrace();
-			}
-			else if (figure.isContext() || !figure.isLine()) {
-				analysedContextFigures.add(figure);
-				//logger.info("Figure: " + figure.getName() + " is accepted as context for multizoom.");
-			} else
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
-		}
-		return parentNames;
 	}
 
 	public void zoomOutFailed() {

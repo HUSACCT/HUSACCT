@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.figures;
 
+
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;

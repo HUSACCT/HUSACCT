@@ -1,5 +1,7 @@
 package husacct.graphics.presentation.figures;
 
+
+import husacct.common.Resource;
 import husacct.graphics.task.layout.ContainerLayoutStrategy;
 
 import java.awt.Color;
@@ -7,10 +9,16 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.event.FigureEvent;
@@ -21,7 +29,12 @@ public class ParentFigure extends BaseFigure {
 	private static final Color	defaultContainerColor	= new Color(204, 204,
 																255);
 	private RectangleFigure		body;
-	private TextFigure			text;
+	private TextFigure			moduleName;
+	private TextFigure			moduleStereotype;
+	private BufferedImage 		moduleIcon;
+	private ImageFigure 		moduleIconFigure;
+	private String type;					
+
 	
 	protected int				minWidth				= 400;
 	protected int				minHeight				= 400;
@@ -35,12 +48,15 @@ public class ParentFigure extends BaseFigure {
 		childrenOwnImpl = new ArrayList<Figure>();
 		
 		body = new RectangleFigure();
-		text = new TextFigure(name);
-		text.set(AttributeKeys.FONT_BOLD, true);
-		children.add(body);
-		children.add(text);
-		
 		body.set(AttributeKeys.FILL_COLOR, defaultContainerColor);
+		children.add(body);
+
+		moduleName = new TextFigure(name);
+		moduleName.set(AttributeKeys.FONT_BOLD, true);
+		children.add(moduleName);
+
+		moduleStereotype = new TextFigure("");
+		children.add(moduleStereotype);
 		
 		baseZIndex = -2;
 		resetLayer();
@@ -171,11 +187,16 @@ public class ParentFigure extends BaseFigure {
 	public ParentFigure clone() {
 		ParentFigure other = (ParentFigure) super.clone();
 		other.body = body.clone();
-		other.text = text.clone();
+		other.moduleName = moduleName.clone();
+		other.moduleStereotype = moduleStereotype.clone();
+		other.moduleIconFigure = moduleIconFigure.clone();
 		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.body);
-		other.children.add(other.text);
+		other.children.add(other.moduleName);
+		other.children.add(other.moduleStereotype);
+		if (moduleIconFigure != null)
+			other.children.add(other.moduleIconFigure);
 		
 		return other;
 	}
@@ -205,19 +226,97 @@ public class ParentFigure extends BaseFigure {
 	
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		// Initialize element sizes
+		double nameWidth = moduleName.getBounds().width;
+		double textGap = 5;
+		double stereotypeWidth = moduleStereotype.getBounds().width;
+		double iconWidth = 0;
+		if (moduleIcon != null) {
+			 iconWidth = moduleIcon.getWidth();
+		}
+		double totalHeaderWidth = textGap + nameWidth + textGap + stereotypeWidth + textGap + iconWidth + 3;
+
+		// Set bounds body
 		if (lead.x - anchor.x < minWidth) lead.x = anchor.x + minWidth;
 		if (lead.y - anchor.y < minHeight) lead.y = anchor.y + minHeight;
-		
+		if (lead.x - anchor.x < totalHeaderWidth) lead.x = anchor.x + totalHeaderWidth;
 		body.setBounds(anchor, lead);
 		
-		// textbox centralising
-		double plusX = (lead.x - anchor.x - text.getBounds().width) / 2;
+		// Position name
+		double namePlusX = ((lead.x - anchor.x - iconWidth - 3) - (nameWidth + textGap + stereotypeWidth)) / 2;
+		Point2D.Double nameTextAnchor = (Double) anchor.clone();
+		nameTextAnchor.x += namePlusX;
+		moduleName.setBounds(nameTextAnchor, null);
+
+		// Position stereotype
+		Point2D.Double stereoTypeTextAnchor = (Double) anchor.clone();
+		stereoTypeTextAnchor.x = nameTextAnchor.x + nameWidth + textGap;
+		moduleStereotype.setBounds(stereoTypeTextAnchor, null);
 		
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX;
-		text.setBounds(textAnchor, null);
+		// Position icon
+		if (moduleIconFigure != null) {
+			double iconAnchorX = lead.x - 3 - iconWidth;
+			double iconAnchorY = anchor.y + 4;
+			double iconLeadX = iconAnchorX + iconWidth;
+			double iconLeadY = iconAnchorY + moduleIcon.getHeight();
+			moduleIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
 		
 		invalidate();
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String parentType) {
+		this.type = parentType;
+		if (type.toLowerCase().equals("facade")) {
+			type = "Interface";
+		}
+
+		children.remove(moduleStereotype);
+		String stereotype = '\u00AB' + type + '\u00BB';
+		moduleStereotype = new TextFigure(stereotype);
+		children.add(moduleStereotype);
+		
+		moduleIconFigure = new ImageFigure();
+		moduleIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		moduleIconFigure.set(AttributeKeys.FILL_COLOR, defaultContainerColor);
+		try {
+			URL componentImageURL = null;
+			// Set Icons: First icons Intended Architecture diagram, second implemented, third default.
+			if (type.toLowerCase().equals("layer")) {
+				componentImageURL = Resource.get(Resource.ICON_LAYER);
+			} else if (type.toLowerCase().equals("component")) {
+				componentImageURL = Resource.get(Resource.ICON_COMPONENT);
+			} else if (type.toLowerCase().equals("subsystem")) {
+				componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
+			} else if (type.toLowerCase().equals("library")) {
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
+			} else if (type.toLowerCase().equals("externallibrary")) {
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
+			} else if (type.toLowerCase().equals("interface")) {
+				componentImageURL = Resource.get(Resource.ICON_FACADE);
+				type = "Interface";
+			} else if (type.toLowerCase().equals("package")) {
+				componentImageURL = Resource.get(Resource.ICON_PACKAGE);
+			} else if (type.toLowerCase().equals("class")) {
+				componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
+			} else if (type.toLowerCase().equals("package")) {
+				componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
+			} else{
+				componentImageURL = Resource.get(Resource.ICON_MODULE);
+			}
+			if(componentImageURL != null){
+				moduleIcon = ImageIO.read(componentImageURL);
+				moduleIconFigure.setImage(null, moduleIcon);
+				children.add(moduleIconFigure);
+			}
+		} catch (Exception e) {
+			moduleIconFigure = null;
+			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
+		}
 	}
 	
 	public void updateLayout() {
@@ -244,4 +343,13 @@ public class ParentFigure extends BaseFigure {
 		setBounds(anchor, lead);
 		changed();
 	}
+
+	@Override
+    public String toString() {
+        String representation = "";
+        representation += "\nName: " + super.name;
+        representation += "\nType: " + type;
+        representation += "\n";
+        return representation;
+    }
 }
