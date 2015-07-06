@@ -48,7 +48,7 @@ public class ImportExportControllerTest {
 			testDoc = sax.build(testFile);
 		} catch (Exception e) {
 		}
-		Element element = ServiceProvider.getInstance().getDefineService().getLogicalArchitectureData();
+		Element element = ServiceProvider.getInstance().getDefineService().exportIntendedArchitecture();
 		String originalRootElement = testDoc.getRootElement().toString();
 		String importedRootElement = element.toString();
 		assertEquals(originalRootElement, importedRootElement);

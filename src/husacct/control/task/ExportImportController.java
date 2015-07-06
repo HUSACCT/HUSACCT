@@ -72,7 +72,7 @@ public class ExportImportController {
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");
 		try {
-			Element logicalData = ServiceProvider.getInstance().getDefineService().getLogicalArchitectureData();
+			Element logicalData = ServiceProvider.getInstance().getDefineService().exportIntendedArchitecture();
 			Document doc = new Document(logicalData);
 			
 			xmlResource.save(doc, resourceData);
@@ -132,7 +132,7 @@ public class ExportImportController {
 		try {
 			Document doc = xmlResource.load(resourceData);	
 			Element logicalData = doc.getRootElement();
-			ServiceProvider.getInstance().getDefineService().loadLogicalArchitectureData(logicalData);
+			ServiceProvider.getInstance().getDefineService().importIntendedArchitecture(logicalData);
 		} catch (Exception e) {
 			logger.debug("Unable to import logical architecture: " + e.getMessage());
 		}

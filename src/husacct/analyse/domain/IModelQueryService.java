@@ -58,7 +58,11 @@ public interface IModelQueryService {
      */
     public DependencyDTO[] getAllDependencies();
 
-    /** Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName 
+	/** Returns a list with the uniqueNames of the rootPackages with a class: the first packages (starting from the root) that contain one or more classes.
+	*/ 
+	public List<String> getRootPackagesWithClass(String module);
+
+	/** Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName 
     */  
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     

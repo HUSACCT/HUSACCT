@@ -194,7 +194,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public Element getLogicalArchitectureData() {
+	public Element exportIntendedArchitecture() {
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);
 		return pd.getWorkspaceData();
@@ -285,13 +285,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public void isReanalyzed() {
-		JtreeController.instance().setLoadState(false);
-
-	}
-
-	@Override
-	public void loadLogicalArchitectureData(Element e) {
+	public void importIntendedArchitecture(Element e) {
 		reset();
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);

@@ -90,7 +90,7 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * 
 	 * @return Element with architecture data
 	 */
-	public Element getLogicalArchitectureData();
+	public Element exportIntendedArchitecture();
 	
 	
 	/**
@@ -133,17 +133,12 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public boolean isMapped();
 
 	/**
-	 * Sets the load state on false
-	 */
-	public void isReanalyzed();
-
-	/**
 	 * Loads the logical architecture data
 	 * 
 	 * @param e
 	 *            is an element with workspace data
 	 */
-	public void loadLogicalArchitectureData(Element e);
+	public void importIntendedArchitecture(Element e);
 	
 	/**
 	 * Creates and saves architecture report

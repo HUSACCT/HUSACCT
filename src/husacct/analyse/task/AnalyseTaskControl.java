@@ -8,6 +8,7 @@ import org.jdom2.Element;
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
+import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ApplicationDTO;
 
 public class AnalyseTaskControl {
@@ -70,6 +71,6 @@ public class AnalyseTaskControl {
     }
     
     public void reconstructArchitecture() {
-    	// Waiting for implementation
+    	new ReconstructArchitecture(queryService);
     }
 }

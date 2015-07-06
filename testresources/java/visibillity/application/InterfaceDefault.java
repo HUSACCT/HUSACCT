@@ -1,6 +1,0 @@
-package application;
-
-interface InterfaceDefault {
-	
-	
-}

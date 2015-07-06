@@ -162,6 +162,11 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
+	public List<String> getRootPackagesWithClass(String module) {
+    	return moduleFinder.getRootPackagesWithClass(module);
+    }
+
+    @Override
     // If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. 
 	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
 		AnalysisStatisticsDTO returnValue;
