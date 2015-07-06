@@ -9,22 +9,53 @@ import java.util.TreeSet;
 
 public interface IModelQueryService {
 
+    /** Removes all the data from the analysis model.
+     * Only to be used at the beginning of an analysis or import process. 
+    */  
     public void clearModel();
 
+    /** Builds up list of dependencies, if not yet existing, 
+     * and initializes dependency hashmaps for fast queries.
+     */
     public void buildCache();
     
+    /** Replaces the existing list of dependencies by the passed list of dependencies. 
+     */
     public void importDependencies(List<DependencyDTO> dependencies);
     
-    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename);
+    /** Returns a SoftwareUnitDTO with the characteristics of a package, class 
+     * or library, identified by the passed uniqueName.
+     * If no software unit is found, a SoftwareUnitDTO is returned with "" values, and an empty list of children.    
+     */
+    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniqueName);
 
-    public String getSourceFilePathOfClass(String uniquename);
+    /** Returns the sourceFilePath of the class with the passed uniqueName.
+     * If no class is found, value "" is returned.
+     */
+    public String getSourceFilePathOfClass(String uniqueName);
 
+    /** Returns an array of SoftwareUnitDTOs of all root packages/namespaces 
+     * within the path(s) of all project(s) in the workspace. Notes:
+     * a)External software units are always prefixed by package: xLibraries.
+     * b)If classes have no specified package/namespace (exceptionally), than these classes are added to generated package: noPackage_HusacctDefined. 
+     */
     public SoftwareUnitDTO[] getSoftwareUnitsInRoot();
 
-    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from);
+    /** Returns an array of SoftwareUnitDTOs with the children of the software unit (package, class or library) 
+     * identified by the passed uniqueName.
+     * If no software unit is found, an empty SoftwareUnitDTO[] is returned.    
+     */
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String uniqueName);
 
-    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String child);
+    /** Returns a SoftwareUnitDTO of the parent of the software unit (package, class or library) 
+     * identified by the passed uniqueName.
+     * If no software unit is found, a SoftwareUnitDTO is returned with "" values, and an empty list of children.    
+     */
+    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String uniqueName);
 
+    /** Returns an array with DependencyDTOs of all dependencies.
+     * It is used only for export purposes. Working with this list for queries is very slow, so better use specific query services. 
+     */
     public DependencyDTO[] getAllDependencies();
 
     /** Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName 
@@ -47,7 +78,9 @@ public interface IModelQueryService {
 	*/ 
     public DependencyDTO[] getDependenciesFromClassToClass(String classPathFrom, String classPathTo);
 
-    /** If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. 
+    /** Returns an AnalysisStatisticsDTO with statistical data of the analyzed application.
+     * If selectedModule == null, statistics of the whole application are returned; 
+     * otherwise statistics of the selectedModule only are returned. 
     */
     public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
 }

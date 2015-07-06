@@ -40,15 +40,15 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename) {
-        return moduleFinder.getModuleForUniqueName(uniquename);
+    public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniqueName) {
+        return moduleFinder.getModuleForUniqueName(uniqueName);
     }
 
     @Override
-    public String getSourceFilePathOfClass(String uniquename) {
+    public String getSourceFilePathOfClass(String uniqueName) {
     	String returnValue = "";
-    	if (theModel.classes.containsKey(uniquename)) {
-    		returnValue = theModel.classes.get(uniquename).sourceFilePath;
+    	if (theModel.classes.containsKey(uniqueName)) {
+    		returnValue = theModel.classes.get(uniqueName).sourceFilePath;
     	}
     	return returnValue;
     }
@@ -60,9 +60,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from) {
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String uniqueName) {
     	SoftwareUnitDTO[] children;
-    	List<SoftwareUnitDTO> childModules = moduleFinder.getChildModulesInModule(from);
+    	List<SoftwareUnitDTO> childModules = moduleFinder.getChildModulesInModule(uniqueName);
         int numberOfChildren = childModules.size();
         if ((childModules != null) && numberOfChildren > 0) {
 	        children = childModules.toArray(new SoftwareUnitDTO[childModules.size()]);
@@ -73,8 +73,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String child) {
-        return moduleFinder.getParentModuleForModule(child);
+    public SoftwareUnitDTO getParentUnitOfSoftwareUnit(String uniqueName) {
+        return moduleFinder.getParentModuleForModule(uniqueName);
     }
 
     @Override

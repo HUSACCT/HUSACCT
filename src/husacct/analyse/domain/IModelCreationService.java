@@ -51,11 +51,9 @@ public interface IModelCreationService {
             String declareType, String belongsToClass, int lineNumber,
             String belongsToMethod, List<String> declareTypes);
 
-    //Function to connect dependencies, after all modules are known in the model
+    /** Executes post-processes such as connecting entities and associations, 
+     * detecting inherited and indirect associations, et cetera.
+     */
     public void executePostProcesses();
 
-    //Single debugging functionality, to check the completeness of the implementation
-    public String represent();
-
-    public void clearMemoryFromObjectsNotUsedAnymore();
 }

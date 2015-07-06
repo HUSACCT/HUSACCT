@@ -19,10 +19,6 @@ public abstract class AbstractAnalyser {
         modelCreationService.executePostProcesses();
     }
 
-    public void clearMemoryFromObjectsNotUsedAnymore() {
-        modelCreationService.clearMemoryFromObjectsNotUsedAnymore();
-    }
-
     public abstract void generateModelFromSource(String sourceFilePath);
 
     public abstract String getProgrammingLanguage();
