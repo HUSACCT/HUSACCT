@@ -20,11 +20,6 @@ public class SoftwareArchitectureDomainService {
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
     }
 
-    public void createNewArchitectureDefinition(String name) {
-		SoftwareArchitecture.getInstance().setName(name);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-    }
-
     public Application getApplicationDetails() {
 		if (app == null) {
 		    app = new Application();

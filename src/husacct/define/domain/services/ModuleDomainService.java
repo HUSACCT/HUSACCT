@@ -1,46 +1,98 @@
 package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import org.apache.log4j.Logger;
 
 public class ModuleDomainService {
 
 	private ModuleFactory factory = new ModuleFactory();
+	private final Logger logger = Logger.getLogger(ModuleDomainService.class);
 
-	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
-        SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId, module);
-		StateService.instance().addModule(module);
-		long moduleId = module.getId();
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		return moduleId;
+	public String addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+		String message = "";
+		// 1) Create new module
+		ModuleStrategy newModule;
+		switch (moduleType) {
+		case "ExternalLibrary":
+			newModule = createNewModule("ExternalLibrary");
+			break;
+		case "Component":
+			newModule = createNewModule("Component");
+			break;
+		case "Facade":
+			newModule = createNewModule("Facade");
+			break;
+		case "SubSystem":
+			newModule = createNewModule("SubSystem");
+			break;
+		case "Layer":
+			newModule = createNewModule("Layer");
+			((Layer) newModule).setHierarchicalLevel(hierarchicalLevel);
+			break;
+		default:
+			newModule = createNewModule("SubSystem");
+			break;
+		}
+
+		// 2) Set attributes
+		newModule.set(name, "");
+		if (softwareUnits != null) {
+			for (SoftwareUnitDTO softwareUnit : softwareUnits) {
+				Type softwareUnitDefinitionType = Type.SUBSYSTEM;
+				if (softwareUnit.type.toUpperCase().equals("CLASS")) {
+					softwareUnitDefinitionType = Type.CLASS;
+				} else if (softwareUnit.type.toUpperCase().equals("INTERFACE")) {
+					softwareUnitDefinitionType = Type.INTERFACE;
+				} else if (softwareUnit.type.toUpperCase().equals("EXTERNALLIBRARY")) {
+					softwareUnitDefinitionType = Type.EXTERNALLIBRARY;
+				} else if (softwareUnit.type.toUpperCase().equals("LIBRARY")) {
+					softwareUnitDefinitionType = Type.LIBRARY;
+				} else if (softwareUnit.type.toUpperCase().equals("PACKAGE")) {
+					softwareUnitDefinitionType = Type.PACKAGE;
+				}
+				newModule.addSUDefinition(new SoftwareUnitDefinition(softwareUnit.uniqueName, softwareUnitDefinitionType));
+			}
+		}
+		
+		// 3) Add module to parent
+		long parentModuleId = SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath).getId();
+		message = addModuleToParent(parentModuleId, newModule);
+
+		if (message.equals("")) {
+			logger.info(" Module added with name: " + newModule.getName() + ", Type: " + newModule.getType() + ", Assigned units: " + newModule.countSoftwareUnits());
+		} else {
+			logger.info(" Module not added with name: " + name + ", Type: " + moduleType);
+		}
+		return message;
 	}
-
-
-	public long addModuleToRoot(ModuleStrategy module) {
-		long moduleId = SoftwareArchitecture.getInstance().addModuleToRoot(module);
-		StateService.instance().addModule(module);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		return moduleId;
-	}
-
-	public String addNewModuleToParent(long parentModuleId,	ModuleStrategy module) {
-		String message = SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId,module);
+	
+	public String addModuleToParent(long parentModuleId, ModuleStrategy module) {
+		String message = "";
+		if (parentModuleId <= 0) {
+			message = SoftwareArchitecture.getInstance().addModuleToRoot(module);
+		} else {
+			message = SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId, module);
+		}
 		StateService.instance().addModule(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return message;
 	}
-	
+
 	public ModuleStrategy createNewModule(String type) {
-		ModuleStrategy result=	factory.createModule(type);
+		ModuleStrategy result =	factory.createModule(type);
 		return result;
 	}
 
@@ -56,10 +108,6 @@ public class ModuleDomainService {
 		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su.getName());
 	}
 	
-	public ModuleStrategy getModuleByName(String name){
-		return SoftwareArchitecture.getInstance().getModuleByName(name);
-	}
-
 	public String getModuleNameById(long moduleId) {
 		String moduleName = new String();
 		if (moduleId != -1) {

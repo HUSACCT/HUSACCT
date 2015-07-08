@@ -110,65 +110,65 @@ public class ExportImportAnalysedModelTest {
 	
 	@Test
 	public void AccessClassVariableConstant(){
-		String fromModule = "domain.direct.violating.AccessClassVariableConstant";
-		String toModule = "technology.direct.dao.UserDAO";
+		String fromClass = "domain.direct.violating.AccessClassVariableConstant";
+		String toClass = "technology.direct.dao.UserDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Class Variable Constant", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Class Variable Constant", false));
 	}
 
 	@Test
 	public void AccessObjectReferenceAsParameter(){
-		String fromModule = "domain.direct.violating.AccessObjectReferenceAsParameter";
-		String toModule = "technology.direct.dao.ProfileDAO";
+		String fromClass = "domain.direct.violating.AccessObjectReferenceAsParameter";
+		String toClass = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Type of Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Type of Variable", false));
 	}
 
 	@Test
 	public void AnnotationDependency(){
-		String fromModule = "domain.direct.violating.AnnotationDependency";
-		String toModule = "technology.direct.dao.SettingsAnnotation";
+		String fromClass = "domain.direct.violating.AnnotationDependency";
+		String toClass = "technology.direct.dao.SettingsAnnotation";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Annotation");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "", false));
 	}
 
 	@Test
 	public void CallInstanceInnerInterface(){
-		String fromModule = "domain.direct.violating.CallInstanceInnerInterface";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
+		String fromClass = "domain.direct.violating.CallInstanceInnerInterface";
+		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Interface Method", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Interface Method", false));
 	}
 
 	@Test
 	public void DeclarationOuterClassByStaticNestedClass(){
-		String fromModule = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
-		String toModule = "technology.direct.dao.CallInstanceOuterClassDAO";
+		String fromClass = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
+		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Instance Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", false));
 	}
 
 	@Test
 	public void ImportDependencyStatic(){
-		String fromModule = "domain.direct.violating.ImportDependencyStatic";
-		String toModule = "technology.direct.dao.AccountDAO";
+		String fromClass = "domain.direct.violating.ImportDependencyStatic";
+		String toClass = "technology.direct.dao.AccountDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void InheritanceExtends(){
-		String fromModule = "domain.direct.violating.InheritanceExtends";
-		String toModule = "technology.direct.dao.HistoryDAO";
+		String fromClass = "domain.direct.violating.InheritanceExtends";
+		String toClass = "technology.direct.dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, "Extends Class", false));	}
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Extends Class", false));	}
 
 	
 	//
@@ -229,11 +229,11 @@ public class ExportImportAnalysedModelTest {
 		return areDependencyTypesDetected(moduleFrom, moduleTo, dependencyTypes, "", isIndirect);
 	}
 
-	private boolean areDependencyTypesDetected(String moduleFrom, String moduleTo, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
+	private boolean areDependencyTypesDetected(String fromClass, String toClass, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
 		boolean dependencyTypesDetected = false;
 		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(moduleFrom, moduleTo);
+		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(fromClass, toClass);
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;

@@ -6,6 +6,7 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
@@ -315,5 +316,15 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		ReportArchitectureAbstract reporter = new ReportArchitectureToExcel();
 		reporter.write(fullFilePath);
 	}
+	
+	// Services for Architecture Reconstruction
+	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+		moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
+	}
+	
+	public void addRule(RuleDTO rule) {
+		
+	}
+	
 
 }

@@ -124,8 +124,7 @@ public class AppliedRuleController extends PopUpController {
 		return appliedRule.checkConvention();
 	}
 
-	private ModuleStrategy createOrAssignModule(ModuleStrategy module,
-			SoftwareUnitDefinition su) {
+	private ModuleStrategy createOrAssignModule(ModuleStrategy module, SoftwareUnitDefinition su) {
 		ModuleStrategy moduleToReturn;
 		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
 
@@ -133,8 +132,7 @@ public class AppliedRuleController extends PopUpController {
 		if (module.getUnits().size() == 1 && firstSUName.equals(su.getName())) {
 			moduleToReturn = module;
 		} else {
-			ModuleStrategy subModule = new ModuleFactory()
-					.createModule("SubSystem");
+			ModuleStrategy subModule = new ModuleFactory().createModule("SubSystem");
 			subModule.set(su.getName(), "");
 			subModule.addSUDefinition(su);
 			moduleService.addModuleToParent(module.getId(), subModule);
@@ -368,10 +366,9 @@ public class AppliedRuleController extends PopUpController {
 				logger.info("Adding " + currentSoftwareUnit.getName()
 						+ " to a module in the root");
 
-				ModuleStrategy subModule = new ModuleFactory()
-						.createModule("SubSystem");
+				ModuleStrategy subModule = new ModuleFactory().createModule("SubSystem");
 				subModule.set(currentSoftwareUnit.getName(), "");
-				moduleService.addModuleToRoot(subModule);
+				moduleService.addModuleToParent(-1, subModule);
 				returnModule = subModule;
 			}
 		}

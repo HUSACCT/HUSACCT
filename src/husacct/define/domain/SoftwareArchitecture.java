@@ -45,12 +45,10 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 				new ArrayList<AppliedRuleStrategy>());
 	}
 
-	public SoftwareArchitecture(String name, String description,
-			ArrayList<ModuleStrategy> modules,
-			ArrayList<AppliedRuleStrategy> rules) {
+	public SoftwareArchitecture(String name, String description, ArrayList<ModuleStrategy> modules, ArrayList<AppliedRuleStrategy> rules) {
 		rootModule = new ModuleDomainService().createNewModule("Root");
 		rootModule.set(name, description);
-		setModules(modules);
+		rootModule.setSubModules(modules);
 		setAppliedRules(rules);
 		registerModule(rootModule);
 		this.modules.add(rootModule);
@@ -83,22 +81,22 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 	}
 
-	//Only to be used to add child modules (rootmodules) to the top module (root)
-	public long addModuleToRoot(ModuleStrategy module) {
-		long moduleId = module.getId();
+	// Only to be used to add rootmodules to the top module (root)
+	public String addModuleToRoot(ModuleStrategy module) {
+		String message = "";
 		try {
 			if (!hasModule(module.getName())) {
 				rootModule.addSubModule(module);
                 registerModule(module);
 				updateWarnings();
-				moduleId = module.getId();
 			} else {
-				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"));
+				message = ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
 			}
 		} catch (Exception rt) {
-			rt.printStackTrace();
+			logger.error(" Exception: " + rt.getMessage());
+			//rt.printStackTrace();
 		}
-		return moduleId;
+		return message;
 	}
 
 	//Only to be used to add child modules to a parent module 
@@ -167,15 +165,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoModule") + ", ModuleId = " + moduleId);
 		}
 		return currentModule;
-	}
-
-	public ModuleStrategy getModuleByName(String name) {
-		for (ModuleStrategy module : rootModule.getSubModules()) {
-			if (module.getName().equalsIgnoreCase(name)) {
-				return module;
-			}
-		}
-		return null;
 	}
 
 	public ModuleStrategy getModuleByLogicalPath(String logicalPath) {
@@ -552,10 +541,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		rootModule.setDescription(description);
 	}
 
-	public void setModules(ArrayList<ModuleStrategy> modules) {
-		rootModule.setSubModules(modules);
-	}
-
 	public void setName(String name) {
 		rootModule.setName(name);
 	}
@@ -573,27 +558,22 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return updatedModule;
 	}
 
-	private void updateModule(int index, ModuleStrategy updatedModule) {
+	private void updateModule(int subModuleIndex, ModuleStrategy updatedModule) {
+		// Update parent
 		ModuleStrategy parent = updatedModule.getparent();
-		parent.getSubModules().remove(index);
-		parent.addSubModule(index, updatedModule);
-		updateRegistry(updatedModule);
-	}
-
-	private void updateRegistry(ModuleStrategy updatedModule) {
-		int index=0;
+		parent.getSubModules().remove(subModuleIndex);
+		parent.addSubModule(subModuleIndex, updatedModule);
+		int moduleIndex=0;
 		for (int i = 0; i < modules.size(); i++) {
 			if (modules.get(i).getId()==updatedModule.getId()) {
-				index=i;
+				moduleIndex=i;
 			}
-			
 		}
-		modules.remove(index);
-		modules.add(index, updatedModule);
+		modules.remove(moduleIndex);
+		modules.add(moduleIndex, updatedModule);
 		if (updatedModule instanceof Component) {
 			SoftwareArchitecture.getInstance().addModuleToParent(updatedModule.getId(),updatedModule.getSubModules().get(0));
 		}
-		
 	}
 
 	public void removeAppliedRule(List<Long> selectedRules) {

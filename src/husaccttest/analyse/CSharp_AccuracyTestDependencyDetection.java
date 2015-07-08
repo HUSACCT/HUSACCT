@@ -85,85 +85,85 @@ public class CSharp_AccuracyTestDependencyDetection {
 	// Access
 	@Test
 	public void AccessClassVariable(){
-		String fromModule = "Domain.Direct.Violating.AccessClassVariable";
-		String toModule = "Technology.Direct.Dao.CheckInDAO";
+		String fromClass = "Domain.Direct.Violating.AccessClassVariable";
+		String toClass = "Technology.Direct.Dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessClassVariableConstant(){
-		String fromModule = "Domain.Direct.Violating.AccessClassVariableConstant";
-		String toModule = "Technology.Direct.Dao.UserDAO";
+		String fromClass = "Domain.Direct.Violating.AccessClassVariableConstant";
+		String toClass = "Technology.Direct.Dao.UserDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessClassVariableInterface(){
-		String fromModule = "Domain.Direct.Violating.AccessClassVariableInterface";
-		String toModule = "Technology.Direct.Dao.ISierraDAO";
+		String fromClass = "Domain.Direct.Violating.AccessClassVariableInterface";
+		String toClass = "Technology.Direct.Dao.ISierraDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessEnumeration(){
-		String fromModule = "Domain.Direct.Violating.AccessEnumeration";
-		String toModule = "Technology.Direct.Dao.TipDAO";
+		String fromClass = "Domain.Direct.Violating.AccessEnumeration";
+		String toClass = "Technology.Direct.Dao.TipDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessEnumerationInner(){
-		String fromModule = "Domain.Direct.Violating.AccessInnerEnumeration";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.InnerEnumeration";
+		String fromClass = "Domain.Direct.Violating.AccessInnerEnumeration";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.InnerEnumeration";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessInstanceVariableRead(){
-		String fromModule = "Domain.Direct.Violating.AccessInstanceVariableRead";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableRead";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessInstanceVariableWrite(){
-		String fromModule = "Domain.Direct.Violating.AccessInstanceVariableWrite";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableWrite";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessInstanceVariableConstant(){
-		String fromModule = "Domain.Direct.Violating.AccessInstanceVariableConstant";
-		String toModule = "Technology.Direct.Dao.UserDAO";
+		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableConstant";
+		String toClass = "Technology.Direct.Dao.UserDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessInstanceVariableSuperClass(){
-		String fromModule = "Domain.Direct.Violating.AccessInstanceVariableSuperClass";
-		String toModule = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
+		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableSuperClass";
+		String toClass = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, true); 
+		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
+		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, true); 
 		boolean totalOutcome = false;
 		if ((outcome1 == true) && (outcome2 == true)) {
 			totalOutcome = true;
@@ -173,13 +173,13 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void AccessInstanceVariableSuperSuperClass(){
-		String fromModule = "Domain.Direct.Violating.AccessInstanceVariableSuperSuperClass";
-		String toModule = "Technology.Direct.Subclass.CallInstanceSubSubClassDOA";
+		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableSuperSuperClass";
+		String toClass = "Technology.Direct.Subclass.CallInstanceSubSubClassDOA";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, true); 
+		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
+		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, true); 
 		boolean totalOutcome = false;
 		if (outcome1 && outcome2) {
 			totalOutcome = true;
@@ -189,220 +189,220 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void AccessFromInnerClass(){
-		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "Domain.Direct.Base";
+		String fromClass = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
+		String toClass = "Domain.Direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 @Test
 	public void AccessInstanceVariable_SetArgumentValue(){
-		String fromModule = "Domain.Direct.Violating.AccessInstanceVariable_SetArgumentValue";
-		String toModule = "Technology.Direct.Dao.CheckInDAO";
+		String fromClass = "Domain.Direct.Violating.AccessInstanceVariable_SetArgumentValue";
+		String toClass = "Technology.Direct.Dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceAsParameter(){
-		String fromModule = "Domain.Direct.Violating.AccessObjectReferenceAsParameter";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.AccessObjectReferenceAsParameter";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessLocalVariable_ReadArgumentValue(){
-		String fromModule = "Domain.Direct.Violating.AccessLocalVariable_ReadArgumentValue";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.AccessLocalVariable_ReadArgumentValue";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void AccessLocalVariable_SetArgumentValue(){
-		String fromModule = "Domain.Direct.Violating.AccessLocalVariable_SetArgumentValue";
-		String toModule = "Technology.Direct.Dao.CheckInDAO";
+		String fromClass = "Domain.Direct.Violating.AccessLocalVariable_SetArgumentValue";
+		String toClass = "Technology.Direct.Dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceWithinIfStatement(){
-		String fromModule = "Domain.Direct.Violating.AccessObjectReferenceWithinIfStatement";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.AccessObjectReferenceWithinIfStatement";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	// Annotation	
 	@Test
 	public void AnnotationDependency(){ // Asserts False, since annotations are not supported in C#
-		String fromModule = "Domain.Direct.Violating.AnnotationDependency";
-		String toModule = "Technology.Direct.Dao.SettingsAnnotation";
+		String fromClass = "Domain.Direct.Violating.AnnotationDependency";
+		String toClass = "Technology.Direct.Dao.SettingsAnnotation";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Annotation");
-		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	// Call
 	@Test
 	public void CallClassMethod(){
-		String fromModule = "Domain.Direct.Violating.CallClassMethod";
-		String toModule = "Technology.Direct.Dao.BadgesDAO";
+		String fromClass = "Domain.Direct.Violating.CallClassMethod";
+		String toClass = "Technology.Direct.Dao.BadgesDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallConstructor(){
-		String fromModule = "Domain.Direct.Violating.CallConstructor";
-		String toModule = "Technology.Direct.Dao.AccountDAO";
+		String fromClass = "Domain.Direct.Violating.CallConstructor";
+		String toClass = "Technology.Direct.Dao.AccountDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallConstructorInnerClass(){
-		String fromModule = "Domain.Direct.Violating.CallConstructorInnerClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Domain.Direct.Violating.CallConstructorInnerClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallConstructorLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
-		String fromModule = "Domain.Direct.Violating.CallConstructorLibraryClass";
-		String toModule = "FI.Foyt.Foursquare.Api.FoursquareApi";
+		String fromClass = "Domain.Direct.Violating.CallConstructorLibraryClass";
+		String toClass = "FI.Foyt.Foursquare.Api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallConstructorSuper(){
-		String fromModule = "Domain.Direct.Violating.CallConstructorSuper";
-		String toModule = "Technology.Direct.Dao.HistoryDAO";
+		String fromClass = "Domain.Direct.Violating.CallConstructorSuper";
+		String toClass = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
 	@Test
 	public void CallFromInnerClass(){
-		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstance(){
-		String fromModule = "Domain.Direct.Violating.CallInstance";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.CallInstance";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceGeneric(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceGeneric";
-		String toModule = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
+		String fromClass = "Domain.Direct.Violating.CallInstanceGeneric";
+		String toClass = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceInnerClass(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceInnerClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Domain.Direct.Violating.CallInstanceInnerClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallConstructorInnerClassDefault(){
-		String fromModule = "Domain.Direct.Violating.CallConstructorInnerClassDefault";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Domain.Direct.Violating.CallConstructorInnerClassDefault";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallConstructorInnerClassFromOtherInnerClass(){
-		String fromModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.TestConstructorCallOfInnerClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.TestConstructorCallOfInnerClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceInnerInterface(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceInnerInterface";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
+		String fromClass = "Domain.Direct.Violating.CallInstanceInnerInterface";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceInterface(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceInterface";
-		String toModule = "Technology.Direct.Dao.CallInstanceInterfaceDAO";
+		String fromClass = "Domain.Direct.Violating.CallInstanceInterface";
+		String toClass = "Technology.Direct.Dao.CallInstanceInterfaceDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceInterfaceGenericInterface(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceInterfaceGenericInterface";
-		String toModule = "Technology.Direct.Dao.CallInstanceInterfaceDAO<p1>";
+		String fromClass = "Domain.Direct.Violating.CallInstanceInterfaceGenericInterface";
+		String toClass = "Technology.Direct.Dao.CallInstanceInterfaceDAO<p1>";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
-		String fromModule = "Domain.Direct.Violating.CallInstanceLibraryClass";
-		String toModule = "FI.Foyt.Foursquare.Api.FoursquareApi";
+		String fromClass = "Domain.Direct.Violating.CallInstanceLibraryClass";
+		String toClass = "FI.Foyt.Foursquare.Api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertFalse(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallInstanceOfSuperOverridden(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceOfSuperOverridden";
-		String toModule = "Technology.Direct.Dao.HistoryDAO";
+		String fromClass = "Domain.Direct.Violating.CallInstanceOfSuperOverridden";
+		String toClass = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
 	@Test
 	public void CallInstanceSuperClass(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceSuperClass";
-		String toModule = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
+		String fromClass = "Domain.Direct.Violating.CallInstanceSuperClass";
+		String toClass = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
+		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
+		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
 		boolean totalOutcome = false;
 		if ((outcome1 == true) || (outcome2 == true)) {
 			totalOutcome = true;
@@ -412,15 +412,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@Test
 	public void CallInstanceSuperSuperClass(){
-		String fromModule = "Domain.Direct.Violating.CallInstanceSuperSuperClass";
-		String toModule = "Technology.Direct.Subclass.CallInstanceSubSubClassDOA";
+		String fromClass = "Domain.Direct.Violating.CallInstanceSuperSuperClass";
+		String toClass = "Technology.Direct.Subclass.CallInstanceSubSubClassDOA";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		boolean outcome1 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
-		boolean outcome2 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
-		toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		boolean outcome3 = areDependencyTypesDetected(fromModule, toModule, typesToFind, false); 
+		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
+		toClass = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
+		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
+		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		boolean outcome3 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
 		boolean totalOutcome = false;
 		if ((outcome1 == true) || (outcome2 == true) || (outcome3 == true)) {
 			totalOutcome = true;
@@ -431,173 +431,173 @@ public class CSharp_AccuracyTestDependencyDetection {
 	// Declaration
 	@Test
 	public void DeclarationExceptionThrows(){
-		String fromModule = "Domain.Direct.Violating.DeclarationExceptionThrows";
-		String toModule = "Technology.Direct.Dao.StaticsException";
+		String fromClass = "Domain.Direct.Violating.DeclarationExceptionThrows";
+		String toClass = "Technology.Direct.Dao.StaticsException";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationInnerClass(){
-		String fromModule = "Domain.Direct.Base";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Domain.Direct.Base";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationOuterClassByInnerClass(){
-		String fromModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.StaticNestedClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO";
+		String fromClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.StaticNestedClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationParameter(){
-		String fromModule = "Domain.Direct.Violating.DeclarationParameter";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationParameter";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationReturnType(){
-		String fromModule = "Domain.Direct.Violating.DeclarationReturnType";
-		String toModule = "Technology.Direct.Dao.VenueDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationReturnType";
+		String toClass = "Technology.Direct.Dao.VenueDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationTypeCast(){
-		String fromModule = "Domain.Direct.Violating.DeclarationTypeCast";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationTypeCast";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationTypeCastToInnerClass(){
-		String fromModule = "Domain.Direct.Violating.DeclarationTypeCastToInnerClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationTypeCastToInnerClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationTypeCastOfArgument(){
-		String fromModule = "Domain.Direct.Violating.DeclarationTypeCastOfArgument";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationTypeCastOfArgument";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationVariableInstanceGeneric(){
-		String fromModule = "Domain.Direct.Violating.DeclarationVariableInstanceGeneric";
-		String toModule = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstanceGeneric";
+		String toClass = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationVariableInstance(){
-		String fromModule = "Domain.Direct.Violating.DeclarationVariableInstance";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationVariableStatic(){
-		String fromModule = "Domain.Direct.Violating.DeclarationVariableStatic";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableStatic";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationVariableLocal(){
-		String fromModule = "Domain.Direct.Violating.DeclarationVariableLocal";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableLocal";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationVariableLocal_Initialized(){
-		String fromModule = "Domain.Direct.Violating.DeclarationVariableLocal_Initialized";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableLocal_Initialized";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void DeclarationVariableWithinForStatement(){
-		String fromModule = "Domain.Direct.Violating.DeclarationVariableWithinForStatement";
-		String toModule = "Technology.Direct.Dao.ProfileDAO";
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableWithinForStatement";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	// Import
 	@Test
 	public void ImportDependencyUnused(){
-		String fromModule = "Domain.Direct.Violating.ImportDependencyUnused";
-		String toModule = "Technology.Direct.Dao.AccountDAO";
+		String fromClass = "Domain.Direct.Violating.ImportDependencyUnused";
+		String toClass = "Technology.Direct.Dao.AccountDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Import");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	// Inheritance
 	@Test
 	public void InheritanceExtends(){
-		String fromModule = "Domain.Direct.Violating.InheritanceExtends";
-		String toModule = "Technology.Direct.Dao.HistoryDAO";
+		String fromClass = "Domain.Direct.Violating.InheritanceExtends";
+		String toClass = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
 	@Test
 	public void InheritanceExtendsAbstractClass(){
-		String fromModule = "Domain.Direct.Violating.InheritanceExtendsAbstractClass";
-		String toModule = "Technology.Direct.Dao.FriendsDAO";
+		String fromClass = "Domain.Direct.Violating.InheritanceExtendsAbstractClass";
+		String toClass = "Technology.Direct.Dao.FriendsDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void InheritanceExtendsFullPath(){
-		String fromModule = "Domain.Direct.Violating.InheritanceExtendsFullPath";
-		String toModule = "Technology.Direct.Dao.HistoryDAO";
+		String fromClass = "Domain.Direct.Violating.InheritanceExtendsFullPath";
+		String toClass = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));	}
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
 	@Test
 	public void InheritanceImplementsInterface(){
-		String fromModule = "Domain.Direct.Violating.InheritanceImplementsInterface";
-		String toModule = "Technology.Direct.Dao.IMapDAO";
+		String fromClass = "Domain.Direct.Violating.InheritanceImplementsInterface";
+		String toClass = "Technology.Direct.Dao.IMapDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	//TESTS
@@ -605,354 +605,354 @@ public class CSharp_AccuracyTestDependencyDetection {
 	// Access
 	@Test
 	public void AccessInstanceVariableIndirect_MethodVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_MethodVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_MethodVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessInstanceVariableIndirect_VarVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_VarVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_VarVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessInstanceVariableIndirect_VarVarToString(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_VarVarToString";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_VarVarToString";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessInstanceVariableIndirectIndirect_MethodVarVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirectIndirect_MethodVarVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirectIndirect_MethodVarVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessInstanceVariableIndirectIndirect_VarVarVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirectIndirect_VarVarVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirectIndirect_VarVarVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessInstanceVariableIndirect_SuperClass(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_SuperClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_SuperClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessInstanceVariableIndirect_SuperSuperClass(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_SuperSuperClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_SuperSuperClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_AsParameter_POI(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter_POI";
-		String toModule = "Domain.Indirect.IndirectTo.POI";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter_POI";
+		String toClass = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
-		String toModule = "Domain.Indirect.IndirectTo.POI";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
+		String toClass = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
-		String toModule = "Domain.Indirect.IndirectTo.POI";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
+		String toClass = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
-		String toModule = "Domain.Indirect.IndirectTo.POI";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
+		String toClass = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_AsParameter(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_WithinIfStament_POI(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament_POI";
-		String toModule = "Domain.Indirect.IndirectTo.POI";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament_POI";
+		String toClass = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessObjectReferenceIndirect_WithinIfStament(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessStaticVariableIndirect_MethodVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_MethodVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_MethodVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessStaticVariableIndirect_VarVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_VarVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_VarVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessStaticVariableIndirect_VarVarToString(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_VarVarToString";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_VarVarToString";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessStaticVariableIndirectIndirect_MethodVarVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirectIndirect_MethodVarVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirectIndirect_MethodVarVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void AccessStaticVariableIndirectIndirect_VarVarVar(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirectIndirect_VarVarVar";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirectIndirect_VarVarVar";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Access");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	// Call
 	@Test
 	public void CallInstanceMethodIndirect_MethodMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirect_MethodMethodToString(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethodToString";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethodToString";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirect_MethodMethod_ViaConstructor(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirect_StaticMethodInstanceMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_StaticMethodInstanceMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_StaticMethodInstanceMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirect_SuperClass(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_SuperClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_SuperClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirect_SuperSuperClass(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_SuperSuperClass";
-		String toModule = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_SuperSuperClass";
+		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirect_VarMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_VarMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_VarMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirectIndirect_MethodVarMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirectIndirect_MethodVarMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirectIndirect_MethodVarMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallInstanceMethodIndirectIndirect_VarVarMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirectIndirect_VarVarMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirectIndirect_VarVarMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void CallStaticMethodIndirect_MethodStaticMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallStaticMethodIndirect_MethodStaticMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallStaticMethodIndirect_MethodStaticMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void CallStaticMethodIndirect_VarStaticMethod(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.CallStaticMethodIndirect_VarStaticMethod";
-		String toModule = "Domain.Indirect.IndirectTo.ServiceOne";
+		String fromClass = "Domain.Indirect.ViolatingFrom.CallStaticMethodIndirect_VarStaticMethod";
+		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	// Inheritance
 	@Test
 	public void InheritanceExtendsExtendsIndirect(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.InheritanceExtendsExtendsIndirect";
-		String toModule = "Domain.Indirect.IndirectTo.POI";
+		String fromClass = "Domain.Indirect.ViolatingFrom.InheritanceExtendsExtendsIndirect";
+		String toClass = "Domain.Indirect.IndirectTo.POI";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void InheritanceExtendsImplementsIndirect(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.InheritanceExtendsImplementsIndirect";
-		String toModule = "Domain.Indirect.IndirectTo.IPreferences";
+		String fromClass = "Domain.Indirect.ViolatingFrom.InheritanceExtendsImplementsIndirect";
+		String toClass = "Domain.Indirect.IndirectTo.IPreferences";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	@Test
 	public void InheritanceFromInnerClass(){
-		String fromModule = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
-		String toModule = "Domain.Direct.Base";
+		String fromClass = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
+		String toClass = "Domain.Direct.Base";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
 	public void InheritanceImplementsExtendsIndirect(){
-		String fromModule = "Domain.Indirect.ViolatingFrom.InheritanceImplementsExtendsIndirect";
-		String toModule = "Domain.Indirect.IndirectTo.IPreferences";
+		String fromClass = "Domain.Indirect.ViolatingFrom.InheritanceImplementsExtendsIndirect";
+		String toClass = "Domain.Indirect.IndirectTo.IPreferences";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromModule, toModule, typesToFind, true));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
 
 	// Violations: Test if all found violating dependencies are reported as violations
 /*	@Test
 	public void ViolationsDirect_CompareToNumberOfDirectDependencies_violating_dao(){
-		String fromModule = "Domain.Direct.Violating";
-		String toModule = "technology.direct";
+		String fromClass = "Domain.Direct.Violating";
+		String toClass = "technology.direct";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
-		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependencies(fromClass, toClass).length;
+		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromClass, toClass).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 
 	@Test
 	public void ViolationsDirect_CompareToNumberOfDirectDependencies_violating_foursquare(){
-		String fromModule = "Domain.Direct.Violating";
-		String toModule = "Fi.Foyt.Foursquare.Api";
+		String fromClass = "Domain.Direct.Violating";
+		String toClass = "Fi.Foyt.Foursquare.Api";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
-		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependencies(fromClass, toClass).length;
+		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromClass, toClass).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 	
 	@Test
 	public void ViolationsInDirect_CompareToNumberOfInDirectDependencies_violatingfrom_indirectto(){
-		String fromModule = "Domain.Indirect.ViolatingFrom";
-		String toModule = "Domain.Indirect.IndirectTo";
+		String fromClass = "Domain.Indirect.ViolatingFrom";
+		String toClass = "Domain.Indirect.IndirectTo";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
-		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependencies(fromClass, toClass).length;
+		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromClass, toClass).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 
 	@Test
 	public void ViolationsInDirect_CompareToNumberOfInDirectDependencies_violatingfrom_dao(){
-		String fromModule = "Domain.Indirect.ViolatingFrom";
-		String toModule = "Technology.Direct.Dao";
+		String fromClass = "Domain.Indirect.ViolatingFrom";
+		String toClass = "Technology.Direct.Dao";
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		int numberOfDependencies = analyseService.getDependencies(fromModule, toModule).length;
-		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromModule, toModule).length;
+		int numberOfDependencies = analyseService.getDependencies(fromClass, toClass).length;
+		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromClass, toClass).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 */
@@ -1016,11 +1016,11 @@ public class CSharp_AccuracyTestDependencyDetection {
 		logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
 	}
 
-	private boolean areDependencyTypesDetected(String moduleFrom, String moduleTo, ArrayList<String> dependencyTypes, boolean isIndirect) {
+	private boolean areDependencyTypesDetected(String fromClass, String toClass, ArrayList<String> dependencyTypes, boolean isIndirect) {
 		boolean dependencyTypesDetected = false;
 		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(moduleFrom, moduleTo);
+		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(fromClass, toClass);
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;

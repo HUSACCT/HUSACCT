@@ -144,16 +144,8 @@ public class XMLDomain {
 				newModule.set(moduleName, moduleDescription, fromStorage);
 				newModule.setId(moduleId);
 	
-				// Add neModule to parent
-				if (parentId == 0) {
-					try {
-						moduleService.addModuleToRoot(newModule);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
+				// Add newModule to parent
 					moduleService.addModuleToParent(parentId, newModule);
-				}
 	
 				if (SoftwareUnitDefinitions != null) {
 					List<Element> SoftwareUnitDefinitionsList = SoftwareUnitDefinitions.getChildren("SoftwareUnitDefinition");
@@ -179,26 +171,25 @@ public class XMLDomain {
 	public SoftwareUnitDefinition getSoftwareUnitDefinitionFromXML(Element e) {
 		Element SUDName = e.getChild("name");
 		Element SUDType = e.getChild("type");
-		Type SoftwareUnitDefinitionType;
+		Type softwareUnitDefinitionType;
 
 		if (SUDType.getValue().toUpperCase().equals("CLASS")) {
-			SoftwareUnitDefinitionType = Type.CLASS;
+			softwareUnitDefinitionType = Type.CLASS;
 		} else if (SUDType.getValue().toUpperCase().equals("INTERFACE")) {
-			SoftwareUnitDefinitionType = Type.INTERFACE;
+			softwareUnitDefinitionType = Type.INTERFACE;
 		} else if (SUDType.getValue().toUpperCase().equals("EXTERNALLIBRARY")) {
-			SoftwareUnitDefinitionType = Type.EXTERNALLIBRARY;
+			softwareUnitDefinitionType = Type.EXTERNALLIBRARY;
 		} else if (SUDType.getValue().toUpperCase().equals("LIBRARY")) {
-			SoftwareUnitDefinitionType = Type.LIBRARY;
+			softwareUnitDefinitionType = Type.LIBRARY;
 		} else if (SUDType.getValue().toUpperCase().equals("PACKAGE")) {
-			SoftwareUnitDefinitionType = Type.PACKAGE;
+			softwareUnitDefinitionType = Type.PACKAGE;
 		} else if (SUDType.getValue().toUpperCase().equals("SUBSYSTEM")) {
-			SoftwareUnitDefinitionType = Type.SUBSYSTEM;
+			softwareUnitDefinitionType = Type.SUBSYSTEM;
 		} else {
-			SoftwareUnitDefinitionType = Type.REGEX;
+			softwareUnitDefinitionType = Type.REGEX;
 		}
 
-		return new SoftwareUnitDefinition(SUDName.getText(),
-				SoftwareUnitDefinitionType);
+		return new SoftwareUnitDefinition(SUDName.getText(), softwareUnitDefinitionType);
 	}
 
 	private boolean hasSubmodules(Element XMLElement) {

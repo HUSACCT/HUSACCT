@@ -2,8 +2,8 @@ package husacct.common.dto;
 
 public class ModuleDTO extends AbstractDTO{
 	public String logicalPath;
-	public ModuleDTO[] subModules;
 	public String type;
+	public ModuleDTO[] subModules;
 	
 	public ModuleDTO(){
 		this.logicalPath = "";

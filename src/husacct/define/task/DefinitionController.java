@@ -237,17 +237,12 @@ import org.apache.log4j.Logger;
 		}
 
 		public void passModuleToService(long selectedModuleId, ModuleStrategy module) {
-			String ExceptionMessage = "";
-			
-			if (selectedModuleId == -1) {
-				moduleService.addModuleToRoot(module);
-			} else {
-				ExceptionMessage = moduleService.addNewModuleToParent(selectedModuleId, module);
-			}
+			String exceptionMessage = "";
+			exceptionMessage = moduleService.addModuleToParent(selectedModuleId, module);
 			this.notifyObservers();
 
-			if (!ExceptionMessage.isEmpty()) {
-				UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
+			if (!exceptionMessage.isEmpty()) {
+				UiDialogs.errorDialog(definitionJPanel, exceptionMessage);
 			}
 			else {
 				logger.info("Adding module with id: " + module.getId() + " and name: " + module.getName());

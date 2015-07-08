@@ -5,6 +5,7 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
 
@@ -17,21 +18,15 @@ import org.jdom2.Element;
 
 public interface IDefineService extends ISaveable, IObservableService {
 
-	/**
-	 * Starts analyze
+	
+	/** Starts analyze
 	 */
 	public void analyze();
 
-	/**
-	 * Creates an application with the given arguments
-	 * 
-	 * @param name
-	 *            the name of the Application
-	 * @param projects
-	 *            is an ArrayList<ProjectDTO> with all the projects within the
-	 *            application
-	 * @param version
-	 *            is the version of the Application
+	/** Creates an application with the given arguments
+	 * @param name: the name of the Application
+	 * @param projects: is an ArrayList<ProjectDTO> with all the projects within the application
+	 * @param version: is the version of the Application
 	 */
 	public void createApplication(String name, ArrayList<ProjectDTO> projects,
 			String version);
@@ -144,4 +139,14 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * Creates and saves architecture report
 	 */
 	public void reportArchitecture(String fullFilePath);
+	
+	// Services for Architecture Reconstruction
+	/** Adds a module to the intended architecture
+	 */
+	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
+	
+	/** Adds a rule to the intended architecture
+	 */
+	public void addRule(RuleDTO rule);
+	
 }
