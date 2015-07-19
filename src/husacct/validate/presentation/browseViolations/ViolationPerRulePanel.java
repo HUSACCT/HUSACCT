@@ -26,6 +26,7 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
@@ -97,6 +98,15 @@ public class ViolationPerRulePanel extends HelpableJPanel {
         ruleScrollPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ViolationsPerRuleTotalTitle")));
         ruleScrollPane.repaint();
         this.repaint();
+        if (violationsPerRuleTable.getRowCount() >= 1) {
+        	violationsPerRuleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        	violationsPerRuleTable.setRowSelectionInterval(0, 0);
+        	int selectedRow = violationsPerRuleTable.getSelectedRow();
+	        int id = (int) violationsPerRuleTable.getValueAt(selectedRow, 0);
+        	showViolationsSelectedRule(id);
+        } else {
+        	clearViolationTable();
+        }
     }
     
     protected void setColumnWidths() {
@@ -132,6 +142,14 @@ public class ViolationPerRulePanel extends HelpableJPanel {
         violationTable.setColumnWidths();
         violationsScrollPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violations")));
         violationsScrollPane.repaint();
-
+    }
+    
+    private void clearViolationTable() {
+		tableModel = new ViolationDataModel();
+        violationTable.setModel(tableModel);
+        violationTable.setAutoCreateRowSorter(true);
+        violationTable.setColumnWidths();
+        violationsScrollPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violations")));
+        violationsScrollPane.repaint();
     }
 }

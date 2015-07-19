@@ -32,7 +32,7 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 			//int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
 			//ViolationHistory selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
 			//browseViolations.setSelectedViolationHistory(selectedViolationHistory);
-			browseViolations.reloadAllViolationPanelsAfterChange();
+			browseViolations.reloadViolationPanelsAfterChange();
 			browseViolations.updateFilterValues();
 			applyFilter.setSelected(false);
 		} catch (InterruptedException e) {

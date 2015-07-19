@@ -146,23 +146,23 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 
 	@Override
 	public void update(Observable o, Object arg) {
-		reloadAllViolationPanelsAfterChange();
+		reloadViolationPanelsAfterChange();
 		filterPane.loadAfterChange();
 	}
 
 	@Override
 	public void update(Locale newLocale) {
-		reloadAllViolationPanelsAfterChange();
+		reloadViolationPanelsAfterChange();
 		filterPane.loadAfterChange();
 	}
 
 	@Override
 	public void updateViolationTables() {
 		violationsPerRulePanel.reload();
-		reloadAllViolationPanelsAfterChange();
+		reloadViolationPanelsAfterChange();
 	}
 
-	public void reloadAllViolationPanelsAfterChange() {
+	public void reloadViolationPanelsAfterChange() {
 		violationsPerRulePanel.reload();
 		reloadViolations();
 		fillViolationsTable(shownViolationsInAllViolationsPanel);
