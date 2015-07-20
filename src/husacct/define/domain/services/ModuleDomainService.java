@@ -80,6 +80,39 @@ public class ModuleDomainService {
 		return message;
 	}
 	
+	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+		try{
+			ModuleStrategy moduleToEdit = getModuleByLogicalPath(logicalPath);
+			if (moduleToEdit != null) {
+				if (newName != null)
+					moduleToEdit.setName(newName);
+				if ((newHierarchicalLevel != 0) && (moduleToEdit instanceof Layer))
+					((Layer) moduleToEdit).setHierarchicalLevel(newHierarchicalLevel);
+				if (newSoftwareUnits != null) {
+					for (SoftwareUnitDTO softwareUnit : newSoftwareUnits) {
+						Type softwareUnitDefinitionType = Type.SUBSYSTEM;
+						if (softwareUnit.type.toUpperCase().equals("CLASS")) {
+							softwareUnitDefinitionType = Type.CLASS;
+						} else if (softwareUnit.type.toUpperCase().equals("INTERFACE")) {
+							softwareUnitDefinitionType = Type.INTERFACE;
+						} else if (softwareUnit.type.toUpperCase().equals("EXTERNALLIBRARY")) {
+							softwareUnitDefinitionType = Type.EXTERNALLIBRARY;
+						} else if (softwareUnit.type.toUpperCase().equals("LIBRARY")) {
+							softwareUnitDefinitionType = Type.LIBRARY;
+						} else if (softwareUnit.type.toUpperCase().equals("PACKAGE")) {
+							softwareUnitDefinitionType = Type.PACKAGE;
+						}
+						moduleToEdit.removeAllSUDefintions();
+						moduleToEdit.addSUDefinition(new SoftwareUnitDefinition(softwareUnit.uniqueName, softwareUnitDefinitionType));
+					}
+					
+				}
+			}
+	    } catch(Exception e) {
+	        logger.error(e);
+	    }
+	}
+	
 	public String addModuleToParent(long parentModuleId, ModuleStrategy module) {
 		String message = "";
 		if (parentModuleId <= 0) {
@@ -205,7 +238,7 @@ public class ModuleDomainService {
 		SoftwareArchitecture.getInstance().removeModule(module);
 	    JtreeController.instance().registerTreeRemoval(module);
       }catch(Exception e) {
-    	  e.printStackTrace();
+    	  logger.error(e);
       }
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}

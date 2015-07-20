@@ -315,6 +315,10 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
 	}
 	
+	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+		moduleService.editModule(logicalPath, newName, newHierarchicalLevel, newSoftwareUnits);
+	}
+	
 	public void addRule(RuleDTO rule) {
 		
 	}

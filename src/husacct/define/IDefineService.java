@@ -19,7 +19,7 @@ import org.jdom2.Element;
 public interface IDefineService extends ISaveable, IObservableService {
 
 	
-	/** Starts analyze
+	/** Loads the analyzed software units.
 	 */
 	public void analyze();
 
@@ -28,12 +28,10 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * @param projects: is an ArrayList<ProjectDTO> with all the projects within the application
 	 * @param version: is the version of the Application
 	 */
-	public void createApplication(String name, ArrayList<ProjectDTO> projects,
-			String version);
+	public void createApplication(String name, ArrayList<ProjectDTO> projects, String version);
 
 	/**
 	 * Gets all details of the application
-	 * 
 	 * @return an ApplicationDTO with the details
 	 */
 	public ApplicationDTO getApplicationDetails();
@@ -75,14 +73,12 @@ public interface IDefineService extends ISaveable, IObservableService {
 
 	/**
 	 * Returns all the defined, enabled rules
-	 * 
 	 * @return an array of RuleDTO's (the defined rules)
 	 */
 	public RuleDTO[] getDefinedRules();
 
 	/**
 	 * Gets the logical architecture data
-	 * 
 	 * @return Element with architecture data
 	 */
 	public Element exportIntendedArchitecture();
@@ -90,7 +86,6 @@ public interface IDefineService extends ISaveable, IObservableService {
 	
 	/**
 	 * Returns the logical module to which the physical path is assigned
-	 * 
 	 * @param physicalPath is the physical path of a class or interface
 	 * @return a ModuleDTO if a module is found based on physicalPath (or a part of physicalPath) 
 	 */
@@ -99,39 +94,32 @@ public interface IDefineService extends ISaveable, IObservableService {
 
 	/**
 	 * Returns the logical path of the parent from the given module
-	 * 
-	 * @param logicalPath
-	 *            is the logical path of the module ("**" is root)
+	 * @param logicalPath is the logical path of the module ("**" is root)
 	 * @return a String containing the logical path to the Parent
 	 */
 	public String getModule_TheParentOfTheModule(String logicalPath);
 
 	/**
 	 * Gets all the root modules
-	 * 
 	 * @return a array of ModuleDTO's with all the root modules
 	 */
 	public ModuleDTO[] getModule_AllRootModules();
 
 	/**
 	 * Checks if there is a module defined.
-	 * 
 	 * @return a boolean
 	 */
 	public boolean isDefined();
 
 	/**
 	 * Checks if a module has been mapped
-	 * 
 	 * @return a boolean
 	 */
 	public boolean isMapped();
 
 	/**
 	 * Loads the logical architecture data
-	 * 
-	 * @param e
-	 *            is an element with workspace data
+	 * @param e is an element with workspace data
 	 */
 	public void importIntendedArchitecture(Element e);
 	
@@ -142,9 +130,16 @@ public interface IDefineService extends ISaveable, IObservableService {
 	
 	// Services for Architecture Reconstruction
 	/** Adds a module to the intended architecture
+	 * Argument name is the simple name, so not the logical path of the module, which is formed by the combination of parentLogicalPath + "." + name.  
 	 */
 	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
 	
+	/** Edits an existing module of the intended architecture
+	 * Argument logicalPath identifies the existing module. If the other arguments don't have a null-value (or 0 for int), the value is set as new attribute value. 
+	 * Argument name is the simple name, so not the logical path of the module.  
+	 */
+	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits);
+
 	/** Adds a rule to the intended architecture
 	 */
 	public void addRule(RuleDTO rule);

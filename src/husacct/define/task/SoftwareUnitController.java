@@ -30,11 +30,10 @@ public class SoftwareUnitController extends PopUpController {
 		softwareUnitDefinitionDomainService.editRegex(DefinitionController.getInstance().getSelectedModuleId(),components,editingRegEx);
 	}
 
-	public void saveRegEx(
-		ArrayList<AnalyzedModuleComponent> selectedComponents, String regExName) {
+	public void saveRegEx(ArrayList<AnalyzedModuleComponent> selectedComponents, String regExName) {
 		logger.info("Adding software unit to module with id " + getModuleId() + " to regex " + regExName);
 		try {
-			softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(getModuleId(), selectedComponents, regExName);
+			softwareUnitDefinitionDomainService.addRegexToModule(getModuleId(), selectedComponents, regExName);
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -57,7 +56,7 @@ public class SoftwareUnitController extends PopUpController {
 		// logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
 			StateService.instance().addSoftwareUnit(SoftwareArchitecture.getInstance().getModuleById(this.getModuleId()), units);
-			softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), units);
+			softwareUnitDefinitionDomainService.addSoftwareUnitsToModule(this.getModuleId(), units);
 			DefinitionController.getInstance().notifyObservers();
 			return true;
 		} catch (Exception e) {
