@@ -65,7 +65,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings = new HashMap<String, Object>();
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
-		currentSettings.put("thickLines", false);
+		currentSettings.put("thickLines", false); //representativeLineWidth is false
 		currentSettings.put("smartLines", true);
 		currentSettings.put("libraries", true);
 		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
@@ -421,7 +421,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			showExternalLibraries.setText(menuBarLocale
 					.get("ShowExternalLibraries"));
 			//TODO name for checkbox 
-			enableThickLines.setText("Thick lines");
+			enableThickLines.setText("Proportional Line Width");
 			
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
