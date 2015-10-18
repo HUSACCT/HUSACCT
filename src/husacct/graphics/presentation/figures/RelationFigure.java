@@ -28,7 +28,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private static final long		serialVersionUID	= 1805821357919823648L;
 	private LineConnectionFigure	line;
 	private TextFigure				amountFigure;
-	private boolean					violationRelation;
+	private boolean					violationRelation = false;
 	
 	public RelationFigure(String name, boolean violated, String amount) {
 		super(name, name);

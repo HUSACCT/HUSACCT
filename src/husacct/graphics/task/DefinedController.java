@@ -227,7 +227,11 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void showViolations() {
-		if (validateService.isValidated()) super.showViolations();
+		if (validateService.isValidated()) {
+			super.showViolations();
+		} else {
+			super.hideViolations();
+		}
 	}
 	
 	@Override

@@ -28,8 +28,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsMenuBar extends HelpableJPanel implements
-		UserInputListener {
+public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener {
 	private static final long				serialVersionUID	= -7419378432318031359L;
 	
 	protected Logger						logger				= Logger.getLogger(GraphicsMenuBar.class);

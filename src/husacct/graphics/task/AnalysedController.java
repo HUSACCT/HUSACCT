@@ -334,7 +334,11 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void showViolations() {
-		if (validateService.isValidated()) super.showViolations();
+		if (validateService.isValidated()) {
+			super.showViolations();
+		} else {
+			super.hideViolations();
+		}
 	}
 
 	public void zoomOutFailed() {

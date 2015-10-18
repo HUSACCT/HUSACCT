@@ -85,7 +85,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		int i = 0;
 		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
-			String translation = localeService.getTranslatedString(strategy .toString());
+			String translation = localeService.getTranslatedString(strategy.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
 			i++;
@@ -223,20 +223,17 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(2, 2));
-		settingsPanel
-		.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
+		settingsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 		
 		layoutStrategyPanel = new JPanel();
 		layoutStrategyPanel.setSize(getWidth(), getHeight());
 		layoutStrategyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		layoutStrategyLabel = new JLabel();
-		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth,
-				elementHeight));
+		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
 		layoutStrategyPanel.add(layoutStrategyLabel);
 		
 		layoutStrategyOptions = new JComboBox<String>(layoutStrategyItems);
-		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth,
-				elementHeight));
+		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
 		layoutStrategyPanel.add(layoutStrategyOptions);
 		settingsPanel.add(layoutStrategyPanel);
 		
@@ -268,8 +265,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				notifyListeners();
 				setVisible(false);
+				notifyListeners();
 			}
 		});
 		confirmPanel.add(okButton);
@@ -333,7 +330,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				listener.hideLibraries();
 			}
 			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
-			if (null != selectedStrategy) {
+			if ((selectedStrategy != null) && !selectedStrategy.toString().equals(currentSettings.get("layoutStrategy").toString())) {
 				currentSettings.put("layoutStrategy", selectedStrategy);
 				listener.changeLayoutStrategy(selectedStrategy);
 			}
