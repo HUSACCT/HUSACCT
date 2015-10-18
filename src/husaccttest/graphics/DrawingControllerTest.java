@@ -35,9 +35,9 @@ public class DrawingControllerTest {
 	@Test
 	public void drawSingleLevelModulesTest() {
 		SoftwareUnitDTO layerDTO = new SoftwareUnitDTO("test.layer", "analysedLayer", "layer", "public");
-		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", "subsystem", new ModuleDTO[] {});
-		ModuleDTO componentDTO = new ModuleDTO("test.component", "component", new ModuleDTO[] {});
-		ModuleDTO externalLibraryDTO = new ModuleDTO("xLibrary.externalLibrary", "library", new ModuleDTO[] {});
+		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", "subsystem", "subsystem", new ModuleDTO[] {});
+		ModuleDTO componentDTO = new ModuleDTO("test.component", "component", "component", new ModuleDTO[] {});
+		ModuleDTO externalLibraryDTO = new ModuleDTO("xLibrary.externalLibrary", "externalLibrary", "library", new ModuleDTO[] {});
 
 		analysedController.drawSingleLevelModules(new AbstractDTO[] { layerDTO, subsystemDTO, componentDTO, externalLibraryDTO });
 
@@ -58,9 +58,9 @@ public class DrawingControllerTest {
 	public void drawMultiLevelModulesTest() {
 		HashMap<String, ArrayList<AbstractDTO>> multiLevelDTOs = new HashMap<String, ArrayList<AbstractDTO>>();
 
-		ModuleDTO classDTO = new ModuleDTO("parent.class", "class", new ModuleDTO[] {});
-		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", "interface", new ModuleDTO[] {});
-		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass","abstract", new ModuleDTO[] {});
+		ModuleDTO classDTO = new ModuleDTO("parent.class", "class", "class", new ModuleDTO[] {});
+		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", "interface", "interface", new ModuleDTO[] {});
+		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass", "abstractClass", "abstract", new ModuleDTO[] {});
 
 		SoftwareUnitDTO analysedClassDTO = new SoftwareUnitDTO("parent.analysedChild", "analysedChild", "class", "public");
 
@@ -86,16 +86,16 @@ public class DrawingControllerTest {
 			if (f instanceof ParentFigure) {
 				BaseFigure[] children = ((ParentFigure) f).getChildFigures();
 				assertEquals("wrong amount of children in parent", 4, children.length);
-				assertEquals("unexpected child figure", "parent.class", children[0].getName());
-				assertEquals("unexpected child figure", "parent.interface", children[1].getName());
-				assertEquals("unexpected child figure", "parent.abstractClass", children[2].getName());
+				assertEquals("unexpected child figure", "class", children[0].getName());
+				assertEquals("unexpected child figure", "interface", children[1].getName());
+				assertEquals("unexpected child figure", "abstractClass", children[2].getName());
 				assertEquals("unexpected child figure", "analysedChild", children[3].getName());
 			} else if (f instanceof AbstractClassFigure) {
 				assertSame("wrong dto for abstract class figure", abstractClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
 			} else if (f instanceof InterfaceFigure) {
 				assertSame("wrong dto for interface figure", interfaceDTO, analysedController.getFigureMap().getModuleDTO(baseF));
 			} else if (f instanceof ClassFigure) {
-				if (baseF.getName().equals("parent.class")) {
+				if (baseF.getName().equals("class")) {
 					assertSame("wrong dto for class figure", classDTO, analysedController.getFigureMap().getModuleDTO(baseF));
 				} else if (baseF.getName().equals("analysedChild")) {
 					assertSame("wrong analysed dto for class figure", analysedClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));

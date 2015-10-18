@@ -1,20 +1,22 @@
 package husacct.common.dto;
 
 public class ModuleDTO extends AbstractDTO{
-	public String logicalPath;
+	public String logicalPath; //The unique name; the full path
+	public String name; //The short name; only unique within the parent module
 	public String type;
 	public ModuleDTO[] subModules;
 	
 	public ModuleDTO(){
 		this.logicalPath = "";
+		this.name = "";
 		this.subModules = new ModuleDTO[]{};
 		this.type = "";
 	}
 	
-	public ModuleDTO(String logicalPath, 
-			String type, ModuleDTO[] subModules) {
+	public ModuleDTO(String logicalPath, String name, String type, ModuleDTO[] subModules) {
 		super();
 		this.logicalPath = logicalPath;
+		this.name = name;
 		this.subModules = subModules;
 		this.type = type;
 		

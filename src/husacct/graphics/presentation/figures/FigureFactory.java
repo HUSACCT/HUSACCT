@@ -45,8 +45,8 @@ public final class FigureFactory {
 		
 		if (dto instanceof ModuleDTO) {
 			type = ((ModuleDTO) dto).type;
-			name = ((ModuleDTO) dto).logicalPath;
-			uniqueName = name;
+			name = ((ModuleDTO) dto).name;
+			uniqueName = ((ModuleDTO) dto).logicalPath;
 		} else if (dto instanceof SoftwareUnitDTO) {
 			type = ((SoftwareUnitDTO) dto).type;
 			name = ((SoftwareUnitDTO) dto).name;

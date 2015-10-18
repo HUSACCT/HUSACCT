@@ -32,6 +32,7 @@ public class DomainToDtoParser {
 	 **/
 	public ModuleDTO parseModule(ModuleStrategy module) {
 		String logicalPath = getLogicalPath(module);
+		String name = module.getName();
 		String type = module.getType();
 
 		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
@@ -45,7 +46,7 @@ public class DomainToDtoParser {
 		subModuleDTOsList.toArray(subModuleDTOs);
 		ModuleDTO[] subModules = subModuleDTOs;
 
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, type, subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, name, type, subModules);
 		return modDTO;
 	}
 
@@ -107,9 +108,10 @@ public class DomainToDtoParser {
 
 	public ModuleDTO parseRootModule(ModuleStrategy module) {
 		String logicalPath = getLogicalPath(module);
+		String name = module.getName();
 		String type = module.getType();
 		ModuleDTO[] subModules = new ModuleDTO[0];
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, type, subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, name, type, subModules);
 		return modDTO;
 	}
 
