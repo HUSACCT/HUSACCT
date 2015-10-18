@@ -1,20 +1,12 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.Resource;
-
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
@@ -29,8 +21,8 @@ public class ProjectFigure extends BaseFigure {
 	private int					MIN_WIDTH			= 120;
 	private int					MIN_HEIGHT			= 60;
 	
-	public ProjectFigure(String figureName) {
-		super(figureName);
+	public ProjectFigure(String figureName, String uniqueName) {
+		super(figureName, uniqueName);
 		
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, projectBackground);

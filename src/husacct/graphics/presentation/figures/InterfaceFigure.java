@@ -9,8 +9,8 @@ public class InterfaceFigure extends ClassFigure {
 	private static final long	serialVersionUID	= 3150088710360391913L;
 	private TextFigure			interfaceTextFigure;
 	
-	public InterfaceFigure(String figureName) {
-		super(figureName);
+	public InterfaceFigure(String figureName, String uniqueName) {
+		super(figureName, uniqueName);
 		
 		interfaceTextFigure = new TextFigure("\u00ABinterface\u00BB");
 		children.add(interfaceTextFigure);

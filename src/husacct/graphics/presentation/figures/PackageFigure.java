@@ -1,19 +1,11 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.Resource;
-
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
@@ -23,14 +15,12 @@ public class PackageFigure extends BaseFigure {
 	private RectangleFigure		top;
 	private RectangleFigure		body;
 	private TextFigure			text;
-//	private BufferedImage 		moduleIcon;
-//	private ImageFigure 		moduleIconFig;
 	
 	private int					MIN_WIDTH			= 100;
 	private int					MIN_HEIGHT			= 80;
 	
-	public PackageFigure(String name) {
-		super(name);
+	public PackageFigure(String name , String uniqueName) {
+		super(name, uniqueName);
 		
 		top = new RectangleFigure();
 		body = new RectangleFigure();

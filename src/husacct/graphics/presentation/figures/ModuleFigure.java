@@ -30,8 +30,8 @@ public class ModuleFigure extends BaseFigure {
 	public int					MIN_WIDTH			= 100;
 	public int					MIN_HEIGHT			= 65;
 	
-	public ModuleFigure(String name, String stereotype) {
-		super(name);
+	public ModuleFigure(String name, String uniqueName, String stereotype) {
+		super(name, uniqueName);
 		this.type = stereotype;
 		if (type.toLowerCase().equals("facade")) {
 			type = "Interface";

@@ -20,23 +20,22 @@ import org.jhotdraw.draw.handle.Handle;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long			serialVersionUID		= 971276235252293165L;
+	public static final Color			defaultBackgroundColor	= new Color(252,255,182);
 	
-	public static final Color			defaultBackgroundColor	= new Color(
-																		252,
-																		255,
-																		182);
 	protected int						baseZIndex, zIndex, raiseZIndex;
 	
+	protected final String				name;
+	protected final String				uniqueName; //Used in equals() to identify objects uniquely
 	private final ArrayList<Decorator>	decorators				= new ArrayList<Decorator>();
 	private boolean						isSizeable				= false;
 	private boolean						isEnabled				= true;
 	private boolean						isStoredInContainer		= false;
-	protected final String				name;
 	private boolean						isContext				= false;
 	
-	public BaseFigure(String theName) {
+	public BaseFigure(String name, String uniqueName) {
 		super();
-		name = theName;
+		this.name = name;
+		this.uniqueName = uniqueName;
 		baseZIndex = 0;
 		raiseZIndex = 5;
 		zIndex = baseZIndex;
@@ -104,20 +103,20 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		// because of the
 		// requirements to override it.
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (this.getClass() != obj.getClass()) return false;
-		
-		BaseFigure other = (BaseFigure) obj;
-		if (name == null) {
-			if (other.name != null) return false;
-		} else if (!name.equals(other.name)) return false;
-		return true;
-	}
-	
+
+	@Override 
+ 	public boolean equals(Object obj) { 
+		if (this == obj) return true; 
+ 		if (obj == null) return false; 
+ 		if (this.getClass() != obj.getClass()) return false; 
+ 		 
+ 		BaseFigure other = (BaseFigure) obj; 
+ 		if (uniqueName == null) { 
+ 			if (other.uniqueName != null) return false; 
+ 		} else if (!uniqueName.equals(other.uniqueName)) return false; 
+ 		return true; 
+ 	} 
+ 	 
 	@Override
 	public Connector findConnector(Point2D.Double p, ConnectionFigure figure) {
 		return new ChopRectangleConnector(this);
@@ -244,7 +243,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
     public String toString() {
         String representation = "";
-        representation += "\nName: " + name;
+        representation += "\nUniqueName: " + uniqueName;
         representation += "\nIsContext: ";
         representation += "\n";
         return representation;

@@ -44,7 +44,7 @@ public class ParentFigure extends BaseFigure {
 	private double				currentPositionX, currentPositionY;
 	
 	public ParentFigure(String name) {
-		super(name);
+		super(name, name);
 		childrenOwnImpl = new ArrayList<Figure>();
 		
 		body = new RectangleFigure();
