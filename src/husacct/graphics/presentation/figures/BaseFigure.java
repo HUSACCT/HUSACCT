@@ -26,16 +26,18 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	protected final String				name;
 	protected final String				uniqueName; //Used in equals() to identify objects uniquely
+	protected final String				type; // In lower case. Used to identify the module type, like subsystem, layer, package, class, also in case of a ParentFigure. 
 	private final ArrayList<Decorator>	decorators				= new ArrayList<Decorator>();
 	private boolean						isSizeable				= false;
 	private boolean						isEnabled				= true;
 	private boolean						isStoredInContainer		= false;
 	private boolean						isContext				= false;
 	
-	public BaseFigure(String name, String uniqueName) {
+	public BaseFigure(String name, String uniqueName, String type) {
 		super();
 		this.name = name;
 		this.uniqueName = uniqueName;
+		this.type = type;
 		baseZIndex = 0;
 		raiseZIndex = 5;
 		zIndex = baseZIndex;
@@ -122,10 +124,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		return new ChopRectangleConnector(this);
 	}
 	
-	public double getHeight() {
-		return getBounds().height;
-	}
-	
 	@Override
 	public int getLayer() {
 		return zIndex;
@@ -133,6 +131,18 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getUniqueName() {
+		return uniqueName;
+	}
+	
+	public String getType(){
+		return type;
+	}
+
+	public double getHeight() {
+		return getBounds().height;
 	}
 	
 	public double getWidth() {

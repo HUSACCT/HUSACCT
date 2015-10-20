@@ -2,6 +2,7 @@ package husacct.graphics.task.layout;
 
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.layered.LayoutStrategy;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;

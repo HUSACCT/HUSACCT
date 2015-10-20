@@ -11,19 +11,16 @@ import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.ClassFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
-import husacct.graphics.presentation.figures.InterfaceFigure;
 import husacct.graphics.presentation.figures.ModuleFigure;
-import husacct.graphics.presentation.figures.PackageFigure;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.FigureConnectorStrategy;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
-import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.task.layout.layered.LayoutStrategy;
 import husacct.graphics.task.layout.state.DrawingState;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
@@ -155,19 +152,22 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	public void drawMultiLevelModules(HashMap<String, ArrayList<AbstractDTO>> modules) {
 		graphicsFrame.setUpToDate();
-		for (String parentName : modules.keySet()) {
+		for (String parentUniqueName : modules.keySet()) {
 			ParentFigure parentFigure = null;
-			if (!parentName.isEmpty()) {
-				parentFigure = figureFactory.createParentFigure(parentName);
-				if (parentFigureNameAndTypeMap.containsKey(parentName)) {
-					String parentType = parentFigureNameAndTypeMap.get(parentName);
+			if (!parentUniqueName.isEmpty()) {
+				if (parentFigureNameAndTypeMap.containsKey(parentUniqueName)) {
+					String parentType = parentFigureNameAndTypeMap.get(parentUniqueName);
 					if ((parentType != null) && !parentType.equals("")) {
-						parentFigure.setType(parentType);
+						parentFigure = figureFactory.createParentFigure(parentUniqueName, parentType);
+					} else {
+						parentFigure = figureFactory.createParentFigure(parentUniqueName, "");
 					}
+				} else {
+					parentFigure = figureFactory.createParentFigure(parentUniqueName, "");
 				}
 				drawing.add(parentFigure);
 			}
-			for (AbstractDTO dto : modules.get(parentName))
+			for (AbstractDTO dto : modules.get(parentUniqueName))
 				try {
 					BaseFigure generatedFigure = figureFactory.createFigure(dto);
 					if (parentFigure != null){ 
@@ -178,7 +178,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 				} catch (Exception e) {
 					logger.error("Could not generate and display figure.", e);
 				}
-			if (!parentName.isEmpty()) 
+			if (!parentUniqueName.isEmpty()) 
 				parentFigure.updateLayout();
 		}
 	}
@@ -381,7 +381,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 				List<BaseFigure> allFigures = Arrays.asList(drawingView.getSelectedFigures().toArray(new BaseFigure[0]));
 				List<BaseFigure> contextModules = new ArrayList<BaseFigure>();
 				for(BaseFigure fig : allFigures){
-					if(fig instanceof PackageFigure || fig instanceof ModuleFigure || fig instanceof ClassFigure || fig instanceof InterfaceFigure || fig instanceof ProjectFigure)
+					if(fig instanceof ModuleFigure || fig instanceof ProjectFigure)
 						contextModules.add(fig);
 				}
 				drawingView.clearSelection();

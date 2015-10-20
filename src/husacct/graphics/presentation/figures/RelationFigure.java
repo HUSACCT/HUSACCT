@@ -31,7 +31,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private boolean					violationRelation = false;
 	
 	public RelationFigure(String name, boolean violated, String amount) {
-		super(name, name);
+		super(name, name, "relation");
 		violationRelation = violated;
 		
 		line = new LineConnectionFigure();

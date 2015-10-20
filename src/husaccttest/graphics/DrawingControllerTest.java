@@ -9,10 +9,8 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.ClassFigure;
-import husacct.graphics.presentation.figures.InterfaceFigure;
+import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.AnalysedController;
@@ -82,25 +80,27 @@ public class DrawingControllerTest {
 			}
 
 			BaseFigure baseF = (BaseFigure) f;
-
-			if (f instanceof ParentFigure) {
+			if (baseF instanceof ParentFigure) {
 				BaseFigure[] children = ((ParentFigure) f).getChildFigures();
 				assertEquals("wrong amount of children in parent", 4, children.length);
 				assertEquals("unexpected child figure", "class", children[0].getName());
 				assertEquals("unexpected child figure", "interface", children[1].getName());
 				assertEquals("unexpected child figure", "abstractClass", children[2].getName());
 				assertEquals("unexpected child figure", "analysedChild", children[3].getName());
-			} else if (f instanceof AbstractClassFigure) {
-				assertSame("wrong dto for abstract class figure", abstractClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof InterfaceFigure) {
-				assertSame("wrong dto for interface figure", interfaceDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof ClassFigure) {
-				if (baseF.getName().equals("class")) {
-					assertSame("wrong dto for class figure", classDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-				} else if (baseF.getName().equals("analysedChild")) {
-					assertSame("wrong analysed dto for class figure", analysedClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-				} else {
-					fail("unexpected class figure in drawing");
+			} else if (baseF instanceof ModuleFigure) { 
+				ModuleFigure moduleF = (ModuleFigure) baseF;
+				if (moduleF.getType().equals("abstract")) {
+					assertSame("wrong dto for abstract class figure", abstractClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+				} else if (moduleF.getType().equals("interface")) {
+					assertSame("wrong dto for interface figure", interfaceDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+				} else if (moduleF.getType().equals("class")) {
+					if (baseF.getName().equals("class")) {
+						assertSame("wrong dto for class figure", classDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+					} else if (baseF.getName().equals("analysedChild")) {
+						assertSame("wrong analysed dto for class figure", analysedClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+					} else {
+						fail("unexpected class figure in drawing");
+					}
 				}
 			} else {
 				fail("unexpected type of figure in drawing");

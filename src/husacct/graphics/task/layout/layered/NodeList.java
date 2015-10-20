@@ -1,4 +1,4 @@
-package husacct.graphics.task.layout;
+package husacct.graphics.task.layout.layered;
 
 import java.util.ArrayList;
 import java.util.Collection;

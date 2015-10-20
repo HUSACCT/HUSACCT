@@ -1,9 +1,11 @@
 package husacct.graphics.task.layout;
 
-import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.InterfaceFigure;
+import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.layered.LayoutStrategy;
+import husacct.graphics.task.layout.layered.Node;
+import husacct.graphics.task.layout.layered.SortedNodeList;
 import husacct.graphics.util.ListUtils;
 
 import java.awt.geom.Point2D;
@@ -34,11 +36,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 				&& figure instanceof RelationFigure;
 	}
 	
-	private static boolean isInterface(Figure figure) {
-		return figure instanceof InterfaceFigure
-				|| figure instanceof AbstractClassFigure;
-	}
-	
 	private AbstractCompositeFigure				drawing;
 	private SortedNodeList						nodes			= new SortedNodeList();
 	
@@ -61,7 +58,14 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 																};
 	
 	private static boolean isInterface(Node node) {
-		return isInterface(node.getFigure());
+		boolean returnValue = false;
+		if (node.getFigure()instanceof ModuleFigure) {
+			ModuleFigure mf = (ModuleFigure) node.getFigure();
+			if (mf.getType().toLowerCase().equals("interface")) {
+				return true;
+			}
+		}
+		return returnValue;
 	}
 	
 	public LayeredLayoutStrategy(AbstractCompositeFigure theDrawing) {

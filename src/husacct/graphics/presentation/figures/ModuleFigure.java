@@ -25,47 +25,51 @@ public class ModuleFigure extends BaseFigure {
 	private TextFigure			moduleStereotype;
 	private BufferedImage 		moduleIcon;
 	private ImageFigure 		moduleIconFigure;
-	private String type;					
 
-	public int					MIN_WIDTH			= 100;
-	public int					MIN_HEIGHT			= 65;
+	protected int				minWidth				= 100;
+	protected int				minHeight				= 50;
 	
-	public ModuleFigure(String name, String uniqueName, String stereotype) {
-		super(name, uniqueName);
-		this.type = stereotype;
-		if (type.toLowerCase().equals("facade")) {
-			type = "Interface";
-		}
+	public ModuleFigure(String name, String uniqueName, String moduleType) {
+		super(name, uniqueName, moduleType.toLowerCase());
 		
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		children.add(body);
 		
-		moduleStereotype = new TextFigure('\u00AB' + type + '\u00BB');
-		children.add(moduleStereotype);
-		
 		moduleName = new TextFigure(name);
 		moduleName.set(AttributeKeys.FONT_BOLD, true);
 		children.add(moduleName);
+		
+		moduleStereotype = new TextFigure('\u00AB' + type + '\u00BB');
+		if (type.equals("facade")) {
+			moduleStereotype = new TextFigure('\u00AB' + "Interface" + '\u00BB');
+		}
+		children.add(moduleStereotype);
 		
 		moduleIconFigure = new ImageFigure();
 		moduleIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
 		moduleIconFigure.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		try {
 			URL componentImageURL = null;
-			if (type.toLowerCase().equals("layer")) {
+			// Set Icons: First icons Intended Architecture diagram, second implemented, third default.
+			if (type.equals("layer")) {
 				componentImageURL = Resource.get(Resource.ICON_LAYER);
-			} else if (type.toLowerCase().equals("component")) {
+			} else if (type.equals("component")) {
 				componentImageURL = Resource.get(Resource.ICON_COMPONENT);
-			} else if (type.toLowerCase().equals("subsystem")) {
-				componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
-			} else if (type.toLowerCase().equals("library")) {
-				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
-			} else if (type.toLowerCase().equals("externallibrary")) {
-				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
-			} else if (type.toLowerCase().equals("interface")) {
+			} else if (type.equals("facade")) {
 				componentImageURL = Resource.get(Resource.ICON_FACADE);
-				type = "Interface";
+			} else if (type.equals("subsystem")) {
+				componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
+			} else if (type.equals("library")) {
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
+			} else if (type.equals("externallibrary")) {
+				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
+			} else if (type.equals("package")) {
+				componentImageURL = Resource.get(Resource.ICON_PACKAGE);
+			} else if (type.equals("class") || type.equals("abstract")) {
+				componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
+			} else if (type.equals("interface")) {
+				componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
 			} else{
 				componentImageURL = Resource.get(Resource.ICON_MODULE);
 			}
@@ -105,9 +109,54 @@ public class ModuleFigure extends BaseFigure {
 	
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if (lead.x - anchor.x < MIN_WIDTH) lead.x = anchor.x + MIN_WIDTH;
-		if (lead.y - anchor.y < MIN_HEIGHT) lead.y = anchor.y + MIN_HEIGHT;
+		// Initialize element sizes
+		double textMargin = 5;
+		double nameWidth = moduleName.getBounds().width;
+		double stereotypeWidth = moduleStereotype.getBounds().width;
+		double iconMarginX = 3;
+		double marginY = 4;
+		double iconWidth = 0;
+		if (moduleIcon != null) {
+			 iconWidth = moduleIcon.getWidth();
+		}
+		double totalHeaderWidth = textMargin + stereotypeWidth + textMargin + iconWidth + iconMarginX;
+		double totalNameLineWidth = textMargin + nameWidth + textMargin;
+
+		// Set bounds body
+		if (lead.x - anchor.x < minWidth) lead.x = anchor.x + minWidth;
+		if (lead.y - anchor.y < minHeight) lead.y = anchor.y + minHeight;
+		if (lead.x - anchor.x < totalHeaderWidth) lead.x = anchor.x + totalHeaderWidth;
+		if (totalNameLineWidth > totalHeaderWidth) lead.x = anchor.x + totalNameLineWidth;
+		body.setBounds(anchor, lead);
 		
+		// Position stereotype
+		double stereotypePlusX = ((lead.x - anchor.x - iconWidth - iconMarginX) - (textMargin + stereotypeWidth + textMargin)) / 2;
+		Point2D.Double stereoTypeTextAnchor = (Double) anchor.clone();
+		stereoTypeTextAnchor.x += stereotypePlusX + textMargin;
+		stereoTypeTextAnchor.y += marginY;
+		moduleStereotype.setBounds(stereoTypeTextAnchor, null);
+		
+		// Position icon
+		if (moduleIconFigure != null) {
+			double iconAnchorX = lead.x - iconMarginX - iconWidth;
+			double iconAnchorY = anchor.y + marginY;
+			double iconLeadX = iconAnchorX + iconWidth;
+			double iconLeadY = iconAnchorY + moduleIcon.getHeight();
+			moduleIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
+		
+		// Position name
+		double namePlusX = ((lead.x - anchor.x) - (textMargin + nameWidth + textMargin)) / 2;
+		double namePlusY = ((lead.y - anchor.y) - (marginY + moduleStereotype.getBounds().height) - moduleName.getBounds().height) / 2;
+		Point2D.Double nameTextAnchor = (Double) anchor.clone();
+		nameTextAnchor.x += namePlusX + textMargin;
+		nameTextAnchor.y = anchor.y + (moduleStereotype.getBounds().height) + namePlusY;
+		moduleName.setBounds(nameTextAnchor, null);
+
+		invalidate();
+
+		
+		/*
 		// Calculate max text width +20 extra
 		double maxTextWidth;
 		if(moduleName.getBounds().width >= moduleStereotype.getBounds().width) 
@@ -126,12 +175,6 @@ public class ModuleFigure extends BaseFigure {
 		double plusX = ((lead.x - anchor.x) - maxTextWidth) / 2;
 		double plusY = ((lead.y - anchor.y) - totalTextHeight) / 2;
 		
-		// Centralize moduleStereotype
-		Point2D.Double moduleStereoTypeTextAnchor = (Double) anchor.clone();
-		moduleStereoTypeTextAnchor.x += plusX	+ (maxTextWidth - moduleStereotype.getBounds().width) / 2;
-		moduleStereoTypeTextAnchor.y += plusY;
-		moduleStereotype.setBounds(moduleStereoTypeTextAnchor, null);
-		
 		// Centralize moduleName
 		Point2D.Double moduleNametextAnchor = (Double) anchor.clone();
 		moduleNametextAnchor.x += plusX + (maxTextWidth - moduleName.getBounds().width) / 2;
@@ -147,6 +190,7 @@ public class ModuleFigure extends BaseFigure {
 		}
 		
 		invalidate();
+		*/
 	}
 	
 	@Override
@@ -157,4 +201,5 @@ public class ModuleFigure extends BaseFigure {
         representation += "\n";
         return representation;
     }
+
 }

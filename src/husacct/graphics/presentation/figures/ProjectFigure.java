@@ -22,7 +22,7 @@ public class ProjectFigure extends BaseFigure {
 	private int					MIN_HEIGHT			= 60;
 	
 	public ProjectFigure(String figureName, String uniqueName) {
-		super(figureName, uniqueName);
+		super(figureName, uniqueName, "project");
 		
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, projectBackground);

@@ -60,17 +60,12 @@ public final class FigureFactory {
 		
 		// TODO check these values with the define team
 		if (type.toLowerCase().equals("project")) return new ProjectFigure(name, uniqueName);
-		else if (type.toLowerCase().equals("class")) return new ClassFigure(name, uniqueName);
-		else if (type.toLowerCase().equals("abstract")) return new AbstractClassFigure(name, uniqueName);
-		else if (type.toLowerCase().equals("interface")) return new InterfaceFigure(name, uniqueName);
-		else if (type.toLowerCase().equals("package")) return new PackageFigure(name, uniqueName);
-		else if (type.toLowerCase().equals("library")) return new ModuleFigure(name, uniqueName, type);
 		else {return new ModuleFigure(name, uniqueName, type);
 		}
 	}
 	
-	public ParentFigure createParentFigure(String parentName) {
-		return new ParentFigure(parentName);
+	public ParentFigure createParentFigure(String parentUniqueName, String type) {
+		return new ParentFigure(parentUniqueName, type);
 	}
 	
 	public ViolationsDecorator createViolationsDecorator() {
