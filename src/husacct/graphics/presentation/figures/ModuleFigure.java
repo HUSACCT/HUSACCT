@@ -70,6 +70,8 @@ public class ModuleFigure extends BaseFigure {
 				componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
 			} else if (type.equals("interface")) {
 				componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
+			} else if (type.equals("project")) {
+				componentImageURL = Resource.get(Resource.ICONSET_PATH);
 			} else{
 				componentImageURL = Resource.get(Resource.ICON_MODULE);
 			}

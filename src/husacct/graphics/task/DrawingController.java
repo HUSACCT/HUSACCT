@@ -14,7 +14,6 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.ParentFigure;
-import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.FigureConnectorStrategy;
@@ -381,7 +380,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 				List<BaseFigure> allFigures = Arrays.asList(drawingView.getSelectedFigures().toArray(new BaseFigure[0]));
 				List<BaseFigure> contextModules = new ArrayList<BaseFigure>();
 				for(BaseFigure fig : allFigures){
-					if(fig instanceof ModuleFigure || fig instanceof ProjectFigure)
+					if(fig instanceof ModuleFigure)
 						contextModules.add(fig);
 				}
 				drawingView.clearSelection();

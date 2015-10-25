@@ -10,8 +10,6 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.ParentFigure;
-import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
@@ -242,7 +240,7 @@ public class AnalysedController extends DrawingController {
 		//parentFigureNameAndTypeMap = new HashMap<String,String>();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures){
-			if (figure.isModule() && !(figure.isContext()) &&(!(figure instanceof ProjectFigure))) try {				
+			if (figure.isModule() && !(figure.isContext())) try {				
 				SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
 				parentNames.add(parentDTO.uniqueName);
 				parentFigureNameAndTypeMap.put(parentDTO.uniqueName, parentDTO.type);
@@ -262,32 +260,6 @@ public class AnalysedController extends DrawingController {
 			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
 	}
-
-	/*
-	 * Code for zooming when Multiple Projects are supported. May need some
-	 * refactoring.
-	 * 
-	 * public void moduleZoom(BaseFigure[] figures) {
-	 * super.notifyServiceListeners(); this.resetContextFigures();
-	 * 
-	 * boolean allProjects = false; for(BaseFigure fig : figures){ if(!(fig
-	 * instanceof ProjectFigure)){ allProjects = false; } else{ allProjects =
-	 * true; } }
-	 * 
-	 * if(allProjects){ setCurrentPathsForProjects(figures); ProjectDTO project
-	 * = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
-	 * AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new
-	 * AbstractDTO[project.analysedModules.size()] ); if(abstractDTOs.length !=
-	 * 0){
-	 * 
-	 * this.drawModulesAndLines(abstractDTOs); } }
-	 * 
-	 * ArrayList<String> parentNames =
-	 * this.sortFiguresBasedOnZoomability(figures);
-	 * 
-	 * if (parentNames.size() > 0) { saveSingleLevelFigurePositions();
-	 * this.getAndDrawModulesIn(parentNames.toArray(new String[] {})); } }
-	 */
 
 	@Override
 	public void moduleZoomOut() {
@@ -318,14 +290,6 @@ public class AnalysedController extends DrawingController {
 		contextFigures = new ArrayList<BaseFigure>();
 	}
 
-	// TODO Breadcrumbs; Needs to be removed as soon as uniqueName of a
-	// AnalysedDTO contains a project
-	private void setCurrentPathsForProjects(BaseFigure[] figures) {
-		String[] paths = new String[1];
-		paths[0] = figures[0].getName();
-		super.setCurrentPaths(paths);
-	}
-
 	@Override
 	public void showLibraries() {
 		super.showLibraries();
@@ -348,4 +312,38 @@ public class AnalysedController extends DrawingController {
 		logger.info("Reverting to the root of the application.");
 		drawArchitecture(getCurrentDrawingDetail());
 	}
+
+	/*
+	 * Code for zooming when Multiple Projects are supported. 
+	 * May need some refactoring.
+	 * 
+	 * public void moduleZoom(BaseFigure[] figures) {
+	 * super.notifyServiceListeners(); this.resetContextFigures();
+	 * 
+	 * boolean allProjects = false; for(BaseFigure fig : figures){ if(!(fig
+	 * instanceof ProjectFigure)){ allProjects = false; } else{ allProjects =
+	 * true; } }
+	 * 
+	 * if(allProjects){ setCurrentPathsForProjects(figures); ProjectDTO project
+	 * = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
+	 * AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new
+	 * AbstractDTO[project.analysedModules.size()] ); if(abstractDTOs.length !=
+	 * 0){
+	 * 
+	 * this.drawModulesAndLines(abstractDTOs); } }
+	 * 
+	 * ArrayList<String> parentNames =
+	 * this.sortFiguresBasedOnZoomability(figures);
+	 * 
+	 * if (parentNames.size() > 0) { saveSingleLevelFigurePositions();
+	 * this.getAndDrawModulesIn(parentNames.toArray(new String[] {})); } }
+	 * 
+	// TODO Needs to be removed as soon as uniqueName of a
+	// AnalysedDTO contains a project
+	private void setCurrentPathsForProjects(BaseFigure[] figures) {
+		String[] paths = new String[1];
+		paths[0] = figures[0].getName();
+		super.setCurrentPaths(paths);
+	}
+	 */
 }

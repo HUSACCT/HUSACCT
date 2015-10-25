@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 public final class FigureFactory {
 	protected Logger	logger				= Logger.getLogger(FigureFactory.class);
-	private String		PROJECT_TYPE		= "Project";
+	private final String PROJECT_TYPE		= "Project";
 	
 	public BaseFigure createFigure(AbstractDTO dto) {
 		BaseFigure createdFigure = createModuleFigure(dto);
@@ -58,10 +58,7 @@ public final class FigureFactory {
 		} else
 			return null;
 		
-		// TODO check these values with the define team
-		if (type.toLowerCase().equals("project")) return new ProjectFigure(name, uniqueName);
-		else {return new ModuleFigure(name, uniqueName, type);
-		}
+		return new ModuleFigure(name, uniqueName, type);
 	}
 	
 	public ParentFigure createParentFigure(String parentUniqueName, String type) {

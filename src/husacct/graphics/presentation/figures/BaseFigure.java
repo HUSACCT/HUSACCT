@@ -165,15 +165,15 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		return isStoredInContainer;
 	}
 	
-	public boolean isLine() {
+	public boolean isLine() { // Overridden by RelationFigure
 		return false;
 	}
 	
-	public boolean isModule() {
+	public boolean isModule() { // Overridden by ModuleFigure
 		return false;
 	}
 	
-	public boolean isParent() {
+	public boolean isParent() { // Overridden by ParentFigure
 		return false;
 	}
 	
