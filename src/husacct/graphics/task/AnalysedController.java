@@ -77,18 +77,20 @@ public class AnalysedController extends DrawingController {
 	private void getAndDrawModulesIn(String parentName) {
 		//AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 		ArrayList<AbstractDTO> children = getChildrenOf(parentName);
-		if (parentName.equals("")) 
+		if (parentName.equals("")) {
 			drawArchitecture(getCurrentDrawingDetail());
-		else if (children.size() > 0) {
+		} else if (children.size() > 0) {
 			setCurrentPaths(new String[] { parentName });
 			this.drawModulesAndLines(children.toArray(new AbstractDTO[] {}));
-		} else
+		} else {
 			logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+		}
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0) drawArchitecture(getCurrentDrawingDetail());
-		else {
+		if (parentNames.length == 0) {
+			drawArchitecture(getCurrentDrawingDetail()); 
+		} else {
 			// First, find the children of the selected module(s) (in parentnames) and store them in allChildren
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			ArrayList<String> compoundedNames = new ArrayList<String>();
@@ -96,12 +98,13 @@ public class AnalysedController extends DrawingController {
 			for (String parentName : parentNames) {
 				compoundedNames.add(parentName);
 				ArrayList<AbstractDTO> knownChildren = getChildrenOf(parentName);
-				if (knownChildren.size() > 0) allChildren.put(parentName, knownChildren);
+				if (knownChildren.size() > 0) 
+					allChildren.put(parentName, knownChildren);
 			}
 
 			if (contextFigures.size() > 0) {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
-				for (BaseFigure figure : contextFigures)
+				for (BaseFigure figure : contextFigures) {
 					if (!figure.isLine() && !figure.isParent()) {
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
 						if(dto instanceof SoftwareUnitDTO){
@@ -128,9 +131,9 @@ public class AnalysedController extends DrawingController {
 						if (knownChildren.size() > 0) allChildren.put(figure.getName(), knownChildren);
 					}
 				if (tmp.size() > 0) allChildren.put("", tmp);
+				}
 			}
 			setCurrentPaths(parentNames);
-
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
@@ -138,7 +141,6 @@ public class AnalysedController extends DrawingController {
 				this.drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else
 				this.drawModulesAndLines(allChildren);
-
 		}
 	}
 
@@ -240,15 +242,15 @@ public class AnalysedController extends DrawingController {
 		//parentFigureNameAndTypeMap = new HashMap<String,String>();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures){
-			if (figure.isModule() && !(figure.isContext())) try {				
-				SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
-				parentNames.add(parentDTO.uniqueName);
-				parentFigureNameAndTypeMap.put(parentDTO.uniqueName, parentDTO.type);
-			} catch (Exception e) {
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
-				//e.printStackTrace();
-			}
-			else if (figure.isContext() || !figure.isLine()) {
+			if (figure.isModule() && !(figure.isContext())) 
+				try {				
+					SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
+					parentNames.add(parentDTO.uniqueName);
+					parentFigureNameAndTypeMap.put(parentDTO.uniqueName, parentDTO.type);
+				} catch (Exception e) {
+					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+					//e.printStackTrace();
+			} else if (figure.isContext() || !figure.isLine()) {
 				contextFigures.add(figure);
 			} else {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");

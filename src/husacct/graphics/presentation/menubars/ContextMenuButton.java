@@ -107,8 +107,10 @@ public class ContextMenuButton extends JPopupMenu {
 	
 	@Override
 	public void show(Component invoker, int x, int y) {
+		/* Commented 2015-10-26: Option to select "Zoom with context". Activate after implementation of this functionality.
 		super.show(invoker, x, y);
 		parentZoomButton = (JButton) invoker;
+		*/
 	}
 	
 	protected void triggerHideModules() {

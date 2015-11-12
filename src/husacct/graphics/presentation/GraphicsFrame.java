@@ -47,6 +47,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	private boolean							showingProperties	= false;
 	
 	private int								frameTotalWidth;
+	private int								centerPaneHeight;
 	
 	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
 	
@@ -204,7 +205,6 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		createLocationBar();
 		
 		locationScrollPane = new JScrollPane(locationBar);
-		locationScrollPane.setPreferredSize(new Dimension(600, 35));
 		locationScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		locationScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
@@ -292,9 +292,10 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	
 	private void positionLayoutComponents() {
 		if (showingProperties) {
-			centerPane.setSize(getWidth(), getHeight());
-			drawingScrollPane.setPreferredSize(new Dimension(600, 900));
-			int smallerSize = getHeight() / 2;
+			int centerPaneHeight = getHeight();
+			int centerPaneWidth = getWidth();
+			centerPane.setSize(centerPaneWidth, centerPaneHeight);
+			int smallerSize = centerPaneHeight - (centerPaneHeight / 3);
 			centerPane.setDividerLocation(smallerSize);
 			centerPane.setDividerSize(10);
 			centerPane.validate();
@@ -321,8 +322,8 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	private void resizeLocationBar() {
-		if (locationScrollPane.getHorizontalScrollBar().isShowing()) locationScrollPane
-				.setPreferredSize(new Dimension(900, 50));
+		if (locationScrollPane.getHorizontalScrollBar().isShowing()) 
+			locationScrollPane.setPreferredSize(new Dimension(900, 50));
 		else
 			locationScrollPane.setPreferredSize(new Dimension(900, 35));
 	}
@@ -361,10 +362,10 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
+		showProperties();
 		DependencyTable propertiesTable = new DependencyTable(dependencyDTOs);
 		propertiesScrollPane.setViewportView(propertiesTable);
-		propertiesTable.setAutoCreateRowSorter(true);
-		showProperties();
+		//propertiesTable.setAutoCreateRowSorter(true);
 	}
 	
 	@Override

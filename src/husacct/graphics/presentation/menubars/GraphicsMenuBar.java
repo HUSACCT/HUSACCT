@@ -165,9 +165,8 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		zoomInButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (SwingUtilities.isRightMouseButton(e)
-						&& e.getClickCount() == 1) zoomOptionsMenu.show(
-						zoomInButton, e.getX(), e.getY());
+				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) 
+					zoomOptionsMenu.show(zoomInButton, e.getX(), e.getY());
 			}
 			
 			@Override
