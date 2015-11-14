@@ -22,15 +22,11 @@ public class FigureConnectorStrategy {
 		return connect(connection, startFigure, endFigure);
 	}
 	
-	public ConnectionFigure connect(ConnectionFigure connection,
-			BaseFigure startFigure, BaseFigure endFigure) {
-		Connector startConnector = startFigure.findConnector(
-				new Point2D.Double(50, 50), prototype);
-		Connector endConnector = endFigure.findConnector(new Point2D.Double(
-				500, 30), prototype);
+	public ConnectionFigure connect(ConnectionFigure connection, BaseFigure startFigure, BaseFigure endFigure) {
+		Connector startConnector = startFigure.findConnector(new Point2D.Double(50, 50), prototype);
+		Connector endConnector = endFigure.findConnector(new Point2D.Double(500, 30), prototype);
 		
-		if (startConnector != null && endConnector != null
-				&& prototype.canConnect(startConnector, endConnector)) {
+		if (startConnector != null && endConnector != null && prototype.canConnect(startConnector, endConnector)) {
 			connection.willChange();
 			connection.setStartConnector(startConnector);
 			connection.setEndConnector(endConnector);

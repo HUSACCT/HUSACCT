@@ -226,8 +226,7 @@ public class Drawing extends QuadTreeDrawing {
 	
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
-		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(),
-				figures);
+		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
 	}
 	
 	public void updateLines() {

@@ -101,6 +101,7 @@ public class ViewController {
 		for(AbstractViewContainer container : viewContainers){
 			container.closeFrame();
 		}
+		AbstractViewContainer.resetLastStartPosition();
 	}
 	
 	public void setLocaleListeners(){

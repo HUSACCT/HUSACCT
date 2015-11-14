@@ -15,8 +15,9 @@ import org.jhotdraw.draw.Figure;
 
 public class BasicLayoutStrategy implements LayoutStrategy {
 	
-	private static final double		VERT_ITEM_SPACING	= 100.0;
-	private static final double		HORZ_ITEM_SPACING	= 100.0;
+	private static final double		VERT_SPACE_FIRST_LINE	= 50.0;
+	private static final double		VERT_ITEM_SPACING		= 110.0;
+	private static final double		HORZ_ITEM_SPACING		= 110.0;
 	
 	private AbstractCompositeFigure	drawing				= null;
 	
@@ -24,20 +25,9 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		drawing = theDrawing;
 	}
 	
-	private int countItemsToPosition(List<Figure> figures) {
-		int count = 0;
-		
-		for (Figure f : figures) {
-			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isInContainer() && !bf.isLine()) count++;
-		}
-		
-		return count;
-	}
-	
 	@Override
 	public void doLayout() {
-		double x = HORZ_ITEM_SPACING, y = VERT_ITEM_SPACING;
+		double x = HORZ_ITEM_SPACING, y = VERT_SPACE_FIRST_LINE;
 		double maxHeightOnLine = 0.0;
 		int figuresOnLine = 0;
 		
@@ -63,8 +53,7 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 				bounds.x = x;
 				bounds.y = y;
 				Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-				Point2D.Double lead = new Point2D.Double(bounds.x
-						+ bounds.width, bounds.y + bounds.height);
+				Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);
 				
 				f.willChange();
 				f.setBounds(anchor, lead);
@@ -75,6 +64,17 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 				figuresOnLine++;
 			} else
 				connectors.add(f);
+	}
+	
+	private int countItemsToPosition(List<Figure> figures) {
+		int count = 0;
+		
+		for (Figure f : figures) {
+			BaseFigure bf = (BaseFigure) f;
+			if (!bf.isInContainer() && !bf.isLine()) count++;
+		}
+		
+		return count;
 	}
 	
 	private boolean inContainer(Figure f) {

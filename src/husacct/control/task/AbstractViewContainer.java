@@ -142,4 +142,9 @@ abstract public class AbstractViewContainer {
 	}
 	
 	abstract public JInternalFrame getInternalFrame();
+	
+	public static void resetLastStartPosition() {
+		lastStartPosition = new Point(10, 10);
+	}
+	
 }
