@@ -54,7 +54,7 @@ public class DefinedController extends DrawingController {
 			modules = internalModules;
 		}
 		resetCurrentPaths();
-		if (DrawingDetail.WITH_VIOLATIONS == detail) 
+		if (DrawingDetail.WITH_VIOLATIONS == detail)
 			showViolations();
 		drawModulesAndLines(modules);
 	}

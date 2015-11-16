@@ -133,7 +133,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	}
 	
 	public int getAmount() {
-		return Integer.parseInt(amountFigure.getText());
+		String amountString = amountFigure.getText();
+		if (amountString.contains("/")){
+			String dependencyString = amountString.substring(amountString.indexOf("/") + 1);
+			return Integer.parseInt(dependencyString);
+
+		} else {
+			return Integer.parseInt(amountFigure.getText());
+		}
 	}
 	
 	@Override

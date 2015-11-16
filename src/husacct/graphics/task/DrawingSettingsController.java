@@ -73,8 +73,7 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	}
 	
 	public void notifyServiceListeners() {
-		ServiceProvider.getInstance().getGraphicsService()
-				.notifyServiceListeners();
+		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
 	
 	public void resetCurrentPaths() {

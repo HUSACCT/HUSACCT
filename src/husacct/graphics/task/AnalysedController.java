@@ -61,7 +61,7 @@ public class AnalysedController extends DrawingController {
 		resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) 
 			showViolations();
-		this.drawModulesAndLines(modules);
+		drawModulesAndLines(modules);
 
 		/*
 		 * Multiple projects is removed, but the code remains. Check Git issue #
@@ -75,13 +75,12 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		//AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 		ArrayList<AbstractDTO> children = getChildrenOf(parentName);
 		if (parentName.equals("")) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else if (children.size() > 0) {
 			setCurrentPaths(new String[] { parentName });
-			this.drawModulesAndLines(children.toArray(new AbstractDTO[] {}));
+			drawModulesAndLines(children.toArray(new AbstractDTO[] {}));
 		} else {
 			logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 		}
@@ -139,8 +138,9 @@ public class AnalysedController extends DrawingController {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
 				this.drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
-			} else
+			} else {
 				this.drawModulesAndLines(allChildren);
+			}
 		}
 	}
 
@@ -271,8 +271,8 @@ public class AnalysedController extends DrawingController {
 			resetContextFigures();
 			String firstCurrentPaths = getCurrentPaths()[0];
 			SoftwareUnitDTO parentDTO = analyseService.getParentUnitOfSoftwareUnit(firstCurrentPaths);
-			if (parentDTO != null) this
-			.getAndDrawModulesIn(parentDTO.uniqueName);
+			if (parentDTO != null) 
+				this.getAndDrawModulesIn(parentDTO.uniqueName);
 			else
 				zoomOutFailed();
 		} else

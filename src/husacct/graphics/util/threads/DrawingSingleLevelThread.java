@@ -21,7 +21,8 @@ public class DrawingSingleLevelThread implements Runnable {
 		try {
 			controller.clearDrawing();
 			controller.drawSingleLevel(toDrawModules);
-			Thread.sleep(10);
+			//Thread.sleep(10);
+			Thread.sleep(1);
 		} catch (InterruptedException e) {
 			logger.error(" InterruptedException: ", e);
 			//e.printStackTrace();

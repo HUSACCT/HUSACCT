@@ -24,7 +24,6 @@ import husacct.graphics.task.layout.state.DrawingState;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.FigureMap;
-import husacct.graphics.util.threads.DrawingLinesThread;
 import husacct.graphics.util.threads.DrawingMultiLevelThread;
 import husacct.graphics.util.threads.DrawingSingleLevelThread;
 import husacct.graphics.util.threads.ThreadMonitor;
@@ -125,18 +124,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 		if (areLinesThick()) drawing.updateLineFigureThicknesses();
 	}
 	
-	protected void drawLinesBasedOnSettingInTask() {
-		clearLines();
-		setDrawingViewNonVisible();
-		runDrawLinesTask();
-	}
-	
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
-		runDrawSingleLevelTask(modules);
+		//showLoadingScreen();
+		//clearDrawing();
+		//drawSingleLevel(modules);
+		//hideLoadingScreen();
+		runThread(new DrawingSingleLevelThread(this, modules)); //2015-11-14 Thread disabled, and the actions of thread included in the lines above.
 	}
 	
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		runDrawMultiLevelTask(modules);
+		//showLoadingScreen();
+		//clearDrawing();
+		//drawMultiLevel(modules);
+		//hideLoadingScreen();
+		runThread(new DrawingMultiLevelThread(this, modules)); //2015-11-14 Thread disabled, and the actions of thread included in the lines above.
 	}
 	
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -449,19 +450,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawingView.restoreHiddenFigures();
 	}
 	
-	private void runDrawLinesTask() {
-		runThread(new DrawingLinesThread(this));
-	}
-	
-	private void runDrawMultiLevelTask(
-			HashMap<String, ArrayList<AbstractDTO>> modules) {
-		runThread(new DrawingMultiLevelThread(this, modules));
-	}
-	
-	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
-		runThread(new DrawingSingleLevelThread(this, modules));
-	}
-	
 	private void runThread(Runnable runnable) {
 		if (!threadMonitor.add(runnable)) {
 			//logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
@@ -492,12 +480,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 			drawingView.cannotZoomOut();
 	}
 	
-	public void setDrawingViewNonVisible() {
+	public void showLoadingScreen() {
 		drawingView.setVisible(false);
 		graphicsFrame.showLoadingScreen();
 	}
 	
-	public void setDrawingViewVisible() {
+	public void hideLoadingScreen() {
 		graphicsFrame.hideLoadingScreen();
 		drawingView.setVisible(true);
 	}
