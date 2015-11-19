@@ -10,11 +10,7 @@ public interface IGraphicsService extends IObservableService {
 	
 	void drawAnalysedArchitecture();
 	
-	void drawAnalysedArchitectureWithViolations();
-	
 	void drawDefinedArchitecture();
-	
-	void drawDefinedArchitectureWithViolations();
 	
 	JInternalFrame getAnalysedArchitectureGUI();
 	

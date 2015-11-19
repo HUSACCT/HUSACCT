@@ -107,9 +107,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawing.clearAllLines();
 	}
 	
-	public void drawArchitecture(DrawingDetail detail) {
-		drawingView.cannotZoomOut();
-	}
+	protected abstract void drawArchitecture();
 	
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
@@ -286,8 +284,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 	}
 	
-	protected abstract DependencyDTO[] getDependenciesBetween(
-			BaseFigure figureFrom, BaseFigure figureTo);
+	protected abstract DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo);
 	
 	public Drawing getDrawing() {
 		return drawing;
@@ -472,12 +469,21 @@ public abstract class DrawingController extends DrawingSettingsController {
 		if (getCurrentPaths().length < 2) saveFigurePositions();
 	}
 	
+	protected void setCannotZoomOut() {
+		drawingView.cannotZoomOut();
+	}
+	
 	@Override
 	public void setCurrentPaths(String[] paths) {
 		super.setCurrentPaths(paths);
 		if (!getCurrentPaths()[0].isEmpty()) drawingView.canZoomOut();
 		else
 			drawingView.cannotZoomOut();
+	}
+	
+	@Override
+	public void setZoomSlider(double zoomFactor) {
+		graphicsFrame.setZoomSlider(zoomFactor);
 	}
 	
 	public void showLoadingScreen() {
@@ -488,11 +494,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void hideLoadingScreen() {
 		graphicsFrame.hideLoadingScreen();
 		drawingView.setVisible(true);
-	}
-	
-	@Override
-	public void setZoomSlider(double zoomFactor) {
-		graphicsFrame.setZoomSlider(zoomFactor);
 	}
 	
 	@Override

@@ -31,13 +31,16 @@ public class DefinedController extends DrawingController {
 		initializeServices();
 	}
 	
+	// Method to create the top-level diagram.
 	@Override
-	public void drawArchitecture(DrawingDetail detail) {
-		super.drawArchitecture(getCurrentDrawingDetail());
+	public void drawArchitecture() {
+		super.setCannotZoomOut();
 		super.notifyServiceListeners();
 
+		// Select all modules in root
 		ModuleDTO[] modules = defineService.getModule_AllRootModules();
 		if (!areExternalLibrariesShown) {
+			// Select only internal modules in root
 			int nrOfInternalModules = 0;
 			for (ModuleDTO module : modules){
 				if (!module.type.toLowerCase().equals("externallibrary"))
@@ -54,13 +57,11 @@ public class DefinedController extends DrawingController {
 			modules = internalModules;
 		}
 		resetCurrentPaths();
-		if (DrawingDetail.WITH_VIOLATIONS == detail)
-			showViolations();
 		drawModulesAndLines(modules);
 	}
 	
 	private void getAndDrawModulesIn(String parentName) {
-		if (parentName.equals("") || parentName.equals("**")) drawArchitecture(getCurrentDrawingDetail());
+		if (parentName.equals("") || parentName.equals("**")) drawArchitecture();
 		else {
 			ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
 			if (children.length > 0) {
@@ -72,13 +73,13 @@ public class DefinedController extends DrawingController {
 	}
 	
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0) drawArchitecture(getCurrentDrawingDetail());
+		if (parentNames.length == 0) drawArchitecture();
 		else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
 				ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
 				if (parentName.equals("") || parentName.equals("**")) {
-					drawArchitecture(getCurrentDrawingDetail());
+					drawArchitecture();
 					continue;
 				} else if (children.length > 0) {
 					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
@@ -153,7 +154,7 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
-		if (paths.length == 0) drawArchitecture(getCurrentDrawingDetail());
+		if (paths.length == 0) drawArchitecture();
 		else
 			getAndDrawModulesIn(paths);
 	}
@@ -204,7 +205,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	public void moduleZoomOutFailed() {
-		drawArchitecture(getCurrentDrawingDetail());
+		drawArchitecture();
 	}
 	
 	@Override

@@ -13,8 +13,7 @@ import javax.swing.JInternalFrame;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class GraphicsServiceImpl extends ObservableService implements
-		IGraphicsService, ISaveable {
+public class GraphicsServiceImpl extends ObservableService implements IGraphicsService, ISaveable {
 	
 	private AnalysedController	analysedController;
 	private DefinedController	definedController;
@@ -46,25 +45,13 @@ public class GraphicsServiceImpl extends ObservableService implements
 	@Override
 	public void drawAnalysedArchitecture() {
 		createControllers();
-		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
-	}
-	
-	@Override
-	public void drawAnalysedArchitectureWithViolations() {
-		createControllers();
-		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
+		analysedController.drawArchitecture();
 	}
 	
 	@Override
 	public void drawDefinedArchitecture() {
 		createControllers();
-		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
-	}
-	
-	@Override
-	public void drawDefinedArchitectureWithViolations() {
-		createControllers();
-		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
+		definedController.drawArchitecture();
 	}
 	
 	@Override

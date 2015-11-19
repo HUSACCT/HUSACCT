@@ -32,7 +32,7 @@ abstract public class AbstractViewContainer {
 	}
 	
 	public void setLocaleListener(){
-		//System.out.println("setting localelistener for " + this.stringIdentifier);
+		//System.out.println("setting localeListener for " + this.stringIdentifier);
 		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
