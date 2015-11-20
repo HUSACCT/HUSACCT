@@ -9,8 +9,8 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
+import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -26,14 +26,14 @@ public class AnalysedController extends DrawingController {
 	protected IValidateService		validateService;
 
 
-	public AnalysedController() {
-		super();
+	public AnalysedController(GraphicsPresentationController presentationController) {
+		super(presentationController);
 		initializeServices();
 	}
 
 	// Method to create the top-level diagram.
 	@Override
-	public void drawArchitecture() {
+	public void drawArchitectureTopLevel() {
 		super.setCannotZoomOut();
 		super.notifyServiceListeners();
 
@@ -77,7 +77,7 @@ public class AnalysedController extends DrawingController {
 	private void getAndDrawModulesIn(String parentName) {
 		ArrayList<AbstractDTO> children = getChildrenOf(parentName);
 		if (parentName.equals("")) {
-			drawArchitecture();
+			drawArchitectureTopLevel();
 		} else if (children.size() > 0) {
 			setCurrentPaths(new String[] { parentName });
 			drawModulesAndLines(children.toArray(new AbstractDTO[] {}));
@@ -88,7 +88,7 @@ public class AnalysedController extends DrawingController {
 
 	private void getAndDrawModulesIn(String[] parentNames) {
 		if (parentNames.length == 0) {
-			drawArchitecture(); 
+			drawArchitectureTopLevel(); 
 		} else {
 			// First, find the children of the selected module(s) (in parentnames) and store them in allChildren
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
@@ -149,7 +149,7 @@ public class AnalysedController extends DrawingController {
 
 		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
 
-		if (parentName.equals("")) drawArchitecture();
+		if (parentName.equals("")) drawArchitectureTopLevel();
 		else if (children.length > 0) {
 			knownChildren = new ArrayList<AbstractDTO>();
 			for (AbstractDTO child : children)
@@ -230,7 +230,7 @@ public class AnalysedController extends DrawingController {
 		saveSingleLevelFigurePositions();
 		resetContextFigures();
 		if (paths.length == 0) 
-			drawArchitecture();
+			drawArchitectureTopLevel();
 		else
 			this.getAndDrawModulesIn(paths);
 	}
@@ -310,7 +310,7 @@ public class AnalysedController extends DrawingController {
 	public void zoomOutFailed() {
 		logger.info("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent.");
 		//logger.info("Reverting to the root of the application.");
-		drawArchitecture();
+		drawArchitectureTopLevel();
 	}
 
 	/*

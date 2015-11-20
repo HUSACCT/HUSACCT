@@ -9,9 +9,8 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
+import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.ParentFigure;
-import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -26,14 +25,14 @@ public class DefinedController extends DrawingController {
 	
 	private HashMap<String, BaseFigure>	definedFigures;
 	
-	public DefinedController() {
-		super();
+	public DefinedController(GraphicsPresentationController presentationController) {
+		super(presentationController);
 		initializeServices();
 	}
 	
 	// Method to create the top-level diagram.
 	@Override
-	public void drawArchitecture() {
+	public void drawArchitectureTopLevel() {
 		super.setCannotZoomOut();
 		super.notifyServiceListeners();
 
@@ -61,7 +60,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	private void getAndDrawModulesIn(String parentName) {
-		if (parentName.equals("") || parentName.equals("**")) drawArchitecture();
+		if (parentName.equals("") || parentName.equals("**")) drawArchitectureTopLevel();
 		else {
 			ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
 			if (children.length > 0) {
@@ -73,13 +72,13 @@ public class DefinedController extends DrawingController {
 	}
 	
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0) drawArchitecture();
+		if (parentNames.length == 0) drawArchitectureTopLevel();
 		else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
 				ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
 				if (parentName.equals("") || parentName.equals("**")) {
-					drawArchitecture();
+					drawArchitectureTopLevel();
 					continue;
 				} else if (children.length > 0) {
 					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
@@ -154,7 +153,7 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
-		if (paths.length == 0) drawArchitecture();
+		if (paths.length == 0) drawArchitectureTopLevel();
 		else
 			getAndDrawModulesIn(paths);
 	}
@@ -205,7 +204,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	public void moduleZoomOutFailed() {
-		drawArchitecture();
+		drawArchitectureTopLevel();
 	}
 	
 	@Override

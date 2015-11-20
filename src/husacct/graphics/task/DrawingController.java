@@ -10,6 +10,7 @@ import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
+import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ModuleFigure;
@@ -50,6 +51,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	private final HashMap<String, DrawingState>	storedStates	= new HashMap<String, DrawingState>();
 	
+	private GraphicsPresentationController 		presentationController;
 	private Drawing								drawing;
 	private DrawingView							drawingView;
 	private GraphicsFrame						graphicsFrame;
@@ -67,13 +69,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected HashMap<String, String> 			parentFigureNameAndTypeMap; // Map with key = name of the parent figure and value = type. 
 
 	
-	public DrawingController() {
+	public DrawingController(GraphicsPresentationController graphicsPresentationController) {
 		super();
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
-		
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
+		parentFigureNameAndTypeMap = new HashMap<String,String>();
 		
+		this.presentationController = graphicsPresentationController;
+		drawing = presentationController.getDrawing();
+		drawingView = presentationController.getDrawingView();
+		graphicsFrame = (GraphicsFrame) presentationController.getGraphicsFrame();
+		
+		switchLayoutStrategy();
+		loadDefaultSettings();
 		localeService = ServiceProvider.getInstance().getLocaleService();
 		localeService.addServiceListener(new IServiceListener() {
 			@Override
@@ -81,11 +90,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 				DrawingController.this.refreshFrame();
 			}
 		});
-		
-		parentFigureNameAndTypeMap = new HashMap<String,String>();
-		initializeComponents();
-		switchLayoutStrategy();
-		loadDefaultSettings();
+		threadMonitor = new ThreadMonitor(this);
 	}
 	
 	@Override
@@ -107,7 +112,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawing.clearAllLines();
 	}
 	
-	protected abstract void drawArchitecture();
+	public abstract void drawArchitectureTopLevel();
 	
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
@@ -119,7 +124,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void drawLinesBasedOnSetting() {
 		drawDependenciesAndViolationsForShownModules();
 		if (areSmartLinesOn()) drawing.updateLineFigureToContext();
-		if (areLinesThick()) drawing.updateLineFigureThicknesses();
+		if (areLinesThick()) drawing.updateLineFigureThicknesses(figureMap.getMaxAll());
 	}
 	
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
@@ -149,7 +154,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	public void drawMultiLevelModules(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		graphicsFrame.setUpToDate();
 		for (String parentUniqueName : modules.keySet()) {
 			ParentFigure parentFigure = null;
 			if (!parentUniqueName.isEmpty()) {
@@ -339,19 +343,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.turnOffViolations();
 	}
 	
-	private void initializeComponents() {
-		drawing = new Drawing();
-		drawing.setFigureMap(figureMap);
-		drawingView = new DrawingView(drawing);
-		drawingView.addListener(this);
-		
-		graphicsFrame = new GraphicsFrame(drawingView);
-		graphicsFrame.addListener(this);
-		graphicsFrame.setSelectedLayout(layoutStrategyOption);
-		
-		threadMonitor = new ThreadMonitor(this);
-	}
-	
 	public boolean isDrawingVisible() {
 		return drawingView.isVisible();
 	}
@@ -402,23 +393,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 			
 			BaseFigure[] selectedFigures = figures.toArray(new BaseFigure[figures.size()]);
 			this.moduleZoom(selectedFigures);
-		}
-	}
-	
-	protected void printFigures(String msg) {
-		if (!debugPrint) return;
-		
-		System.out.println(msg);
-		
-		for (Figure f : drawing.getChildren()) {
-			BaseFigure bf = (BaseFigure) f;
-			Rectangle2D.Double bounds = bf.getBounds();
-			
-			String rect = String.format(Locale.US,
-					"[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y,
-					bounds.width, bounds.height);
-			if (bf.getName().equals("Main")) System.out.println(String.format(
-					"%s: %s", bf.getName(), rect));
 		}
 	}
 	

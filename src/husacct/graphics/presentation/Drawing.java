@@ -33,7 +33,6 @@ public class Drawing extends QuadTreeDrawing {
 	private final Logger				logger				= Logger.getLogger(Drawing.class);
 	private final FileManager			filemanager			= new FileManager();
 	private File						selectedFile		= filemanager.getFile();
-	private FigureMap					figureMap;
 	
 	public Drawing() {
 		super();
@@ -154,11 +153,7 @@ public class Drawing extends QuadTreeDrawing {
 
 			strategy.separateLines(overlappingFigures);
 		}
-
 	}	
-	public void setFigureMap(FigureMap map) {
-		figureMap = map;
-	}
 	
 	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList) {
 		willChange();
@@ -211,9 +206,8 @@ public class Drawing extends QuadTreeDrawing {
 		return output;
 	}
 
-	public void updateLineFigureThicknesses() {
+	public void updateLineFigureThicknesses(int maxAmount) {
 		RelationFigure[] figures = getShownLines();
-		int maxAmount = figureMap.getMaxAll();
 		for (RelationFigure figure : figures) {
 			double weight = (double) figure.getAmount() / maxAmount;
 			if (weight < 0.25) figure.setLineThickness(1);
