@@ -92,22 +92,22 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
-	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+	public void layoutStrategyChange(DrawingLayoutStrategy selectedStrategyEnum) {
 		for (UserInputListener listener : listeners)
-			listener.changeLayoutStrategy(selectedStrategyEnum);
+			listener.layoutStrategyChange(selectedStrategyEnum);
 	}
 	
 	@Override
-	public void drawingZoomChanged(double zoomFactor) {
+	public void zoomFactorChanged(double zoomFactor) {
 		zoomSlider.setValue((int) zoomFactor);
 		for (UserInputListener listener : listeners)
-			listener.drawingZoomChanged(zoomFactor);
+			listener.zoomFactorChanged(zoomFactor);
 	}
 	
 	@Override
-	public void exportToImage() {
+	public void exportImage() {
 		for (UserInputListener listener : listeners)
-			listener.exportToImage();
+			listener.exportImage();
 	}
 	
 	@Override
@@ -124,33 +124,33 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
-	public void hideDependencies() {
+	public void dependenciesHide() {
 		for (UserInputListener listener : listeners)
-			listener.hideDependencies();
+			listener.dependenciesHide();
 	}
 	
 	@Override
-	public void hideLibraries() {
+	public void librariesHide() {
 		for (UserInputListener l : listeners)
-			l.hideLibraries();
+			l.librariesHide();
 	}
 	
 	@Override
-	public void hideModules() {
+	public void moduleHide() {
 		for (UserInputListener listener : listeners)
-			listener.hideModules();
+			listener.moduleHide();
 	}
 	
 	@Override
-	public void hideSmartLines() {
+	public void smartLinesDisable() {
 		for (UserInputListener l : listeners)
-			l.hideSmartLines();
+			l.smartLinesDisable();
 	}
 	
 	@Override
-	public void hideViolations() {
+	public void violationsHide() {
 		for (UserInputListener l : listeners)
-			l.hideViolations();
+			l.violationsHide();
 	}
 	
 	private void initializeComponents() {
@@ -159,7 +159,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					moduleZoom("");
+					zoomIn();
 			}
 		});
 		zoomInButton.addMouseListener(new MouseListener() {
@@ -193,7 +193,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		zoomOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moduleZoomOut();
+				zoomOut();
 			}
 		});
 		add(zoomOutButton);
@@ -216,9 +216,9 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (showDependenciesButton.getToolTipText().equals(
-						menuBarLocale.get("HideDependencies"))) hideDependencies();
+						menuBarLocale.get("HideDependencies"))) dependenciesHide();
 				else
-					showDependencies();
+					dependenciesShow();
 				refreshDrawing();
 			}
 		});
@@ -230,9 +230,9 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (showViolationsButton.getToolTipText().equals(
-						menuBarLocale.get("HideViolations"))) hideViolations();
+						menuBarLocale.get("HideViolations"))) violationsHide();
 				else
-					showViolations();
+					violationsShow();
 				refreshDrawing();
 			}
 		});
@@ -243,7 +243,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		exportToImageButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				exportToImage();
+				exportImage();
 			}
 		});
 		add(exportToImageButton);
@@ -303,7 +303,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 			public void stateChanged(ChangeEvent ce) {
 				int scale = ((JSlider) ce.getSource()).getValue();
 				graphicsOptionsDialog.setZoomValue(scale);
-				drawingZoomChanged(scale);
+				zoomFactorChanged(scale);
 			}
 		});
 		add(zoomSlider);
@@ -319,26 +319,26 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
-	public void moduleZoom() {
+	public void zoomIn() {
 		for (UserInputListener listener : listeners)
-			listener.moduleZoom();
+			listener.zoomIn();
 	}
 	
 	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+	public void zoomIn(BaseFigure[] zoomedModuleFigure) {
 		// Not used from this UI
 	}
 	
 	@Override
-	public void moduleZoom(String zoomType) {
+	public void zoomTypeChange(String zoomType) {
 		for (UserInputListener listener : listeners)
-			listener.moduleZoom();
+			listener.zoomTypeChange(zoomType);
 	}
 	
 	@Override
-	public void moduleZoomOut() {
+	public void zoomOut() {
 		for (UserInputListener listener : listeners)
-			listener.moduleZoomOut();
+			listener.zoomOut();
 	}
 	
 	@Override
@@ -352,9 +352,9 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
-	public void restoreModules() {
+	public void moduleRestoreHiddenModules() {
 		for (UserInputListener listener : listeners)
-			listener.restoreModules();
+			listener.moduleRestoreHiddenModules();
 	}
 	
 	private void setButtonIcon(JButton button, String iconKey) {
@@ -449,33 +449,33 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
-	public void setZoomSlider(double zoomFactor) {
+	public void zoomSliderSetZoomFactor(double zoomFactor) {
 		int value = (int) (zoomFactor * 100);
 		zoomSlider.setValue(value);
 	}
 	
 	@Override
-	public void showDependencies() {
+	public void dependenciesShow() {
 		for (UserInputListener listener : listeners)
-			listener.showDependencies();
+			listener.dependenciesShow();
 	}
 	
 	@Override
-	public void showLibraries() {
+	public void librariesShow() {
 		for (UserInputListener l : listeners)
-			l.showLibraries();
+			l.librariesShow();
 	}
 	
 	@Override
-	public void showSmartLines() {
+	public void smartLinesEnable() {
 		for (UserInputListener l : listeners)
-			l.showSmartLines();
+			l.smartLinesEnable();
 	}
 	
 	@Override
-	public void showViolations() {
+	public void violationsShow() {
 		for (UserInputListener l : listeners)
-			l.showViolations();
+			l.violationsShow();
 	}
 	
 	public void turnOffBar() {
@@ -507,14 +507,14 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 
 	@Override
-	public void disableThickLines() {
+	public void proportionalLinesDisable() {
 		for (UserInputListener l : listeners)
-			l.disableThickLines();
+			l.proportionalLinesDisable();
 	}
 
 	@Override
-	public void enableThickLines() {
+	public void proportionalLinesEnable() {
 		for (UserInputListener l : listeners)
-			l.enableThickLines();
+			l.proportionalLinesEnable();
 	}
 }

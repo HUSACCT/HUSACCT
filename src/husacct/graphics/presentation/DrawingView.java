@@ -80,8 +80,8 @@ public class DrawingView extends DefaultDrawingView {
 	
 	public void drawingZoomChanged(double zoomFactor) {
 		for (UserInputListener listener : listeners) {
-			listener.setZoomSlider(zoomFactor);
-			listener.drawingZoomChanged(zoomFactor);
+			listener.zoomSliderSetZoomFactor(zoomFactor);
+			listener.zoomFactorChanged(zoomFactor);
 		}
 	}
 	
@@ -175,14 +175,14 @@ public class DrawingView extends DefaultDrawingView {
 		selectTool = new SelectionTool();
 	}
 	
-	private void moduleZoom(BaseFigure[] fig) {
+	private void zoomIn() {
 		try{
 			for (UserInputListener listener : listeners)
-				listener.moduleZoom(fig);
+				listener.zoomIn();
 			this.requestFocus();
 		}
 		catch (Exception e){
-			logger.error(" Exception in: " + e + fig.toString());
+			logger.error(" Exception: " + e);
 			//e.printStackTrace();
 		}
 	}
@@ -195,7 +195,7 @@ public class DrawingView extends DefaultDrawingView {
 			if (mouseButton == LeftMouseButton && hasSelection()) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
 				
-				if (mouseClicks == DoubleClick) moduleZoom(selection);
+				if (mouseClicks == DoubleClick) zoomIn();
 				else
 					for (BaseFigure figure : selection)
 						figure.raiseLayer();

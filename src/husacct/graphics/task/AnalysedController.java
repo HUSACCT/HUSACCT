@@ -34,9 +34,6 @@ public class AnalysedController extends DrawingController {
 	// Method to create the top-level diagram.
 	@Override
 	public void drawArchitectureTopLevel() {
-		super.setCannotZoomOut();
-		super.notifyServiceListeners();
-
 		AbstractDTO[] modules;
 
 		if (areExternalLibrariesShown) {
@@ -197,8 +194,8 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	public void hideLibraries() {
-		super.hideLibraries();
+	public void librariesHide() {
+		super.librariesHide();
 		refreshDrawing();
 	}
 
@@ -226,7 +223,6 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleOpen(String[] paths) {
-		super.notifyServiceListeners();
 		saveSingleLevelFigurePositions();
 		resetContextFigures();
 		if (paths.length == 0) 
@@ -236,8 +232,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure[] figures) {
-		super.notifyServiceListeners();
+	public void zoomIn(BaseFigure[] figures) {
 		resetContextFigures();
 		//parentFigureNameAndTypeMap = new HashMap<String,String>();
 		ArrayList<String> parentNames = new ArrayList<String>();
@@ -264,8 +259,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	public void moduleZoomOut() {
-		super.notifyServiceListeners();
+	public void zoomOut() {
 		if (getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
 			resetContextFigures();
@@ -278,12 +272,11 @@ public class AnalysedController extends DrawingController {
 		} else
 			zoomOutFailed();
 		
-		super.restoreModules();
+		super.moduleRestoreHiddenModules();
 	}
 
 	@Override
 	public void refreshDrawing() {
-		super.notifyServiceListeners();
 		super.refreshDrawing();
 		this.getAndDrawModulesIn(getCurrentPaths());
 	}
@@ -293,17 +286,17 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	public void showLibraries() {
-		super.showLibraries();
+	public void librariesShow() {
+		super.librariesShow();
 		refreshDrawing();
 	}
 
 	@Override
-	public void showViolations() {
+	public void violationsShow() {
 		if (validateService.isValidated()) {
-			super.showViolations();
+			super.violationsShow();
 		} else {
-			super.hideViolations();
+			super.violationsHide();
 		}
 	}
 

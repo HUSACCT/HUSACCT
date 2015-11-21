@@ -118,22 +118,22 @@ public class ContextMenu extends JPopupMenu {
 	
 	protected void triggerHideModules() {
 		for (UserInputListener l : listeners)
-			l.hideModules();
+			l.moduleHide();
 	}
 	
 	protected void triggerRestoreModules() {
 		for (UserInputListener l : listeners)
-			l.restoreModules();
+			l.moduleRestoreHiddenModules();
 	}
 	
 	protected void triggerZoomIn() {
 		for (UserInputListener l : listeners)
-			l.moduleZoom();
+			l.zoomIn();
 	}
 	
 	private void triggerZoomOut() {
 		for (UserInputListener l : listeners)
-			l.moduleZoomOut();
+			l.zoomOut();
 	}
 	
 	private void updateMenuItems() {

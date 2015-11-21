@@ -118,25 +118,25 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	
 	private void loadWorkspaceDataForController(DrawingController controller, Element data) {
 		if (isActive(data, workspaceShowDependencies)) 
-			controller.showDependencies();
+			controller.dependenciesShow();
 		else
-			controller.hideDependencies();
+			controller.dependenciesHide();
 		
 		if (isActive(data, workspaceShowViolations)) 
-			controller.showViolations();
+			controller.violationsShow();
 		else
-			controller.hideViolations();
+			controller.violationsHide();
 		
 		if (isActive(data, workspaceSmartLines)) 
-			controller.showSmartLines();
+			controller.smartLinesEnable();
 		else
-			controller.hideSmartLines();
+			controller.smartLinesDisable();
 		
 		DrawingLayoutStrategy selectedStrategy = null;
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values())
 			if (strategy.toString().equals( data.getAttribute(workspaceLayoutStrategy).getValue())) 
 				selectedStrategy = strategy;
 		if (null != selectedStrategy) 
-			controller.changeLayoutStrategy(selectedStrategy);
+			controller.layoutStrategyChange(selectedStrategy);
 	}
 }

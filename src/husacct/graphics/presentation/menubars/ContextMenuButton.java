@@ -75,7 +75,7 @@ public class ContextMenuButton extends JPopupMenu {
 				zoomModuleContext.setEnabled(false);
 				zoomModule.setEnabled(true);
 				for (UserInputListener listener : listeners)
-					listener.moduleZoom("context");
+					listener.zoomTypeChange("context");
 			}
 		});
 		
@@ -86,7 +86,7 @@ public class ContextMenuButton extends JPopupMenu {
 				zoomModuleContext.setEnabled(true);
 				zoomModule.setEnabled(false);
 				for (UserInputListener listener : listeners)
-					listener.moduleZoom("zoom");
+					listener.zoomTypeChange("zoom");
 			}
 		});
 	}
@@ -115,16 +115,16 @@ public class ContextMenuButton extends JPopupMenu {
 	
 	protected void triggerHideModules() {
 		for (UserInputListener l : listeners)
-			l.hideModules();
+			l.moduleHide();
 	}
 	
 	protected void triggerRestoreModules() {
 		for (UserInputListener l : listeners)
-			l.restoreModules();
+			l.moduleRestoreHiddenModules();
 	}
 	
 	protected void triggerZoomInContext() {
 		for (UserInputListener l : listeners)
-			l.moduleZoom();
+			l.zoomIn();
 	}
 }

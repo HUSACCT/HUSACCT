@@ -82,9 +82,9 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+	public void layoutStrategyChange(DrawingLayoutStrategy selectedStrategyEnum) {
 		for (UserInputListener l : listeners)
-			l.changeLayoutStrategy(selectedStrategyEnum);
+			l.layoutStrategyChange(selectedStrategyEnum);
 	}
 	
 	public void createLocationBar() {
@@ -116,16 +116,16 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void drawingZoomChanged(double zoomFactor) {
+	public void zoomFactorChanged(double zoomFactor) {
 		double scaleFactor = menuBar.getScaleFactor();
 		for (UserInputListener l : listeners)
-			l.drawingZoomChanged(scaleFactor);
+			l.zoomFactorChanged(scaleFactor);
 	}
 	
 	@Override
-	public void exportToImage() {
+	public void exportImage() {
 		for (UserInputListener l : listeners)
-			l.exportToImage();
+			l.exportImage();
 	}
 	
 	@Override
@@ -143,15 +143,15 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void hideDependencies() {
+	public void dependenciesHide() {
 		for (UserInputListener l : listeners)
-			l.hideDependencies();
+			l.dependenciesHide();
 	}
 	
 	@Override
-	public void hideLibraries() {
+	public void librariesHide() {
 		for (UserInputListener l : listeners)
-			l.hideLibraries();
+			l.librariesHide();
 	}
 	
 	public void hideLoadingScreen() {
@@ -168,9 +168,9 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void hideModules() {
+	public void moduleHide() {
 		for (UserInputListener listener : listeners)
-			listener.hideModules();
+			listener.moduleHide();
 	}
 	
 	public void hideProperties() {
@@ -179,15 +179,15 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void hideSmartLines() {
+	public void smartLinesDisable() {
 		for (UserInputListener l : listeners)
-			l.hideSmartLines();
+			l.smartLinesDisable();
 	}
 	
 	@Override
-	public void hideViolations() {
+	public void violationsHide() {
 		for (UserInputListener l : listeners)
-			l.hideViolations();
+			l.violationsHide();
 	}
 	
 	private void initializeComponents() {
@@ -287,28 +287,28 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void moduleZoom() {
+	public void zoomIn() {
 		for (UserInputListener l : listeners)
-			l.moduleZoom();
+			l.zoomIn();
 	}
 	
 	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+	public void zoomIn(BaseFigure[] zoomedModuleFigure) {
 		// Not used through this GUI
 	}
 	
 	@Override
-	public void moduleZoom(String zoomType) {
+	public void zoomTypeChange(String zoomType) {
 		for (UserInputListener l : listeners)
-			l.moduleZoom(zoomType);
+			l.zoomTypeChange(zoomType);
 	}
 	
 	@Override
-	public void moduleZoomOut() {
+	public void zoomOut() {
 		String[] secondLastPath = locationBar.getSecondLastPath();
 		if (secondLastPath.length == 0) 
 			for (UserInputListener l : listeners)
-				l.moduleZoomOut();
+				l.zoomOut();
 		else
 			moduleOpen(secondLastPath);
 	}
@@ -352,9 +352,9 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void restoreModules() {
+	public void moduleRestoreHiddenModules() {
 		for (UserInputListener listener : listeners)
-			listener.restoreModules();
+			listener.moduleRestoreHiddenModules();
 	}
 	
 	public void setCurrentPaths(String[] paths) {
@@ -374,14 +374,14 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void setZoomSlider(double zoomFactor) {
-		menuBar.setZoomSlider(zoomFactor);
+	public void zoomSliderSetZoomFactor(double zoomFactor) {
+		menuBar.zoomSliderSetZoomFactor(zoomFactor);
 	}
 	
 	@Override
-	public void showDependencies() {
+	public void dependenciesShow() {
 		for (UserInputListener l : listeners)
-			l.showDependencies();
+			l.dependenciesShow();
 	}
 	
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
@@ -392,9 +392,9 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void showLibraries() {
+	public void librariesShow() {
 		for (UserInputListener l : listeners)
-			l.showLibraries();
+			l.librariesShow();
 	}
 	
 	public void showLoadingScreen() {
@@ -414,15 +414,15 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	@Override
-	public void showSmartLines() {
+	public void smartLinesEnable() {
 		for (UserInputListener l : listeners)
-			l.showSmartLines();
+			l.smartLinesEnable();
 	}
 	
 	@Override
-	public void showViolations() {
+	public void violationsShow() {
 		for (UserInputListener l : listeners)
-			l.showViolations();
+			l.violationsShow();
 	}
 	
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
@@ -520,14 +520,14 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 
 	@Override
-	public void disableThickLines() {
+	public void proportionalLinesDisable() {
 		for (UserInputListener l : listeners)
-			l.disableThickLines();
+			l.proportionalLinesDisable();
 	}
 
 	@Override
-	public void enableThickLines() {
+	public void proportionalLinesEnable() {
 		for (UserInputListener l : listeners)
-			l.enableThickLines();
+			l.proportionalLinesEnable();
 	}
 }

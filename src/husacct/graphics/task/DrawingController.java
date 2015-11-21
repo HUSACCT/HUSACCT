@@ -94,7 +94,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+	public void layoutStrategyChange(DrawingLayoutStrategy selectedStrategyEnum) {
 		layoutStrategyOption = selectedStrategyEnum;
 		switchLayoutStrategy();
 		updateLayout();
@@ -115,7 +115,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public abstract void drawArchitectureTopLevel();
 	
 	@Override
-	public void drawingZoomChanged(double zoomFactor) {
+	public void zoomFactorChanged(double zoomFactor) {
 		zoomFactor = Math.max(MIN_ZOOMFACTOR, zoomFactor);
 		zoomFactor = Math.min(MAX_ZOOMFACTOR, zoomFactor);
 		drawingView.setScaleFactor(zoomFactor);
@@ -212,7 +212,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void exportToImage() {
+	public void exportImage() {
 		drawing.showExportToImagePanel();
 	}
 	
@@ -321,25 +321,25 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void hideDependencies() {
-		super.hideDependencies();
+	public void dependenciesHide() {
+		super.dependenciesHide();
 		graphicsFrame.turnOffDependencies();
 	}
 	
 	@Override
-	public void hideModules() {
+	public void moduleHide() {
 		drawingView.hideSelectedFigures();
 	}
 	
 	@Override
-	public void hideSmartLines() {
-		super.hideSmartLines();
+	public void smartLinesDisable() {
+		super.smartLinesDisable();
 		graphicsFrame.turnOffSmartLines();
 	}
 	
 	@Override
-	public void hideViolations() {
-		super.hideViolations();
+	public void violationsHide() {
+		super.violationsHide();
 		graphicsFrame.turnOffViolations();
 	}
 	
@@ -348,7 +348,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void moduleZoom() {
+	public void zoomIn() {
 		Set<Figure> selection = drawingView.getSelectedFigures();
 		
 		if (selection.size() > 0) {
@@ -392,7 +392,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			}
 			
 			BaseFigure[] selectedFigures = figures.toArray(new BaseFigure[figures.size()]);
-			this.moduleZoom(selectedFigures);
+			this.zoomIn(selectedFigures);
 		}
 	}
 	
@@ -417,7 +417,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void restoreModules() {
+	public void moduleRestoreHiddenModules() {
 		drawingView.restoreHiddenFigures();
 	}
 	
@@ -443,10 +443,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		if (getCurrentPaths().length < 2) saveFigurePositions();
 	}
 	
-	protected void setCannotZoomOut() {
-		drawingView.cannotZoomOut();
-	}
-	
 	@Override
 	public void setCurrentPaths(String[] paths) {
 		super.setCurrentPaths(paths);
@@ -456,8 +452,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void setZoomSlider(double zoomFactor) {
-		graphicsFrame.setZoomSlider(zoomFactor);
+	public void zoomSliderSetZoomFactor(double zoomFactor) {
+		graphicsFrame.zoomSliderSetZoomFactor(zoomFactor);
 	}
 	
 	public void showLoadingScreen() {
@@ -471,20 +467,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	@Override
-	public void showDependencies() {
-		super.showDependencies();
+	public void dependenciesShow() {
+		super.dependenciesShow();
 		graphicsFrame.turnOnDependencies();
 	}
 	
 	@Override
-	public void showSmartLines() {
-		super.showSmartLines();
+	public void smartLinesEnable() {
+		super.smartLinesEnable();
 		graphicsFrame.turnOnSmartLines();
 	}
 	
 	@Override
-	public void showViolations() {
-		super.showViolations();
+	public void violationsShow() {
+		super.violationsShow();
 		graphicsFrame.turnOnViolations();
 	}
 	

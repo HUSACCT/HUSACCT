@@ -52,28 +52,24 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	}
 	
 	@Override
-	public void hideDependencies() {
+	public void dependenciesHide() {
 		areDependenciesShown = false;
 	}
 	
 	@Override
-	public void hideSmartLines() {
+	public void smartLinesDisable() {
 		areSmartLinesOn = false;
 	}
 	
 	@Override
-	public void hideViolations() {
+	public void violationsHide() {
 		areViolationsShown = false;
 	}
 	
 	public void loadDefaultSettings() {
-		showDependencies();
-		hideViolations();
-		showSmartLines();
-	}
-	
-	public void notifyServiceListeners() {
-		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
+		dependenciesShow();
+		violationsHide();
+		smartLinesEnable();
 	}
 	
 	public void resetCurrentPaths() {
@@ -85,42 +81,42 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	}
 	
 	@Override
-	public void showDependencies() {
+	public void dependenciesShow() {
 		areDependenciesShown = true;
 	}
 	
 	@Override
-	public void showSmartLines() {
+	public void smartLinesEnable() {
 		areSmartLinesOn = true;
 	}
 	
 	@Override
-	public void showViolations() {
+	public void violationsShow() {
 		areViolationsShown = true;
 	}
 	
 	@Override
-	public void hideLibraries() {
+	public void librariesHide() {
 		areExternalLibrariesShown = false;
 	}
 	
 	@Override
-	public void showLibraries() {
+	public void librariesShow() {
 		areExternalLibrariesShown = true;
 	}
 	
 	@Override
-	public void enableThickLines(){
+	public void proportionalLinesEnable(){
 		areLinesThick = true;
 	}
 	
 	@Override
-	public void disableThickLines(){
+	public void proportionalLinesDisable(){
 		areLinesThick = false;
 	}
 	
 	@Override
-	public void moduleZoom(String zoomType){
+	public void zoomTypeChange(String zoomType){
 		if(zoomType.equals("zoom"))
 			isZoomWithContextOn = false;
 		if(zoomType.equals("context"))

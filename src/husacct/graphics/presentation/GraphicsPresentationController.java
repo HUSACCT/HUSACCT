@@ -40,6 +40,7 @@ public class GraphicsPresentationController {
 	}
 	
 	protected void changeDrawing(AbstractDTO[] modules) { // Prototype for drawArchitectureTopLevel(), refresh(), zoomIn(), zoomOut() 
+		//ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners(); // Seems pointless: Removed.
 		//showLoadingScreen();
 		//drawing = runSwingThread ...
 		//hideLoadingScreen();
@@ -49,10 +50,20 @@ public class GraphicsPresentationController {
 	}
 	
 	public void drawArchitectureTopLevel() {
-		controller.drawArchitectureTopLevel();
+		try {
+			//showLoadingScreen();
+			drawingView.cannotZoomOut();
+			controller.drawArchitectureTopLevel();
+			//hideLoadingScreen();
+		} catch(Exception e) {
+			logger.error(" Exception: " + e.getMessage());
+		}
 	}
 
-	public void exportToImage() {
+	public void zoomIn() {
+	}
+	
+	public void exportImage() {
 		// To do: move from drawing to presentation or control class 
 		drawing.showExportToImagePanel();
 	}
@@ -85,30 +96,26 @@ public class GraphicsPresentationController {
 		return b;
 	}	
 	
-	public void hideDependencies() {
-		controller.hideDependencies();
+	public void dependenciesHide() {
+		controller.dependenciesHide();
 		graphicsFrame.turnOffDependencies();
 	}
 	
-	public void hideModules() {
-		drawingView.hideSelectedFigures();
-	}
-	
-	public void hideSmartLines() {
-		controller.hideSmartLines();
-		graphicsFrame.turnOffSmartLines();
-	}
-	
-	public void hideViolations() {
-		controller.hideViolations();
-		graphicsFrame.turnOffViolations();
+	public void dependenciesShow() {
+		controller.dependenciesShow();
+		graphicsFrame.turnOnDependencies();
 	}
 	
 	public boolean isDrawingVisible() {
 		return drawingView.isVisible();
 	}
 	
-	public void moduleZoom() {
+	public void moduleHide() {
+		drawingView.hideSelectedFigures();
+	}
+	
+	public void moduleRestoreHiddenModules() {
+		drawingView.restoreHiddenFigures();
 	}
 	
 	public void refreshDrawing(){
@@ -119,36 +126,40 @@ public class GraphicsPresentationController {
 		graphicsFrame.refreshFrame();
 	}
 	
-	public void restoreModules() {
-		drawingView.restoreHiddenFigures();
-	}
-	
-	public void setZoomSlider(double zoomFactor) {
-		graphicsFrame.setZoomSlider(zoomFactor);
+	public void zoomSliderSetZoomFactor(double zoomFactor) {
+		graphicsFrame.zoomSliderSetZoomFactor(zoomFactor);
 	}
 	
 	public void showLoadingScreen() {
 		drawingView.setVisible(false);
 		graphicsFrame.showLoadingScreen();
+		graphicsFrame.updateGUI();
 	}
 	
 	public void hideLoadingScreen() {
 		graphicsFrame.hideLoadingScreen();
 		drawingView.setVisible(true);
+		graphicsFrame.setUpToDate();
+		graphicsFrame.updateGUI();
 	}
 	
-	public void showDependencies() {
-		controller.showDependencies();
-		graphicsFrame.turnOnDependencies();
+	public void smartLinesDisable() {
+		controller.smartLinesDisable();
+		graphicsFrame.turnOffSmartLines();
 	}
 	
-	public void showSmartLines() {
-		controller.showSmartLines();
+	public void smartLinesEnable() {
+		controller.smartLinesEnable();
 		graphicsFrame.turnOnSmartLines();
 	}
 	
-	public void showViolations() {
-		controller.showViolations();
+	public void violationsHide() {
+		controller.violationsHide();
+		graphicsFrame.turnOffViolations();
+	}
+	
+	public void violationsShow() {
+		controller.violationsShow();
 		graphicsFrame.turnOnViolations();
 	}
 	

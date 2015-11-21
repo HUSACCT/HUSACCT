@@ -33,9 +33,6 @@ public class DefinedController extends DrawingController {
 	// Method to create the top-level diagram.
 	@Override
 	public void drawArchitectureTopLevel() {
-		super.setCannotZoomOut();
-		super.notifyServiceListeners();
-
 		// Select all modules in root
 		ModuleDTO[] modules = defineService.getModule_AllRootModules();
 		if (!areExternalLibrariesShown) {
@@ -152,15 +149,14 @@ public class DefinedController extends DrawingController {
 	
 	@Override
 	public void moduleOpen(String[] paths) {
-		super.notifyServiceListeners();
-		if (paths.length == 0) drawArchitectureTopLevel();
+		if (paths.length == 0) 
+			drawArchitectureTopLevel();
 		else
 			getAndDrawModulesIn(paths);
 	}
 	
 	@Override
-	public void moduleZoom(BaseFigure[] figures) {
-		super.notifyServiceListeners();
+	public void zoomIn(BaseFigure[] figures) {
 		definedFigures = new HashMap<String, BaseFigure>();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
@@ -190,8 +186,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	@Override
-	public void moduleZoomOut() {
-		super.notifyServiceListeners();
+	public void zoomOut() {
 		if (getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
 			String firstCurrentPaths = getCurrentPaths()[0];
@@ -209,33 +204,27 @@ public class DefinedController extends DrawingController {
 	
 	@Override
 	public void refreshDrawing() {
-		super.notifyServiceListeners();
 		getAndDrawModulesIn(getCurrentPaths());
 	}
 	
 	@Override
-	public void hideLibraries() {
-		super.hideLibraries();
+	public void librariesHide() {
+		super.librariesHide();
 		refreshDrawing();
 	}
 
 	@Override
-	public void showLibraries() {
-		super.showLibraries();
+	public void librariesShow() {
+		super.librariesShow();
 		refreshDrawing();
 	}
 
 	@Override
-	public void showViolations() {
+	public void violationsShow() {
 		if (validateService.isValidated()) {
-			super.showViolations();
+			super.violationsShow();
 		} else {
-			super.hideViolations();
+			super.violationsHide();
 		}
-	}
-	
-	@Override
-	public void moduleZoom(String zoomType) {
-		// Unused, does not need implementation. AnalyseController has implementation
 	}
 }

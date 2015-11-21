@@ -134,7 +134,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
-					listener.moduleZoom();
+					listener.zoomIn();
 			}
 		});
 		globalActionsPanel.add(zoomInButton);
@@ -144,7 +144,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
-					listener.moduleZoomOut();
+					listener.zoomOut();
 			}
 		});
 		globalActionsPanel.add(zoomOutButton);
@@ -164,7 +164,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
-					listener.exportToImage();
+					listener.exportImage();
 			}
 		});
 		globalActionsPanel.add(exportToImageButton);
@@ -176,7 +176,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
-					listener.hideModules();
+					listener.moduleHide();
 			}
 		});
 		figuresActionsPanel.add(hideFiguresButton);
@@ -186,7 +186,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
-					listener.restoreModules();
+					listener.moduleRestoreHiddenModules();
 			}
 		});
 		figuresActionsPanel.add(showFiguresButton);
@@ -251,7 +251,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			public void stateChanged(ChangeEvent ce) {
 				int scale = ((JSlider) ce.getSource()).getValue();
 				for (UserInputListener listener : listeners)
-					listener.drawingZoomChanged(scale);
+					listener.zoomFactorChanged(scale);
 			}
 		});
 		zoomPanel.add(zoomSlider);
@@ -296,43 +296,43 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		for (UserInputListener listener : listeners) {
 			if (showDependenciesOptionMenu.isSelected()) {
 				currentSettings.put("dependencies", true);
-				listener.showDependencies();
+				listener.dependenciesShow();
 			} else {
 				currentSettings.put("dependencies", false);
-				listener.hideDependencies();
+				listener.dependenciesHide();
 			}
 			if (enableThickLines.isSelected()) {
 				currentSettings.put("thickLines", true);
-				listener.enableThickLines();
+				listener.proportionalLinesEnable();
 			} else {
 				currentSettings.put("thickLines", false);
-				listener.disableThickLines();
+				listener.proportionalLinesDisable();
 			}
 			if (showViolationsOptionMenu.isSelected()) {
 				currentSettings.put("violations", true);
-				listener.showViolations();
+				listener.violationsShow();
 			} else {
 				currentSettings.put("violations", true);
-				listener.hideViolations();
+				listener.violationsHide();
 			}
 			if (smartLinesOptionMenu.isSelected()) {
 				currentSettings.put("smartLines", true);
-				listener.showSmartLines();
+				listener.smartLinesEnable();
 			} else {
 				currentSettings.put("smartLines", false);
-				listener.hideSmartLines();
+				listener.smartLinesDisable();
 			}
 			if (showExternalLibraries.isSelected()) {
 				currentSettings.put("libraries", true);
-				listener.showLibraries();
+				listener.librariesShow();
 			} else {
 				currentSettings.put("libraries", false);
-				listener.hideLibraries();
+				listener.librariesHide();
 			}
 			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
 			if ((selectedStrategy != null) && !selectedStrategy.toString().equals(currentSettings.get("layoutStrategy").toString())) {
 				currentSettings.put("layoutStrategy", selectedStrategy);
-				listener.changeLayoutStrategy(selectedStrategy);
+				listener.layoutStrategyChange(selectedStrategy);
 			}
 			listener.refreshDrawing();
 		}
