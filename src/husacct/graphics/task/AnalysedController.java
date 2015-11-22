@@ -35,7 +35,6 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void drawArchitectureTopLevel() {
 		AbstractDTO[] modules;
-
 		if (areExternalLibrariesShown) {
 			// Select all modules in root
 			modules = analyseService.getSoftwareUnitsInRoot();
@@ -60,12 +59,9 @@ public class AnalysedController extends DrawingController {
 		resetCurrentPaths();
 		drawModulesAndLines(modules);
 
-		/*
-		 * Multiple projects is removed, but the code remains. Check Git issue #
-		 * 
+		/* //To include Multiple Projects, include the following code.
 		 * ArrayList<ProjectDTO> projects =
 		 * this.controlService.getApplicationDTO().projects;
-		 * 
 		 * AbstractDTO[] projectArray = projects.toArray(new
 		 * AbstractDTO[projects.size()]);
 		 */

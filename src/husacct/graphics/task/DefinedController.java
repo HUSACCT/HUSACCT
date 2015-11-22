@@ -157,7 +157,6 @@ public class DefinedController extends DrawingController {
 	
 	@Override
 	public void zoomIn(BaseFigure[] figures) {
-		definedFigures = new HashMap<String, BaseFigure>();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			try {

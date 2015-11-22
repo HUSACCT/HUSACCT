@@ -1,6 +1,5 @@
 package husacct.graphics.task;
 
-import husacct.ServiceProvider;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.UserInputListener;
 

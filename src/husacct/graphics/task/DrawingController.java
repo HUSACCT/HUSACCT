@@ -52,8 +52,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 	private final HashMap<String, DrawingState>	storedStates	= new HashMap<String, DrawingState>();
 	
 	private GraphicsPresentationController 		presentationController;
-	private Drawing								drawing;
-	private DrawingView							drawingView;
+	private Drawing							drawing;
+	private DrawingView						drawingView;
 	private GraphicsFrame						graphicsFrame;
 	
 	protected ILocaleService					localeService;
@@ -68,6 +68,17 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected ArrayList<BaseFigure>				contextFigures; // List with all the figures with isContext = true, not being a line.
 	protected HashMap<String, String> 			parentFigureNameAndTypeMap; // Map with key = name of the parent figure and value = type. 
 
+	
+	public static DrawingController getController(GraphicsPresentationController graphicsPresentationController) { // To do: Parameter = String drawingType
+		String drawingType = graphicsPresentationController.getDrawingType();
+		DrawingController controller = null;
+		if (drawingType.equals("AnalysedDrawing")) {
+			controller = new AnalysedController(graphicsPresentationController);
+		} else if (drawingType.equals("DefinedDrawing")) {
+			controller = new DefinedController(graphicsPresentationController);
+		}
+		return controller;
+	}
 	
 	public DrawingController(GraphicsPresentationController graphicsPresentationController) {
 		super();
@@ -129,10 +140,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		//showLoadingScreen();
-		//clearDrawing();
-		//drawSingleLevel(modules);
+		clearDrawing();
+		drawSingleLevel(modules);
+		drawingView.cannotZoomOut();
 		//hideLoadingScreen();
-		runThread(new DrawingSingleLevelThread(this, modules)); //2015-11-14 Thread disabled, and the actions of thread included in the lines above.
+		//runThread(new DrawingSingleLevelThread(this, modules)); //2015-11-14 Thread disabled, and the actions of thread included in the lines above.
 	}
 	
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -189,13 +201,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.setUpToDate();
 		drawSingleLevelModules(modules);
 		updateLayout();
-		
-		/*
-		 * If we are at root level(projects) if(modules.length != 0 &&
-		 * !(modules[0] instanceof ProjectDTO))
-		 */
-		
 		drawLinesBasedOnSetting();
+		drawingView.cannotZoomOut();
 		graphicsFrame.setCurrentPaths(getCurrentPaths());
 		graphicsFrame.updateGUI();
 	}
@@ -345,6 +352,13 @@ public abstract class DrawingController extends DrawingSettingsController {
 	
 	public boolean isDrawingVisible() {
 		return drawingView.isVisible();
+	}
+
+	public DrawingView zoomMaarIn(DrawingView oldDrawingView) {
+		DrawingView newDrawingView = null;
+		drawingView = oldDrawingView;
+		zoomIn();
+		return newDrawingView;
 	}
 	
 	@Override

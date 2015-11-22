@@ -24,16 +24,17 @@ public class GraphicsPresentationController {
 		try {
 			drawing = new Drawing();
 			drawingView = new DrawingView(drawing);
-			graphicsFrame = new GraphicsFrame(drawingView);
+			graphicsFrame = new GraphicsFrame();
 			this.drawingType = typeOfDrawing;
-			if (drawingType.equals("AnalysedDrawing")) {
-				controller = new AnalysedController(this);
-			} else if (drawingType.equals("DefinedDrawing")) {
-				controller = new DefinedController(this);
+			controller = DrawingController.getController(this);
+			if (controller == null) {
+				logger.error(" Exception: DrawingController not initialized");
+			} else {
+				//drawingView = controller.getDrawingView(); // To do when Presentation and Task are decoupled
+				drawingView.addListener(controller);
+				graphicsFrame.addListener(controller);
+				graphicsFrame.setSelectedLayout(controller.getLayoutStrategy());
 			}
-			drawingView.addListener(controller);
-			graphicsFrame.addListener(controller);
-			graphicsFrame.setSelectedLayout(controller.getLayoutStrategy());
 		} catch(Exception e) {
 			logger.error(" Exception during initialization of Graphics GUI and Controllers: " + e.getMessage());
 		}
@@ -44,6 +45,7 @@ public class GraphicsPresentationController {
 		//showLoadingScreen();
 		//drawing = runSwingThread ...
 		//hideLoadingScreen();
+		graphicsFrame.showDrawing(drawingView);
 		graphicsFrame.setUpToDate();
 		//graphicsFrame.setCurrentPaths(getCurrentPaths());
 		graphicsFrame.updateGUI();
@@ -51,16 +53,18 @@ public class GraphicsPresentationController {
 	
 	public void drawArchitectureTopLevel() {
 		try {
-			//showLoadingScreen();
-			drawingView.cannotZoomOut();
+			//graphicsFrame.hideDrawingAndShowLoadingScreen();
 			controller.drawArchitectureTopLevel();
-			//hideLoadingScreen();
+			graphicsFrame.showDrawing(drawingView);
 		} catch(Exception e) {
 			logger.error(" Exception: " + e.getMessage());
 		}
 	}
 
 	public void zoomIn() {
+		graphicsFrame.hideDrawingAndShowLoadingScreen();
+		controller.zoomIn();
+		graphicsFrame.showDrawing(drawingView);
 	}
 	
 	public void exportImage() {
@@ -77,6 +81,10 @@ public class GraphicsPresentationController {
 	}
 	public Drawing getDrawing() {
 		return drawing;
+	}
+	
+	public String getDrawingType() {
+		return drawingType;
 	}
 	
 	public DrawingView getDrawingView() {

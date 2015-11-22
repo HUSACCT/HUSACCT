@@ -239,6 +239,10 @@ public class DrawingView extends DefaultDrawingView {
 		contextMenu.removeListener(listener);
 	}
 	
+	protected void removePanTool() {
+		panTool = null;
+	}
+	
 	public void restoreHiddenFigures() {
 		drawing.restoreHiddenFigures();
 		contextMenu.setHasHiddenFigures(false);
@@ -254,7 +258,9 @@ public class DrawingView extends DefaultDrawingView {
 	}
 	
 	public void usePanTool() {
-		getEditor().setTool(panTool);
+		if (panTool != null) {
+			getEditor().setTool(panTool);
+		}
 	}
 	
 	public void useSelectTool() {

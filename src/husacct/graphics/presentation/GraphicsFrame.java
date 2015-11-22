@@ -46,24 +46,19 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	private JScrollPane						drawingScrollPane, propertiesScrollPane, locationScrollPane;
 	private JSplitPane						centerPane;
 	private String							ROOT_LEVEL;
-	private boolean							showingLoadingScreen = false;
-	private boolean							showingProperties	= false;
+	private boolean							showLoadingScreen = true;
+	private boolean							showProperties	= false;
 	
 	private int								frameTotalWidth;
 	private int								menuBarHeight = 20;
 	
 	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
 	
-	public GraphicsFrame(DrawingView givenDrawingView) {
+	public GraphicsFrame() {
 		setVisible(false);
 		frameTotalWidth = getWidth();
-		
-		ROOT_LEVEL = localeService.getTranslatedString("Root");
-		resetCurrentPaths();
-		
-		drawingView = givenDrawingView;
-		
 		initializeComponents();
+		setVisible(true);
 		
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override
@@ -93,19 +88,19 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			}
-			
 			@Override
 			public void actionPerformed(String[] selectedPaths) {
 				moduleOpen(selectedPaths);
 			}
 		});
+		locationBar.updateLocationBar(currentPaths);
+
 	}
 	
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
 		menuBar.addListener(this);
 		menuBar.setSize(frameTotalWidth, menuBarHeight);
-		
 		menuBar.setOutOfDateAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -115,6 +110,26 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		});
 	}
 	
+	public void showDrawing(DrawingView newDrawingView) {
+		this.drawingView = newDrawingView;
+		drawingScrollPane.setViewportView(drawingView);
+		drawingView.initializePanTool(drawingScrollPane.getViewport(), drawingScrollPane);
+		showLoadingScreen = false;
+		layoutComponents();
+		menuBar.turnOnBar();
+		locationBar.turnOnBar();
+	}
+	
+	public void hideDrawingAndShowLoadingScreen() {
+		// Detach links to DrawingView and Drawing to prevent Swing Synchronization problems.
+		this.drawingView.removePanTool();
+		this.drawingScrollPane.setViewportView(null);
+		this.drawingView = null;
+		// Show loading screen.
+		showLoadingScreen = true;
+		layoutComponents();
+	}
+
 	@Override
 	public void zoomFactorChanged(double zoomFactor) {
 		double scaleFactor = menuBar.getScaleFactor();
@@ -155,7 +170,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	public void hideLoadingScreen() {
-		showingLoadingScreen = false;
+		showLoadingScreen = false;
 		progressPanel.removeAll();
 		layoutComponents();
 		locationBar.turnOnBar();
@@ -174,7 +189,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	public void hideProperties() {
-		showingProperties = false;
+		showProperties = false;
 		layoutComponents();
 	}
 	
@@ -197,6 +212,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		add(centerPane, BorderLayout.CENTER);
 		
+		resetCurrentPaths();
 		createLocationBar();
 		locationScrollPane = new JScrollPane(locationBar);
 		locationScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -216,8 +232,6 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		drawingScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		drawingScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		drawingScrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		drawingScrollPane.setViewportView(drawingView);
-		drawingView.initializePanTool(drawingScrollPane.getViewport(), drawingScrollPane);
 
 		propertiesScrollPane = new JScrollPane();
 		propertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -256,25 +270,37 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	
 	private void layoutComponents() {
 		centerPane.removeAll();
-		if (showingLoadingScreen) {
+		if (showLoadingScreen) {
+			progressBar = new JProgressBar();
+			progressBar.setIndeterminate(true);
+			progressPanel.add(progressBar);
 			centerPane.add(loadingContainerPanel);
 			centerPane.setDividerSize(0);
-			centerPane.validate();
-			centerPane.updateUI();
-		} else if (!showingProperties) {
-			centerPane.add(drawingScrollPane);
-			centerPane.setDividerSize(0);
-			centerPane.validate();
-			centerPane.updateUI();
+			locationBar.turnOffBar();
+			menuBar.turnOffBar();
 		} else {
-			centerPane.add(drawingScrollPane);
-			centerPane.add(propertiesScrollPane);
-			positionLayoutComponents();
-			centerPane.setOneTouchExpandable(true);
-			centerPane.setContinuousLayout(true);
+			if (drawingScrollPane.getViewport().getView() != null) {  
+				progressPanel.removeAll();
+				if (!showProperties) {
+					centerPane.add(drawingScrollPane);
+					centerPane.setDividerSize(0);
+				} else {
+					centerPane.add(drawingScrollPane);
+					centerPane.add(propertiesScrollPane);
+					positionLayoutComponents();
+					centerPane.setOneTouchExpandable(true);
+					centerPane.setContinuousLayout(true);
+				}
+				locationBar.turnOnBar();
+				menuBar.turnOnBar();
+			} else {
+				// Show drawingScrollPane only if drawingView is set.
+				logger.error(" drawingScrollPane.getViewport().getView() is null: drawingView not set!" );
+			}
 		}
+		centerPane.validate();
+		centerPane.updateUI();
 		updateGUI();
-		
 		if (isVisible()) {
 			validate();
 		}
@@ -314,15 +340,13 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	private void positionLayoutComponents() {
-		if (showingProperties) {
+		if (showProperties) {
 			int centerPaneHeight = getHeight();
 			int centerPaneWidth = getWidth();
 			centerPane.setSize(centerPaneWidth, centerPaneHeight);
 			int smallerSize = centerPaneHeight - (centerPaneHeight / 3);
 			centerPane.setDividerLocation(smallerSize);
 			centerPane.setDividerSize(10);
-			centerPane.validate();
-			centerPane.updateUI();
 		}
 	}
 	
@@ -398,18 +422,14 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	}
 	
 	public void showLoadingScreen() {
-		showingLoadingScreen = true;
-		progressPanel.removeAll(); // If progresspanel does not contain a progressBar already.
-		progressBar = new JProgressBar();
-		progressBar.setIndeterminate(true);
-		progressPanel.add(progressBar);
+		showLoadingScreen = true;
 		layoutComponents();
 		locationBar.turnOffBar();
 		menuBar.turnOffBar();
 	}
 	
 	public void showProperties() {
-		showingProperties = true;
+		showProperties = true;
 		layoutComponents();
 	}
 	
