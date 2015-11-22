@@ -358,7 +358,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		DrawingView newDrawingView = null;
 		drawingView = oldDrawingView;
 		zoomIn();
-		return newDrawingView;
+		return drawingView;
 	}
 	
 	@Override

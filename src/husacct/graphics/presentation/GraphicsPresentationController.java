@@ -9,22 +9,24 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.DrawingController;
+
 import javax.swing.JInternalFrame;
+import javax.swing.SwingWorker;
+
 import org.apache.log4j.Logger;
 
 public class GraphicsPresentationController {
 	private String 					drawingType; //AnalysedDrawing or DefinedDrawing
 	private DrawingController		controller;	
-	private Drawing					drawing;
 	private DrawingView				drawingView;
 	private GraphicsFrame			graphicsFrame;
 	private Logger					logger	= Logger.getLogger(GraphicsPresentationController.class);
 	
 	public GraphicsPresentationController(String typeOfDrawing) {
 		try {
-			drawing = new Drawing();
+			Drawing drawing = new Drawing();
 			drawingView = new DrawingView(drawing);
-			graphicsFrame = new GraphicsFrame();
+			graphicsFrame = new GraphicsFrame(this);
 			this.drawingType = typeOfDrawing;
 			controller = DrawingController.getController(this);
 			if (controller == null) {
@@ -53,23 +55,41 @@ public class GraphicsPresentationController {
 	
 	public void drawArchitectureTopLevel() {
 		try {
-			//graphicsFrame.hideDrawingAndShowLoadingScreen();
-			controller.drawArchitectureTopLevel();
 			graphicsFrame.showDrawing(drawingView);
+			graphicsFrame.hideDrawingAndShowLoadingScreen();
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+		        @Override
+		        public Void doInBackground() {
+					controller.drawArchitectureTopLevel();
+					graphicsFrame.showDrawing(drawingView);
+					return null;
+		        }
+		    };
+			worker.execute();
 		} catch(Exception e) {
 			logger.error(" Exception: " + e.getMessage());
 		}
 	}
 
 	public void zoomIn() {
+		DrawingView oldDrawingView = getDrawingView();
+		drawingView = null;
 		graphicsFrame.hideDrawingAndShowLoadingScreen();
-		controller.zoomIn();
-		graphicsFrame.showDrawing(drawingView);
+		
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+	        @Override
+	        public Void doInBackground() {
+	        	drawingView = controller.zoomMaarIn(oldDrawingView);
+	        	graphicsFrame.showDrawing(drawingView);
+				return null;
+	        }
+	    };
+		worker.execute();
 	}
 	
 	public void exportImage() {
 		// To do: move from drawing to presentation or control class 
-		drawing.showExportToImagePanel();
+		drawingView.getDrawingHusacct().showExportToImagePanel();
 	}
 	
 	public void figureDeselected(BaseFigure[] figures) {
@@ -80,7 +100,7 @@ public class GraphicsPresentationController {
 		return controller;
 	}
 	public Drawing getDrawing() {
-		return drawing;
+		return drawingView.getDrawingHusacct();
 	}
 	
 	public String getDrawingType() {
@@ -127,7 +147,7 @@ public class GraphicsPresentationController {
 	}
 	
 	public void refreshDrawing(){
-		drawing.restoreHiddenFigures();
+		drawingView.getDrawingHusacct().restoreHiddenFigures();
 	}
 	
 	public void refreshFrame() {

@@ -37,6 +37,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	protected ILocaleService				localeService		= ServiceProvider.getInstance().getLocaleService();
 	protected Logger						logger				= Logger.getLogger(GraphicsFrame.class);
 	
+	private GraphicsPresentationController	presentationController;
 	private JPanel 							loadingContainerPanel, progressPanel;
 	private JProgressBar 					progressBar;
 	private DrawingView						drawingView;
@@ -54,7 +55,8 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	
 	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
 	
-	public GraphicsFrame() {
+	public GraphicsFrame(GraphicsPresentationController graphicsPresentationController) {
+		presentationController = graphicsPresentationController;
 		setVisible(false);
 		frameTotalWidth = getWidth();
 		initializeComponents();
@@ -314,8 +316,9 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	
 	@Override
 	public void zoomIn() {
-		for (UserInputListener l : listeners)
-			l.zoomIn();
+		//for (UserInputListener l : listeners)
+		//	l.zoomIn();
+		presentationController.zoomIn();
 	}
 	
 	@Override

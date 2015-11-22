@@ -95,6 +95,10 @@ public class DrawingView extends DefaultDrawingView {
 			l.figureSelected(figures);
 	}
 	
+	public Drawing getDrawingHusacct() {
+		return (Drawing) getDrawing();
+	}
+	
 	private Set<Figure> getDeltaSelection() {
 		HashSet<Figure> deltaSelection = new HashSet<Figure>();
 		Set<Figure> selection = getSelectedFigures();
