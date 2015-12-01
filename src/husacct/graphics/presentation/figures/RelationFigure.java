@@ -188,6 +188,10 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		return true;
 	}
 	
+	public boolean isViolationRelation() {
+		return violationRelation;
+	}
+	
 	@Override
 	public void lineout() {
 		line.lineout();

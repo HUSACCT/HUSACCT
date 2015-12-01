@@ -1,6 +1,6 @@
 package husacct.graphics.task.layout.layered;
 
-import husacct.graphics.util.ListUtils;
+import husacct.graphics.task.layout.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,5 @@
 package husacct.graphics.util;
 
-public enum DrawingLayoutStrategy {
+public enum DrawingLayoutStrategyEnum {
 	NO_LAYOUT, BASIC_LAYOUT, LAYERED_LAYOUT
 }

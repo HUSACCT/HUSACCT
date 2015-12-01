@@ -14,7 +14,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-public class ZoomLocationBar extends HelpableJPanel {
+public class GraphicsLocationBar extends HelpableJPanel {
 	private static final long						serialVersionUID	= 1025962225565217061L;
 	private String									rootLocale;
 	private JButton									rootLocationButton;
@@ -23,11 +23,11 @@ public class ZoomLocationBar extends HelpableJPanel {
 	
 	private int										menuItemMaxHeight	= 45;
 	
-	private ArrayList<JButton>						buttons;
-	private HashMap<JButton, String[]>				buttonPaths			= new HashMap<JButton, String[]>();
+	private ArrayList<JButton>						buttons = new ArrayList<JButton>();;
+	private HashMap<JButton, String[]>				buttonPaths	= new HashMap<JButton, String[]>();
 	private ArrayList<LocationButtonActionListener>	locationButtonPressListener;
 	
-	public ZoomLocationBar() {
+	public GraphicsLocationBar() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		locationButtonPressListener = new ArrayList<LocationButtonActionListener>();
 	}
@@ -65,16 +65,6 @@ public class ZoomLocationBar extends HelpableJPanel {
 		return locationStringButton;
 	}
 	
-	public String[] getSecondLastPath() {
-		try {
-			int secondLastIndex = buttons.size() - 2;
-			JButton secondLastButton = buttons.get(secondLastIndex);
-			return buttonPaths.get(secondLastButton);
-		} catch (Exception e) {
-			return new String[] {};
-		}
-	}
-	
 	private void pressLocationButton(ActionEvent event) {
 		for (LocationButtonActionListener listener : locationButtonPressListener)
 			listener.actionPerformed(buttonPaths.get(event.getSource()));
@@ -109,10 +99,9 @@ public class ZoomLocationBar extends HelpableJPanel {
 			String selectedPath = currentPaths[pathID];
 			String[] pathParts = selectedPath.split("\\" + LOCATION_SEPERATOR);
 			for (int pathLevel = 0; pathLevel < pathParts.length; pathLevel++) {
-				if (null == multiLevelPath.get(pathLevel)) multiLevelPath.put(
-						pathLevel, new HashMap<Integer, String>());
-				HashMap<Integer, String> tmpAdderHashMap = multiLevelPath
-						.get(pathLevel);
+				if (null == multiLevelPath.get(pathLevel)) 
+					multiLevelPath.put(pathLevel, new HashMap<Integer, String>());
+				HashMap<Integer, String> tmpAdderHashMap = multiLevelPath.get(pathLevel);
 				tmpAdderHashMap.put(pathID, pathParts[pathLevel]);
 				multiLevelPath.put(pathLevel, tmpAdderHashMap);
 			}
@@ -120,8 +109,7 @@ public class ZoomLocationBar extends HelpableJPanel {
 		
 		if (multiLevelPath.size() > 0) {
 			addLocationSeperator();
-			Integer[] levelKeySet = multiLevelPath.keySet().toArray(
-					new Integer[] {});
+			Integer[] levelKeySet = multiLevelPath.keySet().toArray(new Integer[] {});
 			HashMap<Integer, String> currentPath = new HashMap<Integer, String>();
 			for (Integer level : levelKeySet) {
 				String visiblePath = "";
@@ -129,25 +117,22 @@ public class ZoomLocationBar extends HelpableJPanel {
 				Set<Integer> keySet = levelPath.keySet();
 				ArrayList<String> capturedLevels = new ArrayList<String>();
 				for (Integer pathID : keySet) {
-					if (!capturedLevels.contains(levelPath.get(pathID))) visiblePath += " "
-							+ LOCATION_COMBINER + " " + levelPath.get(pathID);
+					if (!capturedLevels.contains(levelPath.get(pathID))) 
+						visiblePath += " " + LOCATION_COMBINER + " " + levelPath.get(pathID);
 					String currentValuePath = currentPath.get(pathID);
 					if (null == currentValuePath) {
 						currentValuePath = "";
 						currentPath.put(pathID, currentValuePath);
 					} else
-						currentValuePath = currentPath.get(pathID)
-								+ LOCATION_SEPERATOR;
-					currentPath.put(pathID,
-							currentValuePath + levelPath.get(pathID));
+						currentValuePath = currentPath.get(pathID) + LOCATION_SEPERATOR;
+					currentPath.put(pathID, currentValuePath + levelPath.get(pathID));
 					capturedLevels.add(levelPath.get(pathID));
 				}
 				ArrayList<String> entrySetTranformToArray = new ArrayList<String>();
 				for (Entry<Integer, String> p : currentPath.entrySet())
 					entrySetTranformToArray.add(p.getValue());
 				createAndAddLocationButton(
-						visiblePath.replaceFirst("\\" + LOCATION_COMBINER, "")
-								.trim(),
+						visiblePath.replaceFirst("\\" + LOCATION_COMBINER, "").trim(),
 						entrySetTranformToArray.toArray(new String[] {}));
 				
 				if (!levelKeySet[levelKeySet.length - 1].equals(level)) addLocationSeperator();

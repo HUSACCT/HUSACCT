@@ -1,16 +1,18 @@
 package husacct.graphics.task;
 
-import husacct.graphics.util.DrawingDetail;
-import husacct.graphics.util.UserInputListener;
+import husacct.graphics.util.DrawingDetailEnum;
 
-public abstract class DrawingSettingsController implements UserInputListener {
-	protected boolean	areSmartLinesOn	= true;
-	protected boolean	isZoomWithContextOn	= false;
-	protected boolean	areDependenciesShown, areViolationsShown, areExternalLibrariesShown, areLinesThick;
+public class DrawingSettingsHolder {
+	private boolean	areDependenciesShown = false;
+	private boolean	areExternalLibrariesShown = false;
+	private boolean	areLinesProportionalWide = false;
+	private boolean	areSmartLinesOn	= false;
+	private boolean	areViolationsShown = false;
+	private boolean	isZoomWithContextOn	= false;
 	
-	protected String[]	currentPaths	= new String[] {};
+	private String[]	currentPaths	= new String[] {};
 	
-	public DrawingSettingsController() {
+	public DrawingSettingsHolder() {
 	}
 	
 	public boolean areDependenciesShown() {
@@ -29,13 +31,21 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		return areExternalLibrariesShown;
 	}
 	
-	public boolean areLinesThick(){
-		return areLinesThick;
+	public boolean areLinesProportionalWide(){
+		return areLinesProportionalWide;
 	}
 	
-	protected DrawingDetail getCurrentDrawingDetail() {
-		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (areViolationsShown()) detail = DrawingDetail.WITH_VIOLATIONS;
+	public void dependenciesHide() {
+		areDependenciesShown = false;
+	}
+	
+	public void dependenciesShow() {
+		areDependenciesShown = true;
+	}
+	
+	protected DrawingDetailEnum getCurrentDrawingDetail() {
+		DrawingDetailEnum detail = DrawingDetailEnum.WITHOUT_VIOLATIONS;
+		if (areViolationsShown()) detail = DrawingDetailEnum.WITH_VIOLATIONS;
 		return detail;
 	}
 	
@@ -50,25 +60,12 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		return stringPaths;
 	}
 	
-	@Override
-	public void dependenciesHide() {
-		areDependenciesShown = false;
-	}
-	
-	@Override
 	public void smartLinesDisable() {
 		areSmartLinesOn = false;
 	}
 	
-	@Override
 	public void violationsHide() {
 		areViolationsShown = false;
-	}
-	
-	public void loadDefaultSettings() {
-		dependenciesShow();
-		violationsHide();
-		smartLinesEnable();
 	}
 	
 	public void resetCurrentPaths() {
@@ -79,42 +76,30 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		currentPaths = paths;
 	}
 	
-	@Override
-	public void dependenciesShow() {
-		areDependenciesShown = true;
-	}
-	
-	@Override
 	public void smartLinesEnable() {
 		areSmartLinesOn = true;
 	}
 	
-	@Override
 	public void violationsShow() {
 		areViolationsShown = true;
 	}
 	
-	@Override
 	public void librariesHide() {
 		areExternalLibrariesShown = false;
 	}
 	
-	@Override
 	public void librariesShow() {
 		areExternalLibrariesShown = true;
 	}
 	
-	@Override
 	public void proportionalLinesEnable(){
-		areLinesThick = true;
+		areLinesProportionalWide = true;
 	}
 	
-	@Override
 	public void proportionalLinesDisable(){
-		areLinesThick = false;
+		areLinesProportionalWide = false;
 	}
 	
-	@Override
 	public void zoomTypeChange(String zoomType){
 		if(zoomType.equals("zoom"))
 			isZoomWithContextOn = false;

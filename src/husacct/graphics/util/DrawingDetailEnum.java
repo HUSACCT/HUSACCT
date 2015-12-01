@@ -1,5 +1,5 @@
 package husacct.graphics.util;
 
-public enum DrawingDetail {
+public enum DrawingDetailEnum {
 	WITHOUT_VIOLATIONS, WITH_VIOLATIONS
 }

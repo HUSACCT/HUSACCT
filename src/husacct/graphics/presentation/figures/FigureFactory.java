@@ -20,9 +20,9 @@ public final class FigureFactory {
 	public BaseFigure createFigure(AbstractDTO dto) {
 		BaseFigure createdFigure = createModuleFigure(dto);
 		
-		if (createdFigure == null) throw new RuntimeException("Unimplemented dto type '"
-				+ (dto == null ? "DTO=null" : dto.getClass()
-						.getSimpleName()) + "' passed to FigureFactory");
+		if (createdFigure == null) 
+			throw new RuntimeException("Unimplemented dto type '"
+				+ (dto == null ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
 		return createdFigure;
 	}
 	

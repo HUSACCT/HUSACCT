@@ -28,7 +28,7 @@ public class CheckConformanceTask implements Runnable {
 			this.logger.info(new Date().toString() + " CheckConformanceTask is Starting: IValidateService.checkConformance()" );
 			ServiceProvider.getInstance().getValidateService().checkConformance();
 			filterPanel.loadAfterChange();
-			buttonSaveInHistory.setEnabled(true);
+			// buttonSaveInHistory.setEnabled(true);
 			ServiceProvider.getInstance().getControlService().setValidate(false);
 			this.logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
 		} catch (InterruptedException e) {

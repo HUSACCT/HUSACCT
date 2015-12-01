@@ -9,7 +9,7 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
-import husacct.graphics.presentation.GraphicsPresentationController;
+import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
@@ -25,17 +25,17 @@ public class DefinedController extends DrawingController {
 	
 	private HashMap<String, BaseFigure>	definedFigures;
 	
-	public DefinedController(GraphicsPresentationController presentationController) {
-		super(presentationController);
+	public DefinedController() {
+		super();
 		initializeServices();
 	}
 	
 	// Method to create the top-level diagram.
 	@Override
-	public void drawArchitectureTopLevel() {
+	public DrawingView drawArchitectureTopLevel() {
 		// Select all modules in root
 		ModuleDTO[] modules = defineService.getModule_AllRootModules();
-		if (!areExternalLibrariesShown) {
+		if (!drawingSettingsHolder.areExternalLibrariesShown()) {
 			// Select only internal modules in root
 			int nrOfInternalModules = 0;
 			for (ModuleDTO module : modules){
@@ -52,8 +52,9 @@ public class DefinedController extends DrawingController {
 			}
 			modules = internalModules;
 		}
-		resetCurrentPaths();
+		drawingSettingsHolder.resetCurrentPaths();
 		drawModulesAndLines(modules);
+		return drawingView;
 	}
 	
 	private void getAndDrawModulesIn(String parentName) {
@@ -87,7 +88,7 @@ public class DefinedController extends DrawingController {
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
-					logger.info("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+					// logger.info("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
 			}
 			setCurrentPaths(parentNames);
@@ -95,7 +96,8 @@ public class DefinedController extends DrawingController {
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+				ArrayList<AbstractDTO> onlyParentChildren = new ArrayList<AbstractDTO>();
+				onlyParentChildren = allChildren.get(onlyParentModule);
 				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else
 				drawModulesAndLines(allChildren);
@@ -130,29 +132,23 @@ public class DefinedController extends DrawingController {
 	
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		
 		defineService = ServiceProvider.getInstance().getDefineService();
-		defineService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				refreshDrawing();
-			}
-		});
 		validateService = ServiceProvider.getInstance().getValidateService();
-		validateService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				if (areViolationsShown()) refreshDrawing();
-			}
-		});
 	}
 	
 	@Override
-	public void moduleOpen(String[] paths) {
+	public DrawingView moduleOpen(String[] paths) {
 		if (paths.length == 0) 
 			drawArchitectureTopLevel();
 		else
 			getAndDrawModulesIn(paths);
+		return drawingView;
+	}
+	
+	@Override
+	public DrawingView refreshDrawing() {
+		getAndDrawModulesIn(drawingSettingsHolder.getCurrentPaths());
+		return drawingView;
 	}
 	
 	@Override
@@ -169,12 +165,11 @@ public class DefinedController extends DrawingController {
 				} 
 				else if (figure.isContext() || !figure.isLine()) {
 					//definedFigures.put(parentDTO.logicalPath, figure);
-					boolean breakpoint = true;
 				} else {
-					logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
+					//logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 				}
 			} catch (Exception e) {
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+				//logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				//e.printStackTrace();
 			}
 		}
@@ -186,45 +181,18 @@ public class DefinedController extends DrawingController {
 	}
 	
 	@Override
-	public void zoomOut() {
-		if (getCurrentPaths().length > 0) {
+	public DrawingView zoomOut() {
+		if (drawingSettingsHolder.getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
-			String firstCurrentPaths = getCurrentPaths()[0];
+			String firstCurrentPaths = drawingSettingsHolder.getCurrentPaths()[0];
 			String parentPath = defineService.getModule_TheParentOfTheModule(firstCurrentPaths);
-			if (parentPath != null) getAndDrawModulesIn(parentPath);
+			if (parentPath != null) 
+				getAndDrawModulesIn(parentPath);
 			else
-				moduleZoomOutFailed();
+				drawArchitectureTopLevel();
 		} else
-			moduleZoomOutFailed();
+			drawArchitectureTopLevel();
+		return drawingView;
 	}
 	
-	public void moduleZoomOutFailed() {
-		drawArchitectureTopLevel();
-	}
-	
-	@Override
-	public void refreshDrawing() {
-		getAndDrawModulesIn(getCurrentPaths());
-	}
-	
-	@Override
-	public void librariesHide() {
-		super.librariesHide();
-		refreshDrawing();
-	}
-
-	@Override
-	public void librariesShow() {
-		super.librariesShow();
-		refreshDrawing();
-	}
-
-	@Override
-	public void violationsShow() {
-		if (validateService.isValidated()) {
-			super.violationsShow();
-		} else {
-			super.violationsHide();
-		}
-	}
 }

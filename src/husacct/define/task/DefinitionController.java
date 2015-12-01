@@ -331,7 +331,7 @@ import org.apache.log4j.Logger;
 			
 				for (String softwareUnit : softwareUnitNames) {
 					String type = types.get(location);
-					logger.info("Removing software unit " + softwareUnit + ", Type: " + type);
+					// logger.info("Removing software unit " + softwareUnit + ", Type: " + type);
 					if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 						if (confirm) {
 							JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);

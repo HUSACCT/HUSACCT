@@ -3,7 +3,7 @@ package husacct.graphics.presentation.menubars;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.locale.ILocaleService;
-import husacct.graphics.util.UserInputListener;
+import husacct.graphics.presentation.UserInputListener;
 
 import java.awt.Component;
 import java.awt.Insets;

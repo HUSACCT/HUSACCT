@@ -1,8 +1,8 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
-import husacct.graphics.util.UserInputListener;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -20,7 +20,6 @@ import javax.swing.JComponent;
 import javax.swing.JViewport;
 
 import org.apache.log4j.Logger;
-
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
@@ -66,7 +65,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 	
 	public void addListener(UserInputListener listener) {
-		listeners.add(listener);
+		listeners.add(listener); 			// GraphicsPresentationController
 		contextMenu.addListener(listener);
 	}
 	
@@ -83,16 +82,6 @@ public class DrawingView extends DefaultDrawingView {
 			listener.zoomSliderSetZoomFactor(zoomFactor);
 			listener.zoomFactorChanged(zoomFactor);
 		}
-	}
-	
-	private void figureDeselected(BaseFigure[] figures) {
-		for (UserInputListener l : listeners)
-			l.figureDeselected(figures);
-	}
-	
-	private void figureSelected(BaseFigure[] figures) {
-		for (UserInputListener l : listeners)
-			l.figureSelected(figures);
 	}
 	
 	public Drawing getDrawingHusacct() {
@@ -113,8 +102,6 @@ public class DrawingView extends DefaultDrawingView {
 		if (deselectedFigures.size() > 0) {
 			BaseFigure[] deselection = new BaseFigure[deselectedFigures.size()];
 			deselection = deselectedFigures.toArray(deselection);
-			
-			figureDeselected(deselection);
 			for (BaseFigure figure : deselection)
 				figure.resetLayer();
 		}
@@ -183,7 +170,6 @@ public class DrawingView extends DefaultDrawingView {
 		try{
 			for (UserInputListener listener : listeners)
 				listener.zoomIn();
-			this.requestFocus();
 		}
 		catch (Exception e){
 			logger.error(" Exception: " + e);
@@ -198,14 +184,13 @@ public class DrawingView extends DefaultDrawingView {
 			handleDeselect();
 			if (mouseButton == LeftMouseButton && hasSelection()) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				
-				if (mouseClicks == DoubleClick) zoomIn();
+				if (mouseClicks == DoubleClick) 
+					zoomIn();
 				else
 					for (BaseFigure figure : selection)
 						figure.raiseLayer();
-			} else if (mouseButton == RightMouseButton) contextMenu.show(this,
-					e.getX(), e.getY());
-			
+			} else if (mouseButton == RightMouseButton) 
+				contextMenu.show(this, e.getX(), e.getY());
 			previousSelection.clear();
 			previousSelection.addAll(getSelectedFigures());
 		}
@@ -231,14 +216,27 @@ public class DrawingView extends DefaultDrawingView {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
 			for (BaseFigure selectedFig : selection){
 				drawing.bringToFront(selectedFig);
-				//TODO When two figures have the same name, sometimes one or multiple will dissappear when selected.
 			}
-			figureSelected(selection);
+			// Determine if properties should be displayed or hidden.
+			BaseFigure selectedFigure = selection[0];
+			if (selectedFigure.isLine()) {
+				RelationFigure line = (RelationFigure) selectedFigure;
+				if (line.isViolationRelation()){
+					for (UserInputListener l : listeners)
+						l.propertiesPaneShowViolations(selectedFigure);
+				} else {
+					for (UserInputListener l : listeners)
+						l.propertiesPaneShowDependencies(selectedFigure);
+				}
+			} else {
+				for (UserInputListener l : listeners)
+					l.propertiesPaneHide();
+			}
 		}
 		contextMenu.setHasSelection(hasSelection());
 	}
 	
-	public void removeListener(UserInputListener listener) {
+	public void removeListeners(UserInputListener listener) {
 		listeners.remove(listener);
 		contextMenu.removeListener(listener);
 	}

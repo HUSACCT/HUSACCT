@@ -4,7 +4,7 @@ import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.task.DrawingController;
-import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.DrawingLayoutStrategyEnum;
 
 import javax.swing.JInternalFrame;
 
@@ -80,12 +80,12 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	public Element getWorkspaceData() {
 		createControllers();
 		Element data = new Element(workspaceServiceName);
-		data.addContent(getWorkspaceDataForController(workspaceAnalysedControllerName, presentationControllersAnalysed.getController()));
-		data.addContent(getWorkspaceDataForController(workspaceDefinedControllerName, presentationControllersDefined.getController()));
+		data.addContent(getWorkspaceDataForController(workspaceAnalysedControllerName, presentationControllersAnalysed));
+		data.addContent(getWorkspaceDataForController(workspaceDefinedControllerName, presentationControllersDefined));
 		return data;
 	}
 	
-	private Element getWorkspaceDataForController(String controllerName, DrawingController controller) {
+	private Element getWorkspaceDataForController(String controllerName, GraphicsPresentationController controller) {
 		Element controllerElement = new Element(controllerName);
 		controllerElement.setAttribute(workspaceShowDependencies, "" + controller.areDependenciesShown());
 		controllerElement.setAttribute(workspaceShowViolations, "" + controller.areViolationsShown());
@@ -104,19 +104,20 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		createControllers();
 		try {
 			Element analysedControllerElement = workspaceData.getChild(workspaceAnalysedControllerName);
-			loadWorkspaceDataForController(presentationControllersAnalysed.getController(), analysedControllerElement);
+			loadWorkspaceDataForController(presentationControllersAnalysed, analysedControllerElement);
 		} catch (Exception e) {
 			logger.error("Error importing the workspace for analyse.", e);
 		}
 		try {
 			Element definedControllerElement = workspaceData.getChild(workspaceDefinedControllerName);
-			loadWorkspaceDataForController(presentationControllersDefined.getController(), definedControllerElement);
+			loadWorkspaceDataForController(presentationControllersDefined, definedControllerElement);
 		} catch (Exception e) {
 			logger.error("Error importing the workspace for define.", e);
 		}
 	}
 	
-	private void loadWorkspaceDataForController(DrawingController controller, Element data) {
+	private void loadWorkspaceDataForController(GraphicsPresentationController controller, Element data) {
+		/*
 		if (isActive(data, workspaceShowDependencies)) 
 			controller.dependenciesShow();
 		else
@@ -132,11 +133,12 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		else
 			controller.smartLinesDisable();
 		
-		DrawingLayoutStrategy selectedStrategy = null;
-		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values())
+		DrawingLayoutStrategyEnum selectedStrategy = null;
+		for (DrawingLayoutStrategyEnum strategy : DrawingLayoutStrategyEnum.values())
 			if (strategy.toString().equals( data.getAttribute(workspaceLayoutStrategy).getValue())) 
 				selectedStrategy = strategy;
 		if (null != selectedStrategy) 
 			controller.layoutStrategyChange(selectedStrategy);
+		*/
 	}
 }

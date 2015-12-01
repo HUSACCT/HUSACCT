@@ -9,7 +9,6 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.ParentFigure;
@@ -28,8 +27,7 @@ public class DrawingControllerTest {
 	
 	@Before
 	public void setup() {
-		GraphicsPresentationController presentationController = new GraphicsPresentationController("AnalysedDrawing");
-		analysedController = new AnalysedController(presentationController);
+		analysedController = new AnalysedController();
 	}
 
 	@Test

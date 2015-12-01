@@ -1,6 +1,7 @@
-package husacct.graphics.util;
+package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingLayoutStrategyEnum;
 
 public interface UserInputListener {
 	
@@ -10,11 +11,7 @@ public interface UserInputListener {
 	
 	public void exportImage();
 	
-	public void figureDeselected(BaseFigure[] figures);
-	
-	public void figureSelected(BaseFigure[] figures);
-	
-	public void layoutStrategyChange(DrawingLayoutStrategy selectedStrategyEnum);
+	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum);
 	
 	public void librariesHide();
 	
@@ -25,6 +22,12 @@ public interface UserInputListener {
 	public void moduleRestoreHiddenModules();
 	
 	public void moduleOpen(String[] paths);
+	
+	public void propertiesPaneHide();
+
+	public void propertiesPaneShowDependencies(BaseFigure selectedLine);
+	
+	public void propertiesPaneShowViolations(BaseFigure selectedLine);
 	
 	public void proportionalLinesDisable();
 	
@@ -49,8 +52,6 @@ public interface UserInputListener {
 	public void zoomFactorChanged(double zoomFactor);
 	
 	public void zoomIn();
-	
-	public void zoomIn(BaseFigure[] zoomedModuleFigure);
 	
 	public void zoomTypeChange(String zoomType);
 	

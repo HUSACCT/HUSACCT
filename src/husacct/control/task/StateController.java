@@ -94,7 +94,6 @@ public class StateController {
 			newStates.add(States.NONE);
 		}
 
-
 		setState(newStates);
 	}
 

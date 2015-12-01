@@ -3,8 +3,8 @@ package husacct.graphics.presentation.dialogs;
 import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
-import husacct.graphics.util.DrawingLayoutStrategy;
-import husacct.graphics.util.UserInputListener;
+import husacct.graphics.presentation.UserInputListener;
+import husacct.graphics.util.DrawingLayoutStrategyEnum;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,29 +34,21 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	protected Logger								logger				= Logger.getLogger(GraphicsOptionsDialog.class);
 	private ArrayList<UserInputListener>			listeners			= new ArrayList<UserInputListener>();
 	
-	private JPanel									mainPanel, settingsPanel,
-	globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel,
-	layoutStrategyPanel;
+	private JPanel									mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
 	
 	private int										menuItemMaxHeight	= 45;
 	
-	private JButton									zoomInButton,
-	zoomOutButton, refreshButton, exportToImageButton,
-	hideFiguresButton, showFiguresButton, okButton, applyButton,
-	cancelButton;
-	private JCheckBox								showDependenciesOptionMenu,
-	showViolationsOptionMenu, smartLinesOptionMenu,
-	showExternalLibraries, enableThickLines;
+	private JButton									zoomInButton, zoomOutButton, refreshButton, exportToImageButton, hideSelectedModulesButton, restoreHiddenModulesButton, okButton, cancelButton;
+	private JCheckBox								showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu, showExternalLibraries, enableThickLines;
 	private JComboBox<String>						layoutStrategyOptions;
 	private JSlider									zoomSlider;
-	private JLabel									layoutStrategyLabel,
-	zoomLabel;
+	private JLabel									layoutStrategyLabel, zoomLabel;
 	private ArrayList<JComponent>					interfaceElements;
 	private HashMap<String, Object>					currentSettings;
+	private boolean 								refreshDrawingRequired = false;
 	
-	private int										totalWidth, totalHeight,
-	paddingSize, labelWidth, elementWidth, elementHeight;
-	private HashMap<String, DrawingLayoutStrategy>	layoutStrategiesTranslations;
+	private int										totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
+	private HashMap<String, DrawingLayoutStrategyEnum>	layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
 	private ILocaleService							localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -65,10 +57,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings = new HashMap<String, Object>();
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
-		currentSettings.put("thickLines", false); //representativeLineWidth is false
+		currentSettings.put("thickLines", false); //proportionalLineWidth
 		currentSettings.put("smartLines", true);
-		currentSettings.put("libraries", true);
-		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
+		currentSettings.put("libraries", false);
+		currentSettings.put("layoutStrategy", DrawingLayoutStrategyEnum.BASIC_LAYOUT);
 		
 		totalWidth = 550;
 		totalHeight = 260;
@@ -81,10 +73,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		add(mainPanel);
 		
-		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
+		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategyEnum>();
 		int i = 0;
-		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
-		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
+		layoutStrategyItems = new String[DrawingLayoutStrategyEnum.values().length];
+		for (DrawingLayoutStrategyEnum strategy : DrawingLayoutStrategyEnum.values()) {
 			String translation = localeService.getTranslatedString(strategy.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
@@ -106,16 +98,15 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
 		interfaceElements.add(okButton);
-		interfaceElements.add(applyButton);
 		interfaceElements.add(cancelButton);
 	}
 	
 	public void addListener(UserInputListener listener) {
-		listeners.add(listener);
+		listeners.add(listener); // Listener is GraphicsMenuBar
 	}
 	
-	public DrawingLayoutStrategy getSelectedLayoutStrategyItem() {
-		DrawingLayoutStrategy selectedStrategy = null;
+	public DrawingLayoutStrategyEnum getSelectedLayoutStrategyItem() {
+		DrawingLayoutStrategyEnum selectedStrategy = null;
 		String selectedItem = null;
 		try {
 			selectedItem = (String) layoutStrategyOptions.getSelectedItem();
@@ -171,25 +162,25 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		mainPanel.add(globalActionsPanel);
 		
 		figuresActionsPanel = new JPanel();
-		hideFiguresButton = new JButton();
-		hideFiguresButton.addActionListener(new ActionListener() {
+		hideSelectedModulesButton = new JButton();
+		hideSelectedModulesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
 					listener.moduleHide();
 			}
 		});
-		figuresActionsPanel.add(hideFiguresButton);
+		figuresActionsPanel.add(hideSelectedModulesButton);
 		
-		showFiguresButton = new JButton();
-		showFiguresButton.addActionListener(new ActionListener() {
+		restoreHiddenModulesButton = new JButton();
+		restoreHiddenModulesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (UserInputListener listener : listeners)
 					listener.moduleRestoreHiddenModules();
 			}
 		});
-		figuresActionsPanel.add(showFiguresButton);
+		figuresActionsPanel.add(restoreHiddenModulesButton);
 		mainPanel.add(figuresActionsPanel);
 		
 		optionsPanel = new JPanel();
@@ -197,10 +188,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		optionsPanel.setLayout(new GridLayout(3, 1));
 		
 		showDependenciesOptionMenu = new JCheckBox();
-		showDependenciesOptionMenu.setPreferredSize(new Dimension(40,
-				menuItemMaxHeight));
-		showDependenciesOptionMenu.setMaximumSize(new Dimension(40,
-				menuItemMaxHeight));
+		showDependenciesOptionMenu.setPreferredSize(new Dimension(40, menuItemMaxHeight));
+		showDependenciesOptionMenu.setMaximumSize(new Dimension(40, menuItemMaxHeight));
 		optionsPanel.add(showDependenciesOptionMenu);
 		
 		showViolationsOptionMenu = new JCheckBox();
@@ -267,18 +256,15 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				notifyListeners();
+				if (refreshDrawingRequired) {
+					for (UserInputListener listener : listeners) {
+						listener.refreshDrawing();
+					}
+					refreshDrawingRequired = false;
+				}
 			}
 		});
 		confirmPanel.add(okButton);
-		
-		applyButton = new JButton();
-		applyButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				notifyListeners();
-			}
-		});
-		confirmPanel.add(applyButton);
 		
 		cancelButton = new JButton();
 		cancelButton.addActionListener(new ActionListener() {
@@ -295,46 +281,76 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	public void notifyListeners() {
 		for (UserInputListener listener : listeners) {
 			if (showDependenciesOptionMenu.isSelected()) {
-				currentSettings.put("dependencies", true);
-				listener.dependenciesShow();
+				if (((Boolean) currentSettings.get("dependencies")) != true) {
+					currentSettings.put("dependencies", true);
+					listener.dependenciesShow();
+					refreshDrawingRequired = true;
+				}
 			} else {
-				currentSettings.put("dependencies", false);
-				listener.dependenciesHide();
+				if (((Boolean) currentSettings.get("dependencies")) != false) {
+					currentSettings.put("dependencies", false);
+					listener.dependenciesHide();
+					refreshDrawingRequired = true;
+				}
 			}
 			if (enableThickLines.isSelected()) {
-				currentSettings.put("thickLines", true);
-				listener.proportionalLinesEnable();
+				if (((Boolean) currentSettings.get("thickLines")) != true) {
+					currentSettings.put("thickLines", true);
+					listener.proportionalLinesEnable();
+					refreshDrawingRequired = true;
+				}
 			} else {
-				currentSettings.put("thickLines", false);
-				listener.proportionalLinesDisable();
+				if (((Boolean) currentSettings.get("thickLines")) != false) {
+					currentSettings.put("thickLines", false);
+					listener.proportionalLinesDisable();
+					refreshDrawingRequired = true;
+				}
 			}
 			if (showViolationsOptionMenu.isSelected()) {
-				currentSettings.put("violations", true);
-				listener.violationsShow();
+				if (((Boolean) currentSettings.get("violations")) != true) {
+					currentSettings.put("violations", true);
+					listener.violationsShow();
+					refreshDrawingRequired = true;
+				}
 			} else {
-				currentSettings.put("violations", true);
-				listener.violationsHide();
+				if (((Boolean) currentSettings.get("violations")) != false) {
+					currentSettings.put("violations", false);
+					listener.violationsHide();
+					refreshDrawingRequired = true;
+				}
 			}
 			if (smartLinesOptionMenu.isSelected()) {
-				currentSettings.put("smartLines", true);
-				listener.smartLinesEnable();
+				if (((Boolean) currentSettings.get("smartLines")) != true) {
+					currentSettings.put("smartLines", true);
+					listener.smartLinesEnable();
+					refreshDrawingRequired = true;
+				}
 			} else {
-				currentSettings.put("smartLines", false);
-				listener.smartLinesDisable();
+				if (((Boolean) currentSettings.get("smartLines")) != false) {
+					currentSettings.put("smartLines", false);
+					listener.smartLinesDisable();
+					refreshDrawingRequired = true;
+				}
 			}
 			if (showExternalLibraries.isSelected()) {
-				currentSettings.put("libraries", true);
-				listener.librariesShow();
+				if (((Boolean) currentSettings.get("libraries")) != true) {
+					currentSettings.put("libraries", true);
+					listener.librariesShow();
+					refreshDrawingRequired = true;
+				}
 			} else {
-				currentSettings.put("libraries", false);
-				listener.librariesHide();
+				if (((Boolean) currentSettings.get("libraries")) != false) {
+					currentSettings.put("libraries", false);
+					listener.librariesHide();
+					refreshDrawingRequired = true;
+				}
 			}
-			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
+			DrawingLayoutStrategyEnum selectedStrategy = getSelectedLayoutStrategyItem();
 			if ((selectedStrategy != null) && !selectedStrategy.toString().equals(currentSettings.get("layoutStrategy").toString())) {
 				currentSettings.put("layoutStrategy", selectedStrategy);
 				listener.layoutStrategyChange(selectedStrategy);
+				refreshDrawingRequired = true;
 			}
-			listener.refreshDrawing();
 		}
 	}
 	
@@ -351,12 +367,12 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		layoutStrategyOptions.setSelectedItem(localeService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
 	}
 	
-	public void setDependenciesUIToActive() {
+	public void setDependeciesButtonsToShow() {
 		currentSettings.put("dependencies", true);
 		showDependenciesOptionMenu.setSelected(true);
 	}
 	
-	public void setDependenciesUIToInactive() {
+	public void setDependeciesButtonToDontShow() {
 		currentSettings.put("dependencies", false);
 		showDependenciesOptionMenu.setSelected(false);
 	}
@@ -374,10 +390,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			exportToImageButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(
 					icons.get("hideFigures")));
-			hideFiguresButton.setIcon(icon);
+			hideSelectedModulesButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(
 					icons.get("showFigures")));
-			showFiguresButton.setIcon(icon);
+			restoreHiddenModulesButton.setIcon(icon);
 		} catch (NullPointerException e) {
 			logger.warn("Icons are not set properly.");
 		}
@@ -414,51 +430,45 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			refreshButton.setText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			
-			showDependenciesOptionMenu.setText(menuBarLocale
-					.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale
-					.get("ShowViolations"));
-			showExternalLibraries.setText(menuBarLocale
-					.get("ShowExternalLibraries"));
+			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
+			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
+			showExternalLibraries.setText(menuBarLocale.get("ShowExternalLibraries"));
 			//TODO name for checkbox 
 			enableThickLines.setText("Proportional Line Width");
 			
 			okButton.setText(menuBarLocale.get("Ok"));
-			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
-			smartLinesOptionMenu.setText(menuBarLocale
-					.get("LineContextUpdates"));
-			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
-			showFiguresButton
-			.setText(menuBarLocale.get("RestoreHiddenModules"));
+			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			hideSelectedModulesButton.setText(menuBarLocale.get("HideModules"));
+			restoreHiddenModulesButton.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
 		}
 	}
 	
-	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
+	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategyEnum item) {
 		currentSettings.put("layoutStrategy", item);
 		layoutStrategyOptions.setSelectedItem(localeService
 				.getTranslatedString(item.toString()));
 	}
 	
-	public void setSmartLinesUIToActive() {
+	public void setSmartLinesButtonsToShow() {
 		currentSettings.put("smartLines", true);
 		smartLinesOptionMenu.setSelected(true);
 	}
 	
-	public void setSmartLinesUIToInactive() {
+	public void setSmartLinesButtonsToDontShow() {
 		currentSettings.put("smartLines", false);
 		smartLinesOptionMenu.setSelected(false);
 	}
 	
-	public void setViolationsUIToActive() {
+	public void setViolationsButtonsToShow() {
 		currentSettings.put("violations", true);
 		showViolationsOptionMenu.setSelected(true);
 	}
 	
-	public void setViolationsUIToInactive() {
+	public void setViolationsButtonsToDontShow() {
 		currentSettings.put("violations", false);
 		showViolationsOptionMenu.setSelected(false);
 	}

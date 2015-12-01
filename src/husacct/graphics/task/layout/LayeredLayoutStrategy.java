@@ -6,7 +6,6 @@ import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.layered.LayoutStrategy;
 import husacct.graphics.task.layout.layered.Node;
 import husacct.graphics.task.layout.layered.SortedNodeList;
-import husacct.graphics.util.ListUtils;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;

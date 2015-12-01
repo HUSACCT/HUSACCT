@@ -5,15 +5,12 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
-import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
-import husacct.graphics.presentation.menubars.ZoomLocationBar;
+import husacct.graphics.presentation.menubars.GraphicsLocationBar;
 import husacct.graphics.presentation.tables.DependencyTable;
 import husacct.graphics.presentation.tables.ViolationTable;
-import husacct.graphics.util.DrawingLayoutStrategy;
-import husacct.graphics.util.UserInputListener;
-
+import husacct.graphics.util.DrawingLayoutStrategyEnum;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -32,7 +29,7 @@ import javax.swing.JSplitPane;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsFrame extends HelpableJInternalFrame implements UserInputListener {
+public class GraphicsFrame extends HelpableJInternalFrame {
 	private static final long				serialVersionUID	= -4683140198375851034L;
 	protected ILocaleService				localeService		= ServiceProvider.getInstance().getLocaleService();
 	protected Logger						logger				= Logger.getLogger(GraphicsFrame.class);
@@ -42,7 +39,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	private JProgressBar 					progressBar;
 	private DrawingView						drawingView;
 	private GraphicsMenuBar					menuBar;
-	private ZoomLocationBar					locationBar;
+	private GraphicsLocationBar				locationBar;
 	private String[]						currentPaths;
 	private JScrollPane						drawingScrollPane, propertiesScrollPane, locationScrollPane;
 	private JSplitPane						centerPane;
@@ -53,13 +50,13 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 	private int								frameTotalWidth;
 	private int								menuBarHeight = 20;
 	
-	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
-	
 	public GraphicsFrame(GraphicsPresentationController graphicsPresentationController) {
 		presentationController = graphicsPresentationController;
 		setVisible(false);
 		frameTotalWidth = getWidth();
 		initializeComponents();
+		layoutCenterPane();
+		updateGUI();
 		setVisible(true);
 		
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
@@ -74,137 +71,72 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		});
 	}
 	
-	public void addListener(UserInputListener listener) {
-		listeners.add(listener);
-	}
-	
-	@Override
-	public void layoutStrategyChange(DrawingLayoutStrategy selectedStrategyEnum) {
-		for (UserInputListener l : listeners)
-			l.layoutStrategyChange(selectedStrategyEnum);
-	}
-	
 	public void createLocationBar() {
-		locationBar = new ZoomLocationBar();
+		locationBar = new GraphicsLocationBar();
 		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			}
 			@Override
 			public void actionPerformed(String[] selectedPaths) {
-				moduleOpen(selectedPaths);
+				presentationController.moduleOpen(selectedPaths);
 			}
 		});
-		locationBar.updateLocationBar(currentPaths);
-
 	}
 	
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
-		menuBar.addListener(this);
+		menuBar.addListener(presentationController);
 		menuBar.setSize(frameTotalWidth, menuBarHeight);
 		menuBar.setOutOfDateAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setUpToDate();
-				refreshDrawing();
+				presentationController.refreshDrawing();
 			}
 		});
 	}
 	
-	public void showDrawing(DrawingView newDrawingView) {
-		this.drawingView = newDrawingView;
+	public void attachDrawingViewAndShowDrawing(DrawingView updatedDrawingView) {
+		// Attach drawingView
+		drawingView = updatedDrawingView;
 		drawingScrollPane.setViewportView(drawingView);
 		drawingView.initializePanTool(drawingScrollPane.getViewport(), drawingScrollPane);
+		drawingView.addListener(presentationController);
+		// Hide loading screen and show drawing.
 		showLoadingScreen = false;
-		layoutComponents();
-		menuBar.turnOnBar();
-		locationBar.turnOnBar();
+		hideOutOfDateWarning();
+		setCurrentPaths(presentationController.getCurrentPaths());
+		layoutCenterPane();
 	}
 	
-	public void hideDrawingAndShowLoadingScreen() {
+	public void detachDrawingViewAndShowLoadingScreen() {
 		// Detach links to DrawingView and Drawing to prevent Swing Synchronization problems.
-		this.drawingView.removePanTool();
-		this.drawingScrollPane.setViewportView(null);
-		this.drawingView = null;
-		// Show loading screen.
-		showLoadingScreen = true;
-		layoutComponents();
+		if (drawingView != null) {
+			drawingView.removePanTool();
+			drawingScrollPane.setViewportView(null);
+			drawingView.removeListeners(presentationController);
+			drawingView = null;
+			// Show loading screen.
+			showLoadingScreen = true;
+			layoutCenterPane();
+		}
 	}
 
-	@Override
-	public void zoomFactorChanged(double zoomFactor) {
-		double scaleFactor = menuBar.getScaleFactor();
-		for (UserInputListener l : listeners)
-			l.zoomFactorChanged(scaleFactor);
-	}
-	
-	@Override
-	public void exportImage() {
-		for (UserInputListener l : listeners)
-			l.exportImage();
-	}
-	
-	@Override
-	public void figureDeselected(BaseFigure[] figures) {
-		// Not used in this UI
-	}
-	
-	@Override
-	public void figureSelected(BaseFigure[] figures) {
-		// Not used in this UI
-	}
-	
 	public String[] getCurrentPaths() {
 		return currentPaths;
 	}
 	
-	@Override
-	public void dependenciesHide() {
-		for (UserInputListener l : listeners)
-			l.dependenciesHide();
+	GraphicsMenuBar getGraphicsMenuBar() {
+		return menuBar;
 	}
 	
-	@Override
-	public void librariesHide() {
-		for (UserInputListener l : listeners)
-			l.librariesHide();
-	}
-	
-	public void hideLoadingScreen() {
-		showLoadingScreen = false;
-		progressPanel.removeAll();
-		layoutComponents();
-		locationBar.turnOnBar();
-		menuBar.turnOnBar();
-		/*
-		if (isVisible()) {
-			validate();
-		}
-		*/
-	}
-	
-	@Override
-	public void moduleHide() {
-		for (UserInputListener listener : listeners)
-			listener.moduleHide();
+	GraphicsLocationBar getGraphicsLocationBar() {
+		return locationBar;
 	}
 	
 	public void hideProperties() {
 		showProperties = false;
-		layoutComponents();
-	}
-	
-	@Override
-	public void smartLinesDisable() {
-		for (UserInputListener l : listeners)
-			l.smartLinesDisable();
-	}
-	
-	@Override
-	public void violationsHide() {
-		for (UserInputListener l : listeners)
-			l.violationsHide();
+		layoutCenterPane();
 	}
 	
 	private void initializeComponents() {
@@ -225,7 +157,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		add(locationScrollPane, BorderLayout.SOUTH);
 		add(centerPane, BorderLayout.CENTER);
 
-		// Initialize subcomponents
+		// Initialize subcomponents of centerPane
 		loadingContainerPanel = new JPanel();
 		progressPanel = new JPanel();
 		loadingContainerPanel.add(progressPanel);
@@ -239,10 +171,8 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		propertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		propertiesScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		// Update contents of the main components of GraphicsFrame
+		// Set the texts in the current language 
 		updateComponentsLocaleStrings();
-		layoutComponents();
-		updateGUI();
 		
 		// Add Listeners
 		getRootPane().addComponentListener(new ComponentListener() {
@@ -270,7 +200,7 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		
 	}
 	
-	private void layoutComponents() {
+	private void layoutCenterPane() {
 		centerPane.removeAll();
 		if (showLoadingScreen) {
 			progressBar = new JProgressBar();
@@ -308,40 +238,6 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		}
 	}
 	
-	@Override
-	public void moduleOpen(String[] paths) {
-		for (UserInputListener l : listeners)
-			l.moduleOpen(paths);
-	}
-	
-	@Override
-	public void zoomIn() {
-		//for (UserInputListener l : listeners)
-		//	l.zoomIn();
-		presentationController.zoomIn();
-	}
-	
-	@Override
-	public void zoomIn(BaseFigure[] zoomedModuleFigure) {
-		// Not used through this GUI
-	}
-	
-	@Override
-	public void zoomTypeChange(String zoomType) {
-		for (UserInputListener l : listeners)
-			l.zoomTypeChange(zoomType);
-	}
-	
-	@Override
-	public void zoomOut() {
-		String[] secondLastPath = locationBar.getSecondLastPath();
-		if (secondLastPath.length == 0) 
-			for (UserInputListener l : listeners)
-				l.zoomOut();
-		else
-			moduleOpen(secondLastPath);
-	}
-	
 	private void positionLayoutComponents() {
 		if (showProperties) {
 			int centerPaneHeight = getHeight();
@@ -353,18 +249,8 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		}
 	}
 	
-	@Override
-	public void refreshDrawing() {
-		for (UserInputListener l : listeners)
-			l.refreshDrawing();
-	}
-	
 	public void refreshFrame() {
 		updateComponentsLocaleStrings();
-	}
-	
-	public void removeListener(UserInputListener listener) {
-		listeners.remove(listener);
 	}
 	
 	public void resetCurrentPaths() {
@@ -378,74 +264,39 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 			locationScrollPane.setPreferredSize(new Dimension(900, 35));
 	}
 	
-	@Override
-	public void moduleRestoreHiddenModules() {
-		for (UserInputListener listener : listeners)
-			listener.moduleRestoreHiddenModules();
-	}
-	
 	public void setCurrentPaths(String[] paths) {
 		currentPaths = paths;
 	}
 	
-	public void setOutOfDate() {
-		menuBar.setOutOfDate();
+	public void showOutOfDateWarning() {
+		menuBar.showOutOfDateWarning();
 	}
 	
-	public void setSelectedLayout(DrawingLayoutStrategy layoutStrategyOption) {
+	public void setSelectedLayout(DrawingLayoutStrategyEnum layoutStrategyOption) {
 		menuBar.setSelectedLayoutStrategyItem(layoutStrategyOption);
 	}
 	
-	public void setUpToDate() {
-		menuBar.setUpToDate();
+	public void hideOutOfDateWarning() {
+		menuBar.hideOutOfDateWarning();
 	}
 	
-	@Override
 	public void zoomSliderSetZoomFactor(double zoomFactor) {
 		menuBar.zoomSliderSetZoomFactor(zoomFactor);
 	}
 	
-	@Override
-	public void dependenciesShow() {
-		for (UserInputListener l : listeners)
-			l.dependenciesShow();
+	public void setDependeciesButtonsToShow() {
+		menuBar.setDependeciesButtonsToShow();
 	}
 	
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
 		showProperties();
 		DependencyTable propertiesTable = new DependencyTable(dependencyDTOs);
 		propertiesScrollPane.setViewportView(propertiesTable);
-		//propertiesTable.setAutoCreateRowSorter(true);
-	}
-	
-	@Override
-	public void librariesShow() {
-		for (UserInputListener l : listeners)
-			l.librariesShow();
-	}
-	
-	public void showLoadingScreen() {
-		showLoadingScreen = true;
-		layoutComponents();
-		locationBar.turnOffBar();
-		menuBar.turnOffBar();
 	}
 	
 	public void showProperties() {
 		showProperties = true;
-		layoutComponents();
-	}
-	
-	@Override
-	public void smartLinesEnable() {
-		for (UserInputListener l : listeners)
-			l.smartLinesEnable();
-	}
-	
-	@Override
-	public void violationsShow() {
-		for (UserInputListener l : listeners)
-			l.violationsShow();
+		layoutCenterPane();
 	}
 	
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
@@ -454,28 +305,20 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		propertiesScrollPane.setViewportView(propertiesTable);
 	}
 	
-	public void turnOffDependencies() {
-		menuBar.setDependeciesUIToInactive();
+	public void setSmartLinesButtonsToDontShow() {
+		menuBar.setSmartLinesButtonsToDontShow();
 	}
 	
-	public void turnOffSmartLines() {
-		menuBar.setSmartLinesUIToInactive();
-	}
-	
-	public void turnOffViolations() {
-		menuBar.setViolationsUIToInactive();
-	}
-	
-	public void turnOnDependencies() {
-		menuBar.setDependeciesUIToActive();
+	public void setViolationsButtonsToDontShow() {
+		menuBar.setViolationsButtonsToDontShow();
 	}
 	
 	public void turnOnSmartLines() {
-		menuBar.setSmartLinesUIToActive();
+		menuBar.setSmartLinesButtonsToShow();
 	}
 	
-	public void turnOnViolations() {
-		menuBar.setViolationsUIToActive();
+	public void setViolationsButtonsToShow() {
+		menuBar.setViolationsButtonsToShow();
 	}
 	
 	private void updateComponentsLocaleStrings() {
@@ -485,7 +328,6 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		menuBarLocale.put("Options",
 				localeService.getTranslatedString("Options"));
 		menuBarLocale.put("Ok", localeService.getTranslatedString("OkButton"));
-		menuBarLocale.put("Apply", localeService.getTranslatedString("Apply"));
 		menuBarLocale.put("Cancel",
 				localeService.getTranslatedString("CancelButton"));
 		menuBarLocale.put("Zoom", localeService.getTranslatedString("Zoom"));
@@ -530,27 +372,4 @@ public class GraphicsFrame extends HelpableJInternalFrame implements UserInputLi
 		updateUI();
 	}
 	
-	@Override
-	public void usePanTool() {
-		for (UserInputListener l : listeners)
-			l.usePanTool();
-	}
-	
-	@Override
-	public void useSelectTool() {
-		for (UserInputListener l : listeners)
-			l.useSelectTool();
-	}
-
-	@Override
-	public void proportionalLinesDisable() {
-		for (UserInputListener l : listeners)
-			l.proportionalLinesDisable();
-	}
-
-	@Override
-	public void proportionalLinesEnable() {
-		for (UserInputListener l : listeners)
-			l.proportionalLinesEnable();
-	}
 }
