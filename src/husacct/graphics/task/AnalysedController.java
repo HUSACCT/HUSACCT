@@ -7,8 +7,8 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.presentation.DrawingView;
-import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.domain.DrawingView;
+import husacct.graphics.domain.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;

@@ -3,20 +3,17 @@ package husacct.graphics.presentation;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.define.IDefineService;
-import husacct.graphics.presentation.DrawingView;
+import husacct.graphics.domain.DrawingView;
+import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.presentation.GraphicsFrame;
-import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DrawingController;
 import husacct.graphics.task.DrawingSettingsHolder;
-import husacct.graphics.util.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
 import husacct.validate.IValidateService;
 
 import javax.swing.JInternalFrame;
@@ -97,7 +94,7 @@ public class GraphicsPresentationController implements UserInputListener{
 		}
 	}
 
-	// Services interacting with DrawingController
+	// Main services interacting with DrawingController
 
 	public void drawArchitectureTopLevel() {
 		if (drawingView != null) { // Needed to prevent synchronization problems, e.g. after updates of analyse, define and validate tasks.
@@ -129,10 +126,6 @@ public class GraphicsPresentationController implements UserInputListener{
 		}
 	}
 
-	public DrawingLayoutStrategyEnum getLayoutStrategy() {
-		return drawingController.getLayoutStrategy();
-	}
-	
 	// Creates a drawing of the contents of the selected path in the GraphicsLocationBar
 	@Override
 	public void moduleOpen(String[] paths) {
@@ -258,7 +251,7 @@ public class GraphicsPresentationController implements UserInputListener{
 	
 
 	
-// Service request that interact with DrawingSettings
+// Other methods and services
 	
 	public boolean areDependenciesShown() {
 		return drawingsSettingsHolder.areDependenciesShown();
@@ -297,7 +290,7 @@ public class GraphicsPresentationController implements UserInputListener{
 	}
 	
 	public void exportImage() {
-		// To do: move from drawing to presentation or control class 
+		// To do: move from drawingView to presentation or control class 
 		drawingView.getDrawingHusacct().showExportToImagePanel();
 	}
 	
@@ -305,25 +298,17 @@ public class GraphicsPresentationController implements UserInputListener{
 		return drawingsSettingsHolder.getCurrentPaths();
 	}
 	
-	public DrawingView getDrawingView() {
-		return drawingView;
-	}
-	
 	public JInternalFrame getGraphicsFrame() {
 		return graphicsFrame;
 	}
 	
-	public BaseFigure[] getSelectedFigures() {
-		return drawingView.toFigureArray(drawingView.getSelectedFigures());
+	public DrawingLayoutStrategyEnum getLayoutStrategy() {
+		return drawingController.getLayoutStrategy();
 	}
 	
-	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
-		boolean b = false;
-		return b;
-	}	
-	
-	public boolean isDrawingVisible() {
-		return drawingView.isVisible();
+	@Override
+	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum) {
+			drawingController.layoutStrategyChange(selectedStrategyEnum);
 	}
 	
 	private void loadDefaultSettings() {
@@ -336,11 +321,6 @@ public class GraphicsPresentationController implements UserInputListener{
 		drawingsSettingsHolder.violationsHide();
 		graphicsFrame.setViolationsButtonsToDontShow();
 		graphicsFrame.setSelectedLayout(drawingController.getLayoutStrategy());
-	}
-	
-	@Override
-	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum) {
-			drawingController.layoutStrategyChange(selectedStrategyEnum);
 	}
 	
 	@Override

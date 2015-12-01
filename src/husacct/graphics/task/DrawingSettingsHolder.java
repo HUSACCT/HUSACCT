@@ -1,7 +1,5 @@
 package husacct.graphics.task;
 
-import husacct.graphics.util.DrawingDetailEnum;
-
 public class DrawingSettingsHolder {
 	private boolean	areDependenciesShown = false;
 	private boolean	areExternalLibrariesShown = false;
@@ -41,12 +39,6 @@ public class DrawingSettingsHolder {
 	
 	public void dependenciesShow() {
 		areDependenciesShown = true;
-	}
-	
-	protected DrawingDetailEnum getCurrentDrawingDetail() {
-		DrawingDetailEnum detail = DrawingDetailEnum.WITHOUT_VIOLATIONS;
-		if (areViolationsShown()) detail = DrawingDetailEnum.WITH_VIOLATIONS;
-		return detail;
 	}
 	
 	public String[] getCurrentPaths() {

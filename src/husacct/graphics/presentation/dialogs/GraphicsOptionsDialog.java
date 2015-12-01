@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.graphics.presentation.UserInputListener;
-import husacct.graphics.util.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;

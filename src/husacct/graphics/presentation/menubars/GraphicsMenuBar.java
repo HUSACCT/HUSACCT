@@ -2,10 +2,10 @@ package husacct.graphics.presentation.menubars;
 
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJPanel;
+import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.presentation.UserInputListener;
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
-import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.util.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
 
 import java.awt.Color;
 import java.awt.FlowLayout;

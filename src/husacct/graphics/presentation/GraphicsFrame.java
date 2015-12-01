@@ -5,12 +5,14 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
+import husacct.graphics.domain.DrawingView;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.GraphicsLocationBar;
 import husacct.graphics.presentation.tables.DependencyTable;
 import husacct.graphics.presentation.tables.ViolationTable;
-import husacct.graphics.util.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

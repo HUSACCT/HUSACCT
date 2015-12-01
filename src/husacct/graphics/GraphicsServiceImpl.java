@@ -4,7 +4,7 @@ import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.task.DrawingController;
-import husacct.graphics.util.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
 
 import javax.swing.JInternalFrame;
 

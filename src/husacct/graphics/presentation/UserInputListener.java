@@ -1,7 +1,7 @@
 package husacct.graphics.presentation;
 
-import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.util.DrawingLayoutStrategyEnum;
+import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
 
 public interface UserInputListener {
 	
