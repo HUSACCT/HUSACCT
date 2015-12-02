@@ -94,8 +94,8 @@ public class ContextMenu extends JPopupMenu {
 		});
 	}
 	
-	public void removeListener(UserInputListener listener) {
-		listeners.remove(listener);
+	public void removeListener() {
+		listeners.clear();
 	}
 	
 	public void setCanZoomout(boolean newValue) {

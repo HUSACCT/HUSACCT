@@ -1,7 +1,7 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.domain.figures.BaseFigure;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 public interface UserInputListener {
 	
@@ -11,7 +11,7 @@ public interface UserInputListener {
 	
 	public void exportImage();
 	
-	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum);
+	public void layoutStrategyChange(ModuleLayoutsEnum selectedStrategyEnum);
 	
 	public void librariesHide();
 	

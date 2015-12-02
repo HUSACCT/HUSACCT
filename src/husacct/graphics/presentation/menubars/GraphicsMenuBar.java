@@ -5,7 +5,7 @@ import husacct.common.help.presentation.HelpableJPanel;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.presentation.UserInputListener;
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -280,7 +280,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
-	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum) {
+	public void layoutStrategyChange(ModuleLayoutsEnum selectedStrategyEnum) {
 		for (UserInputListener listener : listeners)
 			listener.layoutStrategyChange(selectedStrategyEnum);
 	}
@@ -403,7 +403,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		outOfDateButton.addActionListener(listener);
 	}
 	
-	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategyEnum item) {
+	public void setSelectedLayoutStrategyItem(ModuleLayoutsEnum item) {
 		graphicsOptionsDialog.setSelectedLayoutStrategyItem(item);
 	}
 	

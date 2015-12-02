@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public class DrawingView extends DefaultDrawingView {
 	protected AbstractTool						selectTool;
 	private boolean								isCtrlPressed		= false;
 	
-	private final ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
+	private UserInputListener					inputListener; 		// Single value instead of ArrayListto prevent concurrency exceptions at zoomIn(). 
 	private final HashSet<Figure>				previousSelection	= new HashSet<Figure>();
 	
 	public DrawingView(Drawing givenDrawing) {
@@ -67,7 +66,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 	
 	public void addListener(UserInputListener listener) {
-		listeners.add(listener); 			// GraphicsPresentationController
+		inputListener = listener; 			// GraphicsPresentationController
 		contextMenu.addListener(listener);
 	}
 	
@@ -80,10 +79,8 @@ public class DrawingView extends DefaultDrawingView {
 	}
 	
 	public void drawingZoomChanged(double zoomFactor) {
-		for (UserInputListener listener : listeners) {
-			listener.zoomSliderSetZoomFactor(zoomFactor);
-			listener.zoomFactorChanged(zoomFactor);
-		}
+		inputListener.zoomSliderSetZoomFactor(zoomFactor);
+		inputListener.zoomFactorChanged(zoomFactor);
 	}
 	
 	public Drawing getDrawingHusacct() {
@@ -170,12 +167,10 @@ public class DrawingView extends DefaultDrawingView {
 	
 	private void zoomIn() {
 		try{
-			for (UserInputListener listener : listeners)
-				listener.zoomIn();
+			inputListener.zoomIn();
 		}
 		catch (Exception e){
 			logger.error(" Exception: " + e);
-			//e.printStackTrace();
 		}
 	}
 	
@@ -224,23 +219,20 @@ public class DrawingView extends DefaultDrawingView {
 			if (selectedFigure.isLine()) {
 				RelationFigure line = (RelationFigure) selectedFigure;
 				if (line.isViolationRelation()){
-					for (UserInputListener l : listeners)
-						l.propertiesPaneShowViolations(selectedFigure);
+					inputListener.propertiesPaneShowViolations(selectedFigure);
 				} else {
-					for (UserInputListener l : listeners)
-						l.propertiesPaneShowDependencies(selectedFigure);
+					inputListener.propertiesPaneShowDependencies(selectedFigure);
 				}
 			} else {
-				for (UserInputListener l : listeners)
-					l.propertiesPaneHide();
+				inputListener.propertiesPaneHide();
 			}
 		}
 		contextMenu.setHasSelection(hasSelection());
 	}
 	
-	public void removeListeners(UserInputListener listener) {
-		listeners.remove(listener);
-		contextMenu.removeListener(listener);
+	public void removeListeners() {
+		inputListener = null;
+		contextMenu.removeListener();
 	}
 	
 	public void removePanTool() {

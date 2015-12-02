@@ -2,9 +2,10 @@ package husacct.graphics;
 
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
+import husacct.graphics.domain.DrawingTypesEnum;
 import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.task.DrawingController;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 import javax.swing.JInternalFrame;
 
@@ -61,13 +62,13 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	
 	private void createPresentationControllerAnalysed() {
 		if (presentationControllersAnalysed == null) {
-			presentationControllersAnalysed = new GraphicsPresentationController("AnalysedDrawing");
+			presentationControllersAnalysed = new GraphicsPresentationController(DrawingTypesEnum.IMPLEMENTED_ARCHITECTURE);
 		}
 	}
 	
 	private void createPresentationControllerDefined() {
 		if (presentationControllersDefined == null) {
-			presentationControllersDefined = new GraphicsPresentationController("DefinedDrawing");
+			presentationControllersDefined = new GraphicsPresentationController(DrawingTypesEnum.INTENDED_ARCHITECTURE);
 		}
 	}
 	
@@ -117,7 +118,7 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	}
 	
 	private void loadWorkspaceDataForController(GraphicsPresentationController controller, Element data) {
-		/*
+		/*// Disabled 2015-12, since it is not useful to store these settings. Furthermore, they were not used at the initialization of a drawing editor. 
 		if (isActive(data, workspaceShowDependencies)) 
 			controller.dependenciesShow();
 		else

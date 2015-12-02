@@ -5,6 +5,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.Drawing;
+import husacct.graphics.domain.DrawingTypesEnum;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.FigureMap;
 import husacct.graphics.domain.figures.BaseFigure;
@@ -13,7 +14,7 @@ import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.ParentFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.task.modulelayout.BasicLayoutStrategy;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 import husacct.graphics.task.modulelayout.FigureConnectorStrategy;
 import husacct.graphics.task.modulelayout.LayeredLayoutStrategy;
 import husacct.graphics.task.modulelayout.NoLayoutStrategy;
@@ -35,7 +36,7 @@ public abstract class DrawingController {
 	
 	protected static final boolean				debugPrint		= true;
 	protected DrawingSettingsHolder 			drawingSettingsHolder;
-	protected DrawingLayoutStrategyEnum				layoutStrategyOption;
+	protected ModuleLayoutsEnum				layoutStrategyOption;
 	
 	private final HashMap<String, DrawingState>	storedStates	= new HashMap<String, DrawingState>();
 	
@@ -53,11 +54,11 @@ public abstract class DrawingController {
 	protected Logger							logger			= Logger.getLogger(DrawingController.class);
 
 	
-	public static DrawingController getController(String drawingType) { // To do: Parameter = String drawingType
+	public static DrawingController getController(DrawingTypesEnum drawingType) {
 		DrawingController controller = null;
-		if (drawingType.equals("AnalysedDrawing")) {
+		if (drawingType == DrawingTypesEnum.IMPLEMENTED_ARCHITECTURE) {
 			controller = new AnalysedController();
-		} else if (drawingType.equals("DefinedDrawing")) {
+		} else if (drawingType == DrawingTypesEnum.INTENDED_ARCHITECTURE) {
 			controller = new DefinedController();
 		}
 		return controller;
@@ -65,7 +66,7 @@ public abstract class DrawingController {
 	
 	public DrawingController() {
 		drawingSettingsHolder = new DrawingSettingsHolder();
-		layoutStrategyOption = DrawingLayoutStrategyEnum.BASIC_LAYOUT;
+		layoutStrategyOption = ModuleLayoutsEnum.BASIC_LAYOUT;
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 		parentFigureNameAndTypeMap = new HashMap<String,String>();
@@ -75,7 +76,7 @@ public abstract class DrawingController {
 		updateLayoutStrategy();
 	}
 	
-	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum) {
+	public void layoutStrategyChange(ModuleLayoutsEnum selectedStrategyEnum) {
 		layoutStrategyOption = selectedStrategyEnum;
 		updateLayoutStrategy();
 	}
@@ -264,7 +265,7 @@ public abstract class DrawingController {
 		return figureMap;
 	}
 	
-	public DrawingLayoutStrategyEnum getLayoutStrategy() {
+	public ModuleLayoutsEnum getLayoutStrategy() {
 		return layoutStrategyOption;
 	}
 	

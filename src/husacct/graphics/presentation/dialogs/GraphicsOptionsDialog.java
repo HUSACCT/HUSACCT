@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.graphics.presentation.UserInputListener;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -48,7 +48,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private boolean 								refreshDrawingRequired = false;
 	
 	private int										totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
-	private HashMap<String, DrawingLayoutStrategyEnum>	layoutStrategiesTranslations;
+	private HashMap<String, ModuleLayoutsEnum>	layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
 	private ILocaleService							localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -60,7 +60,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("thickLines", false); //proportionalLineWidth
 		currentSettings.put("smartLines", true);
 		currentSettings.put("libraries", false);
-		currentSettings.put("layoutStrategy", DrawingLayoutStrategyEnum.BASIC_LAYOUT);
+		currentSettings.put("layoutStrategy", ModuleLayoutsEnum.BASIC_LAYOUT);
 		
 		totalWidth = 550;
 		totalHeight = 260;
@@ -73,10 +73,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		add(mainPanel);
 		
-		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategyEnum>();
+		layoutStrategiesTranslations = new HashMap<String, ModuleLayoutsEnum>();
 		int i = 0;
-		layoutStrategyItems = new String[DrawingLayoutStrategyEnum.values().length];
-		for (DrawingLayoutStrategyEnum strategy : DrawingLayoutStrategyEnum.values()) {
+		layoutStrategyItems = new String[ModuleLayoutsEnum.values().length];
+		for (ModuleLayoutsEnum strategy : ModuleLayoutsEnum.values()) {
 			String translation = localeService.getTranslatedString(strategy.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
@@ -105,8 +105,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		listeners.add(listener); // Listener is GraphicsMenuBar
 	}
 	
-	public DrawingLayoutStrategyEnum getSelectedLayoutStrategyItem() {
-		DrawingLayoutStrategyEnum selectedStrategy = null;
+	public ModuleLayoutsEnum getSelectedLayoutStrategyItem() {
+		ModuleLayoutsEnum selectedStrategy = null;
 		String selectedItem = null;
 		try {
 			selectedItem = (String) layoutStrategyOptions.getSelectedItem();
@@ -345,7 +345,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 					refreshDrawingRequired = true;
 				}
 			}
-			DrawingLayoutStrategyEnum selectedStrategy = getSelectedLayoutStrategyItem();
+			ModuleLayoutsEnum selectedStrategy = getSelectedLayoutStrategyItem();
 			if ((selectedStrategy != null) && !selectedStrategy.toString().equals(currentSettings.get("layoutStrategy").toString())) {
 				currentSettings.put("layoutStrategy", selectedStrategy);
 				listener.layoutStrategyChange(selectedStrategy);
@@ -447,7 +447,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		}
 	}
 	
-	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategyEnum item) {
+	public void setSelectedLayoutStrategyItem(ModuleLayoutsEnum item) {
 		currentSettings.put("layoutStrategy", item);
 		layoutStrategyOptions.setSelectedItem(localeService
 				.getTranslatedString(item.toString()));

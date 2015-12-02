@@ -1,5 +1,5 @@
 package husacct.graphics.task.modulelayout;
 
-public enum DrawingLayoutStrategyEnum {
+public enum ModuleLayoutsEnum {
 	NO_LAYOUT, BASIC_LAYOUT, LAYERED_LAYOUT
 }

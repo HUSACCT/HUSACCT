@@ -11,7 +11,7 @@ import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.GraphicsLocationBar;
 import husacct.graphics.presentation.tables.DependencyTable;
 import husacct.graphics.presentation.tables.ViolationTable;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -116,7 +116,7 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 		if (drawingView != null) {
 			drawingView.removePanTool();
 			drawingScrollPane.setViewportView(null);
-			drawingView.removeListeners(presentationController);
+			drawingView.removeListeners();
 			drawingView = null;
 			// Show loading screen.
 			showLoadingScreen = true;
@@ -274,7 +274,7 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 		menuBar.showOutOfDateWarning();
 	}
 	
-	public void setSelectedLayout(DrawingLayoutStrategyEnum layoutStrategyOption) {
+	public void setSelectedLayout(ModuleLayoutsEnum layoutStrategyOption) {
 		menuBar.setSelectedLayoutStrategyItem(layoutStrategyOption);
 	}
 	

@@ -8,12 +8,13 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
+import husacct.graphics.domain.DrawingTypesEnum;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.task.DrawingController;
 import husacct.graphics.task.DrawingSettingsHolder;
-import husacct.graphics.task.modulelayout.DrawingLayoutStrategyEnum;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 import husacct.validate.IValidateService;
 
 import javax.swing.JInternalFrame;
@@ -22,7 +23,7 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 
 public class GraphicsPresentationController implements UserInputListener{
-	private String 					drawingType; //AnalysedDrawing or DefinedDrawing
+	private DrawingTypesEnum		drawingType;
 	private DrawingController		drawingController;	
 	private DrawingSettingsHolder 	drawingsSettingsHolder;
 	private DrawingView				drawingView;
@@ -35,7 +36,7 @@ public class GraphicsPresentationController implements UserInputListener{
 
 	private Logger					logger	= Logger.getLogger(GraphicsPresentationController.class);
 	
-	public GraphicsPresentationController(String typeOfDrawing) {
+	public GraphicsPresentationController(DrawingTypesEnum typeOfDrawing) {
 		try {
 			this.drawingType = typeOfDrawing;
 			drawingController = DrawingController.getController(drawingType);
@@ -60,7 +61,7 @@ public class GraphicsPresentationController implements UserInputListener{
 			analyseService.addServiceListener(new IServiceListener() {
 				@Override
 				public void update() {
-					GraphicsPresentationController.this.refreshDrawing();
+					GraphicsPresentationController.this.drawArchitectureTopLevel();
 				}
 			});
 	
@@ -68,7 +69,9 @@ public class GraphicsPresentationController implements UserInputListener{
 			defineService.addServiceListener(new IServiceListener() {
 				@Override
 				public void update() {
-					GraphicsPresentationController.this.refreshDrawing();
+					if (GraphicsPresentationController.this.drawingType == DrawingTypesEnum.INTENDED_ARCHITECTURE) {
+						GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
+					}
 				}
 			});
 	
@@ -158,7 +161,7 @@ public class GraphicsPresentationController implements UserInputListener{
 		}
 	}
 
-	// Updates the drawing to reflect the current settings.
+	// Updates (the lines in) the drawing to reflect the current settings.
 	@Override
 	public void refreshDrawing(){
 		if (drawingView != null) {
@@ -302,12 +305,12 @@ public class GraphicsPresentationController implements UserInputListener{
 		return graphicsFrame;
 	}
 	
-	public DrawingLayoutStrategyEnum getLayoutStrategy() {
+	public ModuleLayoutsEnum getLayoutStrategy() {
 		return drawingController.getLayoutStrategy();
 	}
 	
 	@Override
-	public void layoutStrategyChange(DrawingLayoutStrategyEnum selectedStrategyEnum) {
+	public void layoutStrategyChange(ModuleLayoutsEnum selectedStrategyEnum) {
 			drawingController.layoutStrategyChange(selectedStrategyEnum);
 	}
 	
