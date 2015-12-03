@@ -245,7 +245,7 @@ import org.apache.log4j.Logger;
 				UiDialogs.errorDialog(definitionJPanel, exceptionMessage);
 			}
 			else {
-				logger.info("Adding module with id: " + module.getId() + " and name: " + module.getName());
+				logger.info("Adding module with Id: " + module.getId() + ", Name: " + module.getName());
 			}
 		}
 
@@ -253,7 +253,7 @@ import org.apache.log4j.Logger;
 		 * Remove a module by Id
 		 */
 		public void removeModuleById(long moduleId) {
-			logger.info("Removing module by Id " + moduleId);
+			logger.info("Removing module with Id: " + moduleId);
 			try {
 				JPanelStatus.getInstance("Removing ModuleStrategy").start();
 				moduleService.removeModuleById(moduleId);

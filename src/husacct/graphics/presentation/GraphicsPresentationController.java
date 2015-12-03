@@ -8,12 +8,12 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
-import husacct.graphics.domain.DrawingTypesEnum;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.task.DrawingController;
 import husacct.graphics.task.DrawingSettingsHolder;
+import husacct.graphics.task.DrawingTypesEnum;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 import husacct.validate.IValidateService;
 
@@ -32,8 +32,6 @@ public class GraphicsPresentationController implements UserInputListener{
 	private IDefineService			defineService;
 	private ILocaleService			localeService;
 	private IValidateService		validateService;
-
-
 	private Logger					logger	= Logger.getLogger(GraphicsPresentationController.class);
 	
 	public GraphicsPresentationController(DrawingTypesEnum typeOfDrawing) {
@@ -99,16 +97,45 @@ public class GraphicsPresentationController implements UserInputListener{
 
 	// Main services interacting with DrawingController
 
+	// Creates a drawing of the top-level modules of the architecture
 	public void drawArchitectureTopLevel() {
-		if (drawingView != null) { // Needed to prevent synchronization problems, e.g. after updates of analyse, define and validate tasks.
+		graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
+		executeDrawingTask("drawArchitectureTopLevel", new String[] {});
+	}
+
+	/* 
+	 * Detaches drawingView from the presentation, creates a new drawing, and attaches drawingView afterwards.
+	 * SwingWorker is used to create separate threads for the drawing tasks. 
+	 * DrawingView, including a drawing, is detached and attached to prevent thread synchronization problems. 
+	 */
+	private void executeDrawingTask(String drawingTask, String[] paths) {
+		if (drawingView != null) { // Needed to prevent synchronization problems, e.g. after an update of an analyse, define, or validate task.
 			try {
-				graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
 				graphicsFrame.detachDrawingViewAndShowLoadingScreen();
 				drawingView = null;
 				SwingWorker<DrawingView, Void> worker = new SwingWorker<DrawingView, Void>() {
 			        @Override
 			        public DrawingView doInBackground() {
-			        	drawingView = drawingController.drawArchitectureTopLevel();
+			        	switch (drawingTask) {
+			        		case "drawArchitectureTopLevel":
+					        	drawingView = drawingController.drawArchitectureTopLevel();
+					        	break;
+			        		case "moduleOpen":
+					        	drawingView = drawingController.moduleOpen(paths);
+					        	break;
+			        		case "refreshDrawing":
+					        	drawingView = drawingController.refreshDrawing();
+					        	break;
+			        		case "zoomIn":
+					        	drawingView = drawingController.zoomIn();
+					        	break;
+			        		case "zoomOut":
+					        	drawingView = drawingController.zoomOut();
+					        	break;
+			        		default:
+					        	drawingView = drawingController.refreshDrawing();
+					        	break;
+			        	}
 						return drawingView;
 			        }
 			        @Override
@@ -128,130 +155,30 @@ public class GraphicsPresentationController implements UserInputListener{
 			}
 		}
 	}
-
-	// Creates a drawing of the contents of the selected path in the GraphicsLocationBar
+	
+	// Creates a drawing of the contents of the selected path (in the GraphicsLocationBar).
 	@Override
 	public void moduleOpen(String[] paths) {
-		if (drawingView != null) {
-			try {
-				graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
-				graphicsFrame.detachDrawingViewAndShowLoadingScreen();
-				drawingView = null;
-				SwingWorker<DrawingView, Void> worker = new SwingWorker<DrawingView, Void>() {
-			        @Override
-			        public DrawingView doInBackground() {
-			        	drawingView = drawingController.moduleOpen(paths);
-						return drawingView;
-			        }
-			        @Override
-			        public void done() {
-			            try {
-			            	drawingView = get();
-				        	graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
-			            } catch (InterruptedException ignore) {}
-			            catch (java.util.concurrent.ExecutionException e) {
-			    			logger.error(" Exception: " + e.getMessage());
-			            }
-			        }
-			    };
-				worker.execute();
-			} catch(Exception e) {
-				logger.error(" Exception: " + e.getMessage());
-			}
-		}
+		executeDrawingTask("moduleOpen", paths);
 	}
 
-	// Updates (the lines in) the drawing to reflect the current settings.
+	// Updates the drawing to reflect the current settings and/or changes within analyse/define/validate.
 	@Override
 	public void refreshDrawing(){
-		if (drawingView != null) {
-			try {
-				graphicsFrame.detachDrawingViewAndShowLoadingScreen();
-				drawingView = null;
-				SwingWorker<DrawingView, Void> worker = new SwingWorker<DrawingView, Void>() {
-			        @Override
-			        public DrawingView doInBackground() {
-			        	drawingView = drawingController.refreshDrawing();
-						return drawingView;
-			        }
-			        @Override
-			        public void done() {
-			            try {
-			            	drawingView = get();
-				        	graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
-			            } catch (InterruptedException ignore) {}
-			            catch (java.util.concurrent.ExecutionException e) {
-			    			logger.error(" Exception: " + e.getMessage());
-			            }
-			        }
-			    };
-				worker.execute();
-			} catch(Exception e) {
-				logger.error(" Exception: " + e.getMessage());
-			}
-		}
+		executeDrawingTask("refreshDrawing", new String[] {});
 	}
 	
+	// Zooms-in on one or several selected modules. DrawingView knows which modules are selected.
 	@Override
 	public void zoomIn() {
-		if (drawingView != null) {
-			try {
-				graphicsFrame.detachDrawingViewAndShowLoadingScreen();
-				drawingView = null;
-				SwingWorker<DrawingView, Void> worker = new SwingWorker<DrawingView, Void>() {
-			        @Override
-			        public DrawingView doInBackground() {
-			        	drawingView = drawingController.zoomIn();
-						return drawingView;
-			        }
-			        @Override
-			        public void done() {
-			            try {
-			            	drawingView = get();
-				        	graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
-			            } catch (InterruptedException ignore) {}
-			            catch (java.util.concurrent.ExecutionException e) {
-			    			logger.error(" Exception: " + e.getMessage());
-			            }
-			        }
-			    };
-				worker.execute();
-			} catch(Exception e) {
-				logger.error(" Exception: " + e.getMessage());
-			}
-		}
+		executeDrawingTask("zoomIn", new String[] {});
 	}
 
+	// Zooms-out
 	@Override
 	public void zoomOut() {
-		if (drawingView != null) {
-			try {
-				graphicsFrame.detachDrawingViewAndShowLoadingScreen();
-				drawingView = null;
-				SwingWorker<DrawingView, Void> worker = new SwingWorker<DrawingView, Void>() {
-			        @Override
-			        public DrawingView doInBackground() {
-			        	drawingView = drawingController.zoomOut();
-						return drawingView;
-			        }
-			        @Override
-			        public void done() {
-			            try {
-			            	drawingView = get();
-				        	graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
-			            } catch (InterruptedException ignore) {}
-			            catch (java.util.concurrent.ExecutionException e) {
-			    			logger.error(" Exception: " + e.getMessage());
-			            }
-			        }
-			    };
-				worker.execute();
-			} catch(Exception e) {
-				logger.error(" Exception: " + e.getMessage());
-			}
-		}
+		executeDrawingTask("zoomOut", new String[] {});
 	}
-	
 
 	
 // Other methods and services

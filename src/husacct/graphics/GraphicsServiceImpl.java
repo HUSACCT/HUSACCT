@@ -2,9 +2,9 @@ package husacct.graphics;
 
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
-import husacct.graphics.domain.DrawingTypesEnum;
 import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.task.DrawingController;
+import husacct.graphics.task.DrawingTypesEnum;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 import javax.swing.JInternalFrame;

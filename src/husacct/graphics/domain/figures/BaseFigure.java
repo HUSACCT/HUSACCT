@@ -234,8 +234,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		Point2D.Double anchor = getStartPoint();
 		Point2D.Double lead = getEndPoint();
 		
-		Point2D.Double newAnchor = new Point2D.Double(0, 0), newLead = new Point2D.Double(
-				0, 0);
+		Point2D.Double newAnchor = new Point2D.Double(0, 0), newLead = new Point2D.Double(0, 0);
 		newAnchor = (Point2D.Double) at.transform(anchor, newAnchor);
 		newLead = (Point2D.Double) at.transform(lead, newLead);
 		
@@ -246,8 +245,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		willChange();
 		double widthX = x + getBounds().getWidth();
 		double heightY = y + getBounds().getHeight();
-		this.setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX,
-				heightY));
+		this.setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX, heightY));
 		changed();
 	}
 	

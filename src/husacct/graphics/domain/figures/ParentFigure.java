@@ -2,13 +2,9 @@ package husacct.graphics.domain.figures;
 
 
 import husacct.common.Resource;
-import husacct.graphics.task.modulelayout.ContainerLayoutStrategy;
-
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,7 +32,6 @@ public class ParentFigure extends BaseFigure {
 	
 	protected int				minWidth				= 400;
 	protected int				minHeight				= 400;
-	protected int				minChildPadding			= 30;
 	
 	private ArrayList<Figure>	childrenOwnImpl;
 	private double				currentPositionX, currentPositionY;
@@ -308,26 +303,12 @@ public class ParentFigure extends BaseFigure {
 		invalidate();
 	}
 	
-	public void updateLayout() {
-		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this,
-				minChildPadding, minChildPadding);
-		cls.doLayout();
-		
-		Rectangle newSize = new Rectangle();
-		for (Figure f : childrenOwnImpl) {
-			Rectangle2D.Double bounds = f.getBounds();
-			
-			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y
-					+ bounds.height));
-		}
-		minWidth = newSize.width + minChildPadding;
-		minHeight = newSize.height + minChildPadding;
-		
-		Rectangle2D.Double bounds = getBounds();
-		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10,
-				anchor.y + minHeight + 10);
-		
+	public void setMinimalSizes(int minWidth, int minHeight) {
+		this.minWidth = minWidth;
+		this.minHeight = minHeight;
+	}
+	
+	public void updateBounds(Point2D.Double anchor, Point2D.Double lead) {
 		willChange();
 		setBounds(anchor, lead);
 		changed();

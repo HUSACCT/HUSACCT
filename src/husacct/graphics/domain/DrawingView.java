@@ -190,20 +190,23 @@ public class DrawingView extends DefaultDrawingView {
 				contextMenu.show(this, e.getX(), e.getY());
 			previousSelection.clear();
 			previousSelection.addAll(getSelectedFigures());
-		}
-		catch (Exception exc){
+		} catch (Exception exc){
 			logger.error(" Exception " + exc +" In AWT on button: " + mouseButton + "or click: " + mouseClicks);
 			//exc.printStackTrace();
 		}
 	}
 	
 	private void onMouseScrolled(MouseWheelEvent e) {
-		if (isCtrlPressed) {
-			requestFocus();
-			double wheelRotation = e.getWheelRotation() * -1;
-			double wheelRotationFactor = wheelRotation / ScrollSpeed;
-			double scaleFactor = getScaleFactor() + wheelRotationFactor;
-			drawingZoomChanged(scaleFactor);
+		try{
+			if (isCtrlPressed) {
+				requestFocus();
+				double wheelRotation = e.getWheelRotation() * -1;
+				double wheelRotationFactor = wheelRotation / ScrollSpeed;
+				double scaleFactor = getScaleFactor() + wheelRotationFactor;
+				drawingZoomChanged(scaleFactor);
+			}
+		} catch (Exception exc){
+			logger.error(" Exception in handling mouse scroll: " + exc);
 		}
 	}
 	

@@ -5,7 +5,6 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.Drawing;
-import husacct.graphics.domain.DrawingTypesEnum;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.FigureMap;
 import husacct.graphics.domain.figures.BaseFigure;
@@ -14,6 +13,7 @@ import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.ParentFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.task.modulelayout.BasicLayoutStrategy;
+import husacct.graphics.task.modulelayout.ContainerLayoutStrategy;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 import husacct.graphics.task.modulelayout.FigureConnectorStrategy;
 import husacct.graphics.task.modulelayout.LayeredLayoutStrategy;
@@ -156,8 +156,10 @@ public abstract class DrawingController {
 				} catch (Exception e) {
 					logger.error("Could not generate and display figure.", e);
 				}
-			if (!parentUniqueName.isEmpty()) 
-				parentFigure.updateLayout();
+			if (!parentUniqueName.isEmpty()) {
+				ContainerLayoutStrategy cls = new ContainerLayoutStrategy(parentFigure);
+				cls.doLayout();
+			}
 		}
 	}
 	
