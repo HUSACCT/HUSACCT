@@ -71,13 +71,15 @@ public class ValidateMenu extends JMenu{
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				validateItem.setEnabled(false);
+				exportViolationsItem.setEnabled(false);
 				reportViolationsItem.setEnabled(false);
 				
 				if(states.contains(States.VALIDATED)){
+					exportViolationsItem.setEnabled(true);
 					reportViolationsItem.setEnabled(true);
 				}
 				
-				if(states.contains(States.MAPPED) && states.contains(States.ANALYSED) || states.contains(States.VALIDATED)){
+				if(states.contains(States.MAPPED) && states.contains(States.ANALYSED)){
 					validateItem.setEnabled(true);
 				}
 			}
@@ -89,6 +91,8 @@ public class ValidateMenu extends JMenu{
 				validateMenu.setText(localeService.getTranslatedString("Validate"));
 				validateItem.setText(localeService.getTranslatedString("ValidateNow"));
 				validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
+				exportViolationsItem.setText(localeService.getTranslatedString("ValidateExport"));
+				exportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateExportMnemonic"));
 				reportViolationsItem.setText(localeService.getTranslatedString("ValidateReport"));
 				reportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateReportMnemonic"));
 			}

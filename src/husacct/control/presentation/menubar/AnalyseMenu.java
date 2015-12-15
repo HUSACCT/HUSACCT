@@ -41,21 +41,21 @@ public class AnalyseMenu extends JMenu{
 	
 	private void addComponents(){
 		setApplicationPropertiesItem = new JMenuItem(localeService.getTranslatedString("ApplicationProperties"));
-		setApplicationPropertiesItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
 		setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 		
 		analyseNowItem = new JMenuItem(localeService.getTranslatedString("AnalyseNow"));
 		analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 		
 		analysedApplicationOverviewItem = new JMenuItem(localeService.getTranslatedString("AnalysedApplicationOverview"));
-		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
+		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
 		analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 		
 		analysedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
-		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
+		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
 		analysisHistoryItem = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
+		analysisHistoryItem.setMnemonic(getMnemonicKeycode("AnalyseHistoryMnemonic"));
 		
 		reconstructArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReconstructArchitecture"));
 		reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
@@ -67,7 +67,6 @@ public class AnalyseMenu extends JMenu{
 		importAnalysisModelItem.setMnemonic(getMnemonicKeycode("ImportAnalysisModelMnemonic"));
 		
 		reportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
-		reportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
 		reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
 		
 		this.add(setApplicationPropertiesItem);
@@ -174,14 +173,20 @@ public class AnalyseMenu extends JMenu{
 				analyseMenu.setText(localeService.getTranslatedString("Analyse"));
 				setApplicationPropertiesItem.setText(localeService.getTranslatedString("ApplicationProperties"));
 				analyseNowItem.setText(localeService.getTranslatedString("AnalyseNow"));
-				analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
 				analysedApplicationOverviewItem.setText(localeService.getTranslatedString("AnalysedApplicationOverview"));
+				analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
+				analysisHistoryItem.setText(localeService.getTranslatedString("AnalysisHistory"));
+				importAnalysisModelItem.setText(localeService.getTranslatedString("ImportAnalysisModel"));
+				exportAnalysisModelItem.setText(localeService.getTranslatedString("ExportAnalysisModel"));
 				reportDependenciesItem.setText(localeService.getTranslatedString("ExportDependencies"));
 				reconstructArchitectureItem.setText(localeService.getTranslatedString("ReconstructArchitecture"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
-				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
+				analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 				analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
+				analysisHistoryItem.setMnemonic(getMnemonicKeycode("AnalyseHistoryMnemonic"));
+				importAnalysisModelItem.setMnemonic(getMnemonicKeycode("ImportAnalysisModelMnemonic"));
+				exportAnalysisModelItem.setMnemonic(getMnemonicKeycode("ExportAnalysisModelMnemonic"));
 				reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
 				reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
 			}	

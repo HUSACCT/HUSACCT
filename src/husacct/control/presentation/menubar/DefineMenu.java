@@ -41,7 +41,7 @@ public class DefineMenu extends JMenu{
 		defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				
 		definedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("DefinedArchitectureDiagram"));
-		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
+		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
 		definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 				
 		exportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ExportArchitecture"));
@@ -98,6 +98,7 @@ public class DefineMenu extends JMenu{
 				definedArchitectureDiagramItem.setEnabled(false);
 				importArchitectureItem.setEnabled(false);
 				exportArchitectureItem.setEnabled(false);
+				reportArchitectureItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
 					defineArchitectureItem.setEnabled(true);
@@ -107,6 +108,7 @@ public class DefineMenu extends JMenu{
 				if(states.contains(States.DEFINED) || states.contains(States.MAPPED)){
 					exportArchitectureItem.setEnabled(true);
 					definedArchitectureDiagramItem.setEnabled(true);
+					reportArchitectureItem.setEnabled(true);
 				}
 			}
 		});
@@ -119,10 +121,12 @@ public class DefineMenu extends JMenu{
 				definedArchitectureDiagramItem.setText(localeService.getTranslatedString("DefinedArchitectureDiagram"));
 				exportArchitectureItem.setText(localeService.getTranslatedString("ExportArchitecture"));
 				importArchitectureItem.setText(localeService.getTranslatedString("ImportArchitecture"));
+				reportArchitectureItem.setText(localeService.getTranslatedString("ReportArchitecture"));
 				defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
-				importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
 				exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));	
+				importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
+				reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
 			}
 		});
 	}
@@ -139,7 +143,9 @@ public class DefineMenu extends JMenu{
 	public JMenuItem getIimportArchitectureItem(){
 		return importArchitectureItem;
 	}
-	
+	public JMenuItem getReportArchitectureItem(){
+		return reportArchitectureItem;
+	}
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = localeService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
