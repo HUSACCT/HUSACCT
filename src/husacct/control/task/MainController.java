@@ -104,12 +104,14 @@ public class MainController {
 		Object[] options = { localeService.getTranslatedString("Exit"), 
 							 localeService.getTranslatedString("Save&Exit"),
 				             localeService.getTranslatedString("Cancel") };
-		int clickedOption = JOptionPane.showOptionDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		int clickedOption = JOptionPane.showOptionDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), 
+				localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 		if(clickedOption == JOptionPane.YES_OPTION){
 			logger.info("Close HUSACCT" + "\n");
 			System.exit(0);
 		} else if (clickedOption == JOptionPane.NO_OPTION) {
 			workspaceController.showSaveWorkspaceGui();
+			System.exit(0);
 		}
 	}
 
