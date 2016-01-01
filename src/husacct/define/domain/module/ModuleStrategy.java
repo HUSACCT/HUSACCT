@@ -383,7 +383,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return hasSoftwareUnit;
 	}
 	
-	public void copyValuestoNewCompont(ModuleStrategy newModule)
+	public void copyValuestoNewModule(ModuleStrategy newModule) //Overridden if ModuleType == Component.
 	{
 		newModule.setId(this.getId());
 		newModule.setName(this.getName());

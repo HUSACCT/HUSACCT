@@ -455,7 +455,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			ModuleStrategy parent = module.getparent();
 			ArrayList<AppliedRuleStrategy> moduleRules = removeRelatedRules(module);
 			int index = parent.getSubModules().indexOf(module);
-			DefinitionController.getInstance().setSelectedModuleId(0);
 			removeFromRegistry(module);
             JtreeController.instance().restoreTreeItems(module);
 			parent.getSubModules().remove(index);
@@ -486,10 +485,12 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	private void removeFromRegistry(ModuleStrategy module) {
 		try {
 			int index = modules.indexOf(module);
-			modules.remove(index);
+			if (index >= 0) {
+				modules.remove(index);
+			}
 			updateWarnings();
 		} catch (Exception r) {
-			r.printStackTrace();
+			logger.warn(String.format(" The following module cannot be removed from the registry: " + module.getName()));
 		}
 
 	}

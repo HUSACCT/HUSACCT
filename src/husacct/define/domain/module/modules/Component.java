@@ -22,7 +22,7 @@ public class Component extends ModuleStrategy {
 		
 	}
 	
-	public void copyValuestoNewCompont(ModuleStrategy newModule){ 
+	public void copyValuestoNewModule(ModuleStrategy newModule){ 
 		newModule.setId(this.getId());
 		newModule.setName(this.getName());
 		newModule.setDescription(this.getDescription());

@@ -34,19 +34,15 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	private JLabel descriptionLabel;
 	private JScrollPane descriptionScrollPane;
 	private JTextArea descriptionTextArea;
-	private String[] facadeType = { "Facade" };
-	private JComboBox<?> moduleTypeComboBox;
+	private String[] facadeType = { "Interface" };
+	private JComboBox<String> moduleTypeComboBox;
 	private EditpanelDropListener listener = new EditpanelDropListener(this);
 	private JLabel moduleTypeLabel;
-	private String[] moduleTypes = {
-			ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("SubSystem"),
-			ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("Layer"),
-			ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("Component"),
-			ServiceProvider.getInstance().getLocaleService()
-					.getTranslatedString("ExternalLibrary") };
+	private String[] moduleTypes_Translated = {
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"),
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"),
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"),
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary") };
 	private JLabel nameLabel;
 	private JTextField nameTextfield;
 
@@ -57,10 +53,18 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	ActionListener moduleTypeComboboxOnChangeListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String type_ = (String) moduleTypeComboBox.getSelectedItem();
-			if (!_type.equals(type_) &&!type_.toLowerCase().equals("facade")) {
-				String type = (String) moduleTypeComboBox.getItemAt(moduleTypeComboBox.getSelectedIndex());
-				DefinitionController.getInstance().updateModuleType(type);
+			String moduleType;
+			if (moduleTypeComboBox.getModel().getSize() == 1) {
+				moduleType = "Facade";
+			} else {
+				int location = moduleTypeComboBox.getSelectedIndex();
+				String[] moduleTypes = { "SubSystem", "Layer", "Component", "ExternalLibrary" };
+				moduleType = moduleTypes[location];
+			}
+			if (!_type.equals(moduleType)) {
+				if (!moduleType.toLowerCase().equals("facade")) {
+					DefinitionController.getInstance().updateModuleType(moduleType);
+				} 
 			}
 		}
 	};
@@ -99,9 +103,8 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		nameTextfield.addKeyListener(this);
 	}
 
-	private void addModuleType() {
-
-		moduleTypeComboBox = new JComboBox<>(moduleTypes);
+	private void addModuleTypeComboBox() {
+		moduleTypeComboBox = new JComboBox<String>(moduleTypes_Translated);
 		moduleTypeLabel = new JLabel();
 		this.add(moduleTypeLabel, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -110,9 +113,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		this.add(moduleTypeComboBox, new GridBagConstraints(1, 2, 1, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		moduleTypeComboBox
-				.addActionListener(moduleTypeComboboxOnChangeListener);
-
+		moduleTypeComboBox.addActionListener(moduleTypeComboboxOnChangeListener);
 	}
 
 	private JTextArea createModuleDescriptionTextArea() {
@@ -125,21 +126,6 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		return descriptionTextArea;
 	}
 
-	private int getModuleType(String type) {
-		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(moduleTypes);
-		moduleTypeComboBox.setModel(defaultModel);
-		_type= type;
-		for (int i = 0; i < moduleTypes.length; i++) {
-			if (type.equalsIgnoreCase(moduleTypes[i])) {
-				return i;
-			}
-		}
-		moduleTypeComboBox.setEnabled(false);
-		DefaultComboBoxModel facadeModel = new DefaultComboBoxModel(facadeType);
-		moduleTypeComboBox.setModel(facadeModel);
-		return 0;
-	}
-
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		setDefaultGridLayout();
@@ -150,7 +136,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 
 		addModuleNameComponent();
 		addModuleDescriptionComponent();
-		addModuleType();
+		addModuleTypeComboBox();
 		ServiceProvider.getInstance().getControlService()
 				.addServiceListener(this);
 
@@ -166,7 +152,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		String moduleName = nameTextfield.getText();
 		String moduleDescription = descriptionTextArea.getText();
 		DefinitionController.getInstance().updateModule(moduleName, moduleDescription);
-		if (moduleTypeComboBox.getSelectedItem().toString().equalsIgnoreCase(moduleTypes[2])) {
+		if (moduleTypeComboBox.getSelectedItem().toString().equalsIgnoreCase(moduleTypes_Translated[2])) {
 			DefinitionController.getInstance().updateFacade(moduleName);
 		}
 	}
@@ -207,15 +193,28 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		try{
 			Long moduleId = Long.parseLong(arg.toString());
 			if (moduleId != -1) {
-				HashMap<String, Object> moduleDetails = DefinitionController
-						.getInstance().getModuleDetails(moduleId);
+				HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
 				nameTextfield.setText((String) moduleDetails.get("name"));
-				descriptionTextArea.setText((String) moduleDetails
-						.get("description"));
-				String type = ServiceProvider.getInstance().getLocaleService()
-						.getTranslatedString((String) moduleDetails.get("type"));
-				moduleTypeComboBox.setEnabled(true);
-				moduleTypeComboBox.setSelectedIndex(getModuleType(type));
+				descriptionTextArea.setText((String) moduleDetails.get("description"));
+				String moduleType = (String) moduleDetails.get("type");
+				String moduleType_Translated = ServiceProvider.getInstance().getLocaleService().getTranslatedString(moduleType);
+				_type= moduleType_Translated;
+				// Fill moduleTypeComboBox.
+				if (moduleType.equals("Facade")) {
+					DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<String>(facadeType);
+					moduleTypeComboBox.setModel(facadeModel);
+					moduleTypeComboBox.setSelectedIndex(0);
+					moduleTypeComboBox.setEnabled(false);
+				} else {
+					DefaultComboBoxModel<String> defaultModel = new DefaultComboBoxModel<String>(moduleTypes_Translated);
+					moduleTypeComboBox.setModel(defaultModel);
+					for (int i = 0; i < moduleTypes_Translated.length; i++) {
+						if (moduleType_Translated.equalsIgnoreCase(moduleTypes_Translated[i])) {
+							moduleTypeComboBox.setSelectedIndex(i);
+						}
+					}
+					moduleTypeComboBox.setEnabled(true);
+				}			
 			}
 			this.repaint();
 		}catch(NumberFormatException e) {

@@ -227,25 +227,14 @@ public class ModuleDomainService {
 	}
 	
 	public void updateModuleType(long moduleId, String newType) {
-
 		ModuleStrategy oldModule = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		if(oldModule.getId() > 0){
 			if (oldModule.getType() != newType){
 				DefaultRuleDomainService service = new DefaultRuleDomainService();
 				service.removeDefaultRules(oldModule);
 				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(oldModule, newType);
-				//ModuleStrategy updatedModule = new ModuleFactory().updateModuleType(oldModule, newType);
 				service.addDefaultRules(updatedModule);
 				service.updateModuleRules(updatedModule);
-				
-				/*
-				removeModuleById(oldModule.getId());
-				if (oldModule.getparent().getId() != -1) {
-					addModuleToParent(oldModule.getparent().getId(), updatedModule);
-				} else {
-					addModuleToRoot(updatedModule);
-				}
-				*/
 				StateService.instance().addUpdateModule(oldModule, updatedModule);
 			}
 		}

@@ -8,7 +8,6 @@ import husacct.common.services.IServiceListener;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.presentation.jdialog.HelpDialog;
 import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -28,7 +27,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
@@ -45,15 +43,14 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 	private JButton redoButton;
 	private WarningTableJDialog warnings = new WarningTableJDialog();
 	private ReportToHTML report = new ReportToHTML();
+
 	public ApplicationJInternalFrame() {
 		super();
 		initUi();
-
 	}
 
 	private void initUi() {
 		try {
-	   
 			WarningMessageService.getInstance().addObserver(this);
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			ServiceProvider.getInstance().getDefineService().addServiceListener(this);
@@ -62,7 +59,6 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 			pack();
 			setSize(1200, 1200);
 		} catch (Exception e) {
-
 			e.printStackTrace();
 		}
 	}

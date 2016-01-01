@@ -1,6 +1,5 @@
 package husacct.define.domain.module;
 
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.modules.Blank;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.ExternalLibrary;
@@ -70,10 +69,10 @@ public class ModuleFactory {
 
 	public ModuleStrategy updateModuleType(ModuleStrategy oldModule, String moduleType){
 		ModuleStrategy newModule = createModule(moduleType);
-		oldModule.copyValuestoNewCompont(newModule);
+		oldModule.copyValuestoNewModule(newModule); // In case of an oldModule of type Component, it also removes the facade.
 		if (moduleType.toLowerCase().equals("component")) {
-			ModuleStrategy facade=	this.createModule("Facade");
-			facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
+			ModuleStrategy facade =	this.createModule("Facade");
+			facade.set(newModule.getName()+"Facade", "This is the Facade of "+newModule.getName());
 			newModule.addSubModule(0, facade);
 		}	
 		return newModule;		

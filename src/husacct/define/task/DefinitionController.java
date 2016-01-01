@@ -170,7 +170,7 @@ import org.apache.log4j.Logger;
 		}
 
 		/**
-		 * Init the user interface for creating/editting the definition.
+		 * Initialize the user interface for creating/editing the definition.
 		 * 
 		 * @return JPanel The jpanel
 		 */
@@ -256,8 +256,9 @@ import org.apache.log4j.Logger;
 			logger.info("Removing module with Id: " + moduleId);
 			try {
 				JPanelStatus.getInstance("Removing ModuleStrategy").start();
+				Long parent = moduleService.getParentModuleIdByChildId(moduleId);
 				moduleService.removeModuleById(moduleId);
-				setSelectedModuleId(definitionJPanel.modulePanel.getSelectedModuleId());
+				setSelectedModuleId(parent);
 				this.notifyObservers();
 			} catch (Exception e) {
 				logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
