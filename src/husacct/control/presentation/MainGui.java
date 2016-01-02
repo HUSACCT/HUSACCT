@@ -1,9 +1,9 @@
 package husacct.control.presentation;
+
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJFrame;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
-import husacct.control.presentation.toolbar.ToolBar;
 import husacct.control.presentation.util.ActionLogPanel;
 import husacct.control.task.MainController;
 
@@ -55,7 +55,7 @@ public class MainGui extends HelpableJFrame{
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 783, 535);
-		setLookAndFeel();
+		setPgsLookAndFeel();
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -64,12 +64,30 @@ public class MainGui extends HelpableJFrame{
 		});
 	}
 	
-	private void setLookAndFeel(){
+	private void setPgsLookAndFeel(){
 		try {
 			UIManager.setLookAndFeel(new PgsLookAndFeel());
 		} catch (UnsupportedLookAndFeelException event) {
-			logger.debug("Unable to set look and feel" + event.getMessage());
-			
+			logger.warn("Unable to set Pgs look and feel" + event.getMessage());
+			setSystemLookAndFeel();
+		} 
+	}
+	
+	private void setSystemLookAndFeel(){
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException event) {
+			logger.warn("Unable to set System look and feel" + event.getMessage());
+			setPgsLookAndFeel();
+		} catch (ClassNotFoundException e) {
+			logger.warn("Unable to set System look and feel" + e.getMessage());
+			setPgsLookAndFeel();
+		} catch (InstantiationException e) {
+			logger.warn("Unable to set System look and feel" + e.getMessage());
+			setPgsLookAndFeel();
+		} catch (IllegalAccessException e) {
+			logger.warn("Unable to set System look and feel" + e.getMessage());
+			setPgsLookAndFeel();
 		}
 	}
 	

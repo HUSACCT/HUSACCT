@@ -16,8 +16,6 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 	}
 	
 	private void defineLogicalModules(){
-		
-		
 	    getDefineService().getDefinitionController().addModule("Presentation Layer", "This is the presentation layer of the benchmark","Layer");
 		getDefineService().getDefinitionController().addModule("Domain Layer", "This is the domain layer of the benchmark","Layer");
 		getDefineService().getDefinitionController().addModule("Infrastructure Layer", "This is the infrastructure layer of the benchmark","Layer");
