@@ -6,26 +6,29 @@ import husacct.control.presentation.taskbar.TaskBar;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
+import java.beans.PropertyVetoException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
-abstract public class AbstractViewContainer {
+import org.apache.log4j.Logger;
+
+abstract public class InternalFrameController {
 	
 	private JInternalFrame internalFrame;
 	private MainController mainController;
 	
 	public static final Dimension defaultDimension = new Dimension(950, 600);
-	private static Point lastStartPosition = new Point(10, 10);
-	private static Point positionIncrement = new Point(25, 25);
+	private static Point lastStartPosition = new Point(0, 0);
+	private static Point positionIncrement = new Point(20, 20);
 	
 	private ImageIcon frameIcon;
 	private String stringIdentifier;
+	private Logger logger = Logger.getLogger(InternalFrameController.class);
 	
-	public AbstractViewContainer(MainController mainController, ImageIcon frameIcon, String stringIdentifier){
+	public InternalFrameController(MainController mainController, ImageIcon frameIcon, String stringIdentifier){
 		this.mainController = mainController;
 		this.frameIcon = frameIcon;
 		this.stringIdentifier = stringIdentifier;
@@ -89,62 +92,39 @@ abstract public class AbstractViewContainer {
 	}
 	
 	private void updateView(){
-		updateInternalFrame();
-		if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
-			mainController.getMainGui().getDesktopPane().add(internalFrame);
-			setupFrame();	
-			internalFrame.setSize(AbstractViewContainer.defaultDimension);
+		try {
+			updateInternalFrame();
+			if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
+				mainController.getMainGui().getDesktopPane().add(internalFrame);
+				setupFrame();
+				internalFrame.setBounds(InternalFrameController.lastStartPosition.x, InternalFrameController.lastStartPosition.y, InternalFrameController.defaultDimension.width, InternalFrameController.defaultDimension.height);
+				internalFrame.setMaximum(true);
+			}
+		} catch (PropertyVetoException e) {
+			logger.warn(" Exception: " + e.getMessage());
 		}
 	}
 
-	private Rectangle getBounds(JInternalFrame internalFrame){
-		Rectangle rect = null;
-		if(internalFrame != null){
-			rect = internalFrame.getBounds();
-		}
-		return rect;
-	}
-
-	private void updateStartPosition(){
-		int newX = AbstractViewContainer.lastStartPosition.x + AbstractViewContainer.positionIncrement.x;
-		int newY = AbstractViewContainer.lastStartPosition.y + AbstractViewContainer.positionIncrement.x;
-		AbstractViewContainer.lastStartPosition = new Point(newX, newY);
-	}
-	
-	private Point getNewPosition(JInternalFrame internalFrame){
-		Point newPosition = null;
-		if(internalFrame == null){
-			newPosition = new Point(lastStartPosition);
-			updateStartPosition();
-		}
-		return newPosition;
-	}
-	
-	private void setNewPosition(JInternalFrame internalFrame, Point newPosition){
-		if(newPosition != null) {
-			internalFrame.setLocation(newPosition);
-		}
-	}
-	
-	private void setBounds(JInternalFrame internalFrame, Rectangle rect){
-		if(rect != null) internalFrame.setBounds(rect);
-	}	
-
-	public void showView(){
-			Point newPosition = getNewPosition(internalFrame);
-			Rectangle rect = getBounds(internalFrame);
-			resetFrame();
-			updateView();
-			setBounds(internalFrame, rect);
-			setNewPosition(internalFrame, newPosition);
-			internalFrame.setVisible(true);
-			internalFrame.toFront();
-	}
-	
 	abstract public JInternalFrame getInternalFrame();
 	
 	public static void resetLastStartPosition() {
-		lastStartPosition = new Point(10, 10);
+		lastStartPosition = new Point(0, 0);
+	}
+
+	public void showView(){
+			calculateNewStartPosition(internalFrame);
+			resetFrame();
+			updateView();
+			internalFrame.setVisible(true);
+			internalFrame.toFront();
+	}
+
+	private void calculateNewStartPosition(JInternalFrame internalFrame){
+		if(internalFrame == null){
+			int newX = InternalFrameController.lastStartPosition.x + InternalFrameController.positionIncrement.x;
+			int newY = InternalFrameController.lastStartPosition.y + InternalFrameController.positionIncrement.y;
+			InternalFrameController.lastStartPosition = new Point(newX, newY);
+		}
 	}
 	
 }

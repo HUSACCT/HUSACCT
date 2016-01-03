@@ -11,52 +11,52 @@ import javax.swing.JInternalFrame;
 
 public class ViewController {
 	
-	private AbstractViewContainer defineContainer;
-	private AbstractViewContainer definedArchitectureDiagramContainer;
-	private AbstractViewContainer analysedApplicationOverviewContainer;
-	private AbstractViewContainer analysedArchitectureDiagramContainer;
-	private AbstractViewContainer validateContainer;
-	private AbstractViewContainer validateConfigurationContainer;
+	private InternalFrameController defineContainer;
+	private InternalFrameController definedArchitectureDiagramContainer;
+	private InternalFrameController analysedApplicationOverviewContainer;
+	private InternalFrameController analysedArchitectureDiagramContainer;
+	private InternalFrameController validateContainer;
+	private InternalFrameController validateConfigurationContainer;
 	
-	private List<AbstractViewContainer> viewContainers = new ArrayList<AbstractViewContainer>();
+	private List<InternalFrameController> viewContainers = new ArrayList<InternalFrameController>();
 	
 	public ViewController(MainController mainController){
-		defineContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
+		defineContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getDefineService().getDefinedGUI();
 			}
 		};
 		
-		definedArchitectureDiagramContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "DefinedArchitectureDiagram"){
+		definedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "DefinedArchitectureDiagram"){
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getDefinedArchitectureGUI();
 			}
 		};
 		
-		analysedApplicationOverviewContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "AnalysedArchitectureOverview") {
+		analysedApplicationOverviewContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "AnalysedArchitectureOverview") {
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getAnalyseService().getJInternalFrame();
 			}
 		};
 		
-		analysedArchitectureDiagramContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_ANALYSED_ARCHITECTURE_DIAGRAM)), "AnalysedArchitectureDiagram") {
+		analysedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_ANALYSED_ARCHITECTURE_DIAGRAM)), "AnalysedArchitectureDiagram") {
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getAnalysedArchitectureGUI();
 			}
 		};
 		
-		validateContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_VALIDATE)), "Validate") {
+		validateContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_VALIDATE)), "Validate") {
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getValidateService().getBrowseViolationsGUI();
 			}
 		};
 		
-		validateConfigurationContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_VALIDATE)), "Configuration") {
+		validateConfigurationContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_VALIDATE)), "Configuration") {
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getValidateService().getConfigurationGUI();
@@ -98,14 +98,14 @@ public class ViewController {
 	}
 	
 	public void closeAll(){		
-		for(AbstractViewContainer container : viewContainers){
+		for(InternalFrameController container : viewContainers){
 			container.closeFrame();
 		}
-		AbstractViewContainer.resetLastStartPosition();
+		InternalFrameController.resetLastStartPosition();
 	}
 	
 	public void setLocaleListeners(){
-		for(AbstractViewContainer container : viewContainers){
+		for(InternalFrameController container : viewContainers){
 			container.setLocaleListener();
 		}
 	}

@@ -54,7 +54,7 @@ public class MainGui extends HelpableJFrame{
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 783, 535);
+		setBounds(0, 0, 1020, 750);
 		setPgsLookAndFeel();
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -95,7 +95,7 @@ public class MainGui extends HelpableJFrame{
 		JPanel contentPane = new JPanel(new BorderLayout()); 
 		desktopPane = new JDesktopPane();
 		JPanel taskBarPane = new JPanel(new GridLayout());
-		//toolBar = new ToolBar(getMenu(), mainController.getStateController());
+		//toolBar = new ToolBar(getMenu(), mainController.getStateController()); // Disabled since it takes space and does not add much.
 		taskBar = new TaskBar();
 		actionLogPanel = new ActionLogPanel(mainController);
 		

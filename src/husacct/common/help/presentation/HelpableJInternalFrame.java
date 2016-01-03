@@ -6,7 +6,6 @@ import husacct.common.help.Helpable;
 import husacct.control.presentation.MainGui;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
 public class HelpableJInternalFrame extends JInternalFrame{

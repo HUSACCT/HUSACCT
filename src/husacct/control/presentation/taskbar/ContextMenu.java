@@ -3,7 +3,7 @@ package husacct.control.presentation.taskbar;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.util.InternalFrameUtils;
-import husacct.control.task.AbstractViewContainer;
+import husacct.control.task.InternalFrameController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,7 +69,7 @@ public class ContextMenu extends JPopupMenu{
 				} catch (PropertyVetoException e) {
 					logger.debug(e.getMessage());
 				}
-				internalFrame.setSize(AbstractViewContainer.defaultDimension);
+				internalFrame.setSize(InternalFrameController.defaultDimension);
 				InternalFrameUtils.alignCenter(internalFrame);
 				activateFrame(internalFrame);
 			}

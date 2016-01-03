@@ -1,7 +1,5 @@
 package husacct.control.task;
 
-import java.lang.reflect.Constructor;
-
 import husacct.bootstrap.AbstractBootstrap;
 
 import org.apache.log4j.Logger;
