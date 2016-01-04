@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 
 public class TaskBar extends JPanel{
 	private static final long serialVersionUID = 1L;
-
 	private Logger logger = Logger.getLogger(TaskBar.class);
 	
 	public TaskBar(){
@@ -103,9 +102,9 @@ public class TaskBar extends JPanel{
 	}
 	
 	private void activateFrame(JInternalFrame internalFrame, JToggleButton button){
-		DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-		manager.activateFrame(internalFrame);
 		try {
+			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+			manager.activateFrame(internalFrame);
 			internalFrame.setSelected(true);
 			internalFrame.setIcon(false);
 		} catch (PropertyVetoException event) {

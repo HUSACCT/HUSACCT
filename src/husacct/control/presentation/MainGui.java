@@ -2,14 +2,16 @@ package husacct.control.presentation;
 
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJFrame;
+import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
+import husacct.control.presentation.taskbar.TaskBarPane;
 import husacct.control.presentation.util.ActionLogPanel;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -30,11 +32,13 @@ public class MainGui extends HelpableJFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
 	private Logger logger = Logger.getLogger(MainGui.class);
-	private MainController mainController;
-	private MenuBar menuBar;
+	public MainController mainController;
 	private String titlePrefix = "HUSACCT";
+	private MenuBar menuBar;
 	private JDesktopPane desktopPane;
+	private HelpableJScrollPane taskBarPane;
 	private TaskBar taskBar;
+    private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
 	//private ToolBar toolBar;
 	private ActionLogPanel actionLogPanel;
 	
@@ -92,18 +96,20 @@ public class MainGui extends HelpableJFrame{
 	}
 	
 	private void addComponents(){
+		// Create and add contentPane
 		JPanel contentPane = new JPanel(new BorderLayout()); 
-		desktopPane = new JDesktopPane();
-		JPanel taskBarPane = new JPanel(new GridLayout());
-		//toolBar = new ToolBar(getMenu(), mainController.getStateController()); // Disabled since it takes space and does not add much.
-		taskBar = new TaskBar();
 		actionLogPanel = new ActionLogPanel(mainController);
-		
-		taskBarPane.add(taskBar);
 		contentPane.add(actionLogPanel, BorderLayout.SOUTH);
+		//toolBar = new ToolBar(getMenu(), mainController.getStateController()); // Disabled since it takes space and does not add much.
 		//contentPane.add(toolBar, BorderLayout.NORTH);
+		desktopPane = new JDesktopPane();
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		add(contentPane);
+
+		// Create and add taskBarPane
+		taskBar = new TaskBar();
+	    taskBarPane = new TaskBarPane(taskBar);
+	    taskBarPane.setBackground(PANELBACKGROUND);
 		add(taskBarPane);
 	}
 	

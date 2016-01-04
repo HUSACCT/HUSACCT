@@ -9,6 +9,7 @@ import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.WarningMessageService;
+import husacct.define.presentation.DefineInternalFrame;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
@@ -130,7 +131,17 @@ import org.apache.log4j.Logger;
 			return rootComponent;
 		}
 
-		public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule() {
+	    /**
+	     * Returns an DefineInternalFrame with an added DefenitionJPanel.
+	     */
+	    public DefineInternalFrame getNewDefineInternalFrame() {
+	    	DefineInternalFrame jframe = new DefineInternalFrame();
+	    	initSettings();
+	    	jframe.setContentView(getDefinitionJPanel());
+	    	return jframe;
+	        }
+
+	    public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule() {
 			return softwareUnitDefinitionDomainService
 					.getRegExSoftwareUnitNames(getSelectedModuleId());
 		}
@@ -174,7 +185,7 @@ import org.apache.log4j.Logger;
 		 * 
 		 * @return JPanel The jpanel
 		 */
-		public JPanel initUi() {
+		public JPanel getDefinitionJPanel() {
 			return definitionJPanel;
 		}
 
@@ -332,7 +343,7 @@ import org.apache.log4j.Logger;
 			
 				for (String softwareUnit : softwareUnitNames) {
 					String type = types.get(location);
-					// logger.info("Removing software unit " + softwareUnit + ", Type: " + type);
+					logger.info("Removing software unit " + softwareUnit + ", Type: " + type);
 					if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 						if (confirm) {
 							JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);

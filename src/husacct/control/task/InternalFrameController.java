@@ -24,6 +24,7 @@ abstract public class InternalFrameController {
 	private static Point lastStartPosition = new Point(0, 0);
 	private static Point positionIncrement = new Point(20, 20);
 	
+	private Point startPosition = new Point(0, 0);
 	private ImageIcon frameIcon;
 	private String stringIdentifier;
 	private Logger logger = Logger.getLogger(InternalFrameController.class);
@@ -63,7 +64,6 @@ abstract public class InternalFrameController {
 				internalFrame.dispose();
 			}
 		});
-		registerInternalFrameToTaskBar(internalFrame);
 	}
 	
 	private void resetFrame(){
@@ -86,7 +86,6 @@ abstract public class InternalFrameController {
 	}
 	
 	private void registerInternalFrameToTaskBar(JInternalFrame internalFrame){
-		
 		TaskBar taskBar = mainController.getMainGui().getTaskBar();
 		taskBar.registerInternalFrame(internalFrame);
 	}
@@ -97,8 +96,11 @@ abstract public class InternalFrameController {
 			if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
 				mainController.getMainGui().getDesktopPane().add(internalFrame);
 				setupFrame();
-				internalFrame.setBounds(InternalFrameController.lastStartPosition.x, InternalFrameController.lastStartPosition.y, InternalFrameController.defaultDimension.width, InternalFrameController.defaultDimension.height);
+				registerInternalFrameToTaskBar(internalFrame);
+				internalFrame.setBounds(startPosition.x, startPosition.y, InternalFrameController.defaultDimension.width, InternalFrameController.defaultDimension.height);
 				internalFrame.setMaximum(true);
+				mainController.getMainGui().revalidate();
+				mainController.getMainGui().getDesktopPane().repaint();
 			}
 		} catch (PropertyVetoException e) {
 			logger.warn(" Exception: " + e.getMessage());
@@ -120,10 +122,11 @@ abstract public class InternalFrameController {
 	}
 
 	private void calculateNewStartPosition(JInternalFrame internalFrame){
-		if(internalFrame == null){
+		if(internalFrame == null){ // Only do it the first time for a specific internal frame. 
 			int newX = InternalFrameController.lastStartPosition.x + InternalFrameController.positionIncrement.x;
 			int newY = InternalFrameController.lastStartPosition.y + InternalFrameController.positionIncrement.y;
 			InternalFrameController.lastStartPosition = new Point(newX, newY);
+			startPosition = new Point(newX, newY);
 		}
 	}
 	

@@ -28,15 +28,10 @@ public class AnalyseInternalFrame extends HelpableJInternalFrame implements Acti
     public AnalyseInternalFrame() {
         this.controller = new AnalyseUIController();
         registerLocaleChangeListener();
-        setResizable(true);
-        setBounds(200, 200, 550, 522);
-
+        
         tabPanel = new JTabbedPane(JTabbedPane.TOP);
         tabPanel.setBackground(UIManager.getColor("Panel.background"));
         getContentPane().add(tabPanel, BorderLayout.CENTER);
-
-        setIconifiable(true);
-        setVisible(true);
 
         applicationStructurePanel = new ApplicationStructurePanel();
         dependencyPanel = new DependencyPanel();

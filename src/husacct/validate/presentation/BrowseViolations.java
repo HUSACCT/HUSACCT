@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -73,10 +72,6 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	private void initComponents() {
-		setClosable(true);
-		setMaximizable(true);
-		setIconifiable(true);
-
 		// Tab All Violations
 		allViolationsPanel = new JPanel();
 		filterPane = new FilterPanel(this, taskServiceImpl);

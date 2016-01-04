@@ -32,7 +32,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
+public class DefineInternalFrame extends HelpableJInternalFrame implements
 		ILocaleChangeListener, Observer, IServiceListener {
 
 	private static final long serialVersionUID = 6858870868564931134L;
@@ -44,7 +44,7 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 	private WarningTableJDialog warnings = new WarningTableJDialog();
 	private ReportToHTML report = new ReportToHTML();
 
-	public ApplicationJInternalFrame() {
+	public DefineInternalFrame() {
 		super();
 		initUi();
 	}
@@ -56,8 +56,6 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 			ServiceProvider.getInstance().getDefineService().addServiceListener(this);
 			this.addDefinitionPanel();
 			this.addToolBar();
-			pack();
-			setSize(1200, 1200);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -166,25 +164,18 @@ public class ApplicationJInternalFrame extends HelpableJInternalFrame implements
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
-		 setButtonsVisability(undoButton,redoButton);
+		setButtonsVisability(undoButton,redoButton);
 		if (WarningMessageService.getInstance().hasWarnings()) {
 			Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 			warningButton.setIcon(icon);
 		} else {
-
 			warningButton.repaint();
-
 		}
-
 	}
 
 	@Override
 	public void update() {
-
      setButtonsVisability(undoButton,redoButton);
      //DefinitionController.getInstance().notifyObservers();
-
-
-}
+	}
 }

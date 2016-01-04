@@ -18,10 +18,8 @@ import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
-import husacct.define.task.ApplicationController;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
-import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.persistency.PersistentDomain;
 import husacct.define.task.persistency.PersistentDomain.DomainElement;
@@ -175,12 +173,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	
 	public JInternalFrame getDefinedGUI() {
-		ApplicationController applicationController = new ApplicationController();
-		applicationController.initUi();
-		JInternalFrame jinternalFrame = applicationController
-				.getApplicationFrame();
-		jinternalFrame.setVisible(false);
-		return jinternalFrame;
+		return getDefinitionController().getNewDefineInternalFrame();
 	}
 
 	@Override

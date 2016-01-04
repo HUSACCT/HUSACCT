@@ -2,9 +2,6 @@ package husacct.control.presentation.taskbar;
 
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
-import husacct.control.presentation.util.InternalFrameUtils;
-import husacct.control.task.InternalFrameController;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
@@ -54,6 +51,8 @@ public class ContextMenu extends JPopupMenu{
 			public void actionPerformed(ActionEvent event) {
 				try {
 					internalFrame.setMaximum(true);
+					internalFrame.setVisible(true);
+					internalFrame.toFront();
 				} catch (PropertyVetoException e) {
 					logger.debug(e.getMessage());
 				}
@@ -66,11 +65,11 @@ public class ContextMenu extends JPopupMenu{
 			public void actionPerformed(ActionEvent event) {
 				try {
 					internalFrame.setMaximum(false);
+					internalFrame.setVisible(true);
+					internalFrame.toFront();
 				} catch (PropertyVetoException e) {
 					logger.debug(e.getMessage());
 				}
-				internalFrame.setSize(InternalFrameController.defaultDimension);
-				InternalFrameUtils.alignCenter(internalFrame);
 				activateFrame(internalFrame);
 			}
 		});
