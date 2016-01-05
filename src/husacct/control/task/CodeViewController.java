@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.IControlService;
+import husacct.control.presentation.codeviewer.CodeViewInternalFrame;
 import husacct.control.task.codeviewer.CodeviewerService;
 import husacct.control.task.codeviewer.EclipseCodeviewerImpl;
 import husacct.control.task.codeviewer.InternalCodeviewerImpl;
@@ -25,9 +26,11 @@ public class CodeViewController {
 	private CodeviewerService currentCodeviewer;
 	private static Logger logger = Logger.getLogger(ServiceProvider.class);
 	private String fileName;
+	private CodeViewInternalFrame internalCodeViewerView;
 	
 	public CodeViewController(MainController mainController) {
 		controlService = ServiceProvider.getInstance().getControlService();
+		internalCodeViewerView = new CodeViewInternalFrame();
 	}
 	
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
@@ -46,7 +49,7 @@ public class CodeViewController {
 		if(enabled) {
 			currentCodeviewer = new EclipseCodeviewerImpl();
 		} else {
-			currentCodeviewer = new InternalCodeviewerImpl();
+			currentCodeviewer = new InternalCodeviewerImpl(internalCodeViewerView);
 		}
 	}
 

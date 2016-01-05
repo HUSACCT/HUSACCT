@@ -1,7 +1,7 @@
 package husacct.validate.presentation.browseViolations;
 
-// This file containes deleted code from the history panel (left side panel in split panel). 
-
+// This file contains deleted code from the history panel (left side panel in split panel). 
+/*
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -41,7 +41,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class HistoryPanel extends HelpableJPanel {
 
-/*
+
 	// History View, disabled in version 3.2; see disabled code in initComponents()
 	private JPanel historyPane;
 	private JSplitPane splitPane; 
@@ -273,6 +273,7 @@ public class HistoryPanel extends HelpableJPanel {
 	}
 
 
-*/
+
 	
 }
+*/
