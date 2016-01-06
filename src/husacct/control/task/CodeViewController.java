@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -26,9 +27,11 @@ public class CodeViewController {
 	private CodeviewerService currentCodeviewer;
 	private static Logger logger = Logger.getLogger(ServiceProvider.class);
 	private String fileName;
+	MainController mainController;
 	private CodeViewInternalFrame internalCodeViewerView;
 	
 	public CodeViewController(MainController mainController) {
+		this.mainController = mainController;
 		controlService = ServiceProvider.getInstance().getControlService();
 		internalCodeViewerView = new CodeViewInternalFrame();
 	}
@@ -43,16 +46,6 @@ public class CodeViewController {
 		currentCodeviewer.displayErrorsInFile(fileName, errorLines);
 	}
 	
-	public void setCurrentCodeviewer() {
-		String ExternalCodeviewer = ConfigurationManager.getProperty("ExternalCodeviewer");
-		boolean enabled = Boolean.parseBoolean(ExternalCodeviewer);
-		if(enabled) {
-			currentCodeviewer = new EclipseCodeviewerImpl();
-		} else {
-			currentCodeviewer = new InternalCodeviewerImpl(internalCodeViewerView);
-		}
-	}
-
 	// ====================================
 	// Display errors in file (by ClassPath)
 	// classPath, <linenumber , severity>
@@ -77,6 +70,19 @@ public class CodeViewController {
 		}
 	}
 	
+	public JInternalFrame getCodeViewInternalFrame() {
+		return internalCodeViewerView;
+	}
+
+	private void setCurrentCodeviewer() {
+		String ExternalCodeviewer = ConfigurationManager.getProperty("ExternalCodeviewer");
+		boolean enabled = Boolean.parseBoolean(ExternalCodeviewer);
+		if(enabled) {
+			currentCodeviewer = new EclipseCodeviewerImpl();
+		} else {
+			currentCodeviewer = new InternalCodeviewerImpl(internalCodeViewerView, mainController);
+		}
+	}
 
 	// ====================================
 	// Check if file exists.
@@ -97,8 +103,6 @@ public class CodeViewController {
 	// ====================================
 	// Find file path by the class path
 	// ====================================
-	// TODO Multiple project support
-	// TODO Better solution language
 	public String findFilePath(String classPath) {
 		// Init control service if not set
 		if(controlService == null)
@@ -111,7 +115,7 @@ public class CodeViewController {
 			return sourceFilePath;
 		}
 		
-		// Convert classPath to filePath (algorithm before version 3.3)
+		// Convert classPath to filePath (algorithm before version 3.3). Kept here as back-up.
 		String filePath = "";
 		// Grab root path
 		ApplicationDTO application = controlService.getApplicationDTO();

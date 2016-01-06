@@ -8,12 +8,15 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import husacct.control.presentation.codeviewer.Error;
+import husacct.control.task.MainController;
 
 public class InternalCodeviewerImpl implements CodeviewerService {
 
+	MainController mainController;
 	CodeViewInternalFrame codeViewer;
 	
-	public InternalCodeviewerImpl(CodeViewInternalFrame codeViewer) {
+	public InternalCodeviewerImpl(CodeViewInternalFrame codeViewer, MainController mainController) {
+		this.mainController = mainController;
 		this.codeViewer = codeViewer;
 	}
 	
@@ -22,7 +25,7 @@ public class InternalCodeviewerImpl implements CodeviewerService {
 		codeViewer.reset();
 		codeViewer.setErrorLines(errorLines);
 		codeViewer.parseFile(fileName);
-		codeViewer.setVisible(true);
+		mainController.getViewController().showCodeViewer();
 	}
 
 	@Override
@@ -36,8 +39,7 @@ public class InternalCodeviewerImpl implements CodeviewerService {
 		}
 		codeViewer.setErrors(errorList);
 		codeViewer.parseFile(fileName);
-		codeViewer.setVisible(true);
-		
+		mainController.getViewController().showCodeViewer();
 	}
 
 }

@@ -16,9 +16,7 @@ import javax.swing.JPopupMenu;
 
 public class ContextMenu extends JPopupMenu {
 	private static final long				serialVersionUID	= -6033808567664371902L;
-	protected ILocaleService				localeService		= ServiceProvider
-																		.getInstance()
-																		.getLocaleService();
+	protected ILocaleService				localeService		= ServiceProvider.getInstance().getLocaleService();
 	
 	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
 	
@@ -36,25 +34,21 @@ public class ContextMenu extends JPopupMenu {
 		ImageIcon icon;
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_ZOOM));
-		zoomIn = new JMenuItem(localeService.getTranslatedString("ZoomIn"),
-				icon);
+		zoomIn = new JMenuItem(localeService.getTranslatedString("ZoomIn"), icon);
 		add(zoomIn);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_BACK));
-		zoomOut = new JMenuItem(localeService.getTranslatedString("ZoomOut"),
-				icon);
+		zoomOut = new JMenuItem(localeService.getTranslatedString("ZoomOut"), icon);
 		add(zoomOut);
 		
 		addSeparator();
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_FIGURES_HIDE));
-		hide = new JMenuItem(localeService.getTranslatedString("HideModules"),
-				icon);
+		hide = new JMenuItem(localeService.getTranslatedString("HideModules"), icon);
 		add(hide);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_FIGURES_SHOW));
-		restore = new JMenuItem(
-				localeService.getTranslatedString("RestoreHiddenModules"), icon);
+		restore = new JMenuItem(localeService.getTranslatedString("RestoreHiddenModules"), icon);
 		add(restore);
 		
 		hookupEventHandlers();

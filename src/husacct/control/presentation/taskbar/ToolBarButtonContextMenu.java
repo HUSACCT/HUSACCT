@@ -4,8 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
-
 import javax.swing.DesktopManager;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
@@ -13,10 +11,10 @@ import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
 
-public class ContextMenu extends JPopupMenu{
+public class ToolBarButtonContextMenu extends JPopupMenu{
 	private static final long serialVersionUID = 1L;
 	
-	private Logger logger = Logger.getLogger(ContextMenu.class);
+	private Logger logger = Logger.getLogger(ToolBarButtonContextMenu.class);
 	
 	private JInternalFrame internalFrame;
 	
@@ -25,7 +23,7 @@ public class ContextMenu extends JPopupMenu{
 	private JMenuItem minimize;
 	private JMenuItem close;
 	
-	public ContextMenu(JInternalFrame internalFrame){
+	public ToolBarButtonContextMenu(JInternalFrame internalFrame){
 		this.internalFrame = internalFrame;
 		addComponents();
 		setListeners();
@@ -51,9 +49,7 @@ public class ContextMenu extends JPopupMenu{
 			public void actionPerformed(ActionEvent event) {
 				try {
 					internalFrame.setMaximum(true);
-					internalFrame.setVisible(true);
-					internalFrame.toFront();
-				} catch (PropertyVetoException e) {
+				} catch (Exception e) {
 					logger.debug(e.getMessage());
 				}
 				activateFrame(internalFrame);
@@ -65,9 +61,7 @@ public class ContextMenu extends JPopupMenu{
 			public void actionPerformed(ActionEvent event) {
 				try {
 					internalFrame.setMaximum(false);
-					internalFrame.setVisible(true);
-					internalFrame.toFront();
-				} catch (PropertyVetoException e) {
+				} catch (Exception e) {
 					logger.debug(e.getMessage());
 				}
 				activateFrame(internalFrame);
@@ -79,12 +73,10 @@ public class ContextMenu extends JPopupMenu{
 			public void actionPerformed(ActionEvent event) {
 				try {
 					internalFrame.setIcon(true);
-					internalFrame.setVisible(false);
-					deactivateFrame(internalFrame);
-				} catch (PropertyVetoException e) {
+				} catch (Exception e) {
 					logger.debug(e.getMessage());
 				}
-				activateFrame(internalFrame);
+				deactivateFrame(internalFrame);
 			}
 		});
 		
@@ -97,21 +89,25 @@ public class ContextMenu extends JPopupMenu{
 	}
 	
 	private void activateFrame(JInternalFrame internalFrame){
-		DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-		manager.activateFrame(internalFrame);
 		try {
+			internalFrame.setVisible(true);
+			internalFrame.setIcon(false);
+			internalFrame.toFront();
 			internalFrame.setSelected(true);
-		} catch (PropertyVetoException event) {
+			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+			manager.activateFrame(internalFrame);
+		} catch (Exception event) {
 			logger.debug(event.getMessage());
 		}
 	}
 	
 	private void deactivateFrame(JInternalFrame internalFrame){
-		DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-		manager.deactivateFrame(internalFrame);
 		try {
+			internalFrame.setVisible(false);
 			internalFrame.setSelected(false);
-		} catch (PropertyVetoException event) {
+			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+			manager.deactivateFrame(internalFrame);
+		} catch (Exception event) {
 			logger.debug(event.getMessage());
 		}		
 	}

@@ -1,5 +1,7 @@
 package husacct.control.presentation.codeviewer;
 
+import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.control.presentation.codeviewer.parser.AbstractFileParser;
 import husacct.control.presentation.codeviewer.parser.CSharpFileParser;
 import husacct.control.presentation.codeviewer.parser.JavaFileParser;
@@ -9,58 +11,58 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import org.apache.log4j.Logger;
+
+
 @SuppressWarnings("serial")
-public class CodeViewInternalFrame extends JFrame {
+public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 	
+	private static Logger logger = Logger.getLogger(CodeViewInternalFrame.class);
 	private AbstractFileParser parser;
 	
-	private JTextPane textPane;
-	private JScrollPane scrollPane;
+	private JTextPane fileTextPane, codeTextPane;
+	private JScrollPane fileScrollPane, codeScrollPane;
 
-	private StyledDocument styledDocument;
-	private TextLineNumber textLineNumber;
+	private StyledDocument fileDocument, codeDocument;
+	private TextLineNumber codeLineNumber;
 
 	private ArrayList<Error> errors = new ArrayList<Error>();
 	
 	public CodeViewInternalFrame() {
-		this.setLayout(new BorderLayout());
-		this.setSize(800, 600);
-		
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		textLineNumber = new TextLineNumber(textPane);
-		scrollPane = new JScrollPane(textPane);
-		scrollPane.setRowHeaderView(textLineNumber);
-		this.add(scrollPane);
-		
-		styledDocument = textPane.getStyledDocument();
-		styledDocument.putProperty(PlainDocument.tabSizeAttribute, 4);
-
-		errors = new ArrayList<Error>();
+		this.setLayout(new BorderLayout(0,5));
+		initComponents();
 	}
 	
 	public void reset() {
-		this.remove(scrollPane);
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		textLineNumber = new TextLineNumber(textPane);
-		scrollPane = new JScrollPane(textPane);
-		scrollPane.setRowHeaderView(textLineNumber);
-		this.add(scrollPane);
-		
-		styledDocument = textPane.getStyledDocument();
-		styledDocument.putProperty(PlainDocument.tabSizeAttribute, 4);
+		this.remove(fileScrollPane);
+		this.remove(codeScrollPane);
+		initComponents();
+	}
+	
+	private void initComponents() {
+		fileTextPane = new JTextPane();
+		fileTextPane.setEditable(false);
+		fileScrollPane = new JScrollPane(fileTextPane);
+        fileDocument = fileTextPane.getStyledDocument();
+        this.add(fileScrollPane, BorderLayout.PAGE_START);
+
+		codeTextPane = new JTextPane();
+		codeTextPane.setEditable(false);
+		codeLineNumber = new TextLineNumber(codeTextPane);
+		codeScrollPane = new JScrollPane(codeTextPane);
+		codeScrollPane.setRowHeaderView(codeLineNumber);
+		codeDocument = codeTextPane.getStyledDocument();
+		codeDocument.putProperty(PlainDocument.tabSizeAttribute, 4);
+		this.add(codeScrollPane, BorderLayout.CENTER);
 
 		errors = new ArrayList<Error>();
 	}
@@ -77,10 +79,46 @@ public class CodeViewInternalFrame extends JFrame {
 	}
 	
 	public void parseFile(String fileName) {
-		this.setTitle(fileName.substring(fileName.lastIndexOf("\\") + 1));
+		// Parse file into fileTextPane
+		try {
+			// Define style
+			StyleContext context = new StyleContext();
+			Style keyStyle = context.addStyle("default", null);
+			StyleConstants.setForeground(keyStyle, new Color(0, 0, 0));
+			StyleConstants.setBold(keyStyle, false);
+			// Insert file path
+			String pathText = ServiceProvider.getInstance().getLocaleService().getTranslatedString("PathLabelShort");
+			String fullText = pathText + ":	" + fileName;
+			fileDocument.insertString(codeDocument.getLength(), fullText, keyStyle);
+			fileDocument.insertString(codeDocument.getLength(), "\n", null);
+			// Insert file name
+			String fileNameText = fileName.substring(fileName.lastIndexOf("\\") + 1);
+			String fileNameLabel = ServiceProvider.getInstance().getLocaleService().getTranslatedString("File");
+			String fullfileNameText = fileNameLabel + ":	" + fileNameText;
+			StyleConstants.setBold(keyStyle, true);
+			fileDocument.insertString(codeDocument.getLength(), fullfileNameText, keyStyle);
+		} catch (BadLocationException e) {
+			logger.warn(" Exception: " + e.getMessage());
+		}
+		// Parse code into codeTextPane
 		File file = new File(fileName);
 		parser = getParser(fileName.substring(fileName.lastIndexOf(".") + 1));
 		parser.parseFile(file);
+	}
+	
+	public void addWord(String word, Style style, int lineNumber) {
+		try {
+			Error error;
+			if((error = getError(lineNumber)) != null) {
+				StyleContext context = new StyleContext();
+				Style errorStyle = context.addStyle("default", style);
+				StyleConstants.setBackground(errorStyle, error.color);
+				codeDocument.insertString(codeDocument.getLength(), word + " ", errorStyle);
+			} else
+				codeDocument.insertString(codeDocument.getLength(), word + " ", style);
+		} catch (BadLocationException e) {
+			logger.warn(" Exception: " + e.getMessage());
+		}
 	}
 	
 	public Error getError(int lineNumber) {
@@ -91,40 +129,15 @@ public class CodeViewInternalFrame extends JFrame {
 		return null;
 	}
 	
-	public void addWord(String word, Style style, int lineNumber) {
-		try {
-			Error error;
-			if((error = getError(lineNumber)) != null) {
-				StyleContext context = new StyleContext();
-				Style errorStyle = context.addStyle("default", style);
-				StyleConstants.setBackground(errorStyle, error.color);
-				styledDocument.insertString(styledDocument.getLength(), word + " ", errorStyle);
-			} else
-				styledDocument.insertString(styledDocument.getLength(), word + " ", style);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public void setNewLine() {
 		try {
-			styledDocument.insertString(styledDocument.getLength(), "\n", null);
+			codeDocument.insertString(codeDocument.getLength(), "\n", null);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void setErrorLine(int lineNumber) {
-		/*
-		Element map = styledDocument.getDefaultRootElement();
-	    if (lineNumber >= 0 && lineNumber < map.getElementCount()) {
-	        Element element = map.getElement(lineNumber);
-	        styledDocument.setParagraphAttributes(element.getStartOffset(), element.getEndOffset() - element.getStartOffset(), error, false);
-	    }
-	    */
-	}
-	
-	public AbstractFileParser getParser(String extension) {
+	private AbstractFileParser getParser(String extension) {
 		switch(extension.toLowerCase()) {
 			case "java":
 				return new JavaFileParser(this);
@@ -135,26 +148,37 @@ public class CodeViewInternalFrame extends JFrame {
 		}
 	}
 	
+	// Old code (version 2.0) that caused problems
+	/*
+	public void setErrorLine(int lineNumber) {
+		Element map = codeDocument.getDefaultRootElement();
+	    if (lineNumber >= 0 && lineNumber < map.getElementCount()) {
+	        Element element = map.getElement(lineNumber);
+	        codeDocument.setParagraphAttributes(element.getStartOffset(), element.getEndOffset() - element.getStartOffset(), error, false);
+	    }
+	}
+	
 	public int getLineOfOffset(int offset) throws BadLocationException {
 	    if (offset < 0) {
 	        throw new BadLocationException("Can't translate offset to line", -1);
-	    } else if (offset > styledDocument.getLength()) {
-	        throw new BadLocationException("Can't translate offset to line", styledDocument.getLength() + 1);
+	    } else if (offset > codeDocument.getLength()) {
+	        throw new BadLocationException("Can't translate offset to line", codeDocument.getLength() + 1);
 	    } else {
-	        Element map = styledDocument.getDefaultRootElement();
+	        Element map = codeDocument.getDefaultRootElement();
 	        return map.getElementIndex(offset);
 	    }
 	}
 
 	public int getLineStartOffset(int line) throws BadLocationException {
-	    Element map = styledDocument.getDefaultRootElement();
+	    Element map = codeDocument.getDefaultRootElement();
 	    if (line < 0) {
 	        throw new BadLocationException("Negative line", -1);
 	    } else if (line >= map.getElementCount()) {
-	        throw new BadLocationException("No such line", styledDocument.getLength() + 1);
+	        throw new BadLocationException("No such line", codeDocument.getLength() + 1);
 	    } else {
 	        Element lineElem = map.getElement(line);
 	        return lineElem.getStartOffset();
 	    }
 	}
+	*/
 }

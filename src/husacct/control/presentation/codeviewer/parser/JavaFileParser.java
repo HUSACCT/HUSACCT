@@ -12,10 +12,13 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
+import org.apache.log4j.Logger;
+
 import husacct.control.presentation.codeviewer.CodeViewInternalFrame;
 
 public class JavaFileParser implements AbstractFileParser {
 
+	private static Logger logger = Logger.getLogger(JavaFileParser.class);
 	private CodeViewInternalFrame view;
 	private int lineNumber = 1;
 	
@@ -54,7 +57,8 @@ public class JavaFileParser implements AbstractFileParser {
 			}
 			bufferedReader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			view.addWord("File not found!", defaultStyle, lineNumber);
+			logger.error(" Exception: " + e.getMessage());
 		}
 	}
 	

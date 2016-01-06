@@ -17,6 +17,7 @@ public class ViewController {
 	private InternalFrameController analysedArchitectureDiagramContainer;
 	private InternalFrameController validateContainer;
 	private InternalFrameController validateConfigurationContainer;
+	private InternalFrameController codeViewerContainer;
 	
 	private List<InternalFrameController> viewContainers = new ArrayList<InternalFrameController>();
 	
@@ -63,12 +64,20 @@ public class ViewController {
 			}
 		};
 		
+		codeViewerContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_SOURCE)), "ConfigGeneralCodeviewer") {
+			@Override
+			public JInternalFrame getInternalFrame() {
+				return mainController.getCodeViewerController().getCodeViewInternalFrame();
+			}
+		};
+
 		viewContainers.add(defineContainer);
 		viewContainers.add(definedArchitectureDiagramContainer);
 		viewContainers.add(analysedApplicationOverviewContainer);
 		viewContainers.add(analysedArchitectureDiagramContainer);
 		viewContainers.add(validateContainer);
 		viewContainers.add(validateConfigurationContainer);
+		viewContainers.add(codeViewerContainer);
 	}
 	
 	public void showDefineArchitecture() {
@@ -95,6 +104,10 @@ public class ViewController {
 	
 	public void showConfigurationGui() {
 		validateConfigurationContainer.showView();
+	}
+	
+	public void showCodeViewer() {
+		codeViewerContainer.showView();
 	}
 	
 	public void closeAll(){		

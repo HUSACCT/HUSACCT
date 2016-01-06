@@ -23,6 +23,7 @@ abstract public class InternalFrameController {
 	public static final Dimension defaultDimension = new Dimension(950, 600);
 	private static Point lastStartPosition = new Point(0, 0);
 	private static Point positionIncrement = new Point(20, 20);
+	private boolean isMaximixed = true;
 	
 	private Point startPosition = new Point(0, 0);
 	private ImageIcon frameIcon;
@@ -36,7 +37,6 @@ abstract public class InternalFrameController {
 	}
 	
 	public void setLocaleListener(){
-		//System.out.println("setting localeListener for " + this.stringIdentifier);
 		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
@@ -58,8 +58,7 @@ abstract public class InternalFrameController {
 		internalFrame.setIconifiable(true);
 		internalFrame.setFrameIcon(frameIcon);
 		internalFrame.setClosable(true);
-		internalFrame.pack();
-		internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
+		internalFrame.addInternalFrameListener(new InternalFrameAdapter() { // In ToolBar, event internalFrameClosed is processed.
 			public void internalFrameClosing(InternalFrameEvent e) {
 				internalFrame.dispose();
 			}
@@ -68,17 +67,16 @@ abstract public class InternalFrameController {
 	
 	private void resetFrame(){
 		if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
+			isMaximixed = internalFrame.isMaximum();
 			internalFrame.dispose();
 			mainController.getMainGui().getDesktopPane().remove(internalFrame);
-			mainController.getMainGui().getDesktopPane().repaint();
 			internalFrame = null;
 		}
 	}
 	
 	public void closeFrame(){
 		if(internalFrame != null) {
-			internalFrame.dispose();
-			internalFrame = null;
+			resetFrame();
 		}
 	}
 	private String getTitle(){
@@ -92,21 +90,23 @@ abstract public class InternalFrameController {
 	
 	private void updateView(){
 		try {
-			updateInternalFrame();
 			if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (internalFrame != null)) {
 				mainController.getMainGui().getDesktopPane().add(internalFrame);
 				setupFrame();
 				registerInternalFrameToTaskBar(internalFrame);
 				internalFrame.setBounds(startPosition.x, startPosition.y, InternalFrameController.defaultDimension.width, InternalFrameController.defaultDimension.height);
-				internalFrame.setMaximum(true);
+				internalFrame.setMaximum(isMaximixed);
+				internalFrame.setVisible(true);
+				internalFrame.toFront();
 				mainController.getMainGui().revalidate();
 				mainController.getMainGui().getDesktopPane().repaint();
 			}
-		} catch (PropertyVetoException e) {
-			logger.warn(" Exception: " + e.getMessage());
+		} catch (Exception e) {
+			logger.error(" Exception: " + e.getMessage());
 		}
 	}
 
+	// Abstract method, overridden by ViewController with a call to the specific method.
 	abstract public JInternalFrame getInternalFrame();
 	
 	public static void resetLastStartPosition() {
@@ -114,11 +114,33 @@ abstract public class InternalFrameController {
 	}
 
 	public void showView(){
-			calculateNewStartPosition(internalFrame);
-			resetFrame();
-			updateView();
-			internalFrame.setVisible(true);
-			internalFrame.toFront();
+		JInternalFrame  newInternalFrame = getInternalFrame();
+		if (newInternalFrame != null) {
+			if ((newInternalFrame == internalFrame) && !internalFrame.isClosed()) {
+				if (internalFrame.isIcon()) {
+					try {
+						internalFrame.setIcon(false);
+					} catch (PropertyVetoException e) {
+						logger.error(" Exception: " + e.getMessage());
+					}
+				}
+				internalFrame.setVisible(true);
+				internalFrame.toFront();
+				try {
+					internalFrame.setSelected(true);
+				} catch (PropertyVetoException e) {
+					logger.error(" Exception: " + e.getMessage());
+				}
+				mainController.getMainGui().getDesktopPane().getDesktopManager().activateFrame(internalFrame);
+				mainController.getMainGui().revalidate();
+				mainController.getMainGui().getDesktopPane().repaint();
+			} else {
+				calculateNewStartPosition(internalFrame);
+				resetFrame();
+				updateInternalFrame();
+				updateView();
+			}
+		}
 	}
 
 	private void calculateNewStartPosition(JInternalFrame internalFrame){

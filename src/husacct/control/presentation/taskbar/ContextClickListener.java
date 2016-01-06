@@ -26,8 +26,8 @@ class ContextClickListener extends MouseAdapter{
 	}
 
 	private void doPop(MouseEvent e){
-		ContextMenu menu = new ContextMenu(internalFrame);
-		// TODO: calculate height from ContextMenu 
+		ToolBarButtonContextMenu menu = new ToolBarButtonContextMenu(internalFrame);
+		// TODO: calculate height from ToolBarButtonContextMenu 
 		menu.show(e.getComponent(), e.getX(), e.getY() - 70);
 	}
 }

@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyVetoException;
-
 import javax.swing.DesktopManager;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -36,7 +34,7 @@ public class TaskBar extends JPanel{
 		
 		toggleButton.setIcon(internalFrame.getFrameIcon());
 		
-		internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
+		InternalFrameAdapter internalFrameAdapter = new InternalFrameAdapter() {
 			@Override
 			public void internalFrameActivated(InternalFrameEvent e) {
 				activateFrame(internalFrame, toggleButton);
@@ -58,21 +56,16 @@ public class TaskBar extends JPanel{
 			
 			@Override
 			public void internalFrameIconified(InternalFrameEvent e){
-				deactivateFrame(internalFrame, toggleButton);
-				internalFrame.setVisible(false);
 				iconifyFrame(internalFrame, toggleButton);
-				
 			}
 			
 			@Override
 			public void internalFrameDeiconified(InternalFrameEvent e){
-				activateFrame(internalFrame, toggleButton);
-				internalFrame.setVisible(true);		
 				deiconifyFrame(internalFrame, toggleButton);
 			}
 			
-		});
-		
+		};
+		internalFrame.addInternalFrameListener(internalFrameAdapter);
 		internalFrame.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -97,51 +90,56 @@ public class TaskBar extends JPanel{
 			}
 		});
 		
-		activateFrame(internalFrame, toggleButton);
 		add(toggleButton);
+		activateFrame(internalFrame, toggleButton);
 	}
 	
 	private void activateFrame(JInternalFrame internalFrame, JToggleButton button){
 		try {
+			internalFrame.setIcon(false);
+			internalFrame.setSelected(true);
 			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
 			manager.activateFrame(internalFrame);
-			internalFrame.setSelected(true);
-			internalFrame.setIcon(false);
-		} catch (PropertyVetoException event) {
-			logger.debug(event.getMessage());
+		} catch (Exception event) { // 
+			logger.error(event.getMessage());
+			event.printStackTrace();
 		}
 		button.setSelected(true);
 	}
 	
 	private void deactivateFrame(JInternalFrame internalFrame, JToggleButton button){
-		DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-		manager.deactivateFrame(internalFrame);
 		try {
 			internalFrame.setSelected(false);
-		} catch (PropertyVetoException event) {
-			logger.debug(event.getMessage());
+			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+			manager.deactivateFrame(internalFrame);
+		} catch (Exception event) {
+			logger.error(event.getMessage());
 		}
 		button.setSelected(false);
 		
 	}
 	
 	private void iconifyFrame(JInternalFrame internalFrame, JToggleButton button){
-		DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-		manager.iconifyFrame(internalFrame);
 		try {
 			internalFrame.setIcon(true);
-		} catch (PropertyVetoException event) {
-			logger.debug(event.getMessage());
+			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+			manager.iconifyFrame(internalFrame);
+			internalFrame.setVisible(false);
+		} catch (Exception event) {
+			logger.error(event.getMessage());
 		}
+		deactivateFrame(internalFrame, button);
 	}
 	
 	private void deiconifyFrame(JInternalFrame internalFrame, JToggleButton button){
-		DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-		manager.deiconifyFrame(internalFrame);
 		try {
 			internalFrame.setIcon(false);
-		} catch (PropertyVetoException event) {
-			logger.debug(event.getMessage());
+			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+			manager.deiconifyFrame(internalFrame);
+			internalFrame.setVisible(true);		
+		} catch (Exception event) {
+			logger.error(event.getMessage());
 		}
+		activateFrame(internalFrame, button);
 	}	
 }
