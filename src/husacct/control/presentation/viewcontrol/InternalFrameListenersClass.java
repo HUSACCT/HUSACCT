@@ -1,9 +1,9 @@
-package husacct.control.presentation.taskbar;
+package husacct.control.presentation.viewcontrol;
 
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
-public class InternalFrameAdapter implements InternalFrameListener{
+public class InternalFrameListenersClass implements InternalFrameListener{
 
 	public void internalFrameActivated(InternalFrameEvent e) {}
 	public void internalFrameClosed(InternalFrameEvent e) {}

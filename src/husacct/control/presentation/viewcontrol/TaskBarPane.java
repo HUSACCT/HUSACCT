@@ -1,4 +1,4 @@
-package husacct.control.presentation.taskbar;
+package husacct.control.presentation.viewcontrol;
 
 import java.awt.Dimension;
 

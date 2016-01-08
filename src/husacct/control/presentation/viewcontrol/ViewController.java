@@ -1,7 +1,8 @@
-package husacct.control.task;
+package husacct.control.presentation.viewcontrol;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.control.task.MainController;
 
 import java.util.ArrayList;
 import java.util.List;

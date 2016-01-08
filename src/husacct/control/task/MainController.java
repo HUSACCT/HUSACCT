@@ -3,6 +3,8 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
+import husacct.control.presentation.viewcontrol.ViewController;
+
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;

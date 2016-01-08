@@ -4,9 +4,9 @@ import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJFrame;
 import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.control.presentation.menubar.MenuBar;
-import husacct.control.presentation.taskbar.TaskBar;
-import husacct.control.presentation.taskbar.TaskBarPane;
 import husacct.control.presentation.util.ActionLogPanel;
+import husacct.control.presentation.viewcontrol.TaskBar;
+import husacct.control.presentation.viewcontrol.TaskBarPane;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
