@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import javax.swing.text.Position;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -36,6 +37,7 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 	private TextLineNumber codeLineNumber;
 
 	private ArrayList<Error> errors = new ArrayList<Error>();
+	private int firstErrorPosition = 0;
 	
 	public CodeViewInternalFrame() {
 		this.setLayout(new BorderLayout(0,5));
@@ -79,6 +81,7 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 	}
 	
 	public void parseFile(String fileName) {
+		firstErrorPosition = 0;
 		// Parse file into fileTextPane
 		try {
 			// Define style
@@ -104,6 +107,9 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 		File file = new File(fileName);
 		parser = getParser(fileName.substring(fileName.lastIndexOf(".") + 1));
 		parser.parseFile(file);
+		// Set the Carat at the line of the first error.
+		codeTextPane.setSelectionStart(firstErrorPosition);
+		codeTextPane.setSelectionEnd(firstErrorPosition);
 	}
 	
 	public void addWord(String word, Style style, int lineNumber) {
@@ -114,6 +120,9 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 				Style errorStyle = context.addStyle("default", style);
 				StyleConstants.setBackground(errorStyle, error.color);
 				codeDocument.insertString(codeDocument.getLength(), word + " ", errorStyle);
+				if (firstErrorPosition == 0) {
+					firstErrorPosition = codeDocument.getLength();
+				}
 			} else
 				codeDocument.insertString(codeDocument.getLength(), word + " ", style);
 		} catch (BadLocationException e) {
