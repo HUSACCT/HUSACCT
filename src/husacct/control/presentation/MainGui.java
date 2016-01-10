@@ -103,6 +103,7 @@ public class MainGui extends HelpableJFrame{
 		//toolBar = new ToolBar(getMenu(), mainController.getStateController()); // Disabled since it takes space and does not add much.
 		//contentPane.add(toolBar, BorderLayout.NORTH);
 		desktopPane = new JDesktopPane();
+		desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		add(contentPane);
 

@@ -65,14 +65,14 @@ abstract public class InternalFrameController {
 	public void showView(){
 		JInternalFrame  newInternalFrame = getInternalFrame();
 		if (newInternalFrame != null) {
-			if ((newInternalFrame == internalFrame) && !internalFrame.isClosed()) {
-				activateInternalFrame();
-				mainController.getMainGui().getDesktopPane().getDesktopManager().activateFrame(internalFrame);
-				mainController.getMainGui().revalidate();
-				mainController.getMainGui().getDesktopPane().repaint();
+			if ((newInternalFrame == internalFrame)) {
+				if (internalFrame.isClosed() == false) {
+					setInternalFrameAndButtonVisible();
+				} else {
+					addInternalFrame();
+				}
 			} else {
-				calculateNewStartPosition(internalFrame);
-				removeInternalFrame();
+				calculateNewStartPosition();
 				addInternalFrame();
 			}
 		}
@@ -80,9 +80,11 @@ abstract public class InternalFrameController {
 
 	private void addInternalFrame(){
 		try {
+			closeInternalFrame(); // To clean-up
 			internalFrame = getInternalFrame();
 			if (internalFrame != null) {
 				if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (mainController.getMainGui().getTaskBar() != null)) {
+					internalFrame.setVisible(true);
 					mainController.getMainGui().getDesktopPane().add(internalFrame);
 					taskBar = mainController.getMainGui().getTaskBar();
 					setupFrame();
@@ -90,7 +92,7 @@ abstract public class InternalFrameController {
 					internalFrame.setBounds(startPosition.x, startPosition.y, InternalFrameController.defaultDimension.width, InternalFrameController.defaultDimension.height);
 					internalFrame.setMaximum(isMaximixed);
 					internalFrame.setVisible(true);
-					internalFrame.toFront();
+					activateInternalFrame();
 					mainController.getMainGui().revalidate();
 					mainController.getMainGui().getDesktopPane().repaint();
 				}
@@ -107,17 +109,44 @@ abstract public class InternalFrameController {
 		internalFrame.setIconifiable(true);
 		internalFrame.setFrameIcon(frameIcon);
 		internalFrame.setClosable(true);
+		internalFrame.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
 		addListenersToInternalFrame();
 	}
 	
-	private void removeInternalFrame(){
+	public void setInternalFrameAndButtonInvisible(){
+		if (internalFrame != null) {
+			deactivateInternalFrame();
+			internalFrame.setVisible(false);
+			taskBar.removeToggleButton(toggleButton);
+			if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null)) {
+				mainController.getMainGui().getDesktopPane().validate();
+				mainController.getMainGui().repaint(); // In case a scrollbar is added to the taskbar, or removed. 
+			}
+		}
+	}
+
+	private void setInternalFrameAndButtonVisible(){
+		if (internalFrame != null) {
+			internalFrame.setVisible(true);
+			taskBar.addToggleButton(toggleButton);
+			activateInternalFrame();
+			if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null)) {
+				mainController.getMainGui().getDesktopPane().validate();
+				mainController.getMainGui().repaint(); // In case a scrollbar is added to the taskbar, or removed. 
+			}
+		}
+	}
+
+	
+	private void closeInternalFrame(){
 		if (internalFrame != null) {
 			isMaximixed = internalFrame.isMaximum(); // Store current setting; used while internal frame is added again
 			internalFrame.dispose();
+			removeListenersFromInternalFrame();
 			if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null)) {
 				mainController.getMainGui().getDesktopPane().remove(internalFrame);
+				mainController.getMainGui().getDesktopPane().validate();
 			}
-			removeListenersFromInternalFrame();
 			removeToggleButton();
 			internalFrame = null;
 		}
@@ -125,7 +154,7 @@ abstract public class InternalFrameController {
 	
 	public void closeFrame(){
 		if(internalFrame != null) {
-			removeInternalFrame();
+			closeInternalFrame();
 		}
 	}
 
@@ -140,7 +169,7 @@ abstract public class InternalFrameController {
 		lastStartPosition = new Point(0, 0);
 	}
 
-	private void calculateNewStartPosition(JInternalFrame internalFrame){
+	private void calculateNewStartPosition(){
 		if(internalFrame == null){ // Only do it the first time for a specific internal frame. 
 			int newX = InternalFrameController.lastStartPosition.x + InternalFrameController.positionIncrement.x;
 			int newY = InternalFrameController.lastStartPosition.y + InternalFrameController.positionIncrement.y;
@@ -155,12 +184,17 @@ abstract public class InternalFrameController {
 			public void internalFrameActivated(InternalFrameEvent e) {
 				activateInternalFrame();
 			}
+
 			@Override
 			public void internalFrameDeactivated(InternalFrameEvent e) {
 				deactivateInternalFrame();
+
 			}
 			public void internalFrameClosing(InternalFrameEvent e) {
-				removeInternalFrame();
+				setInternalFrameAndButtonInvisible();
+			}
+
+			public void internalFrameClosed(InternalFrameEvent e) {
 			}
 
 			@Override
@@ -197,11 +231,15 @@ abstract public class InternalFrameController {
 	
 	private void activateInternalFrame(){
 		try {
-			internalFrame.setIcon(false);
-			internalFrame.toFront();
-			internalFrame.setSelected(true);
-			DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
-			manager.activateFrame(internalFrame);
+			if ((internalFrame != null) && (internalFrame.getDesktopPane() != null)) {
+				if ( internalFrame.isIcon() == true) {
+					internalFrame.setIcon(false);
+				}
+				internalFrame.toFront();
+				internalFrame.setSelected(true);
+				DesktopManager manager = internalFrame.getDesktopPane().getDesktopManager();
+				manager.activateFrame(internalFrame);
+			}
 		} catch (Exception event) {
 			logger.error(event.getMessage());
 			event.printStackTrace();
@@ -263,6 +301,9 @@ abstract public class InternalFrameController {
 		}
 	}
 
+	/* 
+	 * Adding a button to the taskbar may cause the appearance of scrollbars, which causes a change in size of the taskbar.  
+	 */
 	private void createToggleButton() {
 		toggleButton = new JToggleButton(internalFrame.getTitle());
 		toggleButton.setIcon(internalFrame.getFrameIcon());
@@ -277,9 +318,11 @@ abstract public class InternalFrameController {
 			}
 		};
 		toggleButton.addActionListener(toggleButtonActionListener);
-		activateInternalFrame();
 	}
 
+	/* 
+	 *   Removing the button from the taskbar may cause the disappearance of scrollbars, which causes a change in size of the taskbar.
+	 */
 	private void removeToggleButton() {
 		taskBar.removeToggleButton(toggleButton);
 		toggleButton.removeMouseListener(toggleButtonContextClickListener);

@@ -64,7 +64,7 @@ public class ToolBarButtonContextMenu extends JPopupMenu{
 		close.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				internalFrameController.closeFrame();
+				internalFrameController.setInternalFrameAndButtonInvisible();
 			}
 		});
 	}
