@@ -23,7 +23,7 @@ public final class ServiceProvider {
 	private static ServiceProvider _instance;
 
 	private ILocaleService localeService;
-	private IControlService controlService;
+	private ControlServiceImpl controlService;
 	private IAnalyseService analyseService;
 	private IDefineService defineService;
 	private IValidateService validateService;
@@ -55,6 +55,7 @@ public final class ServiceProvider {
 		this.defineService = new DefineServiceImpl();
 		this.validateService = new ValidateServiceImpl();
 		this.graphicsService = new GraphicsServiceImpl();
+		this.controlService.getMainController().initialiseCodeViewerController();
 		this.controlService.setServiceListeners();
 	}
 	

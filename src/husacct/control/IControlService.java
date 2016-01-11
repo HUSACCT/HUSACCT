@@ -8,7 +8,6 @@ import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,7 +30,6 @@ public interface IControlService extends IObservableService{
 	
 	public ApplicationDTO getApplicationDTO();
 	
-	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors);
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors);
 	public void displayErrorInFile(String fileName, int lineNumber, Severity severity);
 	

@@ -47,7 +47,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ApplicationController applicationController;
 	private StateController stateController;
 	private ViewController viewController;
-	private CodeViewController codeViewController;
 	private GeneralConfigurationPanel generalConfigurationPanel;
 	private FileController fileController;
 	
@@ -60,7 +59,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
 		mainController.initialiseCodeViewerController();
-		codeViewController = mainController.getCodeViewerController();
 		fileController = mainController.getFileController();
 		setDefaultSettings();
 	}
@@ -178,20 +176,15 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
-		codeViewController.displayErrorsInFile(fileName, errors);
-	}
-	
-	@Override
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
-		codeViewController.displayErrorsInFile(fileName, errors);
+		mainController.getCodeViewerController().displayErrorsInFile(fileName, errors);
 	}
 
 	@Override
 	public void displayErrorInFile(String fileName, int lineNumber, Severity severity) {
 		HashMap<Integer, Severity> errors = new HashMap<Integer, Severity>();
 		errors.put(lineNumber, severity);
-		codeViewController.displayErrorsInFile(fileName, errors);
+		mainController.getCodeViewerController().displayErrorsInFile(fileName, errors);
 	}
 	
 	@Override

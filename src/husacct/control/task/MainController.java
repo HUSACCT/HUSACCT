@@ -48,6 +48,7 @@ public class MainController {
 		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
 		this.actionLogController = new ActionLogController(this);
 		this.fileController = new FileController(this);
+		this.codeViewController = new CodeViewController(this);
 	}
 
 	private void setAppleProperties(){

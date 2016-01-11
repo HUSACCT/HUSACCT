@@ -5,25 +5,15 @@ import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.workspace.loaders.LoaderPanel;
 import husacct.control.presentation.workspace.loaders.LoaderPanelFactory;
 import husacct.control.task.MainController;
-import husacct.control.task.resources.ResourceFactory;
-
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings("serial")
 public class OpenWorkspaceDialog extends JDialog{

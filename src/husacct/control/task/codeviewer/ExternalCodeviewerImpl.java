@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EclipseCodeviewerImpl implements CodeviewerService {
+public class ExternalCodeviewerImpl implements CodeviewerService {
 	
 	
-	public EclipseCodeviewerImpl () {}
+	public ExternalCodeviewerImpl () {}
 	
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
