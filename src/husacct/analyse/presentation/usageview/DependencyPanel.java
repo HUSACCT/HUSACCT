@@ -1,6 +1,8 @@
-package husacct.analyse.presentation;
+package husacct.analyse.presentation.usageview;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.AnalyseUIController;
+import husacct.analyse.presentation.SoftwareTreeCellRenderer;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -36,7 +38,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, ActionListener {
+public class DependencyPanel extends HelpableJPanel implements TreeSelectionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");

@@ -8,9 +8,7 @@ import husacct.control.task.MainController;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,12 +27,11 @@ public class AboutDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 
 	private Image  img = null;
-	private JPanel logoPanel, textPanel, gitForkPanel;
+	private JPanel textPanel, gitForkPanel;
 	private JLabel forkLabel,pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
 	private JButton okButton, creditsButton;
-	private String versionNumber = "4.4.1";
+	private String versionNumber = "4.4.2";
 	private MainController mainController;
-	private GridBagConstraints constraint = new GridBagConstraints();
 	private JPanel forkLabelPanel;
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -143,7 +140,7 @@ public class AboutDialog extends JDialog{
 		});
 		creditsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CreditsDialog cd = new CreditsDialog(mainController);
+				new CreditsDialog(mainController);
 			}
 		});
 		forkLabelPanel.addMouseListener(new MouseListener() {
@@ -174,14 +171,6 @@ public class AboutDialog extends JDialog{
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 		});		
-	}
-
-	private GridBagConstraints getConstraint(int gridx, int gridy){
-		constraint.fill = GridBagConstraints.BOTH;
-		constraint.insets = new Insets(3, 3, 3, 3);
-		constraint.gridx = gridx;
-		constraint.gridy = gridy;
-		return constraint;		
 	}
 
 }

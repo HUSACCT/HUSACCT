@@ -1,10 +1,12 @@
-package husacct.analyse.presentation;
+package husacct.analyse.presentation.decompositionview;
 
+import husacct.analyse.presentation.AnalyseUIController;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 
 import java.awt.Color;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.UIManager;

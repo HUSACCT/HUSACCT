@@ -49,7 +49,6 @@ public class CodeViewController {
 		else{
 			// Path empty, thus not found, show error.
 			String message = ServiceProvider.getInstance().getLocaleService().getTranslatedString("CodeViewerNoSourceMsg") + " " + fileName;
-
 			JOptionPane.showMessageDialog(
 				null,
 				message,

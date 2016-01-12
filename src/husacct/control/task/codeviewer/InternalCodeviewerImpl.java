@@ -21,14 +21,6 @@ public class InternalCodeviewerImpl implements CodeviewerService {
 	}
 	
 	@Override
-	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
-		codeViewer.reset();
-		codeViewer.setErrorLines(errorLines);
-		codeViewer.parseFile(fileName);
-		mainController.getViewController().showCodeViewer();
-	}
-
-	@Override
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
 		codeViewer.reset();
 		ArrayList<Error> errorList = new ArrayList<Error>();

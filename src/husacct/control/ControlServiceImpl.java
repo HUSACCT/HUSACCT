@@ -12,7 +12,6 @@ import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.presentation.viewcontrol.ViewController;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
-import husacct.control.task.CodeViewController;
 import husacct.control.task.FileController;
 import husacct.control.task.IFileChangeListener;
 import husacct.control.task.MainController;
@@ -183,7 +182,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void displayErrorInFile(String fileName, int lineNumber, Severity severity) {
 		HashMap<Integer, Severity> errors = new HashMap<Integer, Severity>();
-		errors.put(lineNumber, severity);
+		if ((lineNumber > 0) && (severity != null)) {
+			errors.put(lineNumber, severity);
+		}
 		mainController.getCodeViewerController().displayErrorsInFile(fileName, errors);
 	}
 	

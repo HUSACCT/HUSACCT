@@ -11,13 +11,13 @@ import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
+public class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = 1L;
     private JLabel label;
     private AnalyseUIController uiController;
 
-    SoftwareTreeCellRenderer(AnalyseUIController uiController) {
+    public SoftwareTreeCellRenderer(AnalyseUIController uiController) {
         label = new JLabel();
         label.setOpaque(true);
         this.uiController = uiController;

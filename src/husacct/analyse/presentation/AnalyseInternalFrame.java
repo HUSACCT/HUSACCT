@@ -1,6 +1,8 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.decompositionview.ApplicationStructurePanel;
+import husacct.analyse.presentation.usageview.DependencyPanel;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;
 

@@ -5,8 +5,8 @@ import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
-import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
+import husacct.define.presentation.moduletree.ModuletreeContextMenu;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.components.AbstractDefineComponent;
@@ -60,22 +60,15 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	}
 
-	/**
-	 * Handling ActionPerformed
-	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == newModuleButton
-				|| action.getSource() == addModuleItem) {
+		if (action.getSource() == newModuleButton || action.getSource() == addModuleItem) {
 			newModule();
-		} else if (action.getSource() == removeModuleButton
-				|| action.getSource() == removeModuleItem) {
+		} else if (action.getSource() == removeModuleButton || action.getSource() == removeModuleItem) {
 			removeModule();
-		} else if (action.getSource() == moveModuleUpButton
-				|| action.getSource() == moveModuleUpItem) {
+		} else if (action.getSource() == moveModuleUpButton || action.getSource() == moveModuleUpItem) {
 			moveLayerUp();
-		} else if (action.getSource() == moveModuleDownButton
-				|| action.getSource() == moveModuleDownItem) {
+		} else if (action.getSource() == moveModuleDownButton || action.getSource() == moveModuleDownItem) {
 			moveLayerDown();
 		}
 		updateModuleTree();
@@ -113,8 +106,7 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 	// Has side effects, might wanna change?
 	public void checkLayerComponentIsSelected() {
 		TreePath path = moduleTree.getSelectionPath();
-		if (path != null
-				&& path.getLastPathComponent() instanceof LayerComponent) {
+		if ((path != null) && (path.getLastPathComponent() instanceof LayerComponent)) {
 			enableMoveLayerObjects();
 		} else {
 			disableMoveLayerObjects();
@@ -134,10 +126,8 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 		JPanel innerModulePanel = new JPanel();
 		BorderLayout innerModulePanelLayout = new BorderLayout();
 		innerModulePanel.setLayout(innerModulePanelLayout);
-		innerModulePanel.setBorder(BorderFactory
-				.createTitledBorder(ServiceProvider.getInstance()
-						.getLocaleService()
-						.getTranslatedString("ModuleHierachy")));
+		innerModulePanel.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance()
+			.getLocaleService().getTranslatedString("ModuleHierachy")));
 		innerModulePanel.add(createModuleTreePanel(), BorderLayout.CENTER);
 		innerModulePanel.add(addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
@@ -145,12 +135,10 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	private JPanel createModuleTreePanel() {
 		JPanel moduleTreePanel = new JPanel();
-
 		BorderLayout moduleTreePanelLayout = new BorderLayout();
 		moduleTreePanel.setLayout(moduleTreePanelLayout);
 		createModuleTreeScrollPane();
 		moduleTreePanel.add(moduleTreeScrollPane, BorderLayout.CENTER);
-
 		return moduleTreePanel;
 	}
 
@@ -162,8 +150,7 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	private void createPopup(MouseEvent event) {
 		if (SwingUtilities.isRightMouseButton(event)) {
-			int row = moduleTree.getClosestRowForLocation(event.getX(),
-					event.getY());
+			int row = moduleTree.getClosestRowForLocation(event.getX(), event.getY());
 			moduleTree.setSelectionRow(row);
 			checkLayerComponentIsSelected();
 			popupMenu.show(moduleTree, event.getX(), event.getY());
@@ -171,17 +158,13 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 	}
 
 	private void createPopupMenu() {
-		addModuleItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("NewModule"));
+		addModuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
 		addModuleItem.addActionListener(this);
-		removeModuleItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("RemoveModule"));
+		removeModuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveModule"));
 		removeModuleItem.addActionListener(this);
-		moveModuleUpItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("MoveUp"));
+		moveModuleUpItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveUp"));
 		moveModuleUpItem.addActionListener(this);
-		moveModuleDownItem = new JMenuItem(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("MoveDown"));
+		moveModuleDownItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveDown"));
 		moveModuleDownItem.addActionListener(this);
 
 		popupMenu.add(addModuleItem);
@@ -221,8 +204,7 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 		setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		this.add(createInnerModulePanel(), BorderLayout.CENTER);
 		updateModuleTree();
-		ServiceProvider.getInstance().getControlService()
-				.addServiceListener(this);
+		ServiceProvider.getInstance().getControlService().addServiceListener(this);
 		createPopupMenu();
 	}
 
@@ -337,12 +319,10 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 			public void mouseClicked(MouseEvent event) {
 				createPopup(event);
 			}
-
 			@Override
 			public void mouseEntered(MouseEvent event) {
 				createPopup(event);
 			}
-
 			@Override
 			public void mousePressed(MouseEvent event) {
 				createPopup(event);

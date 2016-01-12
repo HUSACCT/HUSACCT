@@ -1,5 +1,6 @@
-package husacct.analyse.presentation;
+package husacct.analyse.presentation.usageview;
 
+import husacct.analyse.presentation.AnalyseUIController;
 import husacct.common.dto.DependencyDTO;
 
 import java.util.ArrayList;
@@ -74,7 +75,8 @@ class DependencyTableModel extends AbstractTableModel {
     }
 
     //JTable uses this method to determine the default renderer/editor for each cell.  
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Class getColumnClass(int c) {
         if (c == 3) {
             return new Integer(5).getClass();
