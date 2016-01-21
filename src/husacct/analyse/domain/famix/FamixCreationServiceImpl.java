@@ -240,6 +240,19 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
+    public void createDependencyOnParameterTypeOfGeneric(String belongsToClass, String belongsToMethod, int lineNumber, String typeOfDeclaration, String parameterType) {
+    	// Currently, the generic type and its parameter(s) are not created as FamixObjects.
+    	// Only the association is created, necessary to report the dependency.
+        FamixAssociation fAssocation = new FamixAssociation();
+        fAssocation.from = belongsToClass;
+        fAssocation.to = parameterType;
+        fAssocation.type = "Declaration";
+        fAssocation.subType = "Generic Type Parameter";
+        fAssocation.lineNumber = lineNumber;
+        model.waitingAssociations.add(fAssocation);
+    }
+
+     @Override
     public void createAnnotation(String belongsToClass, String declareType, String name,
             String uniqueName, int linenumber) {
 

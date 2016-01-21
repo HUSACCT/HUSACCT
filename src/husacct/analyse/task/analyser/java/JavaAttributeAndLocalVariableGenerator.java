@@ -1,8 +1,11 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.LinkedList;
+
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -10,6 +13,9 @@ class JavaAttributeAndLocalVariableGenerator {
 
     private boolean hasClassScope;
     private boolean isFinal;
+    private boolean isLocalVariable;
+    private boolean mayContainMultipleValues;
+    private String typeInClassDiagram;
     private String name;
     private String accessControlQualifier;
     private String belongsToClass;
@@ -20,15 +26,19 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
         /* Test helpers
-    	if (belongsToClass.contains("technology.direct.dao.UserDAO")) {
+    	if (belongsToClass.contains("domain.direct.violating.DeclarationVariableInstance_Generic_ArrayList")) {
     				boolean breakpoint = true;
     	} */
+        initialize();
+    	this.isLocalVariable = false;
         this.belongsToClass = belongsToClass;
         startFiltering(attributeTree, belongsToClass);
         createAttributeObject();
     }
 
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
+        initialize();
+        this.isLocalVariable = true;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         startFiltering(attributeTree, belongsToClass);
@@ -36,6 +46,8 @@ class JavaAttributeAndLocalVariableGenerator {
     }
 
     public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
+        initialize();
+        this.isLocalVariable = true;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         this.name = name;
@@ -44,12 +56,26 @@ class JavaAttributeAndLocalVariableGenerator {
         createLocalVariableObject();
     }
 
+    private void initialize(){
+        hasClassScope = false;
+        isFinal = false;
+        isLocalVariable = false;
+        mayContainMultipleValues = false;
+        typeInClassDiagram = "";
+        name = "";
+        accessControlQualifier = "";
+        belongsToClass = "";
+        belongsToMethod = "";
+        declareType = "";
+        lineNumber = 0;
+    }
+    
     private void startFiltering(Tree attributeTree, String belongsToClass) {
         CommonTree currentTree = (CommonTree) attributeTree;
         CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);
         if (IdentTree != null) {
             this.name = IdentTree.getText();
-        }
+        } 
         walkThroughAST(attributeTree);
     }
 
@@ -68,7 +94,37 @@ class JavaAttributeAndLocalVariableGenerator {
             	break;
             case JavaParser.TYPE:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-                this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+                // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
+                CommonTree genericType = getFirstDescendantWithType((CommonTree) child, JavaParser.GENERIC_TYPE_ARG_LIST);
+                if (genericType != null) {
+                	this.declareType = genericType.getParent().getText(); // Container type, e.g. ArrayList;
+                	this.mayContainMultipleValues = true;
+                	
+                    int numberOfTypeParameters = genericType.getChildCount();
+                    for (int j = 0; j < numberOfTypeParameters; j++) {
+                    	// TO DO: Check if it contains a generic type arg list. If so, call method to handle (and skip part below). Check also within that method. Reuse this part.
+                        CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
+                        CommonTree qualifiedType = getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
+                        if (qualifiedType != null) {
+                        	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType);
+    	                    if (parameterTypeOfGeneric != null) {
+        	                    if (numberOfTypeParameters == 1) {
+     	                    		this.typeInClassDiagram = parameterTypeOfGeneric;
+        	                    }
+    	                    	int currentLineNumber = qualifiedType.getLine();
+    	                    	String typeOfDeclaration = "InstanceVariable";
+    	                    	if (isLocalVariable) {
+    	                    		typeOfDeclaration = "LocalVariable";
+    	                    	} else if (hasClassScope) {
+    	                    		typeOfDeclaration = "ClassVariable";
+    	                    	}
+    	                    	modelService.createDependencyOnParameterTypeOfGeneric(belongsToClass, belongsToMethod, currentLineNumber, typeOfDeclaration, parameterTypeOfGeneric);
+    	                    }
+                         }
+                    }
+                } else {
+                	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+                }
                 walkThroughChildren = false;
             	break;
             case JavaParser.VAR_DECLARATOR:
@@ -78,6 +134,8 @@ class JavaAttributeAndLocalVariableGenerator {
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 walkThroughChildren = false;
+            	break;
+            case JavaParser.GENERIC_TYPE_ARG_LIST:
             	break;
             case JavaParser.METHOD_CALL:
             	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
@@ -168,4 +226,33 @@ class JavaAttributeAndLocalVariableGenerator {
         }
     }
 
+    /**
+     * Gets a descendant from a ancestor with a certain type. This method walks
+     * the tree breadth-first, to make sure it is the closest relative from the ancestor.
+     */
+    private static CommonTree getFirstDescendantWithType(CommonTree root, int type) {
+    	LinkedList<CommonTree> queue = new LinkedList<>();
+    	queue.add(root);
+    	while(!queue.isEmpty()) {
+    		CommonTree first = queue.removeFirst();
+    		for (int i = 0; i < first.getChildCount(); i++) {
+    			CommonTree child = (CommonTree)first.getChild(i);
+    			if (isOfType(child, type))
+    				return child;
+    			queue.addLast(child);
+    		}
+    	}
+    	return null;
+    }
+    
+    /**
+     * Checks whether or not a tree is of a certain type, including null-check
+     */
+    private static boolean isOfType(CommonTree tree, int type) {
+        if (tree == null) {
+            return false;
+        }
+        return tree.getType() == type;
+    }
+    
 }

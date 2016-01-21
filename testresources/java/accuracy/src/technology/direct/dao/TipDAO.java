@@ -1,7 +1,5 @@
 package technology.direct.dao;
 
-import husacct.validate.domain.validation.DefaultSeverities;
-
 public enum TipDAO {
 	ONE,TWO,THREE,FOUR;
 	
