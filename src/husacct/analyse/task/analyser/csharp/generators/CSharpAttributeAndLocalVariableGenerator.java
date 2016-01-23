@@ -46,9 +46,9 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	private void createAttributeObject() {
 		if ((declareType != null) && !declareType.equals("")) {
 			if(SkippableTypes.isSkippable(declareType)){
-				modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+				modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, "", false);
 	        } else {
-	        	modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber);
+	        	modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, "", false);
 			}
 		}
 		declareType = "";

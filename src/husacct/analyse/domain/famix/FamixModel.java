@@ -51,7 +51,7 @@ class FamixModel extends FamixObject {
         try{
     	if (e instanceof FamixEntity) {
         	// Test Utility
-    		//if (((FamixEntity) e).uniqueName.contains("org.dtangler.swingui.aboutinfodisplayer.impl.AboutInfoView.Actions")) {
+    		//if (((FamixEntity) e).uniqueName.contains("xxx")) {
         	//	String test = "breakpoint"; }
             if (e instanceof FamixBehaviouralEntity) {
                 behaviouralEntities.put(((FamixEntity) e).uniqueName, (FamixBehaviouralEntity) e);

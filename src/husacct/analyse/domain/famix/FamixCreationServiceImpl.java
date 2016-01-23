@@ -140,7 +140,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
     @Override
     public void createAttributeOnly(boolean classScope, boolean isFinal, String accesControlQualifier,
-            String belongsToClass, String declareType, String name, String uniqueName, int line) {
+            String belongsToClass, String declareType, String name, String uniqueName, int line, String typeInClassDiagram, boolean multipleValues) {
+
         FamixAttribute famixAttribute = new FamixAttribute();
         famixAttribute.hasClassScope = classScope;
         famixAttribute.isFinal = isFinal;
@@ -150,14 +151,16 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.name = name;
         famixAttribute.uniqueName = uniqueName;
         famixAttribute.lineNumber = line;
+        famixAttribute.typeInClassDiagram = typeInClassDiagram;
+        famixAttribute.multipleValues = multipleValues;
         model.waitingStructuralEntities.add(famixAttribute);
     }
 
     @Override
     public void createAttribute(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass,
-            String declareType, String name, String uniqueName, int line) {
+            String declareType, String name, String uniqueName, int line, String typeInClassDiagram, boolean multipleValues) {
     	
-    	createAttributeOnly(classScope, isFinal, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line);
+    	createAttributeOnly(classScope, isFinal, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line, "", false);
         
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -190,6 +193,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     @Override
     public void createLocalVariableOnly(String belongsToClass, String declareType, String name,
             String uniqueName, int lineNumber, String belongsToMethodString) {
+    	
         FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
         famixLocalVariable.belongsToMethod = belongsToMethodString;
         famixLocalVariable.belongsToClass = belongsToClass;
@@ -240,9 +244,9 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void createDependencyOnParameterTypeOfGeneric(String belongsToClass, String belongsToMethod, int lineNumber, String typeOfDeclaration, String parameterType) {
-    	// Currently, the generic type and its parameter(s) are not created as FamixObjects.
-    	// Only the association is created, necessary to report the dependency.
+    public void createGenericParameterType(String belongsToClass, String belongsToMethod, int lineNumber, String parameterType) {
+    	// Currently, the generic parameter type (and the generic type itself) is not created as FamixObject.
+    	// Only the association is created, necessary to report the dependency on the declared type.
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = parameterType;

@@ -10,18 +10,20 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class JavaAttributeAndLocalVariableGenerator {
-
-    private boolean hasClassScope;
-    private boolean isFinal;
-    private boolean isLocalVariable;
-    private boolean mayContainMultipleValues;
-    private String typeInClassDiagram;
+	// Attributes of the to-be-created variable
     private String name;
     private String accessControlQualifier;
+    private boolean hasClassScope;
+    private boolean isFinal;
     private String belongsToClass;
-    private String declareType;
     private int lineNumber;
     private String belongsToMethod;
+    private String declareType;			// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is ArrayList.
+    private String typeInClassDiagram; 	// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is Person.
+    private boolean multipleValues; 	// False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[]. 
+
+    private int levelOfRecursionWithinGenericType;
+
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
@@ -30,7 +32,6 @@ class JavaAttributeAndLocalVariableGenerator {
     				boolean breakpoint = true;
     	} */
         initialize();
-    	this.isLocalVariable = false;
         this.belongsToClass = belongsToClass;
         startFiltering(attributeTree, belongsToClass);
         createAttributeObject();
@@ -38,7 +39,6 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
         initialize();
-        this.isLocalVariable = true;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         startFiltering(attributeTree, belongsToClass);
@@ -47,7 +47,6 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
         initialize();
-        this.isLocalVariable = true;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         this.name = name;
@@ -59,8 +58,7 @@ class JavaAttributeAndLocalVariableGenerator {
     private void initialize(){
         hasClassScope = false;
         isFinal = false;
-        isLocalVariable = false;
-        mayContainMultipleValues = false;
+        multipleValues = false;
         typeInClassDiagram = "";
         name = "";
         accessControlQualifier = "";
@@ -68,6 +66,7 @@ class JavaAttributeAndLocalVariableGenerator {
         belongsToMethod = "";
         declareType = "";
         lineNumber = 0;
+        levelOfRecursionWithinGenericType = 0;
     }
     
     private void startFiltering(Tree attributeTree, String belongsToClass) {
@@ -95,33 +94,11 @@ class JavaAttributeAndLocalVariableGenerator {
             case JavaParser.TYPE:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
-                CommonTree genericType = getFirstDescendantWithType((CommonTree) child, JavaParser.GENERIC_TYPE_ARG_LIST);
+                CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) child, JavaParser.GENERIC_TYPE_ARG_LIST);
                 if (genericType != null) {
                 	this.declareType = genericType.getParent().getText(); // Container type, e.g. ArrayList;
-                	this.mayContainMultipleValues = true;
-                	
-                    int numberOfTypeParameters = genericType.getChildCount();
-                    for (int j = 0; j < numberOfTypeParameters; j++) {
-                    	// TO DO: Check if it contains a generic type arg list. If so, call method to handle (and skip part below). Check also within that method. Reuse this part.
-                        CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
-                        CommonTree qualifiedType = getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
-                        if (qualifiedType != null) {
-                        	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType);
-    	                    if (parameterTypeOfGeneric != null) {
-        	                    if (numberOfTypeParameters == 1) {
-     	                    		this.typeInClassDiagram = parameterTypeOfGeneric;
-        	                    }
-    	                    	int currentLineNumber = qualifiedType.getLine();
-    	                    	String typeOfDeclaration = "InstanceVariable";
-    	                    	if (isLocalVariable) {
-    	                    		typeOfDeclaration = "LocalVariable";
-    	                    	} else if (hasClassScope) {
-    	                    		typeOfDeclaration = "ClassVariable";
-    	                    	}
-    	                    	modelService.createDependencyOnParameterTypeOfGeneric(belongsToClass, belongsToMethod, currentLineNumber, typeOfDeclaration, parameterTypeOfGeneric);
-    	                    }
-                         }
-                    }
+                	this.multipleValues = true;
+                	addGenericTypeParameters(genericType);
                 } else {
                 	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
                 }
@@ -158,15 +135,42 @@ class JavaAttributeAndLocalVariableGenerator {
         }
     }
 
-    private void createAttributeObject() {
+    private void addGenericTypeParameters(CommonTree genericType) {
+    	JavaInvocationGenerator javaInvocationGenerator = null;
+        int numberOfTypeParameters = genericType.getChildCount();
+        for (int j = 0; j < numberOfTypeParameters; j++) {
+            CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
+        	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
+            CommonTree genericTypeRecursive = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, JavaParser.GENERIC_TYPE_ARG_LIST);
+            if (genericTypeRecursive != null) {
+            	levelOfRecursionWithinGenericType ++; // Needed to prevent that this.typeInClassDiagram is set with a type included in a recursive generic type. 
+            	addGenericTypeParameters(genericTypeRecursive);
+            } else {
+	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
+	            if (qualifiedType != null) {
+	                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType);
+	                if (parameterTypeOfGeneric != null) {
+	                    if ((numberOfTypeParameters == 1) && (levelOfRecursionWithinGenericType == 0)) {
+	                 		this.typeInClassDiagram = parameterTypeOfGeneric;
+	                    }
+	                	int currentLineNumber = qualifiedType.getLine();
+	                	modelService.createGenericParameterType(belongsToClass, belongsToMethod, currentLineNumber, parameterTypeOfGeneric);
+	                }
+	            }
+            }
+        }
+	}
+
+	private void createAttributeObject() {
     	if ((declareType != null) && !declareType.trim().equals("")) {
     		if (declareType.endsWith(".")) {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {
-	            modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+	            modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, multipleValues);
 	        } else {
-	            modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+	            modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, multipleValues);
 	        }
 	        declareType = "";
     	}
@@ -226,33 +230,4 @@ class JavaAttributeAndLocalVariableGenerator {
         }
     }
 
-    /**
-     * Gets a descendant from a ancestor with a certain type. This method walks
-     * the tree breadth-first, to make sure it is the closest relative from the ancestor.
-     */
-    private static CommonTree getFirstDescendantWithType(CommonTree root, int type) {
-    	LinkedList<CommonTree> queue = new LinkedList<>();
-    	queue.add(root);
-    	while(!queue.isEmpty()) {
-    		CommonTree first = queue.removeFirst();
-    		for (int i = 0; i < first.getChildCount(); i++) {
-    			CommonTree child = (CommonTree)first.getChild(i);
-    			if (isOfType(child, type))
-    				return child;
-    			queue.addLast(child);
-    		}
-    	}
-    	return null;
-    }
-    
-    /**
-     * Checks whether or not a tree is of a certain type, including null-check
-     */
-    private static boolean isOfType(CommonTree tree, int type) {
-        if (tree == null) {
-            return false;
-        }
-        return tree.getType() == type;
-    }
-    
 }

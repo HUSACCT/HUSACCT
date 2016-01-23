@@ -101,6 +101,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
     private int numberOf_Declaration_LocalVariable = 0;
     private int numberOf_Declaration_Parameter = 0;
     private int numberOf_Declaration_ReturnType = 0;
+    private int numberOf_Declaration_GenericTypeParameter = 0;
     private int numberOf_Reference_TypeCast = 0;
     private int numberOf_Declaration_Exception = 0;
     private int numberOf_Inheritance_ExtendsClass = 0;
@@ -274,6 +275,8 @@ public class ExcelExporter extends AbstractReportFileExporter {
         		numberOf_Declaration_ReturnType ++;
         	} else if (dependency.subType.equals("Exception")) {
         		numberOf_Declaration_Exception ++;
+        	} else if (dependency.subType.equals("Generic Type Parameter")) {
+        		numberOf_Declaration_GenericTypeParameter ++;
         	}
     	    break;
     	case "Annotation":
@@ -599,7 +602,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
 
         addCellBold(sheet, 0, 44, "Declaration");
         int declarationTotalSubTypes = numberOf_Declaration_ClassVariable + numberOf_Declaration_Exception + numberOf_Declaration_InstanceVariable 
-        		+ numberOf_Declaration_LocalVariable + numberOf_Declaration_Parameter + numberOf_Declaration_ReturnType;
+        		+ numberOf_Declaration_LocalVariable + numberOf_Declaration_Parameter + numberOf_Declaration_ReturnType + numberOf_Declaration_GenericTypeParameter;
         addCellNumber(sheet, 1, 44, declarationTotalSubTypes);
         if (declarationTotalSubTypes != numberOfAllDependencies_Declaration) {
             addCellDefault(sheet, 2, 44, "Warning: Total of subTypes does not match total of types");
@@ -616,42 +619,44 @@ public class ExcelExporter extends AbstractReportFileExporter {
         addCellNumber(sheet, 1, 49, numberOf_Declaration_Parameter);
         addCellDefault(sheet, 0, 50, "Return Type");
         addCellNumber(sheet, 1, 50, numberOf_Declaration_ReturnType);
+        addCellDefault(sheet, 0, 51, "Generic Type Parameter");
+        addCellNumber(sheet, 1, 51, numberOf_Declaration_GenericTypeParameter);
 
-        addCellBold(sheet, 0, 52, "Inheritance");
+        addCellBold(sheet, 0, 53, "Inheritance");
         int InheritanceTotalSubTypes = numberOf_Inheritance_ExtendsClass + numberOf_Inheritance_ExtendsAbstractClass 
         		+ numberOf_Inheritance_ÏmplementsInterface + numberOf_Inheritance_FromLibraryClass;
-        addCellNumber(sheet, 1, 52, InheritanceTotalSubTypes);
+        addCellNumber(sheet, 1, 53, InheritanceTotalSubTypes);
         if (InheritanceTotalSubTypes != numberOfAllDependencies_Inheritance) {
-            addCellDefault(sheet, 2, 52, "Warning: Total of subTypes does not match total of types");
+            addCellDefault(sheet, 2, 53, "Warning: Total of subTypes does not match total of types");
         }
-        addCellDefault(sheet, 0, 53, "Extends Class");
-        addCellNumber(sheet, 1, 53, numberOf_Inheritance_ExtendsClass);
-        addCellDefault(sheet, 0, 54, "Extends Abstract Class");
-        addCellNumber(sheet, 1, 54, numberOf_Inheritance_ExtendsAbstractClass);
-        addCellDefault(sheet, 0, 55, "Implements Interface");
-        addCellNumber(sheet, 1, 55, numberOf_Inheritance_ÏmplementsInterface);
-        addCellDefault(sheet, 0, 56, "From Library Class");
-        addCellNumber(sheet, 1, 56, numberOf_Inheritance_FromLibraryClass);
+        addCellDefault(sheet, 0, 54, "Extends Class");
+        addCellNumber(sheet, 1, 54, numberOf_Inheritance_ExtendsClass);
+        addCellDefault(sheet, 0, 55, "Extends Abstract Class");
+        addCellNumber(sheet, 1, 55, numberOf_Inheritance_ExtendsAbstractClass);
+        addCellDefault(sheet, 0, 56, "Implements Interface");
+        addCellNumber(sheet, 1, 56, numberOf_Inheritance_ÏmplementsInterface);
+        addCellDefault(sheet, 0, 57, "From Library Class");
+        addCellNumber(sheet, 1, 57, numberOf_Inheritance_FromLibraryClass);
 
-        addCellBold(sheet, 0, 58, "Reference");
+        addCellBold(sheet, 0, 59, "Reference");
         int referenceTotalSubTypes = numberOf_Reference_Type + numberOf_Reference_ReferenceReturnTypeUsedMethod 
         		+ numberOf_Reference_ReferenceTypeOfUsedVariable + numberOf_Reference_TypeCast;
-        addCellNumber(sheet, 1, 58, referenceTotalSubTypes);
+        addCellNumber(sheet, 1, 59, referenceTotalSubTypes);
         if (referenceTotalSubTypes != numberOfAllDependencies_Reference) {
-            addCellDefault(sheet, 2, 58, "Warning: Total of subTypes does not match total of types");
+            addCellDefault(sheet, 2, 59, "Warning: Total of subTypes does not match total of types");
         }
-        addCellDefault(sheet, 0, 59, "Type");
-        addCellNumber(sheet, 1, 59, numberOf_Reference_Type);
-        addCellDefault(sheet, 0, 60, "Type Cast");
-        addCellNumber(sheet, 1, 60, numberOf_Reference_TypeCast);
-        addCellDefault(sheet, 0, 61, "Return Type");
-        addCellNumber(sheet, 1, 61, numberOf_Reference_ReferenceReturnTypeUsedMethod);
-        addCellNumber(sheet, 2, 61, numberOf_Reference_ReferenceReturnTypeUsedMethod_Direct);
-        addCellNumber(sheet, 3, 61, numberOf_Reference_ReferenceReturnTypeUsedMethod_Indirect);
-        addCellDefault(sheet, 0, 62, "Type of Variable");
-        addCellNumber(sheet, 1, 62, numberOf_Reference_ReferenceTypeOfUsedVariable);
-        addCellNumber(sheet, 2, 62, numberOf_Reference_ReferenceTypeOfUsedVariable_Direct);
-        addCellNumber(sheet, 3, 62, numberOf_Reference_ReferenceTypeOfUsedVariable_Indirect);
+        addCellDefault(sheet, 0, 60, "Type");
+        addCellNumber(sheet, 1, 60, numberOf_Reference_Type);
+        addCellDefault(sheet, 0, 61, "Type Cast");
+        addCellNumber(sheet, 1, 61, numberOf_Reference_TypeCast);
+        addCellDefault(sheet, 0, 62, "Return Type");
+        addCellNumber(sheet, 1, 62, numberOf_Reference_ReferenceReturnTypeUsedMethod);
+        addCellNumber(sheet, 2, 62, numberOf_Reference_ReferenceReturnTypeUsedMethod_Direct);
+        addCellNumber(sheet, 3, 62, numberOf_Reference_ReferenceReturnTypeUsedMethod_Indirect);
+        addCellDefault(sheet, 0, 63, "Type of Variable");
+        addCellNumber(sheet, 1, 63, numberOf_Reference_ReferenceTypeOfUsedVariable);
+        addCellNumber(sheet, 2, 63, numberOf_Reference_ReferenceTypeOfUsedVariable_Direct);
+        addCellNumber(sheet, 3, 63, numberOf_Reference_ReferenceTypeOfUsedVariable_Indirect);
 
         
         sheet.setColumnView(0, 40);

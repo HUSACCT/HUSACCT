@@ -562,6 +562,18 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, "Generic Type Parameter", false));
+		typesToFind.clear();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.HashMap", typesToFind, "Library Method", false));
+	}
+
+	@Test
 	public void DeclarationVariableStatic(){
 		String fromClass = "domain.direct.violating.DeclarationVariableStatic";
 		String toClass = "technology.direct.dao.ProfileDAO";

@@ -23,6 +23,6 @@ public class DeclarationVariableInstance_GenericType_OneTypeParameter {
 	private DeclarationParameter declaration;
  
 	public String testUsageOfInstanceVariableDefinedByGenericTypeOneParameterType(){
-		return pDao.get(0).toString();;
+		return pDao.get(0).toString();
 	}
 }

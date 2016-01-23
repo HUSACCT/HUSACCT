@@ -10,9 +10,9 @@ public interface IModelCreationService {
 
     public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 
-    public void createAttributeOnly(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
+    public void createAttributeOnly(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber, String typeInClassDiagram, boolean multipleValues);
 
-    public void createAttribute(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
+    public void createAttribute(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber, String typeInClassDiagram, boolean multipleValues);
 
     public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber);
 
@@ -50,7 +50,7 @@ public interface IModelCreationService {
     public void createParameter(String name, String uniqueName, String declareType, String belongsToClass, int lineNumber,
             String belongsToMethod, List<String> declareTypes);
 
-    public void createDependencyOnParameterTypeOfGeneric(String belongsToClass, String belongsToMethod, int lineNumber, String typeOfDeclaration, String parameterType);
+    public void createGenericParameterType(String belongsToClass, String belongsToMethod, int lineNumber, String parameterType);
 
     /** Executes post-processes such as connecting entities and associations, 
      * detecting inherited and indirect associations, et cetera.
