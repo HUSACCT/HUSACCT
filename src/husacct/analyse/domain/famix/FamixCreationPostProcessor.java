@@ -529,7 +529,7 @@ class FamixCreationPostProcessor {
                 if (fromExists && !toExists && toHasValue && !association.to.endsWith(")")){
 	                if ((association instanceof FamixInvocation)) {
 	                	FamixStructuralEntity entity = null;
-	    	        	// 5.1 Determine if association.to refers to an attribute
+	    	        	// 5.1 Determine if association.to refers to an attribute (or class annotation)
 	                	String classOfAttribute = findAttribute(association.from, association.to);
 	    	            if (!classOfAttribute.equals("")) {
 	    	        		entity = theModel.structuralEntities.get(classOfAttribute + "." + association.to);

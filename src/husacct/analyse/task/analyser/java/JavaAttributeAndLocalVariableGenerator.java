@@ -1,7 +1,5 @@
 package husacct.analyse.task.analyser.java;
 
-import java.util.LinkedList;
-
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
@@ -126,7 +124,7 @@ class JavaAttributeAndLocalVariableGenerator {
             	break;
             case JavaParser.AT:
                 annotationGenerator = new JavaAnnotationGenerator();
-                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass);
+                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "variable");
             	break;
             }
             if (walkThroughChildren) {
@@ -135,6 +133,7 @@ class JavaAttributeAndLocalVariableGenerator {
         }
     }
 
+    // Detects generic type parameters, also in complex types, like: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
     private void addGenericTypeParameters(CommonTree genericType) {
     	JavaInvocationGenerator javaInvocationGenerator = null;
         int numberOfTypeParameters = genericType.getChildCount();

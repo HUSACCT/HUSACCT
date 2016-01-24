@@ -258,17 +258,15 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
      @Override
     public void createAnnotation(String belongsToClass, String declareType, String name,
-            String uniqueName, int linenumber) {
+            String uniqueName, int linenumber, String annotatedElement) {
 
-        FamixAttribute famixAttribute = new FamixAttribute();
-        famixAttribute.hasClassScope = false;
-        famixAttribute.accessControlQualifier = "public";
-        famixAttribute.belongsToClass = belongsToClass;
-        famixAttribute.declareType = declareType;
-        famixAttribute.name = name;
-        famixAttribute.uniqueName = uniqueName;
-        //addToModel(famixAttribute);
-        model.waitingStructuralEntities.add(famixAttribute);
+    	FamixAnnotation famixAnnotation = new FamixAnnotation();
+        famixAnnotation.belongsToClass = belongsToClass;
+        famixAnnotation.declareType = declareType;
+        famixAnnotation.name = name;
+        famixAnnotation.uniqueName = uniqueName;
+        famixAnnotation.annotatedElement = "class";
+        model.waitingStructuralEntities.add(famixAnnotation);
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;

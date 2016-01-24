@@ -172,7 +172,7 @@ class JavaTreeConvertController {
     }
 
     private void delegateAnnotation(CommonTree annotationTree) {
-        javaAnnotationGenerator.generateToDomain(annotationTree, this.currentClass);
+        javaAnnotationGenerator.generateToDomain(annotationTree, this.currentClass, "class");
     }
 
     private void delegateImplementsDefinition(CommonTree treeNode) {

@@ -15,7 +15,7 @@ class JavaAnnotationGenerator extends JavaGenerator {
     public JavaAnnotationGenerator() {
     }
 
-    public void generateToDomain(CommonTree annotationTree, String belongsToClass) {
+    public void generateToDomain(CommonTree annotationTree, String belongsToClass, String annotatedElement) {
         if (isTreeExisting(annotationTree) && (belongsToClass != null) && !belongsToClass.equals("")) {
         	name = "";
         	uniqueName = "";
@@ -25,7 +25,7 @@ class JavaAnnotationGenerator extends JavaGenerator {
 	    	if (!isSkippable(name)) { 
 		        this.uniqueName = belongsToClass + "." + this.name; 
 		        this.setLinenumber(annotationTree);
-		        modelService.createAnnotation(belongsToClass, this.name, this.name, this.uniqueName, this.lineNumber);
+		        modelService.createAnnotation(belongsToClass, this.name, this.name, this.uniqueName, this.lineNumber, "");
 	    	}
     	}
     }

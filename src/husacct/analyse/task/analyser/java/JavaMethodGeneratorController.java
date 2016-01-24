@@ -77,7 +77,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
 	            	break;
 	            case JavaParser.AT:
 	            	JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator();
-	                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass);
+	                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "method");
 	            	break;
 	            case JavaParser.STATIC: 
 	            	hasClassScope = true; 

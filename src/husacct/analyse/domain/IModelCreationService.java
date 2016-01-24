@@ -14,7 +14,7 @@ public interface IModelCreationService {
 
     public void createAttribute(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber, String typeInClassDiagram, boolean multipleValues);
 
-    public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber);
+    public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber, String annotatedElement);
 
     public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 

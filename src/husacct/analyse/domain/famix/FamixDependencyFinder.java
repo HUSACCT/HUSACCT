@@ -1,6 +1,5 @@
 package husacct.analyse.domain.famix;
 
-import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 
 import java.util.ArrayList;
