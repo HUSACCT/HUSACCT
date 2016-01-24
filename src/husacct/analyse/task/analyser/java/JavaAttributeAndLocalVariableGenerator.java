@@ -26,7 +26,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
         /* Test helpers
-    	if (belongsToClass.contains("domain.direct.violating.DeclarationVariableInstance_Generic_ArrayList")) {
+    	if (belongsToClass.contains("CallConstructor_GenericType_OneTypeParameter")) {
     				boolean breakpoint = true;
     	} */
         initialize();
@@ -98,7 +98,7 @@ class JavaAttributeAndLocalVariableGenerator {
                 	this.multipleValues = true;
                 	addGenericTypeParameters(genericType);
                 } else {
-                	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+                	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass);
                 }
                 walkThroughChildren = false;
             	break;
@@ -148,7 +148,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
 	            if (qualifiedType != null) {
 	                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType);
+	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass);
 	                if (parameterTypeOfGeneric != null) {
 	                    if ((numberOfTypeParameters == 1) && (levelOfRecursionWithinGenericType == 0)) {
 	                 		this.typeInClassDiagram = parameterTypeOfGeneric;

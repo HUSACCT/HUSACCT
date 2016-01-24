@@ -25,10 +25,10 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        boolean walkThroughChildren = true;
 
 	        /* Test helper
-	       	if (this.belongsToClass.contains("husacct.analyse.presentation.ExportDependenciesDialog")){
-	    		if (child.getLine() == 69) {
+	       	if (this.belongsToClass.contains("CallConstructor_GenericType_OneTypeParameter")){
+	    		//if (child.getLine() == 69) {
 	    				boolean breakpoint1 = true;
-	    		}
+	    		//}
 	    	} */ 
 
 	        switch(treeType) {

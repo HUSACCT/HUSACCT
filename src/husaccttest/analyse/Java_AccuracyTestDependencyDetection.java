@@ -279,6 +279,19 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructor_GenericType_MultipleTypeParameters(){
+		String fromClass = "domain.direct.violating.CallConstructor_GenericType_MultipleTypeParameters";
+		String toClass = "xLibraries.java.util.HashMap";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Library Method", false));
+		typesToFind.clear();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, "Generic Type Parameter", false));
+	}
+
+	@Test
 	public void CallConstructor(){
 		String fromClass = "domain.direct.violating.CallConstructor";
 		String toClass = "technology.direct.dao.AccountDAO";
@@ -490,12 +503,31 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void DeclarationParameter_GenericType_OneTypeParameter(){
+		String fromClass = "domain.direct.violating.DeclarationParameter_GenericType_OneTypeParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		typesToFind.clear();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, "Library Method", false));
+	}
+
+	@Test
 	public void DeclarationReturnType(){
 		String fromClass = "domain.direct.violating.DeclarationReturnType";
 		String toClass = "technology.direct.dao.VenueDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Return Type", false));
+	}
+
+	@Test
+	public void DeclarationReturnType_GenericType_OneTypeParameter(){
+		String fromClass = "domain.direct.violating.DeclarationReturnType_GenericType_OneTypeParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
 	}
 
 	@Test
@@ -541,8 +573,9 @@ public class Java_AccuracyTestDependencyDetection {
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.AccountDAO", typesToFind, "Instance Variable", false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, "Instance Variable", false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.BadgesDAO", typesToFind, "Generic Type Parameter", false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.CheckinDAO", typesToFind, "Generic Type Parameter", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.CheckInDAO", typesToFind, "Generic Type Parameter", false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, "Generic Type Parameter", false));
 		typesToFind.clear();
 		typesToFind.add("Call");

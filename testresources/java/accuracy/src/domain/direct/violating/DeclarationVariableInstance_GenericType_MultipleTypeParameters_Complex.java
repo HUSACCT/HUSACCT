@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex {
 	
 	@SuppressWarnings("unused")
-	private private HashMap<String, HashMap<ProfileDAO, ArrayList<FriendsDAO>>> complexHashMap;
+	private HashMap<String, HashMap<ProfileDAO, ArrayList<FriendsDAO>>> complexHashMap;
 
 	public String testUsageOfInstanceVariableDefinedByGenericTypeOneParameterType(){
 		complexHashMap.clear();

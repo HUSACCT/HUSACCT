@@ -2,7 +2,7 @@ package domain.direct.violating;
 
 import technology.direct.dao.AccountDAO;
 import technology.direct.dao.BadgesDAO;
-import technology.direct.dao.CheckinDAO;
+import technology.direct.dao.CheckInDAO;
 import technology.direct.dao.ProfileDAO;
 import technology.direct.dao.UserDAO;
 
@@ -17,7 +17,7 @@ public class DeclarationVariableInstance_GenericType_OneTypeParameter {
 	@SuppressWarnings("unused")
 	private AccountDAO[] aDao;
 	private List<BadgesDAO> bDao;
-	private HashSet<CheckinDAO> cDao;
+	private HashSet<CheckInDAO> cDao;
 	private ArrayList<ProfileDAO> pDao;
 	private Vector<UserDAO> uDao;
 	private DeclarationParameter declaration;

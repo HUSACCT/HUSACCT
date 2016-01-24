@@ -14,7 +14,6 @@ class JavaImportGenerator extends JavaGenerator {
     private String completeImportDeclaration;
     private boolean isCompletePackageImport;
     private int lineNumber;
-    private boolean isStatic = false;
 
     public void generateToDomain(CommonTree importTree, String className) {
         this.importingClass = className;
@@ -22,7 +21,6 @@ class JavaImportGenerator extends JavaGenerator {
         if (importTree.getType() == nodeType) {
         	CommonTree staticExpression = (CommonTree) importTree.getFirstChildWithType(JavaParser.STATIC);
         	if (staticExpression != null) {
-        		isStatic = true;
                 int childCount = importTree.getChildCount();
                 for (int currentChild = 0; currentChild < childCount; currentChild++) {
                     CommonTree childNode = (CommonTree) importTree.getChild(currentChild);

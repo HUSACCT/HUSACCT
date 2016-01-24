@@ -70,14 +70,14 @@ public class JavaLoopGenerator extends JavaGenerator {
                 deleteTreeChild(child);
                 break;
             case JavaParser.TYPE:
-            	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+            	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass);
                 if (foundType != null) {
                     this.variableTypeForLoop = foundType;
                 }
                 deleteTreeChild(child);
                 break;
             case JavaParser.IDENT:
-            	String foundName = javaInvocationGenerator.getCompleteToString((CommonTree) child);
+            	String foundName = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass);
             	int lineNumber = 0;
                 if (foundName != null) {
                     lineNumber = child.getLine();

@@ -104,7 +104,7 @@ class JavaTreeConvertController {
     		warnMessage += " [Probably type id " + typeId + " ]";
     	if(classTree != null)
     		warnMessage += " Info: " + classTree.toString();
-    	//logger.warn(warnMessage); //Deactivated 2012-02-10, since warnings were generated for annotation expressions like @interface.
+    	logger.warn(warnMessage);
     }
 
     private void delegateASTToGenerators(CommonTree tree) {

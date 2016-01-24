@@ -1,5 +1,8 @@
 package domain.direct;
 
+import java.util.HashMap;
+import java.util.ArrayList;
+
 import technology.direct.dao.UserDAO;
 import technology.direct.dao.ProfileDAO;
 import technology.direct.dao.CallInstanceOuterClassDAO;
@@ -20,7 +23,7 @@ public class Base {
 	protected CallInstanceSubClassDOA subDao;
 	protected CallInstanceSubSubClassDOA subSubDao;
 	protected ArrayList<ProfileDAO> profileDAOs;
-	
+	protected HashMap<ProfileDAO, UserDAO> hashMap;
 
 	public Base(){
 	}

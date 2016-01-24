@@ -146,7 +146,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
 
     private void getReturnType(Tree tree) {
     	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-    	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree);
+    	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree, belongsToClass);
         if (foundType != null) {
             this.declaredReturnType = foundType;
         } else {

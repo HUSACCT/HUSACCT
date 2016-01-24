@@ -15,23 +15,21 @@ public class JavaParameterGenerator extends JavaGenerator {
     private String declareType;
     private String declareName;
     private String uniqueName;
-    private String signature = "";
+    private String signature = ""; // Builds up to e.g. (String,int). Used to identify methods with the same name, but different parameters. 
     private boolean nameFound = false;
     private boolean declareTypeFound = false;
-    private ArrayList<String> currentTypes;
-    private ArrayList<ArrayList<Object>> saveParameterQueue;
+    private ArrayList<ArrayList<Object>> parameterQueue; // The parameters need to be stored, until signature has been build up completely.
 
     public String generateParameterObjects(Tree allParametersTree, String belongsToMethod, String belongsToClass) {
-        this.saveParameterQueue = new ArrayList<ArrayList<Object>>();
-        this.currentTypes = new ArrayList<String>();
+        this.parameterQueue = new ArrayList<ArrayList<Object>>();
         this.belongsToMethod = belongsToMethod;
         this.belongsToClass = belongsToClass;
 
         /* Test helper
-       	if (this.belongsToClass.equals("plugins.script.ScriptingEngine")){
-    		if (belongsToMethod.contains("performExternalScript")) {
+       	if (this.belongsToClass.equals("domain.direct.violating.DeclarationParameter_GenericType_OneTypeParameter")){
+    		//if (belongsToMethod.contains("performExternalScript")) {
     				boolean breakpoint1 = true;
-    		}
+    		//}
     	} */
 
        	delegateParametersFromTree(allParametersTree);
@@ -45,13 +43,11 @@ public class JavaParameterGenerator extends JavaGenerator {
             CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
             int treeType = child.getType();
             if (treeType == JavaParser.FORMAL_PARAM_STD_DECL) {
-                getAttributeName(child);
-                getParameterAttributes(child, 1);
+                getParameterName(child);
+                getTypeOfParameter(child);
                 if (this.nameFound && this.declareTypeFound) {
-                    setLineNumber(child);
                     this.addToQueue();
                 }
-                deleteTreeChild(child);
                 nameFound = false;
                 declareTypeFound = false;
             }
@@ -59,95 +55,56 @@ public class JavaParameterGenerator extends JavaGenerator {
         }
     }
 
-    private void getAttributeName(Tree tree) {
-        CommonTree attributeTree = (CommonTree) tree;
-        Tree attributeNameTree = attributeTree.getFirstChildWithType(JavaParser.IDENT);
-        if (attributeNameTree != null) {
-            this.declareName = attributeNameTree.getText();
-            this.nameFound = true;
+    private void getParameterName(CommonTree tree) {
+        Tree parameterNameTree = tree.getFirstChildWithType(JavaParser.IDENT);
+        if (parameterNameTree != null) {
+            this.declareName = parameterNameTree.getText();
+            if ((this.declareName != null)&& (!this.declareName.trim().equals(""))) {
+	            this.nameFound = true;
+	            this.lineNumber = parameterNameTree.getLine();
+            }
         }
     }
 
-    private String getParameterAttributes(Tree tree, int indent) {
-        int childrenCount = tree.getChildCount();
-        for (int i = 0; i < childrenCount; i++) {
-            CommonTree currentChild = (CommonTree) tree.getChild(i);
-            if (currentChild.getType() == JavaParser.TYPE) {
-            	setDeclareType(currentChild);
-                this.declareTypeFound = true;
+    private void getTypeOfParameter(CommonTree tree) {
+        CommonTree typeOfParameterTree = JavaGeneratorToolkit.getFirstDescendantWithType(tree, JavaParser.TYPE);
+        if (typeOfParameterTree != null) {
+        	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+           	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass);
+            if (this.declareType.endsWith(".")) {
+            	this.declareType = this.declareType.substring(0, this.declareType.length() - 1); //deleting the last point
+            }
+           	if(!this.declareType.trim().equals("")) {
+           		this.declareTypeFound = true;
                 this.signature += !this.signature.equals("") ? "," : "";
                 this.signature += this.declareType;
-            } else {
-                getParameterAttributes(currentChild, indent + 1);
-            }
-        }
-        return "";
-    }
-
-    private void setLineNumber(CommonTree linenumberTree) {
-        this.lineNumber = linenumberTree.getFirstChildWithType(JavaParser.IDENT).getLine();
-    }
-
-    private void setDeclareType(Tree typeTree) {
-        Tree child = typeTree.getChild(0);
-        Tree declaretype = child.getChild(0);
-        String foundType = "";
-        if (child.getType() != JavaParser.QUALIFIED_TYPE_IDENT) {
-            foundType = child.getText();
-        } else {
-            if (child.getChildCount() > 1) {
-                for (int i = 0; i < child.getChildCount(); i++) {
-                    foundType += child.getChild(i).toString() + ".";
-                }
-            } else {
-                foundType = declaretype.getText();
-            }
-        }
-        if (this.declareType == null || this.declareType.equals("")) {
-            this.declareType = foundType;
-        } else {
-        	currentTypes.add(foundType);
+           	}
         }
     }
-
-    private void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
-        }
-    }
-
+    
     private void addToQueue() {
         ArrayList<Object> myParam = new ArrayList<Object>();
         myParam.add(this.declareType);
         myParam.add(this.declareName);
         myParam.add(this.lineNumber);
-        myParam.add(this.currentTypes);
-        saveParameterQueue.add(myParam);
+        parameterQueue.add(myParam);
         this.declareType = null;
         this.declareName = null;
-        this.currentTypes = new ArrayList<String>();
     }
 
-    @SuppressWarnings("unchecked")
 	private void writeParameterToDomain() {
-        for (ArrayList<Object> object : saveParameterQueue) {
-            ArrayList<Object> currentParam = object;
-            String type = (String) currentParam.get(0);
-            if (type.endsWith(".")) {
-            	type = type.substring(0, type.length() - 1); //deleting the last point
-            }
-            String name = (String) currentParam.get(1);
-            int lineNr =  (int) currentParam.get(2);
-            ArrayList<String> types = (ArrayList<String>) currentParam.get(3);
+        for (ArrayList<Object> currentParameter : parameterQueue) {
+            String type = (String) currentParameter.get(0);
+            String name = (String) currentParameter.get(1);
+            int lineNr =  (int) currentParameter.get(2);
+            ArrayList<String> types = new ArrayList<String>(); // May be removed as soon as types is removed frommodelService.createParameterOnly(). 
             this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
             String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")";
-            if ((type != null) && !type.trim().equals("")) {
-	            if (SkippedTypes.isSkippable(type)) {
-	                modelService.createParameterOnly(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough, types);
-	            } else {
-	                modelService.createParameter(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough, types);
-	            	
-	            }
+            if (SkippedTypes.isSkippable(type)) {
+                modelService.createParameterOnly(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough, types);
+            } else {
+                modelService.createParameter(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough, types);
+            	
             }
         }
     }
