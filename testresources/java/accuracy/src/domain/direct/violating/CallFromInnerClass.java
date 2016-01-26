@@ -36,10 +36,10 @@ public class CallFromInnerClass {
     	public int CallMethodInstanceInnerClass() {
     		int b;
     		b = innerDao.getNext();
-    		return b;
-    		
     		//AccessFromInnerClass
     		String t = innerDao.text;
+    		return b;
+    		
     	}
 
     }

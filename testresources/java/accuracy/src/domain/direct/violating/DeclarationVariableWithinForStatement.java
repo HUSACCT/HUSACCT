@@ -1,5 +1,6 @@
 package domain.direct.violating;
 
+import domain.direct.Base;
 import technology.direct.dao.ProfileDAO;
 
 public class DeclarationVariableWithinForStatement extends Base{

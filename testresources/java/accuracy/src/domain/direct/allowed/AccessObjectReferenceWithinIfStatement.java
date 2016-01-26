@@ -1,9 +1,11 @@
 package domain.direct.allowed;
 
-import domain.direct.Base;
+import technology.direct.dao.ProfileDAO;
 
-public class AccessObjectReferenceWithinIfStatement extends Base{
+public class AccessObjectReferenceWithinIfStatement {
 	
+	private ProfileDAO profileDao;
+
 	public AccessObjectReferenceWithinIfStatement(){
 		if (profileDao != null) {
 			String s = "wrong";

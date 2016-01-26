@@ -6,7 +6,7 @@ public class CallInstanceInPlusExpression {
 	
 	private ProfileDAO profileDao;
 
-	public CallInstance(){
+	public void CallInstance(){
 		
 		System.out.println("test" + profileDao.getCampaignType()); // Dependency at right side of +; left side is tested in AccessInstanceVariableRead.
 	}

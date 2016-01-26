@@ -1,9 +1,11 @@
 package domain.direct.allowed;
 
-import domain.direct.Base;
+import technology.direct.dao.ProfileDAO;
 
-public class AccessInstanceVariableRead extends Base {
+public class AccessInstanceVariableRead {
 	
+	private ProfileDAO profileDao;
+
 	public AccessInstanceVariableRead(){
 		
 		System.out.println(profileDao.name);

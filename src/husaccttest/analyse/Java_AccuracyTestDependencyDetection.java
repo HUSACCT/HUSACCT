@@ -209,8 +209,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.AccessInstanceVariable_SetArgumentValue";
 		String toClass = "technology.direct.dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Type of Variable", true));
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", true));
 	}
 
 	@Test
@@ -245,8 +245,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.AccessLocalVariable_SetArgumentValue";
 		String toClass = "technology.direct.dao.CheckInDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Reference");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Type of Variable", true));
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", true));
 	}
 
 	@Test
@@ -303,7 +303,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void CallConstructorInnerClass(){
 		String fromClass = "domain.direct.violating.CallConstructorInnerClass";
-		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Constructor", false));
@@ -312,7 +312,7 @@ public class Java_AccuracyTestDependencyDetection {
 	@Test
 	public void CallConstructorInnerClassDefault(){
 		String fromClass = "domain.direct.violating.CallConstructorInnerClassDefault";
-		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
+		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Constructor", false));
@@ -642,9 +642,6 @@ public class Java_AccuracyTestDependencyDetection {
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, "Generic Type Parameter", false));
-		typesToFind.clear();
-		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.HashMap", typesToFind, "Library Method", false));
 	}
 
 	@Test

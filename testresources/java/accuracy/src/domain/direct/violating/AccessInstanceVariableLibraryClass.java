@@ -6,6 +6,6 @@ public class AccessInstanceVariableLibraryClass {
 	private FoursquareApiException fourExc;
 	
 	public void handleCallback() {
-				String s = fourExc.message;
+		String s = fourExc.message;
 	}
 }

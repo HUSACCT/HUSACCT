@@ -1,10 +1,12 @@
 package domain.direct.allowed;
 
-import domain.direct.Base;
+import technology.direct.dao.ProfileDAO;
 
-public class AccessInstanceVariableInPlusExpression extends Base {
+public class AccessInstanceVariableInPlusExpression {
 	
-	public AccessInstanceVariableRead(){
+	private ProfileDAO profileDao;
+
+	public void AccessInstanceVariableRead(){
 		
 		System.out.println(profileDao.name + "test"); // Dependency at left side of +; right side is tested in CallInstanceInPlusExpression.
 	}

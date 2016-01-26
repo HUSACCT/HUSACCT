@@ -7,6 +7,6 @@ public class AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromS
 	public String initializeProfileInformation(){
 		String profile = "profiled";
 		Object o = getProfileInformation("tsja", 3);
-		return o;
+		return (String) o;
 	}
 }

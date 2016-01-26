@@ -1,5 +1,7 @@
 package domain.direct.allowed;
 
+import technology.direct.dao.CallInstanceOuterClassDAO;
+
 public class CallFromInnerClass {
     // create an array
     private final static int SIZE = 15;
@@ -13,10 +15,12 @@ public class CallFromInnerClass {
     }
     
     // inner class implements the Iterator pattern
-    public class CallingInnerClass extends domain.direct.Base{
+    public class CallingInnerClass extends domain.direct.Base {
         // start stepping through the array from the beginning
         private int next = 0;
-        
+
+        private CallInstanceOuterClassDAO.CallInstanceInnerClassDAO innerDao; // Declaration of inner class, while only the outer class is imported
+
         public boolean hasNext() {
             return true ;
         }
@@ -32,7 +36,10 @@ public class CallFromInnerClass {
     	public int CallMethodInstanceInnerClass() {
     		int b;
     		b = innerDao.getNext();
+    		//AccessFromInnerClass
+    		String t = innerDao.text;
     		return b;
+    		
     	}
 
     }

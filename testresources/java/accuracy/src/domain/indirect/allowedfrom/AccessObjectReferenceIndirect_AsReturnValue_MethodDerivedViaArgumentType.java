@@ -8,6 +8,6 @@ public class AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumen
 		String profile = "profiled";
 		BaseIndirect baseClass = new BaseIndirect();
 		Object o = baseClass.getMethodCorrectlyByDerivedArgumentType("tsja", profile, 3);
-		return o;
+		return (String) o;
 	}
 }

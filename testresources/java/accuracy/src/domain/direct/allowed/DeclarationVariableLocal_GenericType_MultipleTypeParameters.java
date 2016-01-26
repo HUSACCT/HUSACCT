@@ -1,4 +1,4 @@
-package domain.direct.violating;
+package domain.direct.allowed;
 
 import java.util.HashMap;
 import technology.direct.dao.FriendsDAO;

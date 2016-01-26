@@ -1,6 +1,6 @@
 package domain.direct.allowed;
 
-import import technology.direct.dao.CallInstanceOuterClassDAO;
+import technology.direct.dao.CallInstanceOuterClassDAO;
 
 public class DeclarationTypeCastToInnerClass {
 	

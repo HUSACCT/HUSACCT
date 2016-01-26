@@ -1,7 +1,7 @@
 package domain.direct;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import technology.direct.dao.UserDAO;
 import technology.direct.dao.ProfileDAO;

@@ -22,6 +22,7 @@ public enum RuleTypes {
 	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(
 			FACADE_CONVENTION, INHERITANCE_CONVENTION, IS_NOT_ALLOWED_TO_USE, IS_NOT_ALLOWED_BACK_CALL, IS_NOT_ALLOWED_SKIP_CALL, IS_ONLY_ALLOWED_TO_USE,
 			IS_THE_ONLY_MODULE_ALLOWED_TO_USE, MUST_USE, NAMING_CONVENTION, VISIBILITY_CONVENTION);
+
 	private final String key;
 	private final DefaultSeverities defaultSeverity;
 

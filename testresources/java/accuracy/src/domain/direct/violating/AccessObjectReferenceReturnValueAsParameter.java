@@ -7,7 +7,7 @@ public class AccessObjectReferenceReturnValueAsParameter{
 	private ProfileDAO profileDao;
 	private DeclarationParameter declaration;
 
-	public AccessObjectReferenceAsParameter(){
+	public void AccessObjectReferenceAsParameter(){
 		declaration.getProfileInformation(getProfileDAO());
 	}
 	

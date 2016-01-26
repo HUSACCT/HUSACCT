@@ -8,7 +8,7 @@ public class AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeurist
 	
 	public String initializeProfileInformation(){
 		BaseIndirect baseClass = new BaseIndirect();
-		Object o = baseClass.getMethodCorrectlyByHeuristic("tsja", st.getServiceOne(), 3);
-		return o;
+		Object o = baseClass.getMethodCorrectlyByHeuristic("tsja", st.getServiceOne().name, 3);
+		return (String) o;
 	}
 }

@@ -1,8 +1,10 @@
 package domain.direct.allowed;
 
-import domain.direct.Base;
+import technology.direct.subclass.CallInstanceSubClassDOA;
 
-public class AccessInstanceVariableSuperClass extends Base{
+public class AccessInstanceVariableSuperClass {
+	
+	private CallInstanceSubClassDOA subDao;
 	
 	public AccessInstanceVariableSuperClass(){};
 	

@@ -1,13 +1,14 @@
-package domain.direct.allowed;
+package domain.direct.violating;
 
 import technology.direct.dao.ProfileDAO;
 
 public class AccessInstanceVariable_SetArgumentValue {
 	
-	ProfileDAO profile;
+	ProfileDAO profile = null;
 
+	// Tests if: 1) the type of argument profile is found; 2) thereafter the right method is selected; 3) the return value of this method is found.
 	public String theMethod(String s, int i) {
-		String pn = getProfileInformation(profile, "test", 4).checkinValue;
+		String pn = getProfileInformation(profile, "test", 4).checkinValue.name;
 		return pn;
 	}
 	
@@ -17,9 +18,6 @@ public class AccessInstanceVariable_SetArgumentValue {
 	}
 
 	public ProfileDAO getProfileInformation(ProfileDAO profile, String s, int i) {
-		String pn = s;
-		return pn;
+		return profile;
 	}
-
-
 }

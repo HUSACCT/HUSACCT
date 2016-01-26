@@ -4,8 +4,8 @@ import technology.direct.dao.CallInstanceOuterClassDAO;
 
 public class CallConstructorInnerClassDefault{
 	
-	public CallConstructorInnerClass() {
-		CallInstanceOuterClassDAO.CallInstanceInnerClassDAO v = new CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
+	public  void CallConstructorInnerClass() {
+		CallInstanceOuterClassDAO.StaticNestedClass v = new CallInstanceOuterClassDAO.StaticNestedClass();
 	}
 	
 }

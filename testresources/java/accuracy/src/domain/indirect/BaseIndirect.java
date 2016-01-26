@@ -22,7 +22,7 @@ public class BaseIndirect {
 		return new POI();
 	}
 
-	public POI getMethodCorrectlyByDerivedArgumentType(String s, String j, int j){
+	public POI getMethodCorrectlyByDerivedArgumentType(String s, String i, int j){
 		return new POI();
 	}
 

@@ -1,8 +1,10 @@
 package domain.direct.allowed;
 
-import domain.direct.Base;
+import technology.direct.dao.CallInstanceOuterClassDAO;
 
-public class CallInstanceInnerInterface extends Base{
+public class CallInstanceInnerInterface {
+
+	protected CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO innerInterfaceDao;
 
 	public CallInstanceInnerInterface(){};
 	

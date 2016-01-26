@@ -21,11 +21,11 @@ public class CallInstanceOuterClassDAO {
     }
     
     public void callConstructorInnerClass() {
-    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
+    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = new CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
     }
 
     public void callDefaultConstructorInnerClass() {
-    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
+    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = new CallInstanceOuterClassDAO.CallInstanceInnerClassDAO();
     }
     
     // inner class implements the Iterator pattern
@@ -35,6 +35,9 @@ public class CallInstanceOuterClassDAO {
         private TestConstructorCallOfInnerClass otherInnerClass;
         public String text;
         
+        public CallInstanceInnerClassDAO() {
+        	this.text = "s";
+		}
         public CallInstanceInnerClassDAO(String s) {
         	this.text = s;
         }
@@ -42,7 +45,7 @@ public class CallInstanceOuterClassDAO {
         	this.otherInnerClass = otherInner;
         }
         
-        public boolean hasNext() {
+		public boolean hasNext() {
             return true ;
         }
         
@@ -66,6 +69,15 @@ public class CallInstanceOuterClassDAO {
 
     public static class StaticNestedClass { 
     	CallInstanceOuterClassDAO outer; 
+    	String var;
+    	
+    	public StaticNestedClass() {
+    		this.var = "s";
+    	}
+
+    	public StaticNestedClass(String var) {
+    		this.var = var;
+    	}
  
 		public CallInstanceOuterClassDAO getOuter() { 
 			return outer; 
@@ -73,7 +85,7 @@ public class CallInstanceOuterClassDAO {
 	} 
     
     public class TestConstructorCallOfInnerClass {
-    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = CallInstanceOuterClassDAO.CallInstanceInnerClassDAO(this);
+    	CallInstanceOuterClassDAO.CallInstanceInnerClassDAO i = new CallInstanceOuterClassDAO.CallInstanceInnerClassDAO(this);
     }
 
 }
