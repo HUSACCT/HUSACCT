@@ -6,6 +6,7 @@ public class DeclarationVariableInstance {
 	
 	@SuppressWarnings("unused")
 	private ProfileDAO pdao;
+	
 	public String getProfileInformation(){
 		return "";
 	}

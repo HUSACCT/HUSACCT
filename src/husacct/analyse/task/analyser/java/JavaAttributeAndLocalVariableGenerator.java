@@ -25,10 +25,10 @@ class JavaAttributeAndLocalVariableGenerator {
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
-        /* Test helpers
-    	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_OneTypeParameter")) {
+        // Test helpers
+    	if (belongsToClass.contains("DeclarationVariableInstance_MultipleAttributesAtTheSameLine")) {
     				boolean breakpoint = true;
-    	} */
+    	} //
         initialize();
         this.belongsToClass = belongsToClass;
         startFiltering(attributeTree, belongsToClass);

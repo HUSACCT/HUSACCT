@@ -1,5 +1,6 @@
 package husacct.analyse;
 
+import java.util.HashSet;
 import java.util.List;
 
 import husacct.analyse.domain.IModelPersistencyService;
@@ -7,6 +8,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
@@ -147,5 +149,9 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
 		return queryService.getAnalysisStatistics(selectedModule);
 	}
+
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass) {
+    	return queryService.getAllUmlLinksFromClassToToClass(fromClass, toClass);
+    }
 
 }

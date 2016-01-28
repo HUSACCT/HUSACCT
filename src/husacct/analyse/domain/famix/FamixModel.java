@@ -23,7 +23,7 @@ class FamixModel extends FamixObject {
     public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixImport> imports;
     public HashMap<String, FamixLibrary> libraries;
-    public HashMap<String, HashMap<String, HashSet<FamixUmlLink>>> umlLinks;  // UmlLinks per from-class (first String), per to-class (second String).
+    private HashMap<String, HashMap<String, HashSet<FamixUmlLink>>> umlLinks;  // UmlLinks per from-class (first String), per to-class (second String).
     public ArrayList<FamixAssociation> associations;
     public String modelCreationDate;
 	private int totalNumberOfLinesOfCode;
@@ -187,93 +187,37 @@ class FamixModel extends FamixObject {
 
     // Get methods
     
-    public ArrayList<FamixAssociation> getAssociations() {
-        return associations;
-    }
-
-    public List<FamixClass> getClasses() {
-        ArrayList<FamixClass> result = new ArrayList<FamixClass>();
-        for (FamixClass fclass : classes.values()) {
-            result.add(fclass);
-        }
-        return result;
-    }
-
-    public ArrayList<FamixAttribute> getAttributes() {
-        ArrayList<FamixAttribute> result = new ArrayList<FamixAttribute>();
-        for (FamixStructuralEntity entity : structuralEntities.values()) {
-            if (entity instanceof FamixAttribute) {
-                result.add((FamixAttribute) entity);
-            }
-        }
-        return result;
-    }
-
-    public ArrayList<FamixInvocation> getInvocations() {
-        ArrayList<FamixInvocation> result = new ArrayList<FamixInvocation>();
-        for (FamixAssociation association : associations) {
-            if (association instanceof FamixInvocation) {
-                result.add((FamixInvocation) association);
-            }
-        }
-        return result;
-    }
-
-    public ArrayList<FamixFormalParameter> getParametersForClass(String uniqueClassName) {
-        ArrayList<FamixFormalParameter> result = new ArrayList<FamixFormalParameter>();
-        for (FamixStructuralEntity entity : structuralEntities.values()) {
-            if (entity instanceof FamixFormalParameter) {
-                FamixFormalParameter parameter = (FamixFormalParameter) entity;
-                if (parameter.belongsToClass.equals(uniqueClassName)) {
-                    result.add(parameter);
-                }
-            }
-        }
-        return result;
-    }
-
-    public ArrayList<FamixLocalVariable> getLocalVariablesForClass(String declareClass) {
-        ArrayList<FamixLocalVariable> localVariables = new ArrayList<FamixLocalVariable>();
-        for (FamixStructuralEntity entity : structuralEntities.values()) {
-            if (entity instanceof FamixLocalVariable) {
-                FamixLocalVariable variable = (FamixLocalVariable) entity;
-                if (variable.belongsToClass.equals(declareClass)) {
-                    localVariables.add(variable);
-                }
-            }
-        }
-        return localVariables;
-    }
-
-    public List<FamixImport> getImportsInClass(String uniqueClassName) {
-        List<FamixImport> imports = new ArrayList<FamixImport>();
-        for (FamixAssociation association : associations) {
-            if (association instanceof FamixImport) {
-                FamixImport theImport = (FamixImport) association;
-                if (theImport.from.equals(uniqueClassName)) {
-                    imports.add(theImport); 
-                }
-            }
-        }
-        return imports;
-    }
-
-    public FamixStructuralEntity getTypeForVariable(String uniqueVarName) throws Exception {
-        String typeVariable = uniqueVarName;
-        String[] splitted = typeVariable.split("\\.");
-        for (int i = splitted.length; i > 1; i--) {
-            if (structuralEntities.containsKey(typeVariable)) {
-                return structuralEntities.get(typeVariable);
-            }
-            // Is it an instance variable?
-            typeVariable = splitted[0] + "." + splitted[splitted.length - 1];
-        }
-        // If not, throw new exception
-        throw new Exception("The unit (or a part of it) '" + typeVariable + " or " + uniqueVarName + "' is not found or defined.");
-    }
-    
     public int getTotalNumberOfLinesOfCode() {
     	return totalNumberOfLinesOfCode;
+    }
+    
+    /* Returns all the FamixUmlLinks going from the fromClass to other FamixClasses (not to xLibraries). 
+     * fromClass must be a unique name of FamixClass (not of an xLibraries). 
+     */
+    public HashSet<FamixUmlLink> getAllUmlLinksFromClassToOtherClasses(String fromClass) {
+    	HashSet<FamixUmlLink> returnValue = new HashSet<FamixUmlLink>();
+    	if (umlLinks.containsKey(fromClass)) {
+    		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(fromClass);
+    		for (String toClass : mapOfLinksPerFromClass.keySet()) {
+    			HashSet<FamixUmlLink> setOfLinksPerToClass = mapOfLinksPerFromClass.get(toClass);
+    			returnValue.addAll(setOfLinksPerToClass);
+    		}
+    	}
+    	return returnValue;
+    }
+    
+    /* Returns all the FamixUmlLinks going from the fromClass to the specific toClass.
+     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
+     * */
+    public HashSet<FamixUmlLink> getAllUmlLinksFromClassToToClass(String fromClass, String toClass) {
+    	HashSet<FamixUmlLink> returnValue = new HashSet<FamixUmlLink>();
+    	if (umlLinks.containsKey(fromClass)) {
+    		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(fromClass);
+    		if (mapOfLinksPerFromClass.containsKey(toClass)) {
+    			returnValue = mapOfLinksPerFromClass.get(toClass);
+    		}
+    	}
+    	return returnValue;
     }
     
     public String toString() {

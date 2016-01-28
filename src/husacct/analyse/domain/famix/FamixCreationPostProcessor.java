@@ -1,9 +1,9 @@
 package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
-import husacct.analyse.domain.famix.FamixUmlLink.LinkType;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.States;
+import husacct.analyse.service.UmlLinkTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -202,7 +202,7 @@ class FamixCreationPostProcessor {
         		newLink.from = attribute.belongsToClass;
         		newLink.to = attribute.typeInClassDiagram;
         		newLink.attributeFrom = attribute.name;
-        		newLink.linkType = LinkType.ATTRIBUTELINK;
+        		newLink.linkType = UmlLinkTypes.ATTRIBUTELINK;
         		newLink.isComposite = attribute.isComposite;
         		addToModel(newLink);
         	}

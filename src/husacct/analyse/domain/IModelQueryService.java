@@ -1,11 +1,12 @@
 package husacct.analyse.domain;
 
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
 
 public interface IModelQueryService {
 
@@ -87,4 +88,14 @@ public interface IModelQueryService {
      * otherwise statistics of the selectedModule only are returned. 
     */
     public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
+    
+    /** Returns all the FamixUmlLinks going from the fromClass to other FamixClasses (not to xLibraries). 
+     * fromClass must be a unique name of FamixClass (not of an xLibraries). 
+     */
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass);
+
+    /** Returns all the UML-Links going from the fromClass to the specific toClass.
+     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
+     * */
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass);
 }

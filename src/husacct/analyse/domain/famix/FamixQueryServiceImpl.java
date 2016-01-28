@@ -1,11 +1,14 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
@@ -214,4 +217,31 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         return returnValue;
     }
 
-}
+    /** Returns all the UML-Links going from the fromClass to other FamixClasses (not to xLibraries). 
+     * fromClass must be a unique name of FamixClass (not of an xLibraries). 
+     */
+    @Override
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass) {
+    	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
+    	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getAllUmlLinksFromClassToOtherClasses(fromClass);
+    	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
+    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.linkType.toString());
+    		returnValue.add(umlLinkDTO);
+    	}
+    	return returnValue;
+    }
+    
+    /** Returns all the UML-Links going from the fromClass to the specific toClass.
+     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
+     * */
+    @Override
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass) {
+    	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
+    	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getAllUmlLinksFromClassToToClass(fromClass, toClass);
+    	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
+    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.linkType.toString());
+    		returnValue.add(umlLinkDTO);
+    	}
+    	return returnValue;
+    }
+ }

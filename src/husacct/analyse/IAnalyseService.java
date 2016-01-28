@@ -1,11 +1,13 @@
 package husacct.analyse;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
@@ -64,5 +66,10 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     
     /** If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. */
     public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
+    
+    /** Returns all the UML-Links going from the fromClass to the specific toClass.
+     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
+     * */
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass);
     
 }

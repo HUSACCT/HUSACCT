@@ -7,7 +7,6 @@ import technology.direct.dao.ProfileDAO;
 import technology.direct.dao.UserDAO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
@@ -20,7 +19,6 @@ public class DeclarationVariableInstance_GenericType_OneTypeParameter {
 	private HashSet<CheckInDAO> cDao;
 	private ArrayList<ProfileDAO> pDao;
 	private Vector<UserDAO> uDao;
-	private DeclarationParameter declaration;
  
 	public String testUsageOfInstanceVariableDefinedByGenericTypeOneParameterType(){
 		return pDao.get(0).toString();

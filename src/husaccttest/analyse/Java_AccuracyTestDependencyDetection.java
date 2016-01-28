@@ -2,6 +2,7 @@ package husaccttest.analyse;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
@@ -14,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -1089,6 +1091,67 @@ public class Java_AccuracyTestDependencyDetection {
 		int numberOfViolations = validateService.getViolationsByPhysicalPath(fromUnit, toUnit).length;
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
+
+	// UmlLinkTypes
+	@Test
+	public void UmlLinkType_fromArray(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.AccountDAO";
+		String fromAttribute = "aDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_fromList(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.BadgesDAO";
+		String fromAttribute = "bDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_fromHashSet(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.CheckInDAO";
+		String fromAttribute = "cDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_fromArrayList(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		String fromAttribute = "pDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_fromVector(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.UserDAO";
+		String fromAttribute = "uDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_fromHashMap(){ // No UmlLinks to the two referred types should exist.
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		toClass = "technology.direct.dao.FriendsDAO";
+		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+	}
+
 	
 	//
 	//private helpers
@@ -1161,6 +1224,31 @@ public class Java_AccuracyTestDependencyDetection {
 			dependencyTypesDetected = true;
 		}
 		return dependencyTypesDetected;
+	}
+
+	private boolean IsUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+		boolean umlLinkDetected = false;
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
+			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
+					(linkDTO.isComposite == isComposite) && linkDTO.linkType.equals(linkType)) {
+				umlLinkDetected = true;
+			}
+		}
+		return umlLinkDetected;
+	}
+
+	private boolean IsUmlLinkNotDetected(String classFrom, String classTo) {
+		boolean umlLinkDetected = true;
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
+			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo)) {
+				umlLinkDetected = false;
+			}
+		}
+		return umlLinkDetected;
 	}
 
 }

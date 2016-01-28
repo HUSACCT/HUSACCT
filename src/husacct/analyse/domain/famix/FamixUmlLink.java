@@ -1,10 +1,12 @@
 package husacct.analyse.domain.famix;
 
+import husacct.analyse.service.UmlLinkTypes;
+
 class FamixUmlLink extends FamixObject {
 
 	public String from = "";			
     public String to = "";
-    public LinkType linkType = LinkType.ATTRIBUTELINK;
+    public UmlLinkTypes linkType = UmlLinkTypes.ATTRIBUTELINK;
     public String attributeFrom = "";
 	public boolean isComposite = false; // False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[].
 
@@ -16,11 +18,4 @@ class FamixUmlLink extends FamixObject {
         s += "\n\n";
         return s;
     }
-    
-    public enum LinkType {
-    	INHERITANCELINK,
-        IMPLEMENTSLINK,
-        ATTRIBUTELINK;
-      }
-
 }
