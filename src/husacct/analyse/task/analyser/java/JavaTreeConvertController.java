@@ -73,6 +73,9 @@ class JavaTreeConvertController {
         if (!isTreeExisting(classTree)) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.ENUM);
         }
+        if (!isTreeExisting(classTree)) {
+            classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.AT);
+        }
         if (isTreeExisting(classTree)) {
             int classType = classTree.getType();
             switch (classType) {
@@ -80,6 +83,9 @@ class JavaTreeConvertController {
                     this.theClass = this.currentClass = delegateClass(classTree, false, false, false);
                     break;
                 case JavaParser.INTERFACE:
+                    this.theClass = this.currentClass = delegateClass(classTree, false, true, false);
+                    break;
+                case JavaParser.AT: // Annotation Type, currently handled as interface
                     this.theClass = this.currentClass = delegateClass(classTree, false, true, false);
                     break;
                 case JavaParser.ENUM:

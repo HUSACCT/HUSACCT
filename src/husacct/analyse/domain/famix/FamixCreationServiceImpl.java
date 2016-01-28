@@ -140,7 +140,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
     @Override
     public void createAttributeOnly(boolean classScope, boolean isFinal, String accesControlQualifier,
-            String belongsToClass, String declareType, String name, String uniqueName, int line, String typeInClassDiagram, boolean multipleValues) {
+            String belongsToClass, String declareType, String name, String uniqueName, int line, String typeInClassDiagram, boolean isComposite) {
 
         FamixAttribute famixAttribute = new FamixAttribute();
         famixAttribute.hasClassScope = classScope;
@@ -152,15 +152,15 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixAttribute.uniqueName = uniqueName;
         famixAttribute.lineNumber = line;
         famixAttribute.typeInClassDiagram = typeInClassDiagram;
-        famixAttribute.multipleValues = multipleValues;
+        famixAttribute.isComposite = isComposite;
         model.waitingStructuralEntities.add(famixAttribute);
     }
 
     @Override
     public void createAttribute(boolean classScope, boolean isFinal, String accesControlQualifier, String belongsToClass,
-            String declareType, String name, String uniqueName, int line, String typeInClassDiagram, boolean multipleValues) {
+            String declareType, String name, String uniqueName, int line, String typeInClassDiagram, boolean isComposite) {
     	
-    	createAttributeOnly(classScope, isFinal, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line, "", false);
+    	createAttributeOnly(classScope, isFinal, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line, typeInClassDiagram, isComposite);
         
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;

@@ -16,9 +16,9 @@ class JavaAttributeAndLocalVariableGenerator {
     private String belongsToClass;
     private int lineNumber;
     private String belongsToMethod;
-    private String declareType;			// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is ArrayList.
+    private String declareType;			// Note: In case of an instance variable with a generic type e.g. ArrayList<Person>, this value is ArrayList.
     private String typeInClassDiagram; 	// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is Person.
-    private boolean multipleValues; 	// False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[]. 
+    private boolean isComposite; 		// False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[]. 
 
     private int levelOfRecursionWithinGenericType;
 
@@ -26,7 +26,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
         /* Test helpers
-    	if (belongsToClass.contains("CallConstructor_GenericType_OneTypeParameter")) {
+    	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_OneTypeParameter")) {
     				boolean breakpoint = true;
     	} */
         initialize();
@@ -56,7 +56,7 @@ class JavaAttributeAndLocalVariableGenerator {
     private void initialize(){
         hasClassScope = false;
         isFinal = false;
-        multipleValues = false;
+        isComposite = false;
         typeInClassDiagram = "";
         name = "";
         accessControlQualifier = "";
@@ -95,10 +95,18 @@ class JavaAttributeAndLocalVariableGenerator {
                 CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) child, JavaParser.GENERIC_TYPE_ARG_LIST);
                 if (genericType != null) {
                 	this.declareType = genericType.getParent().getText(); // Container type, e.g. ArrayList;
-                	this.multipleValues = true;
+                	this.isComposite = true;
                 	addGenericTypeParameters(genericType);
                 } else {
                 	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass);
+                	//	Check if the type contains an Array declaration.
+                    CommonTree arrayType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) child, JavaParser.ARRAY_DECLARATOR);
+                    if (arrayType != null) {
+                    	this.isComposite = true;
+                    	if (!hasClassScope) { 
+	                    	this.typeInClassDiagram = this.declareType;
+                    	}
+                    }
                 }
                 walkThroughChildren = false;
             	break;
@@ -150,7 +158,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
 	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass);
 	                if (parameterTypeOfGeneric != null) {
-	                    if ((numberOfTypeParameters == 1) && (levelOfRecursionWithinGenericType == 0)) {
+	                    if ((numberOfTypeParameters == 1) && !hasClassScope && (levelOfRecursionWithinGenericType == 0)) {
 	                 		this.typeInClassDiagram = parameterTypeOfGeneric;
 	                    }
 	                	int currentLineNumber = qualifiedType.getLine();
@@ -167,9 +175,9 @@ class JavaAttributeAndLocalVariableGenerator {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
 	        }
 	        if (SkippedTypes.isSkippable(declareType)) {
-	            modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, multipleValues);
+	            modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, isComposite);
 	        } else {
-	            modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, multipleValues);
+	            modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, isComposite);
 	        }
 	        declareType = "";
     	}

@@ -3,6 +3,7 @@ package husacct.analyse.domain.famix;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.List;
 
@@ -22,6 +23,7 @@ class FamixModel extends FamixObject {
     public HashMap<String, FamixClass> classes;
     public HashMap<String, FamixImport> imports;
     public HashMap<String, FamixLibrary> libraries;
+    public HashMap<String, HashMap<String, HashSet<FamixUmlLink>>> umlLinks;  // UmlLinks per from-class (first String), per to-class (second String).
     public ArrayList<FamixAssociation> associations;
     public String modelCreationDate;
 	private int totalNumberOfLinesOfCode;
@@ -37,7 +39,27 @@ class FamixModel extends FamixObject {
         libraries = new HashMap<String, FamixLibrary>();
         structuralEntities = new HashMap<String, FamixStructuralEntity>();
         behaviouralEntities = new HashMap<String, FamixBehaviouralEntity>();
+        umlLinks = new HashMap<String, HashMap<String, HashSet<FamixUmlLink>>>();
         totalNumberOfLinesOfCode = 0;
+    }
+
+    public void clear() {
+        currentInstance.waitingAssociations.clear();
+        currentInstance.waitingStructuralEntities.clear();
+        currentInstance.associations.clear();
+        currentInstance.classes.clear();
+        currentInstance.packages.clear();
+        currentInstance.libraries.clear();
+        currentInstance.imports.clear();
+        currentInstance.structuralEntities.clear();
+        currentInstance.behaviouralEntities.clear();
+        currentInstance.umlLinks.clear();
+        totalNumberOfLinesOfCode = 0;
+    }
+    
+    public void clearAfterPostProcessing() {
+        currentInstance.waitingAssociations.clear();
+        currentInstance.waitingStructuralEntities.clear();
     }
 
     public static FamixModel getInstance() {
@@ -47,86 +69,124 @@ class FamixModel extends FamixObject {
         return currentInstance;
     }
 
-    public void addObject(FamixObject e) throws InvalidAttributesException {
+    // Add Methods
+    
+    public void addObject(FamixObject famixObject) throws InvalidAttributesException {
         try{
-    	if (e instanceof FamixEntity) {
+    	if (famixObject instanceof FamixEntity) {
         	// Test Utility
     		//if (((FamixEntity) e).uniqueName.contains("xxx")) {
         	//	String test = "breakpoint"; }
-            if (e instanceof FamixBehaviouralEntity) {
-                behaviouralEntities.put(((FamixEntity) e).uniqueName, (FamixBehaviouralEntity) e);
-            } else if (e instanceof FamixStructuralEntity) {
-                structuralEntities.put(((FamixEntity) e).uniqueName, (FamixStructuralEntity) e);
-            } else if (e instanceof FamixPackage) {
-                if (!packages.containsKey(((FamixEntity) e).uniqueName)){
-	            	packages.put(((FamixEntity) e).uniqueName, (FamixPackage) e);
-	                String parentUniqueName = ((FamixPackage) e).belongsToPackage;
-	                FamixPackage parent = null;
-	                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
-	                	parent = packages.get(parentUniqueName);
-	                	parent.children.add(((FamixEntity) e).uniqueName);
-	                }
-                }
-            } else if (e instanceof FamixClass) {
-                if (!classes.containsKey(((FamixEntity) e).uniqueName)){
-	            	classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
-	                String parentUniqueName;
-	                if (((FamixClass) e).isInnerClass) {
-	                	((FamixClass) e).linesOfCode = 0;
-	                	parentUniqueName = ((FamixClass) e).belongsToClass;
-	            		if ((!parentUniqueName.equals("")) && (classes.containsKey(parentUniqueName))){
-	            			FamixClass parent = classes.get(parentUniqueName);
-	            			parent.hasInnerClasses = true;
-	            			parent.children.add(((FamixEntity) e).uniqueName);
-	            		}
-	                } else {
-	                	parentUniqueName = ((FamixClass) e).belongsToPackage;
-		                FamixPackage parent = null;
-		                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
-		                	parent = packages.get(parentUniqueName);
-		                	parent.children.add(((FamixEntity) e).uniqueName);
-		                }
-	                }
-	                int loc = ((FamixClass) e).linesOfCode;
-	                if (loc > 0) { 
-	                	totalNumberOfLinesOfCode = totalNumberOfLinesOfCode + loc;
-	                }
-                }
-            } else if (e instanceof FamixLibrary) {
-                if (!libraries.containsKey(((FamixEntity) e).uniqueName)){
-                	libraries.put(((FamixEntity) e).uniqueName, (FamixLibrary) e);
-	                ((FamixLibrary) e).external = true;
-	                String parentUniqueName = ((FamixLibrary) e).belongsToPackage;
-	                if (parentUniqueName.equals("xLibraries")){
-		                FamixPackage parent = null;
-		                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
-		                	parent = packages.get(parentUniqueName);
-		                	parent.children.add(((FamixEntity) e).uniqueName);
-		                }
-	                } else {
-		                FamixLibrary parent = null;
-		                if (!parentUniqueName.equals("") && (libraries.containsKey(parentUniqueName))){
-		                	parent = libraries.get(parentUniqueName);
-		                	parent.children.add(((FamixEntity) e).uniqueName);
-		                }
-	                }
-                }
+            if (famixObject instanceof FamixBehaviouralEntity) {
+                behaviouralEntities.put(((FamixEntity) famixObject).uniqueName, (FamixBehaviouralEntity) famixObject);
+            } else if (famixObject instanceof FamixStructuralEntity) {
+                structuralEntities.put(((FamixEntity) famixObject).uniqueName, (FamixStructuralEntity) famixObject);
+            } else if (famixObject instanceof FamixPackage) {
+            	addFamixPackage(famixObject);
+            } else if (famixObject instanceof FamixClass) {
+            	addFamixClass(famixObject);
+            } else if (famixObject instanceof FamixLibrary) {
+            	addFamixLibrary(famixObject);
             }
-        } else if (e instanceof FamixAssociation){
-			if(e instanceof FamixImport){
-				String importKey = ((FamixImport)e).importedModule + "." +((FamixImport)e).importingClass;
-				imports.put(importKey, (FamixImport) e);
+        } else if (famixObject instanceof FamixAssociation){
+			if(famixObject instanceof FamixImport){
+				String importKey = ((FamixImport)famixObject).importedModule + "." +((FamixImport)famixObject).importingClass;
+				imports.put(importKey, (FamixImport) famixObject);
 			}
-			associations.add((FamixAssociation) e);
-		} else {
+			associations.add((FamixAssociation) famixObject);
+        } else if (famixObject instanceof FamixUmlLink){
+        	addFamixUmlLink((FamixUmlLink) famixObject);
+        } else {
             throw new InvalidAttributesException("Wrongtype (not of type entity or association) ");
         }
         }catch(Exception e1) {
-        	this.logger.error(new Date().toString() + " Exception while adding:  " + e.toString());
+        	this.logger.error(new Date().toString() + " Exception while adding:  " + famixObject.toString());
 	        e1.printStackTrace();
         }
     }
 
+    private void addFamixPackage(FamixObject famixObject) {
+        if (!packages.containsKey(((FamixEntity) famixObject).uniqueName)){
+        	packages.put(((FamixEntity) famixObject).uniqueName, (FamixPackage) famixObject);
+            String parentUniqueName = ((FamixPackage) famixObject).belongsToPackage;
+            FamixPackage parent = null;
+            if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+            	parent = packages.get(parentUniqueName);
+            	parent.children.add(((FamixEntity) famixObject).uniqueName);
+            }
+        }
+    }
+    
+    private void addFamixClass(FamixObject famixObject) {
+        if (!classes.containsKey(((FamixEntity) famixObject).uniqueName)){
+        	classes.put(((FamixEntity) famixObject).uniqueName, (FamixClass) famixObject);
+            String parentUniqueName;
+            if (((FamixClass) famixObject).isInnerClass) {
+            	((FamixClass) famixObject).linesOfCode = 0;
+            	parentUniqueName = ((FamixClass) famixObject).belongsToClass;
+        		if ((!parentUniqueName.equals("")) && (classes.containsKey(parentUniqueName))){
+        			FamixClass parent = classes.get(parentUniqueName);
+        			parent.hasInnerClasses = true;
+        			parent.children.add(((FamixEntity) famixObject).uniqueName);
+        		}
+            } else {
+            	parentUniqueName = ((FamixClass) famixObject).belongsToPackage;
+                FamixPackage parent = null;
+                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+                	parent = packages.get(parentUniqueName);
+                	parent.children.add(((FamixEntity) famixObject).uniqueName);
+                }
+            }
+            int loc = ((FamixClass) famixObject).linesOfCode;
+            if (loc > 0) { 
+            	totalNumberOfLinesOfCode = totalNumberOfLinesOfCode + loc;
+            }
+        }
+    }
+    
+    private void addFamixLibrary(FamixObject famixObject) {
+    	if (!libraries.containsKey(((FamixEntity) famixObject).uniqueName)){
+        	libraries.put(((FamixEntity) famixObject).uniqueName, (FamixLibrary) famixObject);
+            ((FamixLibrary) famixObject).external = true;
+            String parentUniqueName = ((FamixLibrary) famixObject).belongsToPackage;
+            if (parentUniqueName.equals("xLibraries")){
+                FamixPackage parent = null;
+                if (!parentUniqueName.equals("") && (packages.containsKey(parentUniqueName))){
+                	parent = packages.get(parentUniqueName);
+                	parent.children.add(((FamixEntity) famixObject).uniqueName);
+                }
+            } else {
+                FamixLibrary parent = null;
+                if (!parentUniqueName.equals("") && (libraries.containsKey(parentUniqueName))){
+                	parent = libraries.get(parentUniqueName);
+                	parent.children.add(((FamixEntity) famixObject).uniqueName);
+                }
+            }
+        }
+    }
+    
+    private void addFamixUmlLink(FamixUmlLink famixUmlLink) {
+    	HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass;
+    	HashSet<FamixUmlLink> setOfLinksPerToClass;
+    	if (umlLinks.containsKey(famixUmlLink.from)){
+    		mapOfLinksPerFromClass = umlLinks.get(famixUmlLink.from);
+    		if (mapOfLinksPerFromClass.containsKey(famixUmlLink.to)) {
+    			setOfLinksPerToClass = mapOfLinksPerFromClass.get(famixUmlLink.to);
+    		} else {
+    			setOfLinksPerToClass = new HashSet<FamixUmlLink>();
+    			mapOfLinksPerFromClass.put(famixUmlLink.to, setOfLinksPerToClass);
+    		}
+    	} else {
+			setOfLinksPerToClass = new HashSet<FamixUmlLink>();
+			mapOfLinksPerFromClass = new HashMap<String, HashSet<FamixUmlLink>>();
+			mapOfLinksPerFromClass.put(famixUmlLink.to, setOfLinksPerToClass);
+			umlLinks.put(famixUmlLink.from, mapOfLinksPerFromClass);
+    	}
+		setOfLinksPerToClass.add(famixUmlLink);
+	}
+
+    // Get methods
+    
     public ArrayList<FamixAssociation> getAssociations() {
         return associations;
     }
@@ -228,21 +288,4 @@ class FamixModel extends FamixObject {
 
     }
 
-    public void clear() {
-        currentInstance.waitingAssociations.clear();
-        currentInstance.waitingStructuralEntities.clear();
-        currentInstance.associations.clear();
-        currentInstance.classes.clear();
-        currentInstance.packages.clear();
-        currentInstance.libraries.clear();
-        currentInstance.imports.clear();
-        currentInstance.structuralEntities.clear();
-        currentInstance.behaviouralEntities.clear();
-        totalNumberOfLinesOfCode = 0;
-    }
-    
-    public void clearAfterPostProcessing() {
-        currentInstance.waitingAssociations.clear();
-        currentInstance.waitingStructuralEntities.clear();
-    }
 }

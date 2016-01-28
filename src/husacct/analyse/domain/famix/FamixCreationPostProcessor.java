@@ -1,6 +1,7 @@
 package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
+import husacct.analyse.domain.famix.FamixUmlLink.LinkType;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.States;
 
@@ -86,10 +87,10 @@ class FamixCreationPostProcessor {
             	boolean declareTypeHasValue = false;
             	String theContainingClass = entity.belongsToClass;
             	
-            	// Test helper
-            	//if (theContainingClass.contains("BaseIndirect")){
-            	//	boolean breakpoint1 = true;
-            	//}
+            	/* Test helper
+            	if (theContainingClass.contains("domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter")){
+            		boolean breakpoint1 = true;
+            	} */
             	
             	// Check if belongsToClass refers to an existing class
             	if (theModel.classes.containsKey(theContainingClass)) {
@@ -107,7 +108,7 @@ class FamixCreationPostProcessor {
 
             	// Objective: If declareType is a name instead of a unique name,  than replace it by the unique name of a FamixEntity (Class or Library) it represents.
             	// Try to derive declareType from the unique name from the imports.
-            	if (belongsToClassExists && (!declareTypeExists) && declareTypeHasValue) {
+            	if (belongsToClassExists && !declareTypeExists && declareTypeHasValue) {
 	            	String classFoundInImports = "";
                     classFoundInImports = findClassInImports(theContainingClass, entity.declareType);
                     if (!classFoundInImports.equals("")) {
@@ -118,7 +119,7 @@ class FamixCreationPostProcessor {
                 	}
         		}
 
-            	// Find out or the name refers to a type in the same package as the from class.*/
+            	// Find out or the name refers to a type in the same package as the from class.
             	if (belongsToClassExists && (!declareTypeExists) && declareTypeHasValue) {
                     String belongsToPackage = theModel.classes.get(theContainingClass).belongsToPackage;
             		String type = findClassInPackage(entity.declareType, belongsToPackage);
@@ -130,6 +131,10 @@ class FamixCreationPostProcessor {
                     }
                 }
                 
+            	if (belongsToClassExists && (entity instanceof FamixAttribute)){ 
+            		createFamixUmlLinkIfNeeded(entity, declareTypeExists);
+                }
+            	
             	if (belongsToClassExists && declareTypeHasValue) { // Entities with primitive types should not be filtered out
             		addToModel(entity);
             	} else {
@@ -147,7 +152,64 @@ class FamixCreationPostProcessor {
         }
     }
 
-    void processBehaviouralEntities() {
+    /* If entity is an instance variable, and if typeInClassDiagram refers to a FamixClass, a FamixUmlLink has to be created.
+     * An instance variable: is an instance of FamixAttribute with hasClassScope = false.
+     * If (isComposite = false), typeInClassDiagram can be set to the value of declareType.
+     * If (isComposite = true) and (typeInClassDiagram != ""), repeat the procedure above to determine the type of typeInClassDiagram.
+     * This is necessary to report 1..* associations, e.g. as used in UML class diagrams. 
+     */
+    private void createFamixUmlLinkIfNeeded(FamixStructuralEntity entity, boolean declareTypeExists) {
+    	boolean typeInClassDiagramRefersToClass = false;
+    	FamixAttribute attribute = (FamixAttribute) entity;
+		if (!attribute.hasClassScope) {
+			if (!attribute.isComposite) {  
+				if (declareTypeExists && theModel.classes.containsKey(attribute.declareType)) {
+					attribute.typeInClassDiagram = attribute.declareType;
+					typeInClassDiagramRefersToClass = true;
+				}
+			} else {
+				if ((attribute.typeInClassDiagram != null) && (!attribute.typeInClassDiagram.equals(""))) {
+        			// Check if typeInClassDiagram refers to an existing class or library
+        			if (theModel.classes.containsKey(attribute.typeInClassDiagram)) {
+	            		typeInClassDiagramRefersToClass = true;
+	            	} else {
+	            		// Try to derive typeInClassDiagram from the unique name from the imports.
+		            	String classFoundInImports = "";
+	                    classFoundInImports = findClassInImports(attribute.belongsToClass, attribute.typeInClassDiagram);
+	                    if (!classFoundInImports.equals("")) {
+		                	if (theModel.classes.containsKey(classFoundInImports)) {
+		                		attribute.typeInClassDiagram = classFoundInImports;
+		                		typeInClassDiagramRefersToClass = true;
+		                	}
+	                	}
+	            	}
+                	if (!typeInClassDiagramRefersToClass) {
+                    	// Find out if typeInClassDiagram refers to a type in the same package as the from class.
+                        String belongsToPackage = theModel.classes.get(attribute.belongsToClass).belongsToPackage;
+                		String type = findClassInPackage(attribute.typeInClassDiagram, belongsToPackage);
+                        if (!type.equals("")) {
+    	                	if (theModel.classes.containsKey(type)) {
+    	                		attribute.typeInClassDiagram = type;
+    	                		typeInClassDiagramRefersToClass = true;
+    	                	}
+                        }
+                    }
+				}
+			}
+        	if (typeInClassDiagramRefersToClass) {
+        		// Create FamixUmlLink and add it to the FamixModel
+        		FamixUmlLink newLink = new FamixUmlLink();
+        		newLink.from = attribute.belongsToClass;
+        		newLink.to = attribute.typeInClassDiagram;
+        		newLink.attributeFrom = attribute.name;
+        		newLink.linkType = LinkType.ATTRIBUTELINK;
+        		newLink.isComposite = attribute.isComposite;
+        		addToModel(newLink);
+        	}
+		}
+    }
+    
+    public void processBehaviouralEntities() {
     	sequencesPerMethod = new HashMap<String, ArrayList<FamixMethod>>(); 
     	for (FamixBehaviouralEntity entity : theModel.behaviouralEntities.values()) {
             try {
