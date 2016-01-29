@@ -281,6 +281,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructor(){
+		String fromClass = "domain.direct.violating.CallConstructor";
+		String toClass = "technology.direct.dao.AccountDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Constructor", false));
+	}
+
+	@Test
 	public void CallConstructor_GenericType_MultipleTypeParameters(){
 		String fromClass = "domain.direct.violating.CallConstructor_GenericType_MultipleTypeParameters";
 		String toClass = "xLibraries.java.util.HashMap";
@@ -291,15 +300,6 @@ public class Java_AccuracyTestDependencyDetection {
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, "Generic Type Parameter", false));
-	}
-
-	@Test
-	public void CallConstructor(){
-		String fromClass = "domain.direct.violating.CallConstructor";
-		String toClass = "technology.direct.dao.AccountDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Call");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Constructor", false));
 	}
 
 	@Test

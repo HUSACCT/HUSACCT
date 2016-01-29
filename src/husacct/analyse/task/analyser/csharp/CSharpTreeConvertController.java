@@ -5,10 +5,7 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -25,7 +22,6 @@ public class CSharpTreeConvertController {
 	CSharpPropertyGenerator csPropertyGenerator;
 	CSharpMethodGeneratorController csMethodeGenerator;
 	CSharpLamdaGenerator csLamdaGenerator;
-	List<CommonTree> usings = new ArrayList<>();
 	Stack<String> namespaceStack = new Stack<>();
 	Stack<String> classNameStack = new Stack<>();
     //private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
@@ -56,7 +52,7 @@ public class CSharpTreeConvertController {
 
 	private void delegateASTToGenerators(CommonTree tree) {
 		/* Test and Debug
-		if (sourceFilePath.contains("DeclarationVariableInstanceGeneric.cs")) {
+		if (sourceFilePath.contains("CallInstanceLibraryClass")) {
 			boolean breakpoint = true;
 		} */
 		
@@ -132,7 +128,7 @@ public class CSharpTreeConvertController {
 	}
 
 	private void saveUsing(CommonTree usingTree) {
-		csUsingGenerator.add(usingTree);
+		csUsingGenerator.addUsings(usingTree);
 	}
 
 	private void delegateUsings() {

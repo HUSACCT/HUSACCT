@@ -441,8 +441,8 @@ class FamixCreationPostProcessor {
                 }
 
                 /* Test helper
-            	if (fromExists && association.from.contains("Domain.Direct.Violating.AccessClassVariableInterface")) {
-            		if (association.lineNumber == 9) {
+            	if (fromExists && association.from.contains("CallInstanceLibraryClass")) {
+            		if (association.lineNumber == 10) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -773,8 +773,10 @@ class FamixCreationPostProcessor {
         	addToModel(indirectAssociation);
         }
 
-        /*this.logger.info(new Date().toString() + " Connected via 1) Import or Package: " + numberOfConnectedViaImportOrPackage + ", 2) Variable: " + numberOfConnectedViaAttribute  
-        		+ ", 3) Local var: " + numberOfConnectedViaLocalVariable + ", 4) Method: " +  numberOfConnectedViaMethod +  ", 5) Inherited var/method: " + numberOfDerivedAssociations + ", 6) added to Model: " + numberofAssociationsAddedToModel); */
+        String logString = " Connected via 1) Import or Package: " + numberOfConnectedViaImportOrPackage + ", 2) Variable: " + numberOfConnectedViaAttribute  
+        		+ ", 3) Local var: " + numberOfConnectedViaLocalVariable + ", 4) Method: " +  numberOfConnectedViaMethod +  ", 5) Inherited var/method: " + numberOfDerivedAssociations + ", 6) added to Model: " + numberofAssociationsAddedToModel;
+        /*this.logger.info(new Date().toString() + logString); */
+        logString.trim();
     }
     
 	// Objective: Identify dependencies to the remaining parts of the chain in a chaining invocation (assignment or call).
@@ -965,7 +967,7 @@ class FamixCreationPostProcessor {
         	waitingDerivedAssociations.clear();
     		waitingDerivedAssociations.addAll(addedInvocations);
     		addedInvocations.clear();
-        	//this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
+        	this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
     		processWaitingDerivedAssociations();
     	} else if ((waitingDerivedAssociations != null) && (waitingDerivedAssociations.size() > 0)) {
     		FamixInvocation lastInvocatioInLargeChain = waitingDerivedAssociations.get(waitingDerivedAssociations.size() - 1);
@@ -1219,23 +1221,23 @@ class FamixCreationPostProcessor {
     	List<FamixImport> importsOfClass = importsPerEntity.get(importingClass);
     	if (importsOfClass != null){
 	        for (FamixImport fImport : importsOfClass) {
-	            if (!fImport.importsCompletePackage) {
-	                if (fImport.to.endsWith("." + typeDeclaration)) {
-	                    return fImport.to;
-	                } else {
-	                	FamixClass importedClass = theModel.classes.get(fImport.to);
-	        			if (importedClass != null){
-	        				if (importedClass.hasInnerClasses){
-	        					for (String innerClass : importedClass.children) {
-		        	                if (innerClass.endsWith("." + typeDeclaration)) {
-		        	                    return innerClass;
-		        	                }
-	        					}
-	        				}
-	        			}
-	                }
-	            } 
-	            else {
+                if (fImport.to.endsWith("." + typeDeclaration)) {
+            		return fImport.to;
+                } else {
+                	FamixClass importedClass = theModel.classes.get(fImport.to);
+        			if (importedClass != null){
+        				if (importedClass.hasInnerClasses){
+        					for (String innerClass : importedClass.children) {
+	        	                if (innerClass.endsWith("." + typeDeclaration)) {
+	        	                    return innerClass;
+	        	                }
+        					}
+        				}
+        			}
+                }
+	                
+	            // If the import refers to a complete package or namespace, try to find a class with a matching name within this package
+	            if (fImport.importsCompletePackage) {
 	                for (String uniqueClassName : getClassesInPackage(fImport.to)) {
 	                    if (uniqueClassName.endsWith("." + typeDeclaration)) {
 	                        return uniqueClassName;

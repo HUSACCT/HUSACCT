@@ -148,11 +148,11 @@ class JavaAttributeAndLocalVariableGenerator {
     private void setType(Tree typeTree) {
         javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
         // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
-        CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.GENERIC_TYPE_ARG_LIST);
-        if (genericType != null) {
-        	this.declareType = genericType.getParent().getText(); // Container type, e.g. ArrayList;
+        CommonTree typeArgumentList = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.GENERIC_TYPE_ARG_LIST);
+        if (typeArgumentList != null) {
+        	this.declareType = typeArgumentList.getParent().getText(); // Container type, e.g. ArrayList;
         	this.isComposite = true;
-        	addGenericTypeParameters(genericType);
+        	addGenericTypeParameters(typeArgumentList);
         } else {
         	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeTree, belongsToClass);
         	//	Check if the type contains an Array declaration.

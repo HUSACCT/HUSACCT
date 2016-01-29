@@ -2,6 +2,7 @@ package husaccttest.analyse;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -271,6 +273,19 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallConstructor_GenericType_MultipleTypeParameters(){
+		String fromClass = "Domain.Direct.Violating.CallConstructor_GenericType_MultipleTypeParameters";
+		String toClass = "xLibraries.System.Collections.Generic.Dictionary";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Library Method", false));
+		typesToFind.clear();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.UserDAO", typesToFind, "Generic Type Parameter", false));
+	}
+
+	@Test
 	public void CallConstructorInnerClass(){
 		String fromClass = "Domain.Direct.Violating.CallConstructorInnerClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
@@ -378,12 +393,19 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void CallInstanceLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
+	public void CallInstanceLibraryClass(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceLibraryClass";
-		String toClass = "FI.Foyt.Foursquare.Api.FoursquareApi";
+		String toClass = "xLibraries.FI.Foyt.Foursquare.Api.FoursquareApi";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Call");
-		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		typesToFind.clear();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		typesToFind.clear();
+		typesToFind.add("Inheritance");
+		toClass = "Domain.Direct.Base";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
 	@Test
@@ -466,12 +488,34 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void DeclarationParameter_GenericType_OneTypeParameter(){
+		String fromClass = "Domain.Direct.Violating.DeclarationParameter_GenericType_OneTypeParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		typesToFind.clear();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.System.Collections.Generic.List", typesToFind, "Library Method", false));
+	}
+
+	@Test
 	public void DeclarationReturnType(){
 		String fromClass = "Domain.Direct.Violating.DeclarationReturnType";
 		String toClass = "Technology.Direct.Dao.VenueDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
+
+	@Test
+	public void DeclarationReturnType_GenericType_OneTypeParameter(){
+		String fromClass = "Domain.Direct.Violating.DeclarationReturnType_GenericType_OneTypeParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Generic Type Parameter", false));
+		typesToFind.clear();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.System.Collections.Generic.List", typesToFind, "Library Method", false));
 	}
 
 	@Test
@@ -519,6 +563,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
 
+	@Test
+	public void DeclarationVariableInstance_GenericType_OneTypeParameter(){
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.AccountDAO", typesToFind, "Instance Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.BadgesDAO", typesToFind, "Generic Type Parameter", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.CheckInDAO", typesToFind, "Generic Type Parameter", false));
+	}
 	@Test
 	public void DeclarationVariableStatic(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableStatic";
@@ -956,6 +1009,23 @@ public class CSharp_AccuracyTestDependencyDetection {
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 */
+
+	
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_MultipleAttributesOfTheSameTypeAtTheSameLine(){
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_MultipleAttributesAtTheSameLine";
+		String toClass = "Technology.Direct.Dao.ProfileDAO";
+		String fromAttribute = "p1Dao";
+		boolean isComposite = false;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		fromAttribute = "p2Dao";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		fromAttribute = "p3Dao";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+	
+	
 	
 	//
 	//private helpers
@@ -1036,4 +1106,57 @@ public class CSharp_AccuracyTestDependencyDetection {
 		}
 		return dependencyTypesDetected;
 	}
+
+	private boolean areDependencyTypesDetected(String classFrom, String classTo, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
+		boolean dependencyTypesDetected = false;
+		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(classFrom, classTo);
+		int numberOfDependencies = foundDependencies.length;
+		for (String dependencyType : dependencyTypes) {
+			boolean found = false;
+			for (int i=0 ; i < numberOfDependencies; i++){
+				if (foundDependencies[i].type.equals(dependencyType) && (foundDependencies[i].isIndirect) == isIndirect) {
+					if (!subType.equals("")) {
+						if (foundDependencies[i].subType.equals(subType)) {
+							found = true;	
+						}
+					} else {
+						found = true;
+					}
+				}
+			}
+			foundDependencyTypes.put(dependencyType,found);
+		}
+		if (!foundDependencyTypes.containsValue(false)){
+			dependencyTypesDetected = true;
+		}
+		return dependencyTypesDetected;
+	}
+
+	private boolean IsUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+		boolean umlLinkDetected = false;
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
+			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
+					(linkDTO.isComposite == isComposite) && linkDTO.linkType.equals(linkType)) {
+				umlLinkDetected = true;
+			}
+		}
+		return umlLinkDetected;
+	}
+
+	private boolean IsUmlLinkNotDetected(String classFrom, String classTo) {
+		boolean umlLinkDetected = true;
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
+			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo)) {
+				umlLinkDetected = false;
+			}
+		}
+		return umlLinkDetected;
+	}
+
 }

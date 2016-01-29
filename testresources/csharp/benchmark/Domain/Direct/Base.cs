@@ -1,6 +1,7 @@
 using FI.Foyt.Foursquare.Api.FoursquareApi;
 using Technology.Direct.Dao;
 using Technology.Direct.Subclass;
+using System.Collections.Generic;
 
 namespace Domain.Direct
 {
@@ -27,6 +28,8 @@ namespace Domain.Direct
 		protected internal CallInstanceSubSubClassDOA subSubDao;
 		
 		protected internal List<ProfileDAO> profileDAOs;
+
+		protected Dictionary<ProfileDAO, UserDAO> dictionary;
 
 
 		public Base()

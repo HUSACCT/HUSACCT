@@ -9,8 +9,16 @@ public class CSharpUsingGenerator extends CSharpGenerator {
 
     ArrayList<UsingInformation> usingArray = new ArrayList<>();
 
-    public void add(CommonTree usingTree) {
-        usingArray = getUsingModule(usingTree);
+    public void addUsings(CommonTree usingTree) {
+        ArrayList<UsingInformation> usings = new ArrayList<>();
+        for (int i = 0; i < usingTree.getChildCount(); i++) {
+            if (usingTree.getChild(i).getType() == CSharpParser.USING_NAMESPACE_DIRECTIVE) {
+                usings.add(getUsing((CommonTree) usingTree.getChild(i)));
+            } else if (usingTree.getChild(i) instanceof CommonErrorNode) {
+                usings.add(getUsingFromError((CommonErrorNode) usingTree.getChild(i)));
+            }
+        }
+        usingArray.addAll(usings);
     }
 
     public void generateToDomain(String location) {
@@ -22,18 +30,6 @@ public class CSharpUsingGenerator extends CSharpGenerator {
             boolean isCompleteNamespace = true; //ui.isComplete;
             modelService.createImport(usingLocation, usingModule, lineNumber, completeUsingDeclaration, isCompleteNamespace);
         }
-    }
-
-    private ArrayList<UsingInformation> getUsingModule(CommonTree usingTree) {
-        ArrayList<UsingInformation> usings = new ArrayList<>();
-        for (int i = 0; i < usingTree.getChildCount(); i++) {
-            if (usingTree.getChild(i).getType() == CSharpParser.USING_NAMESPACE_DIRECTIVE) {
-                usings.add(getUsing((CommonTree) usingTree.getChild(i)));
-            } else if (usingTree.getChild(i) instanceof CommonErrorNode) {
-                usings.add(getUsingFromError((CommonErrorNode) usingTree.getChild(i)));
-            }
-        }
-        return usings;
     }
 
     private UsingInformation getUsing(CommonTree tree) {
