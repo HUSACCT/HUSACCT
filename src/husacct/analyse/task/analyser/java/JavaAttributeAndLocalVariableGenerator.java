@@ -8,7 +8,6 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class JavaAttributeAndLocalVariableGenerator {
-	// Attributes of the to-be-created variable
     private String name;
     private String accessControlQualifier;
     private boolean hasClassScope;
@@ -16,31 +15,31 @@ class JavaAttributeAndLocalVariableGenerator {
     private String belongsToClass;
     private int lineNumber;
     private String belongsToMethod;
-    private String declareType;			// Note: In case of an instance variable with a generic type e.g. ArrayList<Person>, this value is ArrayList.
+    private String declareType;			// Type of the attribute. In case of an instance variable with a generic type e.g. ArrayList<Person>, this value is ArrayList.
     private String typeInClassDiagram; 	// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is Person.
     private boolean isComposite; 		// False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[]. 
 
+    private boolean isLocalVariable;
     private int levelOfRecursionWithinGenericType;
-
+    private JavaInvocationGenerator javaInvocationGenerator;
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
     public void generateAttributeToDomain(Tree attributeTree, String belongsToClass) {
-        // Test helpers
+        /* Test helpers
     	if (belongsToClass.contains("DeclarationVariableInstance_MultipleAttributesAtTheSameLine")) {
     				boolean breakpoint = true;
-    	} //
+    	} */
         initialize();
         this.belongsToClass = belongsToClass;
-        startFiltering(attributeTree, belongsToClass);
-        createAttributeObject();
+        walkThroughAST(attributeTree);
     }
 
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
         initialize();
+        isLocalVariable = true;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
-        startFiltering(attributeTree, belongsToClass);
-        createLocalVariableObject();
+        walkThroughAST(attributeTree);
     }
 
     public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
@@ -65,19 +64,11 @@ class JavaAttributeAndLocalVariableGenerator {
         declareType = "";
         lineNumber = 0;
         levelOfRecursionWithinGenericType = 0;
+        isLocalVariable = false;
     }
     
-    private void startFiltering(Tree attributeTree, String belongsToClass) {
-        CommonTree currentTree = (CommonTree) attributeTree;
-        CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);
-        if (IdentTree != null) {
-            this.name = IdentTree.getText();
-        } 
-        walkThroughAST(attributeTree);
-    }
-
     private void walkThroughAST(Tree tree) {
-    	JavaInvocationGenerator javaInvocationGenerator = null;
+    	javaInvocationGenerator = null;
     	JavaAnnotationGenerator annotationGenerator = null;
 
         for (int i = 0; i < tree.getChildCount(); i++) {
@@ -86,39 +77,29 @@ class JavaAttributeAndLocalVariableGenerator {
             int treeType = child.getType();
             switch(treeType)
             {
+            // The first three cases are the default ones for a variable declaration, in order of appearance 
             case JavaParser.MODIFIER_LIST:
                 setModifiers(child);
-            	break;
-            case JavaParser.TYPE:
-                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-                // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
-                CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) child, JavaParser.GENERIC_TYPE_ARG_LIST);
-                if (genericType != null) {
-                	this.declareType = genericType.getParent().getText(); // Container type, e.g. ArrayList;
-                	this.isComposite = true;
-                	addGenericTypeParameters(genericType);
-                } else {
-                	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass);
-                	//	Check if the type contains an Array declaration.
-                    CommonTree arrayType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) child, JavaParser.ARRAY_DECLARATOR);
-                    if (arrayType != null) {
-                    	this.isComposite = true;
-                    	if (!hasClassScope) { 
-	                    	this.typeInClassDiagram = this.declareType;
-                    	}
-                    }
-                }
                 walkThroughChildren = false;
             	break;
-            case JavaParser.VAR_DECLARATOR:
-                setAttributeName(child);
+            case JavaParser.TYPE:
+            	setType(child);
+                walkThroughChildren = false;
             	break;
+            case JavaParser.VAR_DECLARATOR_LIST:
+                setName(child);
+                // Walk through the children is needed, since these children may represent assignment statements too.
+            	break;
+        	// A variable declaration may present as prefix of the variable declaration
+            case JavaParser.AT:
+                annotationGenerator = new JavaAnnotationGenerator();
+                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "variable");
+            	break;
+        	// Assignment statements are passed to a suitable method of JavaInvocationGenerator 
             case JavaParser.EXPR:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 walkThroughChildren = false;
-            	break;
-            case JavaParser.GENERIC_TYPE_ARG_LIST:
             	break;
             case JavaParser.METHOD_CALL:
             	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
@@ -130,10 +111,6 @@ class JavaAttributeAndLocalVariableGenerator {
                 javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, belongsToMethod);
                 walkThroughChildren = false;
             	break;
-            case JavaParser.AT:
-                annotationGenerator = new JavaAnnotationGenerator();
-                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "variable");
-            	break;
             }
             if (walkThroughChildren) {
             	walkThroughAST(child);
@@ -141,6 +118,54 @@ class JavaAttributeAndLocalVariableGenerator {
         }
     }
 
+    private void setModifiers(Tree ModifierList) {
+    	accessControlQualifier = "package";
+    	hasClassScope = false;
+    	isFinal = false;
+        for (int i = 0; i < ModifierList.getChildCount(); i++) {
+            int treeType = ModifierList.getChild(i).getType();
+            switch(treeType)
+            {
+	            case JavaParser.PRIVATE:
+	            	accessControlQualifier = "private";
+	            	break;
+	            case JavaParser.PUBLIC:
+	            	accessControlQualifier = "public";
+	            	break;
+	            case JavaParser.PROTECTED:
+	            	accessControlQualifier = "protected";
+	            	break;
+	            case JavaParser.STATIC:
+	            	hasClassScope = true;
+	            	break;
+	            case JavaParser.FINAL:
+	                isFinal = true;
+	            	break;
+        	}
+        }
+    }
+
+    private void setType(Tree typeTree) {
+        javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+        // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
+        CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.GENERIC_TYPE_ARG_LIST);
+        if (genericType != null) {
+        	this.declareType = genericType.getParent().getText(); // Container type, e.g. ArrayList;
+        	this.isComposite = true;
+        	addGenericTypeParameters(genericType);
+        } else {
+        	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeTree, belongsToClass);
+        	//	Check if the type contains an Array declaration.
+            CommonTree arrayType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.ARRAY_DECLARATOR);
+            if (arrayType != null) {
+            	this.isComposite = true;
+            	if (!hasClassScope) { 
+                	this.typeInClassDiagram = this.declareType;
+            	}
+            }
+        }
+    }
+    
     // Detects generic type parameters, also in complex types, like: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
     private void addGenericTypeParameters(CommonTree genericType) {
     	JavaInvocationGenerator javaInvocationGenerator = null;
@@ -169,7 +194,26 @@ class JavaAttributeAndLocalVariableGenerator {
         }
 	}
 
-	private void createAttributeObject() {
+    private void setName(Tree varDeclaratorListTree) {
+        for (int i = 0; i < varDeclaratorListTree.getChildCount(); i++) {
+            Tree varDeclaratorTree = varDeclaratorListTree.getChild(i);
+            int treeType = varDeclaratorTree.getType();
+            if (treeType == JavaParser.VAR_DECLARATOR) {
+            	CommonTree IdentTree = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) varDeclaratorTree, JavaParser.IDENT);
+                if (IdentTree != null) {
+                    this.name = IdentTree.getText();
+                    this.lineNumber = IdentTree.getLine();
+                    if (isLocalVariable) {
+                    	createLocalVariableObject();
+                    } else {
+                    	createAttributeObject();
+                    }
+                } 
+            }
+        }
+    }
+
+    private void createAttributeObject() {
     	if ((declareType != null) && !declareType.trim().equals("")) {
     		if (declareType.endsWith(".")) {
 	            declareType = declareType.substring(0, declareType.length() - 1); //deleting the last point
@@ -179,7 +223,6 @@ class JavaAttributeAndLocalVariableGenerator {
 	        } else {
 	            modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, isComposite);
 	        }
-	        declareType = "";
     	}
     }
 
@@ -193,48 +236,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	        } else {
 	        	modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	        }
-	        	declareType = "";
 	    }
-    }
-
-    private void setAttributeName(Tree tree) {
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            Tree child = tree.getChild(i);
-            int treeType = child.getType();
-            if (treeType == JavaParser.IDENT) { // <164>
-                this.name = child.getText();
-                this.lineNumber = tree.getLine();
-                break;
-            }
-            setAttributeName(child);
-        }
-   	}
-
-    private void setModifiers(Tree ModifierList) {
-    	accessControlQualifier = "package";
-    	hasClassScope = false;
-    	isFinal = false;
-        for (int i = 0; i < ModifierList.getChildCount(); i++) {
-            int treeType = ModifierList.getChild(i).getType();
-            switch(treeType)
-            {
-	            case JavaParser.PRIVATE:
-	            	accessControlQualifier = "private";
-	            	break;
-	            case JavaParser.PUBLIC:
-	            	accessControlQualifier = "public";
-	            	break;
-	            case JavaParser.PROTECTED:
-	            	accessControlQualifier = "protected";
-	            	break;
-	            case JavaParser.STATIC:
-	            	hasClassScope = true;
-	            	break;
-	            case JavaParser.FINAL:
-	                isFinal = true;
-	            	break;
-        	}
-        }
     }
 
 }

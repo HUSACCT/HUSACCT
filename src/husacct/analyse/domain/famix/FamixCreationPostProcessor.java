@@ -1,7 +1,6 @@
 package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
-import husacct.common.locale.ILocaleService;
 import husacct.control.task.States;
 import husacct.analyse.service.UmlLinkTypes;
 
@@ -359,13 +358,25 @@ class FamixCreationPostProcessor {
 			            		determineDependencyTypeAndOrSubType(association);
 			            		addToModel(association);
 			            	}
-
-			            	//Add the inheritance to hashmap , if association-to refers to an internal class (not an interface, not an external class).
+			            	
 			        		if (theModel.classes.containsKey(association.to)) {
+				            	//Add the inheritance to hashmap firstSuperClassPerClass, if association-to refers to an internal class (not an interface, not an external class).
 				        		FamixClass superClass = theModel.classes.get(association.to);
 				        		if (!superClass.isInterface) {
 				        			firstSuperClassPerClass.put(association.from, association.to);
 				        		}
+				            	// Create a FamixUmlLink to enable inclusion of the inheritance association in a UML class diagram (not in case to = xLibrary)
+				        		FamixUmlLink newLink = new FamixUmlLink();
+				        		newLink.from = association.from;
+				        		newLink.to = association.to;
+				        		newLink.attributeFrom = "";
+				        		if (association.subType.startsWith("Extends")) {
+					        		newLink.linkType = UmlLinkTypes.INHERITANCELINK;
+				        		} else {
+					        		newLink.linkType = UmlLinkTypes.IMPLEMENTSLINK;
+				        		}
+				        		newLink.isComposite = false;
+				        		addToModel(newLink);
 			            	}
 			            	
 			            	// Fill the HashMap inheritanceAccociationsPerClass with inheritance dependencies to super classes or interfaces 

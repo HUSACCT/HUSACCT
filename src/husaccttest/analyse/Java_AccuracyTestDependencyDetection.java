@@ -1092,9 +1092,19 @@ public class Java_AccuracyTestDependencyDetection {
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 
-	// UmlLinkTypes
+	// UmlLinkTypes: Positive
 	@Test
-	public void UmlLinkType_fromArray(){
+	public void UmlLinkType_InstanceVariableDeclaration_NotComposite(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		String fromAttribute = "pdao";
+		boolean isComposite = false;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_Array(){
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		String toClass = "technology.direct.dao.AccountDAO";
 		String fromAttribute = "aDao";
@@ -1104,7 +1114,7 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void UmlLinkType_fromList(){
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_List(){
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		String toClass = "technology.direct.dao.BadgesDAO";
 		String fromAttribute = "bDao";
@@ -1114,7 +1124,7 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void UmlLinkType_fromHashSet(){
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_HashSet(){
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		String toClass = "technology.direct.dao.CheckInDAO";
 		String fromAttribute = "cDao";
@@ -1124,7 +1134,7 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void UmlLinkType_fromArrayList(){
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_ArrayList(){
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		String toClass = "technology.direct.dao.ProfileDAO";
 		String fromAttribute = "pDao";
@@ -1134,7 +1144,7 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void UmlLinkType_fromVector(){
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_Vector(){
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		String toClass = "technology.direct.dao.UserDAO";
 		String fromAttribute = "uDao";
@@ -1144,7 +1154,49 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void UmlLinkType_fromHashMap(){ // No UmlLinks to the two referred types should exist.
+	public void UmlLinkType_InstanceVariableDeclaration_MultipleAttributesOfTheSameTypeAtTheSameLine(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_MultipleAttributesAtTheSameLine";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		String fromAttribute = "p1Dao";
+		boolean isComposite = false;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		fromAttribute = "p2Dao";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		fromAttribute = "p3Dao";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+	
+	@Test
+	public void UmlLinkType_Inherits(){
+		String fromClass = "domain.direct.violating.InheritanceExtends";
+		String toClass = "technology.direct.dao.HistoryDAO";
+		String fromAttribute = "";
+		boolean isComposite = false;
+		String typeToFind = "Inherits";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+	
+	@Test
+	public void UmlLinkType_Implements(){
+		String fromClass = "domain.direct.violating.InheritanceImplementsInterface";
+		String toClass = "technology.direct.dao.IMapDAO";
+		String fromAttribute = "";
+		boolean isComposite = false;
+		String typeToFind = "Implements";
+		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+	
+	// UmlLinkTypes: Negative
+	@Test
+	public void UmlLinkType_NotFromClassVariable(){ 
+		String fromClass = "domain.direct.violating.DeclarationVariableStatic";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+	}
+
+	@Test
+	public void UmlLinkType_NotFromGenericTypeDeclarationWithMultipleTypeParameters(){ 
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
 		String toClass = "technology.direct.dao.ProfileDAO";
 		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
@@ -1152,7 +1204,27 @@ public class Java_AccuracyTestDependencyDetection {
 		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
 	}
 
-	
+	@Test
+	public void UmlLinkType_NotFromLocalVariableDeclaration(){ // No UmlLinks should be caused by local variables.
+		String fromClass = "domain.direct.violating.DeclarationVariableLocal";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+	}
+
+	@Test
+	public void UmlLinkType_NotFromParameterDeclaration(){ // No UmlLinks should be caused by local variables.
+		String fromClass = "domain.direct.violating.DeclarationParameter";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+	}
+
+	@Test
+	public void UmlLinkType_NotFromReturnTypeDeclaration(){ // No UmlLinks should be caused by local variables.
+		String fromClass = "domain.direct.violating.DeclarationReturnType_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+	}
+
 	//
 	//private helpers
 	//
