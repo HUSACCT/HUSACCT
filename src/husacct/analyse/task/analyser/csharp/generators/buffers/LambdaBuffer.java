@@ -18,7 +18,7 @@ public class LambdaBuffer {
 	}
 
 	private String getReturnType(CommonTree tree) {
-		CommonTree typeTree = walkTree(tree, CSharpParser.TYPE);
+		CommonTree typeTree = findHierarchicalSequenceOfTypes(tree, CSharpParser.TYPE);
 		return getTypeNameAndParts(typeTree);
 	}
 }

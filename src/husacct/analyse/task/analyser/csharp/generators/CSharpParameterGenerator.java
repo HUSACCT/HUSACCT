@@ -62,19 +62,17 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 	}
 
 	private CommonTree getGenericListTree(CommonTree parameterTree) {
-		return walkTree(parameterTree, CSharpParser.TYPE, CSharpParser.NAMESPACE_OR_TYPE_NAME, CSharpParser.TYPE_ARGUMENT_LIST);
+		return findHierarchicalSequenceOfTypes(parameterTree, CSharpParser.TYPE, CSharpParser.NAMESPACE_OR_TYPE_NAME, CSharpParser.TYPE_ARGUMENT_LIST);
 	}
 
 	private List<String> getGenericTypes(CommonTree genericListTree, List<String> genericTypes) {
     	try {		
 			if (genericListTree != null) {
 				for (int i = 0; i < genericListTree.getChildCount(); i++) {
-	
 					CommonTree childTree = (CommonTree) genericListTree.getChild(i);
 					CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
 					if (typeNameTree != null) {
 						genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
-		
 						if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
 							genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
 							genericTypes = getGenericTypes(genericListTree, genericTypes);

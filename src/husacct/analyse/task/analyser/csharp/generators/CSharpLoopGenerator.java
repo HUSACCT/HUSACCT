@@ -1,23 +1,23 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 public class CSharpLoopGenerator extends CSharpGenerator {
 
-    private String packageAndClassName;
+    private String belongsToClass;
     private String belongsToMethod;
     private String variableTypeForLoop;
     
     CSharpAttributeAndLocalVariableGenerator csAttribueteAndLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
-	CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+	CSharpInvocationGenerator csharpInvocationGenerator;
     CSharpBlockScopeGenerator csBlockScopeGenerator;
 
     public void generateToDomainFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod) {
-        packageAndClassName = belongsToClass;
+        this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         variableTypeForLoop = "";
         
@@ -43,7 +43,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
             switch(child.getType()){
                 case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
                 	delegateLocalVariable(child);
-                    csAttribueteAndLocalVariableGenerator.generateLocalVariableToDomain(child, packageAndClassName, this.belongsToMethod);
+                    csAttribueteAndLocalVariableGenerator.generateLocalVariableToDomain(child, belongsToClass, this.belongsToMethod);
 		            walkThroughChildren = false;
                     break;
                 case CSharpParser.UNARY_EXPRESSION:
@@ -64,20 +64,21 @@ public class CSharpLoopGenerator extends CSharpGenerator {
    private void delegateLocalVariable(CommonTree child) {
 		if (child.toStringTree().contains("= >")) {
 			CSharpLamdaGenerator csLamdaGenerator = new CSharpLamdaGenerator();
-			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)child, packageAndClassName, belongsToMethod);
+			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)child, belongsToClass, belongsToMethod);
 		} else {
 			CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
-			csharpLocalVariableGenerator.generateLocalVariableToDomain(child, this.packageAndClassName, this.belongsToMethod);
+			csharpLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
 		}
 	}
 
 	private void delegateInvocation(Tree tree) {
-		csharpInvocationGenerator.generateInvocationToDomain((CommonTree) tree, this.belongsToMethod);
+        csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
+		csharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
    private void delegateBlockScope(CommonTree child) {
 	   csBlockScopeGenerator = new CSharpBlockScopeGenerator();
-     csBlockScopeGenerator.walkThroughBlockScope(child, this.packageAndClassName, this.belongsToMethod);
+     csBlockScopeGenerator.walkThroughBlockScope(child, this.belongsToClass, this.belongsToMethod);
 	}
 
 	private void walkForEachTree(CommonTree loopTree) {
@@ -87,14 +88,16 @@ public class CSharpLoopGenerator extends CSharpGenerator {
 			
 			switch (child.getType()) {
 	            case CSharpParser.TYPE:
-	            	String foundType = csharpInvocationGenerator.getCompleteToString((CommonTree) child);
+	                csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
+	            	String foundType = csharpInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.TYPEPARAMETER);
 	                if (foundType != null) {
 	                    this.variableTypeForLoop = foundType;
 	                }
 		            walkThroughChildren = false;
 	                break;
 	            case CSharpParser.IDENTIFIER:
-	            	String foundName = csharpInvocationGenerator.getCompleteToString((CommonTree) child);
+	                csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
+	            	String foundName = csharpInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, null);
 	            	int lineNumber = 0;
 	                if (foundName != null) {
 	                    lineNumber = child.getLine();
@@ -102,7 +105,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
 	                	foundName = "";
 	               	}
 	                if (!foundName.trim().equals("") && !variableTypeForLoop.trim().equals("")) {
-	                	csAttribueteAndLocalVariableGenerator.generateLocalVariableForEachLoopToDomain(packageAndClassName, belongsToMethod, foundName, variableTypeForLoop, lineNumber);
+	                	csAttribueteAndLocalVariableGenerator.generateLocalVariableForEachLoopToDomain(belongsToClass, belongsToMethod, foundName, variableTypeForLoop, lineNumber);
 	                	variableTypeForLoop = "";
 	                }
 		            walkThroughChildren = false;

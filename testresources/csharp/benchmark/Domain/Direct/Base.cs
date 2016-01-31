@@ -1,4 +1,4 @@
-using FI.Foyt.Foursquare.Api.FoursquareApi;
+using FI.Foyt.Foursquare.Api;
 using Technology.Direct.Dao;
 using Technology.Direct.Subclass;
 using System.Collections.Generic;

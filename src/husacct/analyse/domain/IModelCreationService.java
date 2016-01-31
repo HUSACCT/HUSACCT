@@ -50,7 +50,7 @@ public interface IModelCreationService {
     public void createParameter(String name, String uniqueName, String declareType, String belongsToClass, int lineNumber,
             String belongsToMethod, List<String> declareTypes);
 
-    public void createGenericParameterType(String belongsToClass, String belongsToMethod, int lineNumber, String parameterType);
+    public void createTypeParameter(String belongsToClass, int lineNumber, String parameterType, DependencySubTypes dependencySubTypes);
 
     /** Executes post-processes such as connecting entities and associations, 
      * detecting inherited and indirect associations, et cetera.

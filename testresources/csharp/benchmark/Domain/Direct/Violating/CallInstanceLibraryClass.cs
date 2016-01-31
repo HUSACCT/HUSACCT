@@ -3,7 +3,7 @@ using Domain.Direct;
 
 namespace Domain.Direct.Violating
 {
-	using FI.Foyt.Foursquare.Api.FoursquareApi;
+	using FI.Foyt.Foursquare.Api;
 
 	public class CallInstanceLibraryClass : Base
 	{

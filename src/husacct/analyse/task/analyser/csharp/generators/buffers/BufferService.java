@@ -86,11 +86,11 @@ public class BufferService {
 	}
 
 	private String getName(CommonTree lambdaTree) {
-		return walkTree(lambdaTree, CSharpParser.IDENTIFIER).getText();
+		return findHierarchicalSequenceOfTypes(lambdaTree, CSharpParser.IDENTIFIER).getText();
 	}
 
 	private CommonTree getTreeAftherLambdaSign(CommonTree lambdaTree) {
-		CommonTree lambdaPartTree = walkTree(lambdaTree, CSharpParser.LOCAL_VARIABLE_INITIALIZER);
+		CommonTree lambdaPartTree = findHierarchicalSequenceOfTypes(lambdaTree, CSharpParser.LOCAL_VARIABLE_INITIALIZER);
 		CommonTree firstTypeTree = (CommonTree) lambdaPartTree.getFirstChildWithType(CSharpParser.ASSIGNMENT);
 		CommonTree secondTypeTree = (CommonTree) lambdaPartTree.getFirstChildWithType(CSharpParser.GT);
 		if (firstTypeTree != null && secondTypeTree != null && (firstTypeTree.childIndex + 1) == secondTypeTree.childIndex) {

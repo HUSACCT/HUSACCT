@@ -105,7 +105,7 @@ public class CSharpGeneratorToolkit {
     }
 
     /**
-     * Retrieves a descendant from the ancestor by walking the tree by getting childs with the given types.
+     * Retrieves a descendant from the ancestor by walking the tree by getting children with the given types.
      * (IE: walkTree(myTree, MODIFIERS, ABSTRACT) gets the child from myTree with type MODIFIERS and from that tree 
      * retrieves the child with ABSTRACT)
      * Especially useful when walking a tree from which is known how it's built.
@@ -113,7 +113,7 @@ public class CSharpGeneratorToolkit {
      * @param types the list of types to walk the tree sequentially.
      * @return The descendant which matches the given types.
      */
-    public static CommonTree walkTree(CommonTree ancestor, int... types) {
+    public static CommonTree findHierarchicalSequenceOfTypes(CommonTree ancestor, int... types) {
         CommonTree currentParent = ancestor;
         for (int i = 0; i < types.length; i++) {
             if (currentParent == null) {

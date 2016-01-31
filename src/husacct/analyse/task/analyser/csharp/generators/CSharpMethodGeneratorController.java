@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 
 import java.util.*;
@@ -62,7 +63,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 			if (methodTree.getChild(i).getType() == CSharpParser.TYPE) {
 				CommonTree typeTree = (CommonTree) methodTree.getChild(i);
 				CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-		    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree);
+		    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree, belongsToClass, DependencySubTypes.RETURNTYPE);
 		        if ((foundType != null) && !foundType.equals("")) {
 		            this.returnType = foundType;
 		        } 
@@ -93,7 +94,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					break;
 				case CSharpParser.BASE:
 					CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-					csharpInvocationGenerator.generateInvocationBaseConstructorToDomain((CommonTree) child, this.name);
+					csharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) child, this.name);
 					break;
 				case CSharpParser.BLOCK:
 					CommonTree blockTree = (CommonTree) child;

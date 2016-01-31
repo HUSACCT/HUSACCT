@@ -9,6 +9,8 @@ import javax.naming.directory.InvalidAttributesException;
 
 import org.apache.log4j.Logger;
 
+import husacct.analyse.domain.DependencySubTypes;
+import husacct.analyse.domain.DependencyTypes;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.common.dto.SoftwareUnitDTO;
 
@@ -242,18 +244,20 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             model.waitingAssociations.add(fParamAssocation);
         }
     }
-
+    
     @Override
-    public void createGenericParameterType(String belongsToClass, String belongsToMethod, int lineNumber, String parameterType) {
-    	// Currently, the generic parameter type (and the generic type itself) is not created as FamixObject.
+    public void createTypeParameter(String belongsToClass, int lineNumber, String parameterType, DependencySubTypes dependencySubTypes) {
+    	// Currently, the parameter type (e.g. in case of HashSet<PT1>, or HashMap<PT2, PT3>) is not created as FamixObject.
     	// Only the association is created, necessary to report the dependency on the declared type.
-        FamixAssociation fAssocation = new FamixAssociation();
-        fAssocation.from = belongsToClass;
-        fAssocation.to = parameterType;
-        fAssocation.type = "Declaration";
-        fAssocation.subType = "Generic Type Parameter";
-        fAssocation.lineNumber = lineNumber;
-        model.waitingAssociations.add(fAssocation);
+    	if (dependencySubTypes != null) {
+	        FamixAssociation fAssocation = new FamixAssociation();
+	        fAssocation.from = belongsToClass;
+	        fAssocation.to = parameterType;
+	        fAssocation.type = DependencyTypes.DECLARATION.toString();
+	        fAssocation.subType = dependencySubTypes.toString();
+	        fAssocation.lineNumber = lineNumber;
+	        model.waitingAssociations.add(fAssocation);
+    	}
     }
 
      @Override

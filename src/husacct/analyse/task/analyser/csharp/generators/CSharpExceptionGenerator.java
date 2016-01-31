@@ -30,7 +30,7 @@ public class CSharpExceptionGenerator extends CSharpGenerator {
     }
 
     private void getThrownExceptionClass(CommonTree tree) {
-        CommonTree typenameTree = walkTree(tree, CSharpParser.UNARY_EXPRESSION, CSharpParser.OBJECT_CREATION_EXPRESSION, CSharpParser.TYPE);
+        CommonTree typenameTree = findHierarchicalSequenceOfTypes(tree, CSharpParser.UNARY_EXPRESSION, CSharpParser.OBJECT_CREATION_EXPRESSION, CSharpParser.TYPE);
         exceptionClass = getTypeNameAndParts(typenameTree);
     }
 

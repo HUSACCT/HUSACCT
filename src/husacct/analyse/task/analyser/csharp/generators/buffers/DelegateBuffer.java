@@ -32,11 +32,11 @@ public class DelegateBuffer {
 	}
 
 	private String getName(CommonTree tree) {
-		return walkTree(tree, CSharpParser.IDENTIFIER).getText();
+		return findHierarchicalSequenceOfTypes(tree, CSharpParser.IDENTIFIER).getText();
 	}
 
 	private String getReturnType(CommonTree tree) {
-		CommonTree typeTree = walkTree(tree, CSharpParser.TYPE);
+		CommonTree typeTree = findHierarchicalSequenceOfTypes(tree, CSharpParser.TYPE);
 		if (typeTree != null) {
 			return getTypeNameAndParts(typeTree);
 		} else {
@@ -45,7 +45,7 @@ public class DelegateBuffer {
 	}
 
 	private Stack<String> handleParameters(CommonTree tree) {
-		CommonTree paramTree = walkTree(tree, CSharpParser.FORMAL_PARAMETER_LIST);
+		CommonTree paramTree = findHierarchicalSequenceOfTypes(tree, CSharpParser.FORMAL_PARAMETER_LIST);
 		CSharpParameterGenerator csParamGenerator = new CSharpParameterGenerator();
 		return csParamGenerator.generateParameterObjects(paramTree, name, packageAndClassName);
 	}

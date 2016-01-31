@@ -1,5 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
@@ -21,6 +22,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
     private boolean isLocalVariable;
     private int levelOfRecursionWithinGenericType;
+	private DependencySubTypes dependencySubType;
     private JavaInvocationGenerator javaInvocationGenerator;
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
@@ -30,6 +32,7 @@ class JavaAttributeAndLocalVariableGenerator {
     				boolean breakpoint = true;
     	} */
         initialize();
+    	dependencySubType = DependencySubTypes.INSTANCEVAR;
         this.belongsToClass = belongsToClass;
         walkThroughAST(attributeTree);
     }
@@ -37,6 +40,7 @@ class JavaAttributeAndLocalVariableGenerator {
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
         initialize();
         isLocalVariable = true;
+		dependencySubType = DependencySubTypes.LOCALVAR;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         walkThroughAST(attributeTree);
@@ -44,6 +48,8 @@ class JavaAttributeAndLocalVariableGenerator {
 
     public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
         initialize();
+        isLocalVariable = true;
+		dependencySubType = DependencySubTypes.LOCALVAR;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         this.name = name;
@@ -65,6 +71,7 @@ class JavaAttributeAndLocalVariableGenerator {
         lineNumber = 0;
         levelOfRecursionWithinGenericType = 0;
         isLocalVariable = false;
+        dependencySubType = null;
     }
     
     private void walkThroughAST(Tree tree) {
@@ -143,6 +150,14 @@ class JavaAttributeAndLocalVariableGenerator {
 	            	break;
         	}
         }
+        // Set dependencySubType
+        if (!isLocalVariable) {
+    		if (hasClassScope) {
+    			dependencySubType = DependencySubTypes.CLASSVAR;
+    		} else {
+    			dependencySubType = DependencySubTypes.INSTANCEVAR;
+    		}
+    	}
     }
 
     private void setType(Tree typeTree) {
@@ -154,7 +169,7 @@ class JavaAttributeAndLocalVariableGenerator {
         	this.isComposite = true;
         	addGenericTypeParameters(typeArgumentList);
         } else {
-        	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeTree, belongsToClass);
+        	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeTree, belongsToClass, dependencySubType);
         	//	Check if the type contains an Array declaration.
             CommonTree arrayType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.ARRAY_DECLARATOR);
             if (arrayType != null) {
@@ -180,14 +195,14 @@ class JavaAttributeAndLocalVariableGenerator {
             } else {
 	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
 	            if (qualifiedType != null) {
-	                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass);
+	                javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);
+	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass, null); // Null to prevent redundancy in creation of TypeParameters. 
 	                if (parameterTypeOfGeneric != null) {
 	                    if ((numberOfTypeParameters == 1) && !hasClassScope && (levelOfRecursionWithinGenericType == 0)) {
 	                 		this.typeInClassDiagram = parameterTypeOfGeneric;
 	                    }
 	                	int currentLineNumber = qualifiedType.getLine();
-	                	modelService.createGenericParameterType(belongsToClass, belongsToMethod, currentLineNumber, parameterTypeOfGeneric);
+	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
 	                }
 	            }
             }

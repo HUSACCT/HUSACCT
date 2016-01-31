@@ -1221,23 +1221,23 @@ class FamixCreationPostProcessor {
     	List<FamixImport> importsOfClass = importsPerEntity.get(importingClass);
     	if (importsOfClass != null){
 	        for (FamixImport fImport : importsOfClass) {
-                if (fImport.to.endsWith("." + typeDeclaration)) {
-            		return fImport.to;
-                } else {
-                	FamixClass importedClass = theModel.classes.get(fImport.to);
-        			if (importedClass != null){
-        				if (importedClass.hasInnerClasses){
-        					for (String innerClass : importedClass.children) {
-	        	                if (innerClass.endsWith("." + typeDeclaration)) {
-	        	                    return innerClass;
-	        	                }
-        					}
-        				}
-        			}
-                }
-	                
-	            // If the import refers to a complete package or namespace, try to find a class with a matching name within this package
-	            if (fImport.importsCompletePackage) {
+	            if (!fImport.importsCompletePackage) {
+	                if (fImport.to.endsWith("." + typeDeclaration)) {
+	            		return fImport.to;
+	                } else {
+	                	FamixClass importedClass = theModel.classes.get(fImport.to);
+	        			if (importedClass != null){
+	        				if (importedClass.hasInnerClasses){
+	        					for (String innerClass : importedClass.children) {
+		        	                if (innerClass.endsWith("." + typeDeclaration)) {
+		        	                    return innerClass;
+		        	                }
+	        					}
+	        				}
+	        			}
+	                }
+	            } else {
+		            // If the import refers to a complete package or namespace, try to find a class with a matching name within this package
 	                for (String uniqueClassName : getClassesInPackage(fImport.to)) {
 	                    if (uniqueClassName.endsWith("." + typeDeclaration)) {
 	                        return uniqueClassName;

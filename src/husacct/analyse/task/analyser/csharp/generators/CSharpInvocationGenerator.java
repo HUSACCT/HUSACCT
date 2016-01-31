@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
@@ -19,25 +19,25 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
     }
 
     // Is used for call and access; during post-processing, the dependency type is determined. 
-    public void generateInvocationToDomain(CommonTree treeNode, String belongsToMethod) {
-        this.belongsToMethod = belongsToMethod;
-        lineNumber = treeNode.getLine();
-      	if ((treeNode.getChildCount() > 0)) {
-        	String invocTo = getCompleteToString((CommonTree) treeNode.getChild(0));
-        	this.to = invocTo;
-            if ((from != null) && (to != null) && !to.equals("") && !SkippableTypes.isSkippable(to)) {
-                modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
-            }
-        }
-    }
-
-    // Is used for call and access; during post-processing, the dependency type is determined. 
-    public void generateInvocationBaseConstructorToDomain(CommonTree treeNode, String belongsToMethod) {
+    public void generateConstructorInvocToDomain(CommonTree treeNode, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
     	this.to = "superBaseClass()";
         if ((from != null) && (to != null) && !to.equals("") && !SkippableTypes.isSkippable(to)) {
             modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocConstructor");
+        }
+    }
+
+    // Is used for call and access; during post-processing, the dependency type is determined. 
+    public void generateMethodInvocToDomain(CommonTree treeNode, String belongsToMethod) {
+        this.belongsToMethod = belongsToMethod;
+        lineNumber = treeNode.getLine();
+      	if ((treeNode.getChildCount() > 0)) {
+        	String invocTo = getCompleteToString((CommonTree) treeNode.getChild(0), from, DependencySubTypes.TYPEPARAMETER);
+        	this.to = invocTo;
+            if ((from != null) && (to != null) && !to.equals("") && !SkippableTypes.isSkippable(to)) {
+                modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
+            }
         }
     }
 
@@ -47,7 +47,12 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
      * Use this method to determine the to-string in case in the following cases: 
      * 1) type declaration of a (local) variable; 2) at both sides of an assignment; 3) at both sides of an comparison. 
      */
-    public String getCompleteToString(CommonTree tree) {  
+    public String getCompleteToString(CommonTree tree, String belongsToClass, DependencySubTypes dependencySubType) {  
+    	/* Test code
+    	if (belongsToClass.contains("CallConstructor_GenericType_MultipleTypeParameters")) {
+    		boolean testPoint = true;
+    	} */
+    	
     	String returnValue = "";
     	if (tree == null) {
     		return returnValue;
@@ -55,10 +60,10 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
     	try {
     		int treeType = tree.getType();
     		switch(treeType) {
-	        case CSharpParser.MEMBER_ACCESS: case CSharpParser.NAMESPACE_OR_TYPE_NAME: case CSharpParser.NAMESPACE_OR_TYPE_PART:
+	        case CSharpParser.MEMBER_ACCESS: case CSharpParser.NAMESPACE_OR_TYPE_NAME: case CSharpParser.NAMESPACE_OR_TYPE_PART: case CSharpParser.SIMPLE_NAME: 
 	    		boolean isFirstSubString = true;
 	        	for (int i = 0; i < tree.getChildCount(); i++) {
-	    			String subString= getCompleteToString((CommonTree) tree.getChild(i));
+	    			String subString= getCompleteToString((CommonTree) tree.getChild(i), belongsToClass, dependencySubType);
 	    			if ((subString != null) && !subString.equals("")) {
 		        		if (isFirstSubString) { 
 		                	returnValue += subString;
@@ -74,11 +79,14 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	    		}
 	            break;
 	        case CSharpParser.TYPE_ARGUMENT_LIST: // In case of generic classes, add the parameters as <p1>, <p1, p2>, etc.
+            	if (dependencySubType != null) {
+            		addGenericTypeParameters(tree, belongsToClass, dependencySubType);
+            	}
 	        	String parameters = "";
             	int nrOfParameters = tree.getChildCount();
             	if (nrOfParameters > 0) {
             		for (int f = 0; f < nrOfParameters; f++) {
-    	    			String subString= getCompleteToString((CommonTree) tree.getChild(f));
+    	    			String subString= getCompleteToString((CommonTree) tree.getChild(f), belongsToClass, dependencySubType);
 		            	if ((subString != null) && subString != null) {
 		            		if (f == 0) {
 		            			parameters += "p" + 1;
@@ -90,8 +98,8 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
             	}
         		returnValue += "<"+ parameters + ">";
 	        	break;
-	        case CSharpParser.SIMPLE_NAME: case CSharpParser.ARGUMENT_VALUE: case CSharpParser.UNARY_EXPRESSION: case CSharpParser.TYPE: case CSharpParser.EXPRESSION_STATEMENT: case CSharpParser.VARIABLE_INITIALIZER:
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+	        case CSharpParser.ARGUMENT_VALUE: case CSharpParser.UNARY_EXPRESSION: case CSharpParser.TYPE: case CSharpParser.EXPRESSION_STATEMENT: case CSharpParser.VARIABLE_INITIALIZER:
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	            break;
 	        case CSharpParser.METHOD_INVOCATION:
 	        	returnValue += getMethodInvocationString(tree);
@@ -100,7 +108,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	        	returnValue += getConstructorInvocationString(tree); 
 	            break;
 	        case CSharpParser.ARGUMENT: 
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0));
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	    		createPropertyOrFieldInvocationDomainObject(returnValue, tree.getLine());
 	            break;
 	        case CSharpParser.IDENTIFIER:
@@ -131,11 +139,11 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	        	returnValue += "byte";
 	            break;
 	        case CSharpParser.CAST_EXPRESSION: //
-	    		returnValue += getCompleteToString((CommonTree) tree.getChild(1));
+	    		returnValue += getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	    		// Create association of typecast-type access
 	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(CSharpParser.TYPE);
 	        	if (typeChild != null) {
-	        		String typeCastTo = getCompleteToString(typeChild);
+	        		String typeCastTo = getCompleteToString(typeChild, belongsToClass, dependencySubType);
                     for (int i = 1; i < typeChild.getChildCount(); i++) { // In case of inner classes
                     	typeCastTo = typeCastTo + "." + typeChild.getChild(i).getText();
                     }
@@ -145,8 +153,8 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	        	}
 	            break;
 	        case CSharpParser.DOT: // "."
-	        	String left = getCompleteToString((CommonTree) tree.getChild(0));
-	        	String right = getCompleteToString((CommonTree) tree.getChild(1));
+	        	String left = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+	        	String right = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	if ((left == "") || (right == "")) {
 	        		returnValue += left + right;
 	        	} else {
@@ -166,7 +174,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		String argumentString = "";
 		boolean firstArgument = true;
 		for (int i = 0; i < tree.getChildCount(); i++) {
-			String argTo = getCompleteToString((CommonTree) tree.getChild(i));
+			String argTo = getCompleteToString((CommonTree) tree.getChild(i), from, DependencySubTypes.TYPEPARAMETER);
 			if (tree.getChild(i).getType() != CSharpParser.ARGUMENT) {
 				if (i == 0) {
 					bodyString = argTo;
@@ -197,7 +205,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		String argumentString = "";
 		boolean firstArgument = true;
 		for (int i = 0; i < tree.getChildCount(); i++) {
-			String subString = getCompleteToString((CommonTree) tree.getChild(i));
+			String subString = getCompleteToString((CommonTree) tree.getChild(i), from, DependencySubTypes.TYPEPARAMETER);
 			if (tree.getChild(i).getType() == CSharpParser.TYPE) {
 				bodyString = subString;
 			}
@@ -224,5 +232,28 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
             modelService.createVariableInvocation(from, invocationTo, line, belongsToMethod);
         }
     }
+
+    // Detects generic type parameters, also in complex types, like: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
+    private void addGenericTypeParameters(CommonTree genericType, String belongsToClass, DependencySubTypes dependencySubType) {
+        int numberOfTypeParameters = genericType.getChildCount();
+        for (int j = 0; j < numberOfTypeParameters; j++) {
+            CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
+        	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
+            CommonTree genericTypeRecursive = CSharpGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, CSharpParser.TYPE_ARGUMENT_LIST);
+            if (genericTypeRecursive != null) {
+            	addGenericTypeParameters(genericTypeRecursive, belongsToClass, dependencySubType);
+            } else {
+	            CommonTree qualifiedType = CSharpGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, CSharpParser.NAMESPACE_OR_TYPE_NAME);
+	            if (qualifiedType != null) {
+	            	String parameterTypeOfGeneric = getCompleteToString(qualifiedType, from, null); // Last argument = null, since no recursion should take place here.
+	                if ((parameterTypeOfGeneric != null) && (dependencySubType != null)) {
+	                	int currentLineNumber = qualifiedType.getLine();
+	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
+	                }
+	            }
+            }
+        }
+	}
+
 }
 

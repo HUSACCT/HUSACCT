@@ -71,7 +71,7 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 
 	private void delegateInvocation(Tree tree) {
 		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generateInvocationToDomain((CommonTree) tree, this.belongsToMethod);
+		csharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
 	private void delegateException(Tree tree) {

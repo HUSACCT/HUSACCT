@@ -1,4 +1,5 @@
-using System.Collections.Generic.Dictionary;
+using System.Collections.Generic;
+using Technology.Direct.Dao;
 
 namespace Domain.Direct.Violating
 {

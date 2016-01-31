@@ -1,5 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -24,7 +25,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         this. lineNumber = commonTree.getLine();
        	if ((commonTree.getChildCount() > 0)) {
-        	String invocTo = getCompleteToString(commonTree, from);
+        	String invocTo = getCompleteToString(commonTree, from, DependencySubTypes.TYPEPARAMETER);
         	this.to = invocTo;
             if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocConstructor");
@@ -36,7 +37,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
       	if ((treeNode.getChildCount() > 0)) {
-        	String invocTo = getCompleteToString(treeNode, from);
+        	String invocTo = getCompleteToString(treeNode, from, DependencySubTypes.TYPEPARAMETER);
         	this.to = invocTo;
             if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
@@ -51,10 +52,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
             for (int childCount = 0; childCount < treeNode.getChildCount(); childCount++) {
                 CommonTree childNode = (CommonTree) treeNode.getChild(childCount);
                 if (childCount == 0) {
-                	leftVariableInAssignment = getCompleteToString(childNode, from);
+                	leftVariableInAssignment = getCompleteToString(childNode, from, DependencySubTypes.TYPEPARAMETER);
                 }
                 if (childCount == 1) {
-                	rightVariableInAssignment = getCompleteToString(childNode, from);
+                	rightVariableInAssignment = getCompleteToString(childNode, from, DependencySubTypes.TYPEPARAMETER);
             		this.lineNumber = childNode.getLine();
                 }
             }
@@ -77,9 +78,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
     /* Returns the complete string of an expression of a variable, also in case of chaining call/access combinations.
      * In case of a type cast, it does not include the type cast in the returnValue, but it creates a declaration association.
      * Use this method to determine the to-string in case in the following cases: 
-     * 1) type declaration of a (local) variable; 2) at both sides of an assignment; 3) at both sides of an comparison. 
+     * 1) type declaration of a (local) variable, parameter, or return type; 2) at both sides of an assignment; 3) at both sides of an comparison. 
      */
-    public String getCompleteToString(CommonTree tree, String belongsToClass) {  
+    public String getCompleteToString(CommonTree tree, String belongsToClass, DependencySubTypes dependencySubType) {  
     	String returnValue = "";
     	if (tree == null) {
     		return returnValue;
@@ -91,8 +92,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
     		}
     		switch(treeType) {
 	        case JavaParser.DOT: // "."
-	        	String left = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
-	        	String right = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass);
+	        	String left = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+	        	String right = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	if ((left == "") || (right == "")) {
 	        		returnValue += left + right;
 	        	} else {
@@ -100,51 +101,51 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        	}
 	            break;
 	        case JavaParser.METHOD_CALL:
-	        	String left1 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
-	        	String right1 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass);
+	        	String left1 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+	        	String right1 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	    		returnValue += left1 + "(" + right1 + ")";
 	            break;
 	        case JavaParser.CLASS_CONSTRUCTOR_CALL: 
-	        	String left2 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
-	        	String right2 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass);
+	        	String left2 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+	        	String right2 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	    		returnValue += left2 + "(" + right2 + ")";
 	            break;
 	        case JavaParser.SUPER_CONSTRUCTOR_CALL: 
-	        	returnValue += "superBaseClass" + "(" + getCompleteToString((CommonTree) tree.getChild(0), belongsToClass) + ")";
+	        	returnValue += "superBaseClass" + "(" + getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType) + ")";
 	            break;
 	        case JavaParser.STATIC_ARRAY_CREATOR: 
 	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == JavaParser.IDENT))) {
-		        	String left3 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
-		        	String right3 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass);
+		        	String left3 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+		        	String right3 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 		    		returnValue += left3 + "(" + right3 + ")";
 	        	} else {
 	        		returnValue += "";
 	        	}
 	            break;
 	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST:
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	            break;
 	        case JavaParser.TYPE: case JavaParser.QUALIFIED_TYPE_IDENT:
                 // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
                 CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) tree, JavaParser.GENERIC_TYPE_ARG_LIST);
-                if (genericType != null) {
-                	addGenericTypeParameters(genericType);
+                if ((genericType != null) && (dependencySubType != null)) {
+                	addGenericTypeParameters(genericType, belongsToClass, dependencySubType);
                 } 
 	            int childCount = tree.getChildCount();
-	            returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
+	            returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	            for (int currentChild = 1; currentChild < childCount; currentChild++) {
-		        	returnValue += "." + getCompleteToString((CommonTree) tree.getChild(currentChild), belongsToClass);
+		        	returnValue += "." + getCompleteToString((CommonTree) tree.getChild(currentChild), belongsToClass, dependencySubType);
 	            }
 	            if (returnValue.endsWith(".")) {
 	            	returnValue = returnValue.substring(0, returnValue.length() - 1); //deleting the last point
 	            }
 	            break;
 	        case JavaParser.EXPR: case JavaParser.PARENTESIZED_EXPR:
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	            break;
 	        case JavaParser.ARGUMENT_LIST:
 	    		for (int i = 0; i < tree.getChildCount(); i++) {
-	    			String argTo= getCompleteToString((CommonTree) tree.getChild(i), belongsToClass);
+	    			String argTo= getCompleteToString((CommonTree) tree.getChild(i), belongsToClass, dependencySubType);
 	    			createPropertyOrFieldInvocationDomainObject(argTo, (CommonTree) tree.getChild(i));
 	        		//Includes the arguments in the method call signature
 	    			if (argTo.contains(".") || argTo.contains(",")) { // Currently, arguments with a "." or "," disable the indirect dependency detection algorithm. In case of future improvements: create a FamixArgument object per argument. 
@@ -158,8 +159,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	    		}
 	            break;
 	        case JavaParser.PLUS:
-	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass);
-    			String argTo= getCompleteToString((CommonTree) tree.getChild(1), belongsToClass);
+	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+    			String argTo= getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	createPropertyOrFieldInvocationDomainObject(argTo, (CommonTree) tree.getChild(1));
 	        	break;
 	        case JavaParser.IDENT:
@@ -187,7 +188,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        	returnValue += "byte";
 	            break;
 	        case JavaParser.CAST_EXPR:
-	    		returnValue += getCompleteToString((CommonTree) tree.getChild(1), belongsToClass);
+	    		returnValue += getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	    		// Create association of typecast-type access
 	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
 	        	if (typeChild != null) {
@@ -223,21 +224,21 @@ public class JavaInvocationGenerator extends JavaGenerator {
     }
 
     // Detects generic type parameters, also in complex types, like: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
-    private void addGenericTypeParameters(CommonTree genericType) {
+    private void addGenericTypeParameters(CommonTree genericType, String belongsToClass, DependencySubTypes dependencySubType) {
         int numberOfTypeParameters = genericType.getChildCount();
         for (int j = 0; j < numberOfTypeParameters; j++) {
             CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
         	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
             CommonTree genericTypeRecursive = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, JavaParser.GENERIC_TYPE_ARG_LIST);
             if (genericTypeRecursive != null) {
-            	addGenericTypeParameters(genericTypeRecursive);
+            	addGenericTypeParameters(genericTypeRecursive, belongsToClass, dependencySubType);
             } else {
 	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
 	            if (qualifiedType != null) {
-	            	String parameterTypeOfGeneric = getCompleteToString(qualifiedType, from);
-	                if (parameterTypeOfGeneric != null) {
+	            	String parameterTypeOfGeneric = getCompleteToString(qualifiedType, from, null); // Last argument = null, since no recursion should take place here.
+	                if ((parameterTypeOfGeneric != null) && (dependencySubType != null)) {
 	                	int currentLineNumber = qualifiedType.getLine();
-	                	modelService.createGenericParameterType(from, belongsToMethod, currentLineNumber, parameterTypeOfGeneric);
+	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
 	                }
 	            }
             }

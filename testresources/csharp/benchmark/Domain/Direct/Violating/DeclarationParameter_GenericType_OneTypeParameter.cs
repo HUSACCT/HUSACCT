@@ -1,4 +1,4 @@
-using System.Collections.Generic.List;
+using System.Collections.Generic;
 using Technology.Direct.Dao;
 
 namespace Domain.Direct.Violating

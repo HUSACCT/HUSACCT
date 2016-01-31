@@ -1,7 +1,7 @@
 namespace Domain.Direct.Violating
 {
 	using Domain.Direct;
-	using System.Collections.Generic.List;
+	using System.Collections.Generic;
 	using Technology.Direct.Dao;
 
 	public class DeclarationReturnType_GenericType_OneTypeParameter : Base

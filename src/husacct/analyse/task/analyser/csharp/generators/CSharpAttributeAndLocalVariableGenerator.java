@@ -1,12 +1,9 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
-import husacct.analyse.task.analyser.java.JavaGeneratorToolkit;
-import husacct.analyse.task.analyser.java.JavaInvocationGenerator;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -24,22 +21,26 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
     private boolean isLocalVariable;
     private int levelOfRecursionWithinGenericType;
-    private CSharpInvocationGenerator csharpInvocationGenerator;
+	private DependencySubTypes dependencySubType;
+	private CSharpInvocationGenerator csharpInvocationGenerator;
     private IModelCreationService modelService = new FamixCreationServiceImpl();
     
 	public void generateAttributeToDomain(Tree treeNode, String packageAndClassName) {
         initialize();
 		this.belongsToClass = packageAndClassName;
-        // Test helpers
+    	dependencySubType = DependencySubTypes.INSTANCEVAR;
+        /* Test helpers
     	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_OneTypeParameter")) {
     				boolean breakpoint = true;
-    	} //
+    	} */
 		walkThroughAST(treeNode);
 		createAttributeObject();
 	}
 
 	public void generateLocalVariableToDomain(Tree treeNode, String belongsToClass, String belongsToMethod) {
         initialize();
+        isLocalVariable = true;
+		dependencySubType = DependencySubTypes.LOCALVAR;
 		this.belongsToClass = belongsToClass;
 		this.belongsToMethod = belongsToMethod;
 		walkThroughAST(treeNode);
@@ -48,6 +49,8 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
     public void generateLocalVariableForEachLoopToDomain(String packageAndClassName, String belongsToMethod, String name, String type, int line) {
         initialize();
+        isLocalVariable = true;
+		dependencySubType = DependencySubTypes.LOCALVAR;
         this.belongsToClass = packageAndClassName;
         this.belongsToMethod = belongsToMethod;
         this.name = name;
@@ -68,6 +71,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
         lineNumber = 0;
         levelOfRecursionWithinGenericType = 0;
         isLocalVariable = false;
+        dependencySubType = null;
     }
     
 	private void walkThroughAST(Tree treeNode) {
@@ -91,7 +95,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
         	// Assignment statements are passed to a suitable method of csharpInvocationGenerator 
 			case CSharpParser.UNARY_EXPRESSION:
 				csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-				csharpInvocationGenerator.generateInvocationToDomain((CommonTree) child, this.belongsToMethod);
+				csharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, this.belongsToMethod);
 	            walkThroughChildren = false;
 				break;
 			} 
@@ -126,13 +130,21 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	            	break;
         	}
         }
+        // Set dependencySubType
+        if (!isLocalVariable) {
+    		if (hasClassScope) {
+    			dependencySubType = DependencySubTypes.CLASSVAR;
+    		} else {
+    			dependencySubType = DependencySubTypes.INSTANCEVAR;
+    		}
+    	}
     }
 
 	private void setType(Tree typeNode) {
 		CommonTree typeTree = (CommonTree) typeNode;
 		// Determine the type of the declared variable
 		csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree);
+    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree, belongsToClass, dependencySubType);
         if ((foundType != null) && !foundType.equals("")) {
             this.declareType = foundType;
         } 
@@ -146,6 +158,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
         CommonTree rankSpecifier = CSharpGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, CSharpParser.RANK_SPECIFIER);
         if (rankSpecifier != null) {
         	this.isComposite = true;
+        	this.typeInClassDiagram = declareType;
         }
 	}
 
@@ -164,13 +177,13 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	            CommonTree qualifiedType = CSharpGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, CSharpParser.NAMESPACE_OR_TYPE_NAME);
 	            if (qualifiedType != null) {
 	                csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-	            	String parameterTypeOfGeneric = csharpInvocationGenerator.getCompleteToString(qualifiedType); // ,belongsToClass
+	            	String parameterTypeOfGeneric = csharpInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass, dependencySubType);
 	                if (parameterTypeOfGeneric != null) {
 	                    if ((numberOfTypeParameters == 1) && !hasClassScope && (levelOfRecursionWithinGenericType == 0)) {
 	                 		this.typeInClassDiagram = parameterTypeOfGeneric;
 	                    }
 	                	int currentLineNumber = qualifiedType.getLine();
-	                	modelService.createGenericParameterType(belongsToClass, belongsToMethod, currentLineNumber, parameterTypeOfGeneric);
+	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
 	                }
 	            }
             }
@@ -187,9 +200,9 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	private void createAttributeObject() {
 		if ((declareType != null) && !declareType.equals("")) {
 			if(SkippableTypes.isSkippable(declareType)){
-				modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, "", false);
+				modelService.createAttributeOnly(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, isComposite);
 	        } else {
-	        	modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, "", false);
+	        	modelService.createAttribute(hasClassScope, isFinal, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, typeInClassDiagram, isComposite);
 			}
 		}
 	}

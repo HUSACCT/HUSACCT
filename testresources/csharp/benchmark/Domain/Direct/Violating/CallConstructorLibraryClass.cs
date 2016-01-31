@@ -1,4 +1,4 @@
-using FI.Foyt.Foursquare.Api.FoursquareApi;
+using FI.Foyt.Foursquare.Api;
 
 namespace Domain.Direct.Violating
 {
@@ -6,7 +6,7 @@ namespace Domain.Direct.Violating
 	{
 		public virtual void HandleCallback()
 		{
-            new FoursquareApi("Client ID", "Client Secret", "Callback URL");
+            		new FoursquareApi("Client ID", "Client Secret", "Callback URL");
 		}
 	}
 }
