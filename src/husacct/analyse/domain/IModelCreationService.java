@@ -1,6 +1,5 @@
 package husacct.analyse.domain;
 
-import java.util.List;
 
 public interface IModelCreationService {
 
@@ -45,10 +44,10 @@ public interface IModelCreationService {
     		int lineNumber, String belongsToMethodString);
     
 	public void createParameterOnly(String name, String uniqueName, String declareType,
-            String belongsToClass, int lineNumber, String belongsToMethod, List<String> declareTypes);
+            String belongsToClass, int lineNumber, String belongsToMethod);
 
     public void createParameter(String name, String uniqueName, String declareType, String belongsToClass, int lineNumber,
-            String belongsToMethod, List<String> declareTypes);
+            String belongsToMethod);
 
     public void createTypeParameter(String belongsToClass, int lineNumber, String parameterType, DependencySubTypes dependencySubTypes);
 

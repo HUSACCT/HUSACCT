@@ -208,7 +208,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
     @Override
     public void createParameterOnly(String name, String uniqueName, String declareType, String belongsToClass,
-            int lineNumber, String belongsToMethod, List<String> declareTypes) {
+            int lineNumber, String belongsToMethod) {
         FamixFormalParameter famixParameter = new FamixFormalParameter();
         famixParameter.belongsToClass = belongsToClass;
         famixParameter.belongsToMethod = belongsToMethod;
@@ -216,15 +216,14 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixParameter.lineNumber = lineNumber;
         famixParameter.name = name;
         famixParameter.uniqueName = uniqueName;
-        famixParameter.declaredTypes = declareTypes;
         model.waitingStructuralEntities.add(famixParameter);
     }
 
     @Override
     public void createParameter(String name, String uniqueName, String declareType, String belongsToClass, 
-    		int lineNumber, String belongsToMethod, List<String> declareTypes) {
+    		int lineNumber, String belongsToMethod) {
 
-    	this.createParameterOnly(name, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, declareTypes);
+    	this.createParameterOnly(name, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod);
 
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
@@ -233,16 +232,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         fAssocation.subType = "Parameter";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
-
-        for (String type : declareTypes) {
-            FamixAssociation fParamAssocation = new FamixAssociation();
-            fParamAssocation.from = belongsToClass;
-            fParamAssocation.to = type;
-            fParamAssocation.type = "Declaration";
-            fParamAssocation.subType = "Parameter";
-            fParamAssocation.lineNumber = lineNumber;
-            model.waitingAssociations.add(fParamAssocation);
-        }
     }
     
     @Override

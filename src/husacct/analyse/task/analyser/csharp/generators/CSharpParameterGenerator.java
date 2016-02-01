@@ -1,127 +1,117 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+import husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit;
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
 import java.util.*;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 public class CSharpParameterGenerator extends CSharpGenerator {
 
-	private String methodName;
-	private String packageAndClassName;
-	private Stack<Argument> arguments = new Stack<>();
+	private String belongsToMethod; //this includes the signature of the method (uniqueName)
+	private String belongsToClass;
+    private String declareName;
+    private String declareType;
 	private int lineNumber;
+    private String uniqueName;
+    private String paramTypesInSignature = ""; // Builds up to e.g. (String,int). Used to identify methods with the same name, but different parameters. 
+    private boolean nameFound = false;
+    private boolean declareTypeFound = false;
+    private ArrayList<ArrayList<Object>> parameterQueue; // The parameters need to be stored, until signature has been build up completely.
     private final Logger logger = Logger.getLogger(CSharpParameterGenerator.class);
 
-	public Stack<String> generateParameterObjects(CommonTree argumentTree, String name, String classUniqueName) {
-		Stack<String> returnvalue = new Stack<String>();
-		packageAndClassName = classUniqueName;
-		methodName = name;
-		if (argumentTree != null) {
-			lineNumber = argumentTree.getLine();
-			getArgumentsInformation(argumentTree);
-			writeParameterToDomain();
-			returnvalue = getArgumentTypes(arguments);
+	public String generateParameterObjects(CommonTree allParametersTree, String belongsToMethod, String belongsToClass) { // allParametersTree = FORMAL_PARAMETER_LIST
+		String returnvalue = "";
+        this.parameterQueue = new ArrayList<ArrayList<Object>>();
+		this.belongsToClass = belongsToClass;
+		this.belongsToMethod = belongsToMethod;
+        /* Test helper
+       	if (this.belongsToClass.contains("DeclarationParameter")){
+    		//if (belongsToMethod.contains("performExternalScript")) {
+    				boolean breakpoint1 = true;
+    		//}
+    	} */
+
+		if (allParametersTree != null) {
+			lineNumber = allParametersTree.getLine();
+			deriveParametersFromTree(allParametersTree);
+			writeParametersToDomain();
+			returnvalue = paramTypesInSignature;
 		}
 		return returnvalue;
 	}
 
-	private void getArgumentsInformation(CommonTree argumentTree) {
-		String argType;
-		String argName;
-		List<String> genericTypes = new ArrayList<>();
-		for (int i = 0; i < argumentTree.getChildCount(); i++) {
-			CommonTree child = (CommonTree) argumentTree.getChild(i);
-			argType = getFormalParameter(child);
-
-			if (argType != null) {
-				argName = getArgumentName(child);
-
-				CommonTree genericListTree = getGenericListTree(child);
-				genericTypes = getGenericTypes(genericListTree, genericTypes);
-
-				Argument arg = new Argument(argName, argType, genericTypes);
-				arguments.add(arg);
-			}
-		}
-	}
-
-	private String getFormalParameter(CommonTree childTree) {
-		if (childTree.getType() == CSharpParser.FIXED_PARAMETER) {
-			String returnValue = getTypeNameAndParts((CommonTree) childTree.getChild(0));
-			return returnValue;
-			}
-		return null;
-	}
-
-	private String getArgumentName(CommonTree child) {
-		return child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-	}
-
-	private CommonTree getGenericListTree(CommonTree parameterTree) {
-		return findHierarchicalSequenceOfTypes(parameterTree, CSharpParser.TYPE, CSharpParser.NAMESPACE_OR_TYPE_NAME, CSharpParser.TYPE_ARGUMENT_LIST);
-	}
-
-	private List<String> getGenericTypes(CommonTree genericListTree, List<String> genericTypes) {
-    	try {		
-			if (genericListTree != null) {
-				for (int i = 0; i < genericListTree.getChildCount(); i++) {
-					CommonTree childTree = (CommonTree) genericListTree.getChild(i);
-					CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-					if (typeNameTree != null) {
-						genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
-						if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
-							genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
-							genericTypes = getGenericTypes(genericListTree, genericTypes);
-						}
-					}
-				}
-			}
-        } catch (Exception e) {
-	        logger.warn("Exception: "  + e + ", in getGenericTypes()");
-	        //e.printStackTrace();
+    private void deriveParametersFromTree(Tree allParametersTree) {
+        int totalParameters = allParametersTree.getChildCount();
+        for (int currentChild = 0; currentChild < totalParameters; currentChild++) {
+            CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
+            int treeType = child.getType();
+            if (treeType == CSharpParser.FIXED_PARAMETER) {
+                getParameterName(child);
+                getTypeOfParameter(child);
+                if (this.nameFound && this.declareTypeFound) {
+                    this.addToQueue();
+                }
+                nameFound = false;
+                declareTypeFound = false;
+            }
+            deriveParametersFromTree(child);
         }
-		return genericTypes;
-	}
+    }
 
-	private void writeParameterToDomain() {
-		String uniqueParentName = createUniqueParentName();
-		for (Argument arg : arguments) {
-			String uniqueName = uniqueParentName + "." + arg.name;
-			if ((arg.type != null) && !arg.type.equals("")) {
-				if(SkippableTypes.isSkippable(arg.type)){
-					modelService.createParameterOnly(arg.name, uniqueName, arg.type, packageAndClassName, lineNumber, uniqueParentName, arg.genericType);
-		        } else {
-					modelService.createParameter(arg.name, uniqueName, arg.type, packageAndClassName, lineNumber, uniqueParentName, arg.genericType);
-				}
-			}
-		}
-	}
+    private void getParameterName(CommonTree tree) {
+        Tree parameterNameTree = tree.getFirstChildWithType(CSharpParser.IDENTIFIER);
+        if (parameterNameTree != null) {
+            this.declareName = parameterNameTree.getText();
+            if ((this.declareName != null)&& (!this.declareName.trim().equals(""))) {
+	            this.nameFound = true;
+            }
+        }
+    }
 
-	private String createUniqueParentName() {
-		return packageAndClassName + "." + methodName + "(" + createCommaSeperatedString(getArgumentTypes(arguments)) + ")";
-	}
+    private void getTypeOfParameter(CommonTree tree) {
+        CommonTree typeOfParameterTree = CSharpGeneratorToolkit.getFirstDescendantWithType(tree, CSharpParser.TYPE);
+        if (typeOfParameterTree != null) {
+        	CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
+           	this.declareType = cSharpInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.PARAMETER);
+            this.lineNumber = typeOfParameterTree.getLine();
+            if (this.declareType.endsWith(".")) {
+            	this.declareType = this.declareType.substring(0, this.declareType.length() - 1); //deleting the last point
+            }
+           	if(!this.declareType.trim().equals("")) {
+           		this.declareTypeFound = true;
+                this.paramTypesInSignature += !this.paramTypesInSignature.equals("") ? "," : "";
+                this.paramTypesInSignature += this.declareType;
+           	}
+        }
+    }
+    
+    private void addToQueue() {
+        ArrayList<Object> myParam = new ArrayList<Object>();
+        myParam.add(this.declareType);
+        myParam.add(this.declareName);
+        myParam.add(this.lineNumber);
+        parameterQueue.add(myParam);
+        this.declareType = null;
+        this.declareName = null;
+    }
 
-	private Stack<String> getArgumentTypes(Stack<Argument> arguments) {
-		Stack<String> result = new Stack<>();
-		for (Argument arg : arguments) 
-			result.push(arg.type);
-		return result;
-	}
+	private void writeParametersToDomain() {
+        for (ArrayList<Object> currentParameter : parameterQueue) {
+            String type = (String) currentParameter.get(0);
+            String name = (String) currentParameter.get(1);
+            int lineNr =  (int) currentParameter.get(2);
+            this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.paramTypesInSignature + ")." + name;
+            String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.paramTypesInSignature + ")";
+            if (SkippableTypes.isSkippable(type)) {
+                modelService.createParameterOnly(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough);
+            } else {
+                modelService.createParameter(name, uniqueName, type, belongsToClass, lineNr, belongsToMethodToPassThrough);
+            }
+        }
+    }
 
-	public class Argument {
-
-		final String name;
-		final String type;
-		final List<String> genericType;
-
-		public Argument(String name, String type, List<String> generic) {
-			this.name = name;
-			this.type = type;
-			this.genericType = generic;
-		}
-	}
 }

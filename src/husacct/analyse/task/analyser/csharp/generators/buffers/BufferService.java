@@ -58,18 +58,18 @@ public class BufferService {
 	
 	private void combineDelegateAndLambdaToMethod(DelegateBuffer delegateBuffer, LambdaBuffer lambdaBuffer, String name, String belongsToMethod, String packageAndClassName) {
 		String accessControlQualifier = getVisibility(lambdaBuffer.lambdaTree);
-		String argumentTypes = createCommaSeperatedString(delegateBuffer.argtypes);
+		String paramTypesInSignature = delegateBuffer.paramTypesInSignature;
 		boolean isPureAccessor = false;
 		String returnTypes = delegateBuffer.returntype;
-		String uniqueName = getUniqueName(packageAndClassName, belongsToMethod) + "." + name + "(" + argumentTypes + ")";
+		String uniqueName = getUniqueName(packageAndClassName, belongsToMethod) + "." + name + "(" + paramTypesInSignature + ")";
 		boolean isConstructor = false;
 		boolean isAbstract = false;
 		boolean hasClassScope = checkClassScope(belongsToMethod);
 		int lineNumber = lambdaBuffer.lambdaTree.getLine();
 		if(SkippableTypes.isSkippable(returnTypes)){
-			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, paramTypesInSignature, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
         } else {
-    		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, paramTypesInSignature, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
         }
 	}
 

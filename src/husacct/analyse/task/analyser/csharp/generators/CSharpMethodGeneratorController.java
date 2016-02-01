@@ -15,7 +15,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	String name;
 	String uniqueName;
 	String accessControlQualifier;
-	Stack<String> argTypes = new Stack<>();
+	String paramTypesInSignature = "";
 	String returnType = "";
 	boolean isPureAccessor = false; //Not known
 	boolean isConstructor = false;
@@ -89,7 +89,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					break;
 				case CSharpParser.FORMAL_PARAMETER_LIST:
 					CSharpParameterGenerator csParameterGenerator = new CSharpParameterGenerator();
-					argTypes = csParameterGenerator.generateParameterObjects((CommonTree) child, name, belongsToClass);
+					paramTypesInSignature = csParameterGenerator.generateParameterObjects((CommonTree) child, name, belongsToClass);
 					deleteTreeChild(child);
 					break;
 				case CSharpParser.BASE:
@@ -107,15 +107,14 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	}
 
 	private void stepIntoBlock(CommonTree blockTree) {
-		String belongsToMethod = name + createArgumentString(argTypes);
+		String belongsToMethod = name + createArgumentString();
 
 		CSharpBlockScopeGenerator csBlockScopeGenerator = new CSharpBlockScopeGenerator();
 		csBlockScopeGenerator.walkThroughBlockScope(blockTree, belongsToClass, belongsToMethod);
 	}
 
 	private void createMethodObject() {
-		String argumentTypes = createArgumentString(argTypes);
-		argTypes.clear();
+		String argumentTypes = createArgumentString();
 		this.uniqueName = getMethodUniqueName(belongsToClass, name, argumentTypes);
 		if(SkippableTypes.isSkippable(returnType)){
 			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
@@ -124,8 +123,8 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
         }
 	}
 
-	private String createArgumentString(Stack<String> argTypes) {
-		return "(" + createCommaSeperatedString(argTypes) + ")";
+	private String createArgumentString() {
+		return "(" + paramTypesInSignature + ")";
 	}
 
 	private String getMethodUniqueName(String belongsToClass, String name, String argumentTypes) {

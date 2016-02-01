@@ -17,7 +17,8 @@ public class DelegateBuffer {
 	public final String packageAndClassName;
 	public String returntype;
 	public String name;
-	public Stack<String> argtypes;
+	
+	public String paramTypesInSignature = "";
 
 	public DelegateBuffer(String packageAndClassName) {
 		this.packageAndClassName  = packageAndClassName;
@@ -26,7 +27,7 @@ public class DelegateBuffer {
 	public DelegateBuffer store(CommonTree delegateTree) {
 		name = getName(delegateTree);
 		returntype = getReturnType(delegateTree);
-		argtypes = handleParameters(delegateTree);
+		paramTypesInSignature = handleParameters(delegateTree);
 		writeToFamix(delegateTree);
 		return this;
 	}
@@ -44,7 +45,7 @@ public class DelegateBuffer {
 		}
 	}
 
-	private Stack<String> handleParameters(CommonTree tree) {
+	private String handleParameters(CommonTree tree) {
 		CommonTree paramTree = findHierarchicalSequenceOfTypes(tree, CSharpParser.FORMAL_PARAMETER_LIST);
 		CSharpParameterGenerator csParamGenerator = new CSharpParameterGenerator();
 		return csParamGenerator.generateParameterObjects(paramTree, name, packageAndClassName);
@@ -52,17 +53,16 @@ public class DelegateBuffer {
 
 	private void writeToFamix(CommonTree delegateTree) {
 		String accessControlQualifier = getVisibility(delegateTree);
-		String params = createCommaSeperatedString(argtypes);
-		String uniqueName = packageAndClassName + "." + name + "(" + params + ")"; 
+		String uniqueName = packageAndClassName + "." + name + "(" + paramTypesInSignature + ")"; 
 		boolean pureAccessor = false;
 		boolean isConstructor = false;
 		boolean isAbstract = true;
 		boolean hasClassScope = true;
 		int lineNumber = delegateTree.getLine();
 		if(SkippableTypes.isSkippable(returntype)){
-			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, params, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, paramTypesInSignature, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
         } else {
-    		modelService.createMethod(name, uniqueName, accessControlQualifier, params, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, paramTypesInSignature, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
         }
 	}
 }
