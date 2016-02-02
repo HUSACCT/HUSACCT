@@ -1,4 +1,6 @@
-package husacct.common.dto;
+package husacct.analyse.serviceinterface.dto;
+
+import husacct.common.dto.AbstractDTO;
 
 import java.util.ArrayList;
 import java.util.List;

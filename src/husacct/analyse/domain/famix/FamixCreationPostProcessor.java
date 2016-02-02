@@ -2,7 +2,9 @@ package husacct.analyse.domain.famix;
 
 import husacct.ServiceProvider;
 import husacct.control.task.States;
-import husacct.analyse.service.UmlLinkTypes;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.analyse.serviceinterface.enums.DependencyTypes;
+import husacct.analyse.serviceinterface.enums.UmlLinkTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -992,96 +994,96 @@ class FamixCreationPostProcessor {
     private void determineDependencyTypeAndOrSubType(FamixAssociation association) {
     	FamixClass theClass;
     	// Inheritance
-    	if (association.type == "Inheritance") {
+    	if (association.type == DependencyTypes.INHERITANCE.toString()) {
             theClass = theModel.classes.get(association.to);
             if (theClass != null) {
             	if (theClass.isInterface){
-            		association.subType = "Implements Interface";
+            		association.subType = DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString();
             	} else {
                     if (theClass.isAbstract) {
-                        association.subType = "Extends Abstract Class";
+                    	association.subType = DependencySubTypes.INH_EXTENDS_ABSTRACT_CLASS.toString();
                     } else {
-                        association.subType = "Extends Class";
+                        association.subType = DependencySubTypes.INH_EXTENDS_CLASS.toString();
                     }
             	}
             } else {
                 if (theModel.libraries.containsKey("xLibraries." + association.to)) {
-                	association.subType = "From Library Class";
+                	association.subType = DependencySubTypes.INH_FROM_LIBRARY_CLASS.toString();
                 }
             }
         // Call
         } else if (association.type.startsWith("Invoc")) {
-        	association.subType = "Method";
+        	association.subType = DependencySubTypes.CALL_METHOD.toString();
         	theClass = theModel.classes.get(association.to);
             if (theClass != null) {
             	if (theClass.isInterface) {
-            		association.subType = "Interface Method";
+            		association.subType = DependencySubTypes.CALL_INTERFACE_METH.toString();
             	} else if (theClass.isEnumeration) {
-            		association.subType = "Enumeration Method";
+            		association.subType = DependencySubTypes.CALL_ENUM_METH.toString();
             	} else {
                     switch(association.type) {
     	            case "InvocConstructor":
-    	            	association.subType = "Constructor";
+    	            	association.subType = DependencySubTypes.CALL_CONSTRUCTOR.toString();
     	            	break;
     	            case "InvocClassMethod":
-    	            	association.subType = "Class Method";
+    	            	association.subType = DependencySubTypes.CALL_CLASS_METH.toString();
     	            	break;
     	            case "InvocInstanceMethod":
-    	            	association.subType = "Instance Method";
+    	            	association.subType = DependencySubTypes.CALL_INSTANCE_METH.toString();
     	            	break;
                     }
                 }
             } else {
                 if (theModel.libraries.containsKey("xLibraries." + association.to)) {
-                	association.subType = "Library Method";
+                	association.subType = DependencySubTypes.CALL_LIBARRY_METH.toString();
                 }
             }
-            association.type = "Call";
+            association.type = DependencyTypes.CALL.toString();
         // Access
         } else if (association.type.startsWith("Access")) {
         	if (association.type.startsWith("AccessReference")) {
-    			association.subType = "Type";
+    			association.subType = DependencySubTypes.REF_TYPE.toString();
 	    		if (association.type.equals("AccessReference_ReturnType")) {
-	    			association.subType = "Return Type";
+	    			association.subType = DependencySubTypes.REF_RETURN_TYPE.toString();
 	    		} else if (association.type.equals("AccessReference_TypeOfVariable")) {
-	    			association.subType = "Type of Variable";
+	    			association.subType = DependencySubTypes.REF_TYPE_OF_VAR.toString();
 	    		}
-	    		association.type = "Reference";
+	    		association.type = DependencyTypes.REFERENCE.toString();
         	} else {
-            	association.subType = "Variable";
+            	association.subType = DependencySubTypes.ACC_VARIABLE.toString();
 	        	theClass = theModel.classes.get(association.to);
 	            if (theClass != null) {
 	            	if (theClass.isInterface) {
-	            		association.subType = "Interface Variable";
+	            		association.subType = DependencySubTypes.ACC_INTERFACE_VAR.toString();
 	            	} else if (theClass.isEnumeration) {
-		            		association.subType = "Enumeration Variable";
+		            		association.subType = DependencySubTypes.ACC_ENUMERATION_VAR.toString();
 	            	} else {
 	                    switch(association.type) {
 	        	            case "AccessInstanceAttribute":
-	        	            	association.subType = "Instance Variable";
+	        	            	association.subType = DependencySubTypes.ACC_INSTANCE_VAR.toString();
 	        	            	break;
 	        	            case "AccessInstanceAttributeConstant":
-	        	            	association.subType = "Instance Variable Constant";
+	        	            	association.subType = DependencySubTypes.ACC_INSTANCE_VAR_CONST.toString();
 	        	            	break;
 	        	            case "AccessClassAttribute":
-	        	            	association.subType = "Class Variable";
+	        	            	association.subType = DependencySubTypes.ACC_CLASS_VAR.toString();
 	        	            	break;
 	        	            case "AccessClassAttributeConstant":
-	        	            	association.subType = "Class Variable Constant";
+	        	            	association.subType = DependencySubTypes.ACC_CLASS_VAR_CONST.toString();
 	        	            	break;
 	                    }
 	            	}
 	            } else {
 	                if (theModel.libraries.containsKey("xLibraries." + association.to)) {
-	                	association.subType = "Library Variable";
+	                	association.subType = DependencySubTypes.ACC_LIBRARY_VAR.toString();
 	                }
 	            }
-	            association.type = "Access";
+	            association.type = DependencyTypes.ACCESS.toString();
         	}
             // Declaration
         } else if (association.type.startsWith("Declaration")) {
-        	if (association.subType.equals("Type Cast")) {
-	    		association.type = "Reference";
+        	if (association.subType.equals("Type Cast")) { 
+	    		association.type = DependencyTypes.REFERENCE.toString();
         	}
         }
     }

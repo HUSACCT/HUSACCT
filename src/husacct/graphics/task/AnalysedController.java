@@ -2,10 +2,10 @@ package husacct.graphics.task;
 
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;

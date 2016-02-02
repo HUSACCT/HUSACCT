@@ -1,5 +1,7 @@
 package husacct.analyse.domain;
 
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+
 
 public interface IModelCreationService {
 

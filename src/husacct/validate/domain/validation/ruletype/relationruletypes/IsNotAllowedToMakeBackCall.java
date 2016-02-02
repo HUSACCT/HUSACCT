@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.ruletype.relationruletypes;
 
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;

@@ -1,11 +1,11 @@
 package husacct.define;
 
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
 

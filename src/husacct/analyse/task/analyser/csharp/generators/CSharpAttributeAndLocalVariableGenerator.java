@@ -1,9 +1,10 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -28,7 +29,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	public void generateAttributeToDomain(Tree treeNode, String packageAndClassName) {
         initialize();
 		this.belongsToClass = packageAndClassName;
-    	dependencySubType = DependencySubTypes.INSTANCEVAR;
+    	dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
         /* Test helpers
     	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_OneTypeParameter")) {
     				boolean breakpoint = true;
@@ -40,7 +41,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	public void generateLocalVariableToDomain(Tree treeNode, String belongsToClass, String belongsToMethod) {
         initialize();
         isLocalVariable = true;
-		dependencySubType = DependencySubTypes.LOCALVAR;
+		dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
 		this.belongsToClass = belongsToClass;
 		this.belongsToMethod = belongsToMethod;
 		walkThroughAST(treeNode);
@@ -50,7 +51,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
     public void generateLocalVariableForEachLoopToDomain(String packageAndClassName, String belongsToMethod, String name, String type, int line) {
         initialize();
         isLocalVariable = true;
-		dependencySubType = DependencySubTypes.LOCALVAR;
+		dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
         this.belongsToClass = packageAndClassName;
         this.belongsToMethod = belongsToMethod;
         this.name = name;
@@ -133,9 +134,9 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
         // Set dependencySubType
         if (!isLocalVariable) {
     		if (hasClassScope) {
-    			dependencySubType = DependencySubTypes.CLASSVAR;
+    			dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
     		} else {
-    			dependencySubType = DependencySubTypes.INSTANCEVAR;
+    			dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
     		}
     	}
     }

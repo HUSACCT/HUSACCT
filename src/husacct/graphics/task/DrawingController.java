@@ -1,8 +1,8 @@
 package husacct.graphics.task;
 
 
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.DrawingView;

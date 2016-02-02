@@ -6,7 +6,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.IValidateService;
-import husacct.analyse.IAnalyseService;
+import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;

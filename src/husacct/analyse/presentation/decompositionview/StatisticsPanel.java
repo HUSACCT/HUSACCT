@@ -1,8 +1,8 @@
 package husacct.analyse.presentation.decompositionview;
 
 import husacct.analyse.presentation.AnalyseUIController;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 
 import java.awt.Color;

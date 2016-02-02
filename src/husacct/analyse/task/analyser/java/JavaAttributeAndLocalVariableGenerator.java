@@ -1,9 +1,9 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -32,7 +32,7 @@ class JavaAttributeAndLocalVariableGenerator {
     				boolean breakpoint = true;
     	} */
         initialize();
-    	dependencySubType = DependencySubTypes.INSTANCEVAR;
+    	dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
         this.belongsToClass = belongsToClass;
         walkThroughAST(attributeTree);
     }
@@ -40,7 +40,7 @@ class JavaAttributeAndLocalVariableGenerator {
     public void generateLocalVariableToDomain(Tree attributeTree, String belongsToClass, String belongsToMethod) {
         initialize();
         isLocalVariable = true;
-		dependencySubType = DependencySubTypes.LOCALVAR;
+		dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         walkThroughAST(attributeTree);
@@ -49,7 +49,7 @@ class JavaAttributeAndLocalVariableGenerator {
     public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
         initialize();
         isLocalVariable = true;
-		dependencySubType = DependencySubTypes.LOCALVAR;
+		dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         this.name = name;
@@ -153,9 +153,9 @@ class JavaAttributeAndLocalVariableGenerator {
         // Set dependencySubType
         if (!isLocalVariable) {
     		if (hasClassScope) {
-    			dependencySubType = DependencySubTypes.CLASSVAR;
+    			dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
     		} else {
-    			dependencySubType = DependencySubTypes.INSTANCEVAR;
+    			dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
     		}
     	}
     }

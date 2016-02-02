@@ -1,7 +1,7 @@
 package husacct.define.analyzer;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.task.States;

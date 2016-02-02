@@ -1,8 +1,9 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 import husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit;
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
 import java.util.*;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -76,7 +77,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
         CommonTree typeOfParameterTree = CSharpGeneratorToolkit.getFirstDescendantWithType(tree, CSharpParser.TYPE);
         if (typeOfParameterTree != null) {
         	CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-           	this.declareType = cSharpInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.PARAMETER);
+           	this.declareType = cSharpInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.DECL_PARAMETER);
             this.lineNumber = typeOfParameterTree.getLine();
             if (this.declareType.endsWith(".")) {
             	this.declareType = this.declareType.substring(0, this.declareType.length() - 1); //deleting the last point

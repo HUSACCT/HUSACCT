@@ -1,7 +1,7 @@
 package husacct.graphics.task.modulelayout.state;
 
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.FigureMap;

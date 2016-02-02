@@ -3,7 +3,7 @@ package husacct;
 import java.util.Date;
 
 import husacct.analyse.AnalyseServiceImpl;
-import husacct.analyse.IAnalyseService;
+import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.common.locale.ILocaleService;
 import husacct.common.locale.LocaleServiceImpl;
 import husacct.control.ControlServiceImpl;
@@ -14,6 +14,7 @@ import husacct.graphics.GraphicsServiceImpl;
 import husacct.graphics.IGraphicsService;
 import husacct.validate.IValidateService;
 import husacct.validate.ValidateServiceImpl;
+
 import org.apache.log4j.Logger;
 
 public final class ServiceProvider {

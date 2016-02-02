@@ -1,7 +1,8 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
@@ -33,7 +34,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
       	if ((treeNode.getChildCount() > 0)) {
-        	String invocTo = getCompleteToString((CommonTree) treeNode.getChild(0), from, DependencySubTypes.TYPEPARAMETER);
+        	String invocTo = getCompleteToString((CommonTree) treeNode.getChild(0), from, DependencySubTypes.DECL_TYPE_PARAMETER);
         	this.to = invocTo;
             if ((from != null) && (to != null) && !to.equals("") && !SkippableTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
@@ -174,7 +175,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		String argumentString = "";
 		boolean firstArgument = true;
 		for (int i = 0; i < tree.getChildCount(); i++) {
-			String argTo = getCompleteToString((CommonTree) tree.getChild(i), from, DependencySubTypes.TYPEPARAMETER);
+			String argTo = getCompleteToString((CommonTree) tree.getChild(i), from, DependencySubTypes.DECL_TYPE_PARAMETER);
 			if (tree.getChild(i).getType() != CSharpParser.ARGUMENT) {
 				if (i == 0) {
 					bodyString = argTo;
@@ -205,7 +206,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		String argumentString = "";
 		boolean firstArgument = true;
 		for (int i = 0; i < tree.getChildCount(); i++) {
-			String subString = getCompleteToString((CommonTree) tree.getChild(i), from, DependencySubTypes.TYPEPARAMETER);
+			String subString = getCompleteToString((CommonTree) tree.getChild(i), from, DependencySubTypes.DECL_TYPE_PARAMETER);
 			if (tree.getChild(i).getType() == CSharpParser.TYPE) {
 				bodyString = subString;
 			}

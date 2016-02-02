@@ -1,8 +1,8 @@
 package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
-import husacct.analyse.domain.DependencySubTypes;
-import husacct.common.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.factory.message.Messagebuilder;
@@ -390,19 +390,19 @@ public class ExcelReportWriter extends ReportWriter {
         	} else {
         		numberOfAllDependencies_Declaration_Direct ++;
         	}
-        	if (violation.getDependencySubType().equals(DependencySubTypes.INSTANCEVAR.toString())) {
+        	if (violation.getDependencySubType().equals(DependencySubTypes.DECL_INSTANCE_VAR.toString())) {
         		numberOf_Declaration_InstanceVariable ++;
-        	} else if (violation.getDependencySubType().equals(DependencySubTypes.LOCALVAR.toString())) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.DECL_LOCAL_VAR.toString())) {
         		numberOf_Declaration_LocalVariable ++;
-        	} else if (violation.getDependencySubType().equals(DependencySubTypes.CLASSVAR.toString())) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.DECL_CLASS_VAR.toString())) {
         		numberOf_Declaration_ClassVariable ++;
-        	} else if (violation.getDependencySubType().equals(DependencySubTypes.PARAMETER.toString())) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.DECL_PARAMETER.toString())) {
         		numberOf_Declaration_Parameter ++;
-        	} else if (violation.getDependencySubType().equals(DependencySubTypes.RETURNTYPE.toString())) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.DECL_RETURN_TYPE.toString())) {
         		numberOf_Declaration_ReturnType ++;
-        	} else if (violation.getDependencySubType().equals(DependencySubTypes.EXCEPTION.toString())) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.DECL_EXCEPTION.toString())) {
         		numberOf_Declaration_Exception ++;
-        	} else if (violation.getDependencySubType().equals(DependencySubTypes.TYPEPARAMETER.toString())) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.DECL_TYPE_PARAMETER.toString())) {
         		numberOf_Declaration_GenericTypeParameter ++;
         	}
     	    break;
@@ -746,7 +746,7 @@ public class ExcelReportWriter extends ReportWriter {
         addCellNumber(sheet, 1, 49, numberOf_Declaration_Parameter);
         addCellDefault(sheet, 0, 50, "Return Type");
         addCellNumber(sheet, 1, 50, numberOf_Declaration_ReturnType);
-        addCellDefault(sheet, 0, 51, DependencySubTypes.TYPEPARAMETER.toString());
+        addCellDefault(sheet, 0, 51, DependencySubTypes.DECL_TYPE_PARAMETER.toString());
         addCellNumber(sheet, 1, 51, numberOf_Declaration_GenericTypeParameter);
 
         addCellBold(sheet, 0, 53, "Inheritance");

@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -89,7 +89,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
 			switch (child.getType()) {
 	            case CSharpParser.TYPE:
 	                csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-	            	String foundType = csharpInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.TYPEPARAMETER);
+	            	String foundType = csharpInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.DECL_TYPE_PARAMETER);
 	                if (foundType != null) {
 	                    this.variableTypeForLoop = foundType;
 	                }

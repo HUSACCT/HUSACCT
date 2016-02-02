@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         this. lineNumber = commonTree.getLine();
        	if ((commonTree.getChildCount() > 0)) {
-        	String invocTo = getCompleteToString(commonTree, from, DependencySubTypes.TYPEPARAMETER);
+        	String invocTo = getCompleteToString(commonTree, from, DependencySubTypes.DECL_TYPE_PARAMETER);
         	this.to = invocTo;
             if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocConstructor");
@@ -37,7 +37,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
         lineNumber = treeNode.getLine();
       	if ((treeNode.getChildCount() > 0)) {
-        	String invocTo = getCompleteToString(treeNode, from, DependencySubTypes.TYPEPARAMETER);
+        	String invocTo = getCompleteToString(treeNode, from, DependencySubTypes.DECL_TYPE_PARAMETER);
         	this.to = invocTo;
             if (to != null && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
                 modelService.createMethodInvocation(from, to, lineNumber, belongsToMethod, "InvocMethod");
@@ -52,10 +52,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
             for (int childCount = 0; childCount < treeNode.getChildCount(); childCount++) {
                 CommonTree childNode = (CommonTree) treeNode.getChild(childCount);
                 if (childCount == 0) {
-                	leftVariableInAssignment = getCompleteToString(childNode, from, DependencySubTypes.TYPEPARAMETER);
+                	leftVariableInAssignment = getCompleteToString(childNode, from, DependencySubTypes.DECL_TYPE_PARAMETER);
                 }
                 if (childCount == 1) {
-                	rightVariableInAssignment = getCompleteToString(childNode, from, DependencySubTypes.TYPEPARAMETER);
+                	rightVariableInAssignment = getCompleteToString(childNode, from, DependencySubTypes.DECL_TYPE_PARAMETER);
             		this.lineNumber = childNode.getLine();
                 }
             }

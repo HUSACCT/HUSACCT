@@ -1,4 +1,6 @@
-package husacct.common.dto;
+package husacct.analyse.serviceinterface.dto;
+
+import husacct.common.dto.AbstractDTO;
 
 public class AnalysisStatisticsDTO extends AbstractDTO {
 	public final int totalNrOfPackages;

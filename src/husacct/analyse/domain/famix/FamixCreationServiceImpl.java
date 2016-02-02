@@ -9,10 +9,10 @@ import javax.naming.directory.InvalidAttributesException;
 
 import org.apache.log4j.Logger;
 
-import husacct.analyse.domain.DependencySubTypes;
-import husacct.analyse.domain.DependencyTypes;
 import husacct.analyse.domain.IModelCreationService;
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.analyse.serviceinterface.enums.DependencyTypes;
 
 public class FamixCreationServiceImpl implements IModelCreationService {
 
@@ -304,7 +304,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = from;
         fAssocation.to = to;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "Declaration"; // Is changed afterwards in Reference. Don't change it here, cause it influences the postprocessing.
         fAssocation.subType = "Type Cast";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);

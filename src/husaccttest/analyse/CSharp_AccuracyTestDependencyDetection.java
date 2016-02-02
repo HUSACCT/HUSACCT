@@ -1,11 +1,11 @@
 package husaccttest.analyse;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.analyse.domain.DependencySubTypes;
-import husacct.analyse.service.UmlLinkDTO;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
@@ -278,8 +278,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromClass = "Domain.Direct.Violating.CallConstructor_GenericType_MultipleTypeParameters";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.TYPEPARAMETER.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.UserDAO", typesToFind, DependencySubTypes.TYPEPARAMETER.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_TYPE_PARAMETER.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.UserDAO", typesToFind, DependencySubTypes.DECL_TYPE_PARAMETER.toString(), false));
 	}
 
 	@Test
@@ -506,7 +506,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromClass = "Domain.Direct.Violating.DeclarationReturnType_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.RETURNTYPE.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_RETURN_TYPE.toString(), false));
 	}
 
 	@Test
@@ -537,15 +537,6 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
-	public void DeclarationVariableInstanceGeneric(){
-		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstanceGeneric";
-		String toClass = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
-		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
-	}
-
-	@Test
 	public void DeclarationVariableInstance(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
@@ -572,6 +563,16 @@ public class CSharp_AccuracyTestDependencyDetection {
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Instance Variable", false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, "Instance Variable", false));
 	}
+
+	@Test
+	public void DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex(){
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Declaration");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Instance Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, "Instance Variable", false));
+	}
+
 	@Test
 	public void DeclarationVariableStatic(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableStatic";

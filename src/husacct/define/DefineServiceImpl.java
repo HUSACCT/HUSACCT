@@ -1,12 +1,12 @@
 package husacct.define;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;

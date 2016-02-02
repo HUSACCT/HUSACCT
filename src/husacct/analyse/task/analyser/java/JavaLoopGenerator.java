@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -71,7 +71,7 @@ public class JavaLoopGenerator extends JavaGenerator {
                 deleteTreeChild(child);
                 break;
             case JavaParser.TYPE:
-            	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.TYPEPARAMETER);
+            	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.DECL_TYPE_PARAMETER);
                 if (foundType != null) {
                     this.variableTypeForLoop = foundType;
                 }

@@ -1,8 +1,8 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.IControlService;
@@ -15,6 +15,7 @@ import husacct.validate.IValidateService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;

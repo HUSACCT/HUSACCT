@@ -10,9 +10,9 @@ import org.jdom2.Element;
 import husacct.analyse.abstraction.dto.ClassDTO;
 import husacct.analyse.abstraction.dto.LibraryDTO;
 import husacct.analyse.abstraction.dto.PackageDTO;
-import husacct.analyse.service.UmlLinkDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.DependencyDTO;
 
 public class XmlFileImporterAnalysedModel {
 

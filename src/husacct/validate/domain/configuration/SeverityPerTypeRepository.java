@@ -1,7 +1,7 @@
 package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
+import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.validate.domain.exception.KeyNotFoundException;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.SeverityNotFoundException;

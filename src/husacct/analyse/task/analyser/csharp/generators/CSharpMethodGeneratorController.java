@@ -1,8 +1,8 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import java.util.*;
 
@@ -63,7 +63,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 			if (methodTree.getChild(i).getType() == CSharpParser.TYPE) {
 				CommonTree typeTree = (CommonTree) methodTree.getChild(i);
 				CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-		    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree, belongsToClass, DependencySubTypes.RETURNTYPE);
+		    	String foundType = csharpInvocationGenerator.getCompleteToString(typeTree, belongsToClass, DependencySubTypes.DECL_RETURN_TYPE);
 		        if ((foundType != null) && !foundType.equals("")) {
 		            this.returnType = foundType;
 		        } 

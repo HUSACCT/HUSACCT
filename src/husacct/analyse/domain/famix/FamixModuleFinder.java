@@ -1,6 +1,6 @@
 package husacct.analyse.domain.famix;
 
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,7 +1,7 @@
 package husacct.analyse.abstraction.export;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
 
 public abstract class AbstractReportFileExporter {
 

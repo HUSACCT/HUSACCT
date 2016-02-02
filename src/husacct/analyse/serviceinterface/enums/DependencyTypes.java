@@ -1,10 +1,11 @@
-package husacct.analyse.domain;
+package husacct.analyse.serviceinterface.enums;
 
 import java.util.EnumSet;
 
 public enum DependencyTypes {
 
     ACCESS("Access"),
+    ANNOTATION("Annotation"),
     CALL("Call"),
     DECLARATION("Declaration"),
     IMPORT("Import"),

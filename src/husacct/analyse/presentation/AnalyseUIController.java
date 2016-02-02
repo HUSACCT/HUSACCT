@@ -1,9 +1,9 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 

@@ -1,10 +1,11 @@
 package husaccttest.analyse;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.analyse.domain.DependencySubTypes;
-import husacct.analyse.service.UmlLinkDTO;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.analyse.serviceinterface.enums.DependencyTypes;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -299,8 +300,8 @@ public class Java_AccuracyTestDependencyDetection {
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Library Method", false));
 		typesToFind.clear();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.TYPEPARAMETER.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, DependencySubTypes.TYPEPARAMETER.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_TYPE_PARAMETER.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, DependencySubTypes.DECL_TYPE_PARAMETER.toString(), false));
 	}
 
 	@Test
@@ -510,7 +511,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationParameter_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.PARAMETER.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_PARAMETER.toString(), false));
 		typesToFind.clear();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, "Library Method", false));
@@ -530,7 +531,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationReturnType_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.RETURNTYPE.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_RETURN_TYPE.toString(), false));
 	}
 
 	@Test
@@ -574,12 +575,12 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.AccountDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.BadgesDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.CheckInDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.AccountDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.BadgesDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.CheckInDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.UserDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
 		typesToFind.clear();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, "Library Method", false));
@@ -590,8 +591,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
 		typesToFind.clear();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.HashMap", typesToFind, "Library Method", false));
@@ -602,8 +603,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, DependencySubTypes.INSTANCEVAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
 		typesToFind.clear();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.HashMap", typesToFind, "Library Method", false));
@@ -615,7 +616,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String toClass = "technology.direct.dao.ProfileDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, DependencySubTypes.CLASSVAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, DependencySubTypes.DECL_CLASS_VAR.toString(), false));
 	}
 
 	@Test
@@ -623,7 +624,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationVariableStatic_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.CLASSVAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_CLASS_VAR.toString(), false));
 		typesToFind.clear();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "xLibraries.java.util.ArrayList", typesToFind, "Library Method", false));
@@ -643,8 +644,8 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromClass = "domain.direct.violating.DeclarationVariableLocal_GenericType_MultipleTypeParameters";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.LOCALVAR.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, DependencySubTypes.LOCALVAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_LOCAL_VAR.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "technology.direct.dao.FriendsDAO", typesToFind, DependencySubTypes.DECL_LOCAL_VAR.toString(), false));
 	}
 
 	@Test
@@ -1093,6 +1094,58 @@ public class Java_AccuracyTestDependencyDetection {
 		Assert.assertTrue(numberOfDependencies == numberOfViolations);
 	}
 
+	// Test service that provide only dependencies of type Access, Call, or Reference.
+	@Test
+	public void OnlyDependenciesOfTypeAccessCallReference_fromClasstoClass(){
+		String fromClass = "domain.direct.violating.AccessInstanceVariable_SetArgumentValue";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		// Get all dependencies between the the two classes
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		DependencyDTO[] allDependencies= analyseService.getDependenciesFromClassToClass(fromClass, toClass);
+		int numberOfAllDependencies = allDependencies.length;
+		// Determine the number of dependencies not of type Access, Call, or Reference.
+		ArrayList<DependencyDTO> result = new ArrayList<DependencyDTO>();
+    	for (DependencyDTO dependency : allDependencies) {
+    		if (dependency.type.equals(DependencyTypes.ANNOTATION.toString()) || dependency.type.equals(DependencyTypes.DECLARATION.toString()) 
+    				|| dependency.type.equals(DependencyTypes.IMPORT.toString()) || dependency.type.equals(DependencyTypes.INHERITANCE.toString())) {
+        		result.add(dependency);
+        	}
+    	}
+    	int numberOfADII_Dependencies = result.size();
+    	int numberOfACR_Dependencies = analyseService.getDependencies_OnlyAccessCallAndReferences_FromClassToClass(fromClass, toClass).length;
+		boolean correctNrOfACR_Dependencies = false;
+		if ((numberOfACR_Dependencies > 1) && (numberOfACR_Dependencies == numberOfAllDependencies - numberOfADII_Dependencies)) {
+			correctNrOfACR_Dependencies = true;
+		}
+		Assert.assertTrue(correctNrOfACR_Dependencies);
+	}
+
+	@Test
+	public void OnlyDependenciesOfTypeAccessCallReference_fromSUtoSU(){
+		String fromClass = "domain.direct.violating";
+		String toClass = "technology.direct.dao";
+		// Get all dependencies between the the two classes
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		DependencyDTO[] allDependencies= analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromClass, toClass);
+		int numberOfAllDependencies = allDependencies.length;
+		// Determine the number of dependencies not of type Access, Call, or Reference.
+		ArrayList<DependencyDTO> result = new ArrayList<DependencyDTO>();
+    	for (DependencyDTO dependency : allDependencies) {
+    		if (dependency.type.equals(DependencyTypes.ANNOTATION.toString()) || dependency.type.equals(DependencyTypes.DECLARATION.toString()) 
+    				|| dependency.type.equals(DependencyTypes.IMPORT.toString()) || dependency.type.equals(DependencyTypes.INHERITANCE.toString())) {
+        		result.add(dependency);
+        	}
+    	}
+    	int numberOfADII_Dependencies = result.size();
+    	int numberOfACR_Dependencies = analyseService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(fromClass, toClass).length;
+		boolean correctNrOfACR_Dependencies = false;
+		if ((numberOfACR_Dependencies > 1) && (numberOfACR_Dependencies == numberOfAllDependencies - numberOfADII_Dependencies)) {
+			correctNrOfACR_Dependencies = true;
+		}
+		Assert.assertTrue(correctNrOfACR_Dependencies);
+	}
+
+	
 	// UmlLinkTypes: Positive
 	@Test
 	public void UmlLinkType_InstanceVariableDeclaration_NotComposite(){

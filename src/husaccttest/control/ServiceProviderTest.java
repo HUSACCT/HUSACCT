@@ -2,7 +2,7 @@ package husaccttest.control;
 
 import static org.junit.Assert.assertSame;
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
+import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.define.IDefineService;
 import husacct.graphics.IGraphicsService;
 import husacct.validate.IValidateService;

@@ -2,9 +2,10 @@ package husacct.analyse.task.reconstruct;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.define.IDefineService;
 
 import org.apache.log4j.Logger;

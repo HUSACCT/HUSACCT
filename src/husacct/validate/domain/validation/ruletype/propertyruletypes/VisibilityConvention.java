@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
@@ -9,6 +9,7 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+
 import java.util.EnumSet;
 import java.util.List;
 

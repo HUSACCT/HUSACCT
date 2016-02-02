@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleTypeDTO;

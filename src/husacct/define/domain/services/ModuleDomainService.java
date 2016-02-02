@@ -1,7 +1,7 @@
 package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.ModuleFactory;
@@ -14,6 +14,7 @@ import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import org.apache.log4j.Logger;
 
 public class ModuleDomainService {

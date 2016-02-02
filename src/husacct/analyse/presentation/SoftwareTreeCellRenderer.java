@@ -1,9 +1,11 @@
 package husacct.analyse.presentation;
 
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.Resource;
-import husacct.common.dto.SoftwareUnitDTO;
+
 import java.awt.Color;
 import java.awt.Component;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;

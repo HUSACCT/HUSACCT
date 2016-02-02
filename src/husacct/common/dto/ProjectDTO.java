@@ -1,5 +1,7 @@
 package husacct.common.dto;
 
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+
 import java.util.ArrayList;
 
 public class ProjectDTO extends AbstractDTO {

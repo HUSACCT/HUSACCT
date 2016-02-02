@@ -1,7 +1,7 @@
 package husacct.analyse.presentation.usageview;
 
 import husacct.analyse.presentation.AnalyseUIController;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
 
 import java.util.ArrayList;
 import java.util.List;

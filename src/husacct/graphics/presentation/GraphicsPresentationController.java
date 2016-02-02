@@ -2,8 +2,8 @@ package husacct.graphics.presentation;
 
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;

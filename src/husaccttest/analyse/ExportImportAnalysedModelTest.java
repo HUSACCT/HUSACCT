@@ -1,10 +1,10 @@
 package husaccttest.analyse;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.analyse.service.UmlLinkDTO;
-import husacct.common.dto.AnalysisStatisticsDTO;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;

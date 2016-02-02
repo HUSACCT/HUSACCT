@@ -14,4 +14,16 @@ namespace Technology.Direct.Dao
 			return "commercial";
 		}
 	}
+
+
+	public class ProfileDAO<AccountDAO, BadgesDAO, FriendsDAO> 
+	{
+		public string name = "commercial";
+
+		public virtual string GetCampaignType()
+		{
+			return name;
+		}
+	}
+
 }

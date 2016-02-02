@@ -2,11 +2,11 @@ package husacct.analyse.abstraction.export.excel;
 
 import husacct.ServiceProvider;
 import husacct.analyse.abstraction.export.AbstractReportFileExporter;
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.common.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.DependencyDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -264,19 +264,19 @@ public class ExcelExporter extends AbstractReportFileExporter {
         	} else {
         		numberOfAllDependencies_Declaration_Direct ++;
         	}
-        	if (dependency.subType.equals(DependencySubTypes.INSTANCEVAR.toString())) {
+        	if (dependency.subType.equals(DependencySubTypes.DECL_INSTANCE_VAR.toString())) {
         		numberOf_Declaration_InstanceVariable ++;
-        	} else if (dependency.subType.equals(DependencySubTypes.LOCALVAR.toString())) {
+        	} else if (dependency.subType.equals(DependencySubTypes.DECL_LOCAL_VAR.toString())) {
         		numberOf_Declaration_LocalVariable ++;
-        	} else if (dependency.subType.equals(DependencySubTypes.CLASSVAR.toString())) {
+        	} else if (dependency.subType.equals(DependencySubTypes.DECL_CLASS_VAR.toString())) {
         		numberOf_Declaration_ClassVariable ++;
-        	} else if (dependency.subType.equals(DependencySubTypes.PARAMETER.toString())) {
+        	} else if (dependency.subType.equals(DependencySubTypes.DECL_PARAMETER.toString())) {
         		numberOf_Declaration_Parameter ++;
-        	} else if (dependency.subType.equals(DependencySubTypes.RETURNTYPE.toString())) {
+        	} else if (dependency.subType.equals(DependencySubTypes.DECL_RETURN_TYPE.toString())) {
         		numberOf_Declaration_ReturnType ++;
-        	} else if (dependency.subType.equals(DependencySubTypes.EXCEPTION.toString())) {
+        	} else if (dependency.subType.equals(DependencySubTypes.DECL_EXCEPTION.toString())) {
         		numberOf_Declaration_Exception ++;
-        	} else if (dependency.subType.equals(DependencySubTypes.TYPEPARAMETER.toString())) {
+        	} else if (dependency.subType.equals(DependencySubTypes.DECL_TYPE_PARAMETER.toString())) {
         		numberOf_Declaration_GenericTypeParameter ++;
         	}
     	    break;
@@ -620,7 +620,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
         addCellNumber(sheet, 1, 49, numberOf_Declaration_Parameter);
         addCellDefault(sheet, 0, 50, "Return Type");
         addCellNumber(sheet, 1, 50, numberOf_Declaration_ReturnType);
-        addCellDefault(sheet, 0, 51, DependencySubTypes.TYPEPARAMETER.toString());
+        addCellDefault(sheet, 0, 51, DependencySubTypes.DECL_TYPE_PARAMETER.toString());
         addCellNumber(sheet, 1, 51, numberOf_Declaration_GenericTypeParameter);
 
         addCellBold(sheet, 0, 53, "Inheritance");

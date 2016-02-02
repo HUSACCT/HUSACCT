@@ -1,5 +1,6 @@
-package husacct.analyse.service;
+package husacct.analyse.serviceinterface.dto;
 
+import husacct.analyse.serviceinterface.enums.UmlLinkTypes;
 import husacct.common.dto.AbstractDTO;
 
 public class UmlLinkDTO extends AbstractDTO{

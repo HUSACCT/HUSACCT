@@ -7,10 +7,11 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.service.UmlLinkDTO;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.AnalysisStatisticsDTO;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
+import husacct.analyse.serviceinterface.enums.DependencyTypes;
 
 public class FamixQueryServiceImpl implements IModelQueryService {
 
@@ -86,6 +87,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         return allDependencies;
     }
 
+    // Query dependencies of all types
     @Override
     public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
         List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
@@ -97,9 +99,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
                 for (DependencyDTO dependency : dependencyFinder.getDependenciesFromTo(fromTypeName, toTypeName)) {
 					// Filter-out duplicate dependencies
 					String uniqueName = (dependency.from + dependency.to + dependency.lineNumber + dependency.type + dependency.subType + Boolean.toString(dependency.isIndirect));
-					if (!foundDependenciesTreeMap.containsKey(uniqueName)){
-						foundDependenciesTreeMap.put(uniqueName, dependency);
-					}
+					foundDependenciesTreeMap.put(uniqueName, dependency);
                 }
             }
         }
@@ -112,6 +112,41 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     	ArrayList<DependencyDTO> result = dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
         DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]);
         return allDependencies;
+	}
+	
+    // Query only dependencies of the types Access, Call, and Reference (representing "Executing" activities).
+    @Override
+    public DependencyDTO[] getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
+        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
+    	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
+    	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
+        for (String fromTypeName : allFromTypeNames) {
+            for (String toTypeName : allToTypeNames) {
+                for (DependencyDTO dependency : dependencyFinder.getDependenciesFromTo(fromTypeName, toTypeName)) {
+                	if (dependency.type.equals(DependencyTypes.ACCESS.toString()) || dependency.type.equals(DependencyTypes.CALL.toString())|| dependency.type.equals(DependencyTypes.REFERENCE.toString())) {
+						// Filter-out duplicate dependencies
+						String uniqueName = (dependency.from + dependency.to + dependency.lineNumber + dependency.type + dependency.subType + Boolean.toString(dependency.isIndirect));
+						foundDependenciesTreeMap.put(uniqueName, dependency);
+                	}
+                }
+            }
+        }
+        foundDependenciesReturnList.addAll(foundDependenciesTreeMap.values());
+        return foundDependenciesReturnList.toArray(new DependencyDTO[foundDependenciesReturnList.size()]);
+    }
+    
+    @Override
+	public DependencyDTO[] getDependencies_OnlyAccessCallAndReferences_FromClassToClass(String classPathFrom, String classPathTo){
+    	ArrayList<DependencyDTO> DependencyDTOs = dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
+    	ArrayList<DependencyDTO> result = new ArrayList<DependencyDTO>();
+    	for (DependencyDTO dependency : DependencyDTOs) {
+        	if (dependency.type.equals(DependencyTypes.ACCESS.toString()) || dependency.type.equals(DependencyTypes.CALL.toString())|| dependency.type.equals(DependencyTypes.REFERENCE.toString())) {
+        		result.add(dependency);
+        	}
+    	}
+        DependencyDTO[] dependenciesOfSelectedTypes = result.toArray(new DependencyDTO[result.size()]);
+        return dependenciesOfSelectedTypes;
 	}
 	
     // Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  

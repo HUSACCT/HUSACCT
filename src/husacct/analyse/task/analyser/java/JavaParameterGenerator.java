@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import java.util.ArrayList;
 
@@ -71,7 +71,7 @@ public class JavaParameterGenerator extends JavaGenerator {
         CommonTree typeOfParameterTree = JavaGeneratorToolkit.getFirstDescendantWithType(tree, JavaParser.TYPE);
         if (typeOfParameterTree != null) {
         	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-           	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.PARAMETER);
+           	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.DECL_PARAMETER);
             this.lineNumber = typeOfParameterTree.getLine();
             if (this.declareType.endsWith(".")) {
             	this.declareType = this.declareType.substring(0, this.declareType.length() - 1); //deleting the last point

@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.validate.domain.validation.Severity;
 
 import javax.swing.JTable;

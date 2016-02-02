@@ -1,4 +1,4 @@
-package husacct.analyse;
+package husacct.analyse.serviceinterface;
 
 import java.util.HashSet;
 import java.util.List;
@@ -7,11 +7,11 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-import husacct.analyse.service.UmlLinkDTO;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
@@ -44,6 +44,19 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 	*/ 
     public DependencyDTO[] getDependenciesFromClassToClass(String classPathFrom, String classPathTo);
 	
+	/** Returns an array of the dependencies, of the dependency types Access, Call, and References only, between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
+     * Relatively fast function, based on HashMap. At least one of the argument must match with an analysedModule.
+     */  
+	public DependencyDTO[] getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
+
+	/** Returns the dependencies, of the dependency types Access, Call, and References only, for the exact match from classPathFrom and classPathTo. 
+	* Fast function, based on HashMap.
+	* Either classPathTFrom or classPathTo should refer to a class or library class and have a value other than "", otherwise an empty array is returned.
+	* If classPathTFrom = "", then all dependencies to classPathTo are returned, which refer to existing classPathFrom's.
+	* If classPathTo = "", then all dependencies from classPathFrom are returned, which refer to existing classPathTo's.
+	*/ 
+	public DependencyDTO[] getDependencies_OnlyAccessCallAndReferences_FromClassToClass(String classPathFrom, String classPathTo);
+    
     public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename);
     
     public String getSourceFilePathOfClass(String uniquename);
@@ -71,5 +84,5 @@ public interface IAnalyseService extends IObservableService, ISaveable {
      * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
      * */
     public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass);
-    
+
 }

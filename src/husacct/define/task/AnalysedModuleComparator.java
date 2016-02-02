@@ -1,6 +1,6 @@
 package husacct.define.task;
 
-import husacct.common.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 
 import java.util.Comparator;
 

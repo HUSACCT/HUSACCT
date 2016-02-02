@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.serviceinterface.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -147,7 +147,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
 
     private void getReturnType(Tree tree) {
     	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-    	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree, belongsToClass, DependencySubTypes.RETURNTYPE);
+    	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree, belongsToClass, DependencySubTypes.DECL_RETURN_TYPE);
         if (foundType != null) {
             this.declaredReturnType = foundType;
         } else {
