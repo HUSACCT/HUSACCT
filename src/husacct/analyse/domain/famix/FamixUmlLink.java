@@ -1,16 +1,15 @@
 package husacct.analyse.domain.famix;
 
-import husacct.analyse.service.UmlLinkTypes;
-
 class FamixUmlLink extends FamixObject {
 
 	public String from = "";			
     public String to = "";
-    public UmlLinkTypes linkType = UmlLinkTypes.ATTRIBUTELINK;
     public String attributeFrom = "";
 	public boolean isComposite = false; // False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[].
+    public String linkType = "";		// The value should be the same as the value of attributeof "key" of one of the enum values of UmlLinkTypes. 
+    									// Because of the persistency mechanism, the type is String and notUmlLinkTypes.
 
-    public String toString() {
+     public String toString() {
         String s = "";
         s += "\nFrom: " + from;
         s += "\nTo: " + to;

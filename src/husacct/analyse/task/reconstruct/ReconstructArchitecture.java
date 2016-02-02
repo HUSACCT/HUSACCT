@@ -1,17 +1,13 @@
 package husacct.analyse.task.reconstruct;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
-import java.util.ArrayList;
-
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineService;
 
 import org.apache.log4j.Logger;
-import org.jfree.util.Log;
 
 public class ReconstructArchitecture {
 

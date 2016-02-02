@@ -1,6 +1,7 @@
 package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
@@ -389,19 +390,19 @@ public class ExcelReportWriter extends ReportWriter {
         	} else {
         		numberOfAllDependencies_Declaration_Direct ++;
         	}
-        	if (violation.getDependencySubType().equals("Instance Variable")) {
+        	if (violation.getDependencySubType().equals(DependencySubTypes.INSTANCEVAR.toString())) {
         		numberOf_Declaration_InstanceVariable ++;
-        	} else if (violation.getDependencySubType().equals("Local Variable")) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.LOCALVAR.toString())) {
         		numberOf_Declaration_LocalVariable ++;
-        	} else if (violation.getDependencySubType().equals("Class Variable")) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.CLASSVAR.toString())) {
         		numberOf_Declaration_ClassVariable ++;
-        	} else if (violation.getDependencySubType().equals("Parameter")) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.PARAMETER.toString())) {
         		numberOf_Declaration_Parameter ++;
-        	} else if (violation.getDependencySubType().equals("Return Type")) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.RETURNTYPE.toString())) {
         		numberOf_Declaration_ReturnType ++;
-        	} else if (violation.getDependencySubType().equals("Exception")) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.EXCEPTION.toString())) {
         		numberOf_Declaration_Exception ++;
-        	} else if (violation.getDependencySubType().equals("Generic Type Parameter")) {
+        	} else if (violation.getDependencySubType().equals(DependencySubTypes.TYPEPARAMETER.toString())) {
         		numberOf_Declaration_GenericTypeParameter ++;
         	}
     	    break;
@@ -745,7 +746,7 @@ public class ExcelReportWriter extends ReportWriter {
         addCellNumber(sheet, 1, 49, numberOf_Declaration_Parameter);
         addCellDefault(sheet, 0, 50, "Return Type");
         addCellNumber(sheet, 1, 50, numberOf_Declaration_ReturnType);
-        addCellDefault(sheet, 0, 51, "Generic Type Parameter");
+        addCellDefault(sheet, 0, 51, DependencySubTypes.TYPEPARAMETER.toString());
         addCellNumber(sheet, 1, 51, numberOf_Declaration_GenericTypeParameter);
 
         addCellBold(sheet, 0, 53, "Inheritance");

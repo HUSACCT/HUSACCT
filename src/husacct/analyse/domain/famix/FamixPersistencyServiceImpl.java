@@ -7,6 +7,7 @@ import husacct.analyse.abstraction.export.XmlFileExporterAnalysedModel;
 import husacct.analyse.abstraction.export.XmlFileImporterAnalysedModel;
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 
@@ -32,7 +33,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
 
     private Logger husacctLogger = Logger.getLogger(XmlFileExporterAnalysedModel.class);
 
-    // The following Famix types have to be exported and imported in strict order: Packages, Classes, Libraries, Dependencies;
+    // The following Famix types have to be exported and imported in strict order: Packages, Classes, Libraries, Dependencies, UmlLinks;
     // The first three need to be sorted on uniqueName.
     
    public FamixPersistencyServiceImpl(IModelQueryService queryService) {
@@ -49,6 +50,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
         writeClassesToXML();
         writeLibrariesToXML();
         writeDependenciesToXML();
+        writeUmlLinksToXML();
         return xmlFileExporter.getXML();
     }
 
@@ -81,6 +83,13 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
         }
     }
     
+    private void writeUmlLinksToXML() {
+        for (String classUniqueName : classesTreeMap.keySet()) {
+        	for (UmlLinkDTO umlLink : queryService.getAllUmlLinksFromClassToOtherClasses(classUniqueName)) {
+        	xmlFileExporter.writeUmlLinkToXml(umlLink);
+            }
+        }
+    }
     // IMPORT
     
     @Override
@@ -91,6 +100,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     	readClassesFromXML();
     	readLibrariesFromXML();
     	readDependenciesFromXML();
+        readUmlLinksFromXML();
     	queryService.buildCache();
     }
 
@@ -124,6 +134,15 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     private void readDependenciesFromXML() {
     	List<DependencyDTO> list = xmlFileImporter.readDependenciesfromXml();
     	queryService.importDependencies(list);
+    }
+    
+    private void readUmlLinksFromXML() {
+    	List<UmlLinkDTO> list = xmlFileImporter.readUmlLinksFromXML();
+    	for (UmlLinkDTO dto: list) {
+    		FamixUmlLink fobj = new FamixUmlLink();
+    		HashMap<String, Class<?>> fobjFieldsMap = getHashMapWithFields(fobj);
+    		writeDtoToFamixObject(dto, fobj, fobjFieldsMap);
+    	}
     }
     
     private HashMap<String, Class<?>> getHashMapWithFields(FamixObject fobj) {	

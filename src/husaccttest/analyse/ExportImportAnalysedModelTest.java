@@ -2,6 +2,7 @@ package husaccttest.analyse;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.control.ControlServiceImpl;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -106,6 +108,11 @@ public class ExportImportAnalysedModelTest {
 		Assert.assertTrue(analyseStatisticsAfterImport.totalNrOfLinesOfCode == analyseStatisticsBeforeExport.totalNrOfLinesOfCode);
 	}
 	
+	@Test
+	public void ImportUmlLinks(){
+		Assert.assertTrue(analyseStatisticsAfterImport.totalNrOfUmlLinks == analyseStatisticsBeforeExport.totalNrOfUmlLinks);
+	}
+	
 	// Tests Dependency Detection after Import
 	
 	@Test
@@ -169,6 +176,37 @@ public class ExportImportAnalysedModelTest {
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Extends Class", false));	}
+
+	// UmlLinkTypes: Positive
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_NotComposite(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		String fromAttribute = "pdao";
+		boolean isComposite = false;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_Array(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.AccountDAO";
+		String fromAttribute = "aDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_Composite_List(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
+		String toClass = "technology.direct.dao.BadgesDAO";
+		String fromAttribute = "bDao";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
 
 	
 	//
@@ -254,6 +292,19 @@ public class ExportImportAnalysedModelTest {
 			dependencyTypesDetected = true;
 		}
 		return dependencyTypesDetected;
+	}
+
+	private boolean isUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+		boolean umlLinkDetected = false;
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
+			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
+					(linkDTO.isComposite == isComposite) && linkDTO.linkType.equals(linkType)) {
+				umlLinkDetected = true;
+			}
+		}
+		return umlLinkDetected;
 	}
 
 }

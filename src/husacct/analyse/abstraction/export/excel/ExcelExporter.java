@@ -2,6 +2,7 @@ package husacct.analyse.abstraction.export.excel;
 
 import husacct.ServiceProvider;
 import husacct.analyse.abstraction.export.AbstractReportFileExporter;
+import husacct.analyse.domain.DependencySubTypes;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
@@ -263,19 +264,19 @@ public class ExcelExporter extends AbstractReportFileExporter {
         	} else {
         		numberOfAllDependencies_Declaration_Direct ++;
         	}
-        	if (dependency.subType.equals("Instance Variable")) {
+        	if (dependency.subType.equals(DependencySubTypes.INSTANCEVAR.toString())) {
         		numberOf_Declaration_InstanceVariable ++;
-        	} else if (dependency.subType.equals("Local Variable")) {
+        	} else if (dependency.subType.equals(DependencySubTypes.LOCALVAR.toString())) {
         		numberOf_Declaration_LocalVariable ++;
-        	} else if (dependency.subType.equals("Class Variable")) {
+        	} else if (dependency.subType.equals(DependencySubTypes.CLASSVAR.toString())) {
         		numberOf_Declaration_ClassVariable ++;
-        	} else if (dependency.subType.equals("Parameter")) {
+        	} else if (dependency.subType.equals(DependencySubTypes.PARAMETER.toString())) {
         		numberOf_Declaration_Parameter ++;
-        	} else if (dependency.subType.equals("Return Type")) {
+        	} else if (dependency.subType.equals(DependencySubTypes.RETURNTYPE.toString())) {
         		numberOf_Declaration_ReturnType ++;
-        	} else if (dependency.subType.equals("Exception")) {
+        	} else if (dependency.subType.equals(DependencySubTypes.EXCEPTION.toString())) {
         		numberOf_Declaration_Exception ++;
-        	} else if (dependency.subType.equals("Generic Type Parameter")) {
+        	} else if (dependency.subType.equals(DependencySubTypes.TYPEPARAMETER.toString())) {
         		numberOf_Declaration_GenericTypeParameter ++;
         	}
     	    break;
@@ -619,7 +620,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
         addCellNumber(sheet, 1, 49, numberOf_Declaration_Parameter);
         addCellDefault(sheet, 0, 50, "Return Type");
         addCellNumber(sheet, 1, 50, numberOf_Declaration_ReturnType);
-        addCellDefault(sheet, 0, 51, "Generic Type Parameter");
+        addCellDefault(sheet, 0, 51, DependencySubTypes.TYPEPARAMETER.toString());
         addCellNumber(sheet, 1, 51, numberOf_Declaration_GenericTypeParameter);
 
         addCellBold(sheet, 0, 53, "Inheritance");

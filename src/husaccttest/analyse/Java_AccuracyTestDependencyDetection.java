@@ -1101,7 +1101,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "pdao";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1111,7 +1111,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "aDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1121,7 +1121,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "bDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1131,7 +1131,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "cDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1141,7 +1141,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "pDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1151,7 +1151,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "uDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1161,11 +1161,11 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "p1Dao";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 		fromAttribute = "p2Dao";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 		fromAttribute = "p3Dao";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
 	@Test
@@ -1175,7 +1175,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "";
 		boolean isComposite = false;
 		String typeToFind = "Inherits";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
 	@Test
@@ -1185,7 +1185,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "";
 		boolean isComposite = false;
 		String typeToFind = "Implements";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
 	// UmlLinkTypes: Negative
@@ -1193,37 +1193,37 @@ public class Java_AccuracyTestDependencyDetection {
 	public void UmlLinkType_NotFromClassVariable(){ 
 		String fromClass = "domain.direct.violating.DeclarationVariableStatic";
 		String toClass = "technology.direct.dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromGenericTypeDeclarationWithMultipleTypeParameters(){ 
 		String fromClass = "domain.direct.violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
 		String toClass = "technology.direct.dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 		toClass = "technology.direct.dao.FriendsDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromLocalVariableDeclaration(){ // No UmlLinks should be caused by local variables.
 		String fromClass = "domain.direct.violating.DeclarationVariableLocal";
 		String toClass = "technology.direct.dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromParameterDeclaration(){ // No UmlLinks should be caused by local variables.
 		String fromClass = "domain.direct.violating.DeclarationParameter";
 		String toClass = "technology.direct.dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromReturnTypeDeclaration(){ // No UmlLinks should be caused by local variables.
 		String fromClass = "domain.direct.violating.DeclarationReturnType_GenericType_OneTypeParameter";
 		String toClass = "technology.direct.dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	//
@@ -1299,7 +1299,7 @@ public class Java_AccuracyTestDependencyDetection {
 		return dependencyTypesDetected;
 	}
 
-	private boolean IsUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+	private boolean isUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
 		boolean umlLinkDetected = false;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
@@ -1312,7 +1312,7 @@ public class Java_AccuracyTestDependencyDetection {
 		return umlLinkDetected;
 	}
 
-	private boolean IsUmlLinkNotDetected(String classFrom, String classTo) {
+	private boolean isUmlLinkNotDetected(String classFrom, String classTo) {
 		boolean umlLinkDetected = true;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);

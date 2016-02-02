@@ -201,7 +201,7 @@ class FamixCreationPostProcessor {
         		newLink.from = attribute.belongsToClass;
         		newLink.to = attribute.typeInClassDiagram;
         		newLink.attributeFrom = attribute.name;
-        		newLink.linkType = UmlLinkTypes.ATTRIBUTELINK;
+        		newLink.linkType = UmlLinkTypes.ATTRIBUTELINK.toString();
         		newLink.isComposite = attribute.isComposite;
         		addToModel(newLink);
         	}
@@ -371,9 +371,9 @@ class FamixCreationPostProcessor {
 				        		newLink.to = association.to;
 				        		newLink.attributeFrom = "";
 				        		if (association.subType.startsWith("Extends")) {
-					        		newLink.linkType = UmlLinkTypes.INHERITANCELINK;
+					        		newLink.linkType = UmlLinkTypes.INHERITANCELINK.toString();
 				        		} else {
-					        		newLink.linkType = UmlLinkTypes.IMPLEMENTSLINK;
+					        		newLink.linkType = UmlLinkTypes.IMPLEMENTSLINK.toString();
 				        		}
 				        		newLink.isComposite = false;
 				        		addToModel(newLink);

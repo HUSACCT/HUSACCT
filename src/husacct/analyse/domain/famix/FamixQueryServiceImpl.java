@@ -1,7 +1,6 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
@@ -180,7 +179,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			totalNrOfPackages --;
 		}
 		if (selectedModule == null) {
-			returnValue = new AnalysisStatisticsDTO(totalNrOfPackages, theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, 0, 0, 0);
+			returnValue = new AnalysisStatisticsDTO(totalNrOfPackages, theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, theModel.getTotalNumberOfUmlLinks(), 0, 0, 0);
 		} else {
 			int packages = 0;
 			int classes = 0;
@@ -212,7 +211,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 			} else {
 				// A library is selected, so return default 0-values.
 			}
-			returnValue = new AnalysisStatisticsDTO(totalNrOfPackages, theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, packages, classes, linesOfCode);
+			returnValue = new AnalysisStatisticsDTO(totalNrOfPackages, theModel.classes.size(), theModel.getTotalNumberOfLinesOfCode(), getAllDependencies().length, theModel.getTotalNumberOfUmlLinks(), packages, classes, linesOfCode);
 		}
         return returnValue;
     }

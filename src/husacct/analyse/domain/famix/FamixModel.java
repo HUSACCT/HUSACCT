@@ -191,6 +191,18 @@ class FamixModel extends FamixObject {
     	return totalNumberOfLinesOfCode;
     }
     
+    public int getTotalNumberOfUmlLinks() {
+    	int totalNrOfUmlLinks = 0;
+        for (String classUniqueName : classes.keySet()) {
+        	if (umlLinks.containsKey(classUniqueName)) {
+        		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(classUniqueName);
+        		int nrOfUmlLinksFromClass = mapOfLinksPerFromClass.keySet().size();
+        		totalNrOfUmlLinks += nrOfUmlLinksFromClass;
+            }
+        }
+    	return totalNrOfUmlLinks;
+    }
+    
     /* Returns all the FamixUmlLinks going from the fromClass to other FamixClasses (not to xLibraries). 
      * fromClass must be a unique name of FamixClass (not of an xLibraries). 
      */

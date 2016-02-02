@@ -10,6 +10,7 @@ import org.jdom2.Element;
 import husacct.analyse.abstraction.dto.ClassDTO;
 import husacct.analyse.abstraction.dto.LibraryDTO;
 import husacct.analyse.abstraction.dto.PackageDTO;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 
@@ -19,6 +20,7 @@ public class XmlFileImporterAnalysedModel {
     private Element classesElement = new Element("Classes");
     private Element librariesElement = new Element("Libraries");
     private Element dependenciesElement = new Element("Dependencies");
+    private Element umlLinksElement = new Element("UmlLinks");
     private Logger husacctLogger = Logger.getLogger(XmlFileImporterAnalysedModel.class);
 
     public XmlFileImporterAnalysedModel(Element analyseElement) {
@@ -32,6 +34,8 @@ public class XmlFileImporterAnalysedModel {
 				librariesElement = rootElement;
 			} else if (name.equals("Dependencies")){
 				dependenciesElement = rootElement;
+			} else if (name.equals("UmlLinks")){
+				umlLinksElement = rootElement;
 			}
 		}
     }
@@ -79,6 +83,18 @@ public class XmlFileImporterAnalysedModel {
     		if (e.getName().equals("Dependency")) {
     			DependencyDTO dto = new DependencyDTO();
     			dto = (DependencyDTO) writeElementToDto(e, dto);
+    			dtoList.add(dto);
+    		}
+    	}
+    	return dtoList;
+    }
+
+    public List<UmlLinkDTO> readUmlLinksFromXML() {
+    	List<UmlLinkDTO> dtoList = new ArrayList<UmlLinkDTO>();
+    	for (Element e: umlLinksElement.getChildren()){
+    		if (e.getName().equals("UmlLink")) {
+    			UmlLinkDTO dto = new UmlLinkDTO();
+    			dto = (UmlLinkDTO) writeElementToDto(e, dto);
     			dtoList.add(dto);
     		}
     	}

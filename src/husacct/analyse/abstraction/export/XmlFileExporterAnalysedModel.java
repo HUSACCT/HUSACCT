@@ -9,6 +9,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.abstraction.dto.ClassDTO;
 import husacct.analyse.abstraction.dto.LibraryDTO;
 import husacct.analyse.abstraction.dto.PackageDTO;
+import husacct.analyse.service.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
@@ -21,6 +22,7 @@ public class XmlFileExporterAnalysedModel {
     private Element classesElement;
     private Element librariesElement;
     private Element dependenciesElement;
+    private Element umlLinksElement;
     private Logger husacctLogger = Logger.getLogger(XmlFileExporterAnalysedModel.class);
 
     public XmlFileExporterAnalysedModel() {
@@ -29,6 +31,7 @@ public class XmlFileExporterAnalysedModel {
 		classesElement = new Element("Classes");
 		librariesElement = new Element("Libraries");
 		dependenciesElement = new Element("Dependencies");
+		umlLinksElement = new Element("UmlLinks");
     }
 
     private void writeApplicationElement() {
@@ -55,6 +58,11 @@ public class XmlFileExporterAnalysedModel {
     public void writeDependencyToXml(DependencyDTO dto) {
     	Element dependencyElement = writeDtoToXml("Dependency", dto);
     	dependenciesElement.addContent(dependencyElement);
+    }
+
+    public void writeUmlLinkToXml(UmlLinkDTO dto) {
+    	Element umlLinkElement = writeDtoToXml("UmlLink", dto);
+    	umlLinksElement.addContent(umlLinkElement);
     }
 
     public Element writeDtoToXml(String elementName, AbstractDTO dto) {
@@ -92,6 +100,7 @@ public class XmlFileExporterAnalysedModel {
     	analysisModelElement.addContent(classesElement);
     	analysisModelElement.addContent(librariesElement);
     	analysisModelElement.addContent(dependenciesElement);
+    	analysisModelElement.addContent(umlLinksElement);
     	return analysisModelElement;
     }
     
