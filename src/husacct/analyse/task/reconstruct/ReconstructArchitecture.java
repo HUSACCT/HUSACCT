@@ -1,11 +1,13 @@
 package husacct.analyse.task.reconstruct;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.define.IDefineService;
 
 import org.apache.log4j.Logger;
@@ -33,6 +35,9 @@ public class ReconstructArchitecture {
 		identifyComponents();
 		identifySubSystems();
 		IdentifyAdapters();
+		
+		// Example to retrieve UmlLink
+		getUmlLinks();
 	}
 
 	private void identifyExternalSystems() {
@@ -151,7 +156,7 @@ public class ReconstructArchitecture {
 		
 	}
 
-	private void IdentifyAdapters() { // Here, and adapter is a module with a IsTheOnlyModuleAllowedToUse rule.
+	private void IdentifyAdapters() { // Here, an adapter is a module with a IsTheOnlyModuleAllowedToUse rule.
 		
 	}
 	
@@ -162,5 +167,15 @@ public class ReconstructArchitecture {
 	private void createRule() {
 		
 	}
+	
+	private void getUmlLinks() {
+		// Test example for  UmlLinks while running the Java AccuracyTest
+		HashSet<UmlLinkDTO> umlLinks = queryService.getAllUmlLinksFromClassToOtherClasses("domain.direct.violating.InheritanceExtends");
+    	for (UmlLinkDTO umlLink : umlLinks) {
+    		String umlLinkFrom = umlLink.from;
+    		logger.info(" UmlLink From, To, atributeFrom, isComposite, type: " + umlLinkFrom + ", " + umlLink.to + ", " + umlLink.attributeFrom + ", " + umlLink.isComposite + ", " + umlLink.linkType);
+    	}
+	}
+	
 
 }

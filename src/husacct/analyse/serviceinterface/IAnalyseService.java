@@ -80,8 +80,13 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     /** If selectedModule == null, statistics of the whole application are returned; otherwise statistics of the selectedModule only are returned. */
     public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
     
+    /** Returns all the UML-Links going from the fromClass to another FamixClass or FamixLibrary. 
+     * fromClass must be a unique name of a FamixClass (not of an FamixLibrary (starting with "xLibraries."). 
+     */
+    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass);
+
     /** Returns all the UML-Links going from the fromClass to the specific toClass.
-     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
+     * fromClass and toClass must both be a unique name of FamixClass, or (in case of toClass) FamixLibrary (include "xLibraries."). 
      * */
     public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass);
 

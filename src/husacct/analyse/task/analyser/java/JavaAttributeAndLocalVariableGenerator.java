@@ -198,8 +198,12 @@ class JavaAttributeAndLocalVariableGenerator {
 	                javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);
 	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass, null); // Null to prevent redundancy in creation of TypeParameters. 
 	                if (parameterTypeOfGeneric != null) {
-	                    if ((numberOfTypeParameters == 1) && !hasClassScope && (levelOfRecursionWithinGenericType == 0)) {
-	                 		this.typeInClassDiagram = parameterTypeOfGeneric;
+	                    if (!hasClassScope && (levelOfRecursionWithinGenericType == 0)) {
+	                    	if (numberOfTypeParameters == 1) {
+	                    		this.typeInClassDiagram = parameterTypeOfGeneric; 	// E.g. ArrayList<Person>, the type of the first TypeParameter is set. 
+	                    	} else if ((numberOfTypeParameters == 2) && (j == 1)) {
+	                    		this.typeInClassDiagram = parameterTypeOfGeneric;	// E.g. HshMap<String, Person>, the type of the second TypeParameter is set.
+	                    	}
 	                    }
 	                	int currentLineNumber = qualifiedType.getLine();
 	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);

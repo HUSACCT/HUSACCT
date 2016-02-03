@@ -89,7 +89,7 @@ class FamixCreationPostProcessor {
             	String theContainingClass = entity.belongsToClass;
             	
             	/* Test helper
-            	if (theContainingClass.contains("domain.direct.violating.DeclarationVariableInstance_GenericType_OneTypeParameter")){
+            	if (theContainingClass.contains("domain.direct.violating.AccessInstanceVariableLibraryClass")){
             		boolean breakpoint1 = true;
             	} */
             	
@@ -136,7 +136,7 @@ class FamixCreationPostProcessor {
             		createFamixUmlLinkIfNeeded(entity, declareTypeExists);
                 }
             	
-            	if (belongsToClassExists && declareTypeHasValue) { // Entities with primitive types should not be filtered out
+            	if (belongsToClassExists && declareTypeHasValue) { // Entities with primitive types should not be filtered out, neither those with xLibrary type
             		addToModel(entity);
             	} else {
             		//boolean breakpoint = true;
@@ -153,51 +153,51 @@ class FamixCreationPostProcessor {
         }
     }
 
-    /* If entity is an instance variable, and if typeInClassDiagram refers to a FamixClass, a FamixUmlLink has to be created.
+	/* A FamixUmlLink contains the data necessary to report 1..1 and 1..* associations, e.g. as used in UML class diagrams. 
+	 * If entity is an instance variable, and if typeInClassDiagram refers to a FamixClass 
+     * or a FamixLibrary, a FamixUmlLink has to be created.
      * An instance variable: is an instance of FamixAttribute with hasClassScope = false.
      * If (isComposite = false), typeInClassDiagram can be set to the value of declareType.
      * If (isComposite = true) and (typeInClassDiagram != ""), repeat the procedure above to determine the type of typeInClassDiagram.
-     * This is necessary to report 1..* associations, e.g. as used in UML class diagrams. 
      */
     private void createFamixUmlLinkIfNeeded(FamixStructuralEntity entity, boolean declareTypeExists) {
-    	boolean typeInClassDiagramRefersToClass = false;
+    	boolean typeInClassDiagramRefersToClassOrLibrary = false;
     	FamixAttribute attribute = (FamixAttribute) entity;
 		if (!attribute.hasClassScope) {
 			if (!attribute.isComposite) {  
-				if (declareTypeExists && theModel.classes.containsKey(attribute.declareType)) {
+				if (declareTypeExists) {
 					attribute.typeInClassDiagram = attribute.declareType;
-					typeInClassDiagramRefersToClass = true;
+					typeInClassDiagramRefersToClassOrLibrary = true;
 				}
 			} else {
 				if ((attribute.typeInClassDiagram != null) && (!attribute.typeInClassDiagram.equals(""))) {
         			// Check if typeInClassDiagram refers to an existing class or library
         			if (theModel.classes.containsKey(attribute.typeInClassDiagram)) {
-	            		typeInClassDiagramRefersToClass = true;
+	            		typeInClassDiagramRefersToClassOrLibrary = true;
 	            	} else {
 	            		// Try to derive typeInClassDiagram from the unique name from the imports.
 		            	String classFoundInImports = "";
 	                    classFoundInImports = findClassInImports(attribute.belongsToClass, attribute.typeInClassDiagram);
 	                    if (!classFoundInImports.equals("")) {
-		                	if (theModel.classes.containsKey(classFoundInImports)) {
-		                		attribute.typeInClassDiagram = classFoundInImports;
-		                		typeInClassDiagramRefersToClass = true;
-		                	}
+	                		attribute.typeInClassDiagram = classFoundInImports;
+	                		typeInClassDiagramRefersToClassOrLibrary = true;
 	                	}
 	            	}
-                	if (!typeInClassDiagramRefersToClass) {
+                	if (!typeInClassDiagramRefersToClassOrLibrary) {
                     	// Find out if typeInClassDiagram refers to a type in the same package as the from class.
                         String belongsToPackage = theModel.classes.get(attribute.belongsToClass).belongsToPackage;
                 		String type = findClassInPackage(attribute.typeInClassDiagram, belongsToPackage);
                         if (!type.equals("")) {
-    	                	if (theModel.classes.containsKey(type)) {
-    	                		attribute.typeInClassDiagram = type;
-    	                		typeInClassDiagramRefersToClass = true;
-    	                	}
+	                		attribute.typeInClassDiagram = type;
+	                		typeInClassDiagramRefersToClassOrLibrary = true;
                         }
                     }
 				}
 			}
-        	if (typeInClassDiagramRefersToClass) {
+        	if (typeInClassDiagramRefersToClassOrLibrary) {
+        		if (theModel.libraries.containsKey("xLibraries." + attribute.typeInClassDiagram)) {
+        			attribute.typeInClassDiagram = "xLibraries." + attribute.typeInClassDiagram;
+        		}
         		// Create FamixUmlLink and add it to the FamixModel
         		FamixUmlLink newLink = new FamixUmlLink();
         		newLink.from = attribute.belongsToClass;

@@ -164,7 +164,12 @@ public class CSharpGeneratorToolkit {
     	String returnValue = EMPTYSTRING;
     	try {
     		if (tree != null) {
-				CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME); // NAMESPACE_OR_TYPE_NAME
+    			CommonTree typenameTree;
+    			if (tree.getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
+    				typenameTree = tree;
+    			} else {
+    				typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME); // NAMESPACE_OR_TYPE_NAME
+    			}
 				if (typenameTree != null) {
 					returnValue = getComplete_NAMESPACE_OR_TYPE_NAME_String(typenameTree);
 				} else {

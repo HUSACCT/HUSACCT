@@ -251,9 +251,6 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         return returnValue;
     }
 
-    /** Returns all the UML-Links going from the fromClass to other FamixClasses (not to xLibraries). 
-     * fromClass must be a unique name of FamixClass (not of an xLibraries). 
-     */
     @Override
     public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass) {
     	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
@@ -265,9 +262,6 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     	return returnValue;
     }
     
-    /** Returns all the UML-Links going from the fromClass to the specific toClass.
-     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
-     * */
     @Override
     public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass) {
     	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();

@@ -101,13 +101,13 @@ public interface IModelQueryService {
     */
     public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule);
     
-    /** Returns all the FamixUmlLinks going from the fromClass to other FamixClasses (not to xLibraries). 
-     * fromClass must be a unique name of FamixClass (not of an xLibraries). 
+    /** Returns all the UML-Links going from the fromClass to another FamixClass or FamixLibrary. 
+     * fromClass must be a unique name of a FamixClass (not of an FamixLibrary (starting with "xLibraries."). 
      */
     public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass);
 
     /** Returns all the UML-Links going from the fromClass to the specific toClass.
-     * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
+     * fromClass and toClass must both be a unique name of FamixClass, or (in case of toClass) FamixLibrary (include "xLibraries."). 
      * */
     public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass);
 

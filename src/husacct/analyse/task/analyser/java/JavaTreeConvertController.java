@@ -40,6 +40,11 @@ class JavaTreeConvertController {
     	compilationUnit_return compilationUnit;
     	CommonTree compilationUnitTree;
     	try {
+    		/* Test and Debug
+    		if (sourceFilePath.contains("InheritanceExtends")) {
+    			boolean breakpoint = true;
+    		} */
+    		
     		this.sourceFilePath = sourceFilePath;
         	this.numberOfLinesOfCode = nrOfLinesOfCode;
 	        compilationUnit = javaParser.compilationUnit();

@@ -293,7 +293,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     	FamixInheritanceDefinition fImplements = new FamixInheritanceDefinition();
         fImplements.from = from;
         fImplements.to = to;
-        fImplements.subType = "Ïmplements Interface";
+        fImplements.subType = "Implements Interface";
         fImplements.lineNumber = lineNumber;
         model.waitingAssociations.add(fImplements);
     }

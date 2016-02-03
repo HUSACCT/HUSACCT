@@ -165,4 +165,9 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     	return queryService.getAllUmlLinksFromClassToToClass(fromClass, toClass);
     }
 
+	@Override
+	public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass) {
+		return queryService.getAllUmlLinksFromClassToOtherClasses(fromClass);
+	}
+
 }

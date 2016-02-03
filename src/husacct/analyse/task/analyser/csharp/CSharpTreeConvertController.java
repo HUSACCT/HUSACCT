@@ -52,7 +52,7 @@ public class CSharpTreeConvertController {
 
 	private void delegateASTToGenerators(CommonTree tree) {
 		/* Test and Debug
-		if (sourceFilePath.contains("CallInstanceLibraryClass")) {
+		if (sourceFilePath.contains("ThingGraphUiManager")) {
 			boolean breakpoint = true;
 		} */
 		

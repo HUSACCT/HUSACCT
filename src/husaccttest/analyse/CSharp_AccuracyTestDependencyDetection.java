@@ -626,7 +626,10 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String toClass = "Technology.Direct.Dao.HistoryDAO";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Inheritance");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	
+		toClass = "Technology.Direct.Dao.IMapDAO";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
 
 	@Test
 	public void InheritanceExtendsAbstractClass(){
@@ -1020,7 +1023,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "pdao";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1030,7 +1033,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "aDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1040,7 +1043,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "bDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1050,7 +1053,17 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "cDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+
+	@Test
+	public void UmlLinkType_VariableInstance_GenericType_MultipleTypeParameters(){ 
+		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
+		String toClass = "Technology.Direct.Dao.FriendsDAO";
+		String fromAttribute = "dictionary";
+		boolean isComposite = true;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1060,11 +1073,11 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "p1Dao";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 		fromAttribute = "p2Dao";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 		fromAttribute = "p3Dao";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1074,7 +1087,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "";
 		boolean isComposite = false;
 		String typeToFind = "Inherits";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
 	@Test
@@ -1084,7 +1097,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromAttribute = "";
 		boolean isComposite = false;
 		String typeToFind = "Implements";
-		Assert.assertTrue(IsUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	
@@ -1093,37 +1106,35 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void UmlLinkType_NotFromClassVariable(){ 
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableStatic";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromGenericTypeDeclarationWithMultipleTypeParameters(){ 
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
-		toClass = "Technology.Direct.Dao.ProfileDAO.FriendsDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromLocalVariableDeclaration(){ // No UmlLinks should be caused by local variables.
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableLocal";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromParameterDeclaration(){ // No UmlLinks should be caused by local variables.
 		String fromClass = "Domain.Direct.Violating.DeclarationParameter";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	@Test
 	public void UmlLinkType_NotFromReturnTypeDeclaration(){ // No UmlLinks should be caused by local variables.
 		String fromClass = "Domain.Direct.Violating.DeclarationReturnType_GenericType_OneTypeParameter";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		Assert.assertTrue(IsUmlLinkNotDetected(fromClass, toClass));
+		Assert.assertTrue(isUmlLinkNotDetected(fromClass, toClass));
 	}
 
 	
@@ -1234,7 +1245,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		return dependencyTypesDetected;
 	}
 
-	private boolean IsUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+	private boolean isUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
 		boolean umlLinkDetected = false;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
@@ -1247,7 +1258,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		return umlLinkDetected;
 	}
 
-	private boolean IsUmlLinkNotDetected(String classFrom, String classTo) {
+	private boolean isUmlLinkNotDetected(String classFrom, String classTo) {
 		boolean umlLinkDetected = true;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
