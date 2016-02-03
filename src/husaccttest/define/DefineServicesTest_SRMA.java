@@ -1,30 +1,20 @@
 package husaccttest.define;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
-import husacct.common.dto.AnalysisStatisticsDTO;
-import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.RuleDTO;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.ViolationDTO;
+import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.define.IDefineService;
-import husacct.validate.IValidateService;
-import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husaccttest.TestResourceFinder;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
