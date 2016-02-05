@@ -120,6 +120,7 @@ public class AnalyseMenu extends JMenu{
 		reconstructArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().reconstructArchitecture();
+				mainController.getViewController().showAnalyseSarGui();
 				mainController.getViewController().showDefineArchitecture();
 			}
 		});

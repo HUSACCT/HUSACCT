@@ -19,6 +19,7 @@ public class ViewController {
 	private InternalFrameController validateContainer;
 	private InternalFrameController validateConfigurationContainer;
 	private InternalFrameController codeViewerContainer;
+	private InternalFrameController analyseSARController;
 	
 	private List<InternalFrameController> viewContainers = new ArrayList<InternalFrameController>();
 	
@@ -41,6 +42,13 @@ public class ViewController {
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getAnalyseService().getJInternalFrame();
+			}
+		};
+		
+		analyseSARController = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "SoftwareArchitectureReconstruction") {
+			@Override
+			public JInternalFrame getInternalFrame() {
+				return ServiceProvider.getInstance().getAnalyseService().getJInternalSARFrame();
 			}
 		};
 		
@@ -75,6 +83,7 @@ public class ViewController {
 		viewContainers.add(defineContainer);
 		viewContainers.add(definedArchitectureDiagramContainer);
 		viewContainers.add(analysedApplicationOverviewContainer);
+		viewContainers.add(analyseSARController);
 		viewContainers.add(analysedArchitectureDiagramContainer);
 		viewContainers.add(validateContainer);
 		viewContainers.add(validateConfigurationContainer);
@@ -92,6 +101,10 @@ public class ViewController {
 	
 	public void showApplicationOverviewGui() {
 		analysedApplicationOverviewContainer.showView();
+	}
+	
+	public void showAnalyseSarGui() {
+		analyseSARController.showView();
 	}
 	
 	public void showAnalysedArchitectureDiagram() {	

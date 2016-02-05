@@ -8,6 +8,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
+import husacct.analyse.presentation.AnalyseInternalSARFrame;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
@@ -29,6 +30,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     private IModelPersistencyService persistencyService;
 	private AnalyseTaskControl analyseTaskControl;
     private AnalyseInternalFrame analyseInternalFrame;
+    private AnalyseInternalSARFrame analyseInternalSARFrame;
 
     public AnalyseServiceImpl() {
         this.queryService = new FamixQueryServiceImpl(); //Must be created as first, since it clears the model (needed in case of reloading workspaces). 
@@ -62,6 +64,15 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         return analyseInternalFrame;
     }
 
+    @Override
+    public JInternalFrame getJInternalSARFrame() {
+        if (analyseInternalSARFrame == null) {
+        	analyseInternalSARFrame = new AnalyseInternalSARFrame();
+        }
+        return analyseInternalSARFrame;
+     	
+    }
+    
     @Override
     public SoftwareUnitDTO getSoftwareUnitByUniqueName(String uniquename) {
         return queryService.getSoftwareUnitByUniqueName(uniquename);

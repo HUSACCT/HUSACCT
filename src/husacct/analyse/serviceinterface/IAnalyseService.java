@@ -26,6 +26,8 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public JInternalFrame getJInternalFrame();
 
+    public JInternalFrame getJInternalSARFrame();
+
     /** Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName */  
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);
     
