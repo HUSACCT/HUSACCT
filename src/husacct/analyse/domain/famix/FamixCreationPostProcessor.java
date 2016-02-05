@@ -203,8 +203,9 @@ class FamixCreationPostProcessor {
         		newLink.from = attribute.belongsToClass;
         		newLink.to = attribute.typeInClassDiagram;
         		newLink.attributeFrom = attribute.name;
-        		newLink.linkType = UmlLinkTypes.ATTRIBUTELINK.toString();
+        		newLink.type = UmlLinkTypes.ATTRIBUTELINK.toString();
         		newLink.isComposite = attribute.isComposite;
+        		newLink.lineNumber = attribute.lineNumber;
         		addToModel(newLink);
         	}
 		}
@@ -373,11 +374,12 @@ class FamixCreationPostProcessor {
 				        		newLink.to = association.to;
 				        		newLink.attributeFrom = "";
 				        		if (association.subType.startsWith("Extends")) {
-					        		newLink.linkType = UmlLinkTypes.INHERITANCELINK.toString();
+					        		newLink.type = UmlLinkTypes.INHERITANCELINK.toString();
 				        		} else {
-					        		newLink.linkType = UmlLinkTypes.IMPLEMENTSLINK.toString();
+					        		newLink.type = UmlLinkTypes.IMPLEMENTSLINK.toString();
 				        		}
 				        		newLink.isComposite = false;
+				        		newLink.lineNumber = association.lineNumber;
 				        		addToModel(newLink);
 			            	}
 			            	

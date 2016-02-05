@@ -206,7 +206,7 @@ class FamixModel extends FamixObject {
     /* Returns all the FamixUmlLinks going from the fromClass to other FamixClasses (not to xLibraries). 
      * fromClass must be a unique name of FamixClass (not of an xLibraries). 
      */
-    public HashSet<FamixUmlLink> getAllUmlLinksFromClassToOtherClasses(String fromClass) {
+    public HashSet<FamixUmlLink> getUmlLinksFromClassToOtherClasses(String fromClass) {
     	HashSet<FamixUmlLink> returnValue = new HashSet<FamixUmlLink>();
     	if (umlLinks.containsKey(fromClass)) {
     		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(fromClass);
@@ -221,7 +221,7 @@ class FamixModel extends FamixObject {
     /* Returns all the FamixUmlLinks going from the fromClass to the specific toClass.
      * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
      * */
-    public HashSet<FamixUmlLink> getAllUmlLinksFromClassToToClass(String fromClass, String toClass) {
+    public HashSet<FamixUmlLink> getUmlLinksFromClassToToClass(String fromClass, String toClass) {
     	HashSet<FamixUmlLink> returnValue = new HashSet<FamixUmlLink>();
     	if (umlLinks.containsKey(fromClass)) {
     		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(fromClass);

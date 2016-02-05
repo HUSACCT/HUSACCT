@@ -297,10 +297,10 @@ public class ExportImportAnalysedModelTest {
 	private boolean isUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
 		boolean umlLinkDetected = false;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getUmlLinksFromClassToToClass(classFrom, classTo);
 		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
 			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
-					(linkDTO.isComposite == isComposite) && linkDTO.linkType.equals(linkType)) {
+					(linkDTO.isComposite == isComposite) && linkDTO.type.equals(linkType)) {
 				umlLinkDetected = true;
 			}
 		}

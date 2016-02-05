@@ -12,6 +12,7 @@ import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.analyse.serviceinterface.enums.DependencyTypes;
+import husacct.analyse.serviceinterface.enums.UmlLinkTypes;
 
 public class FamixQueryServiceImpl implements IModelQueryService {
 
@@ -252,24 +253,68 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
 
     @Override
-    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass) {
+    public HashSet<UmlLinkDTO> getUmlLinksFromClassToOtherClasses(String fromClass) {
     	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
-    	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getAllUmlLinksFromClassToOtherClasses(fromClass);
+    	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getUmlLinksFromClassToOtherClasses(fromClass);
     	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
-    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.linkType.toString());
+    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.type.toString());
     		returnValue.add(umlLinkDTO);
     	}
     	return returnValue;
     }
     
     @Override
-    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass) {
+    public HashSet<UmlLinkDTO> getUmlLinksFromClassToToClass(String fromClass, String toClass) {
     	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
-    	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getAllUmlLinksFromClassToToClass(fromClass, toClass);
+    	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getUmlLinksFromClassToToClass(fromClass, toClass);
     	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
-    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.linkType.toString());
+    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.type.toString());
     		returnValue.add(umlLinkDTO);
     	}
     	return returnValue;
     }
- }
+
+    @Override
+    public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
+        List<UmlLinkDTO> foundUmlLinksReturnList = new ArrayList<UmlLinkDTO>();
+	    TreeMap<String, UmlLinkDTO> foundUmlLinksTreeMap = new TreeMap<String, UmlLinkDTO>();
+    	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
+    	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
+        for (String fromTypeName : allFromTypeNames) {
+            for (String toTypeName : allToTypeNames) {
+                for (FamixUmlLink umlLink : theModel.getUmlLinksFromClassToToClass(fromTypeName, toTypeName)) {
+					// Filter-out duplicate umlLinks
+					String uniqueName = (umlLink.from + umlLink.to + umlLink.type + umlLink.attributeFrom);
+		    		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.type.toString());
+					foundUmlLinksTreeMap.put(uniqueName, umlLinkDTO);
+                }
+            }
+        }
+        foundUmlLinksReturnList.addAll(foundUmlLinksTreeMap.values());
+        return foundUmlLinksReturnList.toArray(new UmlLinkDTO[foundUmlLinksReturnList.size()]);
+    }
+
+    @Override
+    public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
+        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
+    	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
+    	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
+        for (String fromTypeName : allFromTypeNames) {
+            for (String toTypeName : allToTypeNames) {
+                for (FamixUmlLink umlLink : theModel.getUmlLinksFromClassToToClass(fromTypeName, toTypeName)) {
+					// Filter-out duplicate umlLinks
+					String uniqueName = (umlLink.from + umlLink.to + umlLink.type + umlLink.attributeFrom);
+		    		DependencyDTO umlLinkDepDTO = new DependencyDTO(umlLink.from, umlLink.to, umlLink.type, umlLink.attributeFrom, umlLink.lineNumber, umlLink.isComposite, false);
+		    		if (umlLink.type.equals(UmlLinkTypes.ATTRIBUTELINK.toString())){
+		    			String typeConcat = "Attr: " + umlLink.attributeFrom;
+		    			umlLinkDepDTO.type = typeConcat;
+		    		}
+		    		foundDependenciesTreeMap.put(uniqueName, umlLinkDepDTO);
+                }
+            }
+        }
+        foundDependenciesReturnList.addAll(foundDependenciesTreeMap.values());
+        return foundDependenciesReturnList.toArray(new DependencyDTO[foundDependenciesReturnList.size()]);
+    }
+}

@@ -170,10 +170,10 @@ public class ReconstructArchitecture {
 	
 	private void getUmlLinks() {
 		// Test example for  UmlLinks while running the Java AccuracyTest
-		HashSet<UmlLinkDTO> umlLinks = queryService.getAllUmlLinksFromClassToOtherClasses("domain.direct.violating.InheritanceExtends");
+		HashSet<UmlLinkDTO> umlLinks = queryService.getUmlLinksFromClassToOtherClasses("domain.direct.violating.InheritanceExtends");
     	for (UmlLinkDTO umlLink : umlLinks) {
     		String umlLinkFrom = umlLink.from;
-    		logger.info(" UmlLink From, To, atributeFrom, isComposite, type: " + umlLinkFrom + ", " + umlLink.to + ", " + umlLink.attributeFrom + ", " + umlLink.isComposite + ", " + umlLink.linkType);
+    		logger.info(" UmlLink From, To, atributeFrom, isComposite, type: " + umlLinkFrom + ", " + umlLink.to + ", " + umlLink.attributeFrom + ", " + umlLink.isComposite + ", " + umlLink.type);
     	}
 	}
 	

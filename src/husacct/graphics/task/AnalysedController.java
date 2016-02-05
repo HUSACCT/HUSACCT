@@ -162,8 +162,6 @@ public class AnalysedController extends DrawingController {
 	
 	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
 		boolean b = false;
-		//TODO This will always return a stacktrace of a nullpointerexception if there isn't a dependency, 
-		//This needs to be cleaner but we couldn't find a method in time.
 		try{
 			SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
 			SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);

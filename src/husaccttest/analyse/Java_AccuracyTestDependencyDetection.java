@@ -1157,7 +1157,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "pdao";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1167,7 +1167,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "fourExc";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1177,7 +1177,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "aDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1187,7 +1187,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "bDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1197,7 +1197,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "cDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1207,7 +1207,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "pDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1217,7 +1217,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "uDao";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1227,7 +1227,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "hashMap";
 		boolean isComposite = true;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 
 	@Test
@@ -1237,13 +1237,50 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "p1Dao";
 		boolean isComposite = false;
 		String typeToFind = "Attribute";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 		fromAttribute = "p2Dao";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 		fromAttribute = "p3Dao";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_MultipleAttr_ViaServiceWIthSoftwareUnits(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance_MultipleAttributesAtTheSameLine";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		String fromAttribute = "p1Dao";
+		boolean isComposite = false;
+		String typeToFind = "Attribute";
+		Assert.assertTrue(isUmlLinkDetectedViaSoftwareUnits(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		fromAttribute = "p2Dao";
+		Assert.assertTrue(isUmlLinkDetectedViaSoftwareUnits(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		fromAttribute = "p3Dao";
+		Assert.assertTrue(isUmlLinkDetectedViaSoftwareUnits(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+	}
+	
+	@Test
+	public void UmlLinkType_InstanceVariableDeclaration_MultipleAttr_DependencyDTO(){
+		String fromClass = "domain.direct.violating"; //.DeclarationVariableInstance_MultipleAttributesAtTheSameLine";
+		String toClass = "technology.direct.dao"; //.ProfileDAO";
+		String fromAttribute = "p1Dao";
+		boolean isComposite = false;
+		String typeToFind = "Attr: " + fromAttribute;
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add(typeToFind);
+		Assert.assertTrue(areUMLLinkDependencyDTOsDetected(fromClass, toClass, typesToFind, fromAttribute, isComposite));
+		fromAttribute = "p2Dao";
+		typeToFind = "Attr: " + fromAttribute;
+		typesToFind.clear();
+		typesToFind.add(typeToFind);
+		Assert.assertTrue(areUMLLinkDependencyDTOsDetected(fromClass, toClass, typesToFind, fromAttribute, isComposite));
+		fromAttribute = "p3Dao";
+		typeToFind = "Attr: " + fromAttribute;
+		typesToFind.clear();
+		typesToFind.add(typeToFind);
+		Assert.assertTrue(areUMLLinkDependencyDTOsDetected(fromClass, toClass, typesToFind, fromAttribute, isComposite));
+	}
+	
+
 	@Test
 	public void UmlLinkType_Inherits(){
 		String fromClass = "domain.direct.violating.InheritanceExtends";
@@ -1251,7 +1288,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "";
 		boolean isComposite = false;
 		String typeToFind = "Inherits";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
 	@Test
@@ -1261,7 +1298,7 @@ public class Java_AccuracyTestDependencyDetection {
 		String fromAttribute = "";
 		boolean isComposite = false;
 		String typeToFind = "Implements";
-		Assert.assertTrue(isUmlLinkDetected(fromClass, toClass, fromAttribute, isComposite, typeToFind));
+		Assert.assertTrue(isUmlLinkDetectedViaClass(fromClass, toClass, fromAttribute, isComposite, typeToFind));
 	}
 	
 	// UmlLinkTypes: Negative
@@ -1373,13 +1410,40 @@ public class Java_AccuracyTestDependencyDetection {
 		return dependencyTypesDetected;
 	}
 
-	private boolean isUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+	private boolean areUMLLinkDependencyDTOsDetected(String classFrom, String classTo, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
+		boolean dependencyTypesDetected = false;
+		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		DependencyDTO[] foundDependencies = analyseService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(classFrom, classTo);
+		int numberOfDependencies = foundDependencies.length;
+		for (String dependencyType : dependencyTypes) {
+			boolean found = false;
+			for (int i=0 ; i < numberOfDependencies; i++){
+				if (foundDependencies[i].type.equals(dependencyType) && (foundDependencies[i].isIndirect) == isIndirect) {
+					if (!subType.equals("")) {
+						if (foundDependencies[i].subType.equals(subType)) {
+							found = true;	
+						}
+					} else {
+						found = true;
+					}
+				}
+			}
+			foundDependencyTypes.put(dependencyType,found);
+		}
+		if (!foundDependencyTypes.containsValue(false)){
+			dependencyTypesDetected = true;
+		}
+		return dependencyTypesDetected;
+	}
+
+	private boolean isUmlLinkDetectedViaClass(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
 		boolean umlLinkDetected = false;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getUmlLinksFromClassToToClass(classFrom, classTo);
 		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
 			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
-					(linkDTO.isComposite == isComposite) && linkDTO.linkType.equals(linkType)) {
+					(linkDTO.isComposite == isComposite) && linkDTO.type.equals(linkType)) {
 				umlLinkDetected = true;
 			}
 		}
@@ -1389,10 +1453,23 @@ public class Java_AccuracyTestDependencyDetection {
 	private boolean isUmlLinkNotDetected(String classFrom, String classTo) {
 		boolean umlLinkDetected = true;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getAllUmlLinksFromClassToToClass(classFrom, classTo);
+		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getUmlLinksFromClassToToClass(classFrom, classTo);
 		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
 			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo)) {
 				umlLinkDetected = false;
+			}
+		}
+		return umlLinkDetected;
+	}
+
+	private boolean isUmlLinkDetectedViaSoftwareUnits(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
+		boolean umlLinkDetected = false;
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		UmlLinkDTO[]  umlLinkDTOs = analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(classFrom, classTo);
+		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
+			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
+					(linkDTO.isComposite == isComposite) && linkDTO.type.equals(linkType)) {
+				umlLinkDetected = true;
 			}
 		}
 		return umlLinkDetected;

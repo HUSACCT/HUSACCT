@@ -74,7 +74,7 @@ public class AnalyseMenu extends JMenu{
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
 		this.add(analysisHistoryItem);
-		//this.add(reconstructArchitectureItem);
+		this.add(reconstructArchitectureItem);
 		this.add(exportAnalysisModelItem);
 		this.add(importAnalysisModelItem);
 		this.add(reportDependenciesItem);

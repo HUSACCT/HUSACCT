@@ -104,11 +104,21 @@ public interface IModelQueryService {
     /** Returns all the UML-Links going from the fromClass to another FamixClass or FamixLibrary. 
      * fromClass must be a unique name of a FamixClass (not of an FamixLibrary (starting with "xLibraries."). 
      */
-    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToOtherClasses(String fromClass);
+    public HashSet<UmlLinkDTO> getUmlLinksFromClassToOtherClasses(String fromClass);
 
     /** Returns all the UML-Links going from the fromClass to the specific toClass.
      * fromClass and toClass must both be a unique name of FamixClass, or (in case of toClass) FamixLibrary (include "xLibraries."). 
      * */
-    public HashSet<UmlLinkDTO> getAllUmlLinksFromClassToToClass(String fromClass, String toClass);
+    public HashSet<UmlLinkDTO> getUmlLinksFromClassToToClass(String fromClass, String toClass);
+    
+	/** Returns an array of all umlLinks  (enclosed in UmlLinkDTOs)between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
+     * Relatively fast function, based on HashMap. Both argument must match with an analysedModule.
+     */  
+    public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
+    
+	/** Returns an array of all umlLinks (enclosed in DependencyDTOs) between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
+     * Relatively fast function, based on HashMap. Both argument must match with an analysedModule.
+     */  
+    public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
 
 }

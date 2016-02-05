@@ -85,7 +85,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     
     private void writeUmlLinksToXML() {
         for (String classUniqueName : classesTreeMap.keySet()) {
-        	for (UmlLinkDTO umlLink : queryService.getAllUmlLinksFromClassToOtherClasses(classUniqueName)) {
+        	for (UmlLinkDTO umlLink : queryService.getUmlLinksFromClassToOtherClasses(classUniqueName)) {
         	xmlFileExporter.writeUmlLinkToXml(umlLink);
             }
         }
