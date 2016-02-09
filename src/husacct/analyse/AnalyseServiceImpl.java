@@ -172,6 +172,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return queryService.getAnalysisStatistics(selectedModule);
 	}
 
+	@Override
     public HashSet<UmlLinkDTO> getUmlLinksFromClassToToClass(String fromClass, String toClass) {
     	return queryService.getUmlLinksFromClassToToClass(fromClass, toClass);
     }
@@ -181,10 +182,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return queryService.getUmlLinksFromClassToOtherClasses(fromClass);
 	}
 
+	@Override
     public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
     	return queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }
     
+	@Override
     public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
     	return queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }

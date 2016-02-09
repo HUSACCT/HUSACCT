@@ -1,6 +1,12 @@
 package husacct.graphics.task;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
@@ -10,12 +16,6 @@ import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.validate.IValidateService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
 
 public class AnalysedController extends DrawingController {
 	private final Logger			logger			= Logger.getLogger(AnalysedController.class);
@@ -251,6 +251,10 @@ public class AnalysedController extends DrawingController {
 		} else
 			drawArchitectureTopLevel();
 		return drawingView;
+	}
+	
+	private void test() {
+//		analyseService.uml
 	}
 
 	/*
