@@ -151,7 +151,9 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo)
+	{
+//		analyseService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
 		SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
 		SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
 		if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null && dtoTo != null){ 
