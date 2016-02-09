@@ -95,7 +95,6 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return childModuleDTOs;
 	}
 
-	
 	@Override
 	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath) {
 		HashSet<String> resultClasses = new HashSet<String>();
@@ -113,6 +112,20 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			resultClasses.addAll(AllPhysicalClassPaths); 
 		}
 		return resultClasses;
+	}
+
+	@Override
+	public ModuleDTO getModule_SelectedInGUI() {
+		ModuleDTO selectedModuleDTO =  new ModuleDTO();
+		ModuleStrategy selectedModuleStrategy;
+		long selectedModuleId = getDefinitionController().getSelectedModuleId();
+		if (selectedModuleId >= 0) {
+			selectedModuleStrategy = moduleService.getModuleById(selectedModuleId);
+			if (selectedModuleStrategy != null) {
+				selectedModuleDTO = domainParser.parseModule(selectedModuleStrategy);
+			} 
+		} 
+		return selectedModuleDTO;
 	}
 
 	@Override // Returns all paths of subpackages (and subsub, etc) within the assigned software units, but not the paths of these assigned software units
@@ -322,6 +335,5 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	public void addRule(RuleDTO rule) {
 		
 	}
-	
 
 }
