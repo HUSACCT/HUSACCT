@@ -30,8 +30,9 @@ public class ReconstructArchitecture {
 		this.queryService = queryService;
 		defineService = ServiceProvider.getInstance().getDefineService();
 		identifyExternalSystems();
-		determineInternalRootPackagesWithClasses(); 
-		identifyLayers();
+		
+		identifyLayersAtRootLevel();
+		
 		identifyComponents();
 		identifySubSystems();
 		IdentifyAdapters();
@@ -77,7 +78,16 @@ public class ReconstructArchitecture {
 			}
 		}
 	}
-	
+	private void identifyLayersAtRootLevel() {
+		determineInternalRootPackagesWithClasses();
+		identifyLayers();
+	}
+	private void identifyMultipleLayers(){
+		
+	}
+	private void identifyLayersAtSelectedModule(){
+		
+	}
 	private void identifyLayers() {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
