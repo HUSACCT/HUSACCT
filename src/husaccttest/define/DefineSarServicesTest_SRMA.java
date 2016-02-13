@@ -4,10 +4,15 @@ import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.services.AppliedRuleDomainService;
 import husaccttest.TestResourceFinder;
 
 import java.io.File;
@@ -15,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
@@ -22,7 +28,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class DefineServicesTest_SRMA {
+public class DefineSarServicesTest_SRMA {
 	private static String workspacePath;
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
@@ -31,6 +37,7 @@ public class DefineServicesTest_SRMA {
 	private static Logger logger;
 	private static IAnalyseService analyseService = null;
 	private static IDefineService defineService = null;
+	private static IDefineSarService defineSarService = null;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -71,13 +78,26 @@ public class DefineServicesTest_SRMA {
 	// TESTS 
 
 	@Test
+	public void addModuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.softwareunit1", "softwareunit1", "Package", "public");
+		newSoftwareUnits.add(newUnit);
+		defineSarService.addModule("TestModule1", "Presentation", "Layer", 1, newSoftwareUnits);
+		ModuleDTO retrievedModule = defineService.getModule_BasedOnSoftwareUnitName("presentation.softwareunit1");
+		Assert.assertTrue(retrievedModule.logicalPath.equals("Presentation.TestModule1"));
+	}
+	
+	@Test
 	public void editModuleTest_HierarchicalLevel() {
 		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
 		int levelOld = defineService.getHierarchicalLevelOfLayer("Presentation");
-		defineService.editModule("Presentation", null, levelOld + 3, null);
+		defineSarService.editModule("Presentation", null, levelOld + 3, null);
 		int levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
 		Assert.assertTrue(levelNew == levelOld + 3);
-		defineService.editModule("Presentation", null, levelOld, null);
+		defineSarService.editModule("Presentation", null, levelOld, null);
 		levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
 		Assert.assertTrue(levelNew == levelOld);
 	}
@@ -85,11 +105,12 @@ public class DefineServicesTest_SRMA {
 	@Test
 	public void editModuleTest_Name() {
 		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
 		String logicalPathOld = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
-		defineService.editModule(logicalPathOld, "NothingIsAllowed", 0, null);
+		defineSarService.editModule(logicalPathOld, "NothingIsAllowed", 0, null);
 		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NothingIsAllowed"));
-		defineService.editModule(logicalPathNew, "NotAllowed", 0, null);
+		defineSarService.editModule(logicalPathNew, "NotAllowed", 0, null);
 		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
 	}
@@ -97,18 +118,83 @@ public class DefineServicesTest_SRMA {
 	@Test
 	public void editModuleTest_SoftwareUnits() {
 		defineService = ServiceProvider.getInstance().getDefineService();
-		HashSet<String> softwarePackagesOld = defineService.getModule_AllPhysicalPackagePathsOfModule("Presentation.RelationRules.NotAllowed");
+		defineSarService = defineService.getSarService();
 		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.relationrules.newsoftwareunit", "newsoftwareunit", "Package", "public");
 		newSoftwareUnits.add(newUnit);
-		defineService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
+		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
 		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.newsoftwareunit").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
 		newUnit.uniqueName = "presentation.relationrules.notallowed";
 		newUnit.name = "allowed";
-		defineService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
+		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
 		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
+	}
+	
+	@Test
+	public void removeModuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		defineSarService.removeModule("Presentation.TestModule1");
+		ModuleDTO retrievedModule = defineService.getModule_BasedOnSoftwareUnitName("presentation.softwareunit1");
+		Assert.assertFalse(retrievedModule.logicalPath.equals("Presentation.TestModule1"));
+	}
+	
+	// Test case that checks if a main rule is added correctly.
+	@Test
+	public void addMainRuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		defineSarService.addMainRule("Presentation", "Domain", "IsNotAllowedToUse");
+		Assert.assertTrue(isRuleExisting("Presentation", "Domain", "IsNotAllowedToUse"));
+	}
+	
+	// Test case that checks if a  main rule is not added if the ruleTypeKey is not correct.
+	@Test
+	public void addMainRuleTest_IncorrectRuleTypeKey() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		defineSarService.addMainRule("Domain", "Presentation", "IsNotAllowedTotUse"); // Tot instead of To
+		Assert.assertFalse(isRuleExisting("IsNotAllowedToUse", "Presentation", "Domain"));
+	}
+	
+	// Test case that checks if a duplicate main rule is not added.
+	@Test
+	public void addMainRuleTest_DuplicateRuleTypeKey() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		boolean rule1Added = defineSarService.addMainRule("Presentation", "Technology", "IsNotAllowedToUse");
+		boolean rule2Added = defineSarService.addMainRule("Presentation", "Technology", "IsNotAllowedToUse");
+		AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
+		AppliedRuleStrategy rule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey("Presentation", "Technology", "IsNotAllowedToUse");
+		boolean ruleFound = false;
+		if (rule != null) ruleFound = true;
+		Assert.assertTrue(rule1Added);
+		Assert.assertFalse(rule2Added);
+		Assert.assertTrue(ruleFound);
+	}
+	
+	// Test case that checks if a rule is disabled.
+	@Test
+	public void editRuleTest_IsEnabled() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		boolean ruleAdded = defineSarService.addMainRule("Technology.PropertyRules", "Technology.RelationRules", "IsNotAllowedToUse");
+		boolean ruleEdited = defineSarService.editRule_IsEnabled("Technology.PropertyRules", "Technology.RelationRules", "IsNotAllowedToUse", false);
+		AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
+		AppliedRuleStrategy rule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey("Technology.PropertyRules", "Technology.RelationRules", "IsNotAllowedToUse");
+		boolean ruleFound = false;
+		boolean isEnabled = true;
+		if (rule != null) { 
+			ruleFound = true;
+			isEnabled = rule.isEnabled();
+		}
+		Assert.assertTrue(ruleAdded);
+		Assert.assertTrue(ruleEdited);
+		Assert.assertTrue(ruleFound);
+		Assert.assertFalse(isEnabled);
+
 	}
 	
 	// Tests case that checks the number of found dependencies between modules in the intended architecture. 
@@ -126,7 +212,7 @@ public class DefineServicesTest_SRMA {
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
-		logger = Logger.getLogger(DefineServicesTest_SRMA.class);
+		logger = Logger.getLogger(DefineSarServicesTest_SRMA.class);
 	}
 	
 	private static void loadWorkspace(String location) {
@@ -146,18 +232,10 @@ public class DefineServicesTest_SRMA {
 		}
 	}
 
-
 	private static void analyseApplication() {
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
 		mainController.getApplicationController().analyseApplication();
-	}
-
-	private int getNumberofDependenciesBetweenSoftwareUnits(String fromUnit, String toUnit) {
-		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromUnit, toUnit);
-		int numberOfDependencies = foundDependencies.length;
-		return numberOfDependencies;
 	}
 
 	private int getNumberofDependenciesBetweenModulesInIntendedArchitecture(String fromModule, String toModule) {
@@ -177,4 +255,14 @@ public class DefineServicesTest_SRMA {
 		return numberOfDependencies;
 	}
 
+	private boolean isRuleExisting(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
+		RuleDTO[] definedRules = defineService.getDefinedRules();
+		boolean ruleFound = false;
+		for (RuleDTO definedRule : definedRules) {
+			if (definedRule.moduleFrom.logicalPath.equals(moduleFromLogicalPath) && definedRule.moduleTo.logicalPath.equals(moduleTologicalPath) && definedRule.ruleTypeKey.equals(ruleTypeKey)) {
+				ruleFound = true;
+			}
+		}
+		return ruleFound;
+	}
 }

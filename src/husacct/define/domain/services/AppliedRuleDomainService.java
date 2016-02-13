@@ -9,6 +9,7 @@ import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -43,10 +44,10 @@ public class AppliedRuleDomainService {
 	}
 
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies, String regex, ModuleStrategy moduleStrategyFrom, 
-			ModuleStrategy moduleStrategyTo, boolean enabled, boolean isException, AppliedRuleStrategy parentRule) {
+			ModuleStrategy moduleStrategyTo, boolean isEnabled, boolean isException, AppliedRuleStrategy parentRule) {
 
 		AppliedRuleStrategy rule = ruleFactory.createRule(ruleTypeKey);
-		rule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentRule); 
+		rule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, isEnabled, isException, parentRule); 
 		if (isDuplicate(rule)) {
 			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
 			return -1;
@@ -59,6 +60,29 @@ public class AppliedRuleDomainService {
 
 	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
 		return SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
+	}
+
+	/** Gets the main rule that matches the arguments. So, no exception rule.
+	 * 	Returns null if no matching rule is found.
+	 *  Returns the last found rule, if several rules are found. In that case a warning message is logged.
+	 */
+	public AppliedRuleStrategy getAppliedMainRuleBy_From_To_RuleTypeKey(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
+		AppliedRuleStrategy foundRule = null;
+		ModuleDomainService moduleService = new ModuleDomainService();
+		long fromId = moduleService.getModuleByLogicalPath(moduleFromLogicalPath).getId();
+		long toId = moduleService.getModuleByLogicalPath(moduleTologicalPath).getId();
+		ArrayList<AppliedRuleStrategy> allDefinedRules = getAllAppliedRules(); // Includes exceptions.
+		int numberOfFoundRules = 0;
+		for (AppliedRuleStrategy definedRule : allDefinedRules) {
+			if (!definedRule.isException() && (definedRule.getModuleFrom().getId() == fromId) && (definedRule.getModuleTo().getId() == toId) && definedRule.getRuleTypeKey().equals(ruleTypeKey)) {
+				foundRule = definedRule;
+				numberOfFoundRules ++;
+			}
+		}
+		if (numberOfFoundRules > 1) {
+	        this.logger.warn(new Date().toString() + " Duplicate rules with logical key (from, to, ruleTypeKey: "  + moduleFromLogicalPath + ", " + moduleTologicalPath + ", " + ruleTypeKey);
+		}
+		return foundRule;
 	}
 
 	public boolean getAppliedRuleIsEnabled(long appliedRuleId) {
@@ -186,16 +210,11 @@ public class AppliedRuleDomainService {
 		 .notifyServiceListeners();
 	 }
 
-	 public void updateAppliedRule(long appliedRuleId, Boolean isGenerated,
-			 String ruleTypeKey, String description, String[] dependencies,
+	 public void updateAppliedRule(long appliedRuleId, Boolean isGenerated, String ruleTypeKey, String description, String[] dependencies,
 			 String regex, long ModuleStrategyFromId, long ModuleStrategyToId, boolean enabled) {
-
-		 ModuleStrategy ModuleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(
-				 ModuleStrategyFromId);
-		 ModuleStrategy ModuleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(
-				 ModuleStrategyToId);
-		 updateAppliedRule(appliedRuleId, ruleTypeKey, description,
-				 dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled);
+		 ModuleStrategy ModuleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyFromId);
+		 ModuleStrategy ModuleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyToId);
+		 updateAppliedRule(appliedRuleId, ruleTypeKey, description, dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled);
 	 }
 
 	 public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,

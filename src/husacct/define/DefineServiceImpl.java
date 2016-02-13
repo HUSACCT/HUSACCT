@@ -2,7 +2,6 @@ package husacct.define;
 
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
@@ -46,6 +45,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private boolean isMapped;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+	private DefineSarServiceImpl defineSarService;
 	private Logger logger = Logger.getLogger(DefineServiceImpl.class);
 
 
@@ -112,20 +112,6 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			resultClasses.addAll(AllPhysicalClassPaths); 
 		}
 		return resultClasses;
-	}
-
-	@Override
-	public ModuleDTO getModule_SelectedInGUI() {
-		ModuleDTO selectedModuleDTO =  new ModuleDTO();
-		ModuleStrategy selectedModuleStrategy;
-		long selectedModuleId = getDefinitionController().getSelectedModuleId();
-		if (selectedModuleId >= 0) {
-			selectedModuleStrategy = moduleService.getModuleById(selectedModuleId);
-			if (selectedModuleStrategy != null) {
-				selectedModuleDTO = domainParser.parseModule(selectedModuleStrategy);
-			} 
-		} 
-		return selectedModuleDTO;
 	}
 
 	@Override // Returns all paths of subpackages (and subsub, etc) within the assigned software units, but not the paths of these assigned software units
@@ -200,6 +186,12 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return DefinitionController.getInstance();
 	}
 
+	@Override
+	public IDefineSarService getSarService() {
+		defineSarService = new DefineSarServiceImpl(this);
+		return defineSarService;
+	}
+	
 	@Override
 	public Element exportIntendedArchitecture() {
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
@@ -313,27 +305,15 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 		domainParser = new DomainToDtoParser();
-
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());
+		if (defineSarService != null) {
+			defineSarService.reset();
+		}
 	}
 
 	public void reportArchitecture(String fullFilePath) {
 		ReportArchitectureAbstract reporter = new ReportArchitectureToExcel();
 		reporter.write(fullFilePath);
 	}
-	
-	// Services for Architecture Reconstruction
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
-		moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
-	}
-	
-	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
-		moduleService.editModule(logicalPath, newName, newHierarchicalLevel, newSoftwareUnits);
-	}
-	
-	public void addRule(RuleDTO rule) {
-		
-	}
-
 }
