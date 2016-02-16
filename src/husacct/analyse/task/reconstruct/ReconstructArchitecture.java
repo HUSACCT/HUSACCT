@@ -19,6 +19,9 @@ public class ReconstructArchitecture {
 	private IDefineService defineService;
 
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; // The first packages (starting from the project root) that contain one or more classes.
+	
+	private ArrayList<SoftwareUnitDTO> identifiedLayers;
+	
     // External system variables
 	private String xLibrariesRootPackage = "xLibraries";
 	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<SoftwareUnitDTO>();
@@ -31,7 +34,8 @@ public class ReconstructArchitecture {
 		defineService = ServiceProvider.getInstance().getDefineService();
 		identifyExternalSystems();
 		
-		identifyLayersAtRootLevel();
+		//identifyLayersAtRootLevel();l
+		identifyMultipleLayers();
 		
 		identifyComponents();
 		identifySubSystems();
@@ -80,20 +84,25 @@ public class ReconstructArchitecture {
 	}
 	private void identifyLayersAtRootLevel() {
 		determineInternalRootPackagesWithClasses();
-		identifyLayers();
+		identifyLayers(internalRootPackagesWithClasses);
 	}
 	private void identifyMultipleLayers(){
+		identifiedLayers = new ArrayList<SoftwareUnitDTO>();
 		
+		identifyLayersAtRootLevel();
+		
+		identifyLayers(identifiedLayers);
 	}
 	private void identifyLayersAtSelectedModule(){
 		
 	}
-	private void identifyLayers() {
+	private void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
 		ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<SoftwareUnitDTO>();
-		assignedUnits.addAll(internalRootPackagesWithClasses);
+		assignedUnits.addAll(units);
 		layers.put(layerId, assignedUnits);
+			
 		
 		// 2) Identify the bottom layer. Look for packages with dependencies to external systems only.
 		identifyTopLayerBasedOnUnitsInBottomLayer(layerId);
@@ -120,6 +129,7 @@ public class ReconstructArchitecture {
 			layers = tempLayers;
 			for (Integer herarchicalLevel : layers.keySet()) {
 				defineService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+				identifiedLayers.addAll(layers.get(herarchicalLevel));
 			}
 		}
 
