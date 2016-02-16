@@ -57,6 +57,11 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 */
 	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath);
 
+	/**
+	 * Gets the module selected by the user in the view "Define intended architecture". 
+	 * @return a ModuleDTO; with empty values if no module is selected or if the selected module is not found.
+	 */
+	public ModuleDTO getModule_SelectedInGUI();
 	
 	/**
 	 * Gets the hierarchical level of a module

@@ -8,6 +8,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineService;
 
 import org.apache.log4j.Logger;
@@ -30,14 +31,18 @@ public class ReconstructArchitecture {
 		this.queryService = queryService;
 		defineService = ServiceProvider.getInstance().getDefineService();
 		identifyExternalSystems();
-		determineInternalRootPackagesWithClasses(); 
-		identifyLayers();
+		
+		identifyLayersAtRootLevel();
+		
 		identifyComponents();
 		identifySubSystems();
 		IdentifyAdapters();
 		
 		// Example to retrieve UmlLink
 		getUmlLinks();
+		
+		// Example to get the module selected in Define GUI
+		ModuleDTO selectedModule = defineService.getModule_SelectedInGUI();
 	}
 
 	private void identifyExternalSystems() {
@@ -77,7 +82,16 @@ public class ReconstructArchitecture {
 			}
 		}
 	}
-	
+	private void identifyLayersAtRootLevel() {
+		determineInternalRootPackagesWithClasses();
+		identifyLayers();
+	}
+	private void identifyMultipleLayers(){
+		
+	}
+	private void identifyLayersAtSelectedModule(){
+		
+	}
 	private void identifyLayers() {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
