@@ -207,16 +207,16 @@ public abstract class DrawingController {
 			for (BaseFigure figureTo : shownModules) {
 				if (figureFrom != figureTo) {
 					DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
-					if (drawingSettingsHolder.areDependenciesShown() && (dependencies.length > 0)) {
+					if (dependencies.length > 0) {
 						if (drawingSettingsHolder.areViolationsShown()) {
 							ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
 							if (violations.length > 0){ 
 								figureFrom.addDecorator(figureFactory.createViolationsDecorator());
 								drawDependenciesAndViolationsBetween(dependencies, violations, figureFrom, figureTo);
-							} else {
+							} else if (drawingSettingsHolder.areDependenciesShown()){
 								drawDependenciesBetween(dependencies,figureFrom, figureTo);
 							}
-						} else {
+						} else if (drawingSettingsHolder.areDependenciesShown()){
 							drawDependenciesBetween(dependencies,figureFrom, figureTo);
 						}
 					}
