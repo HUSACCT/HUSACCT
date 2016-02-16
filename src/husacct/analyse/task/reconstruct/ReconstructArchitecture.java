@@ -21,6 +21,9 @@ public class ReconstructArchitecture {
 
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; // The first packages (starting from the project root) that contain one or more classes.
 	
+	//This array contains the classes of the selected Module
+	private ArrayList<SoftwareUnitDTO> selectedModuleWithClasses;
+	
 	private ArrayList<SoftwareUnitDTO> identifiedLayers;
 	
     // External system variables
@@ -36,7 +39,8 @@ public class ReconstructArchitecture {
 		identifyExternalSystems();
 		
 		//identifyLayersAtRootLevel();l
-		identifyMultipleLayers();
+		//identifyMultipleLayers();
+		
 		
 		identifyComponents();
 		identifySubSystems();
@@ -47,6 +51,7 @@ public class ReconstructArchitecture {
 		
 		// Example to get the module selected in Define GUI
 		ModuleDTO selectedModule = defineService.getModule_SelectedInGUI();
+		identifyLayersAtSelectedModule(selectedModule);
 	}
 
 	private void identifyExternalSystems() {
@@ -72,6 +77,7 @@ public class ReconstructArchitecture {
 			if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
 				for (String internalPackage : queryService.getRootPackagesWithClass(rootModule.uniqueName)) {
 					internalRootPackagesWithClasses.add(queryService.getSoftwareUnitByUniqueName(internalPackage));
+					
 				}
 			}
 		}
@@ -86,6 +92,47 @@ public class ReconstructArchitecture {
 			}
 		}
 	}
+	
+	
+	// The Module classes modified from root
+	private void determineSelectedModuleWithClasses(ModuleDTO selectedModule) { 
+		selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
+		logger.info(" -- DetermineSelectedModule wordt bereikt -- ");
+		logger.info("De selectedModule: " + selectedModule);
+		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
+		for (SoftwareUnitDTO rootModule : allRootUnits) {
+			if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
+				for (String internalPackage : queryService.getRootPackagesWithClass(rootModule.uniqueName)) {
+					logger.info("Stap 3" + internalPackage + " --- " + selectedModule);
+					
+					ModuleDTO[] selectedSubModules = selectedModule.subModules;
+					for(ModuleDTO subModule : selectedSubModules){
+						logger.info("Stap 3.1: " + subModule.logicalPath.toLowerCase() + " === " + internalPackage.toLowerCase() );
+						if(subModule.logicalPath.toLowerCase().equals(internalPackage.toLowerCase())){
+							selectedModuleWithClasses.add(queryService.getSoftwareUnitByUniqueName(internalPackage));
+							logger.info("Stap 4");
+						}
+					}
+				}
+			}
+		}
+		logger.info("Array list van Selected Module : " + selectedModuleWithClasses.toString());
+		/*
+		if (internalRootPackagesWithClasses.size() == 1) {
+			// Temporal solution useful for HUSACCT20 test. To be improved! E.g., classes in root are excluded from the process. 
+			String newRoot = internalRootPackagesWithClasses. get(0).uniqueName;
+			internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+			for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
+				if (child.type.equalsIgnoreCase("package")) {
+					internalRootPackagesWithClasses.add(child);
+				}
+			}
+		}
+		*/
+	}
+	
+	
+	
 	private void identifyLayersAtRootLevel() {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses);
@@ -97,8 +144,14 @@ public class ReconstructArchitecture {
 		
 		identifyLayers(identifiedLayers);
 	}
-	private void identifyLayersAtSelectedModule(){
-		
+	private void identifyLayersAtSelectedModule(ModuleDTO selectedModule){
+		//This array will be filled with the classes in one module
+		//selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
+				
+		determineSelectedModuleWithClasses(selectedModule);
+				
+		//Identify the layers within the selected module
+		identifyLayers(selectedModuleWithClasses);
 	}
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
 		// 1) Assign all internalRootPackages to bottom layer
