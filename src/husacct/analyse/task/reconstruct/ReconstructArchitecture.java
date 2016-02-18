@@ -113,6 +113,10 @@ public class ReconstructArchitecture {
 			selectedModuleWithClasses
 					.add(queryService.getSoftwareUnitByUniqueName(subModule.logicalPath.toLowerCase()));
 		}
+		System.out.println("----------");
+		System.out.println(selectedModuleWithClasses);
+		System.out.println("----------");
+		
 	}
 
 	private void identifyLayersAtRootLevel() {
