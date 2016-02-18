@@ -10,7 +10,7 @@ class FamixInvocation extends FamixAssociation {
 	public String originalToString = ""; 	// Full original to-string; may be chained/composed
 	public String statement = ""; 			// Part of originalToString that causes association
     public String remainingToString = ""; 	// toRemainderChainingInvocation
-	public String usedEntity = ""; 			// uniqueName of used FamixStructuralEntity, FamixBehaviouralEntity, or “” (not found)
+	public String usedEntity = ""; 			// uniqueName of used FamixStructuralEntity, FamixBehaviouralEntity, or "" (not found)
 	
 
     public String toString() {
