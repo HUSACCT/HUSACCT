@@ -113,7 +113,6 @@ public class ReconstructArchitecture {
 			selectedModuleWithClasses
 					.add(queryService.getSoftwareUnitByUniqueName(subModule.logicalPath.toLowerCase()));
 		}
-		logger.info("HELLUEUEUEUEUEUUEUEUEUEUEUUEUEUEUEUEUUE: " + selectedModuleWithClasses);
 	}
 
 	private void identifyLayersAtRootLevel() {
@@ -140,7 +139,6 @@ public class ReconstructArchitecture {
 	}
 
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
-		logger.info(" HALLO JUMBOOOOO UNIIIITSSSSS: " + units);
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
 		ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<SoftwareUnitDTO>();
