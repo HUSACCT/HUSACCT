@@ -21,8 +21,8 @@ public class ReconstructArchitecture {
 
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; // The first packages (starting from the project root) that contain one or more classes.
 	
-	private ArrayList<SoftwareUnitDTO> identifiedLayers;
-	
+	//private ArrayList<SoftwareUnitDTO> identifiedLayers;
+	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> identifiedLayers;
     // External system variables
 	private String xLibrariesRootPackage = "xLibraries";
 	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<SoftwareUnitDTO>();
@@ -89,13 +89,26 @@ public class ReconstructArchitecture {
 	private void identifyLayersAtRootLevel() {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses);
+		for (Integer herarchicalLevel : layers.keySet()) {
+			defineService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+		}
 	}
 	private void identifyMultipleLayers(){
-		identifiedLayers = new ArrayList<SoftwareUnitDTO>();
-		
 		identifyLayersAtRootLevel();
+		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		identifiedLayers = layers;	
+		layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 		
-		identifyLayers(identifiedLayers);
+		for(int i : identifiedLayers.keySet()){
+			identifyLayers(identifiedLayers.get(i));
+			logger.info(layers);	
+			if(layers.keySet().size() > 1){
+				for (Integer herarchicalLevel : layers.keySet()) {
+					defineService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
+				}
+			}	
+		}
+		
 	}
 	private void identifyLayersAtSelectedModule(){
 		
@@ -106,7 +119,7 @@ public class ReconstructArchitecture {
 		ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<SoftwareUnitDTO>();
 		assignedUnits.addAll(units);
 		layers.put(layerId, assignedUnits);
-			
+		
 		
 		// 2) Identify the bottom layer. Look for packages with dependencies to external systems only.
 		identifyTopLayerBasedOnUnitsInBottomLayer(layerId);
@@ -131,10 +144,7 @@ public class ReconstructArchitecture {
 				raise --;
 			}
 			layers = tempLayers;
-			for (Integer herarchicalLevel : layers.keySet()) {
-				defineService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
-				identifiedLayers.addAll(layers.get(herarchicalLevel));
-			}
+			
 		}
 
 		logger.info(" Number of added Layers: " + layers.size());
