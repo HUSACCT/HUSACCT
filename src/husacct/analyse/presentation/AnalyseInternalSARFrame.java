@@ -50,7 +50,6 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 	}
     
     public void initUI(){
-    	JPanel definitionPanel = new DefinitionJPanel();
     	this.addDefinitionPanel();
     }
 }
