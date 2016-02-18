@@ -25,7 +25,7 @@ public class ReconstructArchitecture {
 	// This array contains the classes of the selected Module
 	private ArrayList<SoftwareUnitDTO> selectedModuleWithClasses;
 
-	private ArrayList<SoftwareUnitDTO> identifiedLayers;
+	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> identifiedLayers;
 
 	// External system variables
 	private String xLibrariesRootPackage = "xLibraries";
@@ -58,7 +58,7 @@ public class ReconstructArchitecture {
 
 		switch (approach) {
 		case ("layerApproach"):
-			// run multiple layers
+			identifyMultipleLayers();
 			break;
 		case ("selectedModuleApproach"):
 			identifyLayersAtSelectedModule(selectedModule);
@@ -113,19 +113,35 @@ public class ReconstructArchitecture {
 			selectedModuleWithClasses
 					.add(queryService.getSoftwareUnitByUniqueName(subModule.logicalPath.toLowerCase()));
 		}
+		System.out.println("----------");
+		System.out.println(selectedModuleWithClasses);
+		System.out.println("----------");
+		
 	}
 
 	private void identifyLayersAtRootLevel() {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses);
+		for (Integer herarchicalLevel : layers.keySet()) {
+			defineService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+		}
 	}
 
 	private void identifyMultipleLayers() {
-		identifiedLayers = new ArrayList<SoftwareUnitDTO>();
-
 		identifyLayersAtRootLevel();
-
-		identifyLayers(identifiedLayers);
+		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		identifiedLayers = layers;	
+		layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		
+		for(int i : identifiedLayers.keySet()){
+			identifyLayers(identifiedLayers.get(i));
+			logger.info(layers);	
+			if(layers.keySet().size() > 1){
+				for (Integer herarchicalLevel : layers.keySet()) {
+					defineService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
+				}
+			}	
+		}
 	}
 
 	private void identifyLayersAtSelectedModule(ModuleDTO selectedModule) {
@@ -172,11 +188,7 @@ public class ReconstructArchitecture {
 				raise--;
 			}
 			layers = tempLayers;
-			for (Integer herarchicalLevel : layers.keySet()) {
-				defineService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel,
-						layers.get(herarchicalLevel));
-				identifiedLayers.addAll(layers.get(herarchicalLevel));
-			}
+			
 		}
 
 		logger.info(" Number of added Layers: " + layers.size());
@@ -254,3 +266,4 @@ public class ReconstructArchitecture {
 	}
 
 }
+
