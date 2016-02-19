@@ -11,7 +11,7 @@ public class DependencyDTO extends AbstractDTO{
 	public int lineNumber = 0;
 	public boolean isIndirect = false;
 	// From FamixInvocation
-	public String usedEntity = ""; // uniqueName of used FamixStructuralEntity, FamixBehaviouralEntity, or “” (not found)
+	public String usedEntity = ""; // uniqueName of used FamixStructuralEntity, FamixBehaviouralEntity, or "" (not found)
 	public String belongsToMethod = "";	// Unique name of the method of the from-class that contains the association-causing statement.
 	public String statement = ""; // Part of originalToString that causes association
 	// Derived attributes
