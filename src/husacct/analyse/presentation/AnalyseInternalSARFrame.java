@@ -46,6 +46,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 		BorderLayout borderLayout = new BorderLayout();
 		this.overviewPanel.setLayout(borderLayout);
 		this.overviewPanel.add(new DefinitionJPanel());
+		this.overviewPanel.setSize(20, 20);
 		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
 	}
     
