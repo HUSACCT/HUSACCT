@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
-	DefineSarServicesTest_SRMA.class
+	DefineSarServicesTest_SRMA.class,
+	DefineServicesTest_SRMA.class
 })
 public class DefineTestSuite {
 	

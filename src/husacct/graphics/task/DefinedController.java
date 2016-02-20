@@ -7,7 +7,6 @@ import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;

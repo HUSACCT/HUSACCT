@@ -42,6 +42,14 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath);
 
 	/**
+	 * Gets the uniqueNames (paths) of the SUs assigned to the module. Not of the SUse assigned to one of the subModules, subSubModules, etc.
+	 * In case of logicalPath = "**" (root), an empty HashSet<String> is returned.
+	 * @param logicalPath of a module in the intended architecture
+	 * @return HashSet<String>
+	 */
+	HashSet<String> getAssignedSoftwareUnitsOfModule(String logicalPath);
+
+	/**
 	 * Gets all the physical classPaths of the types represented by the assigned software units and these of all the children of the module
 	 * @param String logicalPath is the logical path, ** is root module
 	 * @return a HashSet<PhysicalPathDTO>. Throws RuntimeException when the module is not found.
@@ -130,5 +138,5 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * Creates and saves architecture report
 	 */
 	public void reportArchitecture(String fullFilePath);
-	
+
 }

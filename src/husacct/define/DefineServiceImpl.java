@@ -132,6 +132,33 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return resultPackages;
 	}
 
+	@Override
+	public HashSet<String> getAssignedSoftwareUnitsOfModule(String logicalPath){
+		HashSet<String> resultSetOfSoftwareUnits = new HashSet<String>();
+		try {
+			if ((logicalPath != null) && !logicalPath.equals("**")) {
+				// 1 Get the module
+				ModuleStrategy module =(moduleService.getModuleByLogicalPath(logicalPath));
+				// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+				if (module != null){
+					Set<String> softwareUnits = module.getAllAssignedSoftwareUnitsInTree().keySet();
+					if(softwareUnits != null)
+						resultSetOfSoftwareUnits.addAll(softwareUnits);
+				}
+			}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        //e.printStackTrace();
+        }
+		return resultSetOfSoftwareUnits;
+	}
+
+	/**
+	 * Gets all the SUs assigned to the module or assigned to one of the subModules, subSubModules, etc.
+	 * In case of logicalPath = "**" (root), this is done for all modules in the root.
+	 * @param logicalPath of a module in the intended architecture
+	 * @return TreeMap<String, SoftwareUnitDefinition>
+	 */
 	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
 		try {
