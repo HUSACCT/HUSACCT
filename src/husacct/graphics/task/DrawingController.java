@@ -228,7 +228,7 @@ public abstract class DrawingController {
 	public void drawDependenciesBetween(DependencyDTO[] dependencies, BaseFigure figureFrom, BaseFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		try {
-			dependencyFigure = figureFactory.createRelationFigure(dependencies);
+			dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
 		} catch (Exception e) {
 			logger.error("Could not create a dependency figure.", e);
 		}
@@ -242,7 +242,7 @@ public abstract class DrawingController {
 	public void drawDependenciesAndViolationsBetween(DependencyDTO[] dependencies, ViolationDTO[] violations, BaseFigure figureFrom, BaseFigure figureTo) {
 		RelationFigure violationFigure = null;
 		try {
-			violationFigure = figureFactory.createRelationFigureWithViolations(dependencies, violations);
+			violationFigure = figureFactory.createRelationFigure_DependencyWithViolations(dependencies, violations);
 		} catch (Exception e) {
 			logger.error("Could not create a violation line between figures.", e);
 		}
@@ -291,48 +291,45 @@ public abstract class DrawingController {
 	}
 
 	public DrawingView zoomIn() {
-		Set<Figure> selection = drawingView.getSelectedFigures();
-		
-		if (selection.size() > 0) {
-			ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-			for (Figure s : selection) {
-				if(s instanceof ParentFigure) {
-					// Don't add figures.remove(f);
-				} else {
-					BaseFigure f = (BaseFigure) s;
-					f.setContext(false); // minimizing potential side effects
-					figures.add(f);
-				}
-			}
-			if(drawingSettingsHolder.isZoomWithContextOn()){
-				drawingView.clearSelection();
-				drawingView.selectAll();
-				List<BaseFigure> allFigures = Arrays.asList(drawingView.getSelectedFigures().toArray(new BaseFigure[0]));
-				List<BaseFigure> contextModules = new ArrayList<BaseFigure>();
-				for(BaseFigure fig : allFigures){
-					if(fig instanceof ModuleFigure)
-						contextModules.add(fig);
-				}
-				drawingView.clearSelection();
-				drawingView.addToSelection(selection);
-				
-				for(BaseFigure selected : figures){
-					for (BaseFigure module : contextModules){
-						if (!module.equals(selected)) {
-							if(hasDependencyBetween(selected, module)) {
-								module.setContext(true);
-							}
-						}							
+		try {
+			Set<Figure> selection = drawingView.getSelectedFigures();
+			if (selection.size() > 0) {
+				ArrayList<BaseFigure> selectedFigures = new ArrayList<BaseFigure>();
+				ArrayList<BaseFigure> figuresForNewDrawing = new ArrayList<BaseFigure>();
+				// Add the selected figures (property isContext = false)
+				for (Figure s : selection) {
+					if(s instanceof ParentFigure) {
+						// Don't add figures.remove(f);
+					} else {
+						BaseFigure f = (BaseFigure) s;
+						f.setContext(false); // minimizing potential side effects
+						selectedFigures.add(f);
+						figuresForNewDrawing.add(f);
 					}
 				}
-				for(BaseFigure contextModule : contextModules){
-					if(contextModule.isContext())
-						figures.add(contextModule);
+				if(drawingSettingsHolder.isZoomWithContextOn()){
+					// Objective: Add modules with a relation to one of the selected figures to figuresForNewDrawing.
+					// 1) Get all modules in the current drawing
+					BaseFigure[] shownModules = drawing.getShownModules();
+					List<BaseFigure> potentialContextModules = Arrays.asList(shownModules);
+					/* b) Is a selected figure has a relation with a potentialContextFigure, 
+					 *    then set isContext = true, and add it to figuresForNewDrawing. */
+					for(BaseFigure selected : selectedFigures){
+						for (BaseFigure module : potentialContextModules){
+							if (!module.equals(selected)) {
+								if(hasDependencyBetween(selected, module)) {
+									module.setContext(true);
+									figuresForNewDrawing.add(module);
+								}
+							}							
+						}
+					}
 				}
+				BaseFigure[] figuresForNewDrawingArray = figuresForNewDrawing.toArray(new BaseFigure[figuresForNewDrawing.size()]);
+				this.zoomIn(figuresForNewDrawingArray);
 			}
-			
-			BaseFigure[] selectedFigures = figures.toArray(new BaseFigure[figures.size()]);
-			this.zoomIn(selectedFigures);
+		} catch (Exception e) {
+			logger.error("Could not create a violation line between figures.", e);
 		}
 		return drawingView;
 	}

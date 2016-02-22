@@ -75,12 +75,14 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	// Draw the child modules of the parentNames
 	private void getAndDrawModulesIn(String[] parentNames) {
 		if (parentNames.length == 0) {
 			drawArchitectureTopLevel(); 
 		} else {
 			// First, find the children of the selected module(s) (in parentnames) and store them in allChildren
-			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
+			// Map allChildren: key = parentName; value = ArrayList<knownChildren>
+			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>(); 
 			ArrayList<String> compoundedNames = new ArrayList<String>();
 
 			for (String parentName : parentNames) {
@@ -152,36 +154,30 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
-		SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
-		if (!dtoFrom.uniqueName.equals(dtoTo.uniqueName) && dtoFrom != null && dtoTo != null){ 
-			return analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(dtoFrom.uniqueName, dtoTo.uniqueName);
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			return analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		}
 		return new DependencyDTO[] {};
 	}
 	
 	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
 		boolean b = false;
-		try{
-			SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
-			SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
-			if (dtoFrom != null && dtoTo != null && !dtoFrom.uniqueName.equals(dtoTo.uniqueName)){ 
-				if((analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(dtoFrom.uniqueName, dtoTo.uniqueName).length > 0) || (analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(dtoTo.uniqueName, dtoFrom.uniqueName).length > 0)){
-					b = true;
-				}
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			if((analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName()).length > 0) || 
+					(analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureTo.getUniqueName(), figureFrom.getUniqueName()).length > 0)){
+				b = true;
 			}
-		}catch (Exception e) {
-			logger.warn(" dto was null, but that is ok");
-			//e.printStackTrace();
 		}
 		return b;		
 	}
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		SoftwareUnitDTO dtoFrom = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureFrom);
-		SoftwareUnitDTO dtoTo = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figureTo);
-		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			return validateService.getViolationsByPhysicalPath(figureFrom.getUniqueName(), figureTo.getUniqueName());
+		} else {
+			return new ViolationDTO[]{};
+		}
 	}
 
 	private void initializeServices() {
