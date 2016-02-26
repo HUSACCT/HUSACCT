@@ -4,6 +4,7 @@ import husacct.control.task.configuration.ConfigurationManager;
 import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.domain.decorators.ViolationsDecorator;
 import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.domain.linelayoutstrategies.ConnectorLineSeparationStrategy;
 import husacct.graphics.domain.linelayoutstrategies.ILineSeparationStrategy;
@@ -52,16 +53,16 @@ public class Drawing extends QuadTreeDrawing {
 		changed();
 	}
 	
-	public void clearAllLines() {
+	public void clearAllRelations() {
 		willChange();
-		BaseFigure[] lines = getShownLines();
-		for (BaseFigure line : lines)
+		RelationFigure[] lines = getShownRelations();
+		for (RelationFigure line : lines)
 			remove(line);
 		invalidate();
 		changed();
 	}
 	
-	public RelationFigure[] getShownLines() {
+	public RelationFigure[] getShownRelations() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
@@ -70,13 +71,15 @@ public class Drawing extends QuadTreeDrawing {
 		return moduleFigures.toArray(new RelationFigure[] {});
 	}
 	
-	public BaseFigure[] getShownModules() {
-		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
+	public ModuleFigure[] getShownModules() {
+		ArrayList<ModuleFigure> moduleFigures = new ArrayList<ModuleFigure>();
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (!figure.isLine() && !figure.isParent()) moduleFigures.add(figure);
+			if (figure.isModule() && (figure instanceof ModuleFigure)) {
+				moduleFigures.add((ModuleFigure) figure);
+			}
 		}
-		return moduleFigures.toArray(new BaseFigure[] {});
+		return moduleFigures.toArray(new ModuleFigure[] {});
 	}
 	
 	public boolean hasHiddenFigures() {
@@ -205,7 +208,7 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	public void updateLineFigureThicknesses(int maxAmount) {
-		RelationFigure[] figures = getShownLines();
+		RelationFigure[] figures = getShownRelations();
 		for (RelationFigure figure : figures) {
 			double weight = (double) figure.getAmount() / maxAmount;
 			if (weight < 0.25) figure.setLineThickness(1);
@@ -217,12 +220,12 @@ public class Drawing extends QuadTreeDrawing {
 	}
 	
 	public void updateLineFigureToContext() {
-		RelationFigure[] figures = getShownLines();
+		RelationFigure[] figures = getShownRelations();
 		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
 	}
 	
 	public void updateLines() {
-		RelationFigure[] lines = getShownLines();
+		RelationFigure[] lines = getShownRelations();
 		for (RelationFigure line : lines)
 			line.updateConnection();
 	}

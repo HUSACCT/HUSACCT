@@ -1,10 +1,6 @@
 package husacct.graphics.domain;
 
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.RelationFigure;
@@ -13,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FigureMap {
-	private final HashMap<String, BaseFigure>				moduleFiguresByName		= new HashMap<String, BaseFigure>();
-	private final HashMap<BaseFigure, AbstractDTO>			moduleFigureDTOMap		= new HashMap<BaseFigure, AbstractDTO>();
 	private final HashMap<RelationFigure, DependencyDTO[]>	dependencyLineDTOMap	= new HashMap<RelationFigure, DependencyDTO[]>();
 	private final HashMap<RelationFigure, ViolationDTO[]>	violationLineDTOMap		= new HashMap<RelationFigure, ViolationDTO[]>();
 	private int	maxDependencies, maxViolations, maxAll;
@@ -27,22 +21,12 @@ public class FigureMap {
 		maxDependencies = 0;
 		maxViolations = 0;
 		maxAll = 0;
-		moduleFigureDTOMap.clear();
 		dependencyLineDTOMap.clear();
 		clearAllViolations();
-		moduleFiguresByName.clear();
 	}
 	
 	public void clearAllViolations() {
 		violationLineDTOMap.clear();
-	}
-	
-	public boolean containsModule(String path) {
-		return moduleFiguresByName.containsKey(path);
-	}
-	
-	public BaseFigure findModuleByPath(String path) {
-		return moduleFiguresByName.get(path);
 	}
 	
 	public DependencyDTO[] getDependencyDTOs(BaseFigure figure) {
@@ -59,10 +43,6 @@ public class FigureMap {
 	
 	public int getMaxViolations() {
 		return maxViolations;
-	}
-	
-	public AbstractDTO getModuleDTO(BaseFigure figure) {
-		return moduleFigureDTOMap.get(figure);
 	}
 	
 	public ViolationDTO[] getViolationDTOs(BaseFigure figure) {
@@ -87,21 +67,6 @@ public class FigureMap {
 	public void linkDependencies(RelationFigure figure, DependencyDTO[] dtos) {
 		dependencyLineDTOMap.put(figure, dtos);
 		setMaxDependencies(dtos.length);
-	}
-	
-	public void linkModule(BaseFigure figure, AbstractDTO dto) {
-		moduleFigureDTOMap.put(figure, dto);
-		
-		if (dto instanceof ModuleDTO) {
-			ModuleDTO md = (ModuleDTO) dto;
-			moduleFiguresByName.put(md.logicalPath, figure);
-		} else if (dto instanceof SoftwareUnitDTO) {
-			SoftwareUnitDTO md = (SoftwareUnitDTO) dto;
-			moduleFiguresByName.put(md.uniqueName, figure);
-		} else if (dto instanceof ProjectDTO) {
-			ProjectDTO pd = (ProjectDTO) dto;
-			moduleFiguresByName.put(pd.name, figure);
-		}
 	}
 	
 	public void linkViolations(RelationFigure figure, ViolationDTO[] dtos) {

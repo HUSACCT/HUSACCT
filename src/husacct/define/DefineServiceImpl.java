@@ -86,8 +86,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			ModuleDTO moduleDTO = domainParser.parseModule(module);
 			childModuleDTOs = moduleDTO.subModules;
 		}
-
-		// Removing nested childs
+		// Remove nested children
 		for (ModuleDTO modDTO : childModuleDTOs) {
 			modDTO.subModules = new ModuleDTO[] {};
 		}
@@ -256,18 +255,21 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	@Override
 	public String getModule_TheParentOfTheModule(String logicalPath) {
 		String parentLogicalPath = "";
-		if (logicalPath.contains(".")) {
-			String[] moduleNames = logicalPath.split("\\.");
-			parentLogicalPath += moduleNames[0];
-			for (int i = 1; i < moduleNames.length - 1; i++) {
-				parentLogicalPath += "." + moduleNames[i];
+		try {
+			if (logicalPath.contains(".")) {
+				String[] moduleNames = logicalPath.split("\\.");
+				parentLogicalPath += moduleNames[0];
+				for (int i = 1; i < moduleNames.length - 1; i++) {
+					parentLogicalPath += "." + moduleNames[i];
+				}
+				// Check if exists, an exception will automaticly be thrown
+				SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath);
+			} else {
+				parentLogicalPath = "**";
 			}
-			// Check if exists, an exception will automaticly be thrown
-			SoftwareArchitecture.getInstance().getModuleByLogicalPath(
-					parentLogicalPath);
-		} else {
-			parentLogicalPath = "**";
-		}
+        } catch (Exception e) {
+	        this.logger.warn(" Exception: "  + e );
+        }
 		return parentLogicalPath;
 	}
 

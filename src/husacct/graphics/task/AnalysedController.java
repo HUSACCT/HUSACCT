@@ -7,18 +7,13 @@ import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
 
 public class AnalysedController extends DrawingController {
-	private final Logger			logger			= Logger.getLogger(AnalysedController.class);
 	protected IAnalyseService		analyseService;
 	protected IValidateService		validateService;
 
@@ -28,126 +23,27 @@ public class AnalysedController extends DrawingController {
 		initializeServices();
 	}
 
-	// Method to create the top-level diagram.
 	@Override
-	public DrawingView drawArchitectureTopLevel() {
-		AbstractDTO[] modules;
-		if (drawingSettingsHolder.areExternalLibrariesShown()) {
-			// Select all modules in root
-			modules = analyseService.getSoftwareUnitsInRoot();
-		} else {
-			// Select only internal modules in root
-			SoftwareUnitDTO[] analysedModules = analyseService.getSoftwareUnitsInRoot();
-			int nrOfInternalModules = 0;
-			for (SoftwareUnitDTO analysedModule : analysedModules){
-				if (!analysedModule.name.toLowerCase().equals("xlibraries"))
-					nrOfInternalModules++;
+	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
+		SoftwareUnitDTO[] rootModules = analyseService.getSoftwareUnitsInRoot();
+		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
+		for (SoftwareUnitDTO rootModule : rootModules) {
+			if (rootModule.name.toLowerCase().equals("xlibraries")){
+				rootModule.type = "library";
 			}
-			AbstractDTO[] internalModules = new SoftwareUnitDTO[nrOfInternalModules];
-			int i = 0;
-			for (SoftwareUnitDTO analysedModule : analysedModules){
-				if (!analysedModule.name.toLowerCase().equals("xlibraries")) {
-					internalModules[i] = analysedModule;
-					i++;	
-				}
-			}
-			modules = internalModules;
+			ModuleFigure rootModuleFigure = figureFactory.createModuleFigure(rootModule);
+			rootModuleFigures.add(rootModuleFigure);
 		}
-		drawingSettingsHolder.resetCurrentPaths();
-		drawModulesAndLines(modules);
-		return drawingView;
-
-		/* //To include Multiple Projects, include the following code.
-		 * ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
-		 * AbstractDTO[] projectArray = projects.toArray(new AbstractDTO[projects.size()]);
-		 */
+		return rootModuleFigures;
 	}
-
-	private void getAndDrawModulesIn(String parentName) {
-		ArrayList<AbstractDTO> children = getChildrenOf(parentName);
-		if (parentName.equals("")) {
-			drawArchitectureTopLevel();
-		} else if (children.size() > 0) {
-			setCurrentPaths(new String[] { parentName });
-			drawModulesAndLines(children.toArray(new AbstractDTO[] {}));
-		} else {
-			logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
-		}
-	}
-
-	// Draw the child modules of the parentNames
-	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0) {
-			drawArchitectureTopLevel(); 
-		} else {
-			// First, find the children of the selected module(s) (in parentnames) and store them in allChildren
-			// Map allChildren: key = parentName; value = ArrayList<knownChildren>
-			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>(); 
-			ArrayList<String> compoundedNames = new ArrayList<String>();
-
-			for (String parentName : parentNames) {
-				compoundedNames.add(parentName);
-				ArrayList<AbstractDTO> knownChildren = getChildrenOf(parentName);
-				if (knownChildren.size() > 0) 
-					allChildren.put(parentName, knownChildren);
-			}
-
-			if (contextFigures.size() > 0) {
-				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
-				for (BaseFigure figure : contextFigures) {
-					if (!figure.isLine() && !figure.isParent()) {
-						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
-						if(dto instanceof SoftwareUnitDTO){
-							SoftwareUnitDTO moduleDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
-							for (String parentName : parentNames) {
-								//NOTE: A check to see if the current figure is part of the parents children.
-								String[] partParentName = parentName.split("\\.");
-								String[] partModuleParentName = moduleDTO.uniqueName.split("\\.");
-								
-								if(!allChildren.containsKey(partModuleParentName[0])){
-									if(!partParentName[0].equals(partModuleParentName[0])){
-										if (dto != null){ 
-											tmp.add(dto); 
-											break;
-										} else{
-											logger.debug(figure.getName() + " -> " + figure);
-										}
-									}
-								}
-							}
-						}
-					} else if (figure.isParent()) {
-						ArrayList<AbstractDTO> knownChildren = getChildrenOf(figure.getName());
-						if (knownChildren.size() > 0) allChildren.put(figure.getName(), knownChildren);
-					}
-				if (tmp.size() > 0) allChildren.put("", tmp);
-				}
-			}
-			setCurrentPaths(parentNames);
-			Set<String> parentNamesKeySet = allChildren.keySet();
-			if (parentNamesKeySet.size() == 1) {
-				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
-				this.drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
-			} else {
-				this.drawModulesAndLines(allChildren);
-			}
-		}
-	}
-
-	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
-		AbstractDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);
-
-		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
-
-		if (parentName.equals("")) 
-			drawArchitectureTopLevel();
-		else if (children.length > 0) {
-			knownChildren = new ArrayList<AbstractDTO>();
-			for (AbstractDTO child : children)
-				knownChildren.add(child);
-		} else {
-			// logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+	
+	@Override
+	protected ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName) {
+		SoftwareUnitDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);
+		ArrayList<ModuleFigure> knownChildren = new ArrayList<ModuleFigure>();
+		for (AbstractDTO child : children) {
+			ModuleFigure moduleFigure = figureFactory.createModuleFigure(child);
+			knownChildren.add(moduleFigure);
 		}
 		return knownChildren;
 	}
@@ -160,6 +56,7 @@ public class AnalysedController extends DrawingController {
 		return new DependencyDTO[] {};
 	}
 	
+	@Override
 	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
 		boolean b = false;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
@@ -180,106 +77,19 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	@Override
+	protected String getUniqueNameOfParent(String childUniqueName) {
+		String parentUniqueName = "";
+		SoftwareUnitDTO parentDTO = analyseService.getParentUnitOfSoftwareUnit(childUniqueName);
+		if (parentDTO != null) { 
+			parentUniqueName = parentDTO.uniqueName;
+		}
+		return parentUniqueName;
+	}
+	
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 	}
 
-	@Override
-	public DrawingView moduleOpen(String[] paths) {
-		saveSingleLevelFigurePositions();
-		resetContextFigures();
-		if (paths.length == 0) 
-			drawArchitectureTopLevel();
-		else
-			this.getAndDrawModulesIn(paths);
-		return drawingView;
-	}
-
-	@Override
-	public DrawingView refreshDrawing() {
-		this.getAndDrawModulesIn(drawingSettingsHolder.getCurrentPaths());
-		return drawingView;
-	}
-
-	private void resetContextFigures() {
-		contextFigures = new ArrayList<BaseFigure>();
-	}
-
-	@Override
-	public void zoomIn(BaseFigure[] figures) {
-		resetContextFigures();
-		//parentFigureNameAndTypeMap = new HashMap<String,String>();
-		ArrayList<String> parentNames = new ArrayList<String>();
-		for (BaseFigure figure : figures){
-			if (figure.isModule() && !(figure.isContext())) 
-				try {				
-					SoftwareUnitDTO parentDTO = (SoftwareUnitDTO) getFigureMap().getModuleDTO(figure);
-					parentNames.add(parentDTO.uniqueName);
-					parentFigureNameAndTypeMap.put(parentDTO.uniqueName, parentDTO.type);
-				} catch (Exception e) {
-					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
-					//e.printStackTrace();
-			} else if (figure.isContext() || !figure.isLine()) {
-				contextFigures.add(figure);
-			} else {
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
-			}
-		}
-
-		if (parentNames.size() > 0) {
-			saveSingleLevelFigurePositions();
-			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
-		}
-	}
-
-	@Override
-	public DrawingView zoomOut() {
-		if (drawingSettingsHolder.getCurrentPaths().length > 0) {
-			saveSingleLevelFigurePositions();
-			resetContextFigures();
-			String firstCurrentPaths = drawingSettingsHolder.getCurrentPaths()[0];
-			SoftwareUnitDTO parentDTO = analyseService.getParentUnitOfSoftwareUnit(firstCurrentPaths);
-			if (parentDTO != null) 
-				this.getAndDrawModulesIn(parentDTO.uniqueName);
-			else
-				drawArchitectureTopLevel();
-		} else
-			drawArchitectureTopLevel();
-		return drawingView;
-	}
-
-	/*
-	 * Code for zooming when Multiple Projects are supported. 
-	 * May need some refactoring.
-	 * 
-	 * public void moduleZoom(BaseFigure[] figures) {
-	 * super.notifyServiceListeners(); this.resetContextFigures();
-	 * 
-	 * boolean allProjects = false; for(BaseFigure fig : figures){ if(!(fig
-	 * instanceof ProjectFigure)){ allProjects = false; } else{ allProjects =
-	 * true; } }
-	 * 
-	 * if(allProjects){ setCurrentPathsForProjects(figures); ProjectDTO project
-	 * = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
-	 * AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new
-	 * AbstractDTO[project.analysedModules.size()] ); if(abstractDTOs.length !=
-	 * 0){
-	 * 
-	 * this.drawModulesAndLines(abstractDTOs); } }
-	 * 
-	 * ArrayList<String> parentNames =
-	 * this.sortFiguresBasedOnZoomability(figures);
-	 * 
-	 * if (parentNames.size() > 0) { saveSingleLevelFigurePositions();
-	 * this.getAndDrawModulesIn(parentNames.toArray(new String[] {})); } }
-	 * 
-	// TODO Needs to be removed as soon as uniqueName of a
-	// AnalysedDTO contains a project
-	private void setCurrentPathsForProjects(BaseFigure[] figures) {
-		String[] paths = new String[1];
-		paths[0] = figures[0].getName();
-		super.setCurrentPaths(paths);
-	}
-	 */
 }

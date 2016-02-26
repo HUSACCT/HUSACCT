@@ -1,11 +1,9 @@
 package husacct.graphics.task.modulelayout.state;
 
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
 import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.FigureMap;
 import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.domain.figures.ModuleFigure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -20,7 +18,6 @@ import org.jhotdraw.draw.Figure;
 public class DrawingState {
 	private Drawing							drawing;
 	private HashMap<String, FigureState>	savedPositions;
-	private FigureMap						figureMap			= null;
 	private boolean							hasHiddenFigures	= false;
 	
 	public DrawingState(Drawing theDrawing) {
@@ -34,14 +31,11 @@ public class DrawingState {
 	}
 	
 	private String getFullPath(BaseFigure bf) {
-		AbstractDTO dto = figureMap.getModuleDTO(bf);
-		
-		if (dto instanceof ModuleDTO) {
-			ModuleDTO moduleDto = (ModuleDTO) dto;
-			return moduleDto.logicalPath;
+		String uniqueName = "";
+		if (bf instanceof ModuleFigure) {
+			return bf.getUniqueName();
 		} else {
-			SoftwareUnitDTO analysedDto = (SoftwareUnitDTO) dto;
-			return analysedDto.uniqueName;
+			return uniqueName;
 		}
 	}
 	
@@ -49,9 +43,7 @@ public class DrawingState {
 		return hasHiddenFigures;
 	}
 	
-	public void restore(FigureMap figureMap) {
-		this.figureMap = figureMap;
-		
+	public void restore() {
 		restoreFigures();
 		restoreLineStates();
 	}
@@ -60,7 +52,7 @@ public class DrawingState {
 		Set<Entry<String, FigureState>> entries = savedPositions.entrySet();
 		for (Entry<String, FigureState> e : entries) {
 			FigureState savedState = e.getValue();
-			
+/*			To do: invent new working mechanism. 
 			if (figureMap.containsModule(savedState.path)) {
 				BaseFigure bf = figureMap.findModuleByPath(savedState.path);
 				Rectangle2D.Double bounds = savedState.position;
@@ -74,7 +66,7 @@ public class DrawingState {
 				bf.changed();
 				if (!savedState.enabled) bf.setEnabled(false);
 			}
-		}
+*/		}
 	}
 	
 	private void restoreLineStates() {
@@ -91,14 +83,13 @@ public class DrawingState {
 		}
 	}
 	
-	public void save(FigureMap figureMap) {
-		this.figureMap = figureMap;
+	public void save() {
 		clear();
 		List<Figure> figures = drawing.getChildren();
 		
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isLine() && shouldSaveState(bf)) {
+			if (bf.isModule()) {
 				FigureState state = saveFigureState(bf);
 				savedPositions.put(state.path, state);
 				if (!state.enabled) hasHiddenFigures = true;
@@ -115,7 +106,4 @@ public class DrawingState {
 		return output;
 	}
 	
-	private boolean shouldSaveState(BaseFigure bf) {
-		return figureMap.getModuleDTO(bf) != null;
-	}
 }
