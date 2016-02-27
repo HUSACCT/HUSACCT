@@ -10,6 +10,7 @@ import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.define.IDefineService;
+import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.ParentFigure;
@@ -76,7 +77,9 @@ public class DrawingControllerTest {
 			}
 
 			graphicsAnalysedController = new AnalysedController();
+			graphicsAnalysedController.getDrawingSettingsHolder().dependenciesShow();
 			graphicsDefinedController = new DefinedController();
+			graphicsDefinedController.getDrawingSettingsHolder().dependenciesShow();
 
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getMessage();
@@ -94,8 +97,8 @@ public class DrawingControllerTest {
 	@Test
 	public void analysed_DrawArchitectureTopLevelTest_withoutExternalSystems() {
 		graphicsAnalysedController.drawArchitectureTopLevel();
-		assertEquals("wrong amount of figures drawn", 3, graphicsAnalysedController.getDrawing().getChildren().size());
-		for (Figure f : graphicsAnalysedController.getDrawing().getChildren()) {
+		assertEquals("wrong amount of figures drawn", 3, graphicsAnalysedController.getDrawing().getShownModules().length);
+		for (Figure f : graphicsAnalysedController.getDrawing().getShownModules()) {
 			if (!(f instanceof BaseFigure)) {
 				fail("non-basefigure in drawing");
 			} else {
@@ -109,7 +112,7 @@ public class DrawingControllerTest {
 	public void analysed_DrawArchitectureTopLevelTest_withExternalSystems() {
 		graphicsAnalysedController.getDrawingSettingsHolder().librariesShow();
 		graphicsAnalysedController.drawArchitectureTopLevel();
-		assertEquals("wrong amount of figures drawn", 4, graphicsAnalysedController.getDrawing().getChildren().size());
+		assertEquals("wrong amount of figures drawn", 4, graphicsAnalysedController.getDrawing().getShownModules().length);
 		boolean libraryPresent = false; 
 		for (ModuleFigure mf : graphicsAnalysedController.getDrawing().getShownModules()) { 
 			if (mf.getType().toLowerCase().equals("library")) {
@@ -196,7 +199,7 @@ public class DrawingControllerTest {
 		graphicsDefinedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology"});
 		graphicsDefinedController.drawArchitectureTopLevel();
 		int nrOfModules = graphicsDefinedController.getDrawing().getShownModules().length;
-		for (Figure f : graphicsAnalysedController.getDrawing().getChildren()) {
+		for (Figure f : graphicsAnalysedController.getDrawing().getShownModules()) {
 			if (!(f instanceof BaseFigure)) {
 				fail("non-basefigure in drawing");
 			} else {
@@ -212,7 +215,7 @@ public class DrawingControllerTest {
 		graphicsDefinedController.drawArchitectureTopLevel();
 		graphicsDefinedController.resetContextFigures();
 		for (ModuleFigure mf : graphicsDefinedController.getDrawing().getShownModules()) { 
-			if (mf.getName().toLowerCase().equals("technology") || mf.getName().toLowerCase().equals("domain")) {
+			if (mf.getName().equals("Technology") || mf.getName().equals("Domain")) {
 				graphicsDefinedController.contextFigures.add(mf);
 			} 
 		}
@@ -223,8 +226,8 @@ public class DrawingControllerTest {
 		for (Figure f : graphicsDefinedController.getDrawing().getChildren()) { 
 			if (f instanceof ParentFigure) {
 				ParentFigure parentFigure = (ParentFigure) f;
-				if (parentFigure.getName().toLowerCase().equals("technology") || parentFigure.getName().toLowerCase().equals("domain") || 
-						parentFigure.getName().toLowerCase().equals("presentation")) {
+				if (parentFigure.getName().equals("Technology") || parentFigure.getName().equals("Domain") || 
+						parentFigure.getName().equals("Presentation")) {
 					numberOfParentFigures ++;
 				}
 			}
@@ -237,14 +240,24 @@ public class DrawingControllerTest {
 	public void defined_DrawRelation_NumberOfDependencies() {
 		graphicsDefinedController.drawArchitectureTopLevel();
 		graphicsDefinedController.resetContextFigures();
-		for (Figure f : graphicsDefinedController.getDrawing().getChildren()) { 
+		for (ModuleFigure mf : graphicsDefinedController.getDrawing().getShownModules()) { 
+			if (mf.getName().equals("Technology") || mf.getName().equals("Domain")) {
+				graphicsDefinedController.contextFigures.add(mf);
+			} 
+		}
+		graphicsDefinedController.getDrawingSettingsHolder().zoomTypeChange("context");
+		graphicsDefinedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology"});
+		Drawing drawing = graphicsDefinedController.getDrawing();
+		RelationFigure[] relations = drawing.getShownRelations();
+		for (Figure f : relations) { 
 			if (f instanceof RelationFigure) {
 				ConnectionFigure cf = (ConnectionFigure) f;
-				Figure start = cf.getStartFigure();
-				Figure end = cf.getEndFigure();
-
-				if ((start != null) && (end != null)) {
-					// To do: Check on nr of dependencies
+				ModuleFigure start = (ModuleFigure) cf.getStartFigure();
+				ModuleFigure end = (ModuleFigure) cf.getEndFigure();
+				if ((start != null) && start.getUniqueName().equals("Domain")&& (end != null) && end.getUniqueName().equals("Technology.RelationRules")) {
+					int nrOfDependencies = getNumberofDependenciesBetweenModulesInIntendedArchitecture(start.getUniqueName(), end.getUniqueName());
+					int nrOfDependenciesShown = ((RelationFigure) f).getAmount();
+					assertEquals("wrong amount of figures drawn", nrOfDependenciesShown, nrOfDependencies);
 				}
 			} 
 		}

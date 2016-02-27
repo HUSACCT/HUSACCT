@@ -5,7 +5,6 @@ import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.DrawingView;
-import husacct.graphics.domain.FigureMap;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.FigureFactory;
 import husacct.graphics.domain.figures.ModuleFigure;
@@ -25,28 +24,25 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController {
 	private static final double					MIN_ZOOMFACTOR	= 0.25;
 	private static final double					MAX_ZOOMFACTOR	= 1.75;
 	
-	protected static final boolean				debugPrint		= true;
-	protected DrawingSettingsHolder 			drawingSettingsHolder;
-	protected ModuleLayoutsEnum					layoutStrategyOption;
-	
-	private final HashMap<String, DrawingState>	storedStates	= new HashMap<String, DrawingState>();
-	
 	private Drawing								drawing;
 	protected DrawingView						drawingView;
 	
+	protected DrawingSettingsHolder 			drawingSettingsHolder;
 	protected final FigureFactory				figureFactory;
 	private final FigureConnectorStrategy		connectionStrategy;
 	private LayoutStrategy						layoutStrategy;
+	protected ModuleLayoutsEnum					layoutStrategyOption;
 	
-	private final FigureMap						figureMap		= new FigureMap();
 	public ArrayList<ModuleFigure>				contextFigures; 			// List with all the figures with isContext = true, not being a line (public, because of testability)
 	protected HashMap<String, String> 			parentFigureNameAndTypeMap; // Map with key = uniqueName of the parent figure and value = type. 
+	private final HashMap<String, DrawingState>	storedStates	= new HashMap<String, DrawingState>();
 	
 	protected Logger							logger			= Logger.getLogger(DrawingController.class);
 
@@ -73,31 +69,10 @@ public abstract class DrawingController {
 		updateLayoutStrategy();
 	}
 	
-	public void layoutStrategyChange(ModuleLayoutsEnum selectedStrategyEnum) {
-		layoutStrategyOption = selectedStrategyEnum;
-		updateLayoutStrategy();
-	}
-
-	public DrawingView moduleOpen(String[] paths) {
-		saveSingleLevelFigurePositions();
-		resetContextFigures();
-		if (paths.length == 0) 
-			drawArchitectureTopLevel();
-		else
-			gatherChildModuleFiguresAndContextFigures_AndDraw(paths);
-		return drawingView;
-	}
-	
 	public void clearDrawing() {
-		figureMap.clearAll();
 		drawing.clearAll();
-		
 		drawingView.clearSelection();
 		drawingView.invalidate();
-	}
-	
-	public void clearRelationFigures() {
-		drawing.clearAllRelations();
 	}
 	
 	// Method to create the top-level diagram.
@@ -126,27 +101,13 @@ public abstract class DrawingController {
 	}
 
 	
-	public void zoomFactorChanged(double zoomFactor) {
-		zoomFactor = Math.max(MIN_ZOOMFACTOR, zoomFactor);
-		zoomFactor = Math.min(MAX_ZOOMFACTOR, zoomFactor);
-		drawingView.setScaleFactor(zoomFactor);
-	}
-	
-	public void drawRelationFiguresBasedOnSetting() {
-		drawDependenciesAndViolationsForShownModules();
-		if (drawingSettingsHolder.areSmartLinesOn()) 
-			drawing.updateLineFigureToContext();
-		if (drawingSettingsHolder.areLinesProportionalWide()) 
-			drawing.updateLineFigureThicknesses(figureMap.getMaxAll());
-	}
-	
 	protected void drawModulesAndRelations_SingleLevel(ModuleFigure[] modules) {
 		clearDrawing();
 		for (ModuleFigure moduleFigure : modules) {
 			drawing.add(moduleFigure);
 		}
 		updateLayout();
-		drawRelationFiguresBasedOnSetting();
+		drawRelationFiguresForShownModules();
 		drawingView.cannotZoomOut();
 	}
 	
@@ -182,166 +143,51 @@ public abstract class DrawingController {
 			}
 		}
 		updateLayout();
-		drawRelationFiguresBasedOnSetting();
+		drawRelationFiguresForShownModules();
+	}
+	
+	public void drawRelationFiguresForShownModules() {
+		ModuleFigure[] shownModules = drawing.getShownModules();
+		for (ModuleFigure figureFrom : shownModules) {
+			for (ModuleFigure figureTo : shownModules) {
+				if (figureFrom != figureTo) {
+					if (hasRelationBetween(figureFrom, figureTo)) {
+						boolean drawRelationsWithoutViolations = true;
+						if (drawingSettingsHolder.areViolationsShown()) {
+							// Draw RelationFigures with Violations
+							ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
+							if (violations.length > 0){ 
+								drawRelationsWithoutViolations = false;
+								figureFrom.addDecorator(figureFactory.createViolationsDecorator());
+								RelationFigure violationFigure = getRelationFigureWithViolationsBetween(figureFrom, figureTo);
+								if (violationFigure != null) {
+									connectionStrategy.connect(violationFigure, figureFrom, figureTo);
+									drawing.add(violationFigure);
+								}
+							}
+						}
+						if (drawingSettingsHolder.areDependenciesShown() && drawRelationsWithoutViolations) {
+							// Draw RelationFigures without Violations
+							RelationFigure dependencyFigure = getRelationFigureBetween(figureFrom, figureTo);
+							if (dependencyFigure != null) {
+								connectionStrategy.connect(dependencyFigure, figureFrom, figureTo);
+								drawing.add(dependencyFigure);
+							}
+						}
+					}
+				}
+			}
+		}
+		if (drawingSettingsHolder.areSmartLinesOn()) {
+			drawing.updateLineFigureToContext();
+		}
+		if (drawingSettingsHolder.areLinesProportionalWide()) { 
+			drawing.updateLineFigureThicknesses(drawing.getMaxAll());
+		}
 	}
 	
 	public void exportImage() {
 		drawing.showExportToImagePanel();
-	}
-	
-	public DependencyDTO[] getDependenciesOfLine(BaseFigure selectedLine) {
-		return figureMap.getDependencyDTOs(selectedLine);
-	}
-	
-	public ViolationDTO[] getViolationsOfLine(BaseFigure selectedLine) {
-		return figureMap.getViolationDTOs(selectedLine);
-	}
-	
-	public DrawingSettingsHolder getDrawingSettingsHolder() {
-		return drawingSettingsHolder;
-	}
-	
-	public void drawDependenciesAndViolationsForShownModules() {
-		BaseFigure[] shownModules = drawing.getShownModules();
-		for (BaseFigure figureFrom : shownModules) {
-			for (BaseFigure figureTo : shownModules) {
-				if (figureFrom != figureTo) {
-					DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
-					if (dependencies.length > 0) {
-						if (drawingSettingsHolder.areViolationsShown()) {
-							ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
-							if (violations.length > 0){ 
-								figureFrom.addDecorator(figureFactory.createViolationsDecorator());
-								drawDependenciesAndViolationsBetween(dependencies, violations, figureFrom, figureTo);
-							} else if (drawingSettingsHolder.areDependenciesShown()){
-								drawDependenciesBetween(dependencies,figureFrom, figureTo);
-							}
-						} else if (drawingSettingsHolder.areDependenciesShown()){
-							drawDependenciesBetween(dependencies,figureFrom, figureTo);
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	public void drawDependenciesBetween(DependencyDTO[] dependencies, BaseFigure figureFrom, BaseFigure figureTo) {
-		RelationFigure dependencyFigure = null;
-		try {
-			dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
-		} catch (Exception e) {
-			logger.error("Could not create a dependency figure.", e);
-		}
-		if (dependencyFigure != null) {
-			figureMap.linkDependencies(dependencyFigure, dependencies);
-			connectionStrategy.connect(dependencyFigure, figureFrom, figureTo);
-			drawing.add(dependencyFigure);
-		}
-	}
-	
-	public void drawDependenciesAndViolationsBetween(DependencyDTO[] dependencies, ViolationDTO[] violations, BaseFigure figureFrom, BaseFigure figureTo) {
-		RelationFigure violationFigure = null;
-		try {
-			violationFigure = figureFactory.createRelationFigure_DependencyWithViolations(dependencies, violations);
-		} catch (Exception e) {
-			logger.error("Could not create a violation line between figures.", e);
-		}
-		if (violationFigure != null) {
-			figureMap.linkViolations(violationFigure, violations);
-			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
-			drawing.add(violationFigure);
-		}
-	}
-	
-	protected abstract DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo);
-	
-	public Drawing getDrawing() {
-		return drawing;
-	}
-	
-	public DrawingView getDrawingView() {
-		return drawingView;
-	}
-	
-	public ModuleLayoutsEnum getLayoutStrategy() {
-		return layoutStrategyOption;
-	}
-	
-	public BaseFigure[] getSelectedFigures() {
-		return drawingView.toFigureArray(drawingView.getSelectedFigures());
-	}
-	
-	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
-
-	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
-		boolean b = false;
-		return b;
-	}	
-	
-	protected boolean hasSavedFigureStates(String paths) {
-		return storedStates.containsKey(paths);
-	}
-	
-	public boolean isDrawingVisible() {
-		return drawingView.isVisible();
-	}
-
-	public DrawingView zoomIn() {
-		try {
-			Set<Figure> selection = drawingView.getSelectedFigures();
-			if (selection.size() > 0) {
-				// 1) Create a list of ModuleFigures in the current drawing as base to create a zoomed-in drawing.  
-				ArrayList<ModuleFigure> selectedModules = new ArrayList<ModuleFigure>();
-				ArrayList<ModuleFigure> moduleFiguresForNewDrawing = new ArrayList<ModuleFigure>();
-				// 1a) Add the selected figures (property isContext = false)
-				for (Figure s : selection) {
-					if(s instanceof ModuleFigure) { 
-						ModuleFigure mf = (ModuleFigure) s;
-						mf.setContext(false); // minimizing potential side effects
-						selectedModules.add(mf);
-						moduleFiguresForNewDrawing.add(mf);
-					} else if (s instanceof ParentFigure){
-						// Do nothing yet. Maybe later: create ModuleFigure and add it.
-					}
-				}
-				if(drawingSettingsHolder.isZoomWithContextOn()){
-					// 1b)Objective: Add context ModuleFigures: modules with a relation to one of the selected figures.
-					// Get all modules in the current drawing
-					ModuleFigure[] potentialContextModules = drawing.getShownModules();
-					/* If a selected figure has a relation with a potentialContextFigure, 
-					 *    then set isContext = true, and add it to figuresForNewDrawing. */
-					for(ModuleFigure selected : selectedModules){
-						for (ModuleFigure module : potentialContextModules){
-							if (!module.equals(selected)) {
-								if(hasDependencyBetween(selected, module)) {
-									module.setContext(true);
-									moduleFiguresForNewDrawing.add(module);
-								}
-							}							
-						}
-					}
-				}
-				// 2) Create a list with the uniqueNames of the to be zoomed-in modules + reset and set contextFigures.
-				resetContextFigures();
-				ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
-				for (ModuleFigure moduleFigure : moduleFiguresForNewDrawing){
-					if (!moduleFigure.isContext()) {
-						parentNames.add(moduleFigure.getUniqueName());
-						parentFigureNameAndTypeMap.put(moduleFigure.getUniqueName(), moduleFigure.getType());
-					} else {
-						contextFigures.add((ModuleFigure) moduleFigure);
-					}
-				}
-				// 3) Forward to next process step
-				if (parentNames.size() > 0) {
-					saveSingleLevelFigurePositions();
-					this.gatherChildModuleFiguresAndContextFigures_AndDraw(parentNames.toArray(new String[] {}));
-				}
-			}
-		} catch (Exception e) {
-			logger.error(" Exception: " + e.getMessage());
-		}
-		return drawingView;
 	}
 	
 	public void gatherChildModuleFiguresAndContextFigures_AndDraw(String[] parentNames) { // Public visibility, because of testability. Do not call from Presentation!
@@ -389,10 +235,11 @@ public abstract class DrawingController {
 					}
 					parentChildrenMap.put("", contextFiguresInRoot);
 				}
+				resetContextFigures();
 			}
 			// 3) Hand-over to drawing services 
-			setCurrentPaths(parentNames);
 			Set<String> parentNamesKeySet = parentChildrenMap.keySet();
+			setCurrentPaths(parentNamesKeySet.toArray(new String[] {}));
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<ModuleFigure> onlyParentChildren = parentChildrenMap.get(onlyParentModule);
@@ -403,42 +250,67 @@ public abstract class DrawingController {
 		}
 	}
 
+	public DependencyDTO[] getDependenciesOfLine(BaseFigure selectedLine) {
+		if (selectedLine instanceof RelationFigure) {
+			ConnectionFigure cf = (ConnectionFigure) selectedLine;
+			ModuleFigure from = (ModuleFigure) cf.getStartFigure();
+			ModuleFigure to = (ModuleFigure) cf.getEndFigure();
+			return getDependenciesBetween(from, to);
+		} else {
+			return new DependencyDTO[] {};
+		}
+	}
+	
+	public ViolationDTO[] getViolationsOfLine(BaseFigure selectedLine) {
+		if (selectedLine instanceof RelationFigure) {
+			ConnectionFigure cf = (ConnectionFigure) selectedLine;
+			ModuleFigure from = (ModuleFigure) cf.getStartFigure();
+			ModuleFigure to = (ModuleFigure) cf.getEndFigure();
+			return getViolationsBetween(from, to);
+		} else {
+			return new ViolationDTO[] {};
+		}
+	}
+	
+	public DrawingSettingsHolder getDrawingSettingsHolder() {
+		return drawingSettingsHolder;
+	}
+	
+	public Drawing getDrawing() {
+		return drawing;
+	}
+	
+	public DrawingView getDrawingView() {
+		return drawingView;
+	}
+	
+	public ModuleLayoutsEnum getLayoutStrategy() {
+		return layoutStrategyOption;
+	}
+	
+	public void layoutStrategyChange(ModuleLayoutsEnum selectedStrategyEnum) {
+		layoutStrategyOption = selectedStrategyEnum;
+		updateLayoutStrategy();
+	}
+
+	public DrawingView moduleOpen(String[] paths) {
+		saveSingleLevelFigurePositions();
+		if (paths.length == 0) 
+			drawArchitectureTopLevel();
+		else
+			gatherChildModuleFiguresAndContextFigures_AndDraw(paths);
+		return drawingView;
+	}
+	
 	public DrawingView refreshDrawing() {
 		gatherChildModuleFiguresAndContextFigures_AndDraw(drawingSettingsHolder.getCurrentPaths());
 		return drawingView;
 	}
 	
-	protected void resetAllFigurePositions() {
-		storedStates.clear();
-	}
-	
-	public void resetContextFigures() { 				// Public, because of testability.
+	public void resetContextFigures() { // Public, because of testability.
 		contextFigures = new ArrayList<ModuleFigure>();
 	}
 
-	protected void restoreFigurePositions(String paths) {
-		if (storedStates.containsKey(paths)) {
-			DrawingState state = storedStates.get(paths);
-			state.restore();
-			drawingView.setHasHiddenFigures(state.hasHiddenFigures());
-		}
-	}
-	
-	protected void saveFigurePositions() {
-		String paths = drawingSettingsHolder.getCurrentPathsToString();
-		DrawingState state;
-		if (storedStates.containsKey(paths)) state = storedStates.get(paths);
-		else
-			state = new DrawingState(drawing);
-		
-		state.save();
-		storedStates.put(paths, state);
-	}
-	
-	public void saveSingleLevelFigurePositions() {
-		if (drawingSettingsHolder.getCurrentPaths().length < 2) saveFigurePositions();
-	}
-	
 	public void setCurrentPaths(String[] paths) {
 		drawingSettingsHolder.setCurrentPaths(paths);
 		if (!drawingSettingsHolder.getCurrentPaths()[0].isEmpty()) 
@@ -470,12 +342,75 @@ public abstract class DrawingController {
 		drawing.updateLines();
 	}
 	
+	public DrawingView zoomIn() {
+		try {
+			Set<Figure> selection = drawingView.getSelectedFigures();
+			if (selection.size() > 0) {
+				// 1) Create a list of ModuleFigures in the current drawing as base to create a zoomed-in drawing.  
+				ArrayList<ModuleFigure> selectedModules = new ArrayList<ModuleFigure>();
+				ArrayList<ModuleFigure> moduleFiguresForNewDrawing = new ArrayList<ModuleFigure>();
+				// 1a) Add the selected figures (property isContext = false)
+				for (Figure s : selection) {
+					if(s instanceof ModuleFigure) { 
+						ModuleFigure mf = (ModuleFigure) s;
+						mf.setContext(false); // minimizing potential side effects
+						selectedModules.add(mf);
+						moduleFiguresForNewDrawing.add(mf);
+					} else if (s instanceof ParentFigure){
+						// Do nothing yet. Maybe later: create ModuleFigure and add it.
+					}
+				}
+				if(drawingSettingsHolder.isZoomWithContextOn()){
+					// 1b)Objective: Add context ModuleFigures: modules with a relation to one of the selected figures.
+					// Get all modules in the current drawing
+					ModuleFigure[] potentialContextModules = drawing.getShownModules();
+					/* If a selected figure has a relation with a potentialContextFigure, 
+					 *    then set isContext = true, and add it to figuresForNewDrawing. */
+					for(ModuleFigure selected : selectedModules){
+						for (ModuleFigure module : potentialContextModules){
+							if (!module.equals(selected)) {
+								if(hasRelationBetween(selected, module)) {
+									module.setContext(true);
+									moduleFiguresForNewDrawing.add(module);
+								}
+							}							
+						}
+					}
+				}
+				// 2) Create a list with the uniqueNames of the to be zoomed-in modules + reset and set contextFigures.
+				resetContextFigures();
+				ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
+				for (ModuleFigure moduleFigure : moduleFiguresForNewDrawing){
+					if (!moduleFigure.isContext()) {
+						parentNames.add(moduleFigure.getUniqueName());
+						parentFigureNameAndTypeMap.put(moduleFigure.getUniqueName(), moduleFigure.getType());
+					} else {
+						contextFigures.add((ModuleFigure) moduleFigure);
+					}
+				}
+				// 3) Forward to next process step
+				if (parentNames.size() > 0) {
+					saveSingleLevelFigurePositions();
+					this.gatherChildModuleFiguresAndContextFigures_AndDraw(parentNames.toArray(new String[] {}));
+				}
+			}
+		} catch (Exception e) {
+			logger.error(" Exception: " + e.getMessage());
+		}
+		return drawingView;
+	}
+	
+	public void zoomFactorChanged(double zoomFactor) {
+		zoomFactor = Math.max(MIN_ZOOMFACTOR, zoomFactor);
+		zoomFactor = Math.min(MAX_ZOOMFACTOR, zoomFactor);
+		drawingView.setScaleFactor(zoomFactor);
+	}
+	
 	public DrawingView zoomOut() {
 		if (drawingSettingsHolder.getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
-			resetContextFigures();
 			String firstCurrentPaths = drawingSettingsHolder.getCurrentPaths()[0];
-			String parentName = getUniqueNameOfParent(firstCurrentPaths);
+			String parentName = getUniqueNameOfParentModule(firstCurrentPaths);
 			if (parentName != null) { 
 				ArrayList<ModuleFigure> children = getChildModuleFiguresOfParent(parentName); 
 				if (parentName.equals("")) {
@@ -492,11 +427,47 @@ public abstract class DrawingController {
 		return drawingView;
 	}
 	
+	// Abstract	methods
+	protected abstract ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName);
+	
+	protected abstract DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 	
 	protected abstract ArrayList<ModuleFigure> getModuleFiguresInRoot();
 
-	protected abstract ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName);
+	protected abstract RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 	
-	protected abstract String getUniqueNameOfParent(String childUniqueName);
+	protected abstract RelationFigure getRelationFigureWithViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 
+	protected abstract String getUniqueNameOfParentModule(String childUniqueName);
+	
+	protected abstract ViolationDTO[] getViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
+
+	protected abstract boolean hasRelationBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
+	
+	// Methods to save and restore figure positions
+	protected void restoreFigurePositions(String paths) {
+		if (storedStates.containsKey(paths)) {
+			DrawingState state = storedStates.get(paths);
+			state.restore();
+			drawingView.setHasHiddenFigures(state.hasHiddenFigures());
+		}
+	}
+	
+	protected void saveFigurePositions() {
+		String paths = drawingSettingsHolder.getCurrentPathsToString();
+		DrawingState state;
+		if (storedStates.containsKey(paths)) state = storedStates.get(paths);
+		else
+			state = new DrawingState(drawing);
+		
+		state.save();
+		storedStates.put(paths, state);
+	}
+	
+	public void saveSingleLevelFigurePositions() {
+		if (drawingSettingsHolder.getCurrentPaths().length < 2) saveFigurePositions();
+	}
+	
+
+	
 }

@@ -7,8 +7,8 @@ import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
+import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -49,7 +49,23 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		RelationFigure dependencyFigure = null;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			DependencyDTO[] dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			try {
+				if (dependencies.length > 0) {
+					dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
+				}
+			} catch (Exception e) {
+				logger.error(" Could not create a dependency figure." + e.getMessage());
+			}
+		}
+		return dependencyFigure;
+	}
+	
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			return analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		}
@@ -57,7 +73,7 @@ public class AnalysedController extends DrawingController {
 	}
 	
 	@Override
-	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
+	protected boolean hasRelationBetween(ModuleFigure figureFrom, ModuleFigure figureTo){
 		boolean b = false;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			if((analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName()).length > 0) || 
@@ -69,7 +85,24 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected RelationFigure getRelationFigureWithViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		RelationFigure violationFigure = null;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			try {
+				ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
+				DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
+				if ((violations != null) && (dependencies != null)) {
+					violationFigure = figureFactory.createRelationFigure_DependencyWithViolations(dependencies, violations);
+				}
+			} catch (Exception e) {
+				logger.error("Could not create a violation line between figures." + e.getMessage());
+			}
+		} 
+		return violationFigure;
+	}
+
+	@Override
+	protected ViolationDTO[] getViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			return validateService.getViolationsByPhysicalPath(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		} else {
@@ -78,7 +111,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected String getUniqueNameOfParent(String childUniqueName) {
+	protected String getUniqueNameOfParentModule(String childUniqueName) {
 		String parentUniqueName = "";
 		SoftwareUnitDTO parentDTO = analyseService.getParentUnitOfSoftwareUnit(childUniqueName);
 		if (parentDTO != null) { 

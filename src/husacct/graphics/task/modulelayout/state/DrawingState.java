@@ -1,7 +1,6 @@
 package husacct.graphics.task.modulelayout.state;
 
 import husacct.graphics.domain.Drawing;
-import husacct.graphics.domain.FigureMap;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 

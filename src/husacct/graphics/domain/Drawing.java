@@ -28,11 +28,12 @@ import org.jhotdraw.draw.QuadTreeDrawing;
 import org.jhotdraw.draw.io.ImageOutputFormat;
 
 public class Drawing extends QuadTreeDrawing {
-	private static final long			serialVersionUID	= 3212318618672284266L;
+	private static final long			serialVersionUID		= 3212318618672284266L;
 	private final ArrayList<BaseFigure>	hiddenFigures;
-	private final Logger				logger				= Logger.getLogger(Drawing.class);
-	private final FileManager			filemanager			= new FileManager();
-	private File						selectedFile		= filemanager.getFile();
+	private final Logger				logger					= Logger.getLogger(Drawing.class);
+	private final FileManager			filemanager				= new FileManager();
+	private File						selectedFile			= filemanager.getFile();
+	private int							highestRelationAmount 	= 0;
 	
 	public Drawing() {
 		super();
@@ -41,8 +42,13 @@ public class Drawing extends QuadTreeDrawing {
 	
 	@Override
 	public boolean add(Figure figure) {
-		// This triggers the minimum sizes
+		// Triggers the minimum sizes
 		figure.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
+		// Set highestRelationAmount
+		if (figure instanceof RelationFigure) {
+			int newMax = ((RelationFigure) figure).getAmount();
+			setHighestRelationAmount(newMax);
+		}
 		return super.add(figure);
 	}
 	
@@ -51,6 +57,7 @@ public class Drawing extends QuadTreeDrawing {
 		basicRemoveAllChildren();
 		invalidate();
 		changed();
+		highestRelationAmount = 0;
 	}
 	
 	public void clearAllRelations() {
@@ -229,4 +236,13 @@ public class Drawing extends QuadTreeDrawing {
 		for (RelationFigure line : lines)
 			line.updateConnection();
 	}
+	
+	public int getMaxAll() {
+		return highestRelationAmount;
+	}
+	
+	private void setHighestRelationAmount(int newMax) {
+		if (newMax > highestRelationAmount) highestRelationAmount = newMax;
+	}
+	
 }

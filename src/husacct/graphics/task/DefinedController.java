@@ -8,8 +8,8 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
-import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
+import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -52,7 +52,32 @@ public class DefinedController extends DrawingController {
 	}
 
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		RelationFigure dependencyFigure = null;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
+			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
+			for (String physicalClassPathFrom : physicalClassPathsFrom){
+				for (String physicalClassPathTo : physicalClassPathsTo) {
+					DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(physicalClassPathFrom, physicalClassPathTo);
+					for (DependencyDTO tempDependency : foundDependencies)
+						dependencies.add(tempDependency);
+				}
+			}
+			try {
+				if (dependencies.size() > 0) {
+					dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies.toArray(new DependencyDTO[] {}));
+				}
+			} catch (Exception e) {
+				logger.error(" Could not create a dependency figure." + e.getMessage());
+			}
+		}
+		return dependencyFigure;
+	}
+	
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
@@ -69,7 +94,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	@Override
-	protected boolean hasDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
+	protected boolean hasRelationBetween(ModuleFigure figureFrom, ModuleFigure figureTo){
 		boolean hasDependencies = false;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
@@ -93,7 +118,24 @@ public class DefinedController extends DrawingController {
 	}
 
 	@Override
-	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected RelationFigure getRelationFigureWithViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		RelationFigure violationFigure = null;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			try {
+				ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
+				DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
+				if ((violations != null) && (dependencies != null)) {
+					violationFigure = figureFactory.createRelationFigure_DependencyWithViolations(dependencies, violations);
+				}
+			} catch (Exception e) {
+				logger.error("Could not create a RelationFigure with Violations between given figures. " + e.getMessage());
+			}
+		} 
+		return violationFigure;
+	}
+
+	@Override
+	protected ViolationDTO[] getViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			ViolationDTO[] returnValue = validateService.getViolationsByLogicalPath(figureFrom.getUniqueName(), figureTo.getUniqueName());
 			return returnValue;
@@ -104,7 +146,7 @@ public class DefinedController extends DrawingController {
 	}
 	
 	@Override
-	protected String getUniqueNameOfParent(String childUniqueName) {
+	protected String getUniqueNameOfParentModule(String childUniqueName) {
 		String parentUniqueName = defineService.getModule_TheParentOfTheModule(childUniqueName);
 		if (parentUniqueName.equals("**")) {
 			parentUniqueName = "";
