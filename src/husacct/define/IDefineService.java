@@ -35,6 +35,13 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public ApplicationDTO getApplicationDetails();
 
 	/**
+	 * Gets the module with the uniqueName.
+	 * @param String uniqueName is the logical path.
+	 * @return an ModuleDTO if the module is found. Returns null if uniqueName = null, "", or "**", nut also if the module is not found.
+	 */
+	public ModuleDTO getModule_ByUniqueName(String uniqueName);
+	
+	/**
 	 * Gets all the children from a module, not the grand children
 	 * @param String logicalPath is the logical path, ** is root module
 	 * @return an array of ModuleDTO's. Throws RuntimeException when the module is not found.

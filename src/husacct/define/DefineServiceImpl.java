@@ -77,6 +77,22 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
+	public ModuleDTO getModule_ByUniqueName(String uniqueName) {
+		ModuleDTO moduleDTO = null;
+		try{
+			if ((uniqueName != null) && !uniqueName.equals("") && !uniqueName.equals("**")) {
+				ModuleStrategy module = moduleService.getModuleByLogicalPath(uniqueName);
+				moduleDTO = domainParser.parseModule(module);
+				// Remove nested children
+				moduleDTO.subModules = new ModuleDTO[] {};
+			}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e.getMessage() );
+        }
+		return moduleDTO;
+	}
+
+	@Override
 	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath) {
 		ModuleDTO[] childModuleDTOs;
 		if (logicalPath.equals("**")) {

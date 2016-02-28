@@ -21,6 +21,7 @@ import husacct.graphics.task.modulelayout.state.DrawingState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -198,16 +199,19 @@ public abstract class DrawingController {
 				  Map parentChildrenMap: key = parentName; value = ArrayList<knownChildrenOfParent> */
 			HashMap<String, ArrayList<ModuleFigure>> parentChildrenMap = new HashMap<String, ArrayList<ModuleFigure>>(); 
 			for (String parentName : parentNames) {
-				if (!parentName.equals("") || !parentName.equals("**")) {
-				ArrayList<ModuleFigure> knownChildren = getChildModuleFiguresOfParent(parentName);
-				if (knownChildren.size() > 0) 
-					parentChildrenMap.put(parentName, knownChildren);
+				if (!parentName.equals("") && !parentName.equals("**")) {
+					ArrayList<ModuleFigure> knownChildren = getChildModuleFiguresOfParent(parentName);
+					if (knownChildren.size() > 0) {
+						parentChildrenMap.put(parentName, knownChildren);
+					} else {
+						return;
+					}
 				}
 			}
 			// 2) If there are contextFigures, put an entry in parentChildrenMap for each combo of parent-child contextFigure(s)   
 			if (contextFigures.size() > 0) {
 				// a) Filter out context figures that are children of one of the parents.
-				ArrayList<ModuleFigure> filteredContextFigures = new ArrayList<ModuleFigure>();
+				HashSet<ModuleFigure> filteredContextFigures = new HashSet<ModuleFigure>();
 				for (ModuleFigure contextFigure : contextFigures) {
 					for (String parentName : parentNames) {
 						if (!contextFigure.getUniqueName().startsWith(parentName)) {
@@ -218,10 +222,10 @@ public abstract class DrawingController {
 				// b) Add the filteredContextFigures with their parents to parentChildrenMap
 				ArrayList<ModuleFigure> contextFiguresInRoot = new ArrayList<ModuleFigure>();
 				for (ModuleFigure figure : filteredContextFigures) {
-					if (!figure.getUniqueName().contains(".")) {
+					String parentOfContextFigure = getUniqueNameOfParentModule(figure.getUniqueName());
+					if (parentOfContextFigure.equals("")) {
 						contextFiguresInRoot.add(figure.clone());
 					} else {
-						String parentOfContextFigure = figure.getUniqueName().substring(0, figure.getUniqueName().lastIndexOf("."));
 						if (parentChildrenMap.containsKey(parentOfContextFigure)) {
 							ArrayList<ModuleFigure> children = parentChildrenMap.get(parentOfContextFigure);
 							if (!children.contains(parentOfContextFigure)) {
@@ -239,7 +243,13 @@ public abstract class DrawingController {
 			}
 			// 3) Hand-over to drawing services 
 			Set<String> parentNamesKeySet = parentChildrenMap.keySet();
-			setCurrentPaths(parentNamesKeySet.toArray(new String[] {}));
+			Set<String> currentPaths = new HashSet<String>();
+			for (String parentName : parentNamesKeySet) {
+				if (!parentName.equals("")) {
+					currentPaths.add(parentName);
+				}
+			}
+			setCurrentPaths(currentPaths.toArray(new String[] {}));
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<ModuleFigure> onlyParentChildren = parentChildrenMap.get(onlyParentModule);
@@ -407,23 +417,56 @@ public abstract class DrawingController {
 	}
 	
 	public DrawingView zoomOut() {
-		if (drawingSettingsHolder.getCurrentPaths().length > 0) {
-			saveSingleLevelFigurePositions();
-			String firstCurrentPaths = drawingSettingsHolder.getCurrentPaths()[0];
-			String parentName = getUniqueNameOfParentModule(firstCurrentPaths);
-			if (parentName != null) { 
-				ArrayList<ModuleFigure> children = getChildModuleFiguresOfParent(parentName); 
-				if (parentName.equals("")) {
-					drawArchitectureTopLevel();
-				} else if (children.size() > 0) {
-					setCurrentPaths(new String[] { parentName });
-					drawModulesAndRelations_SingleLevel(children.toArray(new ModuleFigure[] {}));
-				} 
+		// Objective: Collapse the ParentModule(s) witch is/are most decomposed.
+		resetContextFigures();
+		saveSingleLevelFigurePositions();
+		// Determine the decomposition level.
+		HashMap<String, Integer> pathsWithDecompositionLevel = new HashMap<String, Integer>(); 
+		int highestLevel = 0;
+		for (String currentPath : drawingSettingsHolder.getCurrentPaths()) {
+			if (currentPath != null) {
+				String[] levels = currentPath.split("\\.");
+				int decompositionLevel = levels.length;
+				pathsWithDecompositionLevel.put(currentPath, decompositionLevel);
+				if (decompositionLevel > highestLevel) {
+					highestLevel = decompositionLevel;
+				}
 			}
-			else
-				drawArchitectureTopLevel();
-		} else
+		}
+		// Collapse the parent(s) with the highest decomposition level.
+		boolean drawTopLevel = true;
+		ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
+		HashSet<String> contextFigureNames = new HashSet<String>(); // Parent is a module to-be-zoomed-in 
+		for (String path : pathsWithDecompositionLevel.keySet()) {
+			String parentName;
+			if (pathsWithDecompositionLevel.get(path) == highestLevel) {
+				parentName = getUniqueNameOfParentModule(path);
+			} else {
+				parentName = path;
+			}
+			if (parentName.equals("")) {
+				contextFigureNames.add(path);
+			} else {
+				parentNames.add(parentName);
+				drawTopLevel = false;
+			}
+		}
+		if (drawTopLevel) {
 			drawArchitectureTopLevel();
+		} else {
+			//Determine the context figures
+			for (ModuleFigure moduleFigure : drawing.getShownModules()) {
+				String parentName = getUniqueNameOfParentModule(moduleFigure.getUniqueName());
+				if (parentName.equals("")) {
+					contextFigureNames.add(moduleFigure.getUniqueName());
+				}			
+			}
+			for (String contextFigureName : contextFigureNames) {
+				ModuleFigure contextFigure = getModuleFiguresByUniqueName(contextFigureName);
+				contextFigures.add(contextFigure);
+			}
+			gatherChildModuleFiguresAndContextFigures_AndDraw(parentNames.toArray(new String[] {}));
+		}
 		return drawingView;
 	}
 	
@@ -432,6 +475,9 @@ public abstract class DrawingController {
 	
 	protected abstract DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 	
+	// Return null if no module is found, or if uniqueName = null, "", or "**".
+	protected abstract ModuleFigure getModuleFiguresByUniqueName(String uniqueName);
+
 	protected abstract ArrayList<ModuleFigure> getModuleFiguresInRoot();
 
 	protected abstract RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo);

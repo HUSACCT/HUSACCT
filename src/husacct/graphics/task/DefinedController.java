@@ -27,6 +27,16 @@ public class DefinedController extends DrawingController {
 	}
 	
 	@Override
+	protected ModuleFigure getModuleFiguresByUniqueName(String uniqueName) {
+		ModuleFigure moduleFigure = null;
+		ModuleDTO module = defineService.getModule_ByUniqueName(uniqueName);	
+		if (module != null) {
+			moduleFigure = figureFactory.createModuleFigure(module);
+		}
+		return moduleFigure;
+	}
+	
+	@Override
 	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
 		ModuleDTO[] rootModules = defineService.getModule_AllRootModules();
 		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();

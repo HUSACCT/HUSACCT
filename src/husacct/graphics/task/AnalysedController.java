@@ -24,6 +24,16 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
+	protected ModuleFigure getModuleFiguresByUniqueName(String uniqueName) {
+		ModuleFigure moduleFigure = null;
+		SoftwareUnitDTO module = analyseService.getSoftwareUnitByUniqueName(uniqueName);	
+		if (module != null) {
+			moduleFigure = figureFactory.createModuleFigure(module);
+		}
+		return moduleFigure;
+	}
+	
+	@Override
 	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
 		SoftwareUnitDTO[] rootModules = analyseService.getSoftwareUnitsInRoot();
 		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
