@@ -17,12 +17,16 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import java.awt.Component;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	private ComponentInformationJPanel componentInformationJPanel;
 	private ApproachesTableJPanel approachesTableJPanel;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
+	private JButton applyButton;
+	private JButton reverseButton;
+	private JPanel panel;
 	
 	/**
 	 * Create the panel.
@@ -44,20 +48,39 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	
 	public JPanel createButtons(){
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setLayout(new BorderLayout(0, 0));
 		{
-			btnNewButton = new JButton("Apply");
-			btnNewButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
-			btnNewButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-			buttonPanel.add(btnNewButton);
-			btnNewButton.addActionListener(this);
-		}
-		{
-			btnNewButton_1 = new JButton("Reverse");
-			btnNewButton_1.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-			btnNewButton_1.setAlignmentX(Component.RIGHT_ALIGNMENT);
-			buttonPanel.add(btnNewButton_1);
-			btnNewButton_1.addActionListener(this);
+			{
+				panel = new JPanel();
+				buttonPanel.add(panel, BorderLayout.EAST);
+				GridBagLayout gbl_panel = new GridBagLayout();
+				gbl_panel.columnWidths = new int[]{59, 73, 0};
+				gbl_panel.rowHeights = new int[]{23, 0, 0, 0};
+				gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+				gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+				panel.setLayout(gbl_panel);
+				reverseButton = new JButton("Reverse");
+				GridBagConstraints gbc_reverseButton = new GridBagConstraints();
+				gbc_reverseButton.insets = new Insets(0, 0, 0, 5);
+				gbc_reverseButton.anchor = GridBagConstraints.NORTHWEST;
+				gbc_reverseButton.gridx = 0;
+				gbc_reverseButton.gridy = 2;
+				panel.add(reverseButton, gbc_reverseButton);
+				reverseButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+				reverseButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+				{
+					applyButton = new JButton("Apply");
+					GridBagConstraints gbc_applyButton = new GridBagConstraints();
+					gbc_applyButton.anchor = GridBagConstraints.NORTHWEST;
+					gbc_applyButton.gridx = 1;
+					gbc_applyButton.gridy = 2;
+					panel.add(applyButton, gbc_applyButton);
+					applyButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+					applyButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+					applyButton.addActionListener(this);
+				}
+				reverseButton.addActionListener(this);
+			}
 
 		}
 			
@@ -74,8 +97,8 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == btnNewButton) {
-			JTable approachesTable = approachesTableJPanel.table;
+		if (action.getSource() == applyButton) {
+			JTable approachesTable = approachesTableJPanel.approachesTable;
 			
 			//Getting all selected rows. 
 			 int rowCount = approachesTable.getRowCount();
@@ -94,8 +117,8 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 				 }
 			 }
 		}
-		if (action.getSource() == btnNewButton_1) {
-			JTable approachesTable = approachesTableJPanel.table;
+		if (action.getSource() == reverseButton) {
+			JTable approachesTable = approachesTableJPanel.approachesTable;
 			approachesTable.clearSelection();
 		}
 	}
