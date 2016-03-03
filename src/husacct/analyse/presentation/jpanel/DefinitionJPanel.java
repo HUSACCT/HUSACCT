@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import husacct.ServiceProvider;
+import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
@@ -111,7 +112,8 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 					 System.out.println("Threshold: " + approachesTable.getValueAt(i, 1));
 					 System.out.println("---------------------------------- ");
 					 
-					 ReconstructArchitecture ra = new ReconstructArchitecture(new FamixQueryServiceImpl()); //because the task team was not allowed to edit any other classes
+					 IModelQueryService queryService = ServiceProvider.getInstance().getAnalyseService().getQueryService();
+					 ReconstructArchitecture ra = new ReconstructArchitecture(queryService); //because the task team was not allowed to edit any other classes
 					 ra.startReconstruction(getSelectedModule(), (int)approachesTable.getValueAt(i, 1), (String)approachesTable.getValueAt(i, 0));
 					 
 				 }

@@ -40,7 +40,6 @@ public class ReconstructArchitecture {
 		defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
 		identifyExternalSystems();
 		ModuleDTO selectedModule = defineSarService.getModule_SelectedInGUI();
-		identifyLayersAtSelectedModule(selectedModule);
 		// identifyLayersAtRootLevel();
 		// identifyMultipleLayers();
 

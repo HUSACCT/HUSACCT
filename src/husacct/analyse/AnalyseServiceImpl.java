@@ -188,4 +188,10 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
     	return queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }
+
+	@Override
+	public IModelQueryService getQueryService() {
+		// TODO Auto-generated method stub
+		return queryService;
+	}
 }
