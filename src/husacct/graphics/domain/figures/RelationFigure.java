@@ -112,7 +112,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
 			break;
 		case ASSOCIATION:
-			// TODO: do something
+			// default is a straight line, so do nothing
 			break;
 		default: 
 			throw new IllegalStateException("Unknown relation type");
