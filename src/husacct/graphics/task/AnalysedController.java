@@ -75,7 +75,8 @@ public class AnalysedController extends DrawingController {
 						dependencyFigure = figureFactory.createRelationFigure_UmlLink(umlLinks);
 					}
 				} catch (Exception e) {
-					logger.error(" Could not create a dependency figure." + e.getMessage());
+					logger.error(" Could not create a dependency figure.");
+					e.printStackTrace();
 				}				
 			} else {
 			

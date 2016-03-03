@@ -24,7 +24,8 @@ public final class FigureFactory {
 	}
 	public RelationFigure createRelationFigure_UmlLink(UmlLinkDTO[] UmlLinkDTO) {
 		if (UmlLinkDTO.length <= 0) throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
-		return new RelationFigure("Dependency from " + UmlLinkDTO[0].from + " to " + UmlLinkDTO[0].to, RelationType.ASSOCIATION /*UmlLinkDTO[0].type */, Integer.toString(UmlLinkDTO.length));
+		System.out.println("DEBUG: uml link type: "+UmlLinkDTO[0].type);
+		return new RelationFigure("Dependency from " + UmlLinkDTO[0].from + " to " + UmlLinkDTO[0].to, RelationType.ATTRIBUTELINK , Integer.toString(UmlLinkDTO.length));
 	}
 	
 	public RelationFigure createRelationFigure_DependencyWithViolations(DependencyDTO[] dependencyDTOs, ViolationDTO[] violationDTOs) {

@@ -111,7 +111,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		case VIOLATION:
 			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
 			break;
-		case ASSOCIATION:
+		case ATTRIBUTELINK:
 			// default is a straight line, so do nothing
 			break;
 		default: 
