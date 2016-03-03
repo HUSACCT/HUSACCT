@@ -73,7 +73,7 @@ public class DomainToDtoParser {
 		return moduleDTOs;
 	}
 
-	private PhysicalPathDTO parsePhysicalPathDTO(SoftwareUnitDefinition su) {
+	public PhysicalPathDTO parsePhysicalPathDTO(SoftwareUnitDefinition su) {
 		String path = su.getName();
 		String type = su.getType().toString();
 		PhysicalPathDTO physicalPathDTO = new PhysicalPathDTO(path, type);

@@ -7,111 +7,67 @@ import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
-import husacct.graphics.domain.DrawingView;
-import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.domain.figures.ModuleFigure;
+import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 public class DefinedController extends DrawingController {
 	protected IAnalyseService			analyseService;
 	protected IDefineService			defineService;
 	protected IValidateService			validateService;
 	
-	private HashMap<String, BaseFigure>	definedFigures;
 	
 	public DefinedController() {
 		super();
 		initializeServices();
 	}
 	
-	// Method to create the top-level diagram.
 	@Override
-	public DrawingView drawArchitectureTopLevel() {
-		// Select all modules in root
-		ModuleDTO[] modules = defineService.getModule_AllRootModules();
-		if (!drawingSettingsHolder.areExternalLibrariesShown()) {
-			// Select only internal modules in root
-			int nrOfInternalModules = 0;
-			for (ModuleDTO module : modules){
-				if (!module.type.toLowerCase().equals("externallibrary"))
-					nrOfInternalModules++;
-			}
-			ModuleDTO[] internalModules = new ModuleDTO[nrOfInternalModules];
-			int i = 0;
-			for (ModuleDTO module : modules){
-				if (!module.type.toLowerCase().equals("externallibrary")) {
-					internalModules[i] = module;
-					i++;	
-				}
-			}
-			modules = internalModules;
+	protected ModuleFigure getModuleFiguresByUniqueName(String uniqueName) {
+		ModuleFigure moduleFigure = null;
+		ModuleDTO module = defineService.getModule_ByUniqueName(uniqueName);	
+		if (module != null) {
+			moduleFigure = figureFactory.createModuleFigure(module);
 		}
-		drawingSettingsHolder.resetCurrentPaths();
-		drawModulesAndLines(modules);
-		return drawingView;
-	}
-	
-	private void getAndDrawModulesIn(String parentName) {
-		if (parentName.equals("") || parentName.equals("**")) drawArchitectureTopLevel();
-		else {
-			ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
-			if (children.length > 0) {
-				setCurrentPaths(new String[] { parentName });
-				drawModulesAndLines(children);
-			} else
-				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
-		}
-	}
-	
-	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0) drawArchitectureTopLevel();
-		else {
-			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
-			for (String parentName : parentNames) {
-				ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
-				if (parentName.equals("") || parentName.equals("**")) {
-					drawArchitectureTopLevel();
-					continue;
-				} else if (children.length > 0) {
-					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
-					for (AbstractDTO child : children)
-						knownChildren.add(child);
-					allChildren.put(parentName, knownChildren);
-				} else {
-					AbstractDTO value = getFigureMap().getModuleDTO(definedFigures.get(parentName));
-					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
-					tmpList.add(value);
-					allChildren.put("", tmpList);
-					// logger.info("Tried to draw modules for \"" + parentName + "\", but it has no children.");
-				}
-			}
-			setCurrentPaths(parentNames);
-			
-			Set<String> parentNamesKeySet = allChildren.keySet();
-			if (parentNamesKeySet.size() == 1) {
-				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = new ArrayList<AbstractDTO>();
-				onlyParentChildren = allChildren.get(onlyParentModule);
-				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
-			} else
-				drawModulesAndLines(allChildren);
-		}
+		return moduleFigure;
 	}
 	
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
-		HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(dtoFrom.logicalPath);
-		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
-		HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(dtoTo.logicalPath);
-		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
-		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) 
+	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
+		ModuleDTO[] rootModules = defineService.getModule_AllRootModules();
+		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
+		for (AbstractDTO rootModule : rootModules) {
+			ModuleFigure rootModuleFigure = figureFactory.createModuleFigure(rootModule);
+			rootModuleFigures.add(rootModuleFigure);
+		}
+		return rootModuleFigures;
+	}
+	
+	@Override
+	protected ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName) {
+		if (parentName.equals("")) {
+			parentName = "**"; // Root within Define.
+		}
+		ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
+		ArrayList<ModuleFigure> knownChildren = new ArrayList<ModuleFigure>();
+		for (AbstractDTO child : children) {
+			ModuleFigure moduleFigure = figureFactory.createModuleFigure(child);
+			knownChildren.add(moduleFigure);
+		}
+		return knownChildren;
+	}
+
+	@Override
+	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		RelationFigure dependencyFigure = null;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
+			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
 			for (String physicalClassPathFrom : physicalClassPathsFrom){
 				for (String physicalClassPathTo : physicalClassPathsTo) {
 					DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(physicalClassPathFrom, physicalClassPathTo);
@@ -119,80 +75,99 @@ public class DefinedController extends DrawingController {
 						dependencies.add(tempDependency);
 				}
 			}
+			try {
+				if (dependencies.size() > 0) {
+					dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies.toArray(new DependencyDTO[] {}));
+				}
+			} catch (Exception e) {
+				logger.error(" Could not create a dependency figure." + e.getMessage());
+			}
+		}
+		return dependencyFigure;
+	}
+	
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
+			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
+			for (String physicalClassPathFrom : physicalClassPathsFrom){
+				for (String physicalClassPathTo : physicalClassPathsTo) {
+					DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(physicalClassPathFrom, physicalClassPathTo);
+					for (DependencyDTO tempDependency : foundDependencies)
+						dependencies.add(tempDependency);
+				}
+			}
+		}
 		return dependencies.toArray(new DependencyDTO[] {});
 	}
 	
 	@Override
-	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
-		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
-		ViolationDTO[] returnValue = validateService.getViolationsByLogicalPath(dtoFrom.logicalPath, dtoTo.logicalPath);
-		return returnValue;
+	protected boolean hasRelationBetween(ModuleFigure figureFrom, ModuleFigure figureTo){
+		boolean hasDependencies = false;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
+			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
+			DependencyDTO[] foundDependencies;
+			for (String physicalClassPathFrom : physicalClassPathsFrom){
+				for (String physicalClassPathTo : physicalClassPathsTo) {
+					foundDependencies = analyseService.getDependenciesFromClassToClass(physicalClassPathFrom, physicalClassPathTo);
+					if (foundDependencies.length > 0) {
+						return true;
+					} else {
+						foundDependencies = analyseService.getDependenciesFromClassToClass(physicalClassPathTo, physicalClassPathFrom);
+						if (foundDependencies.length > 0) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return hasDependencies;		
+	}
+
+	@Override
+	protected RelationFigure getRelationFigureWithViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		RelationFigure violationFigure = null;
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			try {
+				ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
+				DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
+				if ((violations != null) && (dependencies != null)) {
+					violationFigure = figureFactory.createRelationFigure_DependencyWithViolations(dependencies, violations);
+				}
+			} catch (Exception e) {
+				logger.error("Could not create a RelationFigure with Violations between given figures. " + e.getMessage());
+			}
+		} 
+		return violationFigure;
+	}
+
+	@Override
+	protected ViolationDTO[] getViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			ViolationDTO[] returnValue = validateService.getViolationsByLogicalPath(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			return returnValue;
+		}
+		 else {
+			return new ViolationDTO[]{};
+		}
+	}
+	
+	@Override
+	protected String getUniqueNameOfParentModule(String childUniqueName) {
+		String parentUniqueName = defineService.getModule_TheParentOfTheModule(childUniqueName);
+		if (parentUniqueName.equals("**")) {
+			parentUniqueName = "";
+		}
+		return parentUniqueName;
 	}
 	
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		defineService = ServiceProvider.getInstance().getDefineService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-	}
-	
-	@Override
-	public DrawingView moduleOpen(String[] paths) {
-		if (paths.length == 0) 
-			drawArchitectureTopLevel();
-		else
-			getAndDrawModulesIn(paths);
-		return drawingView;
-	}
-	
-	@Override
-	public DrawingView refreshDrawing() {
-		getAndDrawModulesIn(drawingSettingsHolder.getCurrentPaths());
-		return drawingView;
-	}
-	
-	@Override
-	public void zoomIn(BaseFigure[] figures) {
-		ArrayList<String> parentNames = new ArrayList<String>();
-		definedFigures = new HashMap<String, BaseFigure>();
-		for (BaseFigure figure : figures) {
-			try {
-				if (figure.isModule()) {
-					ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(figure);
-					parentNames.add(parentDTO.logicalPath);
-					definedFigures.put(parentDTO.logicalPath, figure);
-					parentFigureNameAndTypeMap.put(parentDTO.logicalPath, parentDTO.type);
-				} 
-				else if (figure.isContext() || !figure.isLine()) {
-					//definedFigures.put(parentDTO.logicalPath, figure);
-				} else {
-					//logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
-				}
-			} catch (Exception e) {
-				//logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
-				//e.printStackTrace();
-			}
-		}
-		
-		if (parentNames.size() > 0) {
-			saveSingleLevelFigurePositions();
-			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
-		}
-	}
-	
-	@Override
-	public DrawingView zoomOut() {
-		if (drawingSettingsHolder.getCurrentPaths().length > 0) {
-			saveSingleLevelFigurePositions();
-			String firstCurrentPaths = drawingSettingsHolder.getCurrentPaths()[0];
-			String parentPath = defineService.getModule_TheParentOfTheModule(firstCurrentPaths);
-			if (parentPath != null) 
-				getAndDrawModulesIn(parentPath);
-			else
-				drawArchitectureTopLevel();
-		} else
-			drawArchitectureTopLevel();
-		return drawingView;
 	}
 	
 }

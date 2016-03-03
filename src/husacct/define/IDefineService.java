@@ -1,9 +1,7 @@
 package husacct.define;
 
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.savechain.ISaveable;
@@ -37,11 +35,26 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public ApplicationDTO getApplicationDetails();
 
 	/**
+	 * Gets the module with the uniqueName.
+	 * @param String uniqueName is the logical path.
+	 * @return an ModuleDTO if the module is found. Returns null if uniqueName = null, "", or "**", nut also if the module is not found.
+	 */
+	public ModuleDTO getModule_ByUniqueName(String uniqueName);
+	
+	/**
 	 * Gets all the children from a module, not the grand children
 	 * @param String logicalPath is the logical path, ** is root module
 	 * @return an array of ModuleDTO's. Throws RuntimeException when the module is not found.
 	 */
 	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath);
+
+	/**
+	 * Gets the uniqueNames (paths) of the SUs assigned to the module. Not of the SUse assigned to one of the subModules, subSubModules, etc.
+	 * In case of logicalPath = "**" (root), an empty HashSet<String> is returned.
+	 * @param logicalPath of a module in the intended architecture
+	 * @return HashSet<String>
+	 */
+	HashSet<String> getAssignedSoftwareUnitsOfModule(String logicalPath);
 
 	/**
 	 * Gets all the physical classPaths of the types represented by the assigned software units and these of all the children of the module
@@ -57,12 +70,6 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 */
 	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath);
 
-	/**
-	 * Gets the module selected by the user in the view "Define intended architecture". 
-	 * @return a ModuleDTO; with empty values if no module is selected or if the selected module is not found.
-	 */
-	public ModuleDTO getModule_SelectedInGUI();
-	
 	/**
 	 * Gets the hierarchical level of a module
 	 * @param logicalPath is the logical path, ** is root module
@@ -111,6 +118,12 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public ModuleDTO[] getModule_AllRootModules();
 
 	/**
+	 * Gets an instance of the SAR (Software Architecture Reconstruction) service.
+	 * @return a boolean
+	 */
+	public IDefineSarService getSarService();
+	
+	/**
 	 * Checks if there is a module defined.
 	 * @return a boolean
 	 */
@@ -132,21 +145,5 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * Creates and saves architecture report
 	 */
 	public void reportArchitecture(String fullFilePath);
-	
-	// Services for Architecture Reconstruction
-	/** Adds a module to the intended architecture
-	 * Argument name is the simple name, so not the logical path of the module, which is formed by the combination of parentLogicalPath + "." + name.  
-	 */
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
-	
-	/** Edits an existing module of the intended architecture
-	 * Argument logicalPath identifies the existing module. If the other arguments don't have a null-value (or 0 for int), the value is set as new attribute value. 
-	 * Argument name is the simple name, so not the logical path of the module.  
-	 */
-	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits);
 
-	/** Adds a rule to the intended architecture
-	 */
-	public void addRule(RuleDTO rule);
-	
 }
