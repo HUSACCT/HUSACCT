@@ -193,7 +193,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			}
 			if (currentModule == null || !currentModule.getName().equals(moduleNames[moduleNames.length - 1])) {
 				logger.warn(String.format(" Module not found; logical path: " + logicalPath));
-				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleNotFound"));
+				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString(" Module not found; logical path: " + logicalPath));
 			}
 		}
 		return currentModule;

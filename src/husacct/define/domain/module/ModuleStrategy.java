@@ -1,13 +1,9 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.PhysicalPathDTO;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
-import husacct.define.domain.services.WarningMessageService;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 import java.util.ArrayList;

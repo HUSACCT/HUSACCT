@@ -3,7 +3,7 @@ package husaccttest.define;
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
@@ -71,53 +73,55 @@ public class DefineServicesTest_SRMA {
 	// TESTS 
 
 	@Test
-	public void editModuleTest_HierarchicalLevel() {
+	public void getAssignedSoftwareUnitsOfModuleTest() {
 		defineService = ServiceProvider.getInstance().getDefineService();
-		int levelOld = defineService.getHierarchicalLevelOfLayer("Presentation");
-		defineService.editModule("Presentation", null, levelOld + 3, null);
-		int levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
-		Assert.assertTrue(levelNew == levelOld + 3);
-		defineService.editModule("Presentation", null, levelOld, null);
-		levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
-		Assert.assertTrue(levelNew == levelOld);
+		Set<String> assignedSUs = defineService.getAssignedSoftwareUnitsOfModule("Domain.RelationRules.IsNotAllowedToUse");
+		boolean su1 = false;
+		boolean noOtherSUs = false;
+		if (assignedSUs.size() == 1) {
+			noOtherSUs = true;
+			for (String assignedSU : assignedSUs) {
+				if (assignedSU.equals("domain.relationrules.is_not_allowed_to_use")) su1 = true;
+			}
+		}
+		Assert.assertTrue(su1 && noOtherSUs);
+	}
+	
+	
+	@Test
+	public void getModule_AllPhysicalPackagePathsOfModuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		Set<String> assignedSUs = defineService.getModule_AllPhysicalPackagePathsOfModule("Domain.RelationRules.IsNotAllowedToUse");
+		boolean su1 = false;
+		boolean su2 = false;
+		boolean noOtherSUs = false;
+		if (assignedSUs.size() == 2) {
+			noOtherSUs = true;
+			for (String assignedSU : assignedSUs) {
+				if (assignedSU.equals("domain.relationrules.is_not_allowed_to_use.violating")) su1 = true;
+				if (assignedSU.equals("domain.relationrules.is_not_allowed_to_use.violating.exception")) su2 = true;
+			}
+		}
+		Assert.assertTrue(su1 && su2 && noOtherSUs);
 	}
 	
 	@Test
-	public void editModuleTest_Name() {
+	public void getModule_AllPhysicalClassPathsOfModule() {
 		defineService = ServiceProvider.getInstance().getDefineService();
-		String logicalPathOld = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
-		defineService.editModule(logicalPathOld, "NothingIsAllowed", 0, null);
-		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
-		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NothingIsAllowed"));
-		defineService.editModule(logicalPathNew, "NotAllowed", 0, null);
-		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
-		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
-	}
-	
-	@Test
-	public void editModuleTest_SoftwareUnits() {
-		defineService = ServiceProvider.getInstance().getDefineService();
-		HashSet<String> softwarePackagesOld = defineService.getModule_AllPhysicalPackagePathsOfModule("Presentation.RelationRules.NotAllowed");
-		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
-		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.relationrules.newsoftwareunit", "newsoftwareunit", "Package", "public");
-		newSoftwareUnits.add(newUnit);
-		defineService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
-		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.newsoftwareunit").logicalPath;
-		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
-		newUnit.uniqueName = "presentation.relationrules.notallowed";
-		newUnit.name = "allowed";
-		defineService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
-		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
-		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
-	}
-	
-	// Tests case that checks the number of found dependencies between modules in the intended architecture. 
-	@Test
-	public void CompareNumberOfDependenciesBetweenModules_Domain_Presentation(){
-		String fromModule = "Domain";
-		String toModule = "Presentation";
-		int numberOfDependencies = getNumberofDependenciesBetweenModulesInIntendedArchitecture(fromModule, toModule);
-		Assert.assertTrue(numberOfDependencies == 16);
+		Set<String> assignedSUs = defineService.getModule_AllPhysicalClassPathsOfModule("Domain.RelationRules.IsNotAllowedToUse");
+		boolean su1A = false;
+		boolean su11A = false;
+		boolean su111A = false;
+		boolean noOtherSUs = false;
+		if (assignedSUs.size() == 10) {
+			noOtherSUs = true;
+			for (String assignedSU : assignedSUs) {
+				if (assignedSU.equals("domain.relationrules.is_not_allowed_to_use.Access_2")) su1A = true;
+				if (assignedSU.equals("domain.relationrules.is_not_allowed_to_use.violating.ViolatingAccess_2")) su11A = true;
+				if (assignedSU.equals("domain.relationrules.is_not_allowed_to_use.violating.exception.ViolatingAccess_2Exc")) su111A = true;
+			}
+		}
+		Assert.assertTrue(su1A && su11A && su111A && noOtherSUs);
 	}
 	
 	//
@@ -146,18 +150,10 @@ public class DefineServicesTest_SRMA {
 		}
 	}
 
-
 	private static void analyseApplication() {
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
 		mainController.getApplicationController().analyseApplication();
-	}
-
-	private int getNumberofDependenciesBetweenSoftwareUnits(String fromUnit, String toUnit) {
-		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromUnit, toUnit);
-		int numberOfDependencies = foundDependencies.length;
-		return numberOfDependencies;
 	}
 
 	private int getNumberofDependenciesBetweenModulesInIntendedArchitecture(String fromModule, String toModule) {
@@ -177,4 +173,14 @@ public class DefineServicesTest_SRMA {
 		return numberOfDependencies;
 	}
 
+	private boolean isRuleExisting(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
+		RuleDTO[] definedRules = defineService.getDefinedRules();
+		boolean ruleFound = false;
+		for (RuleDTO definedRule : definedRules) {
+			if (definedRule.moduleFrom.logicalPath.equals(moduleFromLogicalPath) && definedRule.moduleTo.logicalPath.equals(moduleTologicalPath) && definedRule.ruleTypeKey.equals(ruleTypeKey)) {
+				ruleFound = true;
+			}
+		}
+		return ruleFound;
+	}
 }

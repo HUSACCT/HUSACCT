@@ -4,6 +4,7 @@ import husacct.control.task.configuration.ConfigurationManager;
 import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.domain.decorators.ViolationsDecorator;
 import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.domain.linelayoutstrategies.ConnectorLineSeparationStrategy;
 import husacct.graphics.domain.linelayoutstrategies.ILineSeparationStrategy;
@@ -27,11 +28,12 @@ import org.jhotdraw.draw.QuadTreeDrawing;
 import org.jhotdraw.draw.io.ImageOutputFormat;
 
 public class Drawing extends QuadTreeDrawing {
-	private static final long			serialVersionUID	= 3212318618672284266L;
+	private static final long			serialVersionUID		= 3212318618672284266L;
 	private final ArrayList<BaseFigure>	hiddenFigures;
-	private final Logger				logger				= Logger.getLogger(Drawing.class);
-	private final FileManager			filemanager			= new FileManager();
-	private File						selectedFile		= filemanager.getFile();
+	private final Logger				logger					= Logger.getLogger(Drawing.class);
+	private final FileManager			filemanager				= new FileManager();
+	private File						selectedFile			= filemanager.getFile();
+	private int							highestRelationAmount 	= 0;
 	
 	public Drawing() {
 		super();
@@ -40,8 +42,13 @@ public class Drawing extends QuadTreeDrawing {
 	
 	@Override
 	public boolean add(Figure figure) {
-		// This triggers the minimum sizes
+		// Triggers the minimum sizes
 		figure.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
+		// Set highestRelationAmount
+		if (figure instanceof RelationFigure) {
+			int newMax = ((RelationFigure) figure).getAmount();
+			setHighestRelationAmount(newMax);
+		}
 		return super.add(figure);
 	}
 	
@@ -50,18 +57,19 @@ public class Drawing extends QuadTreeDrawing {
 		basicRemoveAllChildren();
 		invalidate();
 		changed();
+		highestRelationAmount = 0;
 	}
 	
-	public void clearAllLines() {
+	public void clearAllRelations() {
 		willChange();
-		BaseFigure[] lines = getShownLines();
-		for (BaseFigure line : lines)
+		RelationFigure[] lines = getShownRelations();
+		for (RelationFigure line : lines)
 			remove(line);
 		invalidate();
 		changed();
 	}
 	
-	public RelationFigure[] getShownLines() {
+	public RelationFigure[] getShownRelations() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
@@ -70,14 +78,15 @@ public class Drawing extends QuadTreeDrawing {
 		return moduleFigures.toArray(new RelationFigure[] {});
 	}
 	
-	public BaseFigure[] getShownModules() {
-		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
+	public ModuleFigure[] getShownModules() {
+		ArrayList<ModuleFigure> moduleFigures = new ArrayList<ModuleFigure>();
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (!figure.isLine() && !figure.isParent()) moduleFigures
-					.add(figure);
+			if (figure.isModule() && (figure instanceof ModuleFigure)) {
+				moduleFigures.add((ModuleFigure) figure);
+			}
 		}
-		return moduleFigures.toArray(new BaseFigure[] {});
+		return moduleFigures.toArray(new ModuleFigure[] {});
 	}
 	
 	public boolean hasHiddenFigures() {
@@ -206,7 +215,7 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	public void updateLineFigureThicknesses(int maxAmount) {
-		RelationFigure[] figures = getShownLines();
+		RelationFigure[] figures = getShownRelations();
 		for (RelationFigure figure : figures) {
 			double weight = (double) figure.getAmount() / maxAmount;
 			if (weight < 0.25) figure.setLineThickness(1);
@@ -218,13 +227,22 @@ public class Drawing extends QuadTreeDrawing {
 	}
 	
 	public void updateLineFigureToContext() {
-		RelationFigure[] figures = getShownLines();
+		RelationFigure[] figures = getShownRelations();
 		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
 	}
 	
 	public void updateLines() {
-		RelationFigure[] lines = getShownLines();
+		RelationFigure[] lines = getShownRelations();
 		for (RelationFigure line : lines)
 			line.updateConnection();
 	}
+	
+	public int getMaxAll() {
+		return highestRelationAmount;
+	}
+	
+	private void setHighestRelationAmount(int newMax) {
+		if (newMax > highestRelationAmount) highestRelationAmount = newMax;
+	}
+	
 }

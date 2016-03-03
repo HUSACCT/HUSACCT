@@ -53,11 +53,6 @@ public class WorkspaceControllerTest {
 	}
 	
 	@Test
-	public void testInitialWorkspace(){
-		assertNull(workspaceController.getCurrentWorkspace());
-	}
-	
-	@Test
 	public void testNewWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
 		assertNotNull(workspaceController.getCurrentWorkspace());

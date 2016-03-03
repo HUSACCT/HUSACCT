@@ -4,8 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
 import husacct.define.domain.Application;
 import husacct.define.domain.Project;
-import husacct.define.domain.SoftwareArchitecture;
-
 import java.util.ArrayList;
 
 public class SoftwareArchitectureDomainService {
