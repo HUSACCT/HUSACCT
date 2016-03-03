@@ -2,7 +2,6 @@ package husacct.define;
 
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
@@ -46,6 +45,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private boolean isMapped;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+	private DefineSarServiceImpl defineSarService;
 	private Logger logger = Logger.getLogger(DefineServiceImpl.class);
 
 
@@ -77,6 +77,22 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
+	public ModuleDTO getModule_ByUniqueName(String uniqueName) {
+		ModuleDTO moduleDTO = null;
+		try{
+			if ((uniqueName != null) && !uniqueName.equals("") && !uniqueName.equals("**")) {
+				ModuleStrategy module = moduleService.getModuleByLogicalPath(uniqueName);
+				moduleDTO = domainParser.parseModule(module);
+				// Remove nested children
+				moduleDTO.subModules = new ModuleDTO[] {};
+			}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e.getMessage() );
+        }
+		return moduleDTO;
+	}
+
+	@Override
 	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath) {
 		ModuleDTO[] childModuleDTOs;
 		if (logicalPath.equals("**")) {
@@ -86,8 +102,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			ModuleDTO moduleDTO = domainParser.parseModule(module);
 			childModuleDTOs = moduleDTO.subModules;
 		}
-
-		// Removing nested childs
+		// Remove nested children
 		for (ModuleDTO modDTO : childModuleDTOs) {
 			modDTO.subModules = new ModuleDTO[] {};
 		}
@@ -114,20 +129,6 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return resultClasses;
 	}
 
-	@Override
-	public ModuleDTO getModule_SelectedInGUI() {
-		ModuleDTO selectedModuleDTO =  new ModuleDTO();
-		ModuleStrategy selectedModuleStrategy;
-		long selectedModuleId = getDefinitionController().getSelectedModuleId();
-		if (selectedModuleId >= 0) {
-			selectedModuleStrategy = moduleService.getModuleById(selectedModuleId);
-			if (selectedModuleStrategy != null) {
-				selectedModuleDTO = domainParser.parseModule(selectedModuleStrategy);
-			} 
-		} 
-		return selectedModuleDTO;
-	}
-
 	@Override // Returns all paths of subpackages (and subsub, etc) within the assigned software units, but not the paths of these assigned software units
 	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath){
 		HashSet<String> resultPackages = new HashSet<String>();
@@ -146,6 +147,33 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		return resultPackages;
 	}
 
+	@Override
+	public HashSet<String> getAssignedSoftwareUnitsOfModule(String logicalPath){
+		HashSet<String> resultSetOfSoftwareUnits = new HashSet<String>();
+		try {
+			if ((logicalPath != null) && !logicalPath.equals("**")) {
+				// 1 Get the module
+				ModuleStrategy module =(moduleService.getModuleByLogicalPath(logicalPath));
+				// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+				if (module != null){
+					Set<String> softwareUnits = module.getAllAssignedSoftwareUnitsInTree().keySet();
+					if(softwareUnits != null)
+						resultSetOfSoftwareUnits.addAll(softwareUnits);
+				}
+			}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        //e.printStackTrace();
+        }
+		return resultSetOfSoftwareUnits;
+	}
+
+	/**
+	 * Gets all the SUs assigned to the module or assigned to one of the subModules, subSubModules, etc.
+	 * In case of logicalPath = "**" (root), this is done for all modules in the root.
+	 * @param logicalPath of a module in the intended architecture
+	 * @return TreeMap<String, SoftwareUnitDefinition>
+	 */
 	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
 		try {
@@ -201,6 +229,12 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
+	public IDefineSarService getSarService() {
+		defineSarService = new DefineSarServiceImpl(this);
+		return defineSarService;
+	}
+	
+	@Override
 	public Element exportIntendedArchitecture() {
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);
@@ -237,18 +271,21 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	@Override
 	public String getModule_TheParentOfTheModule(String logicalPath) {
 		String parentLogicalPath = "";
-		if (logicalPath.contains(".")) {
-			String[] moduleNames = logicalPath.split("\\.");
-			parentLogicalPath += moduleNames[0];
-			for (int i = 1; i < moduleNames.length - 1; i++) {
-				parentLogicalPath += "." + moduleNames[i];
+		try {
+			if (logicalPath.contains(".")) {
+				String[] moduleNames = logicalPath.split("\\.");
+				parentLogicalPath += moduleNames[0];
+				for (int i = 1; i < moduleNames.length - 1; i++) {
+					parentLogicalPath += "." + moduleNames[i];
+				}
+				// Check if exists, an exception will automaticly be thrown
+				SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath);
+			} else {
+				parentLogicalPath = "**";
 			}
-			// Check if exists, an exception will automaticly be thrown
-			SoftwareArchitecture.getInstance().getModuleByLogicalPath(
-					parentLogicalPath);
-		} else {
-			parentLogicalPath = "**";
-		}
+        } catch (Exception e) {
+	        this.logger.warn(" Exception: "  + e );
+        }
 		return parentLogicalPath;
 	}
 
@@ -313,27 +350,15 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 		domainParser = new DomainToDtoParser();
-
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());
+		if (defineSarService != null) {
+			defineSarService.reset();
+		}
 	}
 
 	public void reportArchitecture(String fullFilePath) {
 		ReportArchitectureAbstract reporter = new ReportArchitectureToExcel();
 		reporter.write(fullFilePath);
 	}
-	
-	// Services for Architecture Reconstruction
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
-		moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
-	}
-	
-	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
-		moduleService.editModule(logicalPath, newName, newHierarchicalLevel, newSoftwareUnits);
-	}
-	
-	public void addRule(RuleDTO rule) {
-		
-	}
-
 }

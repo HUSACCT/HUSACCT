@@ -9,15 +9,14 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.define.IDefineService;
-
+import husacct.define.IDefineSarService;
 import org.apache.log4j.Logger;
 
 public class ReconstructArchitecture {
 
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private IModelQueryService queryService;
-	private IDefineService defineService;
+	private IDefineSarService defineSarService;
 
 	// The first packages (starting from the project root) that contain one or more classes.
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; 
@@ -38,9 +37,9 @@ public class ReconstructArchitecture {
 	public ReconstructArchitecture(IModelQueryService queryService) {
 
 		this.queryService = queryService;
-		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
 		identifyExternalSystems();
-		ModuleDTO selectedModule = defineService.getModule_SelectedInGUI();
+		ModuleDTO selectedModule = defineSarService.getModule_SelectedInGUI();
 		identifyLayersAtSelectedModule(selectedModule);
 		// identifyLayersAtRootLevel();
 		// identifyMultipleLayers();
@@ -69,14 +68,14 @@ public class ReconstructArchitecture {
 	private void identifyExternalSystems() {
 		// Create module "ExternalSystems"
 		ArrayList<SoftwareUnitDTO> emptySoftwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
-		defineService.addModule("ExternalSystems", "**", "ExternalLibrary", 0, emptySoftwareUnitsArgument);
+		defineSarService.addModule("ExternalSystems", "**", "ExternalLibrary", 0, emptySoftwareUnitsArgument);
 		// Create a module for each childUnit of xLibrariesRootPackage
 		int nrOfExternalLibraries = 0;
 		for (SoftwareUnitDTO mainUnit : queryService.getChildUnitsOfSoftwareUnit(xLibrariesRootPackage)) {
 			xLibrariesMainPackages.add(mainUnit);
 			ArrayList<SoftwareUnitDTO> softwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
 			softwareUnitsArgument.add(mainUnit);
-			defineService.addModule(mainUnit.name, "ExternalSystems", "ExternalLibrary", 0, softwareUnitsArgument);
+			defineSarService.addModule(mainUnit.name, "ExternalSystems", "ExternalLibrary", 0, softwareUnitsArgument);
 			nrOfExternalLibraries++;
 		}
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);

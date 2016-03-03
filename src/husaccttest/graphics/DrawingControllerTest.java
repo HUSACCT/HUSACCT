@@ -1,169 +1,316 @@
 package husaccttest.graphics;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import husacct.ServiceProvider;
+import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
+import husacct.control.ControlServiceImpl;
+import husacct.control.task.MainController;
+import husacct.control.task.WorkspaceController;
+import husacct.define.IDefineService;
+import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.ParentFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.task.AnalysedController;
+import husacct.graphics.task.DefinedController;
+import husaccttest.TestResourceFinder;
+import husaccttest.define.DefineSarServicesTest_SRMA;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class DrawingControllerTest {
-	AnalysedController analysedController;
+	private static String workspacePath;
+	private static ControlServiceImpl controlService;
+	private static MainController mainController;
+	private static WorkspaceController workspaceController;
+	private final static String workspace = "SrmaTest-2014-11-12.xml";
+	private static Logger logger;
+	private static IAnalyseService analyseService = null;
+	private static IDefineService defineService = null;
+
+	private static AnalysedController graphicsAnalysedController;
+	private static DefinedController graphicsDefinedController;
 	
 	@Before
 	public void setup() {
-		analysedController = new AnalysedController();
 	}
 
-	@Test
-	public void drawSingleLevelModulesTest() {
-		SoftwareUnitDTO layerDTO = new SoftwareUnitDTO("test.layer", "analysedLayer", "layer", "public");
-		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", "subsystem", "subsystem", new ModuleDTO[] {});
-		ModuleDTO componentDTO = new ModuleDTO("test.component", "component", "component", new ModuleDTO[] {});
-		ModuleDTO externalLibraryDTO = new ModuleDTO("xLibrary.externalLibrary", "externalLibrary", "library", new ModuleDTO[] {});
+	@BeforeClass
+	public static void beforeClass() {
+		try {
+			setLog4jConfiguration();
+			logger.info(String.format("Start: Graphics DrawingControllerTest"));
+			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
+			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 
-		analysedController.drawSingleLevelModules(new AbstractDTO[] { layerDTO, subsystemDTO, componentDTO, externalLibraryDTO });
-
-		assertEquals("wrong amount of figures drawn", 4, analysedController.getDrawing().getChildren().size());
-
-		for (Figure f : analysedController.getDrawing().getChildren()) {
-			if (!(f instanceof BaseFigure)) {
-				fail("non-basefigure in drawing");
+			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+			mainController = controlService.getMainController();
+			workspaceController = mainController.getWorkspaceController();
+			loadWorkspace(workspacePath);
+	
+			analyseApplication(); //analyseApplication() starts a different Thread, and needs some time
+			boolean isAnalysing = true;
+			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+			mainController = controlService.getMainController();
+			while(isAnalysing){
+				try {
+					Thread.sleep((long)10);
+				} catch (InterruptedException e) {}
+				isAnalysing = mainController.getStateController().isAnalysing();
 			}
 
-			BaseFigure baseF = (BaseFigure) f;
+			graphicsAnalysedController = new AnalysedController();
+			graphicsAnalysedController.getDrawingSettingsHolder().dependenciesShow();
+			graphicsDefinedController = new DefinedController();
+			graphicsDefinedController.getDrawingSettingsHolder().dependenciesShow();
 
-			assertTrue("module figure says not to be a module", baseF.isModule());
+		} catch (Exception e){
+			String errorMessage =  "Exception: " + e.getMessage();
+			logger.warn(errorMessage);
 		}
 	}
 
+	@AfterClass
+	public static void tearDown(){
+		workspaceController.closeWorkspace();
+	}
+
+	// TESTS 
+
 	@Test
-	public void drawMultiLevelModulesTest() {
-		HashMap<String, ArrayList<AbstractDTO>> multiLevelDTOs = new HashMap<String, ArrayList<AbstractDTO>>();
-
-		ModuleDTO classDTO = new ModuleDTO("parent.class", "class", "class", new ModuleDTO[] {});
-		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", "interface", "interface", new ModuleDTO[] {});
-		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass", "abstractClass", "abstract", new ModuleDTO[] {});
-
-		SoftwareUnitDTO analysedClassDTO = new SoftwareUnitDTO("parent.analysedChild", "analysedChild", "class", "public");
-
-		ArrayList<AbstractDTO> childModules = new ArrayList<AbstractDTO>();
-		childModules.add(classDTO);
-		childModules.add(interfaceDTO);
-		childModules.add(abstractClassDTO);
-		childModules.add(analysedClassDTO);
-
-		multiLevelDTOs.put("parent", childModules);
-
-		analysedController.drawMultiLevelModules(multiLevelDTOs);
-
-		assertEquals("wrong amount of figure drawn", 5, analysedController.getDrawing().getChildren().size());
-
-		for (Figure f : analysedController.getDrawing().getChildren()) {
+	public void analysed_DrawArchitectureTopLevelTest_withoutExternalSystems() {
+		graphicsAnalysedController.drawArchitectureTopLevel();
+		assertEquals("wrong amount of figures drawn", 3, graphicsAnalysedController.getDrawing().getShownModules().length);
+		for (Figure f : graphicsAnalysedController.getDrawing().getShownModules()) {
 			if (!(f instanceof BaseFigure)) {
 				fail("non-basefigure in drawing");
-			}
-
-			BaseFigure baseF = (BaseFigure) f;
-			if (baseF instanceof ParentFigure) {
-				BaseFigure[] children = ((ParentFigure) f).getChildFigures();
-				assertEquals("wrong amount of children in parent", 4, children.length);
-				assertEquals("unexpected child figure", "class", children[0].getName());
-				assertEquals("unexpected child figure", "interface", children[1].getName());
-				assertEquals("unexpected child figure", "abstractClass", children[2].getName());
-				assertEquals("unexpected child figure", "analysedChild", children[3].getName());
-			} else if (baseF instanceof ModuleFigure) { 
-				ModuleFigure moduleF = (ModuleFigure) baseF;
-				if (moduleF.getType().equals("abstract")) {
-					assertSame("wrong dto for abstract class figure", abstractClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-				} else if (moduleF.getType().equals("interface")) {
-					assertSame("wrong dto for interface figure", interfaceDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-				} else if (moduleF.getType().equals("class")) {
-					if (baseF.getName().equals("class")) {
-						assertSame("wrong dto for class figure", classDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-					} else if (baseF.getName().equals("analysedChild")) {
-						assertSame("wrong analysed dto for class figure", analysedClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-					} else {
-						fail("unexpected class figure in drawing");
-					}
-				}
 			} else {
-				fail("unexpected type of figure in drawing");
+				BaseFigure baseF = (BaseFigure) f;
+				assertTrue("module figure says not to be a module", baseF.isModule());
 			}
 		}
 	}
 
 	@Test
-	public void drawDependenciesBetweenTest() {
-		SoftwareUnitDTO dtoFrom = new SoftwareUnitDTO("test.from", "from", "class", "public");
-		SoftwareUnitDTO dtoTo = new SoftwareUnitDTO("test.to", "to", "class", "public");
+	public void analysed_DrawArchitectureTopLevelTest_withExternalSystems() {
+		graphicsAnalysedController.getDrawingSettingsHolder().librariesShow();
+		graphicsAnalysedController.drawArchitectureTopLevel();
+		assertEquals("wrong amount of figures drawn", 4, graphicsAnalysedController.getDrawing().getShownModules().length);
+		boolean libraryPresent = false; 
+		for (ModuleFigure mf : graphicsAnalysedController.getDrawing().getShownModules()) { 
+			if (mf.getType().toLowerCase().equals("library")) {
+				libraryPresent = true;
+			} 
+		}
+		assertTrue("No library module", libraryPresent);
+		graphicsAnalysedController.getDrawingSettingsHolder().librariesHide();
+	}
 
-		analysedController.drawSingleLevelModules(new AbstractDTO[] { dtoFrom, dtoTo });
-
-		DependencyDTO dep1 = new DependencyDTO("from", "to", "Call", "method", 20, false, false);
-		DependencyDTO dep2 = new DependencyDTO("from", "to", "Call", "method", 21, false, false);
-
-		BaseFigure figFrom = null;
-		BaseFigure figTo = null;
-		for (Figure f : analysedController.getDrawing().getChildren()) {
-			if (f instanceof BaseFigure) {
-				AbstractDTO figDTO = analysedController.getFigureMap().getModuleDTO((BaseFigure) f);
-				if (figDTO == dtoFrom) {
-					figFrom = (BaseFigure) f;
-				}
-				if (figDTO == dtoTo) {
-					figTo = (BaseFigure) f;
+	@Test
+	public void analysed_DrawSingleLevelModulesTest_WithoutContext() {
+		graphicsAnalysedController.drawArchitectureTopLevel();
+		graphicsAnalysedController.resetContextFigures();
+		graphicsAnalysedController.getDrawingSettingsHolder().zoomTypeChange("zoom");
+		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"technology"});
+		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;
+		int numberOfParentFigures = 0;
+		for (Figure f : graphicsAnalysedController.getDrawing().getChildren()) { 
+			if (f instanceof ParentFigure) {
+				ParentFigure parentFigure = (ParentFigure) f;
+				if (parentFigure.getName().toLowerCase().equals("technology") || parentFigure.getName().toLowerCase().equals("domain") || 
+						parentFigure.getName().toLowerCase().equals("presentation")) {
+					numberOfParentFigures ++;
 				}
 			}
 		}
+		assertEquals("wrong amount of module figures drawn", 2, nrOfModules);
+		assertEquals(0, numberOfParentFigures);
+	}
 
-		assertNotNull("figure from not found in drawing", figFrom);
-		assertNotNull("figure to not found in drawing", figTo);
+	@Test
+	public void analysed_DrawMultiLevelModulesTest_WithContext() {
+		graphicsAnalysedController.drawArchitectureTopLevel();
+		graphicsAnalysedController.resetContextFigures();
+		for (ModuleFigure mf : graphicsAnalysedController.getDrawing().getShownModules()) { 
+			if (mf.getName().toLowerCase().equals("technology") || mf.getName().toLowerCase().equals("domain")) {
+				graphicsAnalysedController.contextFigures.add(mf);
+			} 
+		}
+		graphicsAnalysedController.getDrawingSettingsHolder().zoomTypeChange("context");
+		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"technology"});
+		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;
+		int numberOfParentFigures = 0;
+		for (Figure f : graphicsAnalysedController.getDrawing().getChildren()) { 
+			if (f instanceof ParentFigure) {
+				ParentFigure parentFigure = (ParentFigure) f;
+				if (parentFigure.getName().toLowerCase().equals("technology") || parentFigure.getName().toLowerCase().equals("domain") || 
+						parentFigure.getName().toLowerCase().equals("presentation")) {
+					numberOfParentFigures ++;
+				}
+			}
+		}
+		assertEquals("wrong amount of figures drawn", 3, nrOfModules);
+		assertEquals(1, numberOfParentFigures);
+	}
 
-		analysedController.drawDependenciesBetween(new DependencyDTO[] { dep1, dep2 }, figFrom, figTo);
+	@Test
+	public void analysed_DrawMultiLevelModulesTest_WithOutContext() {
+		graphicsAnalysedController.drawArchitectureTopLevel();
+		graphicsAnalysedController.resetContextFigures();
+		graphicsAnalysedController.getDrawingSettingsHolder().zoomTypeChange("zoom");
+		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"technology", "domain"});
+		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;
+		int numberOfParentFigures = 0;
+		for (Figure f : graphicsAnalysedController.getDrawing().getChildren()) { 
+			if (f instanceof ParentFigure) {
+				ParentFigure parentFigure = (ParentFigure) f;
+				if (parentFigure.getName().toLowerCase().equals("technology") || parentFigure.getName().toLowerCase().equals("domain") || 
+						parentFigure.getName().toLowerCase().equals("presentation")) {
+					numberOfParentFigures ++;
+				}
+			}
+		}
+		assertEquals("wrong amount of figures drawn",4, nrOfModules);
+		assertEquals(2, numberOfParentFigures);
+	}
 
-		ArrayList<RelationFigure> relationFigures = new ArrayList<RelationFigure>();
-		for (Figure f : analysedController.getDrawing().getChildren()) {
+	@Test
+	public void defined_DrawArchitectureTopLevelTest_withoutExternalSystems() {
+		graphicsDefinedController.drawArchitectureTopLevel();
+		graphicsDefinedController.resetContextFigures();
+		graphicsDefinedController.getDrawingSettingsHolder().librariesHide();
+		graphicsDefinedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology"});
+		graphicsDefinedController.drawArchitectureTopLevel();
+		int nrOfModules = graphicsDefinedController.getDrawing().getShownModules().length;
+		for (Figure f : graphicsAnalysedController.getDrawing().getShownModules()) {
 			if (!(f instanceof BaseFigure)) {
-				fail("found figure not a base figure");
+				fail("non-basefigure in drawing");
+			} else {
+				BaseFigure baseF = (BaseFigure) f;
+				assertTrue("module figure says not to be a module", baseF.isModule());
 			}
+		}
+		assertEquals("wrong amount of figures drawn", 3, nrOfModules);
+	}
 
-			BaseFigure baseF = (BaseFigure) f;
-
-			if (baseF.isLine()) {
-				if (!(baseF instanceof RelationFigure)) {
-					fail("found line not a relation figure");
+	@Test
+	public void defined_DrawMultiLevelModulesTest_WithContext() {
+		graphicsDefinedController.drawArchitectureTopLevel();
+		graphicsDefinedController.resetContextFigures();
+		for (ModuleFigure mf : graphicsDefinedController.getDrawing().getShownModules()) { 
+			if (mf.getName().equals("Technology") || mf.getName().equals("Domain")) {
+				graphicsDefinedController.contextFigures.add(mf);
+			} 
+		}
+		graphicsDefinedController.getDrawingSettingsHolder().zoomTypeChange("context");
+		graphicsDefinedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology"});
+		int nrOfModules = graphicsDefinedController.getDrawing().getShownModules().length;
+		int numberOfParentFigures = 0;
+		for (Figure f : graphicsDefinedController.getDrawing().getChildren()) { 
+			if (f instanceof ParentFigure) {
+				ParentFigure parentFigure = (ParentFigure) f;
+				if (parentFigure.getName().equals("Technology") || parentFigure.getName().equals("Domain") || 
+						parentFigure.getName().equals("Presentation")) {
+					numberOfParentFigures ++;
 				}
-
-				relationFigures.add((RelationFigure) baseF);
 			}
 		}
+		assertEquals("wrong amount of figures drawn", 3, nrOfModules);
+		assertEquals(1, numberOfParentFigures);
+	}
 
-		assertEquals("unexpected number of lines found", 1, relationFigures.size());
-
-		for (RelationFigure relationFigure : relationFigures) {
-			assertSame("wrong from figure", figFrom, relationFigure.getStartFigure());
-			assertSame("wrong to figure", figTo, relationFigure.getEndFigure());
-
-			DependencyDTO[] depDTOs = analysedController.getFigureMap().getDependencyDTOs(relationFigure);
-			assertSame("wrong dto", dep1, depDTOs[0]);
-			assertSame("wrong dto", dep2, depDTOs[1]);
+	@Test
+	public void defined_DrawRelation_NumberOfDependencies() {
+		graphicsDefinedController.drawArchitectureTopLevel();
+		graphicsDefinedController.resetContextFigures();
+		for (ModuleFigure mf : graphicsDefinedController.getDrawing().getShownModules()) { 
+			if (mf.getName().equals("Technology") || mf.getName().equals("Domain")) {
+				graphicsDefinedController.contextFigures.add(mf);
+			} 
 		}
+		graphicsDefinedController.getDrawingSettingsHolder().zoomTypeChange("context");
+		graphicsDefinedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology"});
+		Drawing drawing = graphicsDefinedController.getDrawing();
+		RelationFigure[] relations = drawing.getShownRelations();
+		for (Figure f : relations) { 
+			if (f instanceof RelationFigure) {
+				ConnectionFigure cf = (ConnectionFigure) f;
+				ModuleFigure start = (ModuleFigure) cf.getStartFigure();
+				ModuleFigure end = (ModuleFigure) cf.getEndFigure();
+				if ((start != null) && start.getUniqueName().equals("Domain")&& (end != null) && end.getUniqueName().equals("Technology.RelationRules")) {
+					int nrOfDependencies = getNumberofDependenciesBetweenModulesInIntendedArchitecture(start.getUniqueName(), end.getUniqueName());
+					int nrOfDependenciesShown = ((RelationFigure) f).getAmount();
+					assertEquals("wrong amount of figures drawn", nrOfDependenciesShown, nrOfDependencies);
+				}
+			} 
+		}
+	}
+
+	
+	//
+	//private helpers
+	//
+	private static void setLog4jConfiguration() {
+		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		PropertyConfigurator.configure(propertiesFile);
+		logger = Logger.getLogger(DefineSarServicesTest_SRMA.class);
+	}
+	
+	private static void loadWorkspace(String location) {
+		logger.info(String.format("Loading workspace %s", location));
+		File file = new File(location);
+		if(file.exists()){
+			HashMap<String, Object> dataValues = new HashMap<String, Object>();
+			dataValues.put("file", file);
+			workspaceController.loadWorkspace("Xml", dataValues);
+			if(workspaceController.isOpenWorkspace()){
+				logger.info(String.format("Workspace %s loaded", location));
+			} else {
+				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));
+			}
+		} else {
+			logger.warn(String.format("Unable to locate %s", file.getAbsoluteFile()));
+		}
+	}
+
+	private static void analyseApplication() {
+		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		mainController = controlService.getMainController();
+		mainController.getApplicationController().analyseApplication();
+	}
+
+	private int getNumberofDependenciesBetweenModulesInIntendedArchitecture(String fromModule, String toModule) {
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		defineService = ServiceProvider.getInstance().getDefineService();
+		HashSet<String> physicalFromClassPaths = defineService.getModule_AllPhysicalClassPathsOfModule(fromModule);
+		HashSet<String> physicalToClassPaths = defineService.getModule_AllPhysicalClassPathsOfModule(toModule);
+		ArrayList<DependencyDTO> allFoundDependencies = new ArrayList<DependencyDTO>();
+		for (String fromPackages : physicalFromClassPaths) {
+			for (String toPackages: physicalToClassPaths) {
+				for (DependencyDTO dependency : analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromPackages, toPackages)) {
+					allFoundDependencies.add(dependency);
+				}
+			}
+		}
+		int numberOfDependencies = allFoundDependencies.size();
+		return numberOfDependencies;
 	}
 
 }
