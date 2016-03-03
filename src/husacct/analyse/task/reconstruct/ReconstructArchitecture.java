@@ -122,7 +122,7 @@ public class ReconstructArchitecture {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses);
 		for (Integer herarchicalLevel : layers.keySet()) {
-			defineService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
 		}
 	}
 
@@ -137,7 +137,7 @@ public class ReconstructArchitecture {
 			logger.info(layers);	
 			if(layers.keySet().size() > 1){
 				for (Integer herarchicalLevel : layers.keySet()) {
-					defineService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
+					defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
 				}
 			}	
 		}

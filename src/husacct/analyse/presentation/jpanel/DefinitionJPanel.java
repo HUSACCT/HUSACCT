@@ -101,7 +101,8 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	}
 	
 	private ModuleDTO getSelectedModule(){
-		return ServiceProvider.getInstance().getDefineService().getModule_SelectedInGUI();
+		return ServiceProvider.getInstance().getDefineService().getSarService()
+				.getModule_SelectedInGUI();
 	}
 
 }

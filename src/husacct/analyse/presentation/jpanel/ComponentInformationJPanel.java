@@ -115,7 +115,8 @@ public class ComponentInformationJPanel extends HelpableJPanel implements Action
 	}
 	
 	private ModuleDTO getSelectedModule(){
-		return ServiceProvider.getInstance().getDefineService().getModule_SelectedInGUI();
+		return ServiceProvider.getInstance().getDefineService().getSarService()
+				.getModule_SelectedInGUI();
 	}
 
 }
