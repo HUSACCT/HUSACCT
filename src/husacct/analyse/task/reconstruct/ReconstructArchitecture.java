@@ -10,6 +10,8 @@ import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
+import husacct.define.IDefineService;
+
 import org.apache.log4j.Logger;
 
 public class ReconstructArchitecture {
@@ -17,6 +19,7 @@ public class ReconstructArchitecture {
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private IModelQueryService queryService;
 	private IDefineSarService defineSarService;
+	private IDefineService defineService;
 
 	// The first packages (starting from the project root) that contain one or more classes.
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; 
@@ -38,6 +41,7 @@ public class ReconstructArchitecture {
 
 		this.queryService = queryService;
 		defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
+		defineService = ServiceProvider.getInstance().getDefineService();
 		identifyExternalSystems();
 		ModuleDTO selectedModule = defineSarService.getModule_SelectedInGUI();
 		identifyLayersAtSelectedModule(selectedModule);
@@ -109,8 +113,9 @@ public class ReconstructArchitecture {
 		selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		ModuleDTO[] selectedSubModules = selectedModule.subModules;
 		for (ModuleDTO subModule : selectedSubModules) {
+			for(String localpath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath.toLowerCase()))
 			selectedModuleWithClasses
-					.add(queryService.getSoftwareUnitByUniqueName(subModule.logicalPath.toLowerCase()));
+					.add(queryService.getSoftwareUnitByUniqueName(localpath));
 		}
 		System.out.println("----------");
 		System.out.println(selectedModuleWithClasses);
