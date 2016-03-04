@@ -112,7 +112,7 @@ public class ReconstructArchitecture {
 		selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		ModuleDTO[] selectedSubModules = selectedModule.subModules;
 		for (ModuleDTO subModule : selectedSubModules) {
-			for(String localpath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath.toLowerCase()))
+			for(String localpath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath))
 			selectedModuleWithClasses
 					.add(queryService.getSoftwareUnitByUniqueName(localpath));
 		}
