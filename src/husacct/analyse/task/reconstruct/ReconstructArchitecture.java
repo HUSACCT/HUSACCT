@@ -55,9 +55,10 @@ public class ReconstructArchitecture {
 		getUmlLinks();
 	}
 
-	public void startReconstruction(ModuleDTO selectedModule, int layerThreshold, String approach) {
-		this.layerThreshold = layerThreshold;
-
+	public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold) {
+		this.layerThreshold = threshold;
+		AlgorithmGeneral Algoritm = new AlgorithmTwo();
+		
 		switch (approach) {
 		case ("layerApproach"):
 			identifyMultipleLayers();
@@ -65,7 +66,16 @@ public class ReconstructArchitecture {
 		case ("selectedModuleApproach"):
 			identifyLayersAtSelectedModule(selectedModule);
 			break;
+		case ("second algorithm"): //second approach for Gui-team
+			Algoritm = new AlgorithmTwo();
+			Algoritm.define(selectedModule, threshold);
+			break;
+		case ("Component recognition")://micheals approach
+			
+			break;
 		}
+		
+		
 	}
 
 	private void identifyExternalSystems() {

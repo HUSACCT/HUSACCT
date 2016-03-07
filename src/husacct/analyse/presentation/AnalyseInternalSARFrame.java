@@ -2,6 +2,7 @@ package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.jpanel.DefinitionJPanel;
+import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;
 
@@ -15,8 +16,10 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 
     private static final long serialVersionUID = 1L;
 	private JPanel overviewPanel;
+	protected AnalyseTaskControl analyseTaskControl;
 
-    public AnalyseInternalSARFrame() {
+    public AnalyseInternalSARFrame(AnalyseTaskControl atc) {
+    	analyseTaskControl = atc;
         registerLocaleChangeListener();
         initUI();
     }
@@ -45,7 +48,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 		this.overviewPanel = new JPanel();
 		BorderLayout borderLayout = new BorderLayout();
 		this.overviewPanel.setLayout(borderLayout);
-		this.overviewPanel.add(new DefinitionJPanel());
+		this.overviewPanel.add(new DefinitionJPanel(analyseTaskControl));
 		this.overviewPanel.setSize(20, 20);
 		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
 	}

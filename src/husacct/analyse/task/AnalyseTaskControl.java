@@ -10,6 +10,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ModuleDTO;
 
 public class AnalyseTaskControl {
 
@@ -72,5 +73,10 @@ public class AnalyseTaskControl {
     
     public void reconstructArchitecture() {
     	new ReconstructArchitecture(queryService);
+    }
+    
+    public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold){
+    	ReconstructArchitecture reconstructArchitecture = new ReconstructArchitecture(queryService);
+    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold);
     }
 }

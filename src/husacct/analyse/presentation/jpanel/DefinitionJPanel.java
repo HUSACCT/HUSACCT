@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
+import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -25,6 +26,7 @@ import java.awt.Insets;
 public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	private ComponentInformationJPanel componentInformationJPanel;
 	private ApproachesTableJPanel approachesTableJPanel;
+	private AnalyseTaskControl analyseTaskControl;
 	private JButton applyButton;
 	private JButton reverseButton;
 	private JPanel panel;
@@ -32,8 +34,9 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	/**
 	 * Create the panel.
 	 */
-	public DefinitionJPanel() {
+	public DefinitionJPanel(AnalyseTaskControl atc) {
 		super();
+		analyseTaskControl = atc;
 		initUI();
 	}
 	
@@ -106,15 +109,17 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 			 for(int i=0; i<=rowCount; i++){
 				 if (approachesTable.isRowSelected(i)){
 					 
+					 ModuleDTO selectedModule = getSelectedModule();
+					 
 					 System.out.println("---------------------------------- ");
-					 System.out.println("Selected Module: " + getSelectedModule().name);
+					 System.out.println("Selected Module: " + selectedModule.name);
 					 System.out.println("Approach: " + approachesTable.getValueAt(i, 0));
 					 System.out.println("Threshold: " + approachesTable.getValueAt(i, 1));
 					 System.out.println("---------------------------------- ");
 					 
-					 IModelQueryService queryService = ServiceProvider.getInstance().getAnalyseService().getQueryService();
-					 ReconstructArchitecture ra = new ReconstructArchitecture(queryService); //because the task team was not allowed to edit any other classes
-					 ra.startReconstruction(getSelectedModule(), (int)approachesTable.getValueAt(i, 1), (String)approachesTable.getValueAt(i, 0));
+					 
+					 
+					 analyseTaskControl.startReconstruction(selectedModule, (String)approachesTable.getValueAt(i, 0), (int)approachesTable.getValueAt(i, 1));
 					 
 				 }
 			 }

@@ -7,7 +7,6 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
@@ -24,9 +23,6 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     public void analyseApplication(ProjectDTO project);
 
     public boolean isAnalysed();
-    
-    //Added by Gui Team Sven and Menno
-    public IModelQueryService getQueryService();
 
     public JInternalFrame getJInternalFrame();
 

@@ -97,7 +97,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	}
 
 	private Object[][] getApproachesRows(){
-		Object ApproachesRows[][] = { { "layerApproach", 10}, { "selectedModuleApproach", 11}, { "Third Approach", 12}};
+		Object ApproachesRows[][] = { { "layerApproach", 10}, { "selectedModuleApproach", 11}, { "second algorithm", 12}, {"Component recognition", 10}};
 		return ApproachesRows;
 	}
 	
