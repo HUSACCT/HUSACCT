@@ -50,10 +50,12 @@ class JavaTreeConvertController {
 	        compilationUnit = javaParser.compilationUnit();
 	        if (compilationUnit != null) {
 	        	compilationUnitTree = (CommonTree) compilationUnit.getTree();
-	        	createClassInformation(compilationUnitTree);
-		        if ((this.theClass != null) && !this.theClass.equals("")) {
-		        	delegateASTToGenerators(compilationUnitTree);
-		        }
+	        	if (compilationUnitTree != null) {
+		        	createClassInformation(compilationUnitTree);
+			        if ((this.theClass != null) && !this.theClass.equals("")) {
+			        	delegateASTToGenerators(compilationUnitTree);
+			        }
+	        	}
 	        } 
     	}
     	catch (Exception e) {
@@ -100,12 +102,7 @@ class JavaTreeConvertController {
                     this.warnNotSupportedClassType(classType, classTree);
             }
         } else {
-            int typeid = 0;
-            CommonTree warnTree = (CommonTree) completeTree.getChild(2);
-            if (isTreeExisting(warnTree)) {
-                typeid = warnTree.getType();
-            }
-            this.warnNotSupportedClassType(typeid, classTree);
+        	// logger.warn(" File without a type: " + this.sourceFilePath);
         }
     }
     
