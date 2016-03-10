@@ -57,18 +57,20 @@ public class ReconstructArchitecture {
 
 	public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold) {
 		this.layerThreshold = threshold;
-		AlgorithmGeneral Algoritm = new AlgorithmTwo();
+		AlgorithmGeneral algorithm = new AlgorithmSelectedModule();
 		
 		switch (approach) {
 		case ("layerApproach"):
 			identifyMultipleLayers();
 			break;
 		case ("selectedModuleApproach"):
-			identifyLayersAtSelectedModule(selectedModule);
+			algorithm = new AlgorithmSelectedModule();
+			algorithm.define(selectedModule, threshold, queryService);
+			identifyLayers(algorithm.determineSelectedModuleWithClasses());
 			break;
 		case ("second algorithm"): //second approach for Gui-team
-			Algoritm = new AlgorithmTwo();
-			Algoritm.define(selectedModule, threshold);
+			algorithm = new AlgorithmTwo();
+			algorithm.define(selectedModule, threshold, queryService);
 			break;
 		case ("Component recognition")://micheals approach
 			
@@ -118,20 +120,6 @@ public class ReconstructArchitecture {
 		}
 	}
 
-	private void determineSelectedModuleWithClasses(ModuleDTO selectedModule) {
-		selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-		ModuleDTO[] selectedSubModules = selectedModule.subModules;
-		for (ModuleDTO subModule : selectedSubModules) {
-			for(String localpath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath))
-			selectedModuleWithClasses
-					.add(queryService.getSoftwareUnitByUniqueName(localpath));
-		}
-		System.out.println("----------");
-		System.out.println(selectedModuleWithClasses);
-		System.out.println("----------");
-		
-	}
-
 	private void identifyLayersAtRootLevel() {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses);
@@ -156,17 +144,8 @@ public class ReconstructArchitecture {
 			}	
 		}
 	}
-
-	private void identifyLayersAtSelectedModule(ModuleDTO selectedModule) {
-		// This array will be filled with the classes in one module
-		// selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-
-		determineSelectedModuleWithClasses(selectedModule);
-
-		// Identify the layers within the selected module
-		identifyLayers(selectedModuleWithClasses);
-	}
-
+	
+	
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
