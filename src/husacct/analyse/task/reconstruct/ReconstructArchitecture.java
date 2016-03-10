@@ -61,6 +61,7 @@ public class ReconstructArchitecture {
 		
 		switch (approach) {
 		case ("layerApproach"):
+			/*
 			algorithm = new AlgorithmMultiLayer();
 			algorithm.define(selectedModule, threshold, queryService);
 			identifiedLayers = algorithm.getClasses(xLibrariesRootPackage, layers);
@@ -74,7 +75,7 @@ public class ReconstructArchitecture {
 				}	
 			}
 			
-			
+			*/
 			identifyMultipleLayers();
 		
 		
@@ -152,6 +153,7 @@ public class ReconstructArchitecture {
 		}
 	}
 
+	
 	private void identifyMultipleLayers() {
 		identifyLayersAtRootLevel();
 		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
