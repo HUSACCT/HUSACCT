@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import husacct.ServiceProvider;
@@ -18,12 +19,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
+public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private ComponentInformationJPanel componentInformationJPanel;
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
@@ -34,7 +37,7 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	/**
 	 * Create the panel.
 	 */
-	public DefinitionJPanel(AnalyseTaskControl atc) {
+	public ReconstructJPanel(AnalyseTaskControl atc) {
 		super();
 		analyseTaskControl = atc;
 		initUI();
@@ -103,7 +106,8 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == applyButton) {
 			JTable approachesTable = approachesTableJPanel.approachesTable;
-			
+			ButtonGroup buttonGroupOne = approachesTableJPanel.radioButtonGroup;
+			ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
 			//Getting all selected rows. 
 			 int rowCount = approachesTable.getRowCount();
 			 for(int i=0; i<=rowCount; i++){
@@ -117,7 +121,10 @@ public class DefinitionJPanel extends HelpableJPanel implements ActionListener{
 					 System.out.println("Threshold: " + approachesTable.getValueAt(i, 1));
 					 System.out.println("---------------------------------- ");
 					 
-					 
+					 if(buttonGroupOne.getSelection() != null && buttonGroupTwo.getSelection() != null){
+						 String selectedRadioButtonGroupOne = buttonGroupOne.getSelection().getActionCommand();
+						 String selectedRadioButtonGroupTwo = buttonGroupTwo.getSelection().getActionCommand(); 
+					 }
 					 
 					 analyseTaskControl.startReconstruction(selectedModule, (String)approachesTable.getValueAt(i, 0), (int)approachesTable.getValueAt(i, 1));
 					 

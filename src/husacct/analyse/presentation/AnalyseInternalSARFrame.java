@@ -1,7 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.jpanel.DefinitionJPanel;
+import husacct.analyse.presentation.jpanel.ReconstructJPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;
@@ -44,16 +44,16 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
         reloadText();
     }
     
-	private void addDefinitionPanel() {
+	private void addReconstructPanel() {
 		this.overviewPanel = new JPanel();
 		BorderLayout borderLayout = new BorderLayout();
 		this.overviewPanel.setLayout(borderLayout);
-		this.overviewPanel.add(new DefinitionJPanel(analyseTaskControl));
+		this.overviewPanel.add(new ReconstructJPanel(analyseTaskControl));
 		this.overviewPanel.setSize(20, 20);
 		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
 	}
     
     public void initUI(){
-    	this.addDefinitionPanel();
+    	this.addReconstructPanel();
     }
 }
