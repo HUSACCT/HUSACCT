@@ -66,7 +66,7 @@ public class ReconstructArchitecture {
 		case ("selectedModuleApproach"):
 			algorithm = new AlgorithmSelectedModule();
 			algorithm.define(selectedModule, threshold, queryService);
-			identifyLayers(algorithm.determineSelectedModuleWithClasses());
+			identifyLayers(algorithm.getClasses());
 			break;
 		case ("second algorithm"): //second approach for Gui-team
 			algorithm = new AlgorithmTwo();

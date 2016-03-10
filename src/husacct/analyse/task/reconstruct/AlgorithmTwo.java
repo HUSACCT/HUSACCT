@@ -16,28 +16,11 @@ public class AlgorithmTwo extends AlgorithmGeneral{
 	}
 
 	@Override
-	public void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ArrayList<SoftwareUnitDTO> determineSelectedModuleWithClasses() {
+	public ArrayList<SoftwareUnitDTO> getClasses() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public void identifyLayersAtSelectedModule() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }
