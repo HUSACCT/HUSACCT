@@ -32,7 +32,7 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 	
 	
 	@Override
-	public ArrayList<SoftwareUnitDTO> getClasses() {
+	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
 		ArrayList<SoftwareUnitDTO> selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 		
@@ -47,6 +47,15 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 		System.out.println("----------");
 		
 		return selectedModuleWithClasses;
+	}
+
+
+
+	@Override
+	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(
+			String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
