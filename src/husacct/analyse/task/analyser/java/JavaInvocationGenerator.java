@@ -103,21 +103,26 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        case JavaParser.METHOD_CALL:
 	        	String left1 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right1 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
+	        	right1 = nullifyIfStringContainsDot(right1);
 	    		returnValue += left1 + "(" + right1 + ")";
 	            break;
 	        case JavaParser.CLASS_CONSTRUCTOR_CALL: 
 	        	String left2 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right2 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
+	        	right2 = nullifyIfStringContainsDot(right2);
 	    		returnValue += left2 + "(" + right2 + ")";
 	            break;
 	        case JavaParser.SUPER_CONSTRUCTOR_CALL: 
-	        	returnValue += "superBaseClass" + "(" + getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType) + ")";
+	        	String superConstructorCallArg = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
+	        	superConstructorCallArg = nullifyIfStringContainsDot(superConstructorCallArg);
+	        	returnValue += "superBaseClass" + "(" + superConstructorCallArg + ")";
 	            break;
 	        case JavaParser.STATIC_ARRAY_CREATOR: 
 	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == JavaParser.IDENT))) {
 		        	String left3 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 		        	String right3 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
-		    		returnValue += left3 + "(" + right3 + ")";
+		        	right3 = nullifyIfStringContainsDot(right3);
+		        	returnValue += left3 + "(" + right3 + ")";
 	        	} else {
 	        		returnValue += "";
 	        	}
@@ -245,6 +250,12 @@ public class JavaInvocationGenerator extends JavaGenerator {
         }
 	}
 
-
+    private String nullifyIfStringContainsDot(String argument) {
+    	String returnValue = "";
+		if (!argument.contains(".")) { // Currently, arguments with a "." or "," disable the indirect dependency detection algorithm. In case of future improvements: create a FamixArgument object per argument. 
+			returnValue = argument;
+		}
+		return returnValue;
+    }
 }
 
