@@ -57,18 +57,45 @@ public class ReconstructArchitecture {
 
 	public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold) {
 		this.layerThreshold = threshold;
-		AlgorithmGeneral Algoritm = new AlgorithmTwo();
+		AlgorithmGeneral algorithm = new AlgorithmSelectedModule();
 		
 		switch (approach) {
 		case ("layerApproach"):
+			/*
+			algorithm = new AlgorithmMultiLayer();
+			algorithm.define(selectedModule, threshold, queryService);
+			identifiedLayers = algorithm.getClasses(xLibrariesRootPackage, layers);
+			for(int i : identifiedLayers.keySet()){
+				identifyLayers(identifiedLayers.get(i));
+				logger.info(layers);	
+				if(layers.keySet().size() > 1){
+					for (Integer herarchicalLevel : layers.keySet()) {
+						defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
+					}
+				}	
+			}
+			
+			*/
 			identifyMultipleLayers();
+		
+		
+		
 			break;
+		case ("rootApproach"):
+			algorithm = new AlgorithmRoot();
+			algorithm.define(selectedModule, threshold, queryService);
+			identifyLayers(algorithm.getClasses(xLibrariesRootPackage));
+			for (Integer herarchicalLevel : layers.keySet()) {
+				defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+			}
 		case ("selectedModuleApproach"):
-			identifyLayersAtSelectedModule(selectedModule);
+			algorithm = new AlgorithmSelectedModule();
+			algorithm.define(selectedModule, threshold, queryService);
+			identifyLayers(algorithm.getClasses(xLibrariesRootPackage));
 			break;
 		case ("second algorithm"): //second approach for Gui-team
-			Algoritm = new AlgorithmTwo();
-			Algoritm.define(selectedModule, threshold);
+			algorithm = new AlgorithmTwo();
+			algorithm.define(selectedModule, threshold, queryService);
 			break;
 		case ("Component recognition")://micheals approach
 			
@@ -118,20 +145,6 @@ public class ReconstructArchitecture {
 		}
 	}
 
-	private void determineSelectedModuleWithClasses(ModuleDTO selectedModule) {
-		selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-		ModuleDTO[] selectedSubModules = selectedModule.subModules;
-		for (ModuleDTO subModule : selectedSubModules) {
-			for(String localpath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath))
-			selectedModuleWithClasses
-					.add(queryService.getSoftwareUnitByUniqueName(localpath));
-		}
-		System.out.println("----------");
-		System.out.println(selectedModuleWithClasses);
-		System.out.println("----------");
-		
-	}
-
 	private void identifyLayersAtRootLevel() {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses);
@@ -140,6 +153,7 @@ public class ReconstructArchitecture {
 		}
 	}
 
+	
 	private void identifyMultipleLayers() {
 		identifyLayersAtRootLevel();
 		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
@@ -156,17 +170,8 @@ public class ReconstructArchitecture {
 			}	
 		}
 	}
-
-	private void identifyLayersAtSelectedModule(ModuleDTO selectedModule) {
-		// This array will be filled with the classes in one module
-		// selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-
-		determineSelectedModuleWithClasses(selectedModule);
-
-		// Identify the layers within the selected module
-		identifyLayers(selectedModuleWithClasses);
-	}
-
+	
+	
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
