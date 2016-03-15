@@ -11,7 +11,9 @@ public abstract class AlgorithmGeneral {
 	
 	//DE METHODES VOOR AlgorithmSelectedModule
 	public abstract void define(ModuleDTO selectedModule, int threshold, IModelQueryService queryService);
-	public abstract ArrayList<SoftwareUnitDTO> getClasses();
+	public abstract ArrayList<SoftwareUnitDTO> getClasses(String library);
+	public abstract TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers);
+		
 	
 
 }

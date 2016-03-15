@@ -31,9 +31,11 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 	
 	
 	@Override
-	public ArrayList<SoftwareUnitDTO> getClasses() {
+
+	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
 		ArrayList<SoftwareUnitDTO> selectedSubmoduleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
+
 		
 		ModuleDTO[] subModuleDTOs = selectedModule.subModules;
 		for(ModuleDTO subModule : subModuleDTOs){
@@ -46,6 +48,15 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 		System.out.println("----------");
 		
 		return selectedSubmoduleWithClasses;
+	}
+
+
+
+	@Override
+	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(
+			String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

@@ -62,12 +62,37 @@ public class ReconstructArchitecture {
 		
 		switch (approach) {
 		case ("layerApproach"):
+			/*
+			algorithm = new AlgorithmMultiLayer();
+			algorithm.define(selectedModule, threshold, queryService);
+			identifiedLayers = algorithm.getClasses(xLibrariesRootPackage, layers);
+			for(int i : identifiedLayers.keySet()){
+				identifyLayers(identifiedLayers.get(i));
+				logger.info(layers);	
+				if(layers.keySet().size() > 1){
+					for (Integer herarchicalLevel : layers.keySet()) {
+						defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
+					}
+				}	
+			}
+			
+			*/
 			identifyMultipleLayers();
+		
+		
+		
 			break;
+		case ("rootApproach"):
+			algorithm = new AlgorithmRoot();
+			algorithm.define(selectedModule, threshold, queryService);
+			identifyLayers(algorithm.getClasses(xLibrariesRootPackage));
+			for (Integer herarchicalLevel : layers.keySet()) {
+				defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+			}
 		case ("selectedModuleApproach"):
 			algorithm = new AlgorithmSelectedModule();
 			algorithm.define(selectedModule, threshold, queryService);
-			identifyLayers(algorithm.getClasses());
+			identifyLayers(algorithm.getClasses(xLibrariesRootPackage));
 			break;
 		case ("second algorithm"): //second approach for Gui-team
 			algorithm = new AlgorithmTwo();
@@ -129,6 +154,7 @@ public class ReconstructArchitecture {
 		}
 	}
 
+	
 	private void identifyMultipleLayers() {
 		identifyLayersAtRootLevel();
 		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();

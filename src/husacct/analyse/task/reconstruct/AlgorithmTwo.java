@@ -16,7 +16,14 @@ public class AlgorithmTwo extends AlgorithmGeneral{
 	}
 
 	@Override
-	public ArrayList<SoftwareUnitDTO> getClasses() {
+	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(
+			String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
 		// TODO Auto-generated method stub
 		return null;
 	}
