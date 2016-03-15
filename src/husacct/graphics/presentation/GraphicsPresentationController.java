@@ -1,6 +1,11 @@
 package husacct.graphics.presentation;
 
 
+import javax.swing.JInternalFrame;
+import javax.swing.SwingWorker;
+
+import org.apache.log4j.Logger;
+
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
@@ -10,17 +15,11 @@ import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.domain.DrawingView;
 import husacct.graphics.domain.figures.BaseFigure;
-import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.task.DrawingController;
 import husacct.graphics.task.DrawingSettingsHolder;
 import husacct.graphics.task.DrawingTypesEnum;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 import husacct.validate.IValidateService;
-
-import javax.swing.JInternalFrame;
-import javax.swing.SwingWorker;
-
-import org.apache.log4j.Logger;
 
 public class GraphicsPresentationController implements UserInputListener{
 	private DrawingTypesEnum		drawingType;
@@ -219,6 +218,7 @@ public class GraphicsPresentationController implements UserInputListener{
 		}
 	}
 	
+	@Override
 	public void exportImage() {
 		// To do: move from drawingView to presentation or control class 
 		drawingView.getDrawingHusacct().showExportToImagePanel();
@@ -368,6 +368,13 @@ public class GraphicsPresentationController implements UserInputListener{
 	@Override
 	public void zoomTypeChange(String zoomType) {
 		drawingsSettingsHolder.zoomTypeChange(zoomType);
+	}
+	
+	public void doSomething(boolean showUmlLinks){
+		if(drawingsSettingsHolder.isShowUmlLinkInsteadOfDependencies() != showUmlLinks){
+			drawingsSettingsHolder.setShowUmlLinkInsteadOfDependencies(showUmlLinks);
+			refreshDrawing();
+		}
 	}
 	
 }
