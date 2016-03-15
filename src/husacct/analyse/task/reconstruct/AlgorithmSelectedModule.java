@@ -5,7 +5,8 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import husacct.ServiceProvider;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.ServiceProvider;
+
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
@@ -15,8 +16,6 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 	private ModuleDTO selectedModule;
 	private int layerThreshold;
 	private IModelQueryService queryService;
-	private ArrayList<SoftwareUnitDTO> selectedModuleWithClasses;
-	
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers;
 	
@@ -33,20 +32,20 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 	
 	@Override
 	public ArrayList<SoftwareUnitDTO> getClasses() {
-		ArrayList<SoftwareUnitDTO> selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+		ArrayList<SoftwareUnitDTO> selectedSubmoduleWithClasses = new ArrayList<SoftwareUnitDTO>();
+		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		
-		ModuleDTO[] selectedSubModules = selectedModule.subModules;
-		for (ModuleDTO subModule : selectedSubModules) {
-			for(String localpath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath))
-			selectedModuleWithClasses
-					.add(queryService.getSoftwareUnitByUniqueName(localpath));
+		ModuleDTO[] subModuleDTOs = selectedModule.subModules;
+		for(ModuleDTO subModule : subModuleDTOs){
+			for(String logicalSoftwarePath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)){
+				selectedSubmoduleWithClasses.add(queryService.getSoftwareUnitByUniqueName(logicalSoftwarePath));
+			}
 		}
 		System.out.println("----------");
-		System.out.println(selectedModuleWithClasses);
+		System.out.println(selectedSubmoduleWithClasses);
 		System.out.println("----------");
 		
-		return selectedModuleWithClasses;
+		return selectedSubmoduleWithClasses;
 	}
 	
 	

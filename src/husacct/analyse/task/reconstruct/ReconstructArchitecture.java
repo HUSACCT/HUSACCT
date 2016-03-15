@@ -46,7 +46,8 @@ public class ReconstructArchitecture {
 		ModuleDTO selectedModule = defineSarService.getModule_SelectedInGUI();
 		// identifyLayersAtRootLevel();
 		// identifyMultipleLayers();
-
+		
+		identifyLayersAtRootLevel();
 		identifyComponents();
 		identifySubSystems();
 		IdentifyAdapters();
