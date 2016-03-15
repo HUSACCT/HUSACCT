@@ -225,29 +225,7 @@ public class ReconstructArchitecture {
 		logger.info(" Number of added Layers: " + layers.size());
 	}
 
-	private boolean searchDependencies(String dependencyType, SoftwareUnitDTO softwareUnit, SoftwareUnitDTO otherSoftwareUnit){
-		boolean rootPackageDoesNotUseOtherPackage = true;
-		int nrOfDependenciesFromsoftwareUnitToOther =0;
-		int nrOfDependenciesFromOtherTosoftwareUnit =0;
-		
-		switch(dependencyType){
-			case "umlDependency": 
-				nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
-				nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
-				break;
-				
-			case "softwareUnitDependency":
-				nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
-				nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
-				break;
-		}
-		
-		if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100) * layerThreshold)) {
-			rootPackageDoesNotUseOtherPackage = false;
-		}
-		
-		return rootPackageDoesNotUseOtherPackage;
-	}
+	
 	
 	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId, String dependencyType) {
 		ArrayList<SoftwareUnitDTO> assignedUnitsOriginalBottomLayer = layers.get(bottomLayerId);
@@ -262,12 +240,28 @@ public class ReconstructArchitecture {
 			
 			for (SoftwareUnitDTO otherSoftwareUnit : assignedUnitsBottomLayerClone) {
 				if (!otherSoftwareUnit.uniqueName.equals(softwareUnit.uniqueName)) {
-					rootPackageDoesNotUseOtherPackage = searchDependencies(dependencyType, softwareUnit, otherSoftwareUnit);
+					int nrOfDependenciesFromsoftwareUnitToOther =0;
+					int nrOfDependenciesFromOtherTosoftwareUnit=0;
+					
+					switch(dependencyType){
+					case "umlDependency":
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+						break;
+						
+					case "softwareUnitDependency":
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+						break;
+					}
+					
+					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100) * layerThreshold)) {
+						rootPackageDoesNotUseOtherPackage = false;
+					}
 				}
 			}
 			
-			if (rootPackageDoesNotUseOtherPackage) { // Leave unit in the lower
-														// layer
+			if (rootPackageDoesNotUseOtherPackage) { // Leave unit in the lower layer
 				assignedUnitsNewBottomLayer.add(softwareUnit);
 			} else { // Assign unit to the higher layer
 				assignedUnitsTopLayer.add(softwareUnit);

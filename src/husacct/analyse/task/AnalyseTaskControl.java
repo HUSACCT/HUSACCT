@@ -80,7 +80,7 @@ public class AnalyseTaskControl {
     
     public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold){
     	ReconstructArchitecture reconstructArchitecture = new ReconstructArchitecture(queryService);
-    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold, "DEPENDENCYTYPE");
+    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold, "softwareUnitDependency");
     }
     
     //Added methods
