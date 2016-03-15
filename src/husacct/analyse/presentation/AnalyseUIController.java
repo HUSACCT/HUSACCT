@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 
@@ -14,8 +15,10 @@ public class AnalyseUIController {
 	private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
     private IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
     private IControlService controlService = ServiceProvider.getInstance().getControlService();
+    private AnalyseTaskControl analyseTaskControl;
 
-    public AnalyseUIController() {
+    public AnalyseUIController(AnalyseTaskControl atc) {
+    	analyseTaskControl = atc;
     }
 
     public String translate(String key) {
@@ -25,7 +28,7 @@ public class AnalyseUIController {
     public List<SoftwareUnitDTO> getRootModules() {
         List<SoftwareUnitDTO> rootModules = new ArrayList<SoftwareUnitDTO>();
 
-        for (SoftwareUnitDTO analysedModule : analyseService.getSoftwareUnitsInRoot()) {
+        for (SoftwareUnitDTO analysedModule : analyseTaskControl.getSoftwareUnitsInRoot()) {
             rootModules.add(analysedModule);
         }
         return rootModules;
@@ -33,7 +36,7 @@ public class AnalyseUIController {
 
     public List<SoftwareUnitDTO> getModulesInModules(String currentModule) {
         List<SoftwareUnitDTO> childModules = new ArrayList<SoftwareUnitDTO>();
-        for (SoftwareUnitDTO child : analyseService.getChildUnitsOfSoftwareUnit(currentModule)) {
+        for (SoftwareUnitDTO child : analyseTaskControl.getChildUnitsOfSoftwareUnit(currentModule)) {
             childModules.add(child);
         }
         return childModules;
@@ -65,7 +68,7 @@ public class AnalyseUIController {
         List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
         for (SoftwareUnitDTO fromModule : from) {
             for (SoftwareUnitDTO toModule : to) {
-                for (DependencyDTO dependency : analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule.uniqueName, toModule.uniqueName)) {
+                for (DependencyDTO dependency : analyseTaskControl.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule.uniqueName, toModule.uniqueName)) {
                     if (!dependencies.contains(dependency)) {
                         dependencies.add(dependency);
                     }
@@ -76,15 +79,15 @@ public class AnalyseUIController {
     }
 
     public void exportDependencies(String path) {
-        analyseService.createDependencyReport(path);
+    	analyseTaskControl.createDependencyReport(path);
     }
     
     public IControlService getControlService(){
     	return this.controlService;
     }
 
-    public IAnalyseService getAnalyseService(){
-    	return this.analyseService;
+    public AnalyseTaskControl getAnalyseTaskControl(){
+    	return this.analyseTaskControl;
     }
 
 }
