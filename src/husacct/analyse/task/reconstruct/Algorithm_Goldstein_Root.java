@@ -17,6 +17,8 @@ public class Algorithm_Goldstein_Root extends AlgorithmGeneral{
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; 
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
+	IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
+	private String xLibrariesRootPackage = "xLibraries";
 	
 	
 	
@@ -26,10 +28,13 @@ public class Algorithm_Goldstein_Root extends AlgorithmGeneral{
 		layerThreshold = th;
 		queryService = qService;
 		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
+		identifyLayersAtRootLevel(library);
+		/*
 		identifyLayers(getClasses(library), dependencyType);
 		for (Integer herarchicalLevel : layers.keySet()) {
 			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
 		}
+		*/
 	}
 
 	
@@ -58,6 +63,37 @@ public class Algorithm_Goldstein_Root extends AlgorithmGeneral{
 		return internalRootPackagesWithClasses;
 	}
 
+	private void identifyLayersAtRootLevel(String dependencyType) {
+		determineInternalRootPackagesWithClasses();
+		identifyLayers(internalRootPackagesWithClasses, dependencyType);
+		for (Integer herarchicalLevel : layers.keySet()) {
+			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+		}
+	}
+	
+	private void determineInternalRootPackagesWithClasses() {
+		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
+		for (SoftwareUnitDTO rootModule : allRootUnits) {
+			if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
+				for (String internalPackage : queryService.getRootPackagesWithClass(rootModule.uniqueName)) {
+					internalRootPackagesWithClasses.add(queryService.getSoftwareUnitByUniqueName(internalPackage));
+
+				}
+			}
+		}
+		if (internalRootPackagesWithClasses.size() == 1) {
+			// Temporal solution useful for HUSACCT20 test. To be improved!
+			// E.g., classes in root are excluded from the process.
+			String newRoot = internalRootPackagesWithClasses.get(0).uniqueName;
+			internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+			for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
+				if (child.type.equalsIgnoreCase("package")) {
+					internalRootPackagesWithClasses.add(child);
+				}
+			}
+		}
+	}
 
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units, String depedencyType) {
 		// 1) Assign all internalRootPackages to bottom layer
