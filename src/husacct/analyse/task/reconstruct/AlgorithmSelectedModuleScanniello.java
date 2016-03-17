@@ -14,6 +14,7 @@ import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
+import husacct.define.domain.module.ModuleStrategy;
 
 public class AlgorithmSelectedModuleScanniello extends AlgorithmGeneral{
 	
@@ -45,22 +46,19 @@ public class AlgorithmSelectedModuleScanniello extends AlgorithmGeneral{
 		while (topOrBottomAreNotEmpty){
 			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = IdentifyLayers(middleLayer);
 			
-			topLayers.add(newIdentifiedLayers.get(topLayers));
-			bottomLayers.add(newIdentifiedLayers.get(bottomLayerKey));
+			if (!newIdentifiedLayers.get(topLayerKey).isEmpty()){
+				topLayers.add(newIdentifiedLayers.get(topLayerKey));
+			}
+			if (!newIdentifiedLayers.get(bottomLayerKey).isEmpty()){
+				bottomLayers.add(newIdentifiedLayers.get(bottomLayerKey));
+			}
 			
-			middleLayer = newIdentifiedLayers.get(middleLayer);
+			middleLayer = newIdentifiedLayers.get(middleLayerKey);
 			topOrBottomAreNotEmpty = newIdentifiedLayers.get(topLayerKey).size() > 0 || newIdentifiedLayers.get(bottomLayerKey).size() > 0;
 		}
 		
-		HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers = RestructureLayers(topLayers,bottomLayers, middleLayer);
-		
-		IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
-		for (Integer herarchicalLevel : structuredLayers.keySet()) {
-			defineSarService.addModule("Layer" + herarchicalLevel, selectedModule.logicalPath, "Layer", herarchicalLevel, structuredLayers.get(herarchicalLevel));
-			
-		}
-		
-		
+		HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers = RestructureLayers(topLayers, bottomLayers, middleLayer);
+		this.buildStructure(structuredLayers, selectedModule);
 	}
 
 	@Override
@@ -178,6 +176,31 @@ public class AlgorithmSelectedModuleScanniello extends AlgorithmGeneral{
 		}
 		
 		return structuredLayers;
+	}
+	
+	private void buildStructure(HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers, ModuleDTO selectedModule){
+		IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
+		for (int hierarchicalLevel : structuredLayers.keySet()) {
+			
+			ArrayList<ModuleDTO> subModuleDTOs = new ArrayList<>();
+			for (SoftwareUnitDTO subSoftwareUnitDTO : structuredLayers.get(hierarchicalLevel)){
+				ModuleDTO subModule = defineService.getModule_BasedOnSoftwareUnitName(subSoftwareUnitDTO.uniqueName);
+				subModuleDTOs.add(subModule);
+			}
+			
+			ModuleStrategy layerModuleStategie = defineSarService.addModule("Layer" + hierarchicalLevel, selectedModule.logicalPath, "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
+			ModuleDTO layerModuleDTO = defineSarService.parseModuleStrategy(layerModuleStategie);
+			
+			for (ModuleDTO subModule : subModuleDTOs){
+				ArrayList<SoftwareUnitDTO> subSoftwareUnitDTOs = new ArrayList<>();
+				for (String softwareUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)){
+					subSoftwareUnitDTOs.add(queryService.getSoftwareUnitByUniqueName(softwareUnitUniqueName));
+				}
+				defineSarService.addModule(subModule.name, layerModuleDTO.logicalPath, subModule.type, hierarchicalLevel, subSoftwareUnitDTOs);
+				defineSarService.removeModule(subModule.logicalPath);
+			}
+			
+		}
 	}
 	
 }
