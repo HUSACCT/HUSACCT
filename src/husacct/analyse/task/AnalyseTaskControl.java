@@ -81,7 +81,7 @@ public class AnalyseTaskControl {
     //method for RecontructArchitectuur
     public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold){
     	ReconstructArchitecture reconstructArchitecture = new ReconstructArchitecture(queryService);
-    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold);
+    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold, "umlDependency");
     }
     
     //Methods for AnalyseUIController
