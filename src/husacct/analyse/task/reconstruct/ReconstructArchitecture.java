@@ -101,14 +101,26 @@ public class ReconstructArchitecture {
 			algorithm = new AlgorithmSelectedModule();
 			algorithm.define(selectedModule, threshold, queryService);
 			identifyLayers(algorithm.getClasses(xLibrariesRootPackage), dependencyType);
-			if(layers.size() > 1){
-				for (int level : layers.keySet()) {
-					ModuleStrategy addedModuleStrategy = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
-					ModuleDTO addedModuleDTO = defineSarService.parseModuleStrategy(addedModuleStrategy);
-					
-					
+			for (int level : layers.keySet()) {
+				ArrayList<ModuleDTO> modulesToBeMoved = new ArrayList<ModuleDTO>();
+				for(SoftwareUnitDTO softwareUnitDTO : layers.get(level)){
+					modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 				}
-			}	
+				
+				ModuleStrategy addedModuleStrategy = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+				ModuleDTO layerModuleDTO = defineSarService.parseModuleStrategy(addedModuleStrategy);
+				
+				for(ModuleDTO moduleDTOInLayer : modulesToBeMoved){
+					ArrayList<SoftwareUnitDTO> assignedSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+					
+					for(String logicalPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTOInLayer.logicalPath)){
+						assignedSoftwareUnits.add(queryService.getSoftwareUnitByUniqueName(logicalPath));
+					}
+					defineSarService.addModule(moduleDTOInLayer.name, layerModuleDTO.logicalPath, moduleDTOInLayer.type, level, assignedSoftwareUnits);
+					defineSarService.removeModule(moduleDTOInLayer.logicalPath);
+				}
+				
+			}
 			break;
 		case ("second algorithm"): //second approach for Gui-team
 			algorithm = new AlgorithmSelectedModuleScanniello();

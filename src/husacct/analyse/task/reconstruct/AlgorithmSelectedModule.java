@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.ServiceProvider;
+import husacct.ServiceProvider;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
