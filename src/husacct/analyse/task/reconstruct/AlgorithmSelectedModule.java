@@ -5,13 +5,13 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.ServiceProvider;
-
+import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
+import husacct.define.domain.module.ModuleStrategy;
 
 public class AlgorithmSelectedModule extends AlgorithmGeneral{
 	private ModuleDTO selectedModule;
@@ -28,12 +28,29 @@ public class AlgorithmSelectedModule extends AlgorithmGeneral{
 		layerThreshold = th;
 		queryService = qService;
 		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
+		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		identifyLayers(getClasses(library), dependencyType);
-		if(layers.size() > 1){
-			for (int level : layers.keySet()) {
-				defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+		identifyLayers(getClasses(library), dependencyType);
+		for (int level : layers.keySet()) {
+			ArrayList<ModuleDTO> modulesToBeMoved = new ArrayList<ModuleDTO>();
+			for(SoftwareUnitDTO softwareUnitDTO : layers.get(level)){
+				modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 			}
-		}	
+			
+			ModuleStrategy addedModuleStrategy = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+			ModuleDTO layerModuleDTO = defineSarService.parseModuleStrategy(addedModuleStrategy);
+			
+			for(ModuleDTO moduleDTOInLayer : modulesToBeMoved){
+				ArrayList<SoftwareUnitDTO> assignedSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+				
+				for(String logicalPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTOInLayer.logicalPath)){
+					assignedSoftwareUnits.add(queryService.getSoftwareUnitByUniqueName(logicalPath));
+				}
+				defineSarService.addModule(moduleDTOInLayer.name, layerModuleDTO.logicalPath, moduleDTOInLayer.type, level, assignedSoftwareUnits);
+				defineSarService.removeModule(moduleDTOInLayer.logicalPath);
+			}
+			
+		}
 	}
 
 	
