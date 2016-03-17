@@ -28,7 +28,7 @@ public class Algorithm_Goldstein_Root extends AlgorithmGeneral{
 		layerThreshold = th;
 		queryService = qService;
 		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
-		identifyLayersAtRootLevel(library);
+		identifyLayersAtRootLevel(dependencyType);
 		/*
 		identifyLayers(getClasses(library), dependencyType);
 		for (Integer herarchicalLevel : layers.keySet()) {
