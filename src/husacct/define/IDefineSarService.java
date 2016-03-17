@@ -2,6 +2,8 @@ package husacct.define;
 
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.define.domain.module.ModuleStrategy;
+
 import java.util.ArrayList;
 
 // Services for SAR: Software Architecture Reconstruction
@@ -10,7 +12,7 @@ public interface IDefineSarService {
 	/** Adds a module to the intended architecture
 	 * Argument name is the simple name, so not the logical path of the module, which is formed by the combination of parentLogicalPath + "." + name.  
 	 */
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
+	public ModuleStrategy addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
 	
 	/** Edits an existing module of the intended architecture
 	 * Argument logicalPath identifies the existing module. If the other arguments don't have a null-value (or 0 for int), the value is set as new attribute value. 
@@ -39,5 +41,11 @@ public interface IDefineSarService {
 	 * @return a ModuleDTO; with empty values if no module is selected or if the selected module is not found.
 	 */
 	public ModuleDTO getModule_SelectedInGUI();
+	
+	/**
+	 * Parses the ModuleStrategy to a ModuleDTO
+	 * @return the ModuleDTO parsed from ModuleStrategy
+	 */
+	public ModuleDTO parseModuleStrategy(ModuleStrategy moduleStrategy);
 
 }

@@ -36,12 +36,15 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 
 	@Override
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+	public ModuleStrategy addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+		ModuleStrategy addedModuleStrategy = new ModuleStrategy() {
+		};
 		try {
-			moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
+			addedModuleStrategy =  moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
         }
+		return addedModuleStrategy;
 	}
 	
 	@Override
@@ -142,5 +145,18 @@ public class DefineSarServiceImpl implements IDefineSarService {
  			}
  		}
 		return returnValue;
+	}
+	
+	@Override
+	public ModuleDTO parseModuleStrategy(ModuleStrategy moduleStrategy) {
+		ModuleDTO parsedModuleDTO =  new ModuleDTO();
+		try {
+			if (moduleStrategy != null) {
+				parsedModuleDTO = domainParser.parseModule(moduleStrategy);
+			} 
+        } catch (Exception e) {
+	        this.logger.warn(" Exception: "  + e );
+        }
+		return parsedModuleDTO;
 	}
 }

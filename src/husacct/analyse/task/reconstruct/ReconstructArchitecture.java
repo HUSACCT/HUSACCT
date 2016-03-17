@@ -11,6 +11,7 @@ import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
+import husacct.define.domain.module.ModuleStrategy;
 
 import org.apache.log4j.Logger;
 
@@ -102,7 +103,10 @@ public class ReconstructArchitecture {
 			identifyLayers(algorithm.getClasses(xLibrariesRootPackage), dependencyType);
 			if(layers.size() > 1){
 				for (int level : layers.keySet()) {
-					defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+					ModuleStrategy addedModuleStrategy = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+					ModuleDTO addedModuleDTO = defineSarService.parseModuleStrategy(addedModuleStrategy);
+					
+					
 				}
 			}	
 			break;
@@ -171,6 +175,7 @@ public class ReconstructArchitecture {
 		identifyLayersAtRootLevel(dependencyType);
 		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 		identifiedLayers = layers;	
+		defineSarService.getModule_SelectedInGUI();
 		layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 		
 		for(int i : identifiedLayers.keySet()){
