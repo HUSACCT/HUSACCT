@@ -23,5 +23,14 @@ public enum RelationType {
 	public String get(){
 		return key;
 	}
+	
+	public static RelationType fromString(String enumName) {
+		switch(enumName) {
+			case "Inherits": return INHERITANCELINK;
+			case "Implements": return IMPLEMENTSLINK;
+			case "Attribute": return ATTRIBUTELINK;
+			default: return null;
+		}
+	}
 
 }
