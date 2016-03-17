@@ -70,9 +70,10 @@ public class ReconstructArchitecture {
 		
 		switch (approach) {
 		case ("layerApproach"):
-			/*
 			algorithm = new AlgorithmMultiLayer();
-			algorithm.define(selectedModule, threshold, queryService);
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
+			
+			/*
 			identifiedLayers = algorithm.getClasses(xLibrariesRootPackage, layers);
 			for(int i : identifiedLayers.keySet()){
 				identifyLayers(identifiedLayers.get(i));
@@ -84,35 +85,23 @@ public class ReconstructArchitecture {
 				}	
 			}
 			
-			*/
+			
 			identifyMultipleLayers(dependencyType);
-		
-		
+			*/
+	
 		
 			break;
 		case ("rootApproach"):
 			algorithm = new AlgorithmRoot();
-			algorithm.define(selectedModule, threshold, queryService);
-			identifyLayers(algorithm.getClasses(xLibrariesRootPackage), dependencyType);
-			for (Integer herarchicalLevel : layers.keySet()) {
-				defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
-			}
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
+			break;
 		case ("selectedModuleApproach"):
 			algorithm = new AlgorithmSelectedModule();
-			algorithm.define(selectedModule, threshold, queryService);
-			identifyLayers(algorithm.getClasses(xLibrariesRootPackage), dependencyType);
-			if(layers.size() > 1){
-				for (int level : layers.keySet()) {
-					ModuleStrategy addedModuleStrategy = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
-					ModuleDTO addedModuleDTO = defineSarService.parseModuleStrategy(addedModuleStrategy);
-					
-					
-				}
-			}	
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
 		case ("second algorithm"): //second approach for Gui-team
 			algorithm = new AlgorithmSelectedModuleScanniello();
-			algorithm.define(selectedModule, threshold, queryService);
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
 		case ("Component recognition")://micheals approach
 			
@@ -137,7 +126,7 @@ public class ReconstructArchitecture {
 		}
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
 	}
-
+	
 	private void determineInternalRootPackagesWithClasses() {
 		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
@@ -161,7 +150,8 @@ public class ReconstructArchitecture {
 			}
 		}
 	}
-
+	
+	
 	private void identifyLayersAtRootLevel(String dependencyType) {
 		determineInternalRootPackagesWithClasses();
 		identifyLayers(internalRootPackagesWithClasses, dependencyType);
@@ -169,7 +159,7 @@ public class ReconstructArchitecture {
 			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
 		}
 	}
-
+	
 	
 	private void identifyMultipleLayers(String dependencyType) {
 		identifyLayersAtRootLevel(dependencyType);
@@ -280,7 +270,7 @@ public class ReconstructArchitecture {
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
 	}
-
+	
 	private void identifyComponents() {
 
 	}
