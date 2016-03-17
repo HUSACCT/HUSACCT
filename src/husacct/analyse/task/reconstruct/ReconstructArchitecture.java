@@ -81,7 +81,7 @@ public class ReconstructArchitecture {
 			algorithm = new Algorithm_Goldstein_SelectedModule();
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
-		case ("second algorithm"): //second approach for Gui-team
+		case ("Scanniello - selectedModuleApproach"): //second approach for Gui-team
 			algorithm = new Algorithm_Scanniello_SelectedModule();
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;

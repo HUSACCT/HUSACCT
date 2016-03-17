@@ -143,7 +143,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	}
 
 	private Object[][] getApproachesRows(){
-		Object ApproachesRows[][] = { {"Goldstein - rootApproach", 10}, { "Goldstein - multipleLayerApproach", 10}, { "Goldstein - selectedModuleApproach", 11}, { "second algorithm", 12}, {"Component recognition", 10}};
+		Object ApproachesRows[][] = { {"Goldstein - rootApproach", 10}, { "Goldstein - multipleLayerApproach", 10}, { "Goldstein - selectedModuleApproach", 11}, { "Scanniello - selectedModuleApproach", 12}, {"Component recognition", 10}};
 		return ApproachesRows;
 	}
 	
