@@ -94,7 +94,7 @@ public class ReconstructArchitecture {
 			identifyLayers(algorithm.getClasses(xLibrariesRootPackage));
 			break;
 		case ("second algorithm"): //second approach for Gui-team
-			algorithm = new AlgorithmTwo();
+			algorithm = new AlgorithmSelectedModuleScanniello();
 			algorithm.define(selectedModule, threshold, queryService);
 			break;
 		case ("Component recognition")://micheals approach

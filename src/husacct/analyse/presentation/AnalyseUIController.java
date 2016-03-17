@@ -13,7 +13,6 @@ import java.util.List;
 
 public class AnalyseUIController {
 	private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
-    private IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
     private IControlService controlService = ServiceProvider.getInstance().getControlService();
     private AnalyseTaskControl analyseTaskControl;
 

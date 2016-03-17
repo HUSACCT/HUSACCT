@@ -78,12 +78,13 @@ public class AnalyseTaskControl {
     	new ReconstructArchitecture(queryService);
     }
     
+    //method for RecontructArchitectuur
     public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold){
     	ReconstructArchitecture reconstructArchitecture = new ReconstructArchitecture(queryService);
     	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold);
     }
     
-    //Added methods
+    //Methods for AnalyseUIController
     public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
         return queryService.getSoftwareUnitsInRoot();
     }
