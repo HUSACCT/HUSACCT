@@ -10,50 +10,34 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-public class AlgorithmMultiLayer extends AlgorithmGeneral{
-
+public class Algorithm_Goldstein_Root extends AlgorithmGeneral{
 	private ModuleDTO selectedModule;
 	private int layerThreshold;
 	private IModelQueryService queryService;
-	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses;
-	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> identifiedLayers;
+	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; 
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
-	private String xLibrariesRootPackage = "xLibraries";
+	
+	
 	
 	@Override
 	public void define(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
 		selectedModule = Module;
 		layerThreshold = th;
 		queryService = qService;
-		
-		identifiedLayers = getClasses(xLibrariesRootPackage, layers);
-		for(int i : identifiedLayers.keySet()){
-			identifyLayers(identifiedLayers.get(i), dependencyType);
-			logger.info(layers);	
-			if(layers.keySet().size() > 1){
-				for (Integer herarchicalLevel : layers.keySet()) {
-					defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
-				}
-			}	
+		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
+		identifyLayers(getClasses(library), dependencyType);
+		for (Integer herarchicalLevel : layers.keySet()) {
+			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
 		}
 	}
 
-	@Override
-	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
-		getClasses(library);
-		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-		identifiedLayers = layers;	
-		
-		return identifiedLayers;
-	}
-
-	private void determineInternalRootPackagesWithClasses() {
+	
+	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
 		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
 		for (SoftwareUnitDTO rootModule : allRootUnits) {
-			if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
+			if (!rootModule.uniqueName.equals(library)) {
 				for (String internalPackage : queryService.getRootPackagesWithClass(rootModule.uniqueName)) {
 					internalRootPackagesWithClasses.add(queryService.getSoftwareUnitByUniqueName(internalPackage));
 
@@ -71,36 +55,10 @@ public class AlgorithmMultiLayer extends AlgorithmGeneral{
 				}
 			}
 		}
+		return internalRootPackagesWithClasses;
 	}
-	
-	
-	private void identifyLayersAtRootLevel(String dependencyType) {
-		determineInternalRootPackagesWithClasses();
-		identifyLayers(internalRootPackagesWithClasses, dependencyType);
-		for (Integer herarchicalLevel : layers.keySet()) {
-			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
-		}
-	}
-	
-	private void identifyMultipleLayers(String dependencyType) {
-		identifyLayersAtRootLevel(dependencyType);
-		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-		identifiedLayers = layers;	
-		defineSarService.getModule_SelectedInGUI();
-		layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-		
-		for(int i : identifiedLayers.keySet()){
-			identifyLayers(identifiedLayers.get(i), dependencyType);
-			logger.info(layers);	
-			if(layers.keySet().size() > 1){
-				for (Integer herarchicalLevel : layers.keySet()) {
-					defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
-				}
-			}	
-		}
-	}
-	
-	
+
+
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units, String depedencyType) {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
@@ -189,9 +147,10 @@ public class AlgorithmMultiLayer extends AlgorithmGeneral{
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
 	}
-
+	
 	@Override
-	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
+	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(
+			String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
 		// TODO Auto-generated method stub
 		return null;
 	}

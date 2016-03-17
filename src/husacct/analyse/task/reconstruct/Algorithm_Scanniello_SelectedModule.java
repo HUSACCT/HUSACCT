@@ -16,7 +16,7 @@ import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
 import husacct.define.domain.module.ModuleStrategy;
 
-public class AlgorithmSelectedModuleScanniello extends AlgorithmGeneral{
+public class Algorithm_Scanniello_SelectedModule extends AlgorithmGeneral{
 	
 	private IModelQueryService queryService;
 	private IDefineService defineService;

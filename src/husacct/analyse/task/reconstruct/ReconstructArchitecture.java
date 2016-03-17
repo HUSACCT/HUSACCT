@@ -59,7 +59,7 @@ public class ReconstructArchitecture {
 
 	public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold, String dependencyType) {
 		this.layerThreshold = threshold;
-		AlgorithmGeneral algorithm = new AlgorithmSelectedModule();
+		AlgorithmGeneral algorithm = new Algorithm_Goldstein_SelectedModule();
 		
 		/*
 		 * DependencyType is de soort relaties waarop het algorithme gaat checken
@@ -69,38 +69,20 @@ public class ReconstructArchitecture {
 		 */
 		
 		switch (approach) {
-		case ("layerApproach"):
-			algorithm = new AlgorithmMultiLayer();
-			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
-			
-			/*
-			identifiedLayers = algorithm.getClasses(xLibrariesRootPackage, layers);
-			for(int i : identifiedLayers.keySet()){
-				identifyLayers(identifiedLayers.get(i));
-				logger.info(layers);	
-				if(layers.keySet().size() > 1){
-					for (Integer herarchicalLevel : layers.keySet()) {
-						defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
-					}
-				}	
-			}
-			
-			
-			identifyMultipleLayers(dependencyType);
-			*/
-	
-		
-			break;
-		case ("rootApproach"):
-			algorithm = new AlgorithmRoot();
+		case ("Goldstein - multipleLayerApproach"):
+			algorithm = new Algorithm_Goldstein_MultiLayer();
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
-		case ("selectedModuleApproach"):
-			algorithm = new AlgorithmSelectedModule();
+		case ("Goldstein - rootApproach"):
+			algorithm = new Algorithm_Goldstein_Root();
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
+			break;
+		case ("Goldstein - selectedModuleApproach"):
+			algorithm = new Algorithm_Goldstein_SelectedModule();
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
 		case ("second algorithm"): //second approach for Gui-team
-			algorithm = new AlgorithmSelectedModuleScanniello();
+			algorithm = new Algorithm_Scanniello_SelectedModule();
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
 		case ("Component recognition")://micheals approach
@@ -110,7 +92,8 @@ public class ReconstructArchitecture {
 		
 		
 	}
-
+	
+	
 	private void identifyExternalSystems() {
 		// Create module "ExternalSystems"
 		ArrayList<SoftwareUnitDTO> emptySoftwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
@@ -126,7 +109,7 @@ public class ReconstructArchitecture {
 		}
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
 	}
-	
+	/*
 	private void determineInternalRootPackagesWithClasses() {
 		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
@@ -160,7 +143,11 @@ public class ReconstructArchitecture {
 		}
 	}
 	
+	*/
 	
+	
+	
+	/*
 	private void identifyMultipleLayers(String dependencyType) {
 		identifyLayersAtRootLevel(dependencyType);
 		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
@@ -270,7 +257,7 @@ public class ReconstructArchitecture {
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
 	}
-	
+	*/
 	private void identifyComponents() {
 
 	}

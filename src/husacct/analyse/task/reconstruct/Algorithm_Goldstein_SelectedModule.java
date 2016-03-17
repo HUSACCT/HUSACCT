@@ -13,7 +13,7 @@ import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
 import husacct.define.domain.module.ModuleStrategy;
 
-public class AlgorithmSelectedModule extends AlgorithmGeneral{
+public class Algorithm_Goldstein_SelectedModule extends AlgorithmGeneral{
 	private ModuleDTO selectedModule;
 	private int layerThreshold;
 	private IModelQueryService queryService;
