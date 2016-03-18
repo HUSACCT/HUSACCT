@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -12,10 +13,11 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
 import husacct.validate.domain.validation.moduletype.ModuleTypes;
 
-public class AlgorithmComponents {
+public class AlgorithmComponents extends AlgorithmGeneral{
 	private final Logger logger = Logger.getLogger(AlgorithmComponents.class);
 	private IModelQueryService queryService;
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; 
@@ -51,7 +53,7 @@ public class AlgorithmComponents {
 			}
 		}
 	}
-	public void identifyComponents(IModelQueryService queryService) {
+	public void identifyComponents() {
 		
 		determineInternalRootPackagesWithClasses();
 		identifiedInterfaceClasses = new ArrayList<SoftwareUnitDTO>();
@@ -128,5 +130,21 @@ public class AlgorithmComponents {
 		//validate.propertyrulestype.facadeconvention.check 
 		//module component get child, edit module
 		//threshold 20% begin met 50%
+	}
+	@Override
+	public void define(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(String library,
+			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

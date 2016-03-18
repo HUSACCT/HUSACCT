@@ -86,7 +86,8 @@ public class ReconstructArchitecture {
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
 		case ("Component recognition")://micheals approach
-			
+			AlgorithmComponents algorithmComponents = new AlgorithmComponents(queryService);
+			algorithmComponents.identifyComponents();
 			break;
 		}
 		
