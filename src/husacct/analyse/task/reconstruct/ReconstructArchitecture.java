@@ -10,6 +10,9 @@ import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
+import husacct.define.IDefineService;
+import husacct.define.domain.module.ModuleStrategy;
+
 import org.apache.log4j.Logger;
 
 public class ReconstructArchitecture {
@@ -17,6 +20,7 @@ public class ReconstructArchitecture {
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private IModelQueryService queryService;
 	private IDefineSarService defineSarService;
+	private IDefineService defineService;
 
 	// The first packages (starting from the project root) that contain one or more classes.
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses; 
@@ -38,12 +42,13 @@ public class ReconstructArchitecture {
 
 		this.queryService = queryService;
 		defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
+		defineService = ServiceProvider.getInstance().getDefineService();
 		identifyExternalSystems();
 		ModuleDTO selectedModule = defineSarService.getModule_SelectedInGUI();
-		identifyLayersAtSelectedModule(selectedModule);
 		// identifyLayersAtRootLevel();
 		// identifyMultipleLayers();
-
+		
+		//identifyLayersAtRootLevel();
 		identifyComponents();
 		identifySubSystems();
 		IdentifyAdapters();
@@ -52,19 +57,43 @@ public class ReconstructArchitecture {
 		getUmlLinks();
 	}
 
-	public void startReconstruction(ModuleDTO selectedModule, int layerThreshold, String approach) {
-		this.layerThreshold = layerThreshold;
-
+	public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold, String dependencyType) {
+		this.layerThreshold = threshold;
+		AlgorithmGeneral algorithm = new Algorithm_Goldstein_SelectedModule();
+		
+		/*
+		 * DependencyType is de soort relaties waarop het algorithme gaat checken
+		 * tot nu toe zijn er alleen deze twee:
+		 * "umlDependency"
+		 * "softwareUnitDependency"
+		 */
+		
 		switch (approach) {
-		case ("layerApproach"):
-			identifyMultipleLayers();
+		case ("Goldstein - multipleLayerApproach"):
+			algorithm = new Algorithm_Goldstein_MultiLayer();
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
-		case ("selectedModuleApproach"):
-			identifyLayersAtSelectedModule(selectedModule);
+		case ("Goldstein - rootApproach"):
+			algorithm = new Algorithm_Goldstein_Root();
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
+			break;
+		case ("Goldstein - selectedModuleApproach"):
+			algorithm = new Algorithm_Goldstein_SelectedModule();
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
+			break;
+		case ("Scanniello - selectedModuleApproach"): //second approach for Gui-team
+			algorithm = new Algorithm_Scanniello_SelectedModule();
+			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
+			break;
+		case ("Component recognition")://micheals approach
+			
 			break;
 		}
+		
+		
 	}
-
+	
+	
 	private void identifyExternalSystems() {
 		// Create module "ExternalSystems"
 		ArrayList<SoftwareUnitDTO> emptySoftwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
@@ -80,7 +109,7 @@ public class ReconstructArchitecture {
 		}
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
 	}
-
+	/*
 	private void determineInternalRootPackagesWithClasses() {
 		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
@@ -104,36 +133,30 @@ public class ReconstructArchitecture {
 			}
 		}
 	}
-
-	private void determineSelectedModuleWithClasses(ModuleDTO selectedModule) {
-		selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-		ModuleDTO[] selectedSubModules = selectedModule.subModules;
-		for (ModuleDTO subModule : selectedSubModules) {
-			selectedModuleWithClasses
-					.add(queryService.getSoftwareUnitByUniqueName(subModule.logicalPath.toLowerCase()));
-		}
-		System.out.println("----------");
-		System.out.println(selectedModuleWithClasses);
-		System.out.println("----------");
-		
-	}
-
-	private void identifyLayersAtRootLevel() {
+	
+	
+	private void identifyLayersAtRootLevel(String dependencyType) {
 		determineInternalRootPackagesWithClasses();
-		identifyLayers(internalRootPackagesWithClasses);
+		identifyLayers(internalRootPackagesWithClasses, dependencyType);
 		for (Integer herarchicalLevel : layers.keySet()) {
 			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
 		}
 	}
-
-	private void identifyMultipleLayers() {
-		identifyLayersAtRootLevel();
+	
+	*/
+	
+	
+	
+	/*
+	private void identifyMultipleLayers(String dependencyType) {
+		identifyLayersAtRootLevel(dependencyType);
 		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 		identifiedLayers = layers;	
+		defineSarService.getModule_SelectedInGUI();
 		layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 		
 		for(int i : identifiedLayers.keySet()){
-			identifyLayers(identifiedLayers.get(i));
+			identifyLayers(identifiedLayers.get(i), dependencyType);
 			logger.info(layers);	
 			if(layers.keySet().size() > 1){
 				for (Integer herarchicalLevel : layers.keySet()) {
@@ -142,18 +165,9 @@ public class ReconstructArchitecture {
 			}	
 		}
 	}
-
-	private void identifyLayersAtSelectedModule(ModuleDTO selectedModule) {
-		// This array will be filled with the classes in one module
-		// selectedModuleWithClasses = new ArrayList<SoftwareUnitDTO>();
-
-		determineSelectedModuleWithClasses(selectedModule);
-
-		// Identify the layers within the selected module
-		identifyLayers(selectedModuleWithClasses);
-	}
-
-	private void identifyLayers(ArrayList<SoftwareUnitDTO> units) {
+	
+	
+	private void identifyLayers(ArrayList<SoftwareUnitDTO> units, String depedencyType) {
 		// 1) Assign all internalRootPackages to bottom layer
 		int layerId = 1;
 		ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<SoftwareUnitDTO>();
@@ -162,13 +176,13 @@ public class ReconstructArchitecture {
 
 		// 2) Identify the bottom layer. Look for packages with dependencies to
 		// external systems only.
-		identifyTopLayerBasedOnUnitsInBottomLayer(layerId);
+		identifyTopLayerBasedOnUnitsInBottomLayer(layerId, depedencyType);
 
 		// 3) Look iteratively for packages on top of the bottom layer, et
 		// cetera.
 		while (layers.lastKey() > layerId) {
 			layerId++;
-			identifyTopLayerBasedOnUnitsInBottomLayer(layerId);
+			identifyTopLayerBasedOnUnitsInBottomLayer(layerId, depedencyType);
 		}
 
 		// 4) Add the layers to the intended architecture
@@ -193,31 +207,43 @@ public class ReconstructArchitecture {
 		logger.info(" Number of added Layers: " + layers.size());
 	}
 
-	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId) {
+	
+	
+	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId, String dependencyType) {
 		ArrayList<SoftwareUnitDTO> assignedUnitsOriginalBottomLayer = layers.get(bottomLayerId);
 		@SuppressWarnings("unchecked")
 		ArrayList<SoftwareUnitDTO> assignedUnitsBottomLayerClone = (ArrayList<SoftwareUnitDTO>) assignedUnitsOriginalBottomLayer
 				.clone();
 		ArrayList<SoftwareUnitDTO> assignedUnitsNewBottomLayer = new ArrayList<SoftwareUnitDTO>();
 		ArrayList<SoftwareUnitDTO> assignedUnitsTopLayer = new ArrayList<SoftwareUnitDTO>();
+		
 		for (SoftwareUnitDTO softwareUnit : assignedUnitsOriginalBottomLayer) {
 			boolean rootPackageDoesNotUseOtherPackage = true;
+			
 			for (SoftwareUnitDTO otherSoftwareUnit : assignedUnitsBottomLayerClone) {
 				if (!otherSoftwareUnit.uniqueName.equals(softwareUnit.uniqueName)) {
-					int nrOfDependenciesFromsoftwareUnitToOther = queryService
-							.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName,
-									otherSoftwareUnit.uniqueName).length;
-					int nrOfDependenciesFromOtherTosoftwareUnit = queryService
-							.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName,
-									softwareUnit.uniqueName).length;
-					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100)
-							* layerThreshold)) {
+					int nrOfDependenciesFromsoftwareUnitToOther =0;
+					int nrOfDependenciesFromOtherTosoftwareUnit=0;
+					
+					switch(dependencyType){
+					case "umlDependency":
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+						break;
+						
+					case "softwareUnitDependency":
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+						break;
+					}
+					
+					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100) * layerThreshold)) {
 						rootPackageDoesNotUseOtherPackage = false;
 					}
 				}
 			}
-			if (rootPackageDoesNotUseOtherPackage) { // Leave unit in the lower
-														// layer
+			
+			if (rootPackageDoesNotUseOtherPackage) { // Leave unit in the lower layer
 				assignedUnitsNewBottomLayer.add(softwareUnit);
 			} else { // Assign unit to the higher layer
 				assignedUnitsTopLayer.add(softwareUnit);
@@ -231,7 +257,7 @@ public class ReconstructArchitecture {
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
 	}
-
+	*/
 	private void identifyComponents() {
 
 	}

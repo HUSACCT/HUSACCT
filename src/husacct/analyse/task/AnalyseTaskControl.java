@@ -7,9 +7,13 @@ import org.jdom2.Element;
 
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ModuleDTO;
 
 public class AnalyseTaskControl {
 
@@ -73,4 +77,24 @@ public class AnalyseTaskControl {
     public void reconstructArchitecture() {
     	new ReconstructArchitecture(queryService);
     }
+    
+    //method for RecontructArchitectuur
+    public void startReconstruction(ModuleDTO selectedModule, String approach, int threshold){
+    	ReconstructArchitecture reconstructArchitecture = new ReconstructArchitecture(queryService);
+    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold, "umlDependency");
+    }
+    
+    //Methods for AnalyseUIController
+    public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
+        return queryService.getSoftwareUnitsInRoot();
+    }
+    public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from) {
+        return queryService.getChildUnitsOfSoftwareUnit(from);
+    }
+    public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
+        return queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
+    }
+	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
+		return queryService.getAnalysisStatistics(selectedModule);
+	}
 }

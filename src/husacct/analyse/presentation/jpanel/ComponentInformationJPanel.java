@@ -29,32 +29,32 @@ public class ComponentInformationJPanel extends HelpableJPanel implements Action
 		super();
 		setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		add(panel, BorderLayout.NORTH);
-		panel.setLayout(new BorderLayout(0, 0));
+		JPanel componentInformationPanel = new JPanel();
+		add(componentInformationPanel, BorderLayout.NORTH);
+		componentInformationPanel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, BorderLayout.WEST);
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel_1.setLayout(gbl_panel_1);
+		JPanel informationPanel = new JPanel();
+		componentInformationPanel.add(informationPanel, BorderLayout.WEST);
+		GridBagLayout gbl_informationPanel = new GridBagLayout();
+		gbl_informationPanel.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_informationPanel.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_informationPanel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_informationPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		informationPanel.setLayout(gbl_informationPanel);
 		
 		JLabel lblNewLabel = new JLabel("Module name:");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 0;
-		panel_1.add(lblNewLabel, gbc_lblNewLabel);
+		informationPanel.add(lblNewLabel, gbc_lblNewLabel);
 		
 		lblNewLabel_2 = new JLabel("");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_2.gridx = 2;
 		gbc_lblNewLabel_2.gridy = 0;
-		panel_1.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		informationPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
 		
 		
@@ -63,36 +63,36 @@ public class ComponentInformationJPanel extends HelpableJPanel implements Action
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 1;
-		panel_1.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		informationPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 				
 		lblNewLabel_3 = new JLabel("");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.gridx = 2;
 		gbc_lblNewLabel_3.gridy = 1;
-		panel_1.add(lblNewLabel_3, gbc_lblNewLabel_3);
+		informationPanel.add(lblNewLabel_3, gbc_lblNewLabel_3);
 		
 		JLabel moduleTypeLabel = new JLabel("Type:");
 		GridBagConstraints gbc_moduleTypeLabel = new GridBagConstraints();
 		gbc_moduleTypeLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_moduleTypeLabel.gridx = 0;
 		gbc_moduleTypeLabel.gridy = 2;
-		panel_1.add(moduleTypeLabel, gbc_moduleTypeLabel);
+		informationPanel.add(moduleTypeLabel, gbc_moduleTypeLabel);
 				
 		moduleTypeValue = new JLabel("");
 		GridBagConstraints gbc_moduleTypeValue = new GridBagConstraints();
 		gbc_moduleTypeValue.gridx = 2;
 		gbc_moduleTypeValue.gridy = 2;
-		panel_1.add(moduleTypeValue, gbc_moduleTypeValue);
+		informationPanel.add(moduleTypeValue, gbc_moduleTypeValue);
 		
 		
 		
 		
-		JPanel panel_2 = new JPanel();
-		panel.add(panel_2, BorderLayout.EAST);
-		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JPanel startStopSarButtonPanel = new JPanel();
+		componentInformationPanel.add(startStopSarButtonPanel, BorderLayout.EAST);
+		startStopSarButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		btnNewButton = new JButton("Start/Stop SAR");
-		panel_2.add(btnNewButton);
+		startStopSarButtonPanel.add(btnNewButton);
 		initUI();
 		btnNewButton.addActionListener(this);
 	}
