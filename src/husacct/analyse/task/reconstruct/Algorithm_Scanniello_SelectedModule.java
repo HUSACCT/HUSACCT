@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.TreeMap;
 
 import husacct.ServiceProvider;
@@ -14,7 +13,6 @@ import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
-import husacct.define.domain.module.ModuleStrategy;
 
 public class Algorithm_Scanniello_SelectedModule extends AlgorithmGeneral{
 	
@@ -188,15 +186,14 @@ public class Algorithm_Scanniello_SelectedModule extends AlgorithmGeneral{
 				subModuleDTOs.add(subModule);
 			}
 			
-			ModuleStrategy layerModuleStategie = defineSarService.addModule("Layer" + hierarchicalLevel, selectedModule.logicalPath, "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
-			ModuleDTO layerModuleDTO = defineSarService.parseModuleStrategy(layerModuleStategie);
-			
+			defineSarService.addModule("Layer" + hierarchicalLevel, selectedModule.logicalPath, "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
+			String newModuleLogicalPath = selectedModule.logicalPath + "." + "Layer" + hierarchicalLevel;
 			for (ModuleDTO subModule : subModuleDTOs){
 				ArrayList<SoftwareUnitDTO> subSoftwareUnitDTOs = new ArrayList<>();
 				for (String softwareUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)){
 					subSoftwareUnitDTOs.add(queryService.getSoftwareUnitByUniqueName(softwareUnitUniqueName));
 				}
-				defineSarService.addModule(subModule.name, layerModuleDTO.logicalPath, subModule.type, hierarchicalLevel, subSoftwareUnitDTOs);
+				defineSarService.addModule(subModule.name, newModuleLogicalPath, subModule.type, hierarchicalLevel, subSoftwareUnitDTOs);
 				defineSarService.removeModule(subModule.logicalPath);
 			}
 			
