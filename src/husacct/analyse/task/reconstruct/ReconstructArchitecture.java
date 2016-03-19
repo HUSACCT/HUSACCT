@@ -86,7 +86,8 @@ public class ReconstructArchitecture {
 			algorithm.define(selectedModule, threshold, queryService, xLibrariesRootPackage, dependencyType);
 			break;
 		case ("Component recognition")://micheals approach
-			
+			AlgorithmComponents algorithmComponents = new AlgorithmComponents(queryService);
+			algorithmComponents.identifyComponents();
 			break;
 		}
 		
@@ -108,6 +109,27 @@ public class ReconstructArchitecture {
 			nrOfExternalLibraries++;
 		}
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
+	}
+	
+	private void identifyComponents() {
+
+	}
+
+	private void identifySubSystems() {
+
+	}
+
+	private void IdentifyAdapters() { // Here, an adapter is a module with a
+										// IsTheOnlyModuleAllowedToUse rule.
+
+	}
+
+	private void createModule() {
+
+	}
+
+	private void createRule() {
+
 	}
 	/*
 	private void determineInternalRootPackagesWithClasses() {
@@ -258,27 +280,6 @@ public class ReconstructArchitecture {
 		}
 	}
 	*/
-	private void identifyComponents() {
-
-	}
-
-	private void identifySubSystems() {
-
-	}
-
-	private void IdentifyAdapters() { // Here, an adapter is a module with a
-										// IsTheOnlyModuleAllowedToUse rule.
-
-	}
-
-	private void createModule() {
-
-	}
-
-	private void createRule() {
-
-	}
-
 	private void getUmlLinks() {
 		// Test example for UmlLinks while running the Java AccuracyTest
 		HashSet<UmlLinkDTO> umlLinks = queryService
