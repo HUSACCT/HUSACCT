@@ -8,13 +8,10 @@ import husacct.control.task.MainController;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -22,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
 
-public class LoadingDialog extends JFrame implements Runnable {
+public class LoadingDialog extends JDialog implements Runnable {
 
 	private int amountOfProcesses = 1;
 	private int currentProcessNumber = 1;
@@ -83,7 +80,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setSize(new Dimension(400, 250));
 		this.setResizable(false);
-		//DialogUtils.alignCenter(this);
+		DialogUtils.alignCenter(this);
 	}
 
 	private void addComponents() {
@@ -115,21 +112,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 		
 		JLabel waitLabel = new JLabel(localeService.getTranslatedString("Wait"));
 
-		JButton runInBackgroundButton = new JButton(localeService.getTranslatedString("RunInBackground"));
-		runInBackgroundButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setExtendedState(JFrame.ICONIFIED);
-			}
-		});
-		
-		JButton stopButton = new JButton(localeService.getTranslatedString("Cancel"));
-		
-		stopButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getToolkit().getSystemEventQueue().postEvent(we);
-			}
-		});	
-		
 		processPanel.add(processLabel);
 		
 		labelPanel.add(progressLabel);
@@ -140,8 +122,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 		projectProgressPanel.add(projectProgressBar);
 		
 		buttonsPanel.add(waitLabel);
-		buttonPanel.add(runInBackgroundButton);
-		buttonPanel.add(stopButton);
 		
 		add(processPanel);
 		add(projectLabelPanel);
