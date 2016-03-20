@@ -83,6 +83,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setSize(new Dimension(400, 250));
 		this.setResizable(false);
+		//DialogUtils.alignCenter(this);
 	}
 
 	private void addComponents() {

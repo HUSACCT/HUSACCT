@@ -1,9 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
@@ -44,7 +42,6 @@ public class SetApplicationPanel extends JPanel{
 	private String[] languages;
 	private DefaultListModel<String> pathListModel = new DefaultListModel<String>();
 	private JDialog dialogOwner;
-	private JPanel panel;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private MainController mainController;
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
@@ -140,7 +137,7 @@ public class SetApplicationPanel extends JPanel{
 			fileChooser.setCurrentDirectory(new File(pathToSelectedFileDir));
 			}
 		}
-		int returnVal = fileChooser.showDialog(panel);
+		int returnVal = fileChooser.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
 			pathListModel.add(pathListModel.size(), selectedFile);
