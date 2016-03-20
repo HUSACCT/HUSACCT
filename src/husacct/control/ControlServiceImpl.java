@@ -92,9 +92,10 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public Element getWorkspaceData() {
 		Element data = new Element("workspace");
 		Workspace workspace = workspaceController.getCurrentWorkspace();
-		data.setAttribute("name", workspace.getName());
-		data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
-
+		if (workspace != null) {
+			data.setAttribute("name", workspace.getName());
+			data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
+		}
 		return data;
 	}
 	

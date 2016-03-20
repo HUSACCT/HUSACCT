@@ -3,8 +3,6 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
-import husacct.control.presentation.util.DialogUtils;
-import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitTableDropListener;
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
@@ -109,10 +107,10 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		if (moduleId != -1) {
 			if (softwareUnitFrame == null) {
 				softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
-				DialogUtils.alignCenter(softwareUnitFrame);
+				ServiceProvider.getInstance().getControlService().centerDialog(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else if (!softwareUnitFrame.isVisible()) {
-				DialogUtils.alignCenter(softwareUnitFrame);
+				ServiceProvider.getInstance().getControlService().centerDialog(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			}
 		}
@@ -122,7 +120,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
 		softwareUnitsTable.setDragEnabled(true);
-		SoftwareUnitTableDropListener listener = new SoftwareUnitTableDropListener(softwareUnitsTable);
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter() {
 			@Override

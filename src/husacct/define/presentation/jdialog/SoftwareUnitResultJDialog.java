@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -26,7 +25,6 @@ import javax.swing.tree.TreeSelectionModel;
 public class SoftwareUnitResultJDialog extends HelpableJDialog implements ActionListener {
 
 	private static final long serialVersionUID = 7060253504620240808L;
-	private String enteredRegEx;
 	private JButton saveButton;
 	private JButton backButton;
 	private JButton selectAllButton;
@@ -37,7 +35,6 @@ public class SoftwareUnitResultJDialog extends HelpableJDialog implements Action
 	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree resultTree, String enteredRegEx, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.resultTree = resultTree;
-		this.enteredRegEx = enteredRegEx;
 		this.previousSoftwareUnitJDialog = previousSoftwareUnitJDialog;
 		initUI();
 	}
@@ -54,7 +51,7 @@ public class SoftwareUnitResultJDialog extends HelpableJDialog implements Action
 			this.setResizable(false);
 			this.setSize(500, 100);
 			this.pack();
-			DialogUtils.alignCenter(this);
+			ServiceProvider.getInstance().getControlService().centerDialog(this);
 			this.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();

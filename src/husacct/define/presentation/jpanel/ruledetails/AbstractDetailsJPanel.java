@@ -1,7 +1,6 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
 import husacct.ServiceProvider;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
@@ -88,7 +87,7 @@ ActionListener {
 			violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController, ruleTypeKey);
 		}
 		violationTypesJDialog.initGUI();
-		DialogUtils.alignCenter(violationTypesJDialog);
+		ServiceProvider.getInstance().getControlService().centerDialog(violationTypesJDialog);
 		violationTypesJDialog.setVisible(true);
 	}
 

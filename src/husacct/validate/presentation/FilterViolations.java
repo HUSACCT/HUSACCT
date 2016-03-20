@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ControlServiceImpl;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
@@ -17,7 +16,6 @@ import java.util.Calendar;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -76,8 +74,8 @@ public final class FilterViolations extends HelpableJDialog {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setModal(true);
-		DialogUtils.alignCenter(this);
-
+		ServiceProvider.getInstance().getControlService().centerDialog(this);
+		
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
 		ruletypeTable.setFillsViewportHeight(true);

@@ -3,7 +3,6 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.moduletree.ModuletreeContextMenu;
@@ -249,7 +248,7 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	public void newModule() {
 		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
-		DialogUtils.alignCenter(addModuleFrame);
+		ServiceProvider.getInstance().getControlService().centerDialog(addModuleFrame);
 		addModuleFrame.initGUI();
 	}
 
