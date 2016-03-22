@@ -5,13 +5,11 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
-import husacct.define.domain.module.ModuleStrategy;
 
 public class Algorithm_Goldstein_SelectedModule extends AlgorithmGeneral{
 	private ModuleDTO selectedModule;
@@ -37,8 +35,8 @@ public class Algorithm_Goldstein_SelectedModule extends AlgorithmGeneral{
 				modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 			}
 			
-			ModuleStrategy addedModuleStrategy = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
-			ModuleDTO layerModuleDTO = defineSarService.parseModuleStrategy(addedModuleStrategy);
+			defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+			String newModuleLogicalPath = selectedModule.logicalPath + "." + "Layer" + level;
 			
 			for(ModuleDTO moduleDTOInLayer : modulesToBeMoved){
 				ArrayList<SoftwareUnitDTO> assignedSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
@@ -46,7 +44,7 @@ public class Algorithm_Goldstein_SelectedModule extends AlgorithmGeneral{
 				for(String logicalPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTOInLayer.logicalPath)){
 					assignedSoftwareUnits.add(queryService.getSoftwareUnitByUniqueName(logicalPath));
 				}
-				defineSarService.addModule(moduleDTOInLayer.name, layerModuleDTO.logicalPath, moduleDTOInLayer.type, level, assignedSoftwareUnits);
+				defineSarService.addModule(moduleDTOInLayer.name, newModuleLogicalPath, moduleDTOInLayer.type, level, assignedSoftwareUnits);
 				defineSarService.removeModule(moduleDTOInLayer.logicalPath);
 			}
 			

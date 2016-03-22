@@ -13,6 +13,7 @@ import husacct.define.domain.services.ModuleDomainService;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 // Services for SAR: Software Architecture Reconstruction
@@ -36,16 +37,14 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 
 	@Override
-	public ModuleStrategy addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
-		ModuleStrategy addedModuleStrategy = new ModuleStrategy() {
-		};
+	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
 		try {
-			addedModuleStrategy =  moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
+			moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
         }
-		return addedModuleStrategy;
 	}
+	
 	
 	@Override
 	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
@@ -147,16 +146,4 @@ public class DefineSarServiceImpl implements IDefineSarService {
 		return returnValue;
 	}
 	
-	@Override
-	public ModuleDTO parseModuleStrategy(ModuleStrategy moduleStrategy) {
-		ModuleDTO parsedModuleDTO =  new ModuleDTO();
-		try {
-			if (moduleStrategy != null) {
-				parsedModuleDTO = domainParser.parseModule(moduleStrategy);
-			} 
-        } catch (Exception e) {
-	        this.logger.warn(" Exception: "  + e );
-        }
-		return parsedModuleDTO;
-	}
 }
