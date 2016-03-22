@@ -3,7 +3,6 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.locale.ILocaleService;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.tables.JTableWarningTable;
 
 import java.awt.BorderLayout;
@@ -41,7 +40,7 @@ public class WarningDialog  extends JDialog{
 		this.setLayout(new BorderLayout());
 		this.setResizable(true);
 		this.setTitle(localeService.getTranslatedString("Warnings"));
-		DialogUtils.alignCenter(this);
+		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		setIconImage(new ImageIcon(Resource.get(Resource.ICON_VALIDATE)).getImage());
 	}
 

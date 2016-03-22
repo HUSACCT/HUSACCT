@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
@@ -302,7 +301,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 			long selectedModuleToId = (Long) ruleDetails.get("moduleToId");
 			this.appliedRuleController.setModuleToId(selectedModuleToId);
 			ExceptionRuleJDialog exceptionFrame = new ExceptionRuleJDialog(this.appliedRuleController, this);
-			DialogUtils.alignCenter(exceptionFrame);
+			ServiceProvider.getInstance().getControlService().centerDialog(exceptionFrame);
 			exceptionFrame.setVisible(true);
 		} else {
 			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));

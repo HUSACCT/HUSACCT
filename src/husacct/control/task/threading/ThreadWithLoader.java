@@ -3,9 +3,6 @@ package husacct.control.task.threading;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.task.MainController;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 public class ThreadWithLoader implements Runnable {
 	
 	private static int taskcounter = 0;

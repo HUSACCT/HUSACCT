@@ -2,7 +2,6 @@ package husacct.control.task.threading;
 
 import java.util.Date;
 
-import husacct.ServiceProvider;
 import husacct.control.presentation.util.LoadingDialog;
 
 import org.apache.log4j.Logger;

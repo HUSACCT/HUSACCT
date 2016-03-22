@@ -71,7 +71,14 @@ class JavaMethodGeneratorController extends JavaGenerator {
             Tree child = tree.getChild(childCount);
 	        boolean walkThroughChildren = true;
             int treeType = child.getType();
-            
+        	
+        	/* Test helper
+        	if (belongsToClass.contains("org.eclipse.ui.internal.views.markers.MarkerFieldFilterGroup")){
+        		if (lineNumber == 522) {
+        			int breakpoint = 1;
+        		}
+        	} */
+
             switch(treeType) {
 	            case JavaParser.ABSTRACT: 
 	            	isAbstract = true;

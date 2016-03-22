@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -134,7 +133,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
-			DialogUtils.alignCenter(appliedRuleFrame);
+			ServiceProvider.getInstance().getControlService().centerDialog(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 
 		} else {
@@ -200,7 +199,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if (selectedAppliedRuleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, selectedAppliedRuleId);
-			DialogUtils.alignCenter(appliedRuleFrame);
+			ServiceProvider.getInstance().getControlService().centerDialog(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this,
