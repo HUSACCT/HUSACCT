@@ -789,8 +789,8 @@ class FamixCreationPostProcessor {
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
-        	if (invocation.from.contains("Domain.Direct.Violating.AccessClassVariableInterface")){
-        		//if (invocation.lineNumber == 8) {
+        	if (invocation.from.contains("org.eclipse.ui.internal.views.markers.MarkerFieldFilterGroup")){
+        		//if (invocation.lineNumber == 522) {
         			int breakpoint = 1;
         		//}
         	} */
@@ -1127,6 +1127,10 @@ class FamixCreationPostProcessor {
     // Returns FamixMethod if one unique method is found. Else, it returns null. 
     private FamixMethod findInvokedMethodOnName(String fromClass, String fromMethod, String invokedClassName, String invokedMethodName) {
     	FamixMethod nullResult = null;
+    	if (invokedClassName == null || invokedClassName.isEmpty()
+    			|| invokedMethodName == null || invokedMethodName.isEmpty() || !invokedMethodName.contains("(")) {
+    		return nullResult;
+    	}
 		/* Test Helper
 		if (fromClass.equals("domain.direct.violating.AccessLocalVariable_SetArgumentValue")){
 			boolean breakpoint = true;

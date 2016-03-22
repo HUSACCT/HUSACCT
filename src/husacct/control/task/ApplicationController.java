@@ -28,8 +28,6 @@ public class ApplicationController {
 	private MainController mainController;
 	private Logger logger = Logger.getLogger(ApplicationController.class);
 	private LoadingDialog currentLoader;
-	private Thread currentThread;
-	
 	public ApplicationController(MainController mainController) {
 		this.mainController = mainController;
 	}
@@ -69,7 +67,7 @@ public class ApplicationController {
 		
 		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(mainController,applicationDTO));
 		currentLoader = analyseThread.getLoader();
-		currentThread = analyseThread.getThread();
+		analyseThread.getThread();
 		logger.info(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
 		currentLoader.addWindowListener(new WindowAdapter() {
 			@Override

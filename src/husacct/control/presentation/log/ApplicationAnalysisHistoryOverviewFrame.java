@@ -4,10 +4,10 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,11 +41,7 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(1000, 400));
-		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (dim.width/2-this.getSize().width/2);
-		int y = dim.height/2-this.getSize().height/2;
-		this.setLocation(x, y);
+		DialogUtils.alignCenter(this);
 	}
 	
 	private void addComponents(){

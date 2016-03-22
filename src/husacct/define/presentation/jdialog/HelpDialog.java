@@ -3,8 +3,6 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.locale.ILocaleService;
-import husacct.control.presentation.util.DialogUtils;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -45,7 +43,7 @@ public class HelpDialog extends JDialog {
 		this.setLayout(new BorderLayout());
 		this.setResizable(false);
 		this.getContentPane().setBackground(Color.WHITE);
-		DialogUtils.alignCenter(this);
+		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		setIconImage(new ImageIcon(Resource.get(Resource.ICON_QUESTIONMARK)).getImage());
 	}
 	

@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
-import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
@@ -61,7 +60,7 @@ public class EditSoftwareUnitJDialog extends HelpableJDialog implements ActionLi
 	    this.setResizable(false);
 	    this.setSize(500, 100);
 	    this.pack();
-	    DialogUtils.alignCenter(this);
+		ServiceProvider.getInstance().getControlService().centerDialog(this);
 	    this.setVisible(true);
 	} catch (Exception e) {
 	    e.printStackTrace();
