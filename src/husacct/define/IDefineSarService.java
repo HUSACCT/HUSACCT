@@ -39,5 +39,5 @@ public interface IDefineSarService {
 	 * @return a ModuleDTO; with empty values if no module is selected or if the selected module is not found.
 	 */
 	public ModuleDTO getModule_SelectedInGUI();
-
+	
 }

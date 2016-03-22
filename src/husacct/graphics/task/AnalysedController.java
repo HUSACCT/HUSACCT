@@ -1,17 +1,22 @@
 package husacct.graphics.task;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
-
-import java.util.ArrayList;
 
 public class AnalysedController extends DrawingController {
 	protected IAnalyseService		analyseService;
@@ -62,13 +67,27 @@ public class AnalysedController extends DrawingController {
 	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-			DependencyDTO[] dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
-			try {
-				if (dependencies.length > 0) {
-					dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
+			
+			if(this.drawingSettingsHolder.isShowUmlLinkInsteadOfDependencies()){
+				UmlLinkDTO[] umlLinks = analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+				try {
+					if (umlLinks.length > 0) {
+						dependencyFigure = figureFactory.createRelationFigure_UmlLink(umlLinks);
+					}
+				} catch (Exception e) {
+					logger.error(" Could not create a dependency figure.");
+					e.printStackTrace();
+				}				
+			} else {
+			
+				DependencyDTO[] dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+				try {
+					if (dependencies.length > 0) {
+						dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
+					}
+				} catch (Exception e) {
+					logger.error(" Could not create a dependency figure." + e.getMessage());
 				}
-			} catch (Exception e) {
-				logger.error(" Could not create a dependency figure." + e.getMessage());
 			}
 		}
 		return dependencyFigure;
@@ -133,6 +152,10 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+	}
+	
+	private void test() {
+//		analyseService.uml
 	}
 
 }

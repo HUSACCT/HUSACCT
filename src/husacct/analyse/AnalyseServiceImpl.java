@@ -47,7 +47,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
     public void analyseApplication(ProjectDTO project) {
         this.analyseTaskControl.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
-        this.analyseInternalFrame = new AnalyseInternalFrame();
+        this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
@@ -59,7 +59,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public JInternalFrame getJInternalFrame() {
         if (analyseInternalFrame == null) {
-            analyseInternalFrame = new AnalyseInternalFrame();
+            analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         }
         return analyseInternalFrame;
     }
@@ -67,7 +67,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public JInternalFrame getJInternalSARFrame() {
         if (analyseInternalSARFrame == null) {
-        	analyseInternalSARFrame = new AnalyseInternalSARFrame();
+        	analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         }
         return analyseInternalSARFrame;
      	
@@ -141,7 +141,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public void importAnalysisModel(Element analyseElement) {
     	analyseTaskControl.importAnalysisModel(analyseElement);
-        this.analyseInternalFrame = new AnalyseInternalFrame();
+        this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
@@ -172,6 +172,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return queryService.getAnalysisStatistics(selectedModule);
 	}
 
+	@Override
     public HashSet<UmlLinkDTO> getUmlLinksFromClassToToClass(String fromClass, String toClass) {
     	return queryService.getUmlLinksFromClassToToClass(fromClass, toClass);
     }
@@ -181,10 +182,12 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return queryService.getUmlLinksFromClassToOtherClasses(fromClass);
 	}
 
+	@Override
     public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
     	return queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }
     
+	@Override
     public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
     	return queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }

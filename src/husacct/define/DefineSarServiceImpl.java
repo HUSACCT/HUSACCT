@@ -13,6 +13,7 @@ import husacct.define.domain.services.ModuleDomainService;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 // Services for SAR: Software Architecture Reconstruction
@@ -43,6 +44,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	        this.logger.warn(" Exception: "  + e );
         }
 	}
+	
 	
 	@Override
 	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
@@ -143,4 +145,5 @@ public class DefineSarServiceImpl implements IDefineSarService {
  		}
 		return returnValue;
 	}
+	
 }

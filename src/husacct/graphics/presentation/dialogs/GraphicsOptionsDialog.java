@@ -1,11 +1,5 @@
 package husacct.graphics.presentation.dialogs;
 
-import husacct.ServiceProvider;
-import husacct.common.help.presentation.HelpableJDialog;
-import husacct.common.locale.ILocaleService;
-import husacct.graphics.presentation.UserInputListener;
-import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
-
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -29,6 +23,13 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
+import husacct.ServiceProvider;
+import husacct.common.help.presentation.HelpableJDialog;
+import husacct.common.locale.ILocaleService;
+import husacct.graphics.presentation.UserInputListener;
+import husacct.graphics.presentation.menubars.GraphicsMenuBar;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
+
 public class GraphicsOptionsDialog extends HelpableJDialog {
 	private static final long						serialVersionUID	= 4794939901459687332L;
 	protected Logger								logger				= Logger.getLogger(GraphicsOptionsDialog.class);
@@ -51,7 +52,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private HashMap<String, ModuleLayoutsEnum>	layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
 	private ILocaleService							localeService = ServiceProvider.getInstance().getLocaleService();
-	
+	private JComboBox<String>						toggleUmlLinks;
 	public GraphicsOptionsDialog() {
 		super((GraphicsOptionsDialog) null, true);
 		currentSettings = new HashMap<String, Object>();
@@ -92,6 +93,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		interfaceElements.add(exportToImageButton);
 		interfaceElements.add(showDependenciesOptionMenu);
 		interfaceElements.add(showViolationsOptionMenu);
+//		interfaceElements.add(toggleUmlLinks);
 		interfaceElements.add(showExternalLibraries);
 		interfaceElements.add(enableThickLines);
 		interfaceElements.add(smartLinesOptionMenu);
@@ -245,6 +247,24 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		});
 		zoomPanel.add(zoomSlider);
 		settingsPanel.add(zoomPanel);
+		
+		String values[] = {"UML Links","Dependency"};
+		toggleUmlLinks = new JComboBox<String>(values);
+		toggleUmlLinks.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(UserInputListener listener : listeners){
+					
+					if (listener instanceof GraphicsMenuBar){
+						boolean result = ((JComboBox)e.getSource()).getSelectedItem().toString().equals(values[0]);
+						
+						((GraphicsMenuBar)listener).doSomething(result);
+					}
+				}
+				System.out.println(((JComboBox)e.getSource()).getSelectedItem().toString());
+			}
+		});
+		settingsPanel.add(toggleUmlLinks);
 		
 		mainPanel.add(settingsPanel);
 		
