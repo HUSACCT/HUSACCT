@@ -2,7 +2,6 @@ package husacct.graphics.domain;
 
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.RelationFigure;
-import husacct.graphics.domain.figures.RelationType;
 import husacct.graphics.domain.util.PanTool;
 import husacct.graphics.presentation.UserInputListener;
 import husacct.graphics.presentation.menubars.ContextMenu;
@@ -222,13 +221,10 @@ public class DrawingView extends DefaultDrawingView {
 			BaseFigure selectedFigure = selection[0];
 			if (selectedFigure.isLine()) {
 				RelationFigure line = (RelationFigure) selectedFigure;
-				RelationType relationType = line.getRelationType();
-				if (relationType == RelationType.VIOLATION){
+				if (line.isViolationRelation()){
 					inputListener.propertiesPaneShowViolations(selectedFigure);
-				} else if (relationType == RelationType.DEPENDENCY) {
-					inputListener.propertiesPaneShowDependencies(selectedFigure);
 				} else {
-					// TODO handle other cases of relation type
+					inputListener.propertiesPaneShowDependencies(selectedFigure);
 				}
 			} else {
 				inputListener.propertiesPaneHide();

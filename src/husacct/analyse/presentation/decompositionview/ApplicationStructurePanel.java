@@ -4,10 +4,15 @@ import husacct.ServiceProvider;
 import husacct.analyse.presentation.AnalyseUIController;
 import husacct.analyse.presentation.SoftwareTreeCellRenderer;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.common.help.presentation.HelpableJTree;
+import husacct.control.presentation.util.DialogUtils;
+import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
+import husacct.define.presentation.moduletree.ModuletreeContextMenu;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.validate.domain.validation.Severity;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +22,7 @@ import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -27,6 +33,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 public class ApplicationStructurePanel extends HelpableJPanel implements ActionListener, TreeSelectionListener {
@@ -39,12 +46,9 @@ public class ApplicationStructurePanel extends HelpableJPanel implements ActionL
     private HelpableJScrollPane jScrollPaneTree;
     private StatisticsPanel statisticsPanel;
     private AnalyseUIController dataControl;
-    private AnalyseTaskControl analyseTaskControl;
 
-
-    public ApplicationStructurePanel(AnalyseTaskControl atc) {
-    	analyseTaskControl = atc;
-        dataControl = new AnalyseUIController(analyseTaskControl);
+    public ApplicationStructurePanel() {
+        dataControl = new AnalyseUIController();
         createLayout();
         createCodeTree();
 		createPopupMenu();

@@ -1,5 +1,12 @@
 package husacct.graphics.presentation.menubars;
 
+import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJPanel;
+import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.presentation.UserInputListener;
+import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -20,14 +27,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
-
-import husacct.common.Resource;
-import husacct.common.help.presentation.HelpableJPanel;
-import husacct.graphics.domain.figures.BaseFigure;
-import husacct.graphics.presentation.GraphicsPresentationController;
-import husacct.graphics.presentation.UserInputListener;
-import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
-import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener {
 	private static final long				serialVersionUID	= -7419378432318031359L;
@@ -509,13 +508,5 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	public void zoomSliderSetZoomFactor(double zoomFactor) {
 		int value = (int) (zoomFactor * 100);
 		zoomSlider.setValue(value);
-	}
-	public void doSomething(boolean result){
-		for (UserInputListener listener : listeners)
-			if (listener instanceof GraphicsPresentationController){
-				
-				
-				((GraphicsPresentationController)listener).doSomething(result);
-			}
 	}
 }

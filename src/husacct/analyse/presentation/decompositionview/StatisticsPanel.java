@@ -55,9 +55,9 @@ public class StatisticsPanel extends HelpableJPanel {
     public void reload(SoftwareUnitDTO selectedModule) {
     	AnalysisStatisticsDTO statistics;
     	if ((selectedModule != null) && !selectedModule.name.equals("xLibraries")) {
-	    	statistics = dataControl.getAnalyseTaskControl().getAnalysisStatistics(selectedModule);
+	    	statistics = dataControl.getAnalyseService().getAnalysisStatistics(selectedModule);
 		} else {
-	    	statistics = dataControl.getAnalyseTaskControl().getAnalysisStatistics(null);
+	    	statistics = dataControl.getAnalyseService().getAnalysisStatistics(null);
 		}
         wholeApplicationPanel.reload(statistics.totalNrOfPackages, statistics.totalNrOfClasses, statistics.totalNrOfLinesOfCode, statistics.totalNrOfDependencies);
         selectionPanel.reload(statistics.selectionNrOfPackages, statistics.selectionNrOfClasses, statistics.selectionNrOfLinesOfCode);

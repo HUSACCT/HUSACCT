@@ -7,17 +7,7 @@ public class DrawingSettingsHolder {
 	private boolean	areSmartLinesOn	= false;
 	private boolean	areViolationsShown = false;
 	private boolean	isZoomWithContextOn	= false;
-	private boolean showUmlLinkInsteadOfDependencies = true;
 	
-
-	public boolean isShowUmlLinkInsteadOfDependencies() {
-		return showUmlLinkInsteadOfDependencies;
-	}
-
-	public void setShowUmlLinkInsteadOfDependencies(boolean showUmlLinkInsteadOfDependencies) {
-		this.showUmlLinkInsteadOfDependencies = showUmlLinkInsteadOfDependencies;
-	}
-
 	private String[]	currentPaths	= new String[] {};
 	
 	public DrawingSettingsHolder() {
