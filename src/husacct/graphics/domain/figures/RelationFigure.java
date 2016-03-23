@@ -28,11 +28,12 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private static final long		serialVersionUID	= 1805821357919823648L;
 	private LineConnectionFigure	line;
 	private TextFigure				amountFigure;
-	private boolean					violationRelation = false;
+	private RelationType			relationType;
+//	private boolean					violationRelation = false;
 	
-	public RelationFigure(String name, boolean violated, String amount) {
+	public RelationFigure(String name, RelationType relationType, String amount) {
 		super(name, name, "relation");
-		violationRelation = violated;
+		this.relationType = relationType;
 		
 		line = new LineConnectionFigure();
 		add(line);
@@ -101,13 +102,29 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	public void draw(Graphics2D graphics) {
 		ArrowTip arrowTip = new ArrowTip(0.5, 7, 3.0);
 		set(AttributeKeys.END_DECORATION, arrowTip);
-		
-		if(violationRelation){
-			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
-		}
-		else{
+			
+		switch(relationType) {
+		case DEPENDENCY:
 			double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
 			set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });
+			break;
+		case VIOLATION:
+			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
+			break;
+		case ATTRIBUTELINK:
+			// default is a straight line, so do nothing
+			break;
+		case INHERITANCELINK:
+			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, true, false);
+			set(AttributeKeys.END_DECORATION, arrowTip);
+			break;
+		case IMPLEMENTSLINK:
+			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
+			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, false, true);
+			set(AttributeKeys.END_DECORATION, arrowTip);
+			break;
+		default: 
+			throw new IllegalStateException("Unknown relation type");
 		}
 		super.draw(graphics);
 	}
@@ -188,10 +205,10 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		return true;
 	}
 	
-	public boolean isViolationRelation() {
-		return violationRelation;
+	public RelationType getRelationType() {
+		return relationType;
 	}
-	
+
 	@Override
 	public void lineout() {
 		line.lineout();
