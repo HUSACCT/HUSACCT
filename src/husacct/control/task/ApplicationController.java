@@ -81,7 +81,7 @@ public class ApplicationController {
 	}
 	
 	public void reconstructArchitecture(){
-		ServiceProvider.getInstance().getAnalyseService().reconstructArchitecture(); // Try out, replace afterwards
+		ServiceProvider.getInstance().getAnalyseService().reconstructArchitecture_Initiate(); // Try out, replace afterwards
 	}
 	
 	public LoadingDialog getCurrentLoader() {

@@ -7,8 +7,13 @@ import org.jdom2.Element;
 
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
+import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ModuleDTO;
 
 public class AnalyseTaskControl {
 
@@ -18,6 +23,7 @@ public class AnalyseTaskControl {
     private IModelQueryService queryService;
     private DependencyReportController reportController;
     private HistoryLogger historyLogger;
+    private ReconstructArchitecture reconstructArchitecture;
 
     private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
 
@@ -69,7 +75,36 @@ public class AnalyseTaskControl {
         reportController.createDependencyReport(path);
     }
     
-    public void reconstructArchitecture() {
-    	//new ReconstructArchitecture(queryService);
+    //method for RecontructArchitecture
+    public void reconstructArchitecture_Initiate() {
+    	reconstructArchitecture = new ReconstructArchitecture(queryService);
     }
+
+    public void reconstructArchitecture_Execute(ModuleDTO selectedModule, String approach, int threshold){
+    	if (reconstructArchitecture == null) {
+    		reconstructArchitecture = new ReconstructArchitecture(queryService);
+    	}
+    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold, "softwareUnitDependency");
+	}
+
+	public void reconstructArchitecture_Reverse(){
+		reconstructArchitecture.reverseReconstruction();
+	}
+    
+	//Methods for AnalyseUIController
+	public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
+		return queryService.getSoftwareUnitsInRoot();
+	}
+
+	public SoftwareUnitDTO[] getChildUnitsOfSoftwareUnit(String from) {
+		return queryService.getChildUnitsOfSoftwareUnit(from);
+	}
+
+	public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
+		return queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
+	}
+
+	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
+		return queryService.getAnalysisStatistics(selectedModule);
+	}
 }

@@ -3,6 +3,7 @@ package husacct.analyse.presentation;
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.decompositionview.ApplicationStructurePanel;
 import husacct.analyse.presentation.usageview.DependencyPanel;
+import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;
 
@@ -17,7 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
 public class AnalyseInternalFrame extends HelpableJInternalFrame implements ActionListener, IServiceListener {
-
+	private AnalyseTaskControl analyseTaskControl;
     private static final long serialVersionUID = 1L;
     private ApplicationStructurePanel applicationStructurePanel;
     private DependencyPanel dependencyPanel;
@@ -27,16 +28,17 @@ public class AnalyseInternalFrame extends HelpableJInternalFrame implements Acti
     private JButton cancelButton;
     private JButton exportDependenciesButton;
 
-    public AnalyseInternalFrame() {
-        this.controller = new AnalyseUIController();
+    public AnalyseInternalFrame(AnalyseTaskControl atc) {
+    	analyseTaskControl = atc;
+        this.controller = new AnalyseUIController(analyseTaskControl);
         registerLocaleChangeListener();
         
         tabPanel = new JTabbedPane(JTabbedPane.TOP);
         tabPanel.setBackground(UIManager.getColor("Panel.background"));
         getContentPane().add(tabPanel, BorderLayout.CENTER);
 
-        applicationStructurePanel = new ApplicationStructurePanel();
-        dependencyPanel = new DependencyPanel();
+        applicationStructurePanel = new ApplicationStructurePanel(analyseTaskControl);
+        dependencyPanel = new DependencyPanel(analyseTaskControl);
         tabPanel.addTab(controller.translate("SourceOverview"), null, applicationStructurePanel, null);
         tabPanel.addTab(controller.translate("DependencyOverview"), null, dependencyPanel, null);
 

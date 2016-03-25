@@ -8,6 +8,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
+import husacct.analyse.presentation.AnalyseInternalSARFrame;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
@@ -29,7 +30,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     private IModelPersistencyService persistencyService;
 	private AnalyseTaskControl analyseTaskControl;
     private AnalyseInternalFrame analyseInternalFrame;
-    //private AnalyseInternalSARFrame analyseInternalSARFrame;
+    private AnalyseInternalSARFrame analyseInternalSARFrame;
 
     public AnalyseServiceImpl() {
         this.queryService = new FamixQueryServiceImpl(); //Must be created as first, since it clears the model (needed in case of reloading workspaces). 
@@ -46,7 +47,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
     public void analyseApplication(ProjectDTO project) {
         this.analyseTaskControl.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
-        this.analyseInternalFrame = new AnalyseInternalFrame();
+        this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
@@ -58,19 +59,17 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public JInternalFrame getJInternalFrame() {
         if (analyseInternalFrame == null) {
-            analyseInternalFrame = new AnalyseInternalFrame();
+            analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         }
         return analyseInternalFrame;
     }
 
     @Override
     public JInternalFrame getJInternalSARFrame() {
-/*        if (analyseInternalSARFrame == null) {
-        	analyseInternalSARFrame = new AnalyseInternalSARFrame();
+        if (analyseInternalSARFrame == null) {
+        	analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         }
         return analyseInternalSARFrame;
-*/     	
-        return analyseInternalFrame;
     }
     
     @Override
@@ -141,13 +140,13 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public void importAnalysisModel(Element analyseElement) {
     	analyseTaskControl.importAnalysisModel(analyseElement);
-        this.analyseInternalFrame = new AnalyseInternalFrame();
+        this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
 	@Override
-    public void reconstructArchitecture() {
-    	analyseTaskControl.reconstructArchitecture();
+    public void reconstructArchitecture_Initiate() {
+    	analyseTaskControl.reconstructArchitecture_Initiate();
     }
     
     // Used for the generic mechanism to save workspace data of all components; e.g. configuration settings  

@@ -71,7 +71,7 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public void createDependencyReport(String fullPath);
     
-    public void reconstructArchitecture();
+    public void reconstructArchitecture_Initiate();
     
     public Element exportAnalysisModel();
 

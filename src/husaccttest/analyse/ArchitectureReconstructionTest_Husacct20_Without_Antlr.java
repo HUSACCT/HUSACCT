@@ -162,7 +162,7 @@ public class ArchitectureReconstructionTest_Husacct20_Without_Antlr {
 
 	private static void reconstructArchitecture() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		analyseService.reconstructArchitecture();
+		analyseService.reconstructArchitecture_Initiate();
 	}
 
 	private int getNumberofDependenciesBetweenSoftwareUnits(String fromUnit, String toUnit) {

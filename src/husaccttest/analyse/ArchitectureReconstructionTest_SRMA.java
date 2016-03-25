@@ -270,7 +270,7 @@ public class ArchitectureReconstructionTest_SRMA {
 
 	private static void reconstructArchitecture() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		analyseService.reconstructArchitecture();
+		analyseService.reconstructArchitecture_Initiate();
 	}
 
 	private int getNumberofDependenciesBetweenSoftwareUnits(String fromUnit, String toUnit) {

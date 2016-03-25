@@ -5,6 +5,7 @@ import husacct.analyse.presentation.AnalyseUIController;
 import husacct.analyse.presentation.SoftwareTreeCellRenderer;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.common.help.presentation.HelpableJTable;
@@ -55,9 +56,10 @@ public class DependencyPanel extends HelpableJPanel implements TreeSelectionList
     private List<SoftwareUnitDTO> toSelected = new ArrayList<SoftwareUnitDTO>();
     protected List<DependencyDTO> filteredList;
     private AnalyseUIController dataControl;
+    private AnalyseTaskControl analyseTaskControl;
 
-    public DependencyPanel() {
-        dataControl = new AnalyseUIController();
+    public DependencyPanel(AnalyseTaskControl atc) {
+        dataControl = new AnalyseUIController(analyseTaskControl);
         createLayout();
 
         dependencyTable = new HelpableJTable();
