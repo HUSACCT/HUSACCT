@@ -97,9 +97,4 @@ public interface IAnalyseService extends IObservableService, ISaveable {
      */  
     public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
     
-	/** Returns an array of all umlLinks (enclosed in DependencyDTOs) between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
-     * Relatively fast function, based on HashMap. Both argument must match with an analysedModule.
-     */  
-    public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
-
 }

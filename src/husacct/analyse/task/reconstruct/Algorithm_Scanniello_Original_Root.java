@@ -27,7 +27,7 @@ public class Algorithm_Scanniello_Original_Root extends AlgorithmGeneral {
 	private IDefineService defineService;
 	
 	@Override
-	public void define(ModuleDTO selectedModule, int th, IModelQueryService qService, String library, String dependencyType) {
+	public void execute(ModuleDTO selectedModule, int th, IModelQueryService qService, String library, String dependencyType) {
 		this.queryService = qService;
 		this.threshold = th;
 		this.defineService = ServiceProvider.getInstance().getDefineService();

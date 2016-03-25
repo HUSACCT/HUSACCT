@@ -20,7 +20,7 @@ public class Algorithm_Goldstein_SelectedModule extends AlgorithmGeneral{
 	
 	
 	@Override
-	public void define(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
+	public void execute(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
 		selectedModule = Module;
 		layerThreshold = th;
 		queryService = qService;

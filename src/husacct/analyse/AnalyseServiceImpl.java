@@ -8,7 +8,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
-import husacct.analyse.presentation.AnalyseInternalSARFrame;
+import husacct.analyse.presentation.reconstruct.AnalyseInternalSARFrame;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
@@ -37,6 +37,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         this.persistencyService = new FamixPersistencyServiceImpl(queryService);
         this.analyseTaskControl = new AnalyseTaskControl(persistencyService, queryService);
         this.analyseInternalFrame = null;
+        this.analyseInternalSARFrame = null;
     }
 
     @Override
@@ -48,6 +49,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public void analyseApplication(ProjectDTO project) {
         this.analyseTaskControl.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
         this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
+        this.analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
@@ -141,6 +143,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public void importAnalysisModel(Element analyseElement) {
     	analyseTaskControl.importAnalysisModel(analyseElement);
         this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
+        this.analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
@@ -186,8 +189,4 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     	return queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }
     
-	@Override
-    public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
-    	return queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
-    }
 }

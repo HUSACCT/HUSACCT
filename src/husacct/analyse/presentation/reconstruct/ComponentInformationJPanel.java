@@ -1,11 +1,10 @@
-package husacct.analyse.presentation.jpanel;
+package husacct.analyse.presentation.reconstruct;
 
 import javax.swing.JPanel;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.help.presentation.HelpableJPanel;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
@@ -18,6 +17,7 @@ import javax.swing.JButton;
 import java.awt.FlowLayout;
 
 public class ComponentInformationJPanel extends HelpableJPanel implements ActionListener{
+	private static final long serialVersionUID = 1L;
 	private JButton btnNewButton;
 	private ModuleDTO selectedModule;
 	private JLabel lblNewLabel_2, lblNewLabel_3, moduleTypeValue;

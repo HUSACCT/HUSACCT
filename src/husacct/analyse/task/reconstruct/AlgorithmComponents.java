@@ -26,7 +26,7 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 	private String xLibrariesRootPackage = "xLibraries";
 	private IDefineService defineService;
 	private IDefineSarService defineSarService;
-	//private final Logger logger = Logger.getLogger(AlgorithmComponents.class);
+	private final Logger logger = Logger.getLogger(AlgorithmComponents.class);
 
 	public AlgorithmComponents(IModelQueryService queryService){
 		this.queryService = queryService;
@@ -35,49 +35,53 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 	}
 
 	@Override
-	public void define(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
-		identifyComponentsInSelectedModule(Module);
+	public void execute(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
+		identifyComponentsInRootOfSelectedModule(Module);
 	}
 
-	public void identifyComponentsInSelectedModule(ModuleDTO module) {
+	public void identifyComponentsInRootOfSelectedModule(ModuleDTO module) {
 		String selectedModuleUniqueName = module.logicalPath;
-		// 1) Select all classesInSelectedModule: classes in the selected module
-		ArrayList<SoftwareUnitDTO> classesInSelectedModule = new ArrayList<SoftwareUnitDTO>();
-		identifiedInterfaceClasses = new ArrayList<SoftwareUnitDTO>();
-		HashSet<String> allTypeStringsInSelectedModule = defineService.getModule_AllPhysicalClassPathsOfModule(selectedModuleUniqueName);
-		for (String typeStringInSelectedModule : allTypeStringsInSelectedModule) {
-			SoftwareUnitDTO typeInSelectedModule = queryService.getSoftwareUnitByUniqueName(typeStringInSelectedModule);
-			if (typeInSelectedModule.type.equalsIgnoreCase("class")) {
-				classesInSelectedModule.add(typeInSelectedModule);
-			}
-		}
-
-		// 2) Select all implementingClassesInSelectedModule: classes in the selected module that implement an interface
-		HashMap<String,ArrayList<SoftwareUnitDTO>> interfacesPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-		for(SoftwareUnitDTO classInSelectedModule : classesInSelectedModule){
-			// Get all dependencies on the interfaceClass
-			ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
-			Collections.addAll(dependenciesList, queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(classInSelectedModule.uniqueName, ""));
-		
-			for(DependencyDTO dependency : dependenciesList){		
-				// Determine the classes that implement the interface	
-				if(dependency.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString()) 
-						&& queryService.getParentUnitOfSoftwareUnit(dependency.from).type.equals("package")){
-					// 3) Get the used interface
-					SoftwareUnitDTO interfaceClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
-					// 4) Relate the interface with the parent package of the implementingClassesInSelectedModule
-					// Determine the parent package of the implementing class, and relate package and interface.
-					// Note: a package can implement several interfaces.
-					String parentName = queryService.getParentUnitOfSoftwareUnit(dependency.from).uniqueName;
-					if(!interfacesPerPackage.containsKey(parentName)){
-						ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = new ArrayList<SoftwareUnitDTO>();
-						softwareUnitsOfInterface.add(interfaceClass);
-						interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+		// 1) Select all the software units in the root of the selected module
+		ArrayList<String> softwareUnitsInSelectedModuleList = new ArrayList<String>();
+		ArrayList<SoftwareUnitDTO> classesInRootPackages = new ArrayList<SoftwareUnitDTO>();
+		try {
+			softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModuleUniqueName));
+			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
+				for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
+					if (softwareUnit.type.equals("class")) {
+						classesInRootPackages.add(softwareUnit);
 					}
-					else{
-						ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = interfacesPerPackage.get(parentName);
-						softwareUnitsOfInterface.add(interfaceClass);
-						interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+				}
+			}
+		} catch (Exception e) {
+	        logger.warn(" Exception: "  + e );
+        }
+		// 2) Select the software units that implement an interface
+		HashMap<String,ArrayList<SoftwareUnitDTO>> interfacesPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
+		for(SoftwareUnitDTO softwareUnitInSelectedModule : classesInRootPackages){
+			// a) Get all dependencies on the software unit
+			ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
+			Collections.addAll(dependenciesList, queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitInSelectedModule.uniqueName, ""));
+			// b) Determine if the software unit implement an interface	
+			for(DependencyDTO dependency : dependenciesList){		
+				if(dependency.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
+					// 3) Get the used interface. Continue only if the interface is implemented ones only (otherwise it is possibly a utility).
+					SoftwareUnitDTO interfaceClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
+					if (isInterfaceImplementedOnceOnly(interfaceClass)) {
+						// 4) Relate the interface with the parent package of the implementingClassesInSelectedModule
+						// Determine the parent package of the implementing class, and relate package and interface.
+						// Note: a package can implement several interfaces.
+						String parentName = queryService.getParentUnitOfSoftwareUnit(softwareUnitInSelectedModule.uniqueName).uniqueName;
+						if(!interfacesPerPackage.containsKey(parentName)){
+							ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = new ArrayList<SoftwareUnitDTO>();
+							softwareUnitsOfInterface.add(interfaceClass);
+							interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+						}
+						else{
+							ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = interfacesPerPackage.get(parentName);
+							softwareUnitsOfInterface.add(interfaceClass);
+							interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+						}
 					}
 				}
 			}
@@ -112,7 +116,6 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 			// Get all dependencies on the interfaceClass
 			ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
 			Collections.addAll(dependenciesList, queryService.getDependenciesFromSoftwareUnitToSoftwareUnit("",interfaceClass.uniqueName));
-		
 			for(DependencyDTO dependencyOnInterface : dependenciesList){		
 				// Determine the classes that implement the interface	
 				if(dependencyOnInterface.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString()) && queryService.getParentUnitOfSoftwareUnit(dependencyOnInterface.to).type.equals("package")){
@@ -199,5 +202,20 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 			}
 		}
 	}
-
+	private boolean isInterfaceImplementedOnceOnly(SoftwareUnitDTO interfaceClass) {
+		boolean interfaceIsImplementedOnceOnly = false;
+		// Get all dependencies on the interfaceClass
+		ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
+		Collections.addAll(dependenciesList, queryService.getDependenciesFromSoftwareUnitToSoftwareUnit("",interfaceClass.uniqueName));
+		int numberOfImplementsDependencies = 0;
+		for(DependencyDTO dependencyOnInterface : dependenciesList){		
+			if(dependencyOnInterface.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
+				numberOfImplementsDependencies ++;
+			}
+		}
+		if (numberOfImplementsDependencies == 1) {
+			interfaceIsImplementedOnceOnly = true;
+		}
+		return interfaceIsImplementedOnceOnly;
+	}
 }

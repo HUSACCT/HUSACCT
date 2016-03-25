@@ -1,7 +1,6 @@
-package husacct.analyse.presentation;
+package husacct.analyse.presentation.reconstruct;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.jpanel.ReconstructJPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;

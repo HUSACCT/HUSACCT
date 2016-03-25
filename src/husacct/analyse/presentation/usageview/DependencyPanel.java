@@ -56,10 +56,9 @@ public class DependencyPanel extends HelpableJPanel implements TreeSelectionList
     private List<SoftwareUnitDTO> toSelected = new ArrayList<SoftwareUnitDTO>();
     protected List<DependencyDTO> filteredList;
     private AnalyseUIController dataControl;
-    private AnalyseTaskControl analyseTaskControl;
 
     public DependencyPanel(AnalyseTaskControl atc) {
-        dataControl = new AnalyseUIController(analyseTaskControl);
+        dataControl = new AnalyseUIController(atc);
         createLayout();
 
         dependencyTable = new HelpableJTable();

@@ -14,8 +14,9 @@ public abstract class AlgorithmGeneral {
 	
 	//private IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
 	private ArrayList<String> reverseReconstrucitonList = new ArrayList<String>();
+
 	//DE METHODES VOOR AlgorithmSelectedModule
-	public abstract void define(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType);
+	public abstract void execute(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType);
 	public abstract ArrayList<SoftwareUnitDTO> getClasses(String library);
 	public abstract TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers);
 	

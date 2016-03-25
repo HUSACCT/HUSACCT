@@ -1259,29 +1259,6 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 	
 	@Test
-	public void UmlLinkType_InstanceVariableDeclaration_MultipleAttr_DependencyDTO(){
-		String fromClass = "domain.direct.violating"; //.DeclarationVariableInstance_MultipleAttributesAtTheSameLine";
-		String toClass = "technology.direct.dao"; //.ProfileDAO";
-		String fromAttribute = "p1Dao";
-		boolean isComposite = false;
-		String typeToFind = "Attr: " + fromAttribute;
-		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add(typeToFind);
-		Assert.assertTrue(areUMLLinkDependencyDTOsDetected(fromClass, toClass, typesToFind, fromAttribute, isComposite));
-		fromAttribute = "p2Dao";
-		typeToFind = "Attr: " + fromAttribute;
-		typesToFind.clear();
-		typesToFind.add(typeToFind);
-		Assert.assertTrue(areUMLLinkDependencyDTOsDetected(fromClass, toClass, typesToFind, fromAttribute, isComposite));
-		fromAttribute = "p3Dao";
-		typeToFind = "Attr: " + fromAttribute;
-		typesToFind.clear();
-		typesToFind.add(typeToFind);
-		Assert.assertTrue(areUMLLinkDependencyDTOsDetected(fromClass, toClass, typesToFind, fromAttribute, isComposite));
-	}
-	
-
-	@Test
 	public void UmlLinkType_Inherits(){
 		String fromClass = "domain.direct.violating.InheritanceExtends";
 		String toClass = "technology.direct.dao.HistoryDAO";
@@ -1388,33 +1365,6 @@ public class Java_AccuracyTestDependencyDetection {
 		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(classFrom, classTo);
-		int numberOfDependencies = foundDependencies.length;
-		for (String dependencyType : dependencyTypes) {
-			boolean found = false;
-			for (int i=0 ; i < numberOfDependencies; i++){
-				if (foundDependencies[i].type.equals(dependencyType) && (foundDependencies[i].isIndirect) == isIndirect) {
-					if (!subType.equals("")) {
-						if (foundDependencies[i].subType.equals(subType)) {
-							found = true;	
-						}
-					} else {
-						found = true;
-					}
-				}
-			}
-			foundDependencyTypes.put(dependencyType,found);
-		}
-		if (!foundDependencyTypes.containsValue(false)){
-			dependencyTypesDetected = true;
-		}
-		return dependencyTypesDetected;
-	}
-
-	private boolean areUMLLinkDependencyDTOsDetected(String classFrom, String classTo, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
-		boolean dependencyTypesDetected = false;
-		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
-		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		DependencyDTO[] foundDependencies = analyseService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(classFrom, classTo);
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;

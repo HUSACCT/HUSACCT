@@ -2,11 +2,6 @@ package husacct.graphics.task;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-
 import husacct.ServiceProvider;
 import husacct.analyse.serviceinterface.IAnalyseService;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
@@ -154,8 +149,4 @@ public class AnalysedController extends DrawingController {
 		validateService = ServiceProvider.getInstance().getValidateService();
 	}
 	
-	private void test() {
-//		analyseService.uml
-	}
-
 }

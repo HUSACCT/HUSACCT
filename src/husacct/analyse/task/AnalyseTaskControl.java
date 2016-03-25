@@ -9,11 +9,11 @@ import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
 import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.serviceinterface.dto.ReconstructArchitectureDTO;
 import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ModuleDTO;
 
 public class AnalyseTaskControl {
 
@@ -80,11 +80,11 @@ public class AnalyseTaskControl {
     	reconstructArchitecture = new ReconstructArchitecture(queryService);
     }
 
-    public void reconstructArchitecture_Execute(ModuleDTO selectedModule, String approach, int threshold){
+    public void reconstructArchitecture_Execute(ReconstructArchitectureDTO dto){
     	if (reconstructArchitecture == null) {
     		reconstructArchitecture = new ReconstructArchitecture(queryService);
     	}
-    	reconstructArchitecture.startReconstruction(selectedModule, approach, threshold, "softwareUnitDependency");
+    	reconstructArchitecture.reconstructArchitecture_Execute(dto);
 	}
 
 	public void reconstructArchitecture_Reverse(){

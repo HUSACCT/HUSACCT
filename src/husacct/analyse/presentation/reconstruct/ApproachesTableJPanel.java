@@ -1,13 +1,10 @@
-package husacct.analyse.presentation.jpanel;
+package husacct.analyse.presentation.reconstruct;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser.classExtendsClause_return;
 import husacct.common.help.presentation.HelpableJPanel;
-import java.awt.FlowLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -21,6 +18,7 @@ import java.awt.Insets;
 import javax.swing.SwingConstants;
 
 public class ApproachesTableJPanel extends HelpableJPanel {
+	private static final long serialVersionUID = 1L;
 	public JTable approachesTable;
 	public JPanel optionsPanel;
 	public ButtonGroup radioButtonGroup;

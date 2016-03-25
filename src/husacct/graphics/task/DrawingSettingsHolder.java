@@ -7,7 +7,7 @@ public class DrawingSettingsHolder {
 	private boolean	areSmartLinesOn	= false;
 	private boolean	areViolationsShown = false;
 	private boolean	isZoomWithContextOn	= false;
-	private boolean showUmlLinkInsteadOfDependencies = true;
+	private boolean showUmlLinkInsteadOfDependencies = false;
 	
 
 	public boolean isShowUmlLinkInsteadOfDependencies() {

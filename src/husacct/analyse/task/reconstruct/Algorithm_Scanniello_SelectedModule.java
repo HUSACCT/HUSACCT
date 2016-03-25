@@ -28,7 +28,7 @@ public class Algorithm_Scanniello_SelectedModule extends AlgorithmGeneral{
 
 
 	@Override
-	public void define(ModuleDTO selectedModule, int threshold, IModelQueryService queryService, String library, String dependencyType) {
+	public void execute(ModuleDTO selectedModule, int threshold, IModelQueryService queryService, String library, String dependencyType) {
 		this.queryService = queryService;
 		this.threshold = threshold;
 		this.defineService = ServiceProvider.getInstance().getDefineService();

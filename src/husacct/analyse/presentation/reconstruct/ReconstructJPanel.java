@@ -1,34 +1,28 @@
-package husacct.analyse.presentation.jpanel;
+package husacct.analyse.presentation.reconstruct;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import husacct.ServiceProvider;
-import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.domain.famix.FamixQueryServiceImpl;
+import husacct.analyse.serviceinterface.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.AnalyseTaskControl;
-import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.help.presentation.HelpableJPanel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
 public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
+	private static final long serialVersionUID = 1L;
 	private ComponentInformationJPanel componentInformationJPanel;
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
@@ -100,8 +94,11 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 						 String selectedRadioButtonGroupOne = buttonGroupOne.getSelection().getActionCommand();
 						 String selectedRadioButtonGroupTwo = buttonGroupTwo.getSelection().getActionCommand(); 
 					 }
-					 
-					 analyseTaskControl.reconstructArchitecture_Execute(selectedModule, (String)approachesTable.getValueAt(i, 0), (int)approachesTable.getValueAt(i, 1));
+					 ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
+					 dto.setSelectedModule(selectedModule);
+					 dto.setApproach((String)approachesTable.getValueAt(i, 0));
+					 dto.setThreshold((int)approachesTable.getValueAt(i, 1));
+					 analyseTaskControl.reconstructArchitecture_Execute(dto);
 					 
 				 }
 			 }
@@ -114,8 +111,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	}
 	
 	private ModuleDTO getSelectedModule(){
-		return ServiceProvider.getInstance().getDefineService().getSarService()
-				.getModule_SelectedInGUI();
+		return ServiceProvider.getInstance().getDefineService().getSarService().getModule_SelectedInGUI();
 	}
 
 }
