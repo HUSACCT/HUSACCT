@@ -12,6 +12,7 @@ import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.ReportToHTML;
+import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -37,6 +38,7 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 
 	private static final long serialVersionUID = 6858870868564931134L;
 	private JPanel overviewPanel;
+	private DefinitionJPanel definitionPanel;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private JButton warningButton;
 	private JButton undoButton;
@@ -54,21 +56,31 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 			WarningMessageService.getInstance().addObserver(this);
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			ServiceProvider.getInstance().getDefineService().addServiceListener(this);
-			this.addDefinitionPanel();
+			this.overviewPanel = new JPanel();
+			BorderLayout borderLayout = new BorderLayout();
+			this.overviewPanel.setLayout(borderLayout);
+			this.addNewDefinitionPanel();
+			this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
 			this.addToolBar();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void addDefinitionPanel() {
-		this.overviewPanel = new JPanel();
-		BorderLayout borderLayout = new BorderLayout();
-		this.overviewPanel.setLayout(borderLayout);
-		this.overviewPanel.add(new DefinitionJPanel());
-		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
+	public void addNewDefinitionPanel() {
+		if (definitionPanel != null) {
+			this.overviewPanel.remove(definitionPanel);
+		}
+		definitionPanel = new DefinitionJPanel();
+		this.overviewPanel.add(definitionPanel);
+		this.revalidate();
+	    DefinitionController.getInstance().notifyObservers();
 	}
 
+	public DefinitionJPanel getDefinitionPanel() {
+		return definitionPanel;
+	}
+	
 	private void addToolBar() {
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setDividerLocation(365);
@@ -135,11 +147,6 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 		this.overviewPanel.add(jp);
 	}
 
-	@Override
-	public void update(Locale newLocale) {
-
-	}
-
 	private ActionListener toolbarActionListener = new ActionListener() {
 
 		@Override
@@ -163,6 +170,17 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	};
 
 	@Override
+	public void update(Locale newLocale) {
+
+	}
+
+	public void updateModulePanel() {
+		if (definitionPanel != null) {
+			definitionPanel.updateModulePanel();
+		}
+	}
+
+	@Override
 	public void update(Observable o, Object arg) {
 		setButtonsVisability(undoButton,redoButton);
 		if (WarningMessageService.getInstance().hasWarnings()) {
@@ -176,6 +194,5 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	@Override
 	public void update() {
      setButtonsVisability(undoButton,redoButton);
-     //DefinitionController.getInstance().notifyObservers();
 	}
 }

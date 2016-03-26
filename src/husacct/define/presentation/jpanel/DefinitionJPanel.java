@@ -84,13 +84,18 @@ public class DefinitionJPanel extends HelpableJPanel {
 			JSplitPane mainSplitPane = new JSplitPane();
 			mainSplitPane.setDividerLocation(300);
 			this.add(mainSplitPane, BorderLayout.CENTER);
-			mainSplitPane
-					.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			mainSplitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
 			mainSplitPane.add(createModulePanel(), JSplitPane.LEFT);
 			mainSplitPane.add(createRightPanel(), JSplitPane.RIGHT);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void updateModulePanel() {
+		if (modulePanel != null) {
+			modulePanel.updateModuleTree();
 		}
 	}
 }

@@ -13,7 +13,7 @@ import husacct.define.IDefineService;
 public abstract class AlgorithmGeneral {
 	
 	//private IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
-	private ArrayList<String> reverseReconstrucitonList = new ArrayList<String>();
+	private ArrayList<String> reverseReconstructionList = new ArrayList<String>();
 
 	//DE METHODES VOOR AlgorithmSelectedModule
 	public abstract void execute(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType);
@@ -22,13 +22,18 @@ public abstract class AlgorithmGeneral {
 	
 	public void reverse(){
 		IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
-		for(String logicalPath : reverseReconstrucitonList){
+		for(String logicalPath : reverseReconstructionList){
 			defineSarService.removeModule(logicalPath);
 		}
+		clearReverseReconstructionList();
 	}
 	
 	public void addToReverseReconstructionList(String logicalpath){
-		reverseReconstrucitonList.add(logicalpath);
+		reverseReconstructionList.add(logicalpath);
+	}
+
+	public void clearReverseReconstructionList() {
+		reverseReconstructionList.clear();
 	}
 
 }

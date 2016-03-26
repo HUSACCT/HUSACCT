@@ -12,6 +12,7 @@ import husacct.analyse.serviceinterface.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.help.presentation.HelpableJPanel;
+import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +28,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
 	private JButton applyButton;
-	private JButton reverseButton;
+	private JButton reverseButton, clearButton;
 	private JPanel panel;
 	
 	/**
@@ -55,7 +56,6 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	
 	public final void initUI(){
 		setLayout(new GridLayout(0, 1, 0, 0));
-		
 		this.add(createComponentInformationJPanel(), BorderLayout.NORTH);
 		this.add(createApproachesTableJPanel(), BorderLayout.CENTER);
 		
@@ -63,17 +63,20 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		approachesTableJPanel.add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout());
 		
-		reverseButton = new JButton("Reverse");
-		panel.add(reverseButton);
-		reverseButton.setPreferredSize(new Dimension(100, 40));
-		
-		reverseButton.addActionListener(this);
-		
 		applyButton = new JButton("Apply");
 		panel.add(applyButton);
 		applyButton.setPreferredSize(new Dimension(100, 40));
 		applyButton.addActionListener(this);
 
+		reverseButton = new JButton("Reverse");
+		panel.add(reverseButton);
+		reverseButton.setPreferredSize(new Dimension(100, 40));
+		reverseButton.addActionListener(this);
+		
+		clearButton = new JButton("Clear All");
+		panel.add(clearButton);
+		clearButton.setPreferredSize(new Dimension(100, 40));
+		clearButton.addActionListener(this);
 	}
 
 	@Override
@@ -99,7 +102,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 					 dto.setApproach((String)approachesTable.getValueAt(i, 0));
 					 dto.setThreshold((int)approachesTable.getValueAt(i, 1));
 					 analyseTaskControl.reconstructArchitecture_Execute(dto);
-					 
+					 ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
 				 }
 			 }
 		}
@@ -107,7 +110,15 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			JTable approachesTable = approachesTableJPanel.approachesTable;
 			approachesTable.clearSelection();
 			analyseTaskControl.reconstructArchitecture_Reverse();
+			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
 		}
+		if (action.getSource() == clearButton) {
+			JTable approachesTable = approachesTableJPanel.approachesTable;
+			approachesTable.clearSelection();
+			analyseTaskControl.reconstructArchitecture_ClearAll();
+			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+		}
+
 	}
 	
 	private ModuleDTO getSelectedModule(){

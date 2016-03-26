@@ -43,20 +43,17 @@ import org.apache.log4j.Logger;
 			instance = dC;
 		}
 
+		private DefineInternalFrame defineInternalFrame;
 		private AppliedRuleDomainService appliedRuleService;
 		private DefaultRuleDomainService defaultRuleService;
-
-		private DefinitionJPanel definitionJPanel;
-		private Logger logger;
+		private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 		private ModuleDomainService moduleService;
-		private List<Observer> observers;
-
+		private List<Observer> observersWithinDefine;
+		private Logger logger;
 		private long selectedModuleId = -1;
 
-		private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
-
 		public DefinitionController() {
-			observers = new ArrayList<Observer>();
+			observersWithinDefine = new ArrayList<Observer>();
 			logger = Logger.getLogger(DefinitionController.class);
 			moduleService = new ModuleDomainService();
 			appliedRuleService = new AppliedRuleDomainService();
@@ -76,8 +73,8 @@ import org.apache.log4j.Logger;
 
 		@Override
 		public void addObserver(Observer o) {
-			if (!observers.contains(o)) {
-				observers.add(o);
+			if (!observersWithinDefine.contains(o)) {
+				observersWithinDefine.add(o);
 			}
 		}
 
@@ -103,7 +100,7 @@ import org.apache.log4j.Logger;
 				} catch (Exception e) {
 					logger.error("getModuleDetails() - exception: "
 							+ e.getMessage());
-					UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+					UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 				}
 			}
 			return moduleDetails;
@@ -135,10 +132,9 @@ import org.apache.log4j.Logger;
 	     * Returns an DefineInternalFrame with an added DefenitionJPanel.
 	     */
 	    public DefineInternalFrame getNewDefineInternalFrame() {
-	    	DefineInternalFrame jframe = new DefineInternalFrame();
-	    	initSettings();
-	    	jframe.setContentView(getDefinitionJPanel());
-	    	return jframe;
+	    	defineInternalFrame = new DefineInternalFrame();
+	    	clearObserversWithinDefine();
+	    	return defineInternalFrame;
 	        }
 
 	    public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule() {
@@ -175,18 +171,21 @@ import org.apache.log4j.Logger;
 					.getSoftwareUnitType(softwareUnitName);
 		}
 
-		public void initSettings() {
-			observers.clear();
-			definitionJPanel = new DefinitionJPanel();
+		public void clearObserversWithinDefine() {
+			observersWithinDefine.clear();
 		}
 
-		/**
-		 * Initialize the user interface for creating/editing the definition.
-		 * 
-		 * @return JPanel The jpanel
-		 */
-		public JPanel getDefinitionJPanel() {
-			return definitionJPanel;
+		public DefineInternalFrame getDefineInternalFrame() {
+			if (defineInternalFrame != null) {
+				return defineInternalFrame;
+			} else {
+				getNewDefineInternalFrame(); 
+				return defineInternalFrame;
+			}
+		}
+
+		public DefinitionJPanel getDefinitionPanel() {
+			return getDefineInternalFrame().getDefinitionPanel();
 		}
 
 		public boolean isAnalysed() {
@@ -203,7 +202,7 @@ import org.apache.log4j.Logger;
 				}
 			} catch (Exception e) {
 				logger.error("moveLayerDown() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
@@ -219,7 +218,7 @@ import org.apache.log4j.Logger;
 				}
 			} catch (Exception e) {
 				logger.error("moveLayerUp() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
@@ -228,13 +227,13 @@ import org.apache.log4j.Logger;
 		@Override
 		public void notifyObservers() {
 			long moduleId = getSelectedModuleId();
-			for (Observer o : observers) {
+			for (Observer o : observersWithinDefine) {
 				o.update(this, moduleId);
 			}
 		}
 		
 		public void notifyAnalyzedObservers() {
-			for (Observer o : observers) {
+			for (Observer o : observersWithinDefine) {
 				o.update(this, "updateSoftwareTree");
 			}
 		}
@@ -242,7 +241,7 @@ import org.apache.log4j.Logger;
 		 * This function will load notify all to update their data
 		 */
 		public void notifyObservers(long moduleId) {
-			for (Observer o : observers) {
+			for (Observer o : observersWithinDefine) {
 				o.update(this, moduleId);
 			}
 		}
@@ -253,7 +252,7 @@ import org.apache.log4j.Logger;
 			this.notifyObservers();
 
 			if (!exceptionMessage.isEmpty()) {
-				UiDialogs.errorDialog(definitionJPanel, exceptionMessage);
+				UiDialogs.errorDialog(getDefinitionPanel(), exceptionMessage);
 			}
 			else {
 				logger.info("Adding module with Id: " + module.getId() + ", Name: " + module.getName());
@@ -273,7 +272,7 @@ import org.apache.log4j.Logger;
 				this.notifyObservers();
 			} catch (Exception e) {
 				logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 				e.printStackTrace();
 			} finally {
 				JPanelStatus.getInstance().stop();
@@ -281,8 +280,8 @@ import org.apache.log4j.Logger;
 		}
 
 		public void removeObserver(Observer o) {
-			if (observers.contains(o)) {
-				observers.remove(o);
+			if (observersWithinDefine.contains(o)) {
+				observersWithinDefine.remove(o);
 			}
 		}
 
@@ -295,7 +294,7 @@ import org.apache.log4j.Logger;
 								.getAppliedRuleById(appliedRuleID);
 						if (defaultRuleService.isMandatoryRule(rule)) {
 							mandatory = true;
-							UiDialogs.errorDialog(definitionJPanel, ServiceProvider
+							UiDialogs.errorDialog(getDefinitionPanel(), ServiceProvider
 									.getInstance().getLocaleService()
 									.getTranslatedString("DefaultRule")
 									+ "\n- " + rule.getRuleTypeKey());
@@ -304,7 +303,7 @@ import org.apache.log4j.Logger;
 					}
 					if (!mandatory) {
 						boolean confirm = UiDialogs.confirmDialog(
-								definitionJPanel,
+								getDefinitionPanel(),
 								ServiceProvider
 								.getInstance()
 								.getLocaleService()
@@ -324,7 +323,7 @@ import org.apache.log4j.Logger;
 				}
 			} catch (Exception e) {
 				logger.error("removeRule() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
@@ -338,7 +337,7 @@ import org.apache.log4j.Logger;
 			try {
 				long moduleId = getSelectedModuleId();
 				int location = 0;
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService()
+				boolean confirm = UiDialogs.confirmDialog(getDefinitionPanel(), ServiceProvider.getInstance().getLocaleService()
 						.getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
 			
 				for (String softwareUnit : softwareUnitNames) {
@@ -351,7 +350,7 @@ import org.apache.log4j.Logger;
 							
 							boolean chekHasCodelevelWarning = WarningMessageService.getInstance().isCodeLevelWarning(softwareUnit);
 							if (chekHasCodelevelWarning) {
-								boolean confirm2 = UiDialogs.confirmDialog(definitionJPanel,
+								boolean confirm2 = UiDialogs.confirmDialog(getDefinitionPanel(),
 												"Your about to remove a software unit that does exist at code level",
 												"Remove?");
 								if (confirm2) {
@@ -369,7 +368,7 @@ import org.apache.log4j.Logger;
 			} catch (Exception e) {
 				logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
 				e.printStackTrace();
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
@@ -399,10 +398,10 @@ import org.apache.log4j.Logger;
 							moduleDescription);
 				}
 				this.notifyObservers();
-				definitionJPanel.modulePanel.updateModuleTree();
+				getDefinitionPanel().modulePanel.updateModuleTree();
 			} catch (Exception e) {
 				logger.error("updateModule() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}
@@ -411,7 +410,7 @@ import org.apache.log4j.Logger;
 		public void updateModuleType(String type) {
 			moduleService.updateModuleType(getSelectedModuleId(), type);
 			this.notifyObservers();
-			definitionJPanel.modulePanel.updateModuleTree();
+			getDefinitionPanel().modulePanel.updateModuleTree();
 		}
 
 		// Changes the name of the facade subsequently after a module with type "Component"	has its name changed. 
@@ -424,10 +423,10 @@ import org.apache.log4j.Logger;
 					moduleService.updateFacade(moduleId, moduleName);
 				}
 				this.notifyObservers();
-				definitionJPanel.modulePanel.updateModuleTree();
+				getDefinitionPanel().modulePanel.updateModuleTree();
 			} catch (Exception e) {
 				logger.error("updateFacade() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();
 			}

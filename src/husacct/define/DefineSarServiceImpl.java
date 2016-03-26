@@ -56,6 +56,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	@Override
 	public void removeModule(String logicalPath) {
 		try {
+			defineService.getDefinitionController().setSelectedModuleId(-1);
 			moduleService.removeModuleById(moduleService.getModuleByLogicalPath(logicalPath).getId());
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -130,6 +131,10 @@ public class DefineSarServiceImpl implements IDefineSarService {
 		return selectedModuleDTO;
 	}
 
+	public void updateModulePanel() {
+		defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
+	}
+	
 	private RuleTypeDTO getRuleType(String ruleTypeKey) {
 		RuleTypeDTO returnValue = null;
  		IValidateService validateService = ServiceProvider.getInstance().getValidateService();

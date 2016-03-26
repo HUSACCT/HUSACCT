@@ -40,11 +40,14 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 	}
 
 	public void identifyComponentsInRootOfSelectedModule(ModuleDTO module) {
-		String selectedModuleUniqueName = module.logicalPath;
-		// 1) Select all the software units in the root of the selected module
-		ArrayList<String> softwareUnitsInSelectedModuleList = new ArrayList<String>();
-		ArrayList<SoftwareUnitDTO> classesInRootPackages = new ArrayList<SoftwareUnitDTO>();
 		try {
+			String selectedModuleUniqueName = module.logicalPath;
+			if (selectedModuleUniqueName.equals("")) {
+				selectedModuleUniqueName = "**"; // Root of intended software architecture
+			}
+			// 1) Select all the software units in the root of the selected module
+			ArrayList<String> softwareUnitsInSelectedModuleList = new ArrayList<String>();
+			ArrayList<SoftwareUnitDTO> classesInRootPackages = new ArrayList<SoftwareUnitDTO>();
 			softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModuleUniqueName));
 			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
 				for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
@@ -53,49 +56,49 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 					}
 				}
 			}
-		} catch (Exception e) {
-	        logger.warn(" Exception: "  + e );
-        }
-		// 2) Select the software units that implement an interface
-		HashMap<String,ArrayList<SoftwareUnitDTO>> interfacesPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-		for(SoftwareUnitDTO softwareUnitInSelectedModule : classesInRootPackages){
-			// a) Get all dependencies on the software unit
-			ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
-			Collections.addAll(dependenciesList, queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitInSelectedModule.uniqueName, ""));
-			// b) Determine if the software unit implement an interface	
-			for(DependencyDTO dependency : dependenciesList){		
-				if(dependency.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
-					// 3) Get the used interface. Continue only if the interface is implemented ones only (otherwise it is possibly a utility).
-					SoftwareUnitDTO interfaceClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
-					if (isInterfaceImplementedOnceOnly(interfaceClass)) {
-						// 4) Relate the interface with the parent package of the implementingClassesInSelectedModule
-						// Determine the parent package of the implementing class, and relate package and interface.
-						// Note: a package can implement several interfaces.
-						String parentName = queryService.getParentUnitOfSoftwareUnit(softwareUnitInSelectedModule.uniqueName).uniqueName;
-						if(!interfacesPerPackage.containsKey(parentName)){
-							ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = new ArrayList<SoftwareUnitDTO>();
-							softwareUnitsOfInterface.add(interfaceClass);
-							interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
-						}
-						else{
-							ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = interfacesPerPackage.get(parentName);
-							softwareUnitsOfInterface.add(interfaceClass);
-							interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+			// 2) Select the software units that implement an interface
+			HashMap<String,ArrayList<SoftwareUnitDTO>> interfacesPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
+			for(SoftwareUnitDTO softwareUnitInSelectedModule : classesInRootPackages){
+				// a) Get all dependencies on the software unit
+				ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
+				Collections.addAll(dependenciesList, queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitInSelectedModule.uniqueName, ""));
+				// b) Determine if the software unit implement an interface	
+				for(DependencyDTO dependency : dependenciesList){		
+					if(dependency.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
+						// 3) Get the used interface. Continue only if the interface is implemented ones only (otherwise it is possibly a utility).
+						SoftwareUnitDTO interfaceClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
+						if (isInterfaceImplementedOnceOnly(interfaceClass)) {
+							// 4) Relate the interface with the parent package of the implementingClassesInSelectedModule
+							// Determine the parent package of the implementing class, and relate package and interface.
+							// Note: a package can implement several interfaces.
+							String parentName = queryService.getParentUnitOfSoftwareUnit(softwareUnitInSelectedModule.uniqueName).uniqueName;
+							if(!interfacesPerPackage.containsKey(parentName)){
+								ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = new ArrayList<SoftwareUnitDTO>();
+								softwareUnitsOfInterface.add(interfaceClass);
+								interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+							}
+							else{
+								ArrayList<SoftwareUnitDTO> softwareUnitsOfInterface = interfacesPerPackage.get(parentName);
+								softwareUnitsOfInterface.add(interfaceClass);
+								interfacesPerPackage.put(parentName, softwareUnitsOfInterface);
+							}
 						}
 					}
 				}
 			}
-		}
-		// Create the component and its interface, and assign the software units to these modules
-		for(String parentPackageUniqueName : interfacesPerPackage.keySet()){
-			SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(parentPackageUniqueName);
-			ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
-			parentUnitsList.add(parentUnit);
-			
-			defineSarService.addModule(parentUnit.name, selectedModuleUniqueName, ModuleTypes.COMPONENT.toString(), 0, parentUnitsList);
-			ArrayList<SoftwareUnitDTO> interfaceUnits = interfacesPerPackage.get(parentPackageUniqueName);
-			defineSarService.addModule(parentUnit.name + "Interface", selectedModuleUniqueName + "." + parentUnit.name, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
-		}
+			// Create the component and its interface, and assign the software units to these modules
+			for(String parentPackageUniqueName : interfacesPerPackage.keySet()){
+				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(parentPackageUniqueName);
+				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
+				parentUnitsList.add(parentUnit);
+				
+				defineSarService.addModule(parentUnit.name, selectedModuleUniqueName, ModuleTypes.COMPONENT.toString(), 0, parentUnitsList);
+				ArrayList<SoftwareUnitDTO> interfaceUnits = interfacesPerPackage.get(parentPackageUniqueName);
+				defineSarService.addModule(parentUnit.name + "Interface", selectedModuleUniqueName + "." + parentUnit.name, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
+			}
+		} catch (Exception e) {
+	        logger.warn(" Exception: "  + e );
+        }
 	}
 
 	public void identifyComponentsInRoot() {

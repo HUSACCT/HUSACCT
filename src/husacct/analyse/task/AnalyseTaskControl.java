@@ -91,6 +91,10 @@ public class AnalyseTaskControl {
 		reconstructArchitecture.reverseReconstruction();
 	}
     
+	public void reconstructArchitecture_ClearAll(){
+		reconstructArchitecture.clearAllModules();
+	}
+    
 	//Methods for AnalyseUIController
 	public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
 		return queryService.getSoftwareUnitsInRoot();

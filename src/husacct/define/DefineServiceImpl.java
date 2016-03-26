@@ -334,8 +334,9 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		pd.setParseData(DomainElement.LOGICAL);
 		pd.loadWorkspaceData(e);
-		DefinitionController.getInstance().notifyObservers();
-		getDefinitionController().initSettings();
+		getDefinitionController().notifyObservers();
+		getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
+		getDefinitionController().clearObserversWithinDefine();
 	}
 
 	@Override

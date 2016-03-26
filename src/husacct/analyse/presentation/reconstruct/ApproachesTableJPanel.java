@@ -149,7 +149,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 				{ "Scanniello - originalRoot", 10}, 
 				{ "Scanniello - improvedRoot", 10}, 
 				{ "Scanniello - selectedModuleApproach", 12}, 
-				{"Component recognition", 10}};
+				{ "Component Recognition in Root of Selected Module", 10}};
 		return ApproachesRows;
 	}
 	
