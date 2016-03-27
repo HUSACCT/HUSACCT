@@ -10,13 +10,13 @@ public interface IDefineSarService {
 	/** Adds a module to the intended architecture
 	 * Argument name is the simple name, so not the logical path of the module, which is formed by the combination of parentLogicalPath + "." + name.  
 	 */
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
+	public ModuleDTO addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
 	
 	/** Edits an existing module of the intended architecture
 	 * Argument logicalPath identifies the existing module. If the other arguments don't have a null-value (or 0 for int), the value is set as new attribute value. 
 	 * Argument name is the simple name, so not the logical path of the module.  
 	 */
-	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits);
+	public ModuleDTO editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits);
 
 	/** Removes an existing module from the intended architecture
 	 * Argument logicalPath identifies the existing module. 

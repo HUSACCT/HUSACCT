@@ -34,10 +34,8 @@ public class Algorithm_Goldstein_SelectedModule extends AlgorithmGeneral{
 				modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 			}
 			
-			defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
-			String newModuleLogicalPath = selectedModule.logicalPath + "." + "Layer" + level;
-			
-			addToReverseReconstructionList(newModuleLogicalPath); //add to cache for reverse
+			ModuleDTO newModule = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
+			addToReverseReconstructionList(newModule); //add to cache for reverse
 		}
 	}
 

@@ -96,15 +96,12 @@ public class Algorithm_Goldstein_UpgradedRoot extends AlgorithmGeneral{
 		identifyLayers(internalRootPackagesWithClasses, dependencyType);
 		
 		for (Integer herarchicalLevel : layers.keySet()) {
-			defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
-			String logicalPathReversable = "Layer" + herarchicalLevel;
-			addToReverseReconstructionList(logicalPathReversable); //add to cache for reverse
+			ModuleDTO newModule = defineSarService.addModule("Layer" + herarchicalLevel, "**", "Layer", herarchicalLevel, layers.get(herarchicalLevel));
+			addToReverseReconstructionList(newModule); //add to cache for reverse
 		}
 		
-		defineSarService.addModule("RestLayer", "**", "Layer", 0, godClasses);
-		
-		String logicalPathReversable = "RestLayer";
-		addToReverseReconstructionList(logicalPathReversable); //add to cache for reverse
+		ModuleDTO newModule = defineSarService.addModule("RestLayer", "**", "Layer", 0, godClasses);
+		addToReverseReconstructionList(newModule); //add to cache for reverse
 		
 	}
 	

@@ -22,7 +22,7 @@ public class ModuleDomainService {
 	private ModuleFactory factory = new ModuleFactory();
 	private final Logger logger = Logger.getLogger(ModuleDomainService.class);
 
-	public String addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+	public ModuleStrategy addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
 		String message = "";
 		// 1) Create new module
 		ModuleStrategy newModule;
@@ -77,12 +77,13 @@ public class ModuleDomainService {
 		} else {
 			logger.info(" Module not added with name: " + name + ", Type: " + moduleType);
 		}
-		return message;
+		return newModule;
 	}
 	
-	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+	public ModuleStrategy editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+		ModuleStrategy moduleToEdit = null;
 		try{
-			ModuleStrategy moduleToEdit = getModuleByLogicalPath(logicalPath);
+			moduleToEdit = getModuleByLogicalPath(logicalPath);
 			if (moduleToEdit != null) {
 				if (newName != null)
 					moduleToEdit.setName(newName);
@@ -111,6 +112,7 @@ public class ModuleDomainService {
 	    } catch(Exception e) {
 	        logger.error(e);
 	    }
+		return moduleToEdit;
 	}
 	
 	public String addModuleToParent(long parentModuleId, ModuleStrategy module) {

@@ -92,16 +92,18 @@ public class AlgorithmComponents extends AlgorithmGeneral{
 				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
 				parentUnitsList.add(parentUnit);
 				
-				defineSarService.addModule(parentUnit.name, selectedModuleUniqueName, ModuleTypes.COMPONENT.toString(), 0, parentUnitsList);
+				ModuleDTO newModule = defineSarService.addModule(parentUnit.name, selectedModuleUniqueName, ModuleTypes.COMPONENT.toString(), 0, parentUnitsList);
+				addToReverseReconstructionList(newModule); //add to cache for reverse
 				ArrayList<SoftwareUnitDTO> interfaceUnits = interfacesPerPackage.get(parentPackageUniqueName);
-				defineSarService.addModule(parentUnit.name + "Interface", selectedModuleUniqueName + "." + parentUnit.name, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
+				ModuleDTO newInterfaceModule = defineSarService.addModule(parentUnit.name + "Interface", selectedModuleUniqueName + "." + parentUnit.name, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
+				addToReverseReconstructionList(newInterfaceModule); //add to cache for reverse
 			}
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
         }
 	}
 
-	public void identifyComponentsInRoot() {
+	public void identifyComponentsInRoot() { // Old mechanism, not used currently
 		// Select all interface classes.
 		determineInternalRootPackagesWithClasses();
 		identifiedInterfaceClasses = new ArrayList<SoftwareUnitDTO>();

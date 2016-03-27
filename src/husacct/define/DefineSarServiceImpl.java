@@ -36,21 +36,31 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 
 	@Override
-	public void addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+	public ModuleDTO addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
+		ModuleDTO newModuleDTO =  new ModuleDTO();
 		try {
-			moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
+			ModuleStrategy newModule = moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
+			if (newModule != null) {
+				newModuleDTO = domainParser.parseModule(newModule);
+			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
         }
+		return newModuleDTO;
 	}
 	
 	@Override
-	public void editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+	public ModuleDTO editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+		ModuleDTO editedModuleDTO =  new ModuleDTO();
 		try {
-			moduleService.editModule(logicalPath, newName, newHierarchicalLevel, newSoftwareUnits);
+			ModuleStrategy editedModule = moduleService.editModule(logicalPath, newName, newHierarchicalLevel, newSoftwareUnits);
+			if (editedModule != null) {
+				editedModuleDTO = domainParser.parseModule(editedModule);
+			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
         }
+		return editedModuleDTO;
 	}
 	
 	@Override

@@ -192,16 +192,13 @@ public class Algorithm_Scanniello_Original_Root extends AlgorithmGeneral {
 		for (int hierarchicalLevel : structuredLayers.keySet()) {
 			if (!structuredLayers.get(hierarchicalLevel).isEmpty()){
 				layerCounter++;
-				defineSarService.addModule("Layer" + layerCounter, "**", "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
-				
-				String logicalPathReversable = "Layer" + layerCounter;
-				addToReverseReconstructionList(logicalPathReversable); //add to cache for reverse
+				ModuleDTO newModule = defineSarService.addModule("Layer" + layerCounter, "**", "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
+				addToReverseReconstructionList(newModule); //add to cache for reverse
 			}
 		}
 		if (!discLayer.isEmpty()){
-			defineSarService.addModule("discLayer", "**", "Layer", 1, discLayer);
-			String logicalPathReversable = "discLayer";
-			addToReverseReconstructionList(logicalPathReversable); //add to cache for reverse
+			ModuleDTO newModule = defineSarService.addModule("discLayer", "**", "Layer", 1, discLayer);
+			addToReverseReconstructionList(newModule); //add to cache for reverse
 		}
 	}
 	
