@@ -15,6 +15,7 @@ import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.AppliedRuleController;
@@ -156,9 +157,13 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 				ModuleStrategy module =(moduleService.getModuleByLogicalPath(logicalPath));
 				// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
 				if (module != null){
+					SoftwareUnitDefinitionDomainService sudSomainService = new SoftwareUnitDefinitionDomainService();
+					resultSetOfSoftwareUnits.addAll(sudSomainService.getSoftwareUnitNames(module.getId()));
+					/* To get all assigned SoftwareUnits of the module(s) and all its child modules:
 					Set<String> softwareUnits = module.getAllAssignedSoftwareUnitsInTree().keySet();
 					if(softwareUnits != null)
 						resultSetOfSoftwareUnits.addAll(softwareUnits);
+					*/
 				}
 			}
         } catch (Exception e) {

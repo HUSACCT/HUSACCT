@@ -93,9 +93,4 @@ public class DefinitionJPanel extends HelpableJPanel {
 		}
 	}
 
-	public void updateModulePanel() {
-		if (modulePanel != null) {
-			modulePanel.updateModuleTree();
-		}
-	}
 }

@@ -148,23 +148,17 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	}
 
 	private ActionListener toolbarActionListener = new ActionListener() {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == warningButton) {
-				
 				warnings.refresh();
 				warnings.setVisible(true);
 			}
 			if (e.getSource()==redoButton) {
 				StateService.instance().redo();
-				
-				
 			}
             if (e.getSource()==undoButton) {
 			StateService.instance().undo();
-			
-            	
 			}
 		}
 	};
@@ -172,12 +166,6 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	@Override
 	public void update(Locale newLocale) {
 
-	}
-
-	public void updateModulePanel() {
-		if (definitionPanel != null) {
-			definitionPanel.updateModulePanel();
-		}
 	}
 
 	@Override
