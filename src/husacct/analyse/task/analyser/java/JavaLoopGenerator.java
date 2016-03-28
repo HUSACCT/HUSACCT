@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;

@@ -10,9 +10,9 @@ import javax.naming.directory.InvalidAttributesException;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelCreationService;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
-import husacct.analyse.serviceinterface.enums.DependencyTypes;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.enums.DependencySubTypes;
+import husacct.common.enums.DependencyTypes;
 
 public class FamixCreationServiceImpl implements IModelCreationService {
 

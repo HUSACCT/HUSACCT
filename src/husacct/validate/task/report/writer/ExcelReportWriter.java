@@ -1,10 +1,10 @@
 package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.enums.DependencySubTypes;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;

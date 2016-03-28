@@ -1,4 +1,6 @@
-package husacct.analyse.serviceinterface.enums;
+package husacct.common.enums;
+
+//Owner: Analyse
 
 public enum UmlLinkTypes {
 	INHERITANCELINK("Inherits"),

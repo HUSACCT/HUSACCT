@@ -8,9 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.control.task.MainController;
 

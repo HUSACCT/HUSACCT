@@ -3,7 +3,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;

@@ -7,8 +7,8 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.IAnalyseService;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;

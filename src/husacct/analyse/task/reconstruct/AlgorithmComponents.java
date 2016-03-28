@@ -10,13 +10,13 @@ import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.enums.DependencySubTypes;
+import husacct.common.enums.ModuleTypes;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
-import husacct.validate.domain.validation.moduletype.ModuleTypes;
 
 public class AlgorithmComponents extends AlgorithmGeneral{
 	private IModelQueryService queryService;

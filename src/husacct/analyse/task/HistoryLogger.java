@@ -1,9 +1,9 @@
 package husacct.analyse.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
+import husacct.analyse.IAnalyseService;
 import husacct.common.OSDetector;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.task.configuration.ConfigurationManager;

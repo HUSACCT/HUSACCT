@@ -1,8 +1,8 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;

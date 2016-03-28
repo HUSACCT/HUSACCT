@@ -1,4 +1,6 @@
-package husacct.validate.domain.validation.moduletype;
+package husacct.common.enums;
+
+//Owner: Validate
 
 public enum ModuleTypes {
 	COMPONENT("Component"),

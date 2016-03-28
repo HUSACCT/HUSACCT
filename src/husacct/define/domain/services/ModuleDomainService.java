@@ -1,7 +1,7 @@
 package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.ModuleFactory;

@@ -1,7 +1,7 @@
 package husacct.bootstrap;
 
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 
 import java.io.File;
 import java.util.ArrayList;

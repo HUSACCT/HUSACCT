@@ -7,12 +7,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
-import husacct.analyse.serviceinterface.enums.DependencyTypes;
-import husacct.analyse.serviceinterface.enums.UmlLinkTypes;
+import husacct.common.dto.AnalysisStatisticsDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.dto.UmlLinkDTO;
+import husacct.common.enums.DependencyTypes;
+import husacct.common.enums.UmlLinkTypes;
 
 public class FamixQueryServiceImpl implements IModelQueryService {
 

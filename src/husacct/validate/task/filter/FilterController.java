@@ -1,7 +1,7 @@
 package husacct.validate.task.filter;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;

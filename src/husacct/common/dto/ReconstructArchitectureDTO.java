@@ -1,7 +1,7 @@
-package husacct.analyse.serviceinterface.dto;
+package husacct.common.dto;
 
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
+
+//Owner: Analyse
 
 public class ReconstructArchitectureDTO extends AbstractDTO{
 	private ModuleDTO selectedModule = null; 

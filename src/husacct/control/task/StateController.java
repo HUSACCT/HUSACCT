@@ -1,7 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;

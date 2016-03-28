@@ -1,10 +1,10 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 
 import java.util.ArrayList;
 import java.util.Date;

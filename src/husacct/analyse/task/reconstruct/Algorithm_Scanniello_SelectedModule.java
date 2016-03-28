@@ -8,9 +8,9 @@ import java.util.TreeMap;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
 

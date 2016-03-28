@@ -1,12 +1,12 @@
 package husaccttest.analyse;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.analyse.IAnalyseService;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.dto.UmlLinkDTO;
+import husacct.common.enums.DependencySubTypes;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;

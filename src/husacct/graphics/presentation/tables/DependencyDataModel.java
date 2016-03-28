@@ -1,7 +1,7 @@
 package husacct.graphics.presentation.tables;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.locale.ILocaleService;
 
 import java.util.HashMap;

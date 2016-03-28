@@ -7,9 +7,9 @@ import husacct.analyse.abstraction.export.XmlFileExporterAnalysedModel;
 import husacct.analyse.abstraction.export.XmlFileImporterAnalysedModel;
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.UmlLinkDTO;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

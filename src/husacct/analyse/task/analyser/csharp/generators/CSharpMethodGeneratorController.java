@@ -2,7 +2,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.enums.DependencySubTypes;
 
 import java.util.*;
 

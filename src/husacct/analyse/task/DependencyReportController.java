@@ -4,7 +4,7 @@ import husacct.analyse.abstraction.export.AbstractReportFileExporter;
 import husacct.analyse.abstraction.export.NoDataException;
 import husacct.analyse.abstraction.export.excel.ExcelExporter;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.common.dto.DependencyDTO;
 
 import org.apache.log4j.Logger;
 

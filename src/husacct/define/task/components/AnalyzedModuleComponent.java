@@ -1,6 +1,6 @@
 package husacct.define.task.components;
 
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 
 import java.util.ArrayList;
 

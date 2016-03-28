@@ -1,8 +1,8 @@
 package husaccttest.define;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.analyse.IAnalyseService;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;

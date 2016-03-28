@@ -3,10 +3,10 @@ package husacct.analyse.abstraction.export.excel;
 import husacct.ServiceProvider;
 import husacct.analyse.abstraction.export.AbstractReportFileExporter;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.enums.DependencySubTypes;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.enums.DependencySubTypes;
 
 import java.io.File;
 import java.io.IOException;

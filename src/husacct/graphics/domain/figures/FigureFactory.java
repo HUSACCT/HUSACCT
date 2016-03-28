@@ -1,12 +1,12 @@
 package husacct.graphics.domain.figures;
 
 
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.decorators.ViolationsDecorator;
 

@@ -2,8 +2,8 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.common.enums.ModuleTypes;
 import husacct.common.locale.ILocaleService;
-import husacct.validate.domain.validation.moduletype.ModuleTypes;
 
 import java.util.HashMap;
 

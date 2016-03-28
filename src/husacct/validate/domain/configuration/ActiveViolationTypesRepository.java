@@ -1,7 +1,7 @@
 package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;

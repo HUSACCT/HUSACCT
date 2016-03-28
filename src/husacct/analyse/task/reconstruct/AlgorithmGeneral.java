@@ -5,8 +5,8 @@ import java.util.TreeMap;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
 
 public abstract class AlgorithmGeneral {

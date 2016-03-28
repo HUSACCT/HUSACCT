@@ -1,10 +1,10 @@
 package husacct.define;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
@@ -13,6 +13,7 @@ import husacct.define.domain.services.ModuleDomainService;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 // Services for SAR: Software Architecture Reconstruction

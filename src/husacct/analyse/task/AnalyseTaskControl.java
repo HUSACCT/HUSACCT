@@ -7,13 +7,13 @@ import org.jdom2.Element;
 
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.ReconstructArchitectureDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 
 public class AnalyseTaskControl {
 

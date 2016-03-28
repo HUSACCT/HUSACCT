@@ -1,10 +1,10 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.IAnalyseService;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.ExportImportDialog;
 import husacct.control.presentation.util.Filename;

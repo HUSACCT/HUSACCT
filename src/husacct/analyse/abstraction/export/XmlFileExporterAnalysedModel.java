@@ -9,10 +9,10 @@ import husacct.ServiceProvider;
 import husacct.analyse.abstraction.dto.ClassDTO;
 import husacct.analyse.abstraction.dto.LibraryDTO;
 import husacct.analyse.abstraction.dto.PackageDTO;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.UmlLinkDTO;
 
 public class XmlFileExporterAnalysedModel {
 

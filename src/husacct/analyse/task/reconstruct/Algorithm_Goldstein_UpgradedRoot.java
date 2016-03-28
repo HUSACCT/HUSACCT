@@ -1,8 +1,8 @@
 package husacct.analyse.task.reconstruct;
 
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
 
 import java.util.ArrayList;

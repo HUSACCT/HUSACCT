@@ -1,7 +1,7 @@
 package husacct.graphics.presentation;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;

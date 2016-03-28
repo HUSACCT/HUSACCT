@@ -1,13 +1,8 @@
 package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.AnalyseUIController;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;
-import husacct.common.help.presentation.HelpableJTable;
-import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.tableModels.ViolationDataModel;
 import husacct.validate.presentation.tableModels.ViolationTable;
@@ -16,11 +11,6 @@ import husacct.validate.presentation.tableModels.ViolationsPerRuleDataModel;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
@@ -29,7 +19,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 

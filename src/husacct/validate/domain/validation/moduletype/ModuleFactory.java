@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.moduletype;
 import java.util.HashMap;
 import java.util.List;
 
+import husacct.common.enums.ModuleTypes;
 import husacct.validate.domain.exception.ModuleNotFoundException;
 import husacct.validate.domain.validation.ruletype.RuleType;
 

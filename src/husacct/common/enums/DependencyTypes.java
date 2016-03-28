@@ -1,6 +1,8 @@
-package husacct.analyse.serviceinterface.enums;
+package husacct.common.enums;
 
 import java.util.EnumSet;
+
+//Owner: Analyse
 
 public enum DependencyTypes {
 

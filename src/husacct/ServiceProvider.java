@@ -3,7 +3,7 @@ package husacct;
 import java.util.Date;
 
 import husacct.analyse.AnalyseServiceImpl;
-import husacct.analyse.serviceinterface.IAnalyseService;
+import husacct.analyse.IAnalyseService;
 import husacct.common.locale.ILocaleService;
 import husacct.common.locale.LocaleServiceImpl;
 import husacct.control.ControlServiceImpl;

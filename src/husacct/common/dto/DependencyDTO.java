@@ -1,6 +1,7 @@
-package husacct.analyse.serviceinterface.dto;
+package husacct.common.dto;
 
-import husacct.common.dto.AbstractDTO;
+
+//Owner: Analyse
 
 public class DependencyDTO extends AbstractDTO{
 	//from FamixAssociation

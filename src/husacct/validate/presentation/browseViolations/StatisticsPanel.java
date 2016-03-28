@@ -3,7 +3,6 @@ package husacct.validate.presentation.browseViolations;
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
 
-import java.awt.GridLayout;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 

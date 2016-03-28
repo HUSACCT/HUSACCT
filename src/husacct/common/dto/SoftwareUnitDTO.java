@@ -1,9 +1,9 @@
-package husacct.analyse.serviceinterface.dto;
-
-import husacct.common.dto.AbstractDTO;
+package husacct.common.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//Owner: Analyse
 
 public class SoftwareUnitDTO extends AbstractDTO{
 	

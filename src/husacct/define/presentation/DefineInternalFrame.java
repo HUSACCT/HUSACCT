@@ -59,7 +59,8 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 			this.overviewPanel = new JPanel();
 			BorderLayout borderLayout = new BorderLayout();
 			this.overviewPanel.setLayout(borderLayout);
-			this.addNewDefinitionPanel();
+			definitionPanel = new DefinitionJPanel();
+			this.overviewPanel.add(definitionPanel);
 			this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
 			this.addToolBar();
 		} catch (Exception e) {
@@ -68,10 +69,9 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	}
 
 	public void addNewDefinitionPanel() {
-		if (definitionPanel != null) {
-			this.overviewPanel.remove(definitionPanel);
-		}
+		DefinitionController.getInstance().clearObserversWithinDefine();
 		definitionPanel = new DefinitionJPanel();
+		this.overviewPanel.removeAll();
 		this.overviewPanel.add(definitionPanel);
 		this.revalidate();
 	    DefinitionController.getInstance().notifyObservers();
@@ -140,11 +140,6 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 		
 		undo.setEnabled(statuses[0]);
 		redo.setEnabled(statuses[1]);
-	}
-
-	public void setContentView(JPanel jp) {
-		this.overviewPanel.removeAll();
-		this.overviewPanel.add(jp);
 	}
 
 	private ActionListener toolbarActionListener = new ActionListener() {

@@ -1,9 +1,9 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;

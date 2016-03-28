@@ -3,11 +3,12 @@ package husacct.analyse.presentation.decompositionview;
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.AnalyseUIController;
 import husacct.analyse.presentation.SoftwareTreeCellRenderer;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.analyse.task.AnalyseTaskControl;
+import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.help.presentation.HelpableJScrollPane;
 import husacct.common.help.presentation.HelpableJTree;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

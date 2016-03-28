@@ -1,4 +1,4 @@
-package husacct.analyse.serviceinterface;
+package husacct.analyse;
 
 import java.util.HashSet;
 import java.util.List;
@@ -7,12 +7,12 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.dto.UmlLinkDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
 

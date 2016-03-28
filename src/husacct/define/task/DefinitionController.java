@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JPanel;
-
 import org.apache.log4j.Logger;
 
 
@@ -132,8 +130,8 @@ import org.apache.log4j.Logger;
 	     * Returns an DefineInternalFrame with an added DefenitionJPanel.
 	     */
 	    public DefineInternalFrame getNewDefineInternalFrame() {
-	    	defineInternalFrame = new DefineInternalFrame();
 	    	clearObserversWithinDefine();
+	    	defineInternalFrame = new DefineInternalFrame();
 	    	return defineInternalFrame;
 	        }
 

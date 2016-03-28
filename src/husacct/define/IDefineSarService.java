@@ -1,7 +1,8 @@
 package husacct.define;
 
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+
 import java.util.ArrayList;
 
 // Services for SAR: Software Architecture Reconstruction

@@ -1,9 +1,9 @@
 package husacct.analyse.domain;
 
-import husacct.analyse.serviceinterface.dto.AnalysisStatisticsDTO;
-import husacct.analyse.serviceinterface.dto.DependencyDTO;
-import husacct.analyse.serviceinterface.dto.SoftwareUnitDTO;
-import husacct.analyse.serviceinterface.dto.UmlLinkDTO;
+import husacct.common.dto.AnalysisStatisticsDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.dto.UmlLinkDTO;
 
 import java.util.HashSet;
 import java.util.List;
