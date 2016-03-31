@@ -21,7 +21,7 @@ public class ReconstructArchitecture {
 	// External system variables
 	private String xLibrariesRootPackage = "xLibraries";
 	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<SoftwareUnitDTO>();
-	private AlgorithmGeneral algorithm = null;
+	private IAlgorithm algorithm = null;
 
 	public ReconstructArchitecture(IModelQueryService queryService) {
 		try {
@@ -38,34 +38,34 @@ public class ReconstructArchitecture {
 		try {
 			switch (dto.getApproach()) {
 				case ("Goldstein - multipleLayerApproach"):
-					algorithm = new Algorithm_Goldstein_MultiLayer();
+					algorithm = new husacct.analyse.task.reconstruct.layers.goldstein.RootMultipleLayers();
 					break;
 				case ("Goldstein - selectedModuleApproach"):
 					if(dto.getSelectedModule() == null || dto.getSelectedModule().logicalPath.equals("**") || dto.getSelectedModule().logicalPath.equals("")){ //is root
-						algorithm = new Algorithm_Goldstein_Root();
+						algorithm = new husacct.analyse.task.reconstruct.layers.goldstein.RootImproved();
 					}
 					else{
-						algorithm = new Algorithm_Goldstein_SelectedModule();
+						algorithm = new husacct.analyse.task.reconstruct.layers.goldstein.SelectedModuleImproved();
 					}
 					break;
 				case ("Scanniello - selectedModuleApproach"): //second approach for Gui-team
-					algorithm = new Algorithm_Scanniello_SelectedModule();
+					algorithm = new husacct.analyse.task.reconstruct.layers.scanniello.SelectedModuleImproved();
 					break;
 				case ("Scanniello - originalRoot"):
-					algorithm = new Algorithm_Scanniello_Original_Root();
+					algorithm = new husacct.analyse.task.reconstruct.layers.scanniello.RootOriginal();
 					break;
 				case ("Scanniello - improvedRoot"):
-					algorithm = new Algorithm_Scanniello_Improved_Root();
+					algorithm = new husacct.analyse.task.reconstruct.layers.scanniello.RootImproved();
 					break;
 				case ("Component Recognition in Root of Selected Module"):
-					algorithm = new AlgorithmComponents(queryService);
+					algorithm = new husacct.analyse.task.reconstruct.components.HUSACCT.SelectedModule();
 					break;
 				default:
-					algorithm = new Algorithm_Goldstein_Root();	
+					algorithm = null;	
 			}
 			if (algorithm != null) {
 				algorithm.clearReverseReconstructionList(); 
-				algorithm.execute(dto.getSelectedModule(), dto.getThreshold(), queryService, xLibrariesRootPackage, dto.getRelationType());
+				algorithm.executeAlgorithm(dto, queryService, xLibrariesRootPackage);
 			}
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
