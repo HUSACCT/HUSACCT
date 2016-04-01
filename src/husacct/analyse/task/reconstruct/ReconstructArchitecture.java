@@ -2,15 +2,22 @@ package husacct.analyse.task.reconstruct;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.components.HUSACCT.ComponentsHUSACCT_SelectedModule;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleImproved;
+import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootImproved;
+import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
+import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_SelectedModuleImproved;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
-
-import org.apache.log4j.Logger;
 
 public class ReconstructArchitecture {
 
@@ -38,27 +45,27 @@ public class ReconstructArchitecture {
 		try {
 			switch (dto.getApproach()) {
 				case ("Goldstein - multipleLayerApproach"):
-					algorithm = new husacct.analyse.task.reconstruct.layers.goldstein.RootMultipleLayers();
+					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
 				case ("Goldstein - selectedModuleApproach"):
 					if(dto.getSelectedModule() == null || dto.getSelectedModule().logicalPath.equals("**") || dto.getSelectedModule().logicalPath.equals("")){ //is root
-						algorithm = new husacct.analyse.task.reconstruct.layers.goldstein.RootImproved();
+						algorithm = new LayersGoldstein_RootImproved();
 					}
 					else{
-						algorithm = new husacct.analyse.task.reconstruct.layers.goldstein.SelectedModuleImproved();
+						algorithm = new LayersGoldstein_SelectedModuleImproved();
 					}
 					break;
 				case ("Scanniello - selectedModuleApproach"): //second approach for Gui-team
-					algorithm = new husacct.analyse.task.reconstruct.layers.scanniello.SelectedModuleImproved();
+					algorithm = new LayersScanniello_SelectedModuleImproved();
 					break;
 				case ("Scanniello - originalRoot"):
-					algorithm = new husacct.analyse.task.reconstruct.layers.scanniello.RootOriginal();
+					algorithm = new LayersScanniello_RootOriginal();
 					break;
 				case ("Scanniello - improvedRoot"):
-					algorithm = new husacct.analyse.task.reconstruct.layers.scanniello.RootImproved();
+					algorithm = new LayersScanniello_RootImproved();
 					break;
 				case ("Component Recognition in Root of Selected Module"):
-					algorithm = new husacct.analyse.task.reconstruct.components.HUSACCT.SelectedModule();
+					algorithm = new ComponentsHUSACCT_SelectedModule();
 					break;
 				default:
 					algorithm = null;	
