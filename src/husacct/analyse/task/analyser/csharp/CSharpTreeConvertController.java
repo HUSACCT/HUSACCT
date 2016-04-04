@@ -6,9 +6,12 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit
 import husacct.analyse.task.analyser.csharp.generators.*;
 
 import java.util.Stack;
+
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+
+import common.Logger;
 
 public class CSharpTreeConvertController {
 	String sourceFilePath = "";
@@ -24,7 +27,7 @@ public class CSharpTreeConvertController {
 	CSharpLamdaGenerator csLamdaGenerator;
 	Stack<String> namespaceStack = new Stack<>();
 	Stack<String> classNameStack = new Stack<>();
-    //private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
+    private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
 
 	public CSharpTreeConvertController() {
 		csUsingGenerator = new CSharpUsingGenerator();
@@ -39,9 +42,11 @@ public class CSharpTreeConvertController {
 	}
 
 	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser, String sourceFilePath, int nrOfLinesOfCode) throws RecognitionException {
+		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
 		this.sourceFilePath = sourceFilePath;
 		this.numberOfLinesOfCode = nrOfLinesOfCode;
-		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
+		recalculateLocInCaseOfMultipleClasses(compilationCommonTree);
+		// Analyse the AST and create domain objects for the relevant code elements.
 		delegateASTToGenerators(compilationCommonTree);
 	}
 
@@ -51,8 +56,9 @@ public class CSharpTreeConvertController {
 	}
 
 	private void delegateASTToGenerators(CommonTree tree) {
+		int numberOfNamespaces = 0;
 		/* Test and Debug
-		if (sourceFilePath.contains("ThingGraphUiManager")) {
+		if (sourceFilePath.contains("ImageDisplay")) {
 			boolean breakpoint = true;
 		} */
 		
@@ -71,6 +77,10 @@ public class CSharpTreeConvertController {
 						namespaceStack.push(delegateNamespace(namespaceTree));
 						delegateASTToGenerators(namespaceTree);
 						namespaceStack.pop();
+						numberOfNamespaces ++;
+						if (numberOfNamespaces > 1) {
+							logger.warn("Multiple namespaces in: " + sourceFilePath);
+						}
 						break;
 					case CSharpParser.CLASS:
 					case CSharpParser.INTERFACE:
@@ -127,6 +137,42 @@ public class CSharpTreeConvertController {
 		return false;
 	}
 
+	/* In case of multiple first-level classes in the file, numberOfLinesOfCode needs to be recalculated.
+	 * In these (exceptional) cases, numberOfLinesOfCode is not determined exactly per class, but as average LOC per class in the file. 
+	 * To test, use Limada-source code: Limaki.View\Limaki.View\Visualizers\ImageDisplay.cs. It contains two namespaces and four types.
+	 */
+	private void recalculateLocInCaseOfMultipleClasses(CommonTree tree) {
+		int numberOfTypesInSourceFile = calculateNumberOfClassesInSourceFile(tree);
+		if (numberOfTypesInSourceFile > 1) {
+			numberOfLinesOfCode = numberOfLinesOfCode / numberOfTypesInSourceFile;
+		}
+	}
+	private int calculateNumberOfClassesInSourceFile(CommonTree tree) {
+		int numberOfTypesInSourceFile = 0;
+		CommonTree namespaceMembersTree = CSharpGeneratorToolkit.getFirstDescendantWithType(tree, CSharpParser.NAMESPACE_MEMBER_DECLARATIONS);
+		if (namespaceMembersTree != null) {
+			int nrOfMembers = namespaceMembersTree.getChildCount();
+			for (int i = 0; i < nrOfMembers; i++) {
+				CommonTree memberTree = (CommonTree) namespaceMembersTree.getChild(i);
+				int nodeType = memberTree.getType();
+				switch (nodeType) {
+					case CSharpParser.NAMESPACE:
+						numberOfTypesInSourceFile = numberOfTypesInSourceFile + calculateNumberOfClassesInSourceFile(memberTree);
+						break;
+					case CSharpParser.CLASS:
+					case CSharpParser.INTERFACE:
+					case CSharpParser.ENUM:
+					case CSharpParser.STRUCT:
+						numberOfTypesInSourceFile ++;
+						break;
+					default:
+						// Do nothing
+				}
+			}
+		}
+		return numberOfTypesInSourceFile;
+	}
+	
 	private void saveUsing(CommonTree usingTree) {
 		csUsingGenerator.addUsings(usingTree);
 	}
