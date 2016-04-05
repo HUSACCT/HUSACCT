@@ -22,7 +22,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	private static final long serialVersionUID = 1L;
 	public JTable approachesTable;
 	public JPanel optionsPanel;
-	public ButtonGroup radioButtonGroup;
+	public ButtonGroup RadioButtonsRelationType;
 	public ButtonGroup radioButtonGroupTwo;
 
 	/**
@@ -122,12 +122,12 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		gbc_ClassesRadioButton.gridx = 4;
 		gbc_ClassesRadioButton.gridy = 1;
 		
-		radioButtonGroup = new ButtonGroup();
+		RadioButtonsRelationType = new ButtonGroup();
 		radioButtonGroupTwo = new ButtonGroup();
 		
-		radioButtonGroup.add(allDependenciesRadioButton);
-		radioButtonGroup.add(umlLinksRadioButton);
-		radioButtonGroup.add(accessCallReferenceDependenciesRadioButton);
+		RadioButtonsRelationType.add(allDependenciesRadioButton);
+		RadioButtonsRelationType.add(umlLinksRadioButton);
+		RadioButtonsRelationType.add(accessCallReferenceDependenciesRadioButton);
 		
 		radioButtonGroupTwo.add(packagesInRootRadioButton);
 		radioButtonGroupTwo.add(packagesAllWithClassesRadioButton);

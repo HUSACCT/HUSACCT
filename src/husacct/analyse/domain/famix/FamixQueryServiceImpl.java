@@ -317,4 +317,9 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         foundDependenciesReturnList.addAll(foundDependenciesTreeMap.values());
         return foundDependenciesReturnList.toArray(new DependencyDTO[foundDependenciesReturnList.size()]);
     }
+
+	@Override
+	public List<SoftwareUnitDTO> getAllClasses() {
+		return moduleFinder.findAllClasses();
+	}
 }
