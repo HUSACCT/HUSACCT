@@ -12,10 +12,8 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
-import husacct.define.IDefineService;
 
 public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
-	private static final String xLibrariesRootPackage = "xLibraries";
 	private static final int topLayerKey = 1;
 	private static final int middleLayerKey = 2;
 	private static final int bottomLayerKey = 3;
@@ -23,14 +21,12 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 
 	private IModelQueryService queryService;
 	private int threshold;
-	private IDefineService defineService;
 	
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
-
 		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
-		this.defineService = ServiceProvider.getInstance().getDefineService();
+		ServiceProvider.getInstance().getDefineService();
 		
 		List<SoftwareUnitDTO> classes = queryService.getAllClasses();
 		ArrayList<SoftwareUnitDTO> classesArray = new ArrayList<SoftwareUnitDTO>(classes);
