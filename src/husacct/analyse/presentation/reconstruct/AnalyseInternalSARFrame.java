@@ -6,6 +6,7 @@ import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.services.IServiceListener;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -53,6 +54,8 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 	}
     
     public void initUI(){
+    	Dimension minimumSize = new Dimension(740, 350);
+		setMinimumSize(minimumSize);
     	this.addReconstructPanel();
     }
 }

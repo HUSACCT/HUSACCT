@@ -26,7 +26,6 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private static final int approachesThresholdCollumn = 1;
 	private static final int approachNameCollumn = 0;
 	private static final long serialVersionUID = 1L;
-	private ComponentInformationJPanel componentInformationJPanel;
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
 	private JButton applyButton;
@@ -42,11 +41,6 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		initUI();
 	}
 	
-	public JPanel createComponentInformationJPanel(){
-		componentInformationJPanel = new ComponentInformationJPanel();
-		return componentInformationJPanel;
-	}
-	
 	public JPanel createApproachesTableJPanel(){
 		approachesTableJPanel = new ApproachesTableJPanel();
 		return approachesTableJPanel;
@@ -58,7 +52,6 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	
 	public final void initUI(){
 		setLayout(new GridLayout(0, 1, 0, 0));
-		this.add(createComponentInformationJPanel(), BorderLayout.NORTH);
 		this.add(createApproachesTableJPanel(), BorderLayout.CENTER);
 		
 		panel = new JPanel();
