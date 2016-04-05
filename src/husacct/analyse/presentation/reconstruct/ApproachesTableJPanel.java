@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
+import javax.swing.ScrollPaneConstants;
 
 public class ApproachesTableJPanel extends HelpableJPanel {
 	private static final long serialVersionUID = 1L;
@@ -33,11 +34,11 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	}
 	
 	public void initUI(){
-		setLayout(new BorderLayout(0, 0));
-		
+		setLayout(new BorderLayout(0, 0));		
 		optionsPanel = new JPanel();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		add(tabbedPane);
 				
@@ -46,6 +47,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 
 		approachesTable = new JTable(rows, columnNames);
+		approachesTable.setMinimumSize(new Dimension(600,150));
 		Dimension tableSize = approachesTable.getPreferredSize();
 		
 		JPanel approachedPane = new JPanel();
