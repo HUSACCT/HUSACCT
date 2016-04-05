@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.task.reconstruct.AlgorithmComponents;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -27,7 +26,7 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	private String xLibrariesRootPackage = "xLibraries";
 	private IDefineService defineService;
 	private IDefineSarService defineSarService;
-	private final Logger logger = Logger.getLogger(AlgorithmComponents.class);
+	private final Logger logger = Logger.getLogger(ComponentsHUSACCT_SelectedModule.class);
 	
 	public ComponentsHUSACCT_SelectedModule(){
 		defineService = ServiceProvider.getInstance().getDefineService();
