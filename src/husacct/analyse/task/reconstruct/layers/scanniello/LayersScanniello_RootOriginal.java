@@ -30,7 +30,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		
 		List<SoftwareUnitDTO> classes = queryService.getAllClasses();
 		ArrayList<SoftwareUnitDTO> classesArray = new ArrayList<SoftwareUnitDTO>(classes);
-		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstIdentifiedLayers = IdentifyLayers(classesArray);
+		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstIdentifiedLayers = identifyLayers(classesArray);
 		
 		ArrayList<ArrayList<SoftwareUnitDTO>> topLayers = new ArrayList<>();
 		ArrayList<ArrayList<SoftwareUnitDTO>> bottomLayers = new ArrayList<>();
@@ -44,7 +44,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		
 		boolean topOrBottomAreNotEmpty = firstIdentifiedLayers.get(topLayerKey).size() > 0 || firstIdentifiedLayers.get(bottomLayerKey).size() > 0;
 		while (topOrBottomAreNotEmpty){
-			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = IdentifyLayers(middleLayer);
+			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = identifyLayers(middleLayer);
 			
 			if (!newIdentifiedLayers.get(topLayerKey).isEmpty()){
 				topLayers.add(newIdentifiedLayers.get(topLayerKey));
@@ -62,7 +62,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 	}
 
 	
-	private HashMap<Integer, ArrayList<SoftwareUnitDTO>> IdentifyLayers(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs){
+	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> identifyLayers(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs){
 		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<SoftwareUnitDTO>();
@@ -131,44 +131,5 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		}
 		return dependecyDTOs;
 	}
-	
-	
-	
-	
-	private HashMap<Integer, ArrayList<SoftwareUnitDTO>> RestructureLayers(ArrayList<ArrayList<SoftwareUnitDTO>> topLayers, ArrayList<ArrayList<SoftwareUnitDTO>> bottomLayers, ArrayList<SoftwareUnitDTO> middleLayer){
-		HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers = new HashMap<Integer, ArrayList<SoftwareUnitDTO>>();
-		
-		int LayerKeyCount = 1;
-		for(ArrayList<SoftwareUnitDTO> topLayer : topLayers){
-			structuredLayers.put(LayerKeyCount, topLayer);
-			LayerKeyCount++;
-		}
-		structuredLayers.put(LayerKeyCount, middleLayer);
-		LayerKeyCount++;
-		for (int i = bottomLayers.size()-1; i>=0; i-- ){
-			structuredLayers.put(LayerKeyCount, bottomLayers.get(i));
-			LayerKeyCount++;
-		}
-		
-		return structuredLayers;
-	}
-	
-	private void buildStructure(HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers, ArrayList<SoftwareUnitDTO> discLayer){
-		IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
-		int layerCounter = 0;
-		for (int hierarchicalLevel : structuredLayers.keySet()) {
-			if (!structuredLayers.get(hierarchicalLevel).isEmpty()){
-				layerCounter++;
-				ModuleDTO newModule = defineSarService.addModule("Layer" + layerCounter, "**", "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
-				addToReverseReconstructionList(newModule); //add to cache for reverse
-			}
-		}
-		if (!discLayer.isEmpty()){
-			ModuleDTO newModule = defineSarService.addModule("discLayer", "**", "Layer", 1, discLayer);
-			addToReverseReconstructionList(newModule); //add to cache for reverse
-		}
-	}
-	
-	
 	
 }
