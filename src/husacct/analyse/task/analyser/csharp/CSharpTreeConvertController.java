@@ -78,9 +78,6 @@ public class CSharpTreeConvertController {
 						delegateASTToGenerators(namespaceTree);
 						namespaceStack.pop();
 						numberOfNamespaces ++;
-						if (numberOfNamespaces > 1) {
-							logger.warn("Multiple namespaces in: " + sourceFilePath);
-						}
 						break;
 					case CSharpParser.CLASS:
 					case CSharpParser.INTERFACE:
