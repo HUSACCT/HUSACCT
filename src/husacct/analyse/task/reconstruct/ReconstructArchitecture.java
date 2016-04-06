@@ -9,6 +9,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.components.HUSACCT.ComponentsHUSACCT_SelectedModule;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootOriginal;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleImproved;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootImproved;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
@@ -48,8 +49,8 @@ public class ReconstructArchitecture {
 					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
 				case ("Goldstein - selectedModuleApproach"):
-					if(dto.getSelectedModule() == null || dto.getSelectedModule().logicalPath.equals("**") || dto.getSelectedModule().logicalPath.equals("")){ //is root
-						algorithm = new LayersGoldstein_RootImproved();
+					if(dto.getSelectedModule() == null || dto.getSelectedModule().logicalPath.equals("**") || dto.getSelectedModule().logicalPath.isEmpty()){ //is root
+						algorithm = new LayersGoldstein_RootOriginal();
 					}
 					else{
 						algorithm = new LayersGoldstein_SelectedModuleImproved();
