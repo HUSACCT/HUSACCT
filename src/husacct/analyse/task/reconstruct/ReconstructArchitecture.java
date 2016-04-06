@@ -43,27 +43,33 @@ public class ReconstructArchitecture {
 	}
 
 	public void reconstructArchitecture_Execute(ReconstructArchitectureDTO dto) {
+		boolean moduleSelected = 	dto.getSelectedModule() != null 
+				&& !dto.getSelectedModule().logicalPath.equals("**") 
+				&& !dto.getSelectedModule().logicalPath.equals("");
+		
 		try {
 			switch (dto.getApproach()) {
 				case ("Goldstein - multipleLayerApproach"):
 					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
 				case ("Goldstein - selectedModuleApproach"):
-					if(dto.getSelectedModule() == null || dto.getSelectedModule().logicalPath.equals("**") || dto.getSelectedModule().logicalPath.isEmpty()){ //is root
+					if(moduleSelected){ //is root
 						algorithm = new LayersGoldstein_RootOriginal();
 					}
 					else{
 						algorithm = new LayersGoldstein_SelectedModuleImproved();
 					}
 					break;
-				case ("Scanniello - selectedModuleApproach"): //second approach for Gui-team
-					algorithm = new LayersScanniello_SelectedModuleImproved();
+				case ("Scanniello - improved"):
+					if (moduleSelected){
+						algorithm = new LayersScanniello_SelectedModuleImproved();
+					}
+					else{
+						algorithm = new LayersScanniello_RootImproved();
+					}
 					break;
 				case ("Scanniello - originalRoot"):
 					algorithm = new LayersScanniello_RootOriginal();
-					break;
-				case ("Scanniello - improvedRoot"):
-					algorithm = new LayersScanniello_RootImproved();
 					break;
 				case ("Component Recognition in Root of Selected Module"):
 					algorithm = new ComponentsHUSACCT_SelectedModule();

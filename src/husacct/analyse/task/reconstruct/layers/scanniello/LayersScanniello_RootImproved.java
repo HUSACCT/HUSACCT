@@ -18,7 +18,7 @@ public class LayersScanniello_RootImproved extends AlgorithmScanniello{
 		ServiceProvider.getInstance().getDefineService();
 		
 		ArrayList<SoftwareUnitDTO> softwareUnitDTOs = determineInternalRootPackagesWithClasses();
-		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstIdentifiedLayers = IdentifyLayersImproved(softwareUnitDTOs);
+		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstIdentifiedLayers = IdentifyLayersImproved(softwareUnitDTOs, dto);
 		
 		ArrayList<ArrayList<SoftwareUnitDTO>> topLayers = new ArrayList<>();
 		ArrayList<ArrayList<SoftwareUnitDTO>> bottomLayers = new ArrayList<>();
@@ -32,7 +32,7 @@ public class LayersScanniello_RootImproved extends AlgorithmScanniello{
 		
 		boolean topOrBottomAreNotEmpty = firstIdentifiedLayers.get(topLayerKey).size() > 0 || firstIdentifiedLayers.get(bottomLayerKey).size() > 0;
 		while (topOrBottomAreNotEmpty){
-			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = IdentifyLayersImproved(middleLayer);
+			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = IdentifyLayersImproved(middleLayer, dto);
 			
 			if (!newIdentifiedLayers.get(topLayerKey).isEmpty()){
 				topLayers.add(newIdentifiedLayers.get(topLayerKey));

@@ -10,6 +10,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.IAlgorithm;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
@@ -46,11 +47,10 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 		 ArrayList<SoftwareUnitDTO> discLayer = new ArrayList<SoftwareUnitDTO>();
 		 
 		for(SoftwareUnitDTO softwareUnitDTO : sofwareUnitDTOs){
-			//check dependencies OF the softwareUnit
-			ArrayList<DependencyDTO> dependecyDTOsFromSoftwareUnit = getUmlLinksFromSoftwareUnit(softwareUnitDTO, sofwareUnitDTOs);
 			
-			//check dependencies TO the softwareUnit
-			ArrayList<DependencyDTO> dependecyDTOsToSoftwareUnit = getUmlLinksTowardsSoftwareUnit(sofwareUnitDTOs, softwareUnitDTO);
+			String relationType = "UmlLinks";
+			ArrayList<DependencyDTO> dependecyDTOsFromSoftwareUnit = getDependencies_From_SoftwareUnit(softwareUnitDTO, sofwareUnitDTOs, relationType);
+			ArrayList<DependencyDTO> dependecyDTOsToSoftwareUnit = getDependencies_Towards_SoftwareUnit(softwareUnitDTO, sofwareUnitDTOs, relationType);
 			
 			//- If other softwareUnits have no dependencies with this one, the softwareUnit must be in the topLayer
 			//- If the SoftwareUnits has no dependencies with other softwareUnits, the softwareUnit must be in de bottomLayer.
@@ -91,18 +91,17 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	
 	
 	
-	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> IdentifyLayersImproved(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs){
+	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> IdentifyLayersImproved(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, ReconstructArchitectureDTO dto){
 		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> discLayer = new ArrayList<SoftwareUnitDTO>();
 		 
 		for(SoftwareUnitDTO softwareUnitDTO : sofwareUnitDTOs){
-			//check dependencies OF the softwareUnit
-			ArrayList<DependencyDTO> dependecyDTOsFromSoftwareUnit = getDependenciesFromSoftwareUnit(softwareUnitDTO, sofwareUnitDTOs);
 			
-			//check dependencies TO the softwareUnit
-			ArrayList<DependencyDTO> dependecyDTOsTowardsSoftwareUnit = getDependenciesTowardsSoftwareUnit(sofwareUnitDTOs, softwareUnitDTO);
+			String relationType = dto.getRelationType();
+			ArrayList<DependencyDTO> dependecyDTOsFromSoftwareUnit = getDependencies_From_SoftwareUnit(softwareUnitDTO, sofwareUnitDTOs, relationType);
+			ArrayList<DependencyDTO> dependecyDTOsTowardsSoftwareUnit = getDependencies_Towards_SoftwareUnit(softwareUnitDTO, sofwareUnitDTOs, relationType);
 			
 			//- If other softwareUnits have no dependencies with this one, the softwareUnit must be in the topLayer
 			//- If the SoftwareUnits has no dependencies with other softwareUnits, the softwareUnit must be in de bottomLayer.
@@ -143,45 +142,45 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	
 	
 	
-	
-	
-	private ArrayList<DependencyDTO> getUmlLinksFromSoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs){
+	private ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
-		
 		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
-			DependencyDTO[] dependencies =  queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
-			dependecyDTOs.addAll(Arrays.asList(dependencies));
-		}
-		return dependecyDTOs;
-	}
-	private ArrayList<DependencyDTO> getUmlLinksTowardsSoftwareUnit(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, SoftwareUnitDTO softwareUnitDTO){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
-		
-		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
-			DependencyDTO[] dependencies =  queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
-			dependecyDTOs.addAll(Arrays.asList(dependencies));
-		}
-		return dependecyDTOs;
-	}
-	private ArrayList<DependencyDTO> getDependenciesFromSoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
-		
-		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
-			DependencyDTO[] dependencies =  queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
-			dependecyDTOs.addAll(Arrays.asList(dependencies));
-		}
-		return dependecyDTOs;
-	}
-	private ArrayList<DependencyDTO> getDependenciesTowardsSoftwareUnit(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, SoftwareUnitDTO softwareUnitDTO){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
-		
-		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
-			DependencyDTO[] dependencies =  queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
+			DependencyDTO[] dependencies = null;
+			switch (relationType) {
+				case "UmlLinks":
+					dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
+					break;
+				case "AccessCallReferenceDependencies":
+					dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
+					break;
+				default : //all dependencies
+					dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
+					break;
+			}
 			dependecyDTOs.addAll(Arrays.asList(dependencies));
 		}
 		return dependecyDTOs;
 	}
 	
+	private ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
+		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
+		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
+			DependencyDTO[] dependencies = null;
+			switch (relationType) {
+				case "UmlLinks":
+					dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
+					break;
+				case "AccessCallReferenceDependencies":
+					dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
+					break;
+				default : //all dependencies
+					dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
+					break;
+			}
+			dependecyDTOs.addAll(Arrays.asList(dependencies));
+		}
+		return dependecyDTOs;
+	}
 	
 	
 	

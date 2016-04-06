@@ -149,8 +149,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 				{ "Goldstein - selectedModuleApproach", 11}, 
 				{ "Goldstein - upgradedRootApproach", 10},
 				{ "Scanniello - originalRoot", 10}, 
-				{ "Scanniello - improvedRoot", 10}, 
-				{ "Scanniello - selectedModuleApproach", 12}, 
+				{ "Scanniello - improved", 10}, 
 				{ "Component Recognition in Root of Selected Module", 10}};
 		return ApproachesRows;
 	}
