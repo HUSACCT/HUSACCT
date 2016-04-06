@@ -31,6 +31,7 @@ public class LayersGoldstein_SelectedModuleImproved extends AlgorithmGoldstein{
 		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		identifyLayers(getClasses(xLibrariesRootPackage), dto.getRelationType());
+		
 		for (int level : layers.keySet()) {
 			ArrayList<ModuleDTO> modulesToBeMoved = new ArrayList<ModuleDTO>();
 			for(SoftwareUnitDTO softwareUnitDTO : layers.get(level)){
@@ -47,11 +48,20 @@ public class LayersGoldstein_SelectedModuleImproved extends AlgorithmGoldstein{
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		
 		ModuleDTO[] subModuleDTOs = selectedModule.subModules;
+		for(String logicalSoftwarePathSelectedModule : defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath)){
+			SoftwareUnitDTO suDTO = queryService.getSoftwareUnitByUniqueName(logicalSoftwarePathSelectedModule);
+			SoftwareUnitDTO[] suDTOsubmodules = queryService.getChildUnitsOfSoftwareUnit(suDTO.uniqueName);
+			for (SoftwareUnitDTO subModule : suDTOsubmodules){
+				selectedSubmoduleWithClasses.add(subModule);
+			}
+		}
+		/*
 		for(ModuleDTO subModule : subModuleDTOs){
 			for(String logicalSoftwarePath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)){
 				selectedSubmoduleWithClasses.add(queryService.getSoftwareUnitByUniqueName(logicalSoftwarePath));
 			}
 		}
+		*/
 		return selectedSubmoduleWithClasses;
 	}
 	
