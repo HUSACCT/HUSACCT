@@ -6,14 +6,15 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit
 import husacct.analyse.task.analyser.csharp.generators.*;
 
 import java.util.Stack;
+import java.util.regex.Matcher;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-
-import common.Logger;
+import org.apache.log4j.Logger;
 
 public class CSharpTreeConvertController {
+	CSharpAnalyser cSharpAnalyser;
 	String sourceFilePath = "";
     int numberOfLinesOfCode = 0;
 	CSharpUsingGenerator csUsingGenerator;
@@ -29,7 +30,8 @@ public class CSharpTreeConvertController {
 	Stack<String> classNameStack = new Stack<>();
     private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
 
-	public CSharpTreeConvertController() {
+	public CSharpTreeConvertController(CSharpAnalyser cSharpAnalyser) {
+		this.cSharpAnalyser = cSharpAnalyser;
 		csUsingGenerator = new CSharpUsingGenerator();
 		csNamespaceGenerator = new CSharpNamespaceGenerator();
 		csClassGenerator = new CSharpClassGenerator();
@@ -56,9 +58,8 @@ public class CSharpTreeConvertController {
 	}
 
 	private void delegateASTToGenerators(CommonTree tree) {
-		int numberOfNamespaces = 0;
 		/* Test and Debug
-		if (sourceFilePath.contains("ImageDisplay")) {
+		if (sourceFilePath.contains("CallClassMethod_ClassWithoutNamespace")) {
 			boolean breakpoint = true;
 		} */
 		
@@ -77,7 +78,6 @@ public class CSharpTreeConvertController {
 						namespaceStack.push(delegateNamespace(namespaceTree));
 						delegateASTToGenerators(namespaceTree);
 						namespaceStack.pop();
-						numberOfNamespaces ++;
 						break;
 					case CSharpParser.CLASS:
 					case CSharpParser.INTERFACE:
@@ -175,48 +175,86 @@ public class CSharpTreeConvertController {
 	}
 
 	private void delegateUsings() {
-		csUsingGenerator.generateToDomain(createPackageAndClassName(namespaceStack, classNameStack));
+		csUsingGenerator.generateToDomain(createPackageAndClassName(classNameStack));
 	}
 
 	private String delegateNamespace(CommonTree namespaceTree) {
-		return csNamespaceGenerator.generateModel(CSharpGeneratorToolkit.getParentName(namespaceStack), namespaceTree);
+		return csNamespaceGenerator.generateModel(CSharpGeneratorToolkit.getNameFromStack(namespaceStack), namespaceTree);
 	}
 
 	private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface, boolean isEnumeration) {
 		String analysedClass;
 		if (isInnerClass) {
-			analysedClass = csClassGenerator.generateToModel(sourceFilePath, 0, classTree, getParentName(namespaceStack), getParentName(classNameStack), isInterface, isEnumeration);
+			analysedClass = csClassGenerator.generateToModel(sourceFilePath, 0, classTree, getNameSpaceName(), getNameFromStack(classNameStack), isInterface, isEnumeration);
 			if (analysedClass == null){
 				analysedClass = "";
 	    		// logger.warn("Inner class not added of parent: " + getParentName(namespaceStack));
 			}
 		} else {
-			analysedClass = csClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, getParentName(namespaceStack), isInterface, isEnumeration);
+			analysedClass = csClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, getNameSpaceName(), isInterface, isEnumeration);
 		}
 		return analysedClass;
 	}
 
 	private void delegateInheritanceDefinition(CommonTree inheritanceTree) {
-		csInheritanceGenerator.generateToDomain(inheritanceTree, createPackageAndClassName(namespaceStack, classNameStack));
+		csInheritanceGenerator.generateToDomain(inheritanceTree, createPackageAndClassName(classNameStack));
 	}
 
 	private void delegateAttribute(CommonTree attributeTree) {
 		if (attributeTree.toStringTree().contains("= >")) {
-			csLamdaGenerator.delegateLambdaToBuffer((CommonTree) attributeTree, createPackageAndClassName(namespaceStack, classNameStack), "");
+			csLamdaGenerator.delegateLambdaToBuffer((CommonTree) attributeTree, createPackageAndClassName(classNameStack), "");
 		} else {
-			csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(namespaceStack, classNameStack));
+			csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(classNameStack));
 		}
 	}
 	
 	private void delegateProperty(CommonTree propertyTree) {
-    	csPropertyGenerator.generateProperyToDomain(propertyTree, createPackageAndClassName(namespaceStack, classNameStack));
+    	csPropertyGenerator.generateProperyToDomain(propertyTree, createPackageAndClassName(classNameStack));
 	}
 
 	private void delegateMethod(CommonTree methodTree) {
-		csMethodeGenerator.generateMethodToDomain(methodTree, createPackageAndClassName(namespaceStack, classNameStack));
+		csMethodeGenerator.generateMethodToDomain(methodTree, createPackageAndClassName(classNameStack));
 	}
 
 	private void delegateDelegate(CommonTree lamdaTree) {
-		csLamdaGenerator.delegateDelegateToBuffer(lamdaTree, createPackageAndClassName(namespaceStack, classNameStack));
+		csLamdaGenerator.delegateDelegateToBuffer(lamdaTree, createPackageAndClassName(classNameStack));
 	}
+
+    /**
+     * Retrieves the package and classname concatenated with dots.
+     * ([A,B] and [C,D] becomes "A.B.C.D")
+     * @return The package and classname concatenated with dots.
+     */
+    private String createPackageAndClassName(Stack<String> classStack) {
+        String namespaces = getNameSpaceName();
+        String classes = getNameFromStack(classStack);
+        return getUniqueName(namespaces, classes);
+    }
+
+    private String getNameSpaceName() {
+    	String namespace = "";
+    	namespace = getNameFromStack(namespaceStack);
+    	if (namespace.equals("")) {
+    		// Create a No_Namespace package, extended with the directories in the sourceFilePath - projectPath.
+    		String projectPath = cSharpAnalyser.getProjectPath();
+    		projectPath = Matcher.quoteReplacement(projectPath);
+    		String separator = Matcher.quoteReplacement("\\");
+    		projectPath = projectPath. replace(separator, "_");
+    		String sourceFilePathReplace = Matcher.quoteReplacement(sourceFilePath);
+    		sourceFilePathReplace = sourceFilePathReplace.replace(cSharpAnalyser.getFileExtension(), "");
+    		int positionLastSeparator = sourceFilePathReplace.lastIndexOf(separator);
+    		String sourceFilePathWithoutProjectPath = "";
+    		if (positionLastSeparator >= 0) {
+	    		sourceFilePathReplace = sourceFilePathReplace.substring(0, positionLastSeparator);
+	    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, "_");
+	    		if (sourceFilePathReplace.contains(projectPath)) {
+	    			sourceFilePathWithoutProjectPath = sourceFilePathReplace.replaceAll(projectPath, "");
+	    		}
+    		}
+    		namespace = csNamespaceGenerator.generateNo_Namespace(sourceFilePathWithoutProjectPath);
+    		namespaceStack.push(namespace);
+    		logger.info(" Class without namespace. Created namespace: " + namespace);
+    	}
+    	return namespace;
+    }
 }

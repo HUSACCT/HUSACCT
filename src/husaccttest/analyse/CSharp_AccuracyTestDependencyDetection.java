@@ -265,6 +265,15 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallClassMethod_ClassWithoutNamespace(){
+		String fromClass = "No_Namespace_Domain_Direct_Violating.CallClassMethod_ClassWithoutNamespace";
+		String toClass = "Technology.Direct.Dao.BadgesDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
+
+	@Test
 	public void CallConstructor(){
 		String fromClass = "Domain.Direct.Violating.CallConstructor";
 		String toClass = "Technology.Direct.Dao.AccountDAO";

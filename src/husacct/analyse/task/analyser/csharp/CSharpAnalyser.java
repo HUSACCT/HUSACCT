@@ -15,9 +15,9 @@ public class CSharpAnalyser extends AbstractAnalyser {
     private ANTLRFileStream charStream;
 
     @Override
-    public void generateModelFromSource(String sourceFilePath) {
+    public void generateModelFromSourceFile(String sourceFilePath) {
         try {
-            CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController();
+            CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController(this);
             CSharpParser cSharpParser = generateCSharpParser(sourceFilePath);
             int nrOfLinesOfCode = determineNumberOfLinesOfCode();
             cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser, sourceFilePath, nrOfLinesOfCode);
