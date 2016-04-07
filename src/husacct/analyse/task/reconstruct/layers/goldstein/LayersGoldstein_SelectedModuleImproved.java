@@ -122,18 +122,22 @@ public class LayersGoldstein_SelectedModuleImproved extends AlgorithmGoldstein{
 					int nrOfDependenciesFromOtherTosoftwareUnit=0;
 					
 					switch(dependencyType){
-					case "umlDependency":
+					case "UmlLinks":
 						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
 						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
-						
-					case "softwareUnitDependency":
+					case "AccessCallReferenceDependencies":
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+						break;
+					case "AllDependencies":
 						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
 						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
 					}
 					
-					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit * 0.01) * layerThreshold)) {
+					
+					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100) * layerThreshold)) {
 						rootPackageDoesNotUseOtherPackage = false;
 					}
 				}

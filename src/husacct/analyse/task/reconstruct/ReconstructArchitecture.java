@@ -53,7 +53,7 @@ public class ReconstructArchitecture {
 					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
 				case ("Goldstein - selectedModuleApproach"):
-					if(moduleSelected){ //is root
+					if(!moduleSelected){ //is root
 						algorithm = new LayersGoldstein_RootOriginal();
 					}
 					else{
