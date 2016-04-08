@@ -14,6 +14,7 @@ import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.savechain.ISaveable;
@@ -149,6 +150,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
     public void reconstructArchitecture_Initiate() {
     	analyseTaskControl.reconstructArchitecture_Initiate();
+    }
+	
+	@Override
+    public void reconstructArchitecture_Execute(ReconstructArchitectureDTO dto) {
+    	analyseTaskControl.reconstructArchitecture_Execute(dto);
     }
     
     // Used for the generic mechanism to save workspace data of all components; e.g. configuration settings  

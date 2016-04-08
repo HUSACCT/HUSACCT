@@ -40,7 +40,7 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	}
 	
 	
-	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> identifyLayersOriginal(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs){
+	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> identifyLayersOriginal(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, boolean firstIdentification){
 		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<SoftwareUnitDTO>();
@@ -77,7 +77,12 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 			}
 			//The softwareUnit has NO dependencies both ways (stand-alone)
 			else{
-				discLayer.add(softwareUnitDTO);
+				if (firstIdentification){
+					discLayer.add(softwareUnitDTO);
+				}
+				else{
+					middleLayer.add(softwareUnitDTO);
+				}
 			}
 		}
 		
@@ -91,7 +96,7 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	
 	
 	
-	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> IdentifyLayersImproved(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, ReconstructArchitectureDTO dto){
+	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> IdentifyLayersImproved(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, ReconstructArchitectureDTO dto, boolean firstIdentification){
 		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<SoftwareUnitDTO>();
 		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<SoftwareUnitDTO>();
@@ -128,7 +133,12 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 			}
 			//The softwareUnit has NO dependencies both ways (stand-alone)
 			else{
-				discLayer.add(softwareUnitDTO);
+				if (firstIdentification){
+					discLayer.add(softwareUnitDTO);
+				}
+				else{
+					middleLayer.add(softwareUnitDTO);
+				}
 			}
 		}
 		

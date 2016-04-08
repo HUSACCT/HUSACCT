@@ -1,14 +1,20 @@
 package husacct.analyse.presentation.reconstruct;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import husacct.ServiceProvider;
 import husacct.analyse.task.AnalyseTaskControl;
+import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -16,13 +22,18 @@ import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 
 public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
+	private final Logger logger = Logger.getLogger(ReconstructJPanel.class);
 	private static final int approachesThresholdCollumn = 1;
 	private static final int approachNameCollumn = 0;
 	private static final long serialVersionUID = 1L;
@@ -82,19 +93,24 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
 
 			int selectedRow = approachesTable.getSelectedRow();
-			String approach = (String) approachesTable.getValueAt(selectedRow, approachNameCollumn);
-			int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
-			String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
+			if (selectedRow >= 0){
+				String approach = (String) approachesTable.getValueAt(selectedRow, approachNameCollumn);
+				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
+				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
 
-			ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
-			ModuleDTO selectedModule = getSelectedModule();
-			dto.setSelectedModule(selectedModule);
-			dto.setApproach(approach);
-			dto.setThreshold(threshold);
-			dto.setRelationType(relationType);
-
-			analyseTaskControl.reconstructArchitecture_Execute(dto);
-			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
+				ModuleDTO selectedModule = getSelectedModule();
+				dto.setSelectedModule(selectedModule);
+				dto.setApproach(approach);
+				dto.setThreshold(threshold);
+				dto.setRelationType(relationType);		
+				
+				analyseTaskControl.reconstructArchitecture_Execute(dto);
+				ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+			}
+			else{
+				logger.warn("No Approache selected");
+			}
 
 		}
 		if (action.getSource() == reverseButton) {

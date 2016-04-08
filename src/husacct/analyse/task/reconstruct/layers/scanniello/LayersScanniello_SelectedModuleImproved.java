@@ -17,8 +17,12 @@ public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello
 		this.threshold = dto.getThreshold();
 		this.defineService = ServiceProvider.getInstance().getDefineService();
 		
+		ReconstructArchitectureDTO testDto = null;
+		String s = testDto.getName();
+		
 		ArrayList<SoftwareUnitDTO> softwareUnitDTOsOfSelectedModule = getSoftwareUnitDTOs(dto.getSelectedModule());
-		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstLayersIdentification = IdentifyLayersImproved(softwareUnitDTOsOfSelectedModule, dto);
+		boolean firstIdentification = true;
+		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstLayersIdentification = IdentifyLayersImproved(softwareUnitDTOsOfSelectedModule, dto, firstIdentification);
 		ArrayList<ArrayList<SoftwareUnitDTO>> topLayers = new ArrayList<>();
 		ArrayList<ArrayList<SoftwareUnitDTO>> bottomLayers = new ArrayList<>();
 		ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<>();
@@ -31,7 +35,8 @@ public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello
 		
 		boolean topOrBottomAreNotEmpty = firstLayersIdentification.get(topLayerKey).size() > 0 || firstLayersIdentification.get(bottomLayerKey).size() > 0;
 		while (topOrBottomAreNotEmpty){
-			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = IdentifyLayersImproved(middleLayer, dto);
+			firstIdentification = false;
+			HashMap<Integer, ArrayList<SoftwareUnitDTO>> newIdentifiedLayers = IdentifyLayersImproved(middleLayer, dto, firstIdentification);
 			
 			if (!newIdentifiedLayers.get(topLayerKey).isEmpty()){
 				topLayers.add(newIdentifiedLayers.get(topLayerKey));
