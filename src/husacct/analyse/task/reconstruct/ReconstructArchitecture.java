@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
+import husacct.analyse.AnalyseConstants;
+import husacct.analyse.AnalyseConstants.Algorithm;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.components.HUSACCT.ComponentsHUSACCT_SelectedModule;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
@@ -30,6 +32,7 @@ public class ReconstructArchitecture {
 	private String xLibrariesRootPackage = "xLibraries";
 	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<SoftwareUnitDTO>();
 	private IAlgorithm algorithm = null;
+	private boolean algorithmSucces = true; //this variable is necessary for the JUnit tests
 
 	public ReconstructArchitecture(IModelQueryService queryService) {
 		try {
@@ -49,10 +52,10 @@ public class ReconstructArchitecture {
 		
 		try {
 			switch (dto.getApproach()) {
-				case ("Goldstein - multipleLayerApproach"):
+				case (AnalyseConstants.Algorithm.Layers_Goldstein_Multiple_Improved):
 					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
-				case ("Goldstein - selectedModuleApproach"):
+				case (AnalyseConstants.Algorithm.Layers_Goldstein_SelectedModule_Improved):
 					if(!moduleSelected){ //is root
 						algorithm = new LayersGoldstein_RootOriginal();
 					}
@@ -60,7 +63,7 @@ public class ReconstructArchitecture {
 						algorithm = new LayersGoldstein_SelectedModuleImproved();
 					}
 					break;
-				case ("Scanniello - improved"):
+				case (AnalyseConstants.Algorithm.Layers_Scanniello_Improved):
 					if (moduleSelected){
 						algorithm = new LayersScanniello_SelectedModuleImproved();
 					}
@@ -68,10 +71,10 @@ public class ReconstructArchitecture {
 						algorithm = new LayersScanniello_RootImproved();
 					}
 					break;
-				case ("Scanniello - originalRoot"):
+				case (AnalyseConstants.Algorithm.Layers_Scanniello_Original):
 					algorithm = new LayersScanniello_RootOriginal();
 					break;
-				case ("Component Recognition in Root of Selected Module"):
+				case (AnalyseConstants.Algorithm.Component_HUSACCT_SelectedModule):
 					algorithm = new ComponentsHUSACCT_SelectedModule();
 					break;
 				default:
@@ -83,6 +86,7 @@ public class ReconstructArchitecture {
 			}
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
+	        algorithmSucces = false;
 	    }
 	}
 	
@@ -129,5 +133,8 @@ public class ReconstructArchitecture {
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
 	}
 	
+	public boolean getAlgorithmSucces(){
+		return algorithmSucces;
+	}
 }
 

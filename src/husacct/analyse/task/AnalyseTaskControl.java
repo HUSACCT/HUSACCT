@@ -86,6 +86,10 @@ public class AnalyseTaskControl {
     	}
     	reconstructArchitecture.reconstructArchitecture_Execute(dto);
 	}
+    
+    public boolean getAlgorithmSucces(){
+    	return reconstructArchitecture.getAlgorithmSucces();
+    }
 
 	public void reconstructArchitecture_Reverse(){
 		reconstructArchitecture.reverseReconstruction();

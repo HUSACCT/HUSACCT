@@ -74,7 +74,7 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     
     public void reconstructArchitecture_Initiate();
     
-    public void reconstructArchitecture_Execute(ReconstructArchitectureDTO dto);
+    public boolean reconstructArchitecture_Execute(ReconstructArchitectureDTO dto);
     
     public Element exportAnalysisModel();
 

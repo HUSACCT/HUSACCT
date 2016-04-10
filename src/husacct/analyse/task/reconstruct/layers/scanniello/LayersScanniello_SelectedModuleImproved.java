@@ -12,13 +12,10 @@ import husacct.common.dto.SoftwareUnitDTO;
 public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello{		
 	
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage)throws Exception {
 		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
 		this.defineService = ServiceProvider.getInstance().getDefineService();
-		
-		ReconstructArchitectureDTO testDto = null;
-		String s = testDto.getName();
 		
 		ArrayList<SoftwareUnitDTO> softwareUnitDTOsOfSelectedModule = getSoftwareUnitDTOs(dto.getSelectedModule());
 		boolean firstIdentification = true;

@@ -96,6 +96,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			if (selectedRow >= 0){
 				String approach = (String) approachesTable.getValueAt(selectedRow, approachNameCollumn);
 				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
+				int test = (int) approachesTable.getModel().getValueAt(selectedRow, 2);
 				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
 
 				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
