@@ -15,7 +15,12 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
 		Tree qualifiedIdentierTree = ((CommonTree)namespaceTree).getFirstChildWithType(CSharpParser.QUALIFIED_IDENTIFIER);
 		if (qualifiedIdentierTree != null) {
 			namespaceName = getQualifiedIdentifiers((CommonTree)qualifiedIdentierTree);
-			createPackageModelForEachNamespace(rootParentNamespace); 	
+			if (rootParentNamespace.isEmpty()) {
+				createPackageModelForEachNamespace(rootParentNamespace);
+			} else {
+				String uniqueName = CSharpGeneratorToolkit.getUniqueName(rootParentNamespace, namespaceName);
+				modelService.createPackage(uniqueName, rootParentNamespace, namespaceName);
+			}
 		} 
 		return namespaceName;
 	}

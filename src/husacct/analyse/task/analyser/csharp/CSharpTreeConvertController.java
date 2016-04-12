@@ -26,11 +26,12 @@ public class CSharpTreeConvertController {
 	CSharpPropertyGenerator csPropertyGenerator;
 	CSharpMethodGeneratorController csMethodeGenerator;
 	CSharpLamdaGenerator csLamdaGenerator;
+	String noNameSpaceString = "";
 	Stack<String> namespaceStack = new Stack<>();
 	Stack<String> classNameStack = new Stack<>();
     private Logger logger = Logger.getLogger(CSharpTreeConvertController.class);
 
-	public CSharpTreeConvertController(CSharpAnalyser cSharpAnalyser) {
+	public CSharpTreeConvertController(CSharpAnalyser cSharpAnalyser) { // Constructor call for each source file.
 		this.cSharpAnalyser = cSharpAnalyser;
 		csUsingGenerator = new CSharpUsingGenerator();
 		csNamespaceGenerator = new CSharpNamespaceGenerator();
@@ -235,25 +236,29 @@ public class CSharpTreeConvertController {
     	String namespace = "";
     	namespace = getNameFromStack(namespaceStack);
     	if (namespace.equals("")) {
-    		// Create a No_Namespace package, extended with the directories in the sourceFilePath - projectPath.
-    		String projectPath = cSharpAnalyser.getProjectPath();
-    		projectPath = Matcher.quoteReplacement(projectPath);
-    		String separator = Matcher.quoteReplacement("\\");
-    		projectPath = projectPath. replace(separator, "_");
-    		String sourceFilePathReplace = Matcher.quoteReplacement(sourceFilePath);
-    		sourceFilePathReplace = sourceFilePathReplace.replace(cSharpAnalyser.getFileExtension(), "");
-    		int positionLastSeparator = sourceFilePathReplace.lastIndexOf(separator);
-    		String sourceFilePathWithoutProjectPath = "";
-    		if (positionLastSeparator >= 0) {
-	    		sourceFilePathReplace = sourceFilePathReplace.substring(0, positionLastSeparator);
-	    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, "_");
-	    		if (sourceFilePathReplace.contains(projectPath)) {
-	    			sourceFilePathWithoutProjectPath = sourceFilePathReplace.replaceAll(projectPath, "");
+    		if (noNameSpaceString.equals("")) {
+	    		// Create a No_Namespace package, extended with the directories in the sourceFilePath - projectPath.
+	    		String projectPath = cSharpAnalyser.getProjectPath();
+	    		projectPath = Matcher.quoteReplacement(projectPath);
+	    		String separator = Matcher.quoteReplacement("\\");
+	    		projectPath = projectPath. replace(separator, "_");
+	    		String sourceFilePathReplace = Matcher.quoteReplacement(sourceFilePath);
+	    		sourceFilePathReplace = sourceFilePathReplace.replace(cSharpAnalyser.getFileExtension(), "");
+	    		int positionLastSeparator = sourceFilePathReplace.lastIndexOf(separator);
+	    		String sourceFilePathWithoutProjectPath = "";
+	    		if (positionLastSeparator >= 0) {
+		    		sourceFilePathReplace = sourceFilePathReplace.substring(0, positionLastSeparator);
+		    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, "_");
+		    		if (sourceFilePathReplace.contains(projectPath)) {
+		    			sourceFilePathWithoutProjectPath = sourceFilePathReplace.replaceAll(projectPath, "");
+		    		}
 	    		}
+	    		namespace = csNamespaceGenerator.generateNo_Namespace(sourceFilePathWithoutProjectPath);
+	    		noNameSpaceString = namespace;
+	    		logger.info(" Class without namespace. Created namespace: " + namespace);
+    		} else {
+    			namespace = noNameSpaceString;
     		}
-    		namespace = csNamespaceGenerator.generateNo_Namespace(sourceFilePathWithoutProjectPath);
-    		namespaceStack.push(namespace);
-    		logger.info(" Class without namespace. Created namespace: " + namespace);
     	}
     	return namespace;
     }
