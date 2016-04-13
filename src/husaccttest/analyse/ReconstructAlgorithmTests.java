@@ -30,7 +30,7 @@ import husaccttest.TestResourceFinder;
 
 import org.junit.Test;
 
-public class AlgorithmTests {
+public class ReconstructAlgorithmTests {
 	private static String workspacePath;
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;

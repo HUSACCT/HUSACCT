@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.RelationTypes;
 import husacct.analyse.task.reconstruct.IAlgorithm;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
@@ -157,13 +158,13 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
 			DependencyDTO[] dependencies = null;
 			switch (relationType) {
-				case "UmlLinks":
+				case RelationTypes.umlLinks:
 					dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
 					break;
-				case "AccessCallReferenceDependencies":
+				case RelationTypes.accessCallReferenceDependencies:
 					dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
 					break;
-				default : //all dependencies
+				default : //RelationTypes.allDependencies
 					dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
 					break;
 			}
@@ -177,13 +178,13 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
 			DependencyDTO[] dependencies = null;
 			switch (relationType) {
-				case "UmlLinks":
+				case RelationTypes.umlLinks:
 					dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
 					break;
-				case "AccessCallReferenceDependencies":
+				case RelationTypes.accessCallReferenceDependencies:
 					dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
 					break;
-				default : //all dependencies
+				default : //RelationTypes.allDependencies
 					dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
 					break;
 			}

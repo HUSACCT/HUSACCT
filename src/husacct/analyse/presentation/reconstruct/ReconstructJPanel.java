@@ -18,6 +18,7 @@ import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
+import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
@@ -42,6 +43,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private JButton applyButton;
 	private JButton reverseButton, clearButton;
 	private JPanel panel;
+	private ILocaleService localService;
 	
 	/**
 	 * Create the panel.
@@ -49,6 +51,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	public ReconstructJPanel(AnalyseTaskControl atc) {
 		super();
 		analyseTaskControl = atc;
+		localService = ServiceProvider.getInstance().getLocaleService();
 		initUI();
 	}
 	
@@ -69,17 +72,20 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		approachesTableJPanel.add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout());
 		
-		applyButton = new JButton("Apply");
+		String applyTranslation = localService.getTranslatedString("Apply");
+		applyButton = new JButton(applyTranslation);
 		panel.add(applyButton);
 		applyButton.setPreferredSize(new Dimension(100, 40));
 		applyButton.addActionListener(this);
 
-		reverseButton = new JButton("Reverse");
+		String reverseTranslation = localService.getTranslatedString("Reverse");
+		reverseButton = new JButton(reverseTranslation);
 		panel.add(reverseButton);
-		reverseButton.setPreferredSize(new Dimension(100, 40));
+		reverseButton.setPreferredSize(new Dimension(reverseButton.getPreferredSize().width, 40));
 		reverseButton.addActionListener(this);
 		
-		clearButton = new JButton("Clear All");
+		String clearAllTranslation = localService.getTranslatedString("ClearAll");
+		clearButton = new JButton(clearAllTranslation);
 		panel.add(clearButton);
 		clearButton.setPreferredSize(new Dimension(100, 40));
 		clearButton.addActionListener(this);
@@ -94,9 +100,8 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 
 			int selectedRow = approachesTable.getSelectedRow();
 			if (selectedRow >= 0){
-				String approach = (String) approachesTable.getValueAt(selectedRow, approachNameCollumn);
+				String approach = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
 				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
-				int test = (int) approachesTable.getModel().getValueAt(selectedRow, 2);
 				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
 
 				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();

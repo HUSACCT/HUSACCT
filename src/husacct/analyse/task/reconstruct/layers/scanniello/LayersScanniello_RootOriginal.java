@@ -15,7 +15,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
 		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
-		ServiceProvider.getInstance().getDefineService();
+		this.defineService = ServiceProvider.getInstance().getDefineService();
 		
 		List<SoftwareUnitDTO> classes = queryService.getAllClasses();
 		ArrayList<SoftwareUnitDTO> classesArray = new ArrayList<SoftwareUnitDTO>(classes);

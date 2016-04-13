@@ -1,12 +1,8 @@
-package husacct.analyse;
+package husacct.analyse.task.reconstruct;
 
-import husacct.analyse.AnalyseConstants.Algorithm;
-
-public class AnalyseConstants {
+public class AnalyseReconstructConstants {
 	
 	public static class Algorithm{
-		public static Algorithm algorithm;
-		
 		//TKey = Translation Key. Form common/resources/local/...
 		public static final String Layers_Scanniello_Original = "Layers_Scanniello_Original";
 		public static final String Layers_Scanniello_Improved = "Layers_Scanniello_Improved";
@@ -17,7 +13,14 @@ public class AnalyseConstants {
 		public static final String Layers_Goldstein_Root_Improved = "Layers_Goldstein_Root_Improved";
 		
 		public static final String Component_HUSACCT_SelectedModule = "Component_HUSACCT_SelectedModule";
+		
+		public static final String Gateways_HUSACCT_Root = "Gateways_HUSACCT_Root";
 
 	}
 	
+	public static class RelationTypes{
+		public static final String allDependencies = "AllDependencies";
+		public static final String umlLinks = "UmlLinks";
+		public static final String accessCallReferenceDependencies = "AccessCallReferenceDependencies";
+	}
 }

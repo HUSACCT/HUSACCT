@@ -5,10 +5,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import husacct.ServiceProvider;
-import husacct.analyse.AnalyseConstants;
-import husacct.analyse.AnalyseConstants.Algorithm;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.RelationTypes;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
+import sun.misc.Service;
 
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
@@ -32,16 +34,16 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	private static final long serialVersionUID = 1L;
 	public JTable approachesTable;
 	private TableColumnModel tableColumnModule;
-	private Map hiddenColumns;
 	public JPanel optionsPanel;
 	public ButtonGroup RadioButtonsRelationType;
 	public ButtonGroup radioButtonGroupTwo;
-
+	private ILocaleService localService;
 	/**
 	 * Create the panel.
 	 */
 	public ApproachesTableJPanel() {
 		super();
+		localService = ServiceProvider.getInstance().getLocaleService();
 		initUI();
 	}
 	
@@ -54,10 +56,10 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		add(tabbedPane);
 				
-		Object columnNames[] = {"ApproachConstants", "Approaches", "threshold"};
+		String approachesTranslation = localService.getTranslatedString("Approaches");
+		String thresholdTranslation = localService.getTranslatedString("Threshold");
+		Object columnNames[] = {"ApproachConstants", approachesTranslation, thresholdTranslation};
 		Object rows[][] = getApproachesRows();
-		
-
 		approachesTable = new JTable(rows, columnNames);
 		approachesTable.setMinimumSize(new Dimension(600,150));
 		tableColumnModule = approachesTable.getColumnModel();
@@ -88,7 +90,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	public void initRadioButtons(){
 		JRadioButton allDependenciesRadioButton = new JRadioButton("All Dependencies");
 		allDependenciesRadioButton.setHorizontalAlignment(SwingConstants.CENTER);
-		allDependenciesRadioButton.setActionCommand("AllDependencies");
+		allDependenciesRadioButton.setActionCommand(RelationTypes.allDependencies);
 		GridBagConstraints gbc_allDependenciesRadioButton = new GridBagConstraints();
 		gbc_allDependenciesRadioButton.anchor = GridBagConstraints.WEST;
 		gbc_allDependenciesRadioButton.insets = new Insets(0, 0, 5, 5);
@@ -96,7 +98,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		gbc_allDependenciesRadioButton.gridy = 0;
 		
 		JRadioButton umlLinksRadioButton = new JRadioButton("Uml Links");
-		umlLinksRadioButton.setActionCommand("UmlLinks");
+		umlLinksRadioButton.setActionCommand(RelationTypes.umlLinks);
 		GridBagConstraints gbc_umlLinksRadioButton = new GridBagConstraints();
 		gbc_umlLinksRadioButton.anchor = GridBagConstraints.WEST;
 		gbc_umlLinksRadioButton.insets = new Insets(0, 0, 5, 5);
@@ -104,7 +106,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		gbc_umlLinksRadioButton.gridy = 0;
 		
 		JRadioButton accessCallReferenceDependenciesRadioButton = new JRadioButton("Dependencies (Acces, Call or Reference only)");
-		accessCallReferenceDependenciesRadioButton.setActionCommand("AccessCallReferenceDependencies");
+		accessCallReferenceDependenciesRadioButton.setActionCommand(RelationTypes.accessCallReferenceDependencies);
 		GridBagConstraints gbc_accessCallReferenceDependenciesRadioButton = new GridBagConstraints();
 		gbc_accessCallReferenceDependenciesRadioButton.anchor = GridBagConstraints.WEST;
 		gbc_accessCallReferenceDependenciesRadioButton.insets = new Insets(0, 0, 5, 5);
@@ -168,7 +170,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			{Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original), 10}, 
 			{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}, 
 				
-			{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10}};
+			{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
+			{Algorithm.Gateways_HUSACCT_Root, "Gateways HUSACCT Root", 10}};
 		return ApproachesRows;
 	}
 	
