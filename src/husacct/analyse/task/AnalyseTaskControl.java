@@ -12,6 +12,7 @@ import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
@@ -93,6 +94,20 @@ public class AnalyseTaskControl {
     
 	public void reconstructArchitecture_ClearAll(){
 		reconstructArchitecture.clearAllModules();
+	}
+	
+	public void testAlgorithm(ReconstructArchitectureDTO dto){
+		ModuleDTO[] intendedArchitecture = reconstructArchitecture.getGoldenStandard();
+		exportToRSF(intendedArchitecture);
+		//golden ophalen en in rsf pompen
+		//nieuwe toepassen en in rsf pompen
+		//mojo aanroepen met de 2 rsfs
+		//output loggen
+		
+	}
+	
+	private void exportToRSF(ModuleDTO[] intendedArchitecture){
+		
 	}
     
 	//Methods for AnalyseUIController

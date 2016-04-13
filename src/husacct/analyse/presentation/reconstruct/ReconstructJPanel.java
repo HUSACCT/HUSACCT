@@ -39,8 +39,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
-	private JButton applyButton;
-	private JButton reverseButton, clearButton;
+	private JButton applyButton, reverseButton, clearButton, testButton;
 	private JPanel panel;
 	
 	/**
@@ -83,6 +82,11 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		panel.add(clearButton);
 		clearButton.setPreferredSize(new Dimension(100, 40));
 		clearButton.addActionListener(this);
+		
+		testButton = new JButton("Clear All");
+		panel.add(testButton);
+		testButton.setPreferredSize(new Dimension(100, 40));
+		testButton.addActionListener(this);
 	}
 
 	@Override
@@ -124,6 +128,31 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			approachesTable.clearSelection();
 			analyseTaskControl.reconstructArchitecture_ClearAll();
 			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+		}
+		if (action.getSource() == testButton){
+			JTable approachesTable = approachesTableJPanel.approachesTable;
+			ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
+			ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
+
+			int selectedRow = approachesTable.getSelectedRow();
+			if (selectedRow >= 0){
+				String approach = (String) approachesTable.getValueAt(selectedRow, approachNameCollumn);
+				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
+				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
+
+				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
+				ModuleDTO selectedModule = getSelectedModule();
+				dto.setSelectedModule(selectedModule);
+				dto.setApproach(approach);
+				dto.setThreshold(threshold);
+				dto.setRelationType(relationType);		
+				
+				analyseTaskControl.testAlgorithm(dto);
+				ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+			}
+			else{
+				logger.warn("No Approache selected");
+			}
 		}
 
 	}

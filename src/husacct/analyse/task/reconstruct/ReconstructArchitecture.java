@@ -112,6 +112,10 @@ public class ReconstructArchitecture {
 	        logger.warn(" Exception: "  + e );
 	    }
 	}
+	
+	public ModuleDTO[] getGoldenStandard(){
+		return defineService.getAllModules();
+	}
 
 	private void identifyExternalSystems() {
 		// Create module "ExternalSystems"
