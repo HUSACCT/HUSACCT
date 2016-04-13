@@ -21,24 +21,26 @@ public class AppliedRuleDomainService {
 
 	public AppliedRuleStrategy reloadAppliedRule(long ruleId, String ruleTypeKey, String description, String[] dependencies, String regex, 
 			long ModuleStrategyFromId, long ModuleStrategyToId, boolean enabled, boolean isException, long parentRuleId) {
+		AppliedRuleStrategy newRule = null;
 		ModuleStrategy moduleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyFromId);
 		ModuleStrategy moduleStrategyTo;
 		if (ModuleStrategyToId != -1) 
 			moduleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyToId);
 		else 
 			moduleStrategyTo = moduleStrategyFrom;
-
-		AppliedRuleStrategy parentAppliedRule = null;
-		if (parentRuleId != -1) 
-			parentAppliedRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
-		
-		AppliedRuleStrategy newRule = ruleFactory.createRule(ruleTypeKey);
-		newRule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentAppliedRule); 
-		newRule.setId(ruleId);
-		if (isDuplicate(newRule)) {
-			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
-		} else {
-			softwareArchitecture.addAppliedRule(newRule);
+		if ((moduleStrategyFrom != null) && (moduleStrategyTo != null)) {
+			AppliedRuleStrategy parentAppliedRule = null;
+			if (parentRuleId != -1) 
+				parentAppliedRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
+			
+			newRule = ruleFactory.createRule(ruleTypeKey);
+			newRule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled, isException, parentAppliedRule); 
+			newRule.setId(ruleId);
+			if (isDuplicate(newRule)) {
+				logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
+			} else {
+				softwareArchitecture.addAppliedRule(newRule);
+			}
 		}
 		return newRule;
 	}
@@ -212,9 +214,11 @@ public class AppliedRuleDomainService {
 
 	 public void updateAppliedRule(long appliedRuleId, Boolean isGenerated, String ruleTypeKey, String description, String[] dependencies,
 			 String regex, long ModuleStrategyFromId, long ModuleStrategyToId, boolean enabled) {
-		 ModuleStrategy ModuleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyFromId);
-		 ModuleStrategy ModuleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyToId);
-		 updateAppliedRule(appliedRuleId, ruleTypeKey, description, dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled);
+		 ModuleStrategy moduleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyFromId);
+		 ModuleStrategy moduleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(ModuleStrategyToId);
+		 if ((moduleStrategyFrom != null) && (moduleStrategyTo != null)) {
+			 updateAppliedRule(appliedRuleId, ruleTypeKey, description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, enabled);
+		 }
 	 }
 
 	 public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,

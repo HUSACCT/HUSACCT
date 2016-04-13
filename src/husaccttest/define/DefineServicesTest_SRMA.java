@@ -38,6 +38,7 @@ public class DefineServicesTest_SRMA {
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
+			logger.info(String.format("Start: Define Services Test"));
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
 			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 
@@ -56,9 +57,6 @@ public class DefineServicesTest_SRMA {
 				} catch (InterruptedException e) {}
 				isAnalysing = mainController.getStateController().isAnalysing();
 			}
-			
-			logger.info(String.format("Start: Define Services Test"));
-
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getMessage();
 			logger.warn(errorMessage);
@@ -68,6 +66,7 @@ public class DefineServicesTest_SRMA {
 	@AfterClass
 	public static void tearDown(){
 		workspaceController.closeWorkspace();
+		logger.info(String.format("Finished: Define Services Test"));
 	}
 
 	// TESTS 

@@ -8,7 +8,6 @@ import java.util.*;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.apache.log4j.Logger;
 
 public class CSharpParameterGenerator extends CSharpGenerator {
 
@@ -22,7 +21,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
     private boolean nameFound = false;
     private boolean declareTypeFound = false;
     private ArrayList<ArrayList<Object>> parameterQueue; // The parameters need to be stored, until signature has been build up completely.
-    private final Logger logger = Logger.getLogger(CSharpParameterGenerator.class);
+    //private final Logger logger = Logger.getLogger(CSharpParameterGenerator.class);
 
 	public String generateParameterObjects(CommonTree allParametersTree, String belongsToMethod, String belongsToClass) { // allParametersTree = FORMAL_PARAMETER_LIST
 		String returnvalue = "";

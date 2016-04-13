@@ -4,8 +4,6 @@ import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToo
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.common.enums.DependencySubTypes;
 
-import java.util.*;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 

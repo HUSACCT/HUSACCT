@@ -25,41 +25,55 @@ import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ValidateTest {
-	private IDefineService define;
-	private IValidateService validate;
+	private static IDefineService define;
+	private static IValidateService validate;
+	private static Logger logger = Logger.getLogger(ValidateTest.class);
 
 	@Before
 	public void setup() {
-		setLog4jConfiguration();
-		define = ServiceProvider.getInstance().getDefineService();
-		
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		for(int counter = 0; counter < 3; counter ++) {
-			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "Java", "1.0", 
-					"DESCRIPTION PROJECT " + counter, new ArrayList<SoftwareUnitDTO>()));
-		}
-		define.createApplication("TEST_APPLICATION", projects, "1.0");
-		validate = ServiceProvider.getInstance().getValidateService();
 	}
 	
-	private void setLog4jConfiguration() {
-		URL propertiesFile = getClass().getResource("/husacct/common/resources/log4j.properties");
-		PropertyConfigurator.configure(propertiesFile);
+	@BeforeClass
+	public static void beforeClass() {
+		try {
+			setLog4jConfiguration();
+			logger.info(String.format(" Start: ValidateTest"));
+			define = ServiceProvider.getInstance().getDefineService();
+			
+			ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+			for(int counter = 0; counter < 3; counter ++) {
+				projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "Java", "1.0", 
+						"DESCRIPTION PROJECT " + counter, new ArrayList<SoftwareUnitDTO>()));
+			}
+			define.createApplication("TEST_APPLICATION", projects, "1.0");
+			validate = ServiceProvider.getInstance().getValidateService();
+			
+		} catch (Exception e){
+			String errorMessage =  "Exception: " + e.getMessage();
+			logger.warn(errorMessage);
+		}
+	}
+
+	@AfterClass
+	public static void tearDown(){
+		logger.info(String.format(" Finished: ValidateTest"));
 	}
 	
 	@Test
-	public void testSetup() {
+	public void componentDefineIsNotNull() {
 		assertNotNull(define);
 		assertNotNull(define.getApplicationDetails());
 		assertNotNull(define.getApplicationDetails().projects.get(0));
 		assertNotNull(define.getApplicationDetails().projects.get(1));
 		assertNotNull(define.getApplicationDetails().projects.get(2));
-		assertNotNull(validate);
 	}
 	
 	@Test
@@ -162,13 +176,12 @@ public class ValidateTest {
 					ModuleTypes.FACADE.toString()
 			};
 			for (String module : modules) {
-				System.out.print("\nAllowedRuleTypes for " + module + ": ");
-				
+				//System.out.print("\nAllowedRuleTypes for " + module + ": ");
 				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				assertNotNull(allowedRuleTypes);
-				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
+				/* for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
 					System.out.print(allowedRuleType.getKey() + ", ");
-				}
+				} */
 			}
 		} catch(Exception exc) {
 			exc.printStackTrace();
@@ -187,13 +200,13 @@ public class ValidateTest {
 			};
 			
 			for (String module : modules) {
-				System.out.print("\nDefaultRuleTypes for " + module + ": ");
+				// System.out.print("\nDefaultRuleTypes for " + module + ": ");
 				
 				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
 				assertNotNull(defaultRuleTypes);
-				for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
+				/* for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
 					System.out.print(defaultRuleType.getKey() + ", ");
-				}
+				} */
 			}
 		} catch(Exception exc) {
 			exc.printStackTrace();
@@ -208,25 +221,15 @@ public class ValidateTest {
 		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 
-	@Test
+/*	@Test
 	public void getViolationTypesCSharpLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
 		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
 		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
-
-	@Test
-	public void getViolationTypesNoLanguage() {
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		projects.add(new ProjectDTO("project", new ArrayList<String>(), "", "", "", new ArrayList<SoftwareUnitDTO>()));
-		define.createApplication("TEST_APPLICATION", projects, "1.0");
-
-		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(0, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
-		assertEquals(0, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
-	}
-
+*/
+	
 	private String[] getCategoryStringArray(CategoryDTO[] dtos) {
 		ArrayList<String> categoryList = new ArrayList<String>();
 
@@ -305,5 +308,10 @@ public class ValidateTest {
 		if (!exceptionOccured) {
 			assertTrue(validate.isValidated());
 		}
+	}
+
+	private static void setLog4jConfiguration() {
+		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		PropertyConfigurator.configure(propertiesFile);
 	}
 }

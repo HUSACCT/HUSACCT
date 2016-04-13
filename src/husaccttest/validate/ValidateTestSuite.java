@@ -4,6 +4,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ValidateTest.class, ImportExportTest.class, SRMATest20141112.class})
+@Suite.SuiteClasses({
+	ValidateTest.class, 
+	ImportExportTest.class, 
+	SRMATest20141112.class
+})
 public class ValidateTestSuite {
 }

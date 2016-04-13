@@ -22,31 +22,36 @@ public class SoftwareUnitDefinitionDomainService {
 
 	public void addSoftwareUnitsToModule(long moduleId, ArrayList<AnalyzedModuleComponent> units) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		try {
-			for (AnalyzedModuleComponent softwareunit : units) {
-				Type type = Type.valueOf(softwareunit.getType());
-				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
-				//Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper " + softwareunit.getType() + "ok " + softwareunit.getUniqueName());
-				if (softwareunit instanceof RegexComponent) {
-					module.addSUDefinition(unit);
-					RegisterRegixSoftwareUnits((RegexComponent) softwareunit, module, unit);
-					JtreeController.instance().removeRegexTreeItem((RegexComponent) softwareunit);
-				} else {
-					module.addSUDefinition(unit);
-					JtreeController.instance().removeTreeItem(softwareunit);
+		if (module != null) {
+			try {
+				for (AnalyzedModuleComponent softwareunit : units) {
+					Type type = Type.valueOf(softwareunit.getType());
+					SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
+					//Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper " + softwareunit.getType() + "ok " + softwareunit.getUniqueName());
+					if (softwareunit instanceof RegexComponent) {
+						module.addSUDefinition(unit);
+						RegisterRegixSoftwareUnits((RegexComponent) softwareunit, module, unit);
+						JtreeController.instance().removeRegexTreeItem((RegexComponent) softwareunit);
+					} else {
+						module.addSUDefinition(unit);
+						JtreeController.instance().removeTreeItem(softwareunit);
+					}
 				}
+				WarningMessageService.getInstance().processModule(module);
+			} catch (Exception e) {
+				Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
+				// System.out.println(e.getStackTrace());
 			}
-			WarningMessageService.getInstance().processModule(module);
-		} catch (Exception e) {
-			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
-			System.out.println(e.getStackTrace());
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		}
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public ArrayList<SoftwareUnitDefinition> getSoftwareUnit(long moduleId) {
+		ArrayList<SoftwareUnitDefinition> softwareUnits = null;
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
+		if (module != null) {
+			softwareUnits = module.getUnits();
+		}
 		return softwareUnits;
 	}
 
@@ -63,15 +68,15 @@ public class SoftwareUnitDefinitionDomainService {
 	public ArrayList<String> getSoftwareUnitNames(long moduleId) {
 		ArrayList<String> softwareUnitNames = new ArrayList<String>();
 		try {
-			ModuleStrategy module = SoftwareArchitecture.getInstance()
-					.getModuleById(moduleId);
-			ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
-
-			for (SoftwareUnitDefinition unit : softwareUnits) {
-				softwareUnitNames.add(unit.getName());
+			ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+			if (module != null) {
+				ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
+				for (SoftwareUnitDefinition unit : softwareUnits) {
+					softwareUnitNames.add(unit.getName());
+				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
 		}
 		return softwareUnitNames;
 	}
@@ -88,23 +93,27 @@ public class SoftwareUnitDefinitionDomainService {
 
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
-		if (unit != null){
-			module.removeSUDefintion(unit);
-			StateService.instance().removeSoftwareUnit(module, unit);
-			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		if (module != null){
+			SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
+			if (unit != null){
+				module.removeSUDefintion(unit);
+				StateService.instance().removeSoftwareUnit(module, unit);
+				ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+			}
 		}
 	}
 
 	public void removeSoftwareUnit(long moduleId, ArrayList<AnalyzedModuleComponent> data) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		for (AnalyzedModuleComponent units : data) {
-			SoftwareUnitDefinition unit = getSoftwareUnitByName(units.getUniqueName());
-			if(unit != null){
-				module.removeSUDefintion(unit);
-				WarningMessageService.getInstance().processModule(module);
-				StateService.instance().removeSoftwareUnit(module, unit);
-				ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		if (module != null){
+			for (AnalyzedModuleComponent units : data) {
+				SoftwareUnitDefinition unit = getSoftwareUnitByName(units.getUniqueName());
+				if(unit != null){
+					module.removeSUDefintion(unit);
+					WarningMessageService.getInstance().processModule(module);
+					StateService.instance().removeSoftwareUnit(module, unit);
+					ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+				}
 			}
 		}
 	}
@@ -136,7 +145,11 @@ public class SoftwareUnitDefinitionDomainService {
 
 	public ExpressionUnitDefinition getExpressionByName(long ModuleId, String name) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(ModuleId);
-		return (ExpressionUnitDefinition) module.getSoftwareUnitByName(name);
+		if (module != null) {
+			return (ExpressionUnitDefinition) module.getSoftwareUnitByName(name);
+		} else {
+			return null;
+		}
 	}
 
 	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
@@ -150,13 +163,13 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 
 	public ArrayList<String> getRegExSoftwareUnitNames(long moduleId) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance()
-				.getModuleById(moduleId);
-		ArrayList<SoftwareUnitRegExDefinition> softwareUnits = module
-				.getRegExUnits();
 		ArrayList<String> softwareUnitNames = new ArrayList<String>();
-		for (SoftwareUnitRegExDefinition unit : softwareUnits) {
-			softwareUnitNames.add(unit.getName());
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		if (module != null){
+			ArrayList<SoftwareUnitRegExDefinition> softwareUnits = module.getRegExUnits();
+			for (SoftwareUnitRegExDefinition unit : softwareUnits) {
+				softwareUnitNames.add(unit.getName());
+			}
 		}
 		return softwareUnitNames;
 	}
@@ -167,46 +180,48 @@ public class SoftwareUnitDefinitionDomainService {
 
 	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public ExpressionUnitDefinition removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
-		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
-		if(unit != null){
-			module.removeSUDefintion(unit);
-			JtreeController.instance().restoreRegexWrapper((ExpressionUnitDefinition) unit);
-			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		if (module != null){
+			if(unit != null){
+				module.removeSUDefintion(unit);
+				JtreeController.instance().restoreRegexWrapper((ExpressionUnitDefinition) unit);
+				ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+			}
 		}
 		return (ExpressionUnitDefinition) unit;
 	}
 
 	private void addRegExUnitsToModule(long moduleId, AnalyzedModuleComponent softwareunit) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		try {
-			if (softwareunit instanceof RegexComponent) {
-				ExpressionUnitDefinition ex = new ExpressionUnitDefinition(softwareunit.getUniqueName(), SoftwareUnitDefinition.Type.REGEX);
-				for (AbstractCombinedComponent ir : ((RegexComponent) softwareunit).getChildren()) {
-					Type typet = Type.valueOf(ir.getType());
-					SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(ir.getUniqueName(), typet);
-					ex.addSoftwareUnit(unitt);
+		if (module != null) {
+			try {
+				if (softwareunit instanceof RegexComponent) {
+					ExpressionUnitDefinition ex = new ExpressionUnitDefinition(softwareunit.getUniqueName(), SoftwareUnitDefinition.Type.REGEX);
+					for (AbstractCombinedComponent ir : ((RegexComponent) softwareunit).getChildren()) {
+						Type typet = Type.valueOf(ir.getType());
+						SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(ir.getUniqueName(), typet);
+						ex.addSoftwareUnit(unitt);
+					}
+					StateService.instance().registerAnalyzedUnit(softwareunit);
+	                JtreeController.instance().removeTreeItem(softwareunit);
+					module.addSUDefinition(ex);
+				} else {
+					Type type = Type.valueOf(softwareunit.getType());
+					SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
+					module.addSUDefinition(unit);
+					JtreeController.instance().getTree().removeTreeItem(softwareunit);
 				}
-				StateService.instance().registerAnalyzedUnit(softwareunit);
-                JtreeController.instance().removeTreeItem(softwareunit);
-				module.addSUDefinition(ex);
-			} else {
-				Type type = Type.valueOf(softwareunit.getType());
-				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
-				module.addSUDefinition(unit);
-				JtreeController.instance().getTree().removeTreeItem(softwareunit);
+				WarningMessageService.getInstance().processModule(module);
+			} catch (Exception e) {
+				Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(
+						"Undefined softwareunit type: " + softwareunit.getType());
+				Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(
+						e.getMessage());
+				// System.out.println(e.getStackTrace());
 			}
-			WarningMessageService.getInstance().processModule(module);
-		} catch (Exception e) {
-			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(
-					"Undefined softwareunit type: " + softwareunit.getType());
-			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(
-					e.getMessage());
-			System.out.println(e.getStackTrace());
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		}
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
 	}
 
 

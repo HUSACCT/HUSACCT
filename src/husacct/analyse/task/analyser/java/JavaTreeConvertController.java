@@ -5,7 +5,6 @@ import husacct.analyse.infrastructure.antlr.java.JavaParser.compilationUnit_retu
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 class JavaTreeConvertController {
@@ -65,25 +64,19 @@ class JavaTreeConvertController {
     }
 
     private void createClassInformation(CommonTree completeTree) {
-        CommonTree packageTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.PACKAGE);
-        if (hasPackageElement(completeTree)) {
-            this.thePackage = javaPackageGenerator.generateModel(packageTree);
-        } else {
-    		this.thePackage = javaPackageGenerator.generateNoPackage_Package();
-        }
-        javaClassGenerator = new JavaClassGenerator(thePackage);
-
         CommonTree classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.CLASS);
-        if (!isTreeExisting(classTree)) {
+        if (classTree == null) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.INTERFACE);
         }
-        if (!isTreeExisting(classTree)) {
+        if (classTree == null) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.ENUM);
         }
-        if (!isTreeExisting(classTree)) {
+        if (classTree == null) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.AT);
         }
-        if (isTreeExisting(classTree)) {
+        if (classTree != null) {
+        	determineThePackage(completeTree);
+        	javaClassGenerator = new JavaClassGenerator(thePackage);
             int classType = classTree.getType();
             switch (classType) {
                 case JavaParser.CLASS:
@@ -101,8 +94,15 @@ class JavaTreeConvertController {
                 default:
                     this.warnNotSupportedClassType(classType, classTree);
             }
+        }
+    }
+    
+    private void determineThePackage(CommonTree completeTree) {
+        CommonTree packageTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.PACKAGE);
+        if (packageTree != null) {
+            this.thePackage = javaPackageGenerator.generateModel(packageTree);
         } else {
-        	// logger.warn(" File without a type: " + this.sourceFilePath);
+    		this.thePackage = javaPackageGenerator.generateNoPackage_Package();
         }
     }
     
@@ -116,12 +116,11 @@ class JavaTreeConvertController {
     }
 
     private void delegateASTToGenerators(CommonTree tree) {
-        if (isTreeExisting(tree)) {
+        if (tree != null) {
         	CommonTree childNode;
             for (int i = 0; i < tree.getChildCount(); i++) {
                 childNode = (CommonTree) tree.getChild(i);
                 int nodeType = childNode.getType();
-
                 switch (nodeType) {
                     case JavaParser.CLASS: case JavaParser.ENUM: case JavaParser.INTERFACE:	
                         if (classCount > 0) {
@@ -201,13 +200,5 @@ class JavaTreeConvertController {
 
     private void delegateMethod(CommonTree methodTree) {
         methodGenerator.delegateMethodBlock(methodTree, this.currentClass);
-    }
-
-    private boolean hasPackageElement(CommonTree tree) {
-        return tree.getFirstChildWithType(JavaParser.PACKAGE) != null;
-    }
-
-    private boolean isTreeExisting(Tree tree) {
-    	return tree != null;
     }
 }

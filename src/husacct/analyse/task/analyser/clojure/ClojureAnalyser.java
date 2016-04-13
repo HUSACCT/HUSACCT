@@ -9,7 +9,7 @@ public class ClojureAnalyser extends AbstractAnalyser {
     IModelCreationService modelCreatorService = new FamixCreationServiceImpl();
 
     @Override
-    public void generateModelFromSource(String sourceFilePath) {
+    public void generateModelFromSourceFile(String sourceFilePath) {
 //		modelCreatorService.createImport("analyser", importedModule, completeImportString, importsCompletePackage)
     }
 
