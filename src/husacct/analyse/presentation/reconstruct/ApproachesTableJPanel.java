@@ -162,9 +162,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 				
 		Object ApproachesRows[][] = { 
-			{Algorithm.Layers_Goldstein_Root_Original, getTranslation(Algorithm.Layers_Goldstein_Root_Original), 10}, 
 			{Algorithm.Layers_Goldstein_Multiple_Improved, getTranslation(Algorithm.Layers_Goldstein_Multiple_Improved), 10}, 
-			{Algorithm.Layers_Goldstein_SelectedModule_Improved, getTranslation(Algorithm.Layers_Goldstein_SelectedModule_Improved), 10}, 
+			{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10}, 
 			{Algorithm.Layers_Goldstein_Root_Improved, getTranslation(Algorithm.Layers_Goldstein_Root_Improved), 10},
 				
 			{Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original), 10}, 

@@ -1,98 +1,69 @@
-package husacct.analyse.task.reconstruct;
-
-import husacct.analyse.domain.IModelQueryService;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.SoftwareUnitDTO;
-import husacct.define.IDefineSarService;
+package husacct.analyse.task.reconstruct.layers.goldstein;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-public class Algorithm_Goldstein_MultiLayer extends AlgorithmGeneral{
+import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.ReconstructArchitecture;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.define.IDefineSarService;
+import husacct.define.IDefineService;
 
+public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
+
+	
 	private ModuleDTO selectedModule;
 	private int layerThreshold;
 	private IModelQueryService queryService;
-	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses;
-	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> identifiedLayers;
-	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
-	private String xLibrariesRootPackage = "xLibraries";
+	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+	
 	
 	@Override
-	public void execute(ModuleDTO Module, int th, IModelQueryService qService, String library, String dependencyType) {
-		selectedModule = Module;
-		layerThreshold = th;
-		queryService = qService;
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+		selectedModule = dto.getSelectedModule();
+		layerThreshold = dto.getThreshold();
+		this.queryService = queryService;
+		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
+		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
+		identifyLayers(getClasses(xLibrariesRootPackage), dto.getRelationType());
 		
-		identifyMultipleLayers(dependencyType);
-	}
-
-	@Override
-	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
-		getClasses(library);
-		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-		identifiedLayers = layers;	
-		
-		return identifiedLayers;
-	}
-
-	private void determineInternalRootPackagesWithClasses() {
-		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
-		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
-		for (SoftwareUnitDTO rootModule : allRootUnits) {
-			if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
-				for (String internalPackage : queryService.getRootPackagesWithClass(rootModule.uniqueName)) {
-					internalRootPackagesWithClasses.add(queryService.getSoftwareUnitByUniqueName(internalPackage));
-
-				}
+		for (int level : layers.keySet()) {
+			ArrayList<ModuleDTO> modulesToBeMoved = new ArrayList<ModuleDTO>();
+			for(SoftwareUnitDTO softwareUnitDTO : layers.get(level)){
+				modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 			}
-		}
-		if (internalRootPackagesWithClasses.size() == 1) {
-			// Temporal solution useful for HUSACCT20 test. To be improved!
-			// E.g., classes in root are excluded from the process.
-			String newRoot = internalRootPackagesWithClasses.get(0).uniqueName;
-			internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
-			for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
-				if (child.type.equalsIgnoreCase("package")) {
-					internalRootPackagesWithClasses.add(child);
-				}
-			}
-		}
-	}
-	
-	
-	private void identifyLayersAtRootLevel(String dependencyType) {
-		determineInternalRootPackagesWithClasses();
-		identifyLayers(internalRootPackagesWithClasses, dependencyType);
-		for (Integer hierarchicalLevel : layers.keySet()) {
-			ModuleDTO newModule = defineSarService.addModule("Layer" + hierarchicalLevel, "**", "Layer", hierarchicalLevel, layers.get(hierarchicalLevel));
+			
+			ModuleDTO newModule = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layers.get(level));	
 			addToReverseReconstructionList(newModule); //add to cache for reverse
 		}
 	}
 	
-	private void identifyMultipleLayers(String dependencyType) {
-		identifyLayersAtRootLevel(dependencyType);
-		identifiedLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-		identifiedLayers = layers;	
-		defineSarService.getModule_SelectedInGUI();
-		layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
+		ArrayList<SoftwareUnitDTO> selectedSubmoduleWithClasses = new ArrayList<SoftwareUnitDTO>();
+		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		
-		for(int i : identifiedLayers.keySet()){
-			identifyLayers(identifiedLayers.get(i), dependencyType);
-			logger.info(layers);	
-			if(layers.keySet().size() > 1){
-				for (Integer herarchicalLevel : layers.keySet()) {
-					defineSarService.addModule("Layerrr" + herarchicalLevel, "Layer" + i, "Layer", herarchicalLevel, layers.get(herarchicalLevel));	
-				
-				}
-			}	
+		ModuleDTO[] subModuleDTOs = selectedModule.subModules;
+		for(String logicalSoftwarePathSelectedModule : defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath)){
+			SoftwareUnitDTO suDTO = queryService.getSoftwareUnitByUniqueName(logicalSoftwarePathSelectedModule);
+			SoftwareUnitDTO[] suDTOsubmodules = queryService.getChildUnitsOfSoftwareUnit(suDTO.uniqueName);
+			for (SoftwareUnitDTO subModule : suDTOsubmodules){
+				selectedSubmoduleWithClasses.add(subModule);
+			}
 		}
+		/*
+		for(ModuleDTO subModule : subModuleDTOs){
+			for(String logicalSoftwarePath : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)){
+				selectedSubmoduleWithClasses.add(queryService.getSoftwareUnitByUniqueName(logicalSoftwarePath));
+			}
+		}
+		*/
+		return selectedSubmoduleWithClasses;
 	}
-	
 	
 	private void identifyLayers(ArrayList<SoftwareUnitDTO> units, String depedencyType) {
 		// 1) Assign all internalRootPackages to bottom layer
@@ -151,16 +122,20 @@ public class Algorithm_Goldstein_MultiLayer extends AlgorithmGeneral{
 					int nrOfDependenciesFromOtherTosoftwareUnit=0;
 					
 					switch(dependencyType){
-					case "umlDependency":
+					case "UmlLinks":
 						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
 						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
-						
-					case "softwareUnitDependency":
+					case "AccessCallReferenceDependencies":
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+						break;
+					case "AllDependencies":
 						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
 						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
 					}
+					
 					
 					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100) * layerThreshold)) {
 						rootPackageDoesNotUseOtherPackage = false;
@@ -182,12 +157,5 @@ public class Algorithm_Goldstein_MultiLayer extends AlgorithmGeneral{
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
 	}
-
-	@Override
-	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 }

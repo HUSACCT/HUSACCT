@@ -12,7 +12,7 @@ import husacct.analyse.task.reconstruct.gateways.HUSACCT.GatewayHUSACCT_Root;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootOriginal;
-import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleImproved;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleOriginal;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootImproved;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_SelectedModuleImproved;
@@ -52,18 +52,21 @@ public class ReconstructArchitecture {
 		
 		try {
 			switch (dto.getApproach()) {
-				case (AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Multiple_Improved):
+				case (Algorithm.Layers_Goldstein_Multiple_Improved):
 					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
-				case (AnalyseReconstructConstants.Algorithm.Layers_Goldstein_SelectedModule_Improved):
-					if(!moduleSelected){ //is root
+				case (Algorithm.Layers_Goldstein_Root_Improved):
+					algorithm = new LayersGoldstein_RootImproved();
+					break;
+				case (Algorithm.Layers_Goldstein_Original):
+					if(moduleSelected){
+						algorithm = new LayersGoldstein_SelectedModuleOriginal();
+					}
+					else{ //is root
 						algorithm = new LayersGoldstein_RootOriginal();
 					}
-					else{
-						algorithm = new LayersGoldstein_SelectedModuleImproved();
-					}
 					break;
-				case (AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved):
+				case (Algorithm.Layers_Scanniello_Improved):
 					if (moduleSelected){
 						algorithm = new LayersScanniello_SelectedModuleImproved();
 					}
@@ -71,13 +74,13 @@ public class ReconstructArchitecture {
 						algorithm = new LayersScanniello_RootImproved();
 					}
 					break;
-				case (AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Original):
+				case (Algorithm.Layers_Scanniello_Original):
 					algorithm = new LayersScanniello_RootOriginal();
 					break;
-				case (AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule):
+				case (Algorithm.Component_HUSACCT_SelectedModule):
 					algorithm = new ComponentsHUSACCT_SelectedModule();
 					break;
-				case (AnalyseReconstructConstants.Algorithm.Gateways_HUSACCT_Root):
+				case (Algorithm.Gateways_HUSACCT_Root):
 					algorithm = new GatewayHUSACCT_Root();
 					break;
 				default:
