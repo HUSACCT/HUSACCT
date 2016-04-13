@@ -145,7 +145,10 @@ public class ModuleDomainService {
 	public String getModuleNameById(long moduleId) {
 		String moduleName = new String();
 		if (moduleId != -1) {
-			moduleName = SoftwareArchitecture.getInstance().getModuleById(moduleId).getName();
+			ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+			if (module != null) {
+				moduleName = module.getName();
+			}
 		}
 		return moduleName;
 	}
@@ -181,10 +184,12 @@ public class ModuleDomainService {
 	public ArrayList<Long> getSiblingModuleIds(long moduleId) {
 		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
 		if (moduleId != -1) {
-			long parentModuleId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
-			childModuleIdList = getSubModuleIds(parentModuleId);
 			ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-			childModuleIdList.remove(module.getId());
+			if (module != null) {
+				long parentModuleId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
+				childModuleIdList = getSubModuleIds(parentModuleId);
+				childModuleIdList.remove(module.getId());
+			}
 		}
 		return childModuleIdList;
 	}
@@ -202,11 +207,13 @@ public class ModuleDomainService {
 		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
 		if (parentModuleId != -1) {
 			ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
-			for (ModuleStrategy module : parentModule.getSubModules()) {
-				childModuleIdList.add(module.getId());
-				ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
-				for (Long l : subModuleIdList) {
-					childModuleIdList.add(l);
+			if (parentModule != null) {
+				for (ModuleStrategy module : parentModule.getSubModules()) {
+					childModuleIdList.add(module.getId());
+					ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
+					for (Long l : subModuleIdList) {
+						childModuleIdList.add(l);
+					}
 				}
 			}
 		} else {
@@ -234,13 +241,15 @@ public class ModuleDomainService {
 
 	public void removeModuleById(long moduleId) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-      try{
-		SoftwareArchitecture.getInstance().removeModule(module);
-	    JtreeController.instance().registerTreeRemoval(module);
-      }catch(Exception e) {
-    	  logger.error(e);
-      }
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		if (module != null) {
+			try{
+				SoftwareArchitecture.getInstance().removeModule(module);
+				JtreeController.instance().registerTreeRemoval(module);
+			}catch(Exception e) {
+				logger.error(e);
+			}
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		}
 	}
 
 	public void sortModuleChildren(ModuleStrategy module) {
@@ -253,16 +262,18 @@ public class ModuleDomainService {
 
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		StateService.instance().addUpdateModule(moduleId, new String[] { module.getName(), moduleDescription },
-				new String[] { moduleName, moduleDescription });
-		module.setName(moduleName);
-		module.setDescription(moduleDescription);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		if (module != null) {
+			StateService.instance().addUpdateModule(moduleId, new String[] { module.getName(), moduleDescription },
+					new String[] { moduleName, moduleDescription });
+			module.setName(moduleName);
+			module.setDescription(moduleDescription);
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		}
 	}
 	
 	public void updateModuleType(long moduleId, String newType) {
 		ModuleStrategy oldModule = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		if(oldModule.getId() > 0){
+		if((oldModule != null) && (oldModule.getId() > 0)){
 			if (oldModule.getType() != newType){
 				DefaultRuleDomainService service = new DefaultRuleDomainService();
 				service.removeDefaultRules(oldModule);
@@ -277,11 +288,12 @@ public class ModuleDomainService {
 	
 	public void updateFacade(long moduleId, String moduleName){
 		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		for(ModuleStrategy subModule : parent.getSubModules()){
-			if(subModule.getType().equals("Facade")){
-				subModule.setName("Interface<"+moduleName+">");
+		if (parent != null) {
+			for(ModuleStrategy subModule : parent.getSubModules()){
+				if(subModule.getType().equals("Facade")){
+					subModule.setName("Interface<"+moduleName+">");
+				}
 			}
 		}
 	}
-	
 }

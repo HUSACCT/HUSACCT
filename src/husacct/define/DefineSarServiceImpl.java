@@ -56,7 +56,9 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	@Override
 	public void removeModule(String logicalPath) {
 		try {
-			moduleService.removeModuleById(moduleService.getModuleByLogicalPath(logicalPath).getId());
+			if (moduleService.getModuleByLogicalPath(logicalPath) != null) {
+				moduleService.removeModuleById(moduleService.getModuleByLogicalPath(logicalPath).getId());
+			}
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
         }

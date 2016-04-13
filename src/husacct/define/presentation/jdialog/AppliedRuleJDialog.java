@@ -329,40 +329,44 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 	}
 
 	private void save() {
-		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			if (!ruleDetailsJPanel.hasValidData()) {
-				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
-			} else {
-				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
-				if(!appliedRuleController.conformRuleConventions(ruleDetails)){
-					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
-				}else{
+		try {
+			if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
+				if (!ruleDetailsJPanel.hasValidData()) {
+					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
+				} else {
+					HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+					ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
+					if(!appliedRuleController.conformRuleConventions(ruleDetails)){
+						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
+					}else{
+						String message = appliedRuleController.saveRule(ruleDetails);
+						if (!message.equals("")){
+							UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
+						} else {
+							this.dispose();
+						}
+					}
+				}
+			}
+			else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
+				if (!ruleDetailsJPanel.hasValidData()) {
+					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
+				} else {
+					HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+					ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
 					String message = appliedRuleController.saveRule(ruleDetails);
 					if (!message.equals("")){
 						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
+						if (message.equals("IncorrectToModuleFacadeConvExc")){
+							this.removeException();
+						}
 					} else {
 						this.dispose();
 					}
 				}
 			}
-		}
-		else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
-			if (!ruleDetailsJPanel.hasValidData()) {
-				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
-			} else {
-				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
-				String message = appliedRuleController.saveRule(ruleDetails);
-				if (!message.equals("")){
-					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(message));
-					if (message.equals("IncorrectToModuleFacadeConvExc")){
-						this.removeException();
-					}
-				} else {
-					this.dispose();
-				}
-			}
+		}catch (Exception ex) {
+			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString(ex.getMessage()));
 		}
 	}
 

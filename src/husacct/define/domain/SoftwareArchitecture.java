@@ -15,7 +15,6 @@ import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
-import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
@@ -101,22 +100,26 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	//Only to be used to add child modules to a parent module 
 	public String addModuleToParent(long parentModuleId, ModuleStrategy module) {
+		String message = "";
 		ModuleStrategy parentModule = getModuleById(parentModuleId);
-		registerModule(module);
- 		return parentModule.addSubModule(module);
+		if (parentModule != null) {
+			registerModule(module);
+			message = parentModule.addSubModule(module);
+		} else {
+			message = ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoModule");
+		}
+ 		return message;
 	}
 
 	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
 		if (hasAppliedRule(appliedRuleId)) {
 			for (AppliedRuleStrategy rule : appliedRules) {
 				if (rule.getId() == appliedRuleId) {
-					long id = rule.getId();
 					return rule;
 				}
 			}
 		} else {
-			throw new RuntimeException(ServiceProvider.getInstance()
-					.getLocaleService().getTranslatedString("NoRule"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoRule"));
 		}
 		return null;
 	}
@@ -149,6 +152,11 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return rootModule.getDescription();
 	}
 
+	/** 
+	 * Finds the ModuleStrategy with the given moduleId.
+	 * @param moduleId
+	 * @return ModuleStrategy of the found module, or null if no module is found.
+	 */
 	public ModuleStrategy getModuleById(long moduleId) {
 		ModuleStrategy currentModule = null;
 		if (rootModule.getId() == moduleId || rootModule.hasSubModule(moduleId)) {
@@ -160,9 +168,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 					}
 				}
 			}
-		}
-		if (currentModule == null) {
-			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoModule") + ", ModuleId = " + moduleId);
 		}
 		return currentModule;
 	}
@@ -193,7 +198,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			}
 			if (currentModule == null || !currentModule.getName().equals(moduleNames[moduleNames.length - 1])) {
 				logger.warn(String.format(" Module not found; logical path: " + logicalPath));
-				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString(" Module not found; logical path: " + logicalPath));
+				throw new RuntimeException(" Module not found; logical path: " + logicalPath);
 			}
 		}
 		return currentModule;
@@ -254,47 +259,48 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return rootModule.getSubModules();
 	}
 
-	private ArrayList<ModuleStrategy> getModulesForLayerSorting(
-			long parentModuleId) {
+	private ArrayList<ModuleStrategy> getModulesForLayerSorting(long parentModuleId) {
 		ArrayList<ModuleStrategy> modulesToCheck = rootModule.getSubModules();
 		if (parentModuleId != -1L) {
 			ModuleStrategy parentModule = getModuleById(parentModuleId);
-			modulesToCheck = parentModule.getSubModules();
+			if (parentModule != null) {
+				modulesToCheck = parentModule.getSubModules();
+			}
 		}
 		return modulesToCheck;
 	}
 
 	public String getModulesLogicalPath(long moduleId) {
 		String logicalPath = "";
-		ModuleStrategy wantedModule = getModuleById(moduleId);
-
 		if (rootModule.getId() == moduleId) {
 			logicalPath = "**";
 			return logicalPath;
 		} else {
-			ArrayList<String> list = new ArrayList<String>();
-			list.add(wantedModule.getName());
-			wantedModule = wantedModule.getparent();
-			while(wantedModule.getType() != "Root"){
+			ModuleStrategy wantedModule = getModuleById(moduleId);
+			if (wantedModule != null) {
+				ArrayList<String> list = new ArrayList<String>();
 				list.add(wantedModule.getName());
 				wantedModule = wantedModule.getparent();
+				while(wantedModule.getType() != "Root"){
+					list.add(wantedModule.getName());
+					wantedModule = wantedModule.getparent();
+				}
+				int lenght = list.size();
+				String[] names = new String[lenght];
+				int i = 0;
+				for(String s : list){
+					names[i] = s;
+					i++;
+				}	
+		        
+				for (int j = lenght-1; j >= 1; j--) {
+		        	logicalPath = logicalPath + names[j] + ".";
+		        }
+				logicalPath = logicalPath + names[0];
 			}
-			int lenght = list.size();
-			String[] names = new String[lenght];
-			int i = 0;
-			for(String s : list){
-				names[i] = s;
-				i++;
-			}	
-	        
-			for (int j = lenght-1; j >= 1; j--) {
-	        	logicalPath = logicalPath + names[j] + ".";
-	        }
-			logicalPath = logicalPath + names[0];
 		}
 		return logicalPath;
 	}
-
 		
 	public String getName() {
 		return rootModule.getName();
@@ -307,7 +313,9 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			parentModuleId = -1;
 		} else {
 			ModuleStrategy childModule = getModuleById(childModuleId);
-			parentModuleId = childModule.getparent().getId();
+			if (childModule != null) {
+				parentModuleId = childModule.getparent().getId();
+			}
 		}
 		return parentModuleId;
 	}
@@ -344,8 +352,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		return layer;
 	}
 
-	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel,
-			long parentModuleId) {
+	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId) {
 		Layer layer = null;
 		for (ModuleStrategy mod : getModulesForLayerSorting(parentModuleId)) {
 			if (mod instanceof Layer) {
@@ -361,8 +368,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public Layer getTheFirstLayerBelow(Layer layer) {
-		return getTheFirstLayerBelow(layer.getHierarchicalLevel(),
-				getParentModuleIdByChildId(layer.getId()));
+		return getTheFirstLayerBelow(layer.getHierarchicalLevel(), getParentModuleIdByChildId(layer.getId()));
 	}
 
 	private boolean hasAppliedRule(long ruleID) {
@@ -392,27 +398,25 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	public void moveLayerDown(long layerId) {
 		Layer layer = (Layer) getModuleById(layerId);
-		Layer layerBelowLayer = getTheFirstLayerBelow(
-				layer.getHierarchicalLevel(),
-				getParentModuleIdByChildId(layerId));
-		if (layerBelowLayer != null) {
-			switchHierarchicalLayerLevels(layer, layerBelowLayer);
+		if (layer != null) {
+			Layer layerBelowLayer = getTheFirstLayerBelow(
+					layer.getHierarchicalLevel(),
+					getParentModuleIdByChildId(layerId));
+			if (layerBelowLayer != null) {
+				switchHierarchicalLayerLevels(layer, layerBelowLayer);
+			}
 		}
 	}
 
 	public void moveLayerUp(long layerId) {
 		Layer layer = (Layer) getModuleById(layerId);
-		Layer layerAboveLayer = getTheFirstLayerAbove(
-				layer.getHierarchicalLevel(),
-				getParentModuleIdByChildId(layerId));
-		if (layerAboveLayer != null) {
-			switchHierarchicalLayerLevels(layer, layerAboveLayer);
-		}
-	}
-
-	private void processDefaultComponents(ModuleStrategy oldModule) {
-		if (oldModule instanceof Component) {
-			oldModule.getSubModules().remove(0);
+		if (layer != null) {
+			Layer layerAboveLayer = getTheFirstLayerAbove(
+					layer.getHierarchicalLevel(),
+					getParentModuleIdByChildId(layerId));
+			if (layerAboveLayer != null) {
+				switchHierarchicalLayerLevels(layer, layerAboveLayer);
+			}
 		}
 	}
 
@@ -576,37 +580,20 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 	}
 
-	public void removeAppliedRule(List<Long> selectedRules) {
-		ArrayList<AppliedRuleStrategy> appliedRules = getAppliedRuleByIds(selectedRules);
-
-	}
-
-	private ArrayList<AppliedRuleStrategy> getAppliedRuleByIds(
-			List<Long> selectedRules) {
-		ArrayList<AppliedRuleStrategy> result = new ArrayList<AppliedRuleStrategy>();
-
-		for (Long appliedruleID : selectedRules) {
-			AppliedRuleStrategy appliedrule = getAppliedRuleById(appliedruleID);
-			result.add(appliedrule);
-
-		}
-
-		return result;
-	}
-
 	@Override
-	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
-			long moduleID) {
+	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleID) {
 		ModuleStrategy module = getModuleById(moduleID);
-		module.addSUDefinition(units);
+		if (module != null) {
+			module.addSUDefinition(units);
+		}
 	}
 
 	@Override
-	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units,
-			long moduleId) {
+	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
 		ModuleStrategy module = getModuleById(moduleId);
-		module.removeSUDefintion(units);
-
+		if (module != null) {
+			module.removeSUDefintion(units);
+		}
 	}
 
 	@Override
@@ -680,52 +667,45 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	@Override
 	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
 		ModuleStrategy module = getModuleById(moduleId);
-		module.addSUDefinition(expression);
-
+		if (module != null) { 
+			module.addSUDefinition(expression);
+		}
 	}
 
 	@Override
-	public void removeExpression(long moduleId,
-			ExpressionUnitDefinition expression) {
+	public void removeExpression(long moduleId, ExpressionUnitDefinition expression) {
 		ModuleStrategy module = getModuleById(moduleId);
-		module.removeSUDefintion(expression);
-
+		if (module != null) {
+			module.removeSUDefintion(expression);
+		}
 	}
 
 	@Override
-	public void editExpression(long moduleId,
-			ExpressionUnitDefinition oldExpresion,
-			ExpressionUnitDefinition newExpression) {
+	public void editExpression(long moduleId, ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
 		ModuleStrategy module = getModuleById(moduleId);
-		module.removeSUDefintion(oldExpresion);
-		module.addSUDefinition(newExpression);
-
-	}
-
-	public void updateModuleRegistration(ModuleStrategy facade) {
-	 int index=	modules.indexOf(facade.getparent());
-	 
-		
+		if (module != null) {
+			module.removeSUDefintion(oldExpresion);
+			module.addSUDefinition(newExpression);
+		}
 	}
 
 	public void changeSoftwareUnit(long from, long to, ArrayList<String> names) {
 		ModuleStrategy fromModule= getModuleById(from);
 		ModuleStrategy toModule = getModuleById(to);
-	ArrayList<SoftwareUnitDefinition> units=	fromModule.getAndRemoveSoftwareUnits(names);
-	
-	toModule.addSUDefinition(units);
-		
+		if ((fromModule != null) && (toModule != null)) {
+			ArrayList<SoftwareUnitDefinition> units = fromModule.getAndRemoveSoftwareUnits(names);
+			toModule.addSUDefinition(units);
+		}
 	}
 
 	@Override
-	public void switchSoftwareUnitLocation(long fromModule, long toModule,
-			List<String> uniqNames) {
-		ModuleStrategy from = getModuleById(fromModule);
-		ModuleStrategy to = getModuleById(toModule);
-		
-	ArrayList<SoftwareUnitDefinition> units=	from.getAndRemoveSoftwareUnits(uniqNames);
-		to.addSUDefinition(units);
-		
+	public void switchSoftwareUnitLocation(long from, long to, List<String> uniqNames) {
+		ModuleStrategy fromModule= getModuleById(from);
+		ModuleStrategy toModule = getModuleById(to);
+		if ((fromModule != null) && (toModule != null)) {
+			ArrayList<SoftwareUnitDefinition> units = fromModule.getAndRemoveSoftwareUnits(uniqNames);
+			toModule.addSUDefinition(units);
+		}
 	}
 
 	public void registerImportedValues() {

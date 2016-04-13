@@ -90,18 +90,14 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	private ModuleStrategy assignToCorrectModule(Object o) {
-		ModuleStrategy module;
+		ModuleStrategy module = null;
 		if (o instanceof SoftwareUnitDefinition) {
-			module = getModuleWhereSoftwareUnitNeedsToBeMapped(
-					(SoftwareUnitDefinition) o, (SoftwareUnitDefinition) o);
+			module = getModuleWhereSoftwareUnitNeedsToBeMapped((SoftwareUnitDefinition) o, (SoftwareUnitDefinition) o);
 		} else if (o instanceof Long) {
 			long moduleId = (Long) o;
-
 			if (moduleId != -1) {
-				module = SoftwareArchitecture.getInstance().getModuleById(
-						moduleId);
+				module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 			} else {
-
 				module = new ModuleFactory().createDummy("blank");
 				module.setId(-1);
 			}

@@ -38,7 +38,7 @@ public class SRMATest20141112 {
 		try {
 			setLog4jConfiguration();
 			String workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
+			logger.info(String.format(" Start: SRMA Test using workspace: " + workspacePath));
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -78,6 +78,7 @@ public class SRMATest20141112 {
 	@AfterClass
 	public static void tearDown(){
 		workspaceController.closeWorkspace();
+		logger.info(String.format(" Finished: SRMA Test"));
 	}
 	
 	@Test

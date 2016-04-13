@@ -56,7 +56,7 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
 	public String generateNo_Namespace(String sourcePathShort) {
         String uniqueName = "No_Namespace" + sourcePathShort;
         String parentNamespace = "";
-        String namespaceName = "No_Namespace_HUSACCT_Defined" + sourcePathShort;
+        String namespaceName = "No_Namespace__" + sourcePathShort;
         modelService.createPackage(uniqueName, parentNamespace, namespaceName);
         return uniqueName;
     }

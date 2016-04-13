@@ -288,11 +288,13 @@ public class CSharpGeneratorToolkit {
     	queue.add(root);
     	while(!queue.isEmpty()) {
     		CommonTree first = queue.removeFirst();
-    		for (int i = 0; i < first.getChildCount(); i++) {
-    			CommonTree child = (CommonTree)first.getChild(i);
-    			if (isOfType(child, type))
-    				return child;
-    			queue.addLast(child);
+    		if (first != null) {
+	    		for (int i = 0; i < first.getChildCount(); i++) {
+	    			CommonTree child = (CommonTree)first.getChild(i);
+	    			if (isOfType(child, type))
+	    				return child;
+	    			queue.addLast(child);
+	    		}
     		}
     	}
     	return null;

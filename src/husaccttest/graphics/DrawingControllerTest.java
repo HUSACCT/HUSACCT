@@ -90,6 +90,7 @@ public class DrawingControllerTest {
 	@AfterClass
 	public static void tearDown(){
 		workspaceController.closeWorkspace();
+		logger.info(String.format("Finished: Graphics DrawingControllerTest"));
 	}
 
 	// TESTS 
