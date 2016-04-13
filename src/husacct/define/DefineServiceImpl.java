@@ -307,8 +307,8 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public ModuleDTO[] getAllModules(){
-		ModuleStrategy[] modules = (ModuleStrategy[]) moduleService.getSortedModules().toArray();
-		return domainParser.parseRootModules(modules);
+		ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
+		return domainParser.parseRootModules(modules.toArray(new ModuleStrategy[modules.size()]));
 		 
 	}
 	

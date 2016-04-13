@@ -89,7 +89,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		clearButton.setPreferredSize(new Dimension(100, 40));
 		clearButton.addActionListener(this);
 		
-		testButton = new JButton("Clear All");
+		testButton = new JButton("Test");
 		panel.add(testButton);
 		testButton.setPreferredSize(new Dimension(100, 40));
 		testButton.addActionListener(this);
@@ -142,7 +142,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 
 			int selectedRow = approachesTable.getSelectedRow();
 			if (selectedRow >= 0){
-				String approach = (String) approachesTable.getValueAt(selectedRow, approachNameCollumn);
+				String approach = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
 				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
 				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
 
@@ -153,7 +153,12 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 				dto.setThreshold(threshold);
 				dto.setRelationType(relationType);		
 				
-				analyseTaskControl.testAlgorithm(dto);
+				try {
+					analyseTaskControl.testAlgorithm(dto);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
 			}
 			else{
