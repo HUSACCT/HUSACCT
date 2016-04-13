@@ -116,6 +116,13 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * @return a array of ModuleDTO's with all the root modules
 	 */
 	public ModuleDTO[] getModule_AllRootModules();
+	
+	
+	/**
+	 * Gets all the modules
+	 * @return a array of ModuleDTO's with all the modules
+	 */
+	public ModuleDTO[] getAllModules();
 
 	/**
 	 * Gets an instance of the SAR (Software Architecture Reconstruction) service.
