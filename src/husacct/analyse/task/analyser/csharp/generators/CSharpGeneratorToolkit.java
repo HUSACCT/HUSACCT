@@ -21,7 +21,7 @@ public class CSharpGeneratorToolkit {
      * Returns the parentname from the stack: IE stack is C.B.A -> "A.B.C"
      * @param parentStack
      */
-    public static String getParentName(Stack<String> parentStack) {
+    public static String getNameFromStack(Stack<String> parentStack) {
         String result = EMPTYSTRING;
         for (String parentNamePart : parentStack) {
             result += parentNamePart + DOT;
@@ -51,20 +51,25 @@ public class CSharpGeneratorToolkit {
     }
     
     /**
-     * Concatenates two strings by passing through to getUniqueName(String, String)
+     * Removes a DOT at the beginning of the given name
+     * @param name
      */
-    public static String belongsToClass(String namespaces, String classes) {
-        return getUniqueName(namespaces, classes);
+    public static String removeDotAtBeginningOfName(String name) {
+        return name.startsWith(DOT) ? name.substring(1, name.length()) : name;
     }
 
     /**
-     * Retrieves the package and classname concatenated with dots.
-     * ([A,B] and [C,D] becomes "A.B.C.D")
-     * @return The package and classname concatenated with dots.
+     * Removes a DOT at the end of the given name
+     * @param name
      */
-    public static String createPackageAndClassName(Stack<String> namespaceStack, Stack<String> classStack) {
-        String namespaces = getParentName(namespaceStack);
-        String classes = getParentName(classStack);
+    public static String removeDotAtEndOfName(String name) {
+        return name.endsWith(DOT) ? name.substring(0, name.length() -1) : name;
+    }
+   
+    /**
+     * Concatenates two strings by passing through to getUniqueName(String, String)
+     */
+    public static String belongsToClass(String namespaces, String classes) {
         return getUniqueName(namespaces, classes);
     }
 
@@ -283,11 +288,13 @@ public class CSharpGeneratorToolkit {
     	queue.add(root);
     	while(!queue.isEmpty()) {
     		CommonTree first = queue.removeFirst();
-    		for (int i = 0; i < first.getChildCount(); i++) {
-    			CommonTree child = (CommonTree)first.getChild(i);
-    			if (isOfType(child, type))
-    				return child;
-    			queue.addLast(child);
+    		if (first != null) {
+	    		for (int i = 0; i < first.getChildCount(); i++) {
+	    			CommonTree child = (CommonTree)first.getChild(i);
+	    			if (isOfType(child, type))
+	    				return child;
+	    			queue.addLast(child);
+	    		}
     		}
     	}
     	return null;

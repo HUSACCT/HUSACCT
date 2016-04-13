@@ -15,7 +15,7 @@ public class JavaAnalyser extends AbstractAnalyser {
 
     private CharStream charStream;
 
-    public void generateModelFromSource(String sourceFilePath) {
+    public void generateModelFromSourceFile(String sourceFilePath) {
         JavaTreeConvertController javaTreeParserDelegater = new JavaTreeConvertController();
         JavaParser javaParser;
         try {

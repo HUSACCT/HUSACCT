@@ -10,8 +10,6 @@ import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToo
 import husacct.analyse.task.analyser.csharp.generators.CSharpParameterGenerator;
 import husacct.analyse.task.analyser.csharp.generators.SkippableTypes;
 
-import java.util.Stack;
-
 public class DelegateBuffer {
 	protected IModelCreationService modelService = new FamixCreationServiceImpl();
 	public final String packageAndClassName;

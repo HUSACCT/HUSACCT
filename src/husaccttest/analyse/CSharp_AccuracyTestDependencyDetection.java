@@ -265,6 +265,50 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void CallClassMethod_ClassesWithoutNamespace(){
+		String fromClass = "No_Namespace_Domain_Direct_Violating.CallClassMethod_ClassWithoutNamespace1";
+		String toClass = "Technology.Direct.Dao.BadgesDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		fromClass = "No_Namespace_Domain_Direct_Violating.CallClassMethod_ClassWithoutNamespace2";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
+
+	@Test
+	public void CallClassMethod_ClassesWithinMultipleNamespaces(){
+		String fromClass = "Domain.Direct.Violating.Namespace1.CallClassMethod_ClassWithNamespace1";
+		String toClass = "Technology.Direct.Dao.BadgesDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		fromClass = "Domain.Direct.Violating.Namespace2.CallClassMethod_ClassWithNamespace2";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
+
+	@Test
+	public void CallClassMethod_ClassWithinSubNamespace(){
+		String fromClass = "Domain.Direct.Violating.Namespace2.Namespace2_1.CallClassMethod_ClassWithNamespace2_1";
+		String toClass = "Technology.Direct.Dao.BadgesDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		toClass = "Domain.Direct.Violating.Namespace1.IClassWithNamespace1";
+		typesToFind.clear();
+		typesToFind.add("Inheritance");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
+
+	@Test
+	public void CallClassMethod_LOC_MultipleNamespaces(){
+		String fromClass = "No_Namespace_Domain_Direct_Violating.CallClassMethod_ClassWithoutNamespace1";
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		SoftwareUnitDTO selectedModule = analyseService.getSoftwareUnitByUniqueName(fromClass); 
+		int loc = analyseService.getAnalysisStatistics(selectedModule).selectionNrOfLinesOfCode;
+		Assert.assertTrue(loc == 8);
+	}
+
+	@Test
 	public void CallConstructor(){
 		String fromClass = "Domain.Direct.Violating.CallConstructor";
 		String toClass = "Technology.Direct.Dao.AccountDAO";

@@ -205,7 +205,7 @@ public class XMLDomain {
 			for (Element appliedRule : XMLElement.getChildren()) {
 				AppliedRuleStrategy rule = createRuleFromXML(appliedRule);
 				// Determine highestAppliedRuleId to make sure that new rules (after loading from XML) don't get an existing appliedRuleId.
-				if(rule.getId() > highestAppliedRuleId){
+				if((rule != null) && (rule.getId() > highestAppliedRuleId)){
 					highestAppliedRuleId = rule.getId();
 				}
 			}
@@ -244,7 +244,7 @@ public class XMLDomain {
 		long parentRule = -1;
 		if (isException)
 			parentRule = Integer.parseInt(appliedRule.getChildText("parentAppliedRuleId"));
-		 rule = ruleService.reloadAppliedRule(ruleId, ruleTypeKey, description, dependencyTypes, regex, moduleFromId, moduleToId, isEnabled, isException, parentRule);
+		rule = ruleService.reloadAppliedRule(ruleId, ruleTypeKey, description, dependencyTypes, regex, moduleFromId, moduleToId, isEnabled, isException, parentRule);
 		} catch (Exception e) {
         	this.logger.warn(new Date().toString() + "Applied rule not reloaded" + e.getMessage());
 		}

@@ -13,7 +13,6 @@ import husacct.define.domain.services.ModuleDomainService;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 
 // Services for SAR: Software Architecture Reconstruction
@@ -68,7 +67,10 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	public void removeModule(String logicalPath) {
 		try {
 			defineService.getDefinitionController().setSelectedModuleId(-1);
-			moduleService.removeModuleById(moduleService.getModuleByLogicalPath(logicalPath).getId());
+			ModuleStrategy moduleToBeRemoved = moduleService.getModuleByLogicalPath_NoException(logicalPath);
+			if ((moduleToBeRemoved != null) && (moduleToBeRemoved.getId() >= 0)) {
+				moduleService.removeModuleById(moduleToBeRemoved.getId());
+			}
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
         }

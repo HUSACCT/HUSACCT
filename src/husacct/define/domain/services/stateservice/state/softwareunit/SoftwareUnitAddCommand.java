@@ -9,15 +9,12 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 
-import antlr.collections.List;
-
 public class SoftwareUnitAddCommand implements Istate {
 	private ModuleStrategy module;
 	private ArrayList<AnalyzedModuleComponent> units;
 	
 	
-	public SoftwareUnitAddCommand(ModuleStrategy module,
-			ArrayList<AnalyzedModuleComponent> unitTobeRemoved) {
+	public SoftwareUnitAddCommand(ModuleStrategy module, ArrayList<AnalyzedModuleComponent> unitTobeRemoved) {
 		this.module=module;
 		this.units=unitTobeRemoved;
 	}

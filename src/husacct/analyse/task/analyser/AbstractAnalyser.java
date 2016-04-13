@@ -6,20 +6,22 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 public abstract class AbstractAnalyser {
 
     private IModelCreationService modelCreationService;
+    private String projectPath = "";
 
     public AbstractAnalyser() {
         this.modelCreationService = new FamixCreationServiceImpl();
     }
 
-    public void analyseApplication(String sourceFilePath) {
-        generateModelFromSource(sourceFilePath);
+    public void analyseSourceFile(String projectPath, String sourceFilePath) {
+    	this.projectPath = projectPath;
+        generateModelFromSourceFile(sourceFilePath);
     }
 
     public void connectDependencies() {
         modelCreationService.executePostProcesses();
     }
 
-    public abstract void generateModelFromSource(String sourceFilePath);
+    public abstract void generateModelFromSourceFile(String sourceFilePath);
 
     public abstract String getProgrammingLanguage();
 
@@ -30,5 +32,9 @@ public abstract class AbstractAnalyser {
 	 */
 	public void clearLambdaBuffers() {
 		
+	}
+	
+	public String getProjectPath() {
+		return projectPath;
 	}
 }

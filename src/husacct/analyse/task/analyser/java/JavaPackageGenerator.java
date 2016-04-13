@@ -47,9 +47,9 @@ class JavaPackageGenerator extends JavaGenerator {
     }
 
     public String generateNoPackage_Package() {
-        String uniqueName = "no_package";
+        String uniqueName = "No_Package";
         String belongsToPackage = "";
-        String name = "noPackage_HusacctDefined";
+        String name = "No_Package_HUSACCT_Defined";
         createPackage(name, uniqueName, belongsToPackage);
         return uniqueName;
     }
