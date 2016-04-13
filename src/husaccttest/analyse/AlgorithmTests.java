@@ -90,19 +90,25 @@ public class AlgorithmTests {
 	
 	@Test
 	public void TestAlgorithms(){
-		boolean testSucces = false;
+		boolean algortithmSucces = false;
 		ArrayList<ReconstructArchitectureDTO> reconstructionArchitectureDTOs = createTestReconstructArchitectureDTOs();
 		for (ReconstructArchitectureDTO dto : reconstructionArchitectureDTOs){
 			try{
 				logger.info("Algorithm: '" + dto.getName() + "' started");
-				analyseService.reconstructArchitecture_Execute(dto);
-				testSucces = true;
-				logger.info(dto.getName() + " tested succesfully");
+				
+				algortithmSucces = analyseService.reconstructArchitecture_Execute(dto);
+				
+				if (algortithmSucces){
+					logger.info("Algorithm: '" + dto.getName() + "' " + "Tested succesfully");
+				}else{
+					logger.error("Algorithm: '" + dto.getName() + "' " + "Failed");
+				}
+				
 			}catch(Exception e){
-				logger.error(dto.getName() + " failed");
 				logger.error("Error: " + e);
 			}
-			Assert.assertTrue(testSucces);
+			
+			Assert.assertTrue(algortithmSucces);
 		}
 	}
 	

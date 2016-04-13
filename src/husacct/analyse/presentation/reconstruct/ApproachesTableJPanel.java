@@ -4,9 +4,17 @@ import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import husacct.ServiceProvider;
+import husacct.analyse.AnalyseConstants;
+import husacct.analyse.AnalyseConstants.Algorithm;
 import husacct.common.help.presentation.HelpableJPanel;
+import husacct.common.locale.ILocaleService;
+
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
@@ -15,12 +23,16 @@ import java.awt.GridBagLayout;
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.Map;
+
 import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
 
 public class ApproachesTableJPanel extends HelpableJPanel {
 	private static final long serialVersionUID = 1L;
 	public JTable approachesTable;
+	private TableColumnModel tableColumnModule;
+	private Map hiddenColumns;
 	public JPanel optionsPanel;
 	public ButtonGroup RadioButtonsRelationType;
 	public ButtonGroup radioButtonGroupTwo;
@@ -42,12 +54,14 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		add(tabbedPane);
 				
-		Object columnNames[] = { "Approaches", "threshold"};
+		Object columnNames[] = {"ApproachConstants", "Approaches", "threshold"};
 		Object rows[][] = getApproachesRows();
 		
 
 		approachesTable = new JTable(rows, columnNames);
 		approachesTable.setMinimumSize(new Dimension(600,150));
+		tableColumnModule = approachesTable.getColumnModel();
+		hide("ApproachConstants");
 		Dimension tableSize = approachesTable.getPreferredSize();
 		
 		JPanel approachedPane = new JPanel();
@@ -143,15 +157,30 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	}
 
 	private Object[][] getApproachesRows(){
+		
+				
 		Object ApproachesRows[][] = { 
-				{"Goldstein - rootApproach", 10}, 
-				{ "Goldstein - multipleLayerApproach", 10}, 
-				{ "Goldstein - selectedModuleApproach", 11}, 
-				{ "Goldstein - upgradedRootApproach", 10},
-				{ "Scanniello - originalRoot", 10}, 
-				{ "Scanniello - improved", 10}, 
-				{ "Component Recognition in Root of Selected Module", 10}};
+			{Algorithm.Layers_Goldstein_Root_Original, getTranslation(Algorithm.Layers_Goldstein_Root_Original), 10}, 
+			{Algorithm.Layers_Goldstein_Multiple_Improved, getTranslation(Algorithm.Layers_Goldstein_Multiple_Improved), 10}, 
+			{Algorithm.Layers_Goldstein_SelectedModule_Improved, getTranslation(Algorithm.Layers_Goldstein_SelectedModule_Improved), 10}, 
+			{Algorithm.Layers_Goldstein_Root_Improved, getTranslation(Algorithm.Layers_Goldstein_Root_Improved), 10},
+				
+			{Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original), 10}, 
+			{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}, 
+				
+			{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10}};
 		return ApproachesRows;
 	}
+	
+	private String getTranslation(String translationKey){
+		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+		return localeService.getTranslatedString(translationKey);
+	}
+	
+    private void hide(String columnName) {
+        int index = tableColumnModule.getColumnIndex(columnName);
+        TableColumn column = tableColumnModule.getColumn(index);
+        tableColumnModule.removeColumn(column);
+    }
 	
 }

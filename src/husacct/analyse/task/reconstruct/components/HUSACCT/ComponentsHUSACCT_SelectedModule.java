@@ -50,6 +50,10 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	public void identifyComponentsInRootOfSelectedModule(ModuleDTO selectedModule) {
 		try {
 			HashMap<String,ArrayList<SoftwareUnitDTO>> interfacesPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
+			HashMap<String,ArrayList<SoftwareUnitDTO>> classesPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
+			HashMap<String,ArrayList<SoftwareUnitDTO>> exceptionsPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
+			HashMap<String,ArrayList<SoftwareUnitDTO>> enumsPerPackage = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
+			
 			String selectedModuleUniqueName = selectedModule.logicalPath;
 			if (selectedModuleUniqueName.equals("")) {
 				selectedModuleUniqueName = "**"; // Root of intended software architecture
@@ -95,12 +99,57 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 										interfacesPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfInterface);
 									}
 								}
+								
+								// 6) Get the used classes implementing the interfaces
+								SoftwareUnitDTO implementingClass = queryService.getSoftwareUnitByUniqueName(dependency.from);
+								if(!classesPerPackage.containsKey(softwareUnitInSelectedModule)){
+									ArrayList<SoftwareUnitDTO> softwareUnitsOfClass = new ArrayList<SoftwareUnitDTO>();
+									softwareUnitsOfClass.add(implementingClass);
+									classesPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfClass);
+								}
+								else{
+									ArrayList<SoftwareUnitDTO> softwareUnitsOfClass = classesPerPackage.get(softwareUnitInSelectedModule);
+									softwareUnitsOfClass.add(implementingClass);
+									classesPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfClass);
+								}
+								
+								//implementingClass
 							}
+							if(dependency.subType.equals(DependencySubTypes.DECL_EXCEPTION.toString())){
+								SoftwareUnitDTO exceptionClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
+								
+								if(!exceptionsPerPackage.containsKey(softwareUnitInSelectedModule)){
+									ArrayList<SoftwareUnitDTO> softwareUnitsOfExceptions = new ArrayList<SoftwareUnitDTO>();
+									softwareUnitsOfExceptions.add(exceptionClass);
+									exceptionsPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfExceptions);
+								}
+								else{
+									ArrayList<SoftwareUnitDTO> softwareUnitsOfExceptions = exceptionsPerPackage.get(softwareUnitInSelectedModule);
+									softwareUnitsOfExceptions.add(exceptionClass);
+									exceptionsPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfExceptions);
+								}
+							}
+							
+							if(dependency.subType.equals(DependencySubTypes.ACC_ENUMERATION_VAR.toString())){
+								SoftwareUnitDTO enumClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
+								
+								if(!enumsPerPackage.containsKey(softwareUnitInSelectedModule)){
+									ArrayList<SoftwareUnitDTO> softwareUnitsOfEnums = new ArrayList<SoftwareUnitDTO>();
+									softwareUnitsOfEnums.add(enumClass);
+									enumsPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfEnums);
+								}
+								else{
+									ArrayList<SoftwareUnitDTO> softwareUnitsOfEnums = enumsPerPackage.get(softwareUnitInSelectedModule);
+									softwareUnitsOfEnums.add(enumClass);
+									enumsPerPackage.put(softwareUnitInSelectedModule, softwareUnitsOfEnums);
+								}
+							}
+							
 						}
 					}
 				}
 			}
-			// 6) Create the component and its interface, and assign the software units to these modules
+			// 7) Create the component and its interface, and assign the software units to these modules
 			for(String parentPackageUniqueName : interfacesPerPackage.keySet()){
 				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(parentPackageUniqueName);
 				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
@@ -111,6 +160,39 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 				ArrayList<SoftwareUnitDTO> interfaceUnits = interfacesPerPackage.get(parentPackageUniqueName);
 				ModuleDTO newInterfaceModule = defineSarService.addModule(parentUnit.name + "Interface", selectedModuleUniqueName + "." + parentUnit.name, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
 				addToReverseReconstructionList(newInterfaceModule); //add to cache for reverse
+			}
+			
+			// 8) Add classes to the component
+			for(String parentPackageUniqueName : classesPerPackage.keySet()){
+				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(parentPackageUniqueName);
+				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
+				parentUnitsList.add(parentUnit);
+				
+				ArrayList<SoftwareUnitDTO> classUnits = classesPerPackage.get(parentPackageUniqueName);
+				ModuleDTO newClassModule = defineSarService.addModule(parentUnit.name + " Classes", selectedModuleUniqueName + "." + parentUnit.name, "", 0, classUnits);
+				addToReverseReconstructionList(newClassModule); //add to cache for reverse
+			}
+			
+			//  Add exceptions to the component
+			for(String parentPackageUniqueName : exceptionsPerPackage.keySet()){
+				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(parentPackageUniqueName);
+				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
+				parentUnitsList.add(parentUnit);
+				
+				ArrayList<SoftwareUnitDTO> classUnits = exceptionsPerPackage.get(parentPackageUniqueName);
+				ModuleDTO newClassModule = defineSarService.addModule(parentUnit.name + " ExceptionClasses", selectedModuleUniqueName + "." + parentUnit.name, "", 0, classUnits);
+				addToReverseReconstructionList(newClassModule); //add to cache for reverse
+			}
+			// Add enumerations to the component
+			for(String parentPackageUniqueName : enumsPerPackage.keySet()){
+				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(parentPackageUniqueName);
+				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
+				parentUnitsList.add(parentUnit);
+				
+				ArrayList<SoftwareUnitDTO> classUnits = enumsPerPackage.get(parentPackageUniqueName);
+				//defineSarService.editModule(parentPackageUniqueName + "." + parentUnit.name + "Interface", null, 0, classUnits);
+				ModuleDTO newClassModule = defineSarService.addModule(parentUnit.name + " EnumerationClasses", selectedModuleUniqueName + "." + parentUnit.name, "", 0, classUnits);
+				addToReverseReconstructionList(newClassModule); //add to cache for reverse
 			}
 		} catch (Exception e) {
 	        logger.error(" Exception: "  + e );

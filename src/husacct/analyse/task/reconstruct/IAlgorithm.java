@@ -12,7 +12,7 @@ public abstract class IAlgorithm {
 	private ArrayList<ModuleDTO> reverseReconstructionList = new ArrayList<ModuleDTO>();
 
 	
-	public abstract void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage);
+	public abstract void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage)throws Exception;
 	
 	
 	public void reverse(){
