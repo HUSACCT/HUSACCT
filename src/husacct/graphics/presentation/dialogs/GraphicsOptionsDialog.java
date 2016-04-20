@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,7 +37,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	protected Logger								logger				= Logger.getLogger(GraphicsOptionsDialog.class);
 	private ArrayList<UserInputListener>			listeners			= new ArrayList<UserInputListener>();
 	
-	private JPanel									mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
+	private JPanel									mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel, dependencyPanel;
 	
 	private int										menuItemMaxHeight	= 45;
 	
@@ -43,7 +45,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private JCheckBox								showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu, showExternalLibraries, enableThickLines;
 	private JComboBox<String>						layoutStrategyOptions;
 	private JSlider									zoomSlider;
-	private JLabel									layoutStrategyLabel, zoomLabel;
+	private JLabel									layoutStrategyLabel, zoomLabel, dependencyLabel;
 	private ArrayList<JComponent>					interfaceElements;
 	private HashMap<String, Object>					currentSettings;
 	private boolean 								refreshDrawingRequired = false;
@@ -64,7 +66,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("layoutStrategy", ModuleLayoutsEnum.BASIC_LAYOUT);
 		
 		totalWidth = 550;
-		totalHeight = 260;
+		totalHeight = 290;
 		paddingSize = 10;
 		labelWidth = 100;
 		elementHeight = 20;
@@ -93,7 +95,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		interfaceElements.add(exportToImageButton);
 		interfaceElements.add(showDependenciesOptionMenu);
 		interfaceElements.add(showViolationsOptionMenu);
-//		interfaceElements.add(toggleUmlLinks);
+		interfaceElements.add(toggleUmlLinks);
 		interfaceElements.add(showExternalLibraries);
 		interfaceElements.add(enableThickLines);
 		interfaceElements.add(smartLinesOptionMenu);
@@ -213,7 +215,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		mainPanel.add(optionsPanel);
 		
 		settingsPanel = new JPanel();
-		settingsPanel.setLayout(new GridLayout(2, 2));
+		settingsPanel.setLayout(new GridLayout(3, 2));
 		settingsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 		
 		layoutStrategyPanel = new JPanel();
@@ -227,6 +229,34 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
 		layoutStrategyPanel.add(layoutStrategyOptions);
 		settingsPanel.add(layoutStrategyPanel);
+		
+    dependencyPanel = new JPanel();
+    dependencyPanel.setSize(getWidth(), getHeight());
+    dependencyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+    
+    dependencyLabel = new JLabel();
+    dependencyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+    
+    dependencyPanel.add(dependencyLabel);
+    
+    // TODO Use resources instead
+    // TODO filter for implemented diagram only?
+    String values[] = {"Dependency","UML Links"};
+    toggleUmlLinks = new JComboBox<String>(values);
+    toggleUmlLinks.setPreferredSize(new Dimension(elementWidth, elementHeight));
+    toggleUmlLinks.addActionListener(new ActionListener() {
+       
+       @Override
+       public void actionPerformed(ActionEvent arg0) {
+           for(UserInputListener listener : listeners){
+               if (listener instanceof GraphicsMenuBar){
+                   ((GraphicsMenuBar)listener).dependencyTypeChange();
+               }
+           }
+       }
+    });
+    dependencyPanel.add(toggleUmlLinks);
+    settingsPanel.add(dependencyPanel);
 		
 		zoomPanel = new JPanel();
 		zoomPanel.setSize(getWidth(), getHeight());
@@ -247,24 +277,6 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		});
 		zoomPanel.add(zoomSlider);
 		settingsPanel.add(zoomPanel);
-		
-		// TODO Use resources instead
-		String values[] = {"Dependency","UML Links"};
-		toggleUmlLinks = new JComboBox<String>(values);
-		toggleUmlLinks.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for(UserInputListener listener : listeners){
-					
-					if (listener instanceof GraphicsMenuBar){
-						boolean result = ((JComboBox)e.getSource()).getSelectedItem().toString().equals(values[0]);
-						
-						((GraphicsMenuBar)listener).dependencyTypeChange(result);
-					}
-				}
-			}
-		});
-		settingsPanel.add(toggleUmlLinks);
 		
 		mainPanel.add(settingsPanel);
 		
@@ -444,6 +456,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
 			zoomLabel.setText(menuBarLocale.get("Zoom"));
+			dependencyLabel.setText(menuBarLocale.get("DependencyType"));
 			layoutStrategyLabel.setText(menuBarLocale.get("LayoutStrategy"));
 			zoomInButton.setText(menuBarLocale.get("ZoomIn"));
 			zoomOutButton.setText(menuBarLocale.get("ZoomOut"));

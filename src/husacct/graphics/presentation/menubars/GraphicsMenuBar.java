@@ -514,12 +514,11 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		int value = (int) (zoomFactor * 100);
 		zoomSlider.setValue(value);
 	}
-	public void dependencyTypeChange(boolean result){
-		for (UserInputListener listener : listeners)
-			if (listener instanceof GraphicsPresentationController){
-				
-				
-				((GraphicsPresentationController)listener).dependencyTypeChange(result);
-			}
-	}
+
+  public void dependencyTypeChange() {
+      for (UserInputListener listener : listeners)
+          if (listener instanceof GraphicsPresentationController) {
+              ((GraphicsPresentationController) listener).dependencyTypeChange();
+          }
+  }
 }
