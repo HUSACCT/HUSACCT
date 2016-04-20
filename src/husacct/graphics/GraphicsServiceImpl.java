@@ -1,21 +1,20 @@
 package husacct.graphics;
 
-import husacct.common.savechain.ISaveable;
-import husacct.common.services.ObservableService;
-import husacct.graphics.presentation.GraphicsPresentationController;
-import husacct.graphics.task.DrawingController;
-import husacct.graphics.task.DrawingTypesEnum;
-import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
-
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
+import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
+import husacct.graphics.presentation.GraphicsPresentationController;
+import husacct.graphics.task.DrawingTypesEnum;
+
 public class GraphicsServiceImpl extends ObservableService implements IGraphicsService, ISaveable {
 	
 	private GraphicsPresentationController presentationControllersAnalysed;
 	private GraphicsPresentationController presentationControllersDefined;
+	private GraphicsPresentationController presentationControllersModuleAndRule;
 	protected Logger			logger							= Logger.getLogger(GraphicsServiceImpl.class);
 	
 	public static final String	workspaceServiceName			= "ArchitecureGraphicsService";
@@ -46,8 +45,20 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	public void drawDefinedArchitecture() {
 		createPresentationControllerDefined();
 		presentationControllersDefined.drawArchitectureTopLevel();
-	}
+	}	
 	
+	@Override
+	public void drawModuleAndRuleArchitecture() {
+		createPresentationControllersModuleAndRule();
+		presentationControllersModuleAndRule.drawArchitectureTopLevel();		
+	}
+
+	@Override
+	public JInternalFrame getModuleAndRuleGUI() {
+		createPresentationControllersModuleAndRule();
+		return presentationControllersModuleAndRule.getGraphicsFrame();
+	}
+
 	@Override
 	public JInternalFrame getAnalysedArchitectureGUI() {
 		createPresentationControllerAnalysed();
@@ -72,9 +83,16 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		}
 	}
 	
+	private void createPresentationControllersModuleAndRule() {
+		if (presentationControllersModuleAndRule == null) {
+			presentationControllersModuleAndRule = new GraphicsPresentationController(DrawingTypesEnum.MODULE_RULE_ARCHITECTURE);
+		}
+	}
+	
 	private void createControllers() {
 		createPresentationControllerAnalysed();
 		createPresentationControllerDefined();
+		createPresentationControllersModuleAndRule();
 	}
 	
 	@Override

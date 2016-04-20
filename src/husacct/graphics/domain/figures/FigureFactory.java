@@ -1,18 +1,19 @@
 package husacct.graphics.domain.figures;
 
 
+import java.awt.Color;
+
+import org.apache.log4j.Logger;
+
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.decorators.ViolationsDecorator;
-
-import java.awt.Color;
-
-import org.apache.log4j.Logger;
 
 public final class FigureFactory {
 	protected Logger	logger				= Logger.getLogger(FigureFactory.class);
@@ -34,6 +35,11 @@ public final class FigureFactory {
 		return violatedRelationFigure;
 	}
 
+	public RelationFigure createRelationFigure_Rule(RuleDTO[] ruleDTOs) {
+		if (ruleDTOs.length <= 0) throw new RuntimeException("No rules received. Cannot create a rule figure");
+		return new RelationFigure("Rule from " + ruleDTOs[0].moduleFrom.logicalPath + " to " + ruleDTOs[0].moduleTo.logicalPath, RelationType.RULELINK, Integer.toString(ruleDTOs.length));
+	}
+	
 	// May return null!
 	public ModuleFigure createModuleFigure(AbstractDTO dto) {
 		String type;

@@ -29,6 +29,8 @@ public interface UserInputListener {
 	
 	public void propertiesPaneShowViolations(BaseFigure selectedLine);
 	
+	public void propertiesPaneShowRules(BaseFigure selectedFigure);
+	
 	public void proportionalLinesDisable();
 	
 	public void proportionalLinesEnable();

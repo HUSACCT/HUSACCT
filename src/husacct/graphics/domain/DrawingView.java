@@ -1,12 +1,5 @@
 package husacct.graphics.domain;
 
-import husacct.graphics.domain.figures.BaseFigure;
-import husacct.graphics.domain.figures.RelationFigure;
-import husacct.graphics.domain.figures.RelationType;
-import husacct.graphics.domain.util.PanTool;
-import husacct.graphics.presentation.UserInputListener;
-import husacct.graphics.presentation.menubars.ContextMenu;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -29,6 +22,13 @@ import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.draw.event.FigureSelectionListener;
 import org.jhotdraw.draw.tool.AbstractTool;
 import org.jhotdraw.draw.tool.SelectionTool;
+
+import husacct.graphics.domain.figures.BaseFigure;
+import husacct.graphics.domain.figures.RelationFigure;
+import husacct.graphics.domain.figures.RelationType;
+import husacct.graphics.domain.util.PanTool;
+import husacct.graphics.presentation.UserInputListener;
+import husacct.graphics.presentation.menubars.ContextMenu;
 
 public class DrawingView extends DefaultDrawingView {
 	
@@ -227,10 +227,15 @@ public class DrawingView extends DefaultDrawingView {
 					inputListener.propertiesPaneShowViolations(selectedFigure);
 				} else if (relationType == RelationType.DEPENDENCY) {
 					inputListener.propertiesPaneShowDependencies(selectedFigure);
-				} else {
+				} else if(relationType == RelationType.RULELINK){
+					inputListener.propertiesPaneShowRules(selectedFigure);
+				} else{
 					// TODO handle other cases of relation type
 				}
-			} else {
+			} else if(selectedFigure.isModule()) {
+				inputListener.propertiesPaneShowRules(selectedFigure);
+			}else {
+			
 				inputListener.propertiesPaneHide();
 			}
 		}

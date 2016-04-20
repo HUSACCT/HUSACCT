@@ -12,7 +12,8 @@ public enum RelationType {
 
 	INHERITANCELINK("Inherits"),
     IMPLEMENTSLINK("Implements"),
-    ATTRIBUTELINK("Attribute");
+    ATTRIBUTELINK("Attribute"),
+	RULELINK("Rule");
 	
 	private final String key;
 	

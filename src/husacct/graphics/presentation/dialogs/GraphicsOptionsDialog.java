@@ -248,7 +248,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		zoomPanel.add(zoomSlider);
 		settingsPanel.add(zoomPanel);
 		
-		String values[] = {"UML Links","Dependency"};
+		// TODO Use resources instead
+		String values[] = {"Dependency","UML Links"};
 		toggleUmlLinks = new JComboBox<String>(values);
 		toggleUmlLinks.addActionListener(new ActionListener() {
 			@Override
@@ -258,10 +259,9 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 					if (listener instanceof GraphicsMenuBar){
 						boolean result = ((JComboBox)e.getSource()).getSelectedItem().toString().equals(values[0]);
 						
-						((GraphicsMenuBar)listener).doSomething(result);
+						((GraphicsMenuBar)listener).dependencyTypeChange(result);
 					}
 				}
-				System.out.println(((JComboBox)e.getSource()).getSelectedItem().toString());
 			}
 		});
 		settingsPanel.add(toggleUmlLinks);

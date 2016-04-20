@@ -120,8 +120,11 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 			break;
 		case IMPLEMENTSLINK:
 			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
-			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, false, true);
+			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, true, true);
 			set(AttributeKeys.END_DECORATION, arrowTip);
+			break;
+		case RULELINK:
+			// default is a straight line, so do nothing
 			break;
 		default: 
 			throw new IllegalStateException("Unknown relation type");

@@ -1,5 +1,18 @@
 package husacct.define;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.swing.JInternalFrame;
+
+import org.apache.log4j.Logger;
+import org.jdom2.Element;
+
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
@@ -25,19 +38,6 @@ import husacct.define.task.persistency.PersistentDomain;
 import husacct.define.task.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.report.ReportArchitectureAbstract;
 import husacct.define.task.report.ReportArchitectureToExcel;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.swing.JInternalFrame;
-
-import org.apache.log4j.Logger;
-import org.jdom2.Element;
 
 public class DefineServiceImpl extends ObservableService implements IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
@@ -218,6 +218,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	
+	@Override
 	public JInternalFrame getDefinedGUI() {
 		return getDefinitionController().getNewDefineInternalFrame();
 	}
@@ -370,8 +371,24 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		}
 	}
 
+	@Override
 	public void reportArchitecture(String fullFilePath) {
 		ReportArchitectureAbstract reporter = new ReportArchitectureToExcel();
 		reporter.write(fullFilePath);
+	}
+
+	@Override
+	public RuleDTO[] getRulesByLogicalPath(String logicalPathFrom, String logicalPathTo) {
+		ArrayList<RuleDTO> matchingRules = new ArrayList<>();
+		for (RuleDTO rule : getDefinedRules()){
+			String pathFrom = rule.moduleFrom.logicalPath;
+			String pathTo = rule.moduleTo.logicalPath;
+	
+			if(logicalPathFrom.equals(pathFrom) && logicalPathTo.equals(pathTo)){
+				matchingRules.add(rule);
+				
+			}
+		}
+		return matchingRules.toArray(new RuleDTO[matchingRules.size()]);
 	}
 }

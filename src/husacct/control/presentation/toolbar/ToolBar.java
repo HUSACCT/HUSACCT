@@ -1,5 +1,10 @@
 package husacct.control.presentation.toolbar;
 
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
+
 import husacct.common.Resource;
 import husacct.control.presentation.menubar.AnalyseMenu;
 import husacct.control.presentation.menubar.DefineMenu;
@@ -8,17 +13,13 @@ import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.menubar.ValidateMenu;
 import husacct.control.task.StateController;
 
-import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
-import javax.swing.JToolBar;
-
 public class ToolBar extends JToolBar{
 	private static final long serialVersionUID = 1L;
 	
 	private StateController stateController;
 	
 	private ToolBarItem createWorkspace, openWorkspace, saveWorkspace;
-	private ToolBarItem defineArchitecture, defineArchitectureDiagram;
+	private ToolBarItem defineArchitecture, moduleAndDependenciesDiagram, moduleAndRulesDiagram, defineArchitectureDiagram;
 	private ToolBarItem applicationProperties, analysedApplicationOverview, analysedApplicationDiagram;
 	private ToolBarItem validate;
 	
@@ -48,7 +49,9 @@ public class ToolBar extends JToolBar{
 		JMenuItem saveWorkspaceItem = fileMenu.getSaveWorkspaceItem();
 		
 		JMenuItem defineArchitectureItem = defineMenu.getDefineArchitectureItem();
-		JMenuItem defineArchitectureDiagramItem = defineMenu.getDefinedArchitectureDiagramItem();
+		JMenuItem moduleAndDependenciesDiagramItem = defineMenu.getModuleAndDependenciesDiagramItem();
+		JMenuItem moduleAndRulesDiagramItem = defineMenu.getModuleAndRuleDiagramItem();
+		JMenu defineArchitectureDiagramMenu = defineMenu.getArchitectureDiagram();
 		
 		JMenuItem setApplicationPropertiesItem = analyseMenu.getSetApplicationPropertiesItem();
 		JMenuItem analysedApplicationOverviewItem = analyseMenu.getAnalysedApplicationOverviewItem();
@@ -71,7 +74,13 @@ public class ToolBar extends JToolBar{
 		defineArchitecture = new ToolBarItem("DefineArchitecture", icon, defineArchitectureItem, stateController);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM));
-		defineArchitectureDiagram = new ToolBarItem("DefinedArchitectureDiagram", icon, defineArchitectureDiagramItem, stateController);
+		defineArchitectureDiagram = new ToolBarItem("DefineArchitectureDiagram", icon, defineArchitectureDiagramMenu, stateController);
+				
+		icon = new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM));
+		moduleAndDependenciesDiagram = new ToolBarItem("ModuleAndDependenciesDiagram", icon, moduleAndDependenciesDiagramItem, stateController);
+		
+		icon = new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM));
+		moduleAndRulesDiagram = new ToolBarItem("ModuleAndRuleDiagram", icon, moduleAndRulesDiagramItem, stateController);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_APPLICATION_PROPERTIES));
 		applicationProperties = new ToolBarItem("ApplicationProperties", icon, setApplicationPropertiesItem, stateController);
@@ -89,7 +98,8 @@ public class ToolBar extends JToolBar{
 		openWorkspace.setEnabled(false);
 		saveWorkspace.setEnabled(false);
 		defineArchitecture.setEnabled(false);
-		defineArchitectureDiagram.setEnabled(false);
+		moduleAndDependenciesDiagram.setEnabled(false);
+		moduleAndRulesDiagram.setEnabled(false);
 		applicationProperties.setEnabled(false);
 		analysedApplicationOverview.setEnabled(false);
 		analysedApplicationDiagram.setEnabled(false);
@@ -100,6 +110,8 @@ public class ToolBar extends JToolBar{
 		add(saveWorkspace);
 		addSeparator();
 		add(defineArchitecture);
+		add(moduleAndDependenciesDiagram);
+		add(moduleAndRulesDiagram);
 		add(defineArchitectureDiagram);
 		addSeparator();
 		add(applicationProperties);
