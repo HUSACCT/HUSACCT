@@ -177,6 +177,20 @@ class FamixModuleFinder extends FamixFinder {
         return result;
     }
 
+    public List<SoftwareUnitDTO> findAllClasses() {
+        List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+        Iterator<Entry<String, FamixClass>> iterator = theModel.classes.entrySet().iterator();
+        SoftwareUnitDTO current;
+        while (iterator.hasNext()) {
+            Entry<String, FamixClass> currentEntry = (Entry<String, FamixClass>) iterator.next();
+            FamixClass fClass = currentEntry.getValue();
+			current = createAnalysedModuleDTO(fClass);
+			result.add(current);
+        }
+        return result;
+    }
+    
+    
     private List<SoftwareUnitDTO> findLibraries() {
         List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
         Iterator<Entry<String, FamixLibrary>> iterator = theModel.libraries.entrySet().iterator();

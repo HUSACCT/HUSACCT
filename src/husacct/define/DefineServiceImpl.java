@@ -306,6 +306,13 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
+	public ModuleDTO[] getAllModules(){
+		ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
+		return domainParser.parseRootModules(modules.toArray(new ModuleStrategy[modules.size()]));
+		 
+	}
+	
+	@Override
 	public Element getWorkspaceData() {
 		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
 		return pd.getWorkspaceData();

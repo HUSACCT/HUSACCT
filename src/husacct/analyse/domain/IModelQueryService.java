@@ -120,5 +120,10 @@ public interface IModelQueryService {
      * Relatively fast function, based on HashMap. Both argument must match with an analysedModule.
      */  
     public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo);
+    
+    /** returns an List of all the classes of the workSpace founded by the FamixModuleFinder 
+     * returns an empty List if there were no classes found. The FamixQueryService is just passing the data from the famixModuleFinder.
+     */  
+    public List<SoftwareUnitDTO> getAllClasses();
 
 }

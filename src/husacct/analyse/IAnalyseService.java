@@ -11,6 +11,7 @@ import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.savechain.ISaveable;
@@ -72,6 +73,8 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     public void createDependencyReport(String fullPath);
     
     public void reconstructArchitecture_Initiate();
+    
+    public boolean reconstructArchitecture_Execute(ReconstructArchitectureDTO dto);
     
     public Element exportAnalysisModel();
 

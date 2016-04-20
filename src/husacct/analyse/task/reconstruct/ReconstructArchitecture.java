@@ -2,15 +2,25 @@ package husacct.analyse.task.reconstruct;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
+import husacct.analyse.task.reconstruct.components.HUSACCT.ComponentsHUSACCT_SelectedModule;
+import husacct.analyse.task.reconstruct.gateways.HUSACCT.GatewayHUSACCT_Root;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootOriginal;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleOriginal;
+import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootImproved;
+import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
+import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_SelectedModuleImproved;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
-
-import org.apache.log4j.Logger;
 
 public class ReconstructArchitecture {
 
@@ -21,7 +31,8 @@ public class ReconstructArchitecture {
 	// External system variables
 	private String xLibrariesRootPackage = "xLibraries";
 	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<SoftwareUnitDTO>();
-	private AlgorithmGeneral algorithm = null;
+	private IAlgorithm algorithm = null;
+	private boolean algorithmSucces = true; //this variable is necessary for the JUnit tests
 
 	public ReconstructArchitecture(IModelQueryService queryService) {
 		try {
@@ -35,40 +46,53 @@ public class ReconstructArchitecture {
 	}
 
 	public void reconstructArchitecture_Execute(ReconstructArchitectureDTO dto) {
+		boolean moduleSelected = 	dto.getSelectedModule() != null 
+				&& !dto.getSelectedModule().logicalPath.equals("**") 
+				&& !dto.getSelectedModule().logicalPath.equals("");
+		
 		try {
 			switch (dto.getApproach()) {
-				case ("Goldstein - multipleLayerApproach"):
-					algorithm = new Algorithm_Goldstein_MultiLayer();
+				case (Algorithm.Layers_Goldstein_Multiple_Improved):
+					algorithm = new LayersGoldstein_RootMultipleLayers();
 					break;
-				case ("Goldstein - selectedModuleApproach"):
-					if(dto.getSelectedModule() == null || dto.getSelectedModule().logicalPath.equals("**") || dto.getSelectedModule().logicalPath.equals("")){ //is root
-						algorithm = new Algorithm_Goldstein_Root();
+				case (Algorithm.Layers_Goldstein_Root_Improved):
+					algorithm = new LayersGoldstein_RootImproved();
+					break;
+				case (Algorithm.Layers_Goldstein_Original):
+					if(moduleSelected){
+						algorithm = new LayersGoldstein_SelectedModuleOriginal();
+					}
+					else{ //is root
+						algorithm = new LayersGoldstein_RootOriginal();
+					}
+					break;
+				case (Algorithm.Layers_Scanniello_Improved):
+					if (moduleSelected){
+						algorithm = new LayersScanniello_SelectedModuleImproved();
 					}
 					else{
-						algorithm = new Algorithm_Goldstein_SelectedModule();
+						algorithm = new LayersScanniello_RootImproved();
 					}
 					break;
-				case ("Scanniello - selectedModuleApproach"): //second approach for Gui-team
-					algorithm = new Algorithm_Scanniello_SelectedModule();
+				case (Algorithm.Layers_Scanniello_Original):
+					algorithm = new LayersScanniello_RootOriginal();
 					break;
-				case ("Scanniello - originalRoot"):
-					algorithm = new Algorithm_Scanniello_Original_Root();
+				case (Algorithm.Component_HUSACCT_SelectedModule):
+					algorithm = new ComponentsHUSACCT_SelectedModule();
 					break;
-				case ("Scanniello - improvedRoot"):
-					algorithm = new Algorithm_Scanniello_Improved_Root();
-					break;
-				case ("Component Recognition in Root of Selected Module"):
-					algorithm = new AlgorithmComponents(queryService);
+				case (Algorithm.Gateways_HUSACCT_Root):
+					algorithm = new GatewayHUSACCT_Root();
 					break;
 				default:
-					algorithm = new Algorithm_Goldstein_Root();	
+					algorithm = null;	
 			}
 			if (algorithm != null) {
 				algorithm.clearReverseReconstructionList(); 
-				algorithm.execute(dto.getSelectedModule(), dto.getThreshold(), queryService, xLibrariesRootPackage, dto.getRelationType());
+				algorithm.executeAlgorithm(dto, queryService, xLibrariesRootPackage);
 			}
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
+	        algorithmSucces = false;
 	    }
 	}
 	
@@ -98,6 +122,10 @@ public class ReconstructArchitecture {
 	        logger.warn(" Exception: "  + e );
 	    }
 	}
+	
+	public ModuleDTO[] getGoldenStandard(){
+		return defineService.getAllModules();
+	}
 
 	private void identifyExternalSystems() {
 		// Create module "ExternalSystems"
@@ -115,5 +143,8 @@ public class ReconstructArchitecture {
 		logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
 	}
 	
+	public boolean getAlgorithmSucces(){
+		return algorithmSucces;
+	}
 }
 
