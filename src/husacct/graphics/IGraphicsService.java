@@ -1,10 +1,10 @@
 package husacct.graphics;
 
-import husacct.common.services.IObservableService;
-
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
+
+import husacct.common.services.IObservableService;
 
 public interface IGraphicsService extends IObservableService {
 	
@@ -12,9 +12,13 @@ public interface IGraphicsService extends IObservableService {
 	
 	void drawDefinedArchitecture();
 	
+	void drawModuleAndRuleArchitecture();
+	
 	JInternalFrame getAnalysedArchitectureGUI();
 	
 	JInternalFrame getDefinedArchitectureGUI();
+	
+	JInternalFrame getModuleAndRuleGUI();
 	
 	Element getWorkspaceData();
 	

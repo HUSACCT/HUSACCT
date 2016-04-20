@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
@@ -309,6 +310,15 @@ public class GraphicsPresentationController implements UserInputListener{
 	}
 	
 	@Override
+	public void propertiesPaneShowRules(BaseFigure selectedLine) {
+		RuleDTO[] ruleDTOs = drawingController.getRulesOfLine(selectedLine);
+		if(ruleDTOs.length > 0)
+			graphicsFrame.showRulesProperties(ruleDTOs);
+		else
+			graphicsFrame.hideProperties();
+	}
+	
+	@Override
 	public void smartLinesDisable() {
 		if (drawingsSettingsHolder.areSmartLinesOn()) {
 			drawingsSettingsHolder.smartLinesDisable();
@@ -370,11 +380,9 @@ public class GraphicsPresentationController implements UserInputListener{
 		drawingsSettingsHolder.zoomTypeChange(zoomType);
 	}
 	
-	public void doSomething(boolean showUmlLinks){
-		if(drawingsSettingsHolder.isShowUmlLinkInsteadOfDependencies() != showUmlLinks){
-			drawingsSettingsHolder.setShowUmlLinkInsteadOfDependencies(showUmlLinks);
-			refreshDrawing();
-		}
+	public void dependencyTypeChange(){
+	    boolean currentSetting = drawingsSettingsHolder.isShowUmlLinkInsteadOfDependencies();
+	    drawingsSettingsHolder.setShowUmlLinkInsteadOfDependencies(!currentSetting);
+	    refreshDrawing();
 	}
-	
 }

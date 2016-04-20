@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	Java_AccuracyTestDependencyDetection.class,
 	CSharp_AccuracyTestDependencyDetection.class,
 	ExportImportAnalysedModelTest.class,
+	ReconstructAlgorithmTests.class,
 })
 public class AnalyseTestSuite {
 }

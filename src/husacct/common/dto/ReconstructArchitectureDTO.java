@@ -8,6 +8,7 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 	private String approach = "";
 	private int threshold = 0;
 	private String relationType = ""; 
+	private String name = "";
 
     public ReconstructArchitectureDTO() {
     }
@@ -44,6 +45,14 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 		this.relationType = relationType;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String algorithmTestName) {
+		this.name = algorithmTestName;
+	}
+	
 	public String toString() {
         String s = "";
         s += "\nselectedModule: " + selectedModule.logicalPath;
@@ -52,4 +61,5 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
         s += "\n\n";
         return s;
     }
+
 }

@@ -1,19 +1,20 @@
 package husacct.graphics.task;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class DefinedController extends DrawingController {
 	protected IAnalyseService			analyseService;
@@ -168,6 +169,11 @@ public class DefinedController extends DrawingController {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		defineService = ServiceProvider.getInstance().getDefineService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+	}
+
+	@Override
+	protected RuleDTO[] getRulesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		return new RuleDTO[]{};
 	}
 	
 }

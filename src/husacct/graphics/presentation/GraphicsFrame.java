@@ -1,18 +1,5 @@
 package husacct.graphics.presentation;
 
-import husacct.ServiceProvider;
-import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ViolationDTO;
-import husacct.common.help.presentation.HelpableJInternalFrame;
-import husacct.common.locale.ILocaleService;
-import husacct.graphics.domain.DrawingView;
-import husacct.graphics.presentation.menubars.GraphicsMenuBar;
-import husacct.graphics.presentation.menubars.LocationButtonActionListener;
-import husacct.graphics.presentation.menubars.GraphicsLocationBar;
-import husacct.graphics.presentation.tables.DependencyTable;
-import husacct.graphics.presentation.tables.ViolationTable;
-import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -21,7 +8,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
@@ -30,6 +16,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.apache.log4j.Logger;
+
+import husacct.ServiceProvider;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.RuleDTO;
+import husacct.common.dto.ViolationDTO;
+import husacct.common.help.presentation.HelpableJInternalFrame;
+import husacct.common.locale.ILocaleService;
+import husacct.graphics.domain.DrawingView;
+import husacct.graphics.presentation.menubars.GraphicsLocationBar;
+import husacct.graphics.presentation.menubars.GraphicsMenuBar;
+import husacct.graphics.presentation.menubars.LocationButtonActionListener;
+import husacct.graphics.presentation.tables.DependencyTable;
+import husacct.graphics.presentation.tables.RuleTable;
+import husacct.graphics.presentation.tables.ViolationTable;
+import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 public class GraphicsFrame extends HelpableJInternalFrame {
 	private static final long				serialVersionUID	= -4683140198375851034L;
@@ -307,6 +308,12 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 		propertiesScrollPane.setViewportView(propertiesTable);
 	}
 	
+	public void showRulesProperties(RuleDTO[] ruleDTOs) {
+		showProperties();
+		RuleTable propertiesTable = new RuleTable(ruleDTOs);
+		propertiesScrollPane.setViewportView(propertiesTable);
+	}
+	
 	public void setSmartLinesButtonsToDontShow() {
 		menuBar.setSmartLinesButtonsToDontShow();
 	}
@@ -363,6 +370,8 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 				localeService.getTranslatedString("HideModules"));
 		menuBarLocale.put("RestoreHiddenModules",
 				localeService.getTranslatedString("RestoreHiddenModules"));
+		menuBarLocale.put("DependencyType", 
+		                localeService.getTranslatedString("DependencyType"));
 		menuBar.setLocale(menuBarLocale);
 		
 		ROOT_LEVEL = localeService.getTranslatedString("Root");
@@ -372,6 +381,5 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 	public void updateGUI() {
 		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();
-	}
-	
+	}	
 }

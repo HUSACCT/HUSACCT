@@ -1,19 +1,20 @@
 package husacct.control.presentation.viewcontrol;
 
-import husacct.ServiceProvider;
-import husacct.common.Resource;
-import husacct.control.task.MainController;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 
+import husacct.ServiceProvider;
+import husacct.common.Resource;
+import husacct.control.task.MainController;
+
 public class ViewController {
 	
 	private InternalFrameController defineContainer;
 	private InternalFrameController definedArchitectureDiagramContainer;
+	private InternalFrameController moduleAndRuleDiagramContainer;
 	private InternalFrameController analysedApplicationOverviewContainer;
 	private InternalFrameController analysedArchitectureDiagramContainer;
 	private InternalFrameController validateContainer;
@@ -31,10 +32,17 @@ public class ViewController {
 			}
 		};
 		
-		definedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "DefinedArchitectureDiagram"){
+		definedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "ModuleAndDependenciesDiagram"){
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getDefinedArchitectureGUI();
+			}
+		};
+		
+		moduleAndRuleDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "ModuleAndRuleDiagram"){
+			@Override
+			public JInternalFrame getInternalFrame() {
+				return ServiceProvider.getInstance().getGraphicsService().getModuleAndRuleGUI();
 			}
 		};
 		
@@ -97,6 +105,11 @@ public class ViewController {
 	public void showDefinedArchitectureDiagram() {
 		definedArchitectureDiagramContainer.showView();
 		ServiceProvider.getInstance().getGraphicsService().drawDefinedArchitecture();
+	}
+	
+	public void showModuleAndRuleDiagram() {
+		moduleAndRuleDiagramContainer.showView();
+		ServiceProvider.getInstance().getGraphicsService().drawModuleAndRuleArchitecture();
 	}
 	
 	public void showApplicationOverviewGui() {

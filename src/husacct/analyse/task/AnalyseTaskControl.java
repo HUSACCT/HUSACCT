@@ -1,10 +1,14 @@
 package husacct.analyse.task;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
+import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
@@ -12,8 +16,10 @@ import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
+import husacct.define.IDefineService;
 
 public class AnalyseTaskControl {
 
@@ -86,6 +92,10 @@ public class AnalyseTaskControl {
     	}
     	reconstructArchitecture.reconstructArchitecture_Execute(dto);
 	}
+    
+    public boolean getAlgorithmSucces(){
+    	return reconstructArchitecture.getAlgorithmSucces();
+    }
 
 	public void reconstructArchitecture_Reverse(){
 		reconstructArchitecture.reverseReconstruction();
@@ -93,6 +103,50 @@ public class AnalyseTaskControl {
     
 	public void reconstructArchitecture_ClearAll(){
 		reconstructArchitecture.clearAllModules();
+	}
+	
+	public void testAlgorithm(ReconstructArchitectureDTO dto){
+		//gets the golden standard (current intended architecture) and writes it to a file
+		ModuleDTO[] intendedArchitecture = reconstructArchitecture.getGoldenStandard();
+		exportToRSF(intendedArchitecture, "C:\\users\\jorns\\desktop\\Golden_Standard");
+		
+		if (reconstructArchitecture == null) {
+    		reconstructArchitecture = new ReconstructArchitecture(queryService);
+    	}
+		
+		//reset intended architecture 
+		reconstructArchitecture.clearAllModules();
+		
+		//runs the selected algorithm and writes it
+    	reconstructArchitecture.reconstructArchitecture_Execute(dto);
+    	intendedArchitecture = reconstructArchitecture.getGoldenStandard();
+    	exportToRSF(intendedArchitecture, "C:\\users\\jorns\\desktop\\To_Compare");
+    	
+    	//mojo Call (not yet implemented)
+    	
+    	//remove the created files
+	}
+	
+	private void exportToRSF(ModuleDTO[] intendedArchitecture, String fileName){
+		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+		try {
+			String completeFileName = fileName + ".rsf";
+			File golden_Standard = new File(completeFileName);
+			golden_Standard.createNewFile();
+			FileWriter writer = new FileWriter(golden_Standard);
+			String toWrite = "";
+			for(ModuleDTO moduleDTO : intendedArchitecture){
+				for(String softwareDTOPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTO.logicalPath)){
+					toWrite = "contain " + moduleDTO.logicalPath + " " + softwareDTOPath + "\n";
+					writer.write(toWrite);
+				}
+			}
+			
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			logger.info("Error occured while writing the file");
+		}
 	}
     
 	//Methods for AnalyseUIController

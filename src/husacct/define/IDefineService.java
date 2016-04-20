@@ -1,18 +1,18 @@
 package husacct.define;
 
-import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ProjectDTO;
-import husacct.common.dto.RuleDTO;
-import husacct.common.savechain.ISaveable;
-import husacct.common.services.IObservableService;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
+
+import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.RuleDTO;
+import husacct.common.savechain.ISaveable;
+import husacct.common.services.IObservableService;
 
 public interface IDefineService extends ISaveable, IObservableService {
 
@@ -116,6 +116,13 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * @return a array of ModuleDTO's with all the root modules
 	 */
 	public ModuleDTO[] getModule_AllRootModules();
+	
+	
+	/**
+	 * Gets all the modules
+	 * @return a array of ModuleDTO's with all the modules
+	 */
+	public ModuleDTO[] getAllModules();
 
 	/**
 	 * Gets an instance of the SAR (Software Architecture Reconstruction) service.
@@ -145,5 +152,7 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 * Creates and saves architecture report
 	 */
 	public void reportArchitecture(String fullFilePath);
+
+	public RuleDTO[] getRulesByLogicalPath(String pathFrom, String pathTo);
 
 }

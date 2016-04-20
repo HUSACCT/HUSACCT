@@ -7,6 +7,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
@@ -148,6 +149,11 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+	}
+
+	@Override
+	protected RuleDTO[] getRulesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		return new RuleDTO[]{};
 	}
 	
 }
