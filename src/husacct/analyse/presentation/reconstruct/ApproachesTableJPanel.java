@@ -10,7 +10,6 @@ import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.RelationTypes;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
-import sun.misc.Service;
 
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
@@ -25,19 +24,22 @@ import java.awt.GridBagLayout;
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.util.Map;
 
 import javax.swing.SwingConstants;
-import javax.swing.ScrollPaneConstants;
 
 public class ApproachesTableJPanel extends HelpableJPanel {
 	private static final long serialVersionUID = 1L;
-	public JTable approachesTable;
-	private TableColumnModel tableColumnModule;
+	private TableColumnModel tableAllApproachesColumnModel;
+	private TableColumnModel tableDistinctApproachesColumnModel;
+	private ILocaleService localService;
+	private String approachesConstants = AnalyseReconstructConstants.ApproachesTable.ApproachesConstants;
+	public JTabbedPane tabbedPane;
+	public JTable tableAllApproaches;
+	public JTable tableDistinctApproaches;
 	public JPanel optionsPanel;
 	public ButtonGroup RadioButtonsRelationType;
 	public ButtonGroup radioButtonGroupTwo;
-	private ILocaleService localService;
+
 	/**
 	 * Create the panel.
 	 */
@@ -48,32 +50,32 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	}
 	
 	public void initUI(){
-		setLayout(new BorderLayout(0, 0));		
+		setLayout(new BorderLayout(0, 10));		
 		optionsPanel = new JPanel();
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		add(tabbedPane);
 				
-		String approachesTranslation = localService.getTranslatedString("Approaches");
-		String thresholdTranslation = localService.getTranslatedString("Threshold");
-		Object columnNames[] = {"ApproachConstants", approachesTranslation, thresholdTranslation};
-		Object rows[][] = getApproachesRows();
-		approachesTable = new JTable(rows, columnNames);
-		approachesTable.setMinimumSize(new Dimension(600,150));
-		tableColumnModule = approachesTable.getColumnModel();
-		hide("ApproachConstants");
-		Dimension tableSize = approachesTable.getPreferredSize();
+
+		Object columnNames[] = getColumnNames();
+		Object rows[][] = getAllApproachesRows();
+		tableAllApproaches = new JTable(rows, columnNames);
+		tableAllApproaches.setMinimumSize(new Dimension(600,150));
+		tableAllApproachesColumnModel = tableAllApproaches.getColumnModel();
+		hide(approachesConstants, tableAllApproachesColumnModel);
+		Dimension tableSize = tableAllApproaches.getPreferredSize();
 		
-		JPanel approachedPane = new JPanel();
-		JScrollPane scrollPane = new JScrollPane(approachesTable);
-		scrollPane.setPreferredSize(new Dimension(tableSize.width, approachesTable.getRowHeight()*approachesTable.getRowCount()+50));
-		tabbedPane.addTab("Basic", null, approachedPane, null);
-		approachedPane.setLayout(new BorderLayout(0, 0));
-		approachedPane.add(scrollPane, BorderLayout.NORTH);
+		JPanel allApproachedPanel = new JPanel();
+		allApproachedPanel.setName(AnalyseReconstructConstants.ApproachesTable.PanelAllApproaches);
+		JScrollPane scrollPane = new JScrollPane(tableAllApproaches);
+		int tableheight = tableSize.height + (tableSize.height/tableAllApproaches.getRowCount()+5);
+		scrollPane.setPreferredSize(new Dimension(tableSize.width, tableheight));
+		allApproachedPanel.setLayout(new BorderLayout(0, 0));
+		allApproachedPanel.add(scrollPane, BorderLayout.NORTH);
 		
-		approachedPane.add(optionsPanel, BorderLayout.CENTER);
+		allApproachedPanel.add(optionsPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_optionsPanel = new GridBagLayout();
 		gbl_optionsPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
 		gbl_optionsPanel.rowHeights = new int[]{0, 0, 0};
@@ -83,21 +85,49 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 		initRadioButtons();
 		
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Generic", null, panel, null);
+		/*
+		 * Generic tab
+		 */
+		
+		JPanel distinctApproachesPanel = new JPanel();
+		distinctApproachesPanel.setName(AnalyseReconstructConstants.ApproachesTable.PanelDistinctApproaches);
+		distinctApproachesPanel.setLayout(new BorderLayout(0, 0));
+		
+		Object distinctApproachesColumns[] = getColumnNames();
+		Object distinctApproachesRows[][] = getDistinctApproachesRows();
+		tableDistinctApproaches = new JTable(distinctApproachesRows, distinctApproachesColumns);
+		tableDistinctApproaches.setMinimumSize(new Dimension(600,150));
+		tableDistinctApproachesColumnModel = tableDistinctApproaches.getColumnModel();
+		hide(approachesConstants, tableDistinctApproachesColumnModel);
+		Dimension distictApproachesTableSize = tableDistinctApproaches.getPreferredSize();
+		
+		JScrollPane distinctScrollPane = new JScrollPane(tableDistinctApproaches);
+		distinctScrollPane.setPreferredSize(new Dimension(distictApproachesTableSize.width, tableDistinctApproaches.getRowHeight()*tableDistinctApproaches.getRowCount()+50));
+		
+		distinctApproachesPanel.setLayout(new BorderLayout(0, 0));
+		distinctApproachesPanel.add(distinctScrollPane, BorderLayout.CENTER);
+		
+		
+		String distinctApprTranslation = getTranslation(AnalyseReconstructConstants.ApproachesTable.PanelDistinctApproaches);
+		String allApprTranslation = getTranslation(AnalyseReconstructConstants.ApproachesTable.PanelAllApproaches);
+		tabbedPane.addTab(distinctApprTranslation, null, distinctApproachesPanel, null);
+		tabbedPane.addTab(allApprTranslation, null, allApproachedPanel, null);
 	}
 	
 	public void initRadioButtons(){
-		JRadioButton allDependenciesRadioButton = new JRadioButton("All Dependencies");
+		String allDependenciesTranlation = getTranslation(RelationTypes.allDependencies);
+		JRadioButton allDependenciesRadioButton = new JRadioButton(allDependenciesTranlation);
 		allDependenciesRadioButton.setHorizontalAlignment(SwingConstants.CENTER);
 		allDependenciesRadioButton.setActionCommand(RelationTypes.allDependencies);
+		allDependenciesRadioButton.setSelected(true);
 		GridBagConstraints gbc_allDependenciesRadioButton = new GridBagConstraints();
 		gbc_allDependenciesRadioButton.anchor = GridBagConstraints.WEST;
 		gbc_allDependenciesRadioButton.insets = new Insets(0, 0, 5, 5);
 		gbc_allDependenciesRadioButton.gridx = 0;
 		gbc_allDependenciesRadioButton.gridy = 0;
 		
-		JRadioButton umlLinksRadioButton = new JRadioButton("Uml Links");
+		String umlLinkTranslation = getTranslation(RelationTypes.umlLinks);
+		JRadioButton umlLinksRadioButton = new JRadioButton(umlLinkTranslation);
 		umlLinksRadioButton.setActionCommand(RelationTypes.umlLinks);
 		GridBagConstraints gbc_umlLinksRadioButton = new GridBagConstraints();
 		gbc_umlLinksRadioButton.anchor = GridBagConstraints.WEST;
@@ -105,7 +135,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		gbc_umlLinksRadioButton.gridx = 2;
 		gbc_umlLinksRadioButton.gridy = 0;
 		
-		JRadioButton accessCallReferenceDependenciesRadioButton = new JRadioButton("Dependencies (Acces, Call or Reference only)");
+		String acrdTranlation = getTranslation(RelationTypes.accessCallReferenceDependencies);
+		JRadioButton accessCallReferenceDependenciesRadioButton = new JRadioButton(acrdTranlation);
 		accessCallReferenceDependenciesRadioButton.setActionCommand(RelationTypes.accessCallReferenceDependencies);
 		GridBagConstraints gbc_accessCallReferenceDependenciesRadioButton = new GridBagConstraints();
 		gbc_accessCallReferenceDependenciesRadioButton.anchor = GridBagConstraints.WEST;
@@ -158,9 +189,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		optionsPanel.add(classesRadioButton, gbc_ClassesRadioButton);
 	}
 
-	private Object[][] getApproachesRows(){
-		
-				
+	private Object[][] getAllApproachesRows(){
 		Object ApproachesRows[][] = { 
 			{Algorithm.Layers_Goldstein_Multiple_Improved, getTranslation(Algorithm.Layers_Goldstein_Multiple_Improved), 10}, 
 			{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10}, 
@@ -170,8 +199,30 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}, 
 				
 			{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
-			{Algorithm.Gateways_HUSACCT_Root, "Gateways HUSACCT Root", 10}};
+			{Algorithm.Gateways_HUSACCT_Root, getTranslation(Algorithm.Gateways_HUSACCT_Root), 10}};
 		return ApproachesRows;
+	}
+	
+	private Object[][] getDistinctApproachesRows(){
+		Object ApproachesRows[][] = { 
+				{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10},
+				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}, 
+				{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10}};
+			return ApproachesRows;
+	}
+	
+	
+	
+	private Object[] getColumnNames(){
+		String approachesTranslation = localService.getTranslatedString("Approaches");
+		String thresholdTranslation = localService.getTranslatedString("Threshold");
+	
+		Object columnNames[] = {
+				approachesConstants, 
+				approachesTranslation, 
+				thresholdTranslation
+		};
+		return columnNames;
 	}
 	
 	private String getTranslation(String translationKey){
@@ -179,10 +230,10 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		return localeService.getTranslatedString(translationKey);
 	}
 	
-    private void hide(String columnName) {
-        int index = tableColumnModule.getColumnIndex(columnName);
-        TableColumn column = tableColumnModule.getColumn(index);
-        tableColumnModule.removeColumn(column);
+    private void hide(String columnName, TableColumnModel tableColumnModel) {
+        int index = tableColumnModel.getColumnIndex(columnName);
+        TableColumn column = tableColumnModel.getColumn(index);
+        tableColumnModel.removeColumn(column);
     }
 	
 }

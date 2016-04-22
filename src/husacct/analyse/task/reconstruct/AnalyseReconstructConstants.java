@@ -14,7 +14,15 @@ public class AnalyseReconstructConstants {
 		public static final String Component_HUSACCT_SelectedModule = "Component_HUSACCT_SelectedModule";
 		
 		public static final String Gateways_HUSACCT_Root = "Gateways_HUSACCT_Root";
+		public static final String Adapter_Recognition = "Adapter_Recognition";
 
+	}
+	
+	public static class ApproachesTable{
+		public static final String ApproachesConstants = "ApproachesConstants";
+		public static final String PanelAllApproaches = "AllApproaches";
+		public static final String PanelDistinctApproaches = "DistinctApproaches";
+		
 	}
 	
 	public static class RelationTypes{

@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -47,7 +48,6 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 		ArrayList<SoftwareUnitDTO> selectedSubmoduleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		
-		ModuleDTO[] subModuleDTOs = selectedModule.subModules;
 		for(String logicalSoftwarePathSelectedModule : defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath)){
 			SoftwareUnitDTO suDTO = queryService.getSoftwareUnitByUniqueName(logicalSoftwarePathSelectedModule);
 			SoftwareUnitDTO[] suDTOsubmodules = queryService.getChildUnitsOfSoftwareUnit(suDTO.uniqueName);
@@ -122,15 +122,17 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 					int nrOfDependenciesFromOtherTosoftwareUnit=0;
 					
 					switch(dependencyType){
-					case "UmlLinks":
-						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
-						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
+					case AnalyseReconstructConstants.RelationTypes.umlLinks:
+						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
+						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
-					case "AccessCallReferenceDependencies":
+						
+					case AnalyseReconstructConstants.RelationTypes.accessCallReferenceDependencies:
 						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
 						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
-					case "AllDependencies":
+						
+					case AnalyseReconstructConstants.RelationTypes.allDependencies:
 						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
 						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
 						break;
