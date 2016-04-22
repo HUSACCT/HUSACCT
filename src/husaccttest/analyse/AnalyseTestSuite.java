@@ -10,6 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	CSharp_AccuracyTestDependencyDetection.class,
 	ExportImportAnalysedModelTest.class,
 	ReconstructAlgorithmTests.class,
+	ReconstructArchitectureTest_AlgorithmTranslation.class,
 })
 public class AnalyseTestSuite {
 }
