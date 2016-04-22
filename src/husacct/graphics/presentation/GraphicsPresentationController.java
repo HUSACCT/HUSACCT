@@ -385,4 +385,10 @@ public class GraphicsPresentationController implements UserInputListener{
 	    drawingsSettingsHolder.setShowUmlLinkInsteadOfDependencies(!currentSetting);
 	    refreshDrawing();
 	}
+
+    public DrawingTypesEnum getDrawingType() {
+        return drawingType;
+    }
+	
+	
 }

@@ -12,6 +12,7 @@ import husacct.analyse.task.reconstruct.gateways.HUSACCT.GatewayHUSACCT_Root;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootOriginal;
+import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleMultipleLayers;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleOriginal;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootImproved;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
@@ -53,7 +54,12 @@ public class ReconstructArchitecture {
 		try {
 			switch (dto.getApproach()) {
 				case (Algorithm.Layers_Goldstein_Multiple_Improved):
-					algorithm = new LayersGoldstein_RootMultipleLayers();
+					if(moduleSelected){
+						 algorithm = new LayersGoldstein_SelectedModuleMultipleLayers();
+					}
+					else{ //is root
+						 algorithm = new LayersGoldstein_RootMultipleLayers();
+					}
 					break;
 				case (Algorithm.Layers_Goldstein_Root_Improved):
 					algorithm = new LayersGoldstein_RootImproved();

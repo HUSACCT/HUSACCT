@@ -116,7 +116,7 @@ public class ExcelReportWriter extends ReportWriter {
     private int numberOf_Declaration_Exception = 0;
     private int numberOf_Inheritance_ExtendsClass = 0;
     private int numberOf_Inheritance_ExtendsAbstractClass = 0;
-    private int numberOf_Inheritance_ÏmplementsInterface = 0;
+    private int numberOf_Inheritance_ImplementsInterface = 0;
     private int numberOf_Inheritance_FromLibraryClass = 0;
     private int numberOf_Reference_Type = 0;
     private int numberOf_Reference_ReferenceReturnTypeUsedMethod = 0;
@@ -501,7 +501,7 @@ public class ExcelReportWriter extends ReportWriter {
         	} else if (violation.getDependencySubType().equals("Extends Abstract Class")) {
         		numberOf_Inheritance_ExtendsAbstractClass ++;
         	} else if (violation.getDependencySubType().equals("Implements Interface")) {
-        		numberOf_Inheritance_ÏmplementsInterface ++;
+        		numberOf_Inheritance_ImplementsInterface ++;
         	} else if (violation.getDependencySubType().equals("From Library Class")) {
         		numberOf_Inheritance_FromLibraryClass ++;
         	}
@@ -751,7 +751,7 @@ public class ExcelReportWriter extends ReportWriter {
 
         addCellBold(sheet, 0, 53, "Inheritance");
         int InheritanceTotalSubTypes = numberOf_Inheritance_ExtendsClass + numberOf_Inheritance_ExtendsAbstractClass 
-        		+ numberOf_Inheritance_ÏmplementsInterface + numberOf_Inheritance_FromLibraryClass;
+        		+ numberOf_Inheritance_ImplementsInterface + numberOf_Inheritance_FromLibraryClass;
         addCellNumber(sheet, 1, 53, InheritanceTotalSubTypes);
         if (InheritanceTotalSubTypes != numberOfAllDependencies_Inheritance) {
             addCellDefault(sheet, 2, 53, "Warning: Total of subTypes does not match total of types");
@@ -761,7 +761,7 @@ public class ExcelReportWriter extends ReportWriter {
         addCellDefault(sheet, 0, 55, "Extends Abstract Class");
         addCellNumber(sheet, 1, 55, numberOf_Inheritance_ExtendsAbstractClass);
         addCellDefault(sheet, 0, 56, "Implements Interface");
-        addCellNumber(sheet, 1, 56, numberOf_Inheritance_ÏmplementsInterface);
+        addCellNumber(sheet, 1, 56, numberOf_Inheritance_ImplementsInterface);
         addCellDefault(sheet, 0, 57, "From Library Class");
         addCellNumber(sheet, 1, 57, numberOf_Inheritance_FromLibraryClass);
 

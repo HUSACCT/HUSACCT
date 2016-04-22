@@ -13,11 +13,6 @@ import org.junit.BeforeClass;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.analyse.domain.IModelPersistencyService;
-import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
-import husacct.analyse.domain.famix.FamixQueryServiceImpl;
-import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -42,10 +37,6 @@ public class ReconstructAlgorithmTests {
 	
 	private static final String exportFile = "ExportFileAnalysedModel_HUSACCT20_WithoutAntlr.xml";
 	private static String exportFilePath;
-	private static AnalysisStatisticsDTO analyseStatisticsBeforeReconstruction;
-	private static AnalysisStatisticsDTO analyseStatisticsAfterReconstruction;
-	private static AnalyseTaskControl analyseTaskControl;
-
 	@BeforeClass
 	public static void beforeClass() {
 		try {
@@ -60,15 +51,15 @@ public class ReconstructAlgorithmTests {
 			workspaceController = mainController.getWorkspaceController();
 			workspaceController.closeWorkspace();
 			loadWorkspace(workspacePath);
-			analyseStatisticsBeforeReconstruction = getAnalyseStatistics();
+			getAnalyseStatistics();
 			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFile);
 			importAnalysisModel();
-			analyseStatisticsAfterReconstruction = getAnalyseStatistics();
+			getAnalyseStatistics();
 			
 			logger.info(String.format("Start: Architecture Reconstruction"));
-			analyseStatisticsBeforeReconstruction = getAnalyseStatistics();
+			getAnalyseStatistics();
 			reconstructArchitecture();
-			analyseStatisticsAfterReconstruction = getAnalyseStatistics();
+			getAnalyseStatistics();
 			logger.info(String.format("Finished: Architecture Reconstruction"));
 			
 			checkConformance();	//checkConformance() starts a different Thread, and needs some time

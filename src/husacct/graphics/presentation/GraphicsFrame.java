@@ -88,7 +88,7 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 	}
 	
 	private void createMenuBar() {
-		menuBar = new GraphicsMenuBar();
+		menuBar = new GraphicsMenuBar(presentationController.getDrawingType());
 		menuBar.addListener(presentationController);
 		menuBar.setSize(frameTotalWidth, menuBarHeight);
 		menuBar.setOutOfDateAction(new ActionListener() {
