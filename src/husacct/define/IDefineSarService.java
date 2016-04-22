@@ -16,8 +16,9 @@ public interface IDefineSarService {
 	/** Edits an existing module of the intended architecture
 	 * Argument logicalPath identifies the existing module. If the other arguments don't have a null-value (or 0 for int), the value is set as new attribute value. 
 	 * Argument name is the simple name, so not the logical path of the module.  
+	 * @param newType TODO
 	 */
-	public ModuleDTO editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits);
+	public ModuleDTO editModule(String logicalPath, String newType, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits);
 
 	/** Removes an existing module from the intended architecture
 	 * Argument logicalPath identifies the existing module. 

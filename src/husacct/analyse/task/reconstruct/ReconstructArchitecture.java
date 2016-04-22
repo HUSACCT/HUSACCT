@@ -93,7 +93,7 @@ public class ReconstructArchitecture {
 					algorithm = null;	
 			}
 			if (algorithm != null) {
-				algorithm.clearReverseReconstructionList(); 
+				algorithm.clearReverseReconstructionLists(); 
 				algorithm.executeAlgorithm(dto, queryService, xLibrariesRootPackage);
 			}
 		} catch (Exception e) {
@@ -121,7 +121,7 @@ public class ReconstructArchitecture {
 				}
 			}
 			if (algorithm != null) {
-				algorithm.clearReverseReconstructionList();
+				algorithm.clearReverseReconstructionLists();
 			}
 
 		} catch (Exception e) {

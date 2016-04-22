@@ -93,10 +93,10 @@ public class DefineSarServicesTest_SRMA {
 		defineService = ServiceProvider.getInstance().getDefineService();
 		defineSarService = defineService.getSarService();
 		int levelOld = defineService.getHierarchicalLevelOfLayer("Presentation");
-		defineSarService.editModule("Presentation", null, levelOld + 3, null);
+		defineSarService.editModule("Presentation", "newType", null, levelOld + 3, null);
 		int levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
 		Assert.assertTrue(levelNew == levelOld + 3);
-		defineSarService.editModule("Presentation", null, levelOld, null);
+		defineSarService.editModule("Presentation", "newType", null, levelOld, null);
 		levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
 		Assert.assertTrue(levelNew == levelOld);
 	}
@@ -106,10 +106,10 @@ public class DefineSarServicesTest_SRMA {
 		defineService = ServiceProvider.getInstance().getDefineService();
 		defineSarService = defineService.getSarService();
 		String logicalPathOld = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
-		defineSarService.editModule(logicalPathOld, "NothingIsAllowed", 0, null);
+		defineSarService.editModule(logicalPathOld, "newType", "NothingIsAllowed", 0, null);
 		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NothingIsAllowed"));
-		defineSarService.editModule(logicalPathNew, "NotAllowed", 0, null);
+		defineSarService.editModule(logicalPathNew, "newType", "NotAllowed", 0, null);
 		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
 	}
@@ -121,12 +121,12 @@ public class DefineSarServicesTest_SRMA {
 		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.relationrules.newsoftwareunit", "newsoftwareunit", "Package", "public");
 		newSoftwareUnits.add(newUnit);
-		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
+		defineSarService.editModule("Presentation.RelationRules.NotAllowed", "newType", null, 0, newSoftwareUnits);
 		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.newsoftwareunit").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
 		newUnit.uniqueName = "presentation.relationrules.notallowed";
 		newUnit.name = "allowed";
-		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, 0, newSoftwareUnits);
+		defineSarService.editModule("Presentation.RelationRules.NotAllowed", "newType", null, 0, newSoftwareUnits);
 		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
 		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
 	}

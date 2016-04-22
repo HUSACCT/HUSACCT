@@ -80,16 +80,19 @@ public class ModuleDomainService {
 		return newModule;
 	}
 	
-	public ModuleStrategy editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+	public ModuleStrategy editModule(String logicalPath, String newType, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
 		ModuleStrategy moduleToEdit = null;
 		try{
 			moduleToEdit = getModuleByLogicalPath(logicalPath);
 			if (moduleToEdit != null) {
+				if (newType != null)
+					updateModuleType(moduleToEdit.getId(), newType);
 				if (newName != null)
 					moduleToEdit.setName(newName);
 				if ((newHierarchicalLevel != 0) && (moduleToEdit instanceof Layer))
 					((Layer) moduleToEdit).setHierarchicalLevel(newHierarchicalLevel);
 				if (newSoftwareUnits != null) {
+					moduleToEdit.removeAllSUDefintions();
 					for (SoftwareUnitDTO softwareUnit : newSoftwareUnits) {
 						Type softwareUnitDefinitionType = Type.SUBSYSTEM;
 						if (softwareUnit.type.toUpperCase().equals("CLASS")) {
@@ -103,10 +106,8 @@ public class ModuleDomainService {
 						} else if (softwareUnit.type.toUpperCase().equals("PACKAGE")) {
 							softwareUnitDefinitionType = Type.PACKAGE;
 						}
-						moduleToEdit.removeAllSUDefintions();
 						moduleToEdit.addSUDefinition(new SoftwareUnitDefinition(softwareUnit.uniqueName, softwareUnitDefinitionType));
 					}
-					
 				}
 			}
 	    } catch(Exception e) {

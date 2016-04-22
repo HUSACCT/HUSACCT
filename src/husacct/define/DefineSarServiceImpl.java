@@ -13,6 +13,7 @@ import husacct.define.domain.services.ModuleDomainService;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 // Services for SAR: Software Architecture Reconstruction
@@ -50,12 +51,17 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 	
 	@Override
-	public ModuleDTO editModule(String logicalPath, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
+	public ModuleDTO editModule(String logicalPath, String newType, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
 		ModuleDTO editedModuleDTO =  new ModuleDTO();
 		try {
-			ModuleStrategy editedModule = moduleService.editModule(logicalPath, newName, newHierarchicalLevel, newSoftwareUnits);
+			ModuleStrategy editedModule = moduleService.editModule(logicalPath, newType, newName, newHierarchicalLevel, newSoftwareUnits);
 			if (editedModule != null) {
 				editedModuleDTO = domainParser.parseModule(editedModule);
+				long newSelectedModuleId = editedModule.getId();
+				if (newSelectedModuleId > 0) {
+					newSelectedModuleId = editedModule.getparent().getId();
+				}
+				defineService.getDefinitionController().setSelectedModuleId(newSelectedModuleId);
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -66,10 +72,11 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	@Override
 	public void removeModule(String logicalPath) {
 		try {
-			defineService.getDefinitionController().setSelectedModuleId(-1);
 			ModuleStrategy moduleToBeRemoved = moduleService.getModuleByLogicalPath_NoException(logicalPath);
 			if ((moduleToBeRemoved != null) && (moduleToBeRemoved.getId() >= 0)) {
+				long newSelectedModuleId = moduleToBeRemoved.getparent().getId();
 				moduleService.removeModuleById(moduleToBeRemoved.getId());
+				defineService.getDefinitionController().setSelectedModuleId(newSelectedModuleId);
 			}
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
