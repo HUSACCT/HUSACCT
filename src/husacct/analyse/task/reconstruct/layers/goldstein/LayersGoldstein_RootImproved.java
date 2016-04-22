@@ -16,13 +16,9 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 	
 	
 	
-	private ModuleDTO selectedModule;
 	private int layerThreshold;
 	private IModelQueryService queryService;
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses;
-	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClassesClone;
-	private ArrayList<SoftwareUnitDTO> internalRootPackagesAndClasses;
-	private ArrayList<SoftwareUnitDTO> internalClasses;
 	private ArrayList<SoftwareUnitDTO> godClasses;
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
@@ -33,10 +29,8 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 	
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
-		selectedModule = dto.getSelectedModule();
 		layerThreshold = dto.getThreshold();
 		this.queryService = queryService;
-		IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
 		identifyLayersAtRootLevel(dto.getRelationType());
 	}
 
@@ -106,7 +100,6 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 	
 	private void determineInternalRootPackagesWithClasses() {
 		internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
-		internalClasses = new ArrayList<SoftwareUnitDTO>();
 		godClasses = new ArrayList<SoftwareUnitDTO>();
 		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
 		for (SoftwareUnitDTO rootModule : allRootUnits) {

@@ -15,7 +15,6 @@ import husacct.define.IDefineSarService;
 public class LayersGoldstein_RootMultipleLayers extends AlgorithmGoldstein {
 
 	
-	private ModuleDTO selectedModule;
 	private int layerThreshold;
 	private String dependencyType;
 	private IModelQueryService queryService;

@@ -67,7 +67,6 @@ public class LayersGoldstein_SelectedModuleMultipleLayers extends AlgorithmGolds
 		ArrayList<SoftwareUnitDTO> selectedSubmoduleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		
-		ModuleDTO[] subModuleDTOs = selectedModule.subModules;
 		for(String logicalSoftwarePathSelectedModule : defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath)){
 			SoftwareUnitDTO suDTO = queryService.getSoftwareUnitByUniqueName(logicalSoftwarePathSelectedModule);
 			SoftwareUnitDTO[] suDTOsubmodules = queryService.getChildUnitsOfSoftwareUnit(suDTO.uniqueName);
