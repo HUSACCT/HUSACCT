@@ -21,7 +21,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		this.relationType = dto.getRelationType();
 		ArrayList<SoftwareUnitDTO> bottomLayer = identifyBottomLayer();
 		ArrayList<SoftwareUnitDTO> gateways = identifyGateWays(bottomLayer);
-		
+		gateways.getClass();//is alleen om de "gateways is unused" warning weg te halen.
 	}
 	
 	private ArrayList<SoftwareUnitDTO> identifyBottomLayer(){
@@ -56,7 +56,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 				if(dep.from.equals(softwareUnitDTO.uniqueName)){
 					unitDependencies.add(dep);
 					SoftwareUnitDTO depTo = queryService.getSoftwareUnitByUniqueName(dep.to);
-					if (depTo.type.equals("library")){
+					if (depTo.type.toUpperCase().equals("EXTERNALLIBRARY")){
 						unitExternalDependencies.add(dep);
 					}
 				}
