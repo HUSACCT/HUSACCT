@@ -27,6 +27,7 @@ import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.presentation.GraphicsPresentationController;
 import husacct.graphics.presentation.UserInputListener;
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
+import husacct.graphics.task.DrawingTypesEnum;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
 public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener {
@@ -49,7 +50,9 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	
 	private final ContextMenuButton			zoomOptionsMenu;
 	
-	public GraphicsMenuBar() {
+	private boolean drawDependencyTypeToggle = true;
+	
+	public GraphicsMenuBar(DrawingTypesEnum drawingType) {
 		zoomOptionsMenu = new ContextMenuButton();
 		
 		icons = new HashMap<String, String>();
@@ -84,6 +87,8 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		actions.add(showViolationsButton);
 		actions.add(zoomSlider);
 		actions.add(outOfDateButton);
+		
+		drawDependencyTypeToggle = drawingType == DrawingTypesEnum.IMPLEMENTED_ARCHITECTURE;
 	}
 	
 	private void initializeComponents() {
@@ -218,6 +223,11 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
 		graphicsOptionsDialog.addListener(this);
 		graphicsOptionsDialog.setIcons(icons);
+		
+		if (!drawDependencyTypeToggle) {
+		    graphicsOptionsDialog.hideDependencyToggle();
+		}
+		
 		optionsDialogButton = new JButton();
 		optionsDialogButton.setSize(40, menuItemMaxHeight);
 		optionsDialogButton.addActionListener(new ActionListener() {

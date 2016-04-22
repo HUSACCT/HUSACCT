@@ -231,6 +231,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		settingsPanel.add(layoutStrategyPanel);
 		
     dependencyPanel = new JPanel();
+    
     dependencyPanel.setSize(getWidth(), getHeight());
     dependencyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
     
@@ -527,4 +528,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		for (JComponent element : interfaceElements)
 			element.setEnabled(true);
 	}
+
+    public void hideDependencyToggle() {
+        dependencyPanel.setVisible(false);
+    }
 }
