@@ -58,6 +58,8 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
         s += "\nselectedModule: " + selectedModule.logicalPath;
         s += "\napproach: " + approach;
         s += "\nthreshold: " + threshold;
+        s += "\nrelationType: " + relationType;
+        s += "\nname: " + name;
         s += "\n\n";
         return s;
     }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
@@ -26,7 +24,6 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	private final Logger logger = Logger.getLogger(ComponentsHUSACCT_SelectedModule.class);
 
 	ModuleDTO selectedModule;
-	String selectedModuleUniqueName;
 	ArrayList<String> softwareUnitsInSelectedModuleList = new ArrayList<String>();
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithInterfaces = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithImplementingClasses = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
@@ -40,8 +37,36 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	}
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+		selectedModule = dto.getSelectedModule();
+		if (selectedModule.logicalPath.equals("")) {
+			selectedModule.logicalPath = "**"; // Root of intended software architecture
+		}
 		this.queryService = queryService;
-		identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+		softwareUnitsInSelectedModuleList = new ArrayList<String>();
+
+		// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
+		if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
+			return;
+		}
+
+		// Select the set of SUs to be used and activate the component-identifying algorithm  
+		softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath));
+		if (softwareUnitsInSelectedModuleList.size() == 1) {
+			if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString()) || selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
+				softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
+				identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+			} else if (selectedModule.type.equals(ModuleTypes.LAYER.toString())) {
+				boolean componentDetected = identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+				if (!componentDetected) {
+					softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
+					identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+				}
+			}
+		} else {
+			identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+		}
+		
+		// Finally, add new modules to the intended architecture
 		createComponentsAndOrSubSystems();
 	}
 	/**
@@ -53,26 +78,10 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	 * b3) If selectedModule is a SubSytem, the algorithm is applied on the first set of children of the assigned SU.
 	 * @param selectedModuleArgument
 	 */
-	public void identifyComponentsInRootOfSelectedModule(ModuleDTO selectedModuleArgument) {
+	private boolean identifyComponentsInRootOfSelectedModule(ModuleDTO selectedModuleArgument) {
+		boolean componentDetected = false;
 		this.selectedModule = selectedModuleArgument;
 		try {
-			// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
-			if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
-				return;
-			}
-			selectedModuleUniqueName = selectedModule.logicalPath;
-			if (selectedModuleUniqueName.equals("")) {
-				selectedModuleUniqueName = "**"; // Root of intended software architecture
-			}
-			softwareUnitsInSelectedModuleList = new ArrayList<String>();
-
-			// 1) Select the first set of SoftwareUnits in the decomposition hierarchy of the selected module.  
-			softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModuleUniqueName));
-			if (softwareUnitsInSelectedModuleList.size() == 1) {
-				if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString()) || selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
-					softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
-				}
-			}
 			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
 				for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
 					if (softwareUnit.type.equals("class")) {
@@ -89,6 +98,7 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 								boolean isInterfaceOfParent = isInterfaceTheInterfaceOfTheParentModule(interfaceClass, selectedModule);
 								if (interfaceIsSpecificForUnit && !isInterfaceOfParent) {
 									// The softwareUnitInSelectedModule is identified as a Component
+									componentDetected = true;
 									// Relate the interface with the parent package of the implementing class. A package can implement several interfaces.
 									componentsWithInterfaces = addSoftwareUnitToHashMap(interfaceClass, softwareUnitInSelectedModule, componentsWithInterfaces);
 									// Add softwareUnit to implementingClassesPerPackage, since it implements an interfaces.
@@ -110,6 +120,7 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 		} catch (Exception e) {
 	        logger.error(" Exception: "  + e );
         }
+		return componentDetected;
 	}
 
 	// For each softwareUnitsInSelectedModuleList, create a Component and its Interface, or a Subsystem, and assign software units to these modules.
@@ -117,12 +128,9 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 		try {
 			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
 				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(softwareUnitInSelectedModule);
-				ArrayList<SoftwareUnitDTO> parentUnitsList = new ArrayList<SoftwareUnitDTO>();
+				HashSet<SoftwareUnitDTO> parentUnitsList = new HashSet<SoftwareUnitDTO>();
 				parentUnitsList.add(parentUnit);
 				if(componentsWithInterfaces.containsKey(softwareUnitInSelectedModule)){ // Create a Component and an Interface
-					// Determine if the new Component has to replace the SelectedModule
-					boolean replaceSelectedModuleByComponent = hasTheComponentToReplaceTheSelectedModule(softwareUnitInSelectedModule);
-
 					// Determine if all child units of the parenUnit are needed to provide the implemented service of the interfaces
 					boolean allChildUnitsAreNeededToImplementTheInterfaceServices = false;
 					HashSet<SoftwareUnitDTO> allChildUnitsNeededToImplementTheInterfaceServices = getAllChildUnitsNeededToImplementTheInterfaceServices(softwareUnitInSelectedModule);
@@ -156,37 +164,17 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 						}
 					}
 					if (allChildUnitsAreNeededToImplementTheInterfaceServices) {
-						// To do: Create a Component only
+						// Create a Component only
+						createComponent(parentUnit, softwareUnitsToAssignToComponent);
 					} else {
 						// To do: Create a Component and a Subsystem
+						createSubSystem(parentUnit, softwareUnitsToAssignToSubSystem);						
+						parentUnit.name = parentUnit.name + "Component";
+						createComponent(parentUnit, softwareUnitsToAssignToComponent);
 					}
 					
-					// Create a Component
-					ModuleDTO newModule;
-					ArrayList<SoftwareUnitDTO> interfaceUnits = componentsWithInterfaces.get(softwareUnitInSelectedModule);
-					if (!replaceSelectedModuleByComponent) {
-						// Create a new module as a child of the SelectedModule
-						newModule = defineSarService.addModule(parentUnit.name, selectedModuleUniqueName, ModuleTypes.COMPONENT.toString(), 0, parentUnitsList);
-						addToReverseReconstructionList(newModule); //add to cache for reverse
-						// Create the Interface of the Component
-						if (newModule != null) {
-							ModuleDTO newInterfaceModule = defineSarService.addModule(parentUnit.name + "Interface", newModule.logicalPath, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
-							addToReverseReconstructionList(newInterfaceModule); //add to cache for reverse
-						}
-					} else { // Replace SelectedModule by the component
-						ModuleDTO editedModule = defineSarService.editModule(selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), null, 0, null);
-						addToReverseEditModuleList(selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString());
-						for (ModuleDTO subModule : editedModule.subModules) {
-							if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
-								defineSarService.editModule(subModule.logicalPath, null, null, 0, interfaceUnits);
-							}
-						}
-					}
 				} else { // Create a subsystem, if the software unit is a package
-					if (parentUnit.type.equals("package")) {
-						ModuleDTO newModule = defineSarService.addModule(parentUnit.name, selectedModuleUniqueName, ModuleTypes.SUBSYSTEM.toString(), 0, parentUnitsList);
-						addToReverseReconstructionList(newModule); //add to cache for reverse
-					}
+					createSubSystem(parentUnit, parentUnitsList);
 				}
 			}
 		} catch (Exception e) {
@@ -194,6 +182,39 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	    }
 	}
 
+	private void createComponent(SoftwareUnitDTO parentUnit, HashSet<SoftwareUnitDTO> softwareUnitsToAssignToComponent) {
+		ModuleDTO newModule;
+		ArrayList<SoftwareUnitDTO> interfaceUnits = componentsWithInterfaces.get(parentUnit.uniqueName);
+		// Determine if the new Component has to replace the SelectedModule
+		boolean replaceSelectedModuleByComponent = hasTheComponentToReplaceTheSelectedModule(parentUnit.uniqueName);
+
+		if (!replaceSelectedModuleByComponent) {
+			// Create a new module as a child of the SelectedModule
+			newModule = defineSarService.addModule(parentUnit.name, selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), 0, new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToComponent));
+			addToReverseReconstructionList(newModule); //add to cache for reverse
+			// Create the Interface of the Component
+			if (newModule != null) {
+				ModuleDTO newInterfaceModule = defineSarService.addModule(parentUnit.name + "Interface", newModule.logicalPath, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
+				addToReverseReconstructionList(newInterfaceModule); //add to cache for reverse
+			}
+		} else { // Replace SelectedModule by the component
+			ModuleDTO editedModule = defineSarService.editModule(selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), null, 0, null);
+			addToReverseEditModuleList(selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString());
+			for (ModuleDTO subModule : editedModule.subModules) {
+				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
+					defineSarService.editModule(subModule.logicalPath, null, null, 0, interfaceUnits);
+				}
+			}
+		}
+	}
+	
+	private void createSubSystem(SoftwareUnitDTO parentUnit, HashSet<SoftwareUnitDTO> softwareUnitsToAssignToSubSystem) {
+		if (parentUnit.type.equals("package")) {
+			ModuleDTO newModule = defineSarService.addModule(parentUnit.name, selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), 0, new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToSubSystem));
+			addToReverseReconstructionList(newModule); //add to cache for reverse
+		}
+	}
+	
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> addSoftwareUnitToHashMap(SoftwareUnitDTO softwareUnit, String keyOfHashMap, HashMap<String,ArrayList<SoftwareUnitDTO>> hashMap) {
 		if(!hashMap.containsKey(keyOfHashMap)){
 			ArrayList<SoftwareUnitDTO> softwareUnitsOfClass = new ArrayList<SoftwareUnitDTO>();
@@ -305,17 +326,4 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 		}
 		return neededSoftwareUnits;
 	}
-	
-	//@Override
-	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//@Override
-	public TreeMap<Integer, ArrayList<SoftwareUnitDTO>> getClasses(String library, TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
