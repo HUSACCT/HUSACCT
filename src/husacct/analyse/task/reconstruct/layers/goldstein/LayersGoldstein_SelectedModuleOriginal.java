@@ -26,7 +26,8 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 	private IDefineSarService defineSarService;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-	
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
+
 	
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
@@ -41,24 +42,10 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 	}
 	
 	// Returns the SUs assigned to selectedModule or, if only one SU is assigned, the children of this SU.
+	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. Prepare. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
 		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
-		
-		// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. 
-		HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
-		if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
-			for (ModuleDTO subModule : selectedModule.subModules) {
-				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
-					defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath);
-					for (String assignedUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)) {
-						SoftwareUnitDTO assignedUnit = queryService.getSoftwareUnitByUniqueName(assignedUnitUniqueName);
-						if (!assignedUnit.name.isEmpty()) {
-							softwareUnitsToExclude.put(assignedUnit.uniqueName, assignedUnit);
-						}
-					}
-				}
-			}
-		}
+		addSoftwareUnitsAssignedToComponentInterfaceTosoftwareUnitsToExcludeMap();
 		
 		int numberOfAssignedSoftwareUnits = defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath).size();
 		if (numberOfAssignedSoftwareUnits > 1) {
@@ -183,4 +170,19 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 		}
 	}
 
+	private void addSoftwareUnitsAssignedToComponentInterfaceTosoftwareUnitsToExcludeMap() {
+		if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
+			for (ModuleDTO subModule : selectedModule.subModules) {
+				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
+					defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath);
+					for (String assignedUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)) {
+						SoftwareUnitDTO assignedUnit = queryService.getSoftwareUnitByUniqueName(assignedUnitUniqueName);
+						if (!assignedUnit.name.isEmpty()) {
+							softwareUnitsToExclude.put(assignedUnit.uniqueName, assignedUnit);
+						}
+					}
+				}
+			}
+		}
+	}
 }

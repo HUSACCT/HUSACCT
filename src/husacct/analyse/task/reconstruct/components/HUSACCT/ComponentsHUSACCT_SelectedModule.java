@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
@@ -24,12 +25,12 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	private final Logger logger = Logger.getLogger(ComponentsHUSACCT_SelectedModule.class);
 
 	ModuleDTO selectedModule;
-	ArrayList<String> softwareUnitsInSelectedModuleList = new ArrayList<String>();
+	ArrayList<String> softwareUnitsInSelectedModuleList;
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithInterfaces = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithImplementingClasses = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> exceptionsPerSoftwareUnit = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> enumsPerSoftwareUnit = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-	
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExcludeMap = new HashMap<String, SoftwareUnitDTO>();
 	
 	public ComponentsHUSACCT_SelectedModule(){
 		defineService = ServiceProvider.getInstance().getDefineService();
@@ -49,13 +50,19 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 			return;
 		}
 
-		// Select the set of SUs to be used and activate the component-identifying algorithm  
+		// Select the set of SUs to be used, and activate the component-identifying algorithm  
 		softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath));
 		if (softwareUnitsInSelectedModuleList.size() == 1) {
-			if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString()) || selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
+			if (selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
 				softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
 				identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+			} else if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
+				softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
+				identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
+				// In case the selectedModule is a Component, the SUs assigned to the interface should not be assigned again. 
+				addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
 			} else if (selectedModule.type.equals(ModuleTypes.LAYER.toString())) {
+				// Check if the assigned SU is identified as a component. If not, get the children of the SU and apply the algoritm on them,
 				boolean componentDetected = identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
 				if (!componentDetected) {
 					softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
@@ -66,7 +73,7 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 			identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
 		}
 		
-		// Finally, add new modules to the intended architecture
+		// Finally, add the identified Components and Subsystems to the intended architecture
 		createComponentsAndOrSubSystems();
 	}
 	/**
@@ -81,6 +88,7 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	private boolean identifyComponentsInRootOfSelectedModule(ModuleDTO selectedModuleArgument) {
 		boolean componentDetected = false;
 		this.selectedModule = selectedModuleArgument;
+		filterSoftwareUnitsInSelectedModuleList();
 		try {
 			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
 				for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
@@ -101,6 +109,8 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 									componentDetected = true;
 									// Relate the interface with the parent package of the implementing class. A package can implement several interfaces.
 									componentsWithInterfaces = addSoftwareUnitToHashMap(interfaceClass, softwareUnitInSelectedModule, componentsWithInterfaces);
+									// Add the interfaceClass to softwareUnitsToExcludeMap, to prevent that it is assigned to another module.
+									softwareUnitsToExcludeMap.put(interfaceClass.uniqueName, interfaceClass);
 									// Add softwareUnit to implementingClassesPerPackage, since it implements an interfaces.
 									componentsWithImplementingClasses = addSoftwareUnitToHashMap(softwareUnit, softwareUnitInSelectedModule, componentsWithImplementingClasses);
 								}
@@ -125,54 +135,88 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 
 	// For each softwareUnitsInSelectedModuleList, create a Component and its Interface, or a Subsystem, and assign software units to these modules.
 	private void createComponentsAndOrSubSystems() {
+		filterSoftwareUnitsInSelectedModuleList(); // Filter out software units assigned to component interfaces.
 		try {
-			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
-				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(softwareUnitInSelectedModule);
+			for (String softwareUnitWithinSelectedModule : softwareUnitsInSelectedModuleList) {
+				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(softwareUnitWithinSelectedModule);
 				HashSet<SoftwareUnitDTO> parentUnitsList = new HashSet<SoftwareUnitDTO>();
 				parentUnitsList.add(parentUnit);
-				if(componentsWithInterfaces.containsKey(softwareUnitInSelectedModule)){ // Create a Component and an Interface
-					// Determine if all child units of the parenUnit are needed to provide the implemented service of the interfaces
+				if(componentsWithInterfaces.containsKey(softwareUnitWithinSelectedModule)){ // Create a Component and an Interface
+					// First check: Determine if all child units of the parenUnit are needed to provide the implemented service of the interfaces
 					boolean allChildUnitsAreNeededToImplementTheInterfaceServices = false;
-					HashSet<SoftwareUnitDTO> allChildUnitsNeededToImplementTheInterfaceServices = getAllChildUnitsNeededToImplementTheInterfaceServices(softwareUnitInSelectedModule);
+					HashSet<SoftwareUnitDTO> allChildUnitsNeededToImplementTheInterfaceServices = getAllChildUnitsNeededToImplementTheInterfaceServices(softwareUnitWithinSelectedModule);
 					HashSet<SoftwareUnitDTO> softwareUnitsToAssignToComponent = new HashSet<SoftwareUnitDTO>();
 					HashSet<SoftwareUnitDTO> softwareUnitsToAssignToSubSystem = new HashSet<SoftwareUnitDTO>();
 					int size_allChildUnitsNeededToImplementTheInterfaceServices = allChildUnitsNeededToImplementTheInterfaceServices.size();
-					SoftwareUnitDTO[] allChildUnitsOfSoftwareUnitInSelectedModule = queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule);
+					SoftwareUnitDTO[] allChildUnitsOfSoftwareUnitInSelectedModule = queryService.getChildUnitsOfSoftwareUnit(softwareUnitWithinSelectedModule);
 					int size_softwareUnitsInSelectedModuleList = allChildUnitsOfSoftwareUnitInSelectedModule.length;
 					if (size_allChildUnitsNeededToImplementTheInterfaceServices == size_softwareUnitsInSelectedModuleList) {
 						allChildUnitsAreNeededToImplementTheInterfaceServices = true;
 						softwareUnitsToAssignToComponent.addAll(parentUnitsList);
 					} else {
+						// Determine per child SU if it is used by an interface-implementing class
 						for (SoftwareUnitDTO childUnit : allChildUnitsOfSoftwareUnitInSelectedModule) {
-							boolean childUnitIsNeeded = false;
-							for (SoftwareUnitDTO neededUnit : allChildUnitsNeededToImplementTheInterfaceServices) {
-								boolean neededUnitIsNotAnInterface = true;
-								for (SoftwareUnitDTO interfaceUnit : componentsWithInterfaces.get(softwareUnitInSelectedModule)) {
-									if (neededUnit.uniqueName.equals(interfaceUnit.uniqueName)) {
-										neededUnitIsNotAnInterface = false;
+							if (!softwareUnitsToExcludeMap.containsKey(childUnit.uniqueName)) {
+								boolean childUnitIsNeeded = false;
+								for (SoftwareUnitDTO neededUnit : allChildUnitsNeededToImplementTheInterfaceServices) {
+									boolean neededUnitIsNotAnInterface = true;
+									for (SoftwareUnitDTO interfaceUnit : componentsWithInterfaces.get(softwareUnitWithinSelectedModule)) {
+										if (neededUnit.uniqueName.equals(interfaceUnit.uniqueName)) {
+											neededUnitIsNotAnInterface = false;
+										}
+									}
+									if (neededUnitIsNotAnInterface && childUnit.uniqueName.equals(neededUnit.uniqueName)) {
+										childUnitIsNeeded = true;
 									}
 								}
-								if (neededUnitIsNotAnInterface && childUnit.uniqueName.equals(neededUnit.uniqueName)) {
-									childUnitIsNeeded = true;
+								if (childUnitIsNeeded) {
+									softwareUnitsToAssignToComponent.add(childUnit);
+								} else {
+									softwareUnitsToAssignToSubSystem.add(childUnit);
 								}
 							}
-							if (childUnitIsNeeded) {
-								softwareUnitsToAssignToComponent.add(childUnit);
-							} else {
-								softwareUnitsToAssignToSubSystem.add(childUnit);
+						}
+						// Second check: Determine iteratively if the SUs in softwareUnitsToAssignToSubSystem are used by the SUs in softwareUnitsToAssignToComponent.
+						// If so, move them to softwareUnitsToAssignToComponent
+						boolean tryMove = true;
+						while (tryMove) {
+							tryMove = false;
+							ArrayList<SoftwareUnitDTO> softwareUnitsToMove = new ArrayList<SoftwareUnitDTO>();
+							for (SoftwareUnitDTO suSubsystem : softwareUnitsToAssignToSubSystem) {
+								boolean moveToComponent = false;
+								for (SoftwareUnitDTO suComponent : softwareUnitsToAssignToComponent) {
+									DependencyDTO[] dependenciesList = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(suComponent.uniqueName, suSubsystem.uniqueName);
+									if(dependenciesList.length > 0){
+										moveToComponent = true; 
+									}
+								}
+								if (moveToComponent) {
+									softwareUnitsToMove.add(suSubsystem);
+									tryMove = true;
+								} 
+							}
+							if (tryMove) {
+								softwareUnitsToAssignToSubSystem.removeAll(softwareUnitsToMove);
+								softwareUnitsToAssignToComponent.addAll(softwareUnitsToMove);
 							}
 						}
+
+						// Reconsider after second check
+						if (softwareUnitsToAssignToSubSystem.size() == 0) {
+							allChildUnitsAreNeededToImplementTheInterfaceServices = true;
+						}
 					}
+					
+					// Create a Component, conditionally as submodule of a sSubsystem 
 					if (allChildUnitsAreNeededToImplementTheInterfaceServices) {
 						// Create a Component only
 						createComponent(parentUnit, softwareUnitsToAssignToComponent);
 					} else {
-						// To do: Create a Component and a Subsystem
+						// Create a Subsystem and a Component (To do: within the Subsystem) 
 						createSubSystem(parentUnit, softwareUnitsToAssignToSubSystem);						
 						parentUnit.name = parentUnit.name + "Component";
 						createComponent(parentUnit, softwareUnitsToAssignToComponent);
 					}
-					
 				} else { // Create a subsystem, if the software unit is a package
 					createSubSystem(parentUnit, parentUnitsList);
 				}
@@ -325,5 +369,31 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 			}
 		}
 		return neededSoftwareUnits;
+	}
+
+	private void addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap() {
+		if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
+			for (ModuleDTO subModule : selectedModule.subModules) {
+				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
+					defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath);
+					for (String assignedUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)) {
+						SoftwareUnitDTO assignedUnit = queryService.getSoftwareUnitByUniqueName(assignedUnitUniqueName);
+						if (!assignedUnit.name.isEmpty()) {
+							softwareUnitsToExcludeMap.put(assignedUnit.uniqueName, assignedUnit);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void filterSoftwareUnitsInSelectedModuleList() {
+		ArrayList<String> newSoftwareUnitsInSelectedModuleList =  new ArrayList<String>();
+		for (String su : softwareUnitsInSelectedModuleList) {
+			if (!softwareUnitsToExcludeMap.containsKey(su)) {
+				newSoftwareUnitsInSelectedModuleList.add(su);
+			}
+		}
+		softwareUnitsInSelectedModuleList = newSoftwareUnitsInSelectedModuleList;
 	}
 }
