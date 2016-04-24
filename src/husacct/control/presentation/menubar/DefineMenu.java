@@ -60,8 +60,8 @@ public class DefineMenu extends JMenu{
 		reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
 		
 		architectureDiagram = new JMenu(localeService.getTranslatedString("DefinedArchitectureDiagram"));
-		architectureDiagram.add(moduleAndRuleDiagramItem);
 		architectureDiagram.add(moduleAndDependenciesDiagramItem);
+		architectureDiagram.add(moduleAndRuleDiagramItem);
 		
 		this.add(defineArchitectureItem);
 		this.add(architectureDiagram);

@@ -11,6 +11,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
@@ -152,7 +153,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected RuleDTO[] getRulesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+	protected RuleDTO[] getRulesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		return new RuleDTO[]{};
 	}
 	

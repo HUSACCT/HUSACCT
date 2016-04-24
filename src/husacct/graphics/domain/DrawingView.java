@@ -232,7 +232,7 @@ public class DrawingView extends DefaultDrawingView {
 				} else{
 					// TODO handle other cases of relation type
 				}
-			} else if(selectedFigure.isModule()) {
+			} else if(selectedFigure.isModule() || selectedFigure.isParent()) {
 				inputListener.propertiesPaneShowRules(selectedFigure);
 			}else {
 			

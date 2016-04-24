@@ -2,6 +2,7 @@ package husacct.graphics.task;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import husacct.ServiceProvider;
@@ -12,6 +13,8 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
+import husacct.graphics.domain.DrawingView;
+import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.validate.IValidateService;
@@ -28,6 +31,23 @@ public class ModuleAndRuleController extends DrawingController {
 	}
 	
 	@Override
+	public DrawingView drawArchitectureTopLevel() {
+		super.drawArchitectureTopLevel();
+		ModuleFigure[] shownModules = drawing.getShownModules();
+		ArrayList<ModuleFigure> modulesInRoot = new ArrayList<ModuleFigure>(Arrays.asList(shownModules));
+		ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
+		for (ModuleFigure moduleFigure : modulesInRoot){
+			parentNames.add(moduleFigure.getUniqueName());
+			parentFigureNameAndTypeMap.put(moduleFigure.getUniqueName(), moduleFigure.getType());
+		}
+		if (parentNames.size() > 0) {
+			resetContextFigures(); // Needed to initialize contextFigures the first time
+			this.gatherChildModuleFiguresAndContextFigures_AndDraw(parentNames.toArray(new String[] {}));
+		}
+		return drawingView;
+	}
+	
+	@Override
 	protected ModuleFigure getModuleFiguresByUniqueName(String uniqueName) {
 		ModuleFigure moduleFigure = null;
 		ModuleDTO module = defineService.getModule_ByUniqueName(uniqueName);	
@@ -39,21 +59,13 @@ public class ModuleAndRuleController extends DrawingController {
 	
 	@Override
 	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
-		ArrayList<ModuleFigure> rootModuleFigures2 = new ArrayList<ModuleFigure>();
-		for (RuleDTO rule : defineService.getDefinedRules()){
-			ModuleFigure f = figureFactory.createModuleFigure(rule.moduleFrom);
-			if (!rootModuleFigures2.contains(f)){
-				rootModuleFigures2.add(f);
-			}
+		ModuleDTO[] rootModules = defineService.getModule_AllRootModules();
+		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
+		for (AbstractDTO rootModule : rootModules) {
+			ModuleFigure rootModuleFigure = figureFactory.createModuleFigure(rootModule);
+			rootModuleFigures.add(rootModuleFigure);
 		}
-		return rootModuleFigures2;
-//		ModuleDTO[] rootModules = defineService.getModule_AllRootModules();
-//		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
-//		for (AbstractDTO rootModule : rootModules) {
-//			ModuleFigure rootModuleFigure = figureFactory.createModuleFigure(rootModule);
-//			rootModuleFigures.add(rootModuleFigure);
-//		}
-//		return rootModuleFigures;
+		return rootModuleFigures;
 	}
 	
 	@Override
@@ -91,6 +103,17 @@ public class ModuleAndRuleController extends DrawingController {
 			}
 		}
 		return dependencies.toArray(new DependencyDTO[] {});
+	}
+	
+	@Override
+	protected RuleDTO[] getRulesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		if ((figureFrom != null) && (figureTo != null) ){ 
+			RuleDTO[] returnValue = defineService.getRulesByLogicalPath(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			return returnValue;
+		}
+		 else {
+			return new RuleDTO[]{};
+		}
 	}
 	
 //	@Override
@@ -158,15 +181,4 @@ public class ModuleAndRuleController extends DrawingController {
 		validateService = ServiceProvider.getInstance().getValidateService();
 	}
 
-	@Override
-	protected RuleDTO[] getRulesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
-		if ((figureFrom != null) && (figureTo != null) ){ 
-			RuleDTO[] returnValue = defineService.getRulesByLogicalPath(figureFrom.getUniqueName(), figureTo.getUniqueName());
-			return returnValue;
-		}
-		 else {
-			return new RuleDTO[]{};
-		}
-	}
-	
 }

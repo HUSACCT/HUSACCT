@@ -33,7 +33,7 @@ public abstract class DrawingController {
 	private static final double					MIN_ZOOMFACTOR	= 0.25;
 	private static final double					MAX_ZOOMFACTOR	= 1.75;
 	
-	private Drawing								drawing;
+	protected Drawing							drawing;
 	protected DrawingView						drawingView;
 	
 	protected DrawingSettingsHolder 			drawingSettingsHolder;
@@ -285,15 +285,14 @@ public abstract class DrawingController {
 		}
 	}
 	
-	public RuleDTO[] getRulesOfLine(BaseFigure selectedLine) {
-		if (selectedLine instanceof RelationFigure) {
-			ConnectionFigure cf = (ConnectionFigure) selectedLine;
+	public RuleDTO[] getRulesOfFigure(BaseFigure selectedFigure) {
+		if (selectedFigure instanceof RelationFigure) {
+			ConnectionFigure cf = (ConnectionFigure) selectedFigure;
 			ModuleFigure from = (ModuleFigure) cf.getStartFigure();
 			ModuleFigure to = (ModuleFigure) cf.getEndFigure();
 			return getRulesBetween(from, to);
-		} else if(selectedLine instanceof ModuleFigure){
-			ModuleFigure selectedModule = (ModuleFigure) selectedLine;
-			return getRulesBetween(selectedModule, selectedModule);
+		} else if((selectedFigure instanceof ModuleFigure) || (selectedFigure instanceof ParentFigure)){
+			return getRulesBetween(selectedFigure, selectedFigure);
 		}else {
 		
 			return new RuleDTO[] {};
@@ -506,7 +505,7 @@ public abstract class DrawingController {
 	
 	protected abstract ViolationDTO[] getViolationsBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 	
-	protected abstract RuleDTO[] getRulesBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
+	protected abstract RuleDTO[] getRulesBetween(BaseFigure figureFrom, BaseFigure figureTo);
 
 	protected abstract boolean hasRelationBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 	

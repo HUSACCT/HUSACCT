@@ -310,11 +310,14 @@ public class GraphicsPresentationController implements UserInputListener{
 	}
 	
 	@Override
-	public void propertiesPaneShowRules(BaseFigure selectedLine) {
-		RuleDTO[] ruleDTOs = drawingController.getRulesOfLine(selectedLine);
-		if(ruleDTOs.length > 0)
-			graphicsFrame.showRulesProperties(ruleDTOs);
-		else
+	public void propertiesPaneShowRules(BaseFigure selectedFigure) {
+		if (drawingType.equals(DrawingTypesEnum.MODULE_RULE_ARCHITECTURE)) {
+			RuleDTO[] ruleDTOs = drawingController.getRulesOfFigure(selectedFigure);
+			if(ruleDTOs.length > 0)
+				graphicsFrame.showRulesProperties(ruleDTOs);
+			else
+				graphicsFrame.hideProperties();
+		} else
 			graphicsFrame.hideProperties();
 	}
 	
