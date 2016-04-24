@@ -18,11 +18,11 @@ import husacct.common.enums.ModuleTypes;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
 
-public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
+public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 	private IModelQueryService queryService;
 	private IDefineService defineService;
 	private IDefineSarService defineSarService;
-	private final Logger logger = Logger.getLogger(ComponentsHUSACCT_SelectedModule.class);
+	private final Logger logger = Logger.getLogger(ComponentsAndSubSystems_HUSACCT.class);
 
 	ModuleDTO selectedModule;
 	ArrayList<String> softwareUnitsInSelectedModuleList;
@@ -32,12 +32,12 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> enumsPerSoftwareUnit = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExcludeMap = new HashMap<String, SoftwareUnitDTO>();
 	
-	public ComponentsHUSACCT_SelectedModule(){
+	public ComponentsAndSubSystems_HUSACCT(){
 		defineService = ServiceProvider.getInstance().getDefineService();
 		defineSarService = defineService.getSarService();
 	}
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		selectedModule = dto.getSelectedModule();
 		if (selectedModule.logicalPath.equals("")) {
 			selectedModule.logicalPath = "**"; // Root of intended software architecture
@@ -88,7 +88,6 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	private boolean identifyComponentsInRootOfSelectedModule(ModuleDTO selectedModuleArgument) {
 		boolean componentDetected = false;
 		this.selectedModule = selectedModuleArgument;
-		filterSoftwareUnitsInSelectedModuleList();
 		try {
 			for (String softwareUnitInSelectedModule : softwareUnitsInSelectedModuleList) {
 				for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
@@ -135,9 +134,9 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 
 	// For each softwareUnitsInSelectedModuleList, create a Component and its Interface, or a Subsystem, and assign software units to these modules.
 	private void createComponentsAndOrSubSystems() {
-		filterSoftwareUnitsInSelectedModuleList(); // Filter out software units assigned to component interfaces.
+		ArrayList<String> filteredListOfSoftwareUnitsInSelected = filterSoftwareUnitsInSelectedModuleList(); // Filter out software units assigned to component interfaces.
 		try {
-			for (String softwareUnitWithinSelectedModule : softwareUnitsInSelectedModuleList) {
+			for (String softwareUnitWithinSelectedModule : filteredListOfSoftwareUnitsInSelected) {
 				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(softwareUnitWithinSelectedModule);
 				HashSet<SoftwareUnitDTO> parentUnitsList = new HashSet<SoftwareUnitDTO>();
 				parentUnitsList.add(parentUnit);
@@ -210,12 +209,12 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 					// Create a Component, conditionally as submodule of a sSubsystem 
 					if (allChildUnitsAreNeededToImplementTheInterfaceServices) {
 						// Create a Component only
-						createComponent(parentUnit, softwareUnitsToAssignToComponent);
+						createComponent(parentUnit, softwareUnitsToAssignToComponent, false);
 					} else {
-						// Create a Subsystem and a Component (To do: within the Subsystem) 
+						// Create a Subsystem and a Component
 						createSubSystem(parentUnit, softwareUnitsToAssignToSubSystem);						
 						parentUnit.name = parentUnit.name + "Component";
-						createComponent(parentUnit, softwareUnitsToAssignToComponent);
+						createComponent(parentUnit, softwareUnitsToAssignToComponent, true);
 					}
 				} else { // Create a subsystem, if the software unit is a package
 					createSubSystem(parentUnit, parentUnitsList);
@@ -226,13 +225,13 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	    }
 	}
 
-	private void createComponent(SoftwareUnitDTO parentUnit, HashSet<SoftwareUnitDTO> softwareUnitsToAssignToComponent) {
+	private void createComponent(SoftwareUnitDTO parentUnit, HashSet<SoftwareUnitDTO> softwareUnitsToAssignToComponent, boolean hasSiblingSubSystem) {
 		ModuleDTO newModule;
 		ArrayList<SoftwareUnitDTO> interfaceUnits = componentsWithInterfaces.get(parentUnit.uniqueName);
 		// Determine if the new Component has to replace the SelectedModule
-		boolean replaceSelectedModuleByComponent = hasTheComponentToReplaceTheSelectedModule(parentUnit.uniqueName);
+		boolean replaceSelectedModuleByComponent = shouldTheComponentReplaceTheSelectedModule(parentUnit.uniqueName);
 
-		if (!replaceSelectedModuleByComponent) {
+		if (!replaceSelectedModuleByComponent || hasSiblingSubSystem) {
 			// Create a new module as a child of the SelectedModule
 			newModule = defineSarService.addModule(parentUnit.name, selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), 0, new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToComponent));
 			addToReverseReconstructionList(newModule); //add to cache for reverse
@@ -337,7 +336,7 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 	}
 
 	// Returns true, if selectedModule is a Subsystem AND all its assigned types will be assigned to the component.
-	private boolean hasTheComponentToReplaceTheSelectedModule(String softwareUnitInSelectedModule) {
+	private boolean shouldTheComponentReplaceTheSelectedModule(String softwareUnitInSelectedModule) {
 		boolean replaceSelectedModuleByComponent = false;
 		if (selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
 			HashSet<String> allClassesAssignedToSelectedModule = new HashSet<String>();
@@ -387,13 +386,13 @@ public class ComponentsHUSACCT_SelectedModule extends AlgorithmHUSACCT{
 		}
 	}
 	
-	private void filterSoftwareUnitsInSelectedModuleList() {
+	private ArrayList<String> filterSoftwareUnitsInSelectedModuleList() {
 		ArrayList<String> newSoftwareUnitsInSelectedModuleList =  new ArrayList<String>();
 		for (String su : softwareUnitsInSelectedModuleList) {
 			if (!softwareUnitsToExcludeMap.containsKey(su)) {
 				newSoftwareUnitsInSelectedModuleList.add(su);
 			}
 		}
-		softwareUnitsInSelectedModuleList = newSoftwareUnitsInSelectedModuleList;
+		return newSoftwareUnitsInSelectedModuleList;
 	}
 }

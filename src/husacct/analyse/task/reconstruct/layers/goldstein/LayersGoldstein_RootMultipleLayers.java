@@ -26,7 +26,7 @@ public class LayersGoldstein_RootMultipleLayers extends AlgorithmGoldstein {
 	private String xLibrariesRootPackage = "xLibraries";
 	
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		layerThreshold = dto.getThreshold();
 		dependencyType = dto.getRelationType();
 		this.queryService = queryService;

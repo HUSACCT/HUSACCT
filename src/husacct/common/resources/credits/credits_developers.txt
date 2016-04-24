@@ -1,7 +1,16 @@
-@Lecturers
+@Lecturers 2012 and 2013
 Michiel Borkent
 Christian Köppe
 Leo Pruijt
+@Students 2013
+Sven van Alem
+Rick van Alem
+Menno Burkhard
+Lars Celie
+Michael Hersisia
+Gert Kommer
+Rory van Ligten
+Jorn Steehouder
 @Students 2013
 Donovan de Kuiper
 Thijs Schalk

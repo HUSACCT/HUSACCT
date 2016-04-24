@@ -30,7 +30,8 @@ public class AboutDialog extends JDialog{
 	private JPanel textPanel, gitForkPanel;
 	private JLabel forkLabel,pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
 	private JButton okButton, creditsButton;
-	private String versionNumber = "4.5";
+	private String versionNumber = "5.0";
+	private String copyRightText = "\u00a9 2016 HUSACCT (GNU General Public License)";
 	private MainController mainController;
 	private JPanel forkLabelPanel;
 
@@ -108,7 +109,7 @@ public class AboutDialog extends JDialog{
 		gitForkPanel.add(logoLabelPanel);
 
 		textPanel = new JPanel();
-		husacctLabel = new JLabel("\u00a9 2014 HUSACCT (GNU General Public License)");
+		husacctLabel = new JLabel(copyRightText);
 		versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 		versionNumberLabel = new JLabel(versionNumber);
 

@@ -16,6 +16,7 @@ public class AnalyseReconstructConstants {
 		public static final String Gateways_HUSACCT_Root = "Gateways_HUSACCT_Root";
 		public static final String Adapter_Recognition = "Adapter_Recognition";
 
+		public static final String Externals_Recognition = "Externals_Recognition";
 	}
 	
 	public static class ApproachesTable{

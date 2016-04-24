@@ -191,23 +191,26 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 
 	private Object[][] getAllApproachesRows(){
 		Object ApproachesRows[][] = { 
+			{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
+			{Algorithm.Gateways_HUSACCT_Root, getTranslation(Algorithm.Gateways_HUSACCT_Root), 10},
+			{Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition), 10},
+
 			{Algorithm.Layers_Goldstein_Multiple_Improved, getTranslation(Algorithm.Layers_Goldstein_Multiple_Improved), 10}, 
 			{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10}, 
 			{Algorithm.Layers_Goldstein_Root_Improved, getTranslation(Algorithm.Layers_Goldstein_Root_Improved), 10},
 				
 			{Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original), 10}, 
-			{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}, 
+			{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}};
 				
-			{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
-			{Algorithm.Gateways_HUSACCT_Root, getTranslation(Algorithm.Gateways_HUSACCT_Root), 10}};
 		return ApproachesRows;
 	}
 	
 	private Object[][] getDistinctApproachesRows(){
 		Object ApproachesRows[][] = { 
+				{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
+				{Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition), 10},
 				{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10},
-				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}, 
-				{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10}};
+				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}};
 			return ApproachesRows;
 	}
 	

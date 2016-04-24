@@ -24,13 +24,13 @@ public class LayersGoldstein_SelectedModuleMultipleLayers extends AlgorithmGolds
 	
 	
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		selectedModule = dto.getSelectedModule();
 		layerThreshold = dto.getThreshold();
 		this.queryService = queryService;
 		
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
-		identifyMultipleLayers(getClasses(xLibrariesRootPackage), dto.getRelationType());
+		identifyMultipleLayers(getClasses(), dto.getRelationType());
 		
 		for (int level : layers.keySet()) {
 			ArrayList<ModuleDTO> modulesToBeMoved = new ArrayList<ModuleDTO>();
@@ -63,7 +63,7 @@ public class LayersGoldstein_SelectedModuleMultipleLayers extends AlgorithmGolds
 	}
 	
 	
-	public ArrayList<SoftwareUnitDTO> getClasses(String library) {
+	public ArrayList<SoftwareUnitDTO> getClasses() {
 		ArrayList<SoftwareUnitDTO> selectedSubmoduleWithClasses = new ArrayList<SoftwareUnitDTO>();
 		IDefineService defineService = husacct.ServiceProvider.getInstance().getDefineService();
 		

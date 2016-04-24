@@ -12,7 +12,7 @@ public class LayersScanniello_RootImproved extends AlgorithmScanniello{
 	private static final String xLibrariesRootPackage = "xLibraries";
 	
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
 		ServiceProvider.getInstance().getDefineService();

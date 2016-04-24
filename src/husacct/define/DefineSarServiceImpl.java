@@ -43,6 +43,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 			ModuleStrategy newModule = moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
 			if (newModule != null) {
 				newModuleDTO = domainParser.parseModule(newModule);
+				defineService.getDefinitionController().setSelectedModuleId(newModule.getId());
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );

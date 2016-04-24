@@ -15,7 +15,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	//Gateway: is the only class with imports towards an external application 
 
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) throws Exception {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) throws Exception {
 		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
 		this.relationType = dto.getRelationType();

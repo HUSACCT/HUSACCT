@@ -28,7 +28,7 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 	
 	
 	@Override
-	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService, String xLibrariesRootPackage) {
+	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		layerThreshold = dto.getThreshold();
 		this.queryService = queryService;
 		identifyLayersAtRootLevel(dto.getRelationType());

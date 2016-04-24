@@ -68,7 +68,7 @@ public class CreditsDialog extends JDialog {
 
 		textPanel1 = new JPanel();
 		textPanel1.setLayout(new GridBagLayout());
-		architectLabelDescription = new JLabel(localeService.getTranslatedString("Architect") + ":");
+		architectLabelDescription = new JLabel("Architect and lead developer" + ":");
 		architectLabelDescription.setFont(new Font("Arial", Font.BOLD, 14));
 		architectLabel = new JTextArea("\n" + "Leo Pruijt" + "\n" + "HU University of Applied Sciences, Utrecht, The Netherlands");
 		architectLabel.setLineWrap(true);
@@ -80,7 +80,7 @@ public class CreditsDialog extends JDialog {
 
 		textPanel2 = new JPanel();
 		textPanel2.setLayout(new GridBagLayout());
-		processDescription = new JLabel("Process support"  + ":");
+		processDescription = new JLabel("Process support version 1.0 and 2.0"  + ":");
 		processDescription.setFont(new Font("Arial", Font.BOLD, 14));
 		processLabel = new JTextArea("\n" + "Christian Köppe, Michiel Borkent");
 		processLabel.setLineWrap(true);
