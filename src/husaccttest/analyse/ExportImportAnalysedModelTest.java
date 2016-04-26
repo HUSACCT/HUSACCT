@@ -33,8 +33,10 @@ public class ExportImportAnalysedModelTest {
 	private static Logger logger;
 	private static IAnalyseService analyseService = null;
 	
-	private static final String exportFile = "ExportFileAnalysedModel.XML";
+	private static final String exportFileName = "ExportFileAnalysedModel.XML";
 	private static String exportFilePath;
+	private static File exportFile;
+
 	private static AnalysisStatisticsDTO analyseStatisticsBeforeExport;
 	private static AnalysisStatisticsDTO analyseStatisticsAfterImport;
 
@@ -63,7 +65,8 @@ public class ExportImportAnalysedModelTest {
 			}
 			
 			analyseStatisticsBeforeExport = getAnalyseStatistics();
-			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFile);
+			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFileName);
+			exportFile = new File(exportFilePath);
 			exportAnalysisModel();
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
@@ -83,7 +86,13 @@ public class ExportImportAnalysedModelTest {
 
 	@AfterClass
 	public static void tearDown(){
-		workspaceController.closeWorkspace();
+		try {
+			workspaceController.closeWorkspace();
+			exportFile.delete();
+		} catch (Exception e){
+			String errorMessage =  "Exception: " + e.getMessage();
+			logger.warn(errorMessage);
+		}
 	}
 
 	// TESTS 
@@ -250,17 +259,15 @@ public class ExportImportAnalysedModelTest {
 	}
 	
 	private static void exportAnalysisModel() {
-		File file = new File(exportFilePath);
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
-		mainController.getExportImportController().exportAnalysisModel(file);
+		mainController.getExportImportController().exportAnalysisModel(exportFile);
 	}
 
 	private static void importAnalysisModel() {
-		File file = new File(exportFilePath);
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
-		mainController.getExportImportController().importAnalysisModel(file);
+		mainController.getExportImportController().importAnalysisModel(exportFile);
 	}
 
 	private boolean areDependencyTypesDetected(String moduleFrom, String moduleTo, ArrayList<String> dependencyTypes, boolean isIndirect) {
