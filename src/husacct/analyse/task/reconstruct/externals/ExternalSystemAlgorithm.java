@@ -35,8 +35,10 @@ public class ExternalSystemAlgorithm extends ExternalAlgorithm_Super{
 				ArrayList<SoftwareUnitDTO> softwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
 				softwareUnitsArgument.add(mainUnit);
 				ModuleDTO newModule = defineSarService.addModule(mainUnit.name, "ExternalSystems", "ExternalLibrary", 0, softwareUnitsArgument);
-				addToReverseReconstructionList(newModule); //add to cache for reverse
-				nrOfExternalLibraries++;
+				if (!newModule.logicalPath.equals("")) {
+					nrOfExternalLibraries++;
+					addToReverseReconstructionList(newModule); //add to cache for reverse
+				}
 			}
 			logger.info(" Number of added ExternalLibraries: " + nrOfExternalLibraries);
 		} catch (Exception e) {

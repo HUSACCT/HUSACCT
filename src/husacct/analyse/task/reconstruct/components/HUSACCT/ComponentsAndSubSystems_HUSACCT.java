@@ -7,7 +7,6 @@ import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 
-import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
@@ -15,13 +14,9 @@ import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.enums.DependencySubTypes;
 import husacct.common.enums.ModuleTypes;
-import husacct.define.IDefineSarService;
-import husacct.define.IDefineService;
 
 public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 	private IModelQueryService queryService;
-	private IDefineService defineService;
-	private IDefineSarService defineSarService;
 	private final Logger logger = Logger.getLogger(ComponentsAndSubSystems_HUSACCT.class);
 
 	ModuleDTO selectedModule;
@@ -33,9 +28,8 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExcludeMap = new HashMap<String, SoftwareUnitDTO>();
 	
 	public ComponentsAndSubSystems_HUSACCT(){
-		defineService = ServiceProvider.getInstance().getDefineService();
-		defineSarService = defineService.getSarService();
 	}
+
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		selectedModule = dto.getSelectedModule();
@@ -243,18 +237,22 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 		if (!replaceSelectedModuleByComponent || hasSiblingSubSystem) {
 			// Create a new module as a child of the SelectedModule
 			newModule = defineSarService.addModule(parentUnit.name, selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), 0, new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToComponent));
-			addToReverseReconstructionList(newModule); //add to cache for reverse
-			// Create the Interface of the Component
-			if (newModule != null) {
+			if (!newModule.logicalPath.equals("")) {
+				addToReverseReconstructionList(newModule); //add to cache for reverse
+				// Create the Interface of the Component
 				ModuleDTO newInterfaceModule = defineSarService.addModule(parentUnit.name + "Interface", newModule.logicalPath, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
-				addToReverseReconstructionList(newInterfaceModule); //add to cache for reverse
+				if (!newInterfaceModule.logicalPath.equals("")) {
+					addToReverseReconstructionList(newInterfaceModule); //add to cache for reverse
+				}
 			}
 		} else { // Replace SelectedModule by the component
 			ModuleDTO editedModule = defineSarService.editModule(selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), null, 0, null);
-			addToReverseEditModuleList(selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString());
-			for (ModuleDTO subModule : editedModule.subModules) {
-				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
-					defineSarService.editModule(subModule.logicalPath, null, null, 0, interfaceUnits);
+			if (!editedModule.logicalPath.equals("")) {
+				addToReverseReconstructionList(editedModule); //add to cache for reverse
+				for (ModuleDTO subModule : editedModule.subModules) {
+					if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
+						defineSarService.editModule(subModule.logicalPath, null, null, 0, interfaceUnits);
+					}
 				}
 			}
 		}
@@ -262,8 +260,12 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 	
 	private void createSubSystem(SoftwareUnitDTO parentUnit, HashSet<SoftwareUnitDTO> softwareUnitsToAssignToSubSystem) {
 		if (parentUnit.type.equals("package")) {
-			ModuleDTO newModule = defineSarService.addModule(parentUnit.name, selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), 0, new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToSubSystem));
-			addToReverseReconstructionList(newModule); //add to cache for reverse
+			ArrayList<SoftwareUnitDTO> softwareUnits = new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToSubSystem);
+			String type = ModuleTypes.SUBSYSTEM.toString();
+			ModuleDTO newModule = defineSarService.addModule(parentUnit.name, selectedModule.logicalPath, type, 0, softwareUnits);
+			if (!newModule.logicalPath.equals("")) {
+				addToReverseReconstructionList(newModule); //add to cache for reverse
+			}
 		}
 	}
 	

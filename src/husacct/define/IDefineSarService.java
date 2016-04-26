@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public interface IDefineSarService {
 
 	/** Adds a module to the intended architecture
-	 * Argument name is the simple name, so not the logical path of the module, which is formed by the combination of parentLogicalPath + "." + name.  
+	 * Argument name is the simple name, so not the logical path of the module, which is formed by the combination of parentLogicalPath + "." + name.
+	 * Returns a ModuleDTO with filled fields, if adding was successful, or empty fields, if not.
 	 */
 	public ModuleDTO addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits);
 	

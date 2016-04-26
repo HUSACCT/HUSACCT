@@ -47,4 +47,5 @@ public abstract class IAlgorithm {
 		reverseReconstructionList.clear();
 		reverseEditModuleTypeList.clear();
 	}
+
 }

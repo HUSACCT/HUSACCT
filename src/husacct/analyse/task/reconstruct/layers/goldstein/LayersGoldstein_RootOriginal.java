@@ -86,12 +86,16 @@ public class LayersGoldstein_RootOriginal extends AlgorithmGoldstein{
 			determineInternalRootPackagesWithClasses();
 			identifyLayers(internalRootPackagesWithClasses, dependencyType);
 			
-			//defineSarService.addModule("Classes", "**", "Layer", 0, internalClasses);
+			int numberOfAddedLayers = 0;
 			
 			for (Integer hierarchicalLevel : layers.keySet()) {
 				ModuleDTO newModule = defineSarService.addModule("Layer" + hierarchicalLevel, "**", "Layer", hierarchicalLevel, layers.get(hierarchicalLevel));
-				addToReverseReconstructionList(newModule); //add to cache for reverse
+				if (!newModule.logicalPath.equals("")) {
+					numberOfAddedLayers ++;
+					addToReverseReconstructionList(newModule); //add to cache for reverse
+				}
 			}
+			logger.info(" Number of added Layers: " + numberOfAddedLayers);
 		}
 		
 		private void identifyLayers(ArrayList<SoftwareUnitDTO> units, String depedencyType) {
@@ -130,8 +134,6 @@ public class LayersGoldstein_RootOriginal extends AlgorithmGoldstein{
 				layers = tempLayers;
 				
 			}
-
-			logger.info(" Number of added Layers: " + layers.size());
 		}
 		
 		private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId, String dependencyType) {

@@ -59,12 +59,12 @@ public class ReconstructArchitecture {
 					algorithm = new LayersGoldstein_RootImproved();
 					break;
 				case (Algorithm.Layers_Goldstein_Original):
-					if(moduleSelected){
+					// if(moduleSelected){
 						algorithm = new LayersGoldstein_SelectedModuleOriginal();
-					}
-					else{ //is root
-						algorithm = new LayersGoldstein_RootOriginal();
-					}
+					//}
+					//else{ //is root
+					//	algorithm = new LayersGoldstein_RootOriginal();
+					//}
 					break;
 				case (Algorithm.Layers_Scanniello_Improved):
 					if (moduleSelected){

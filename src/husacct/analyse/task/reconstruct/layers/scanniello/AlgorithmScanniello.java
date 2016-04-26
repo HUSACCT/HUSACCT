@@ -13,6 +13,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.enums.ModuleTypes;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
 
@@ -153,42 +154,46 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	
 	
 	
-	private ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
+	private ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitFrom, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
-		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
+		for (SoftwareUnitDTO softwareUnitTo : sofwareUnitDTOs){
 			DependencyDTO[] dependencies = null;
-			switch (relationType) {
-				case RelationTypes.umlLinks:
-					dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
-					break;
-				case RelationTypes.accessCallReferenceDependencies:
-					dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
-					break;
-				default : //RelationTypes.allDependencies
-					dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName, possibleDependency.uniqueName);
-					break;
+			if (!softwareUnitTo.equals(softwareUnitFrom)) {
+				switch (relationType) {
+					case RelationTypes.umlLinks:
+						dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
+						break;
+					case RelationTypes.accessCallReferenceDependencies:
+						dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
+						break;
+					default : //RelationTypes.allDependencies
+						dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
+						break;
+				}
+				dependecyDTOs.addAll(Arrays.asList(dependencies));
 			}
-			dependecyDTOs.addAll(Arrays.asList(dependencies));
 		}
 		return dependecyDTOs;
 	}
 	
-	private ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
+	private ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitTo, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
-		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
+		for (SoftwareUnitDTO softwareUnitFrom : sofwareUnitDTOs){
 			DependencyDTO[] dependencies = null;
-			switch (relationType) {
-				case RelationTypes.umlLinks:
-					dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
-					break;
-				case RelationTypes.accessCallReferenceDependencies:
-					dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
-					break;
-				default : //RelationTypes.allDependencies
-					dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(possibleDependency.uniqueName, softwareUnitDTO.uniqueName);
-					break;
+			if (!softwareUnitTo.equals(softwareUnitFrom)) {
+				switch (relationType) {
+					case RelationTypes.umlLinks:
+						dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
+						break;
+					case RelationTypes.accessCallReferenceDependencies:
+						dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
+						break;
+					default : //RelationTypes.allDependencies
+						dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
+						break;
+				}
+				dependecyDTOs.addAll(Arrays.asList(dependencies));
 			}
-			dependecyDTOs.addAll(Arrays.asList(dependencies));
 		}
 		return dependecyDTOs;
 	}
@@ -229,7 +234,7 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 			}
 		}
 		if (!discLayer.isEmpty()){
-			ModuleDTO newModule = defineSarService.addModule("discLayer", "**", "Layer", 1, discLayer);
+			ModuleDTO newModule = defineSarService.addModule("Rest", "**", ModuleTypes.SUBSYSTEM.toString(), 0, discLayer);
 			addToReverseReconstructionList(newModule); //add to cache for reverse
 		}
 	}
@@ -244,7 +249,7 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 			}
 		}
 		if (!discLayer.isEmpty()){
-			ModuleDTO newModule = defineSarService.addModule("discLayer", selectedModule.logicalPath, "Layer", layerCount, discLayer);
+			ModuleDTO newModule = defineSarService.addModule("Rest", selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), layerCount, discLayer);
 			addToReverseReconstructionList(newModule); //add to cache for reverse
 		}
 	}
