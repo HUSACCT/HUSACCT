@@ -41,6 +41,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 		selectedModule = dto.getSelectedModule();
 		if (selectedModule.logicalPath.equals("")) {
 			selectedModule.logicalPath = "**"; // Root of intended software architecture
+			selectedModule.type = "Root"; // Root of intended software architecture
 		}
 		this.queryService = queryService;
 		softwareUnitsInSelectedModuleList = new ArrayList<String>();
@@ -51,9 +52,17 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 		}
 
 		// Select the set of SUs to be used, and activate the component-identifying algorithm  
-		softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath));
+		if (selectedModule.logicalPath == "**") {
+			for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
+				if (!rootUnit.uniqueName.equals("xLibraries")) {
+					softwareUnitsInSelectedModuleList.add(rootUnit.uniqueName);
+				}
+			}
+		} else {
+			softwareUnitsInSelectedModuleList.addAll(defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath));
+		}
 		if (softwareUnitsInSelectedModuleList.size() == 1) {
-			if (selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
+			if (selectedModule.type.equals("Root") || selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
 				softwareUnitsInSelectedModuleList = getSetOfChildSoftwareUnits(softwareUnitsInSelectedModuleList.get(0));
 				identifyComponentsInRootOfSelectedModule(dto.getSelectedModule());
 			} else if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
@@ -318,14 +327,16 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmHUSACCT{
 	 */
 	private ArrayList<String> getSetOfChildSoftwareUnits(String parentUniqueName) {
 		ArrayList<String> childSoftwareUnits = new ArrayList<String>();
-		String parentUnitUniqueName = parentUniqueName;
+		String softwareUnit = parentUniqueName;
 		while (childSoftwareUnits.size() < 2) {
-			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(parentUnitUniqueName));
+			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(softwareUnit));
 			if (childUnits.length == 0) {
+				if (!softwareUnit.equals(parentUniqueName)) {
+					childSoftwareUnits.add(softwareUnit);
+				}
 				break;
 			} else if ((childUnits.length == 1)) {
-				String newParentUniqueName = childUnits[0].uniqueName;
-				childSoftwareUnits = getSetOfChildSoftwareUnits(newParentUniqueName);
+				softwareUnit = childUnits[0].uniqueName;
 			} else if ((childUnits.length >= 2)) {
 				for (SoftwareUnitDTO childUnit : childUnits) {
 					childSoftwareUnits.add(childUnit.uniqueName);

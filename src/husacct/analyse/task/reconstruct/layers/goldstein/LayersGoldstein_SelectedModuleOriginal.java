@@ -45,7 +45,7 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. Prepare. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
 		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
-		addSoftwareUnitsAssignedToComponentInterfaceTosoftwareUnitsToExcludeMap();
+		addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
 		
 		int numberOfAssignedSoftwareUnits = defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath).size();
 		if (numberOfAssignedSoftwareUnits > 1) {
@@ -103,16 +103,20 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 			}
 			layersWithSoftwareUnitsMap = tempLayers;
 			
+			int numberOfAddedLayers = 0;
 			for (int level : layersWithSoftwareUnitsMap.keySet()) {
 				ArrayList<ModuleDTO> modulesToBeMoved = new ArrayList<ModuleDTO>();
 				for(SoftwareUnitDTO softwareUnitDTO : layersWithSoftwareUnitsMap.get(level)){
 					modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 				}
 				
-				ModuleDTO newModule = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layersWithSoftwareUnitsMap.get(level));	
-				addToReverseReconstructionList(newModule); //add to cache for reverse
+				ModuleDTO newModule = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layersWithSoftwareUnitsMap.get(level));
+				if (newModule != null) {
+					numberOfAddedLayers ++;
+					addToReverseReconstructionList(newModule); //add to cache for reverse
+				}
 			}
-			logger.info(" Number of added Layers: " + layersWithSoftwareUnitsMap.size());
+			logger.info(" Number of added Layers: " + numberOfAddedLayers);
 		}
 	}
 	
@@ -170,7 +174,7 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 		}
 	}
 
-	private void addSoftwareUnitsAssignedToComponentInterfaceTosoftwareUnitsToExcludeMap() {
+	private void addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap() {
 		if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
 			for (ModuleDTO subModule : selectedModule.subModules) {
 				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {

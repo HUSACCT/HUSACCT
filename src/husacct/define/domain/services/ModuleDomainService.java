@@ -22,6 +22,11 @@ public class ModuleDomainService {
 	private ModuleFactory factory = new ModuleFactory();
 	private final Logger logger = Logger.getLogger(ModuleDomainService.class);
 
+	/**  
+	 * Adds module based on the arguments
+	 * Note: This method is called in the course of SAR, so no error messages will be displayed in the GUI if an error occurs.
+	 * @return Null, if the he module could not be added with success, else a ModuleStrategy is returned.
+	 */
 	public ModuleStrategy addModule(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
 		String message = "";
 		// 1) Create new module
@@ -74,10 +79,11 @@ public class ModuleDomainService {
 
 		if (message.equals("")) {
 			logger.info(" Module added with name: " + newModule.getName() + ", Type: " + newModule.getType() + ", Assigned units: " + newModule.countSoftwareUnits());
+			return newModule;
 		} else {
 			logger.info(" Module not added with name: " + name + ", Type: " + moduleType);
+			return null;
 		}
-		return newModule;
 	}
 	
 	public ModuleStrategy editModule(String logicalPath, String newType, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
@@ -123,8 +129,10 @@ public class ModuleDomainService {
 		} else {
 			message = SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId, module);
 		}
-		StateService.instance().addModule(module);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		if (message.equals("")) {
+			StateService.instance().addModule(module);
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		}
 		return message;
 	}
 
