@@ -153,7 +153,9 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	private ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitFrom, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
 		for (SoftwareUnitDTO softwareUnitTo : sofwareUnitDTOs){
-			dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
+			if (!softwareUnitTo.equals(softwareUnitFrom)) {
+				dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
+			}
 		}
 		return dependecyDTOs;
 	}
@@ -161,7 +163,9 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	private ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitTo, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
 		for (SoftwareUnitDTO softwareUnitFrom : sofwareUnitDTOs){
-			dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
+			if (!softwareUnitTo.equals(softwareUnitFrom)) {
+				dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
+			}
 		}
 		return dependecyDTOs;
 	}
