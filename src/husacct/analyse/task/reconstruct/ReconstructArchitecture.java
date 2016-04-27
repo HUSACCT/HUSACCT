@@ -10,10 +10,8 @@ import husacct.analyse.task.reconstruct.externals.ExternalSystemAlgorithm;
 import husacct.analyse.task.reconstruct.gateways.HUSACCT.GatewayHUSACCT_Root;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
-import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootOriginal;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleMultipleLayers;
 import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleOriginal;
-import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootImproved;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
 import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_SelectedModuleImproved;
 import husacct.common.dto.ModuleDTO;
@@ -49,42 +47,32 @@ public class ReconstructArchitecture {
 			switch (dto.getApproach()) {
 				case (Algorithm.Layers_Goldstein_Multiple_Improved):
 					if(moduleSelected){
-						 algorithm = new LayersGoldstein_SelectedModuleMultipleLayers();
+						 algorithm = new LayersGoldstein_SelectedModuleMultipleLayers(queryService);
 					}
 					else{ //is root
-						 algorithm = new LayersGoldstein_RootMultipleLayers();
+						 algorithm = new LayersGoldstein_RootMultipleLayers(queryService);
 					}
 					break;
 				case (Algorithm.Layers_Goldstein_Root_Improved):
-					algorithm = new LayersGoldstein_RootImproved();
+					algorithm = new LayersGoldstein_RootImproved(queryService);
 					break;
 				case (Algorithm.Layers_Goldstein_Original):
-					// if(moduleSelected){
-						algorithm = new LayersGoldstein_SelectedModuleOriginal();
-					//}
-					//else{ //is root
-					//	algorithm = new LayersGoldstein_RootOriginal();
-					//}
+					algorithm = new LayersGoldstein_SelectedModuleOriginal(queryService);
 					break;
 				case (Algorithm.Layers_Scanniello_Improved):
-					if (moduleSelected){
-						algorithm = new LayersScanniello_SelectedModuleImproved();
-					}
-					else{
-						algorithm = new LayersScanniello_RootImproved();
-					}
+					algorithm = new LayersScanniello_SelectedModuleImproved(queryService);
 					break;
 				case (Algorithm.Layers_Scanniello_Original):
-					algorithm = new LayersScanniello_RootOriginal();
+					algorithm = new LayersScanniello_RootOriginal(queryService);
 					break;
 				case (Algorithm.Component_HUSACCT_SelectedModule):
-					algorithm = new ComponentsAndSubSystems_HUSACCT();
+					algorithm = new ComponentsAndSubSystems_HUSACCT(queryService);
 					break;
 				case (Algorithm.Gateways_HUSACCT_Root):
-					algorithm = new GatewayHUSACCT_Root();
+					algorithm = new GatewayHUSACCT_Root(queryService);
 					break;
 				case (Algorithm.Externals_Recognition):
-					algorithm = new ExternalSystemAlgorithm();
+					algorithm = new ExternalSystemAlgorithm(queryService);
 					break;
 				default:
 					algorithm = null;	

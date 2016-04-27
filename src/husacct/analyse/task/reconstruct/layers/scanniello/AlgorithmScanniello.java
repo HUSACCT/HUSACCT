@@ -1,21 +1,16 @@
 package husacct.analyse.task.reconstruct.layers.scanniello;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.RelationTypes;
 import husacct.analyse.task.reconstruct.IAlgorithm;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.enums.ModuleTypes;
-import husacct.define.IDefineSarService;
-import husacct.define.IDefineService;
 
 public abstract class AlgorithmScanniello extends IAlgorithm{
 	protected static final int topLayerKey = 1;
@@ -23,10 +18,11 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	protected static final int bottomLayerKey = 3;
 	protected static final int discLayerKey = 4;
 	
-	protected IModelQueryService queryService;
-	protected IDefineService defineService;
 	protected int threshold;
 
+	protected AlgorithmScanniello(IModelQueryService queryService) {
+		super(queryService);
+	}
 	
 	protected ArrayList<SoftwareUnitDTO> getSoftwareUnitDTOs(ModuleDTO selectedModule){
 		ArrayList<SoftwareUnitDTO> softwareUnitsSelectedModule = new ArrayList<SoftwareUnitDTO>();
@@ -157,21 +153,7 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	private ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitFrom, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
 		for (SoftwareUnitDTO softwareUnitTo : sofwareUnitDTOs){
-			DependencyDTO[] dependencies = null;
-			if (!softwareUnitTo.equals(softwareUnitFrom)) {
-				switch (relationType) {
-					case RelationTypes.umlLinks:
-						dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
-						break;
-					case RelationTypes.accessCallReferenceDependencies:
-						dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
-						break;
-					default : //RelationTypes.allDependencies
-						dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
-						break;
-				}
-				dependecyDTOs.addAll(Arrays.asList(dependencies));
-			}
+			dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
 		}
 		return dependecyDTOs;
 	}
@@ -179,21 +161,7 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	private ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitTo, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
 		for (SoftwareUnitDTO softwareUnitFrom : sofwareUnitDTOs){
-			DependencyDTO[] dependencies = null;
-			if (!softwareUnitTo.equals(softwareUnitFrom)) {
-				switch (relationType) {
-					case RelationTypes.umlLinks:
-						dependencies = queryService.getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
-						break;
-					case RelationTypes.accessCallReferenceDependencies:
-						dependencies = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
-						break;
-					default : //RelationTypes.allDependencies
-						dependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName);
-						break;
-				}
-				dependecyDTOs.addAll(Arrays.asList(dependencies));
-			}
+			dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
 		}
 		return dependecyDTOs;
 	}
@@ -206,16 +174,21 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 		
 		int LayerKeyCount = 1;
 		for(ArrayList<SoftwareUnitDTO> topLayer : topLayers){
-			structuredLayers.put(LayerKeyCount, topLayer);
+			if (!topLayer.isEmpty()) {
+				structuredLayers.put(LayerKeyCount, topLayer);
+				LayerKeyCount++;
+			}
+		}
+		if (!middleLayer.isEmpty()) {
+			structuredLayers.put(LayerKeyCount, middleLayer);
 			LayerKeyCount++;
 		}
-		structuredLayers.put(LayerKeyCount, middleLayer);
-		LayerKeyCount++;
 		for (int i = bottomLayers.size()-1; i>=0; i-- ){
-			structuredLayers.put(LayerKeyCount, bottomLayers.get(i));
-			LayerKeyCount++;
+			if (!bottomLayers.get(i).isEmpty()) {
+				structuredLayers.put(LayerKeyCount, bottomLayers.get(i));
+				LayerKeyCount++;
+			}
 		}
-		
 		return structuredLayers;
 	}
 	
@@ -224,33 +197,33 @@ public abstract class AlgorithmScanniello extends IAlgorithm{
 	
 	
 	protected void buildStructure(HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers, ArrayList<SoftwareUnitDTO> discLayer){
-		IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
-		int layerCounter = 0;
-		for (int hierarchicalLevel : structuredLayers.keySet()) {
-			if (!structuredLayers.get(hierarchicalLevel).isEmpty()){
-				layerCounter++;
-				ModuleDTO newModule = defineSarService.addModule("Layer" + layerCounter, "**", "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
-				addToReverseReconstructionList(newModule); //add to cache for reverse
+		if (structuredLayers.keySet().size() > 1) {
+			int layerCounter = 0;
+			for (int hierarchicalLevel : structuredLayers.keySet()) {
+				if (!structuredLayers.get(hierarchicalLevel).isEmpty()){
+					layerCounter++;
+					createModule_andAddItToReverseList("Layer" + layerCounter, "**", "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
+				}
 			}
-		}
-		if (!discLayer.isEmpty()){
-			ModuleDTO newModule = defineSarService.addModule("Rest", "**", ModuleTypes.SUBSYSTEM.toString(), 0, discLayer);
-			addToReverseReconstructionList(newModule); //add to cache for reverse
+			if (!discLayer.isEmpty()){
+				createModule_andAddItToReverseList("Rest", "**", ModuleTypes.SUBSYSTEM.toString(), 0, discLayer);
+			}
 		}
 	}
+
 	protected void buildStructure (HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers, ArrayList<SoftwareUnitDTO> discLayer, ModuleDTO selectedModule){
-		IDefineSarService defineSarService = ServiceProvider.getInstance().getDefineService().getSarService();
-		int layerCount = 0;
-		for (int hierarchicalLevel : structuredLayers.keySet()) {
-			if (!structuredLayers.get(hierarchicalLevel).isEmpty()){
-				layerCount++;
-				ModuleDTO newModule = defineSarService.addModule("Layer" + layerCount, selectedModule.logicalPath, "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
-				addToReverseReconstructionList(newModule); //add to cache for reverse
+		int numberOfLayers = structuredLayers.keySet().size();
+		if (numberOfLayers > 1) {
+			int layerCount = 0;
+			for (int hierarchicalLevel : structuredLayers.keySet()) {
+				if (!structuredLayers.get(hierarchicalLevel).isEmpty()){
+					layerCount++;
+					createModule_andAddItToReverseList("Layer" + layerCount, selectedModule.logicalPath, "Layer", hierarchicalLevel, structuredLayers.get(hierarchicalLevel));
+				}
 			}
-		}
-		if (!discLayer.isEmpty()){
-			ModuleDTO newModule = defineSarService.addModule("Rest", selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), layerCount, discLayer);
-			addToReverseReconstructionList(newModule); //add to cache for reverse
+			if (!discLayer.isEmpty()){
+				createModule_andAddItToReverseList("Rest", selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), layerCount, discLayer);
+			}
 		}
 	}
 }

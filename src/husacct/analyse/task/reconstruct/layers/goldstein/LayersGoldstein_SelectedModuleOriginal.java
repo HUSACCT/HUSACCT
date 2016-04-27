@@ -7,7 +7,6 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -19,12 +18,14 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 	
 	private ModuleDTO selectedModule;
 	private int layerThreshold;
-	private IModelQueryService queryService;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
 
+	public LayersGoldstein_SelectedModuleOriginal (IModelQueryService queryService) {
+		super(queryService);
+	}
 	
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
@@ -35,8 +36,7 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 				selectedModule.type = "Root"; // Root of intended software architecture
 			}
 			layerThreshold = dto.getThreshold();
-			this.queryService = queryService;
-	
+
 			// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
 			if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
 				return;
@@ -105,17 +105,16 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 					modulesToBeMoved.add(defineService.getModule_BasedOnSoftwareUnitName(softwareUnitDTO.uniqueName));
 				}
 				
-				ModuleDTO newModule = defineSarService.addModule("Layer" + level, selectedModule.logicalPath, "Layer", level, layersWithSoftwareUnitsMap.get(level));
+				ModuleDTO newModule = createModule_andAddItToReverseList("Layer" + level, selectedModule.logicalPath, "Layer", level, layersWithSoftwareUnitsMap.get(level));
 				if (!newModule.logicalPath.equals("")) {
 					numberOfAddedLayers ++;
-					addToReverseReconstructionList(newModule); //add to cache for reverse
 				}
 			}
 			logger.info(" Number of added Layers: " + numberOfAddedLayers);
 		}
 	}
 	
-	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId, String dependencyType) {
+	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId, String relationType) {
 		ArrayList<SoftwareUnitDTO> assignedUnitsOriginalBottomLayer = layersWithSoftwareUnitsMap.get(bottomLayerId);
 		@SuppressWarnings("unchecked")
 		ArrayList<SoftwareUnitDTO> assignedUnitsBottomLayerClone = (ArrayList<SoftwareUnitDTO>) assignedUnitsOriginalBottomLayer.clone();
@@ -127,27 +126,8 @@ public class LayersGoldstein_SelectedModuleOriginal extends AlgorithmGoldstein{
 			
 			for (SoftwareUnitDTO otherSoftwareUnit : assignedUnitsBottomLayerClone) {
 				if (!otherSoftwareUnit.uniqueName.equals(softwareUnit.uniqueName)) {
-					int nrOfDependenciesFromsoftwareUnitToOther =0;
-					int nrOfDependenciesFromOtherTosoftwareUnit=0;
-					
-					switch(dependencyType){
-					case AnalyseReconstructConstants.RelationTypes.umlLinks:
-						nrOfDependenciesFromsoftwareUnitToOther = queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
-						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
-						break;
-						
-					case AnalyseReconstructConstants.RelationTypes.accessCallReferenceDependencies:
-						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
-						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
-						break;
-						
-					case AnalyseReconstructConstants.RelationTypes.allDependencies:
-						nrOfDependenciesFromsoftwareUnitToOther = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName).length;
-						nrOfDependenciesFromOtherTosoftwareUnit = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName).length;
-						break;
-					}
-					
-					
+					int nrOfDependenciesFromsoftwareUnitToOther = getRelationsBetweenSoftwareUnits(softwareUnit.uniqueName, otherSoftwareUnit.uniqueName, relationType).size();
+					int nrOfDependenciesFromOtherTosoftwareUnit = getRelationsBetweenSoftwareUnits(otherSoftwareUnit.uniqueName, softwareUnit.uniqueName, relationType).size();
 					if (nrOfDependenciesFromsoftwareUnitToOther > ((nrOfDependenciesFromOtherTosoftwareUnit / 100) * layerThreshold)) {
 						rootPackageDoesNotUseOtherPackage = false;
 					}

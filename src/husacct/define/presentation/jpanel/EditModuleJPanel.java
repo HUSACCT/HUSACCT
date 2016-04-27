@@ -26,6 +26,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
+
 public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Observer,
 		IServiceListener {
 
@@ -45,6 +47,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 			ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary") };
 	private JLabel nameLabel;
 	private JTextField nameTextfield;
+	private final Logger logger = Logger.getLogger(EditModuleJPanel.class);
 
 	public EditModuleJPanel() {
 		super();
@@ -194,31 +197,33 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 			Long moduleId = Long.parseLong(arg.toString());
 			if (moduleId != -1) {
 				HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
-				nameTextfield.setText((String) moduleDetails.get("name"));
-				descriptionTextArea.setText((String) moduleDetails.get("description"));
-				String moduleType = (String) moduleDetails.get("type");
-				String moduleType_Translated = ServiceProvider.getInstance().getLocaleService().getTranslatedString(moduleType);
-				_type= moduleType_Translated;
-				// Fill moduleTypeComboBox.
-				if (moduleType.equals("Facade")) {
-					DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<String>(facadeType);
-					moduleTypeComboBox.setModel(facadeModel);
-					moduleTypeComboBox.setSelectedIndex(0);
-					moduleTypeComboBox.setEnabled(false);
-				} else {
-					DefaultComboBoxModel<String> defaultModel = new DefaultComboBoxModel<String>(moduleTypes_Translated);
-					moduleTypeComboBox.setModel(defaultModel);
-					for (int i = 0; i < moduleTypes_Translated.length; i++) {
-						if (moduleType_Translated.equalsIgnoreCase(moduleTypes_Translated[i])) {
-							moduleTypeComboBox.setSelectedIndex(i);
+				if (!((String) moduleDetails.get("name")).equals("")) {
+					nameTextfield.setText((String) moduleDetails.get("name"));
+					descriptionTextArea.setText((String) moduleDetails.get("description"));
+					String moduleType = (String) moduleDetails.get("type");
+					String moduleType_Translated = ServiceProvider.getInstance().getLocaleService().getTranslatedString(moduleType);
+					_type= moduleType_Translated;
+					// Fill moduleTypeComboBox.
+					if (moduleType.equals("Facade")) {
+						DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<String>(facadeType);
+						moduleTypeComboBox.setModel(facadeModel);
+						moduleTypeComboBox.setSelectedIndex(0);
+						moduleTypeComboBox.setEnabled(false);
+					} else {
+						DefaultComboBoxModel<String> defaultModel = new DefaultComboBoxModel<String>(moduleTypes_Translated);
+						moduleTypeComboBox.setModel(defaultModel);
+						for (int i = 0; i < moduleTypes_Translated.length; i++) {
+							if (moduleType_Translated.equalsIgnoreCase(moduleTypes_Translated[i])) {
+								moduleTypeComboBox.setSelectedIndex(i);
+							}
 						}
+						moduleTypeComboBox.setEnabled(true);
 					}
-					moduleTypeComboBox.setEnabled(true);
-				}			
+				}
 			}
 			this.repaint();
-		}catch(NumberFormatException e) {
-			
+		}catch(Exception e) {
+			logger.error(e.getMessage());
 		}
 	}
 

@@ -14,9 +14,12 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	//Gateway: only has inside-dependencies towards it, so it is located in the bottom layer
 	//Gateway: is the only class with imports towards an external application 
 
+	public GatewayHUSACCT_Root (IModelQueryService queryService) {
+		super(queryService);
+	}
+		
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) throws Exception {
-		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
 		this.relationType = dto.getRelationType();
 		ArrayList<SoftwareUnitDTO> bottomLayer = identifyBottomLayer();

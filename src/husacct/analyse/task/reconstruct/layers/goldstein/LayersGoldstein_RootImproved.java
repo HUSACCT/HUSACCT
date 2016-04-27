@@ -10,27 +10,21 @@ import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
-import husacct.define.IDefineSarService;
 
 public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
-	
-	
-	
 	private int layerThreshold;
-	private IModelQueryService queryService;
 	private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses;
 	private ArrayList<SoftwareUnitDTO> godClasses;
 	private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	IDefineSarService defineSarService = husacct.ServiceProvider.getInstance().getDefineService().getSarService();
-	private String xLibrariesRootPackage = "xLibraries";
 	
-	
-	
+	public LayersGoldstein_RootImproved (IModelQueryService queryService) {
+		super(queryService);
+	}
+		
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		layerThreshold = dto.getThreshold();
-		this.queryService = queryService;
 		identifyLayersAtRootLevel(dto.getRelationType());
 	}
 

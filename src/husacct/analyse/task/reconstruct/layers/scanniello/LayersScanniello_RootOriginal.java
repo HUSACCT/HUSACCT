@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 	
+	public LayersScanniello_RootOriginal (IModelQueryService queryService) {
+		super(queryService);
+	}
+	
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
-		this.queryService = queryService;
 		this.threshold = dto.getThreshold();
-		this.defineService = ServiceProvider.getInstance().getDefineService();
 		
 		List<SoftwareUnitDTO> classes = queryService.getAllClasses();
 		ArrayList<SoftwareUnitDTO> classesArray = new ArrayList<SoftwareUnitDTO>(classes);

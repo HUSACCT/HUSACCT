@@ -45,6 +45,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 			if (newModule != null) {
 				newModuleDTO = domainParser.parseModule(newModule);
 				moduleIdOfModuleToSelectInUI = newModule.getparent().getId();
+				defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -64,6 +65,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 					newSelectedModuleId = editedModule.getparent().getId();
 				}
 				moduleIdOfModuleToSelectInUI = newSelectedModuleId;
+				defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -78,6 +80,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 			if ((moduleToBeRemoved != null) && (moduleToBeRemoved.getId() >= 0)) {
 				moduleIdOfModuleToSelectInUI = moduleToBeRemoved.getparent().getId();
 				moduleService.removeModuleById(moduleToBeRemoved.getId());
+				defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 			}
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -153,9 +156,8 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 
 	public void updateModulePanel() {
-		defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 		defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
-
+		defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 	}
 	
 	private RuleTypeDTO getRuleType(String ruleTypeKey) {

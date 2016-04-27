@@ -90,15 +90,15 @@ import org.apache.log4j.Logger;
 			if (moduleId != -1) {
 				try {
 					ModuleStrategy module = moduleService.getModuleById(moduleId);
-					moduleDetails.put("id", module.getId());
-					moduleDetails.put("name", module.getName());
-					moduleDetails.put("description", module.getDescription());
-					moduleDetails.put("type", module.getType());
-
+					if (module != null) {
+						moduleDetails.put("id", module.getId());
+						moduleDetails.put("name", module.getName());
+						moduleDetails.put("description", module.getDescription());
+						moduleDetails.put("type", module.getType());
+					}
 				} catch (Exception e) {
-					logger.error("getModuleDetails() - exception: "
-							+ e.getMessage());
-					UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
+					logger.error("getModuleDetails() - exception: " + e.getMessage());
+					//UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 				}
 			}
 			return moduleDetails;

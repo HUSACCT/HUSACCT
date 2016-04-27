@@ -10,10 +10,12 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 public abstract class AlgorithmHUSACCT extends IAlgorithm{
-	protected IModelQueryService queryService;
 	protected int threshold; 
 	
-	
+	public AlgorithmHUSACCT (IModelQueryService queryService) {
+		super(queryService);
+	}
+		
 	protected ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
 		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
 		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){

@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
@@ -21,6 +20,10 @@ public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello
 	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
 	
+	public LayersScanniello_SelectedModuleImproved (IModelQueryService queryService) {
+		super(queryService);
+	}
+	
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService)throws Exception {
 		try {
@@ -29,9 +32,7 @@ public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello
 				selectedModule.logicalPath = "**"; // Root of intended software architecture
 				selectedModule.type = "Root"; // Root of intended software architecture
 			}
-			this.queryService = queryService;
 			this.threshold = dto.getThreshold();
-			this.defineService = ServiceProvider.getInstance().getDefineService();
 			// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
 			if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
 				return;
