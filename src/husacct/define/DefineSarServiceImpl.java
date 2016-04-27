@@ -23,6 +23,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	private DomainToDtoParser domainParser;
 	private ModuleDomainService moduleService;
 	private Logger logger = Logger.getLogger(DefineSarServiceImpl.class);
+	private long moduleIdOfModuleToSelectInUI;
 
 
 	public DefineSarServiceImpl(DefineServiceImpl defineService) {
@@ -43,7 +44,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 			ModuleStrategy newModule = moduleService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
 			if (newModule != null) {
 				newModuleDTO = domainParser.parseModule(newModule);
-				defineService.getDefinitionController().setSelectedModuleId(newModule.getId());
+				moduleIdOfModuleToSelectInUI = newModule.getparent().getId();
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -62,7 +63,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 				if (newSelectedModuleId > 0) {
 					newSelectedModuleId = editedModule.getparent().getId();
 				}
-				defineService.getDefinitionController().setSelectedModuleId(newSelectedModuleId);
+				moduleIdOfModuleToSelectInUI = newSelectedModuleId;
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -75,9 +76,8 @@ public class DefineSarServiceImpl implements IDefineSarService {
 		try {
 			ModuleStrategy moduleToBeRemoved = moduleService.getModuleByLogicalPath_NoException(logicalPath);
 			if ((moduleToBeRemoved != null) && (moduleToBeRemoved.getId() >= 0)) {
-				long newSelectedModuleId = moduleToBeRemoved.getparent().getId();
+				moduleIdOfModuleToSelectInUI = moduleToBeRemoved.getparent().getId();
 				moduleService.removeModuleById(moduleToBeRemoved.getId());
-				defineService.getDefinitionController().setSelectedModuleId(newSelectedModuleId);
 			}
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -153,7 +153,9 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 
 	public void updateModulePanel() {
+		defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 		defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
+
 	}
 	
 	private RuleTypeDTO getRuleType(String ruleTypeKey) {

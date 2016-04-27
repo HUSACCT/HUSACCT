@@ -1,6 +1,5 @@
 package husacct.define.presentation.registry;
 
-import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
@@ -8,7 +7,6 @@ import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.warningmessages.CustomWarningMessage;
 import husacct.define.domain.warningmessages.NotmappedWarningMessage;
 import husacct.define.domain.warningmessages.WarningMessageContainer;
-import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
@@ -52,11 +50,9 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 
 
 
-	public AnalyzedModuleComponent findSoftUnit(String uniqname,
-			List<AnalyzedModuleComponent> list) {
+	public AnalyzedModuleComponent findSoftUnit(String uniqname, List<AnalyzedModuleComponent> list) {
 		for (AnalyzedModuleComponent unit : list) {
-			if (uniqname.toLowerCase().equals(
-					unit.getUniqueName().toLowerCase())) {
+			if (uniqname.equals(unit.getUniqueName())) {
 				return unit;
 			}
 		}

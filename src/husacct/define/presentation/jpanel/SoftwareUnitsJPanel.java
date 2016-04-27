@@ -34,10 +34,14 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
+import org.apache.log4j.Logger;
+
 public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListener,
 		Observer, IServiceListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
+	private final Logger logger = Logger.getLogger(SoftwareUnitsJPanel.class);
+
 	private JButton addSoftwareUnitButton;
 	private JMenuItem addSoftwareUnitItem = new JMenuItem();
 	private JButton editSoftwareUnitButton;
@@ -319,33 +323,26 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 
 	public void updateSoftwareUnitTable() {
 		try {
-			JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
-			atm.getDataVector().removeAllElements();
-			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			JTableTableModel suTableModel = (JTableTableModel) softwareUnitsTable.getModel();
+			suTableModel.getDataVector().removeAllElements();
 			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
+			long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 
-			if (moduleId != -1) {
-				// Get all components from the service
-				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule();
-				ArrayList<String> regExSoftwareUnitNames = DefinitionController.getInstance().getRegExSoftwareUnitNamesBySelectedModule();
+			if (selectedModuleId != -1) {
+				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule(selectedModuleId);
 				if (softwareUnitNames != null) {
 					for (String softwareUnitName : softwareUnitNames) {
 						String softwareUnitType = DefinitionController.getInstance().getSoftwareUnitTypeBySoftwareUnitName(softwareUnitName);
 						Object rowdata[] = { softwareUnitName, softwareUnitType };
-						atm.addRow(rowdata);
-					}
-				}
-				if (regExSoftwareUnitNames != null) {
-					for (String softwareUnitName : regExSoftwareUnitNames) {
-						Object rowdata[] = { softwareUnitName, "REGEX" };
-						atm.addRow(rowdata);
+						suTableModel.addRow(rowdata);
 					}
 				}
 			}
-			atm.fireTableDataChanged();
+			suTableModel.fireTableDataChanged();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e.getMessage());
 			UiDialogs.errorDialog(this, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();

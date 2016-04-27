@@ -247,7 +247,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		ModuleStrategy moduleMappedToSU = null;
 
 		for (SoftwareUnitDefinition softwareUnitResult : module.getUnits()) {
-			if (softwareUnitResult.getName().toLowerCase().equals(softwareUnitName.toLowerCase())) {
+			if (softwareUnitResult.getName().equals(softwareUnitName)) {
 				moduleMappedToSU = module;
 				return moduleMappedToSU;
 			}

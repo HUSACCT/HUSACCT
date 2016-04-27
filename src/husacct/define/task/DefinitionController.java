@@ -135,9 +135,8 @@ import org.apache.log4j.Logger;
 	    	return defineInternalFrame;
 	        }
 
-	    public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule() {
-			return softwareUnitDefinitionDomainService
-					.getRegExSoftwareUnitNames(getSelectedModuleId());
+	    public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule(long selectedModuleId) {
+			return softwareUnitDefinitionDomainService.getRegExSoftwareUnitNames(selectedModuleId);
 		}
 
 		public HashMap<String, Object> getRuleDetailsByAppliedRuleId(
@@ -160,13 +159,12 @@ import org.apache.log4j.Logger;
 			return selectedModuleId;
 		}
 
-		public ArrayList<String> getSoftwareUnitNamesBySelectedModule() {
-			return softwareUnitDefinitionDomainService.getSoftwareUnitNames(getSelectedModuleId());
+		public ArrayList<String> getSoftwareUnitNamesBySelectedModule(long selectedModuleId) {
+			return softwareUnitDefinitionDomainService.getSoftwareUnitNames(selectedModuleId);
 		}
 
 		public String getSoftwareUnitTypeBySoftwareUnitName(String softwareUnitName) {
-			return softwareUnitDefinitionDomainService
-					.getSoftwareUnitType(softwareUnitName);
+			return softwareUnitDefinitionDomainService.getSoftwareUnitType(softwareUnitName);
 		}
 
 		public void clearObserversWithinDefine() {
@@ -374,6 +372,7 @@ import org.apache.log4j.Logger;
 
 		public void setSelectedModuleId(long moduleId) {
 			selectedModuleId = moduleId;
+			//logger.info(" Selected module id: " + selectedModuleId);
 			notifyObservers(moduleId);
 		}
 

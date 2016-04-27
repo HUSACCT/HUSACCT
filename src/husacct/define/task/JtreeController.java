@@ -105,7 +105,7 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 		TreePath[] paths = instance.resultTree.getSelectionPaths();
 		for (TreePath treePath : paths) {
 			AnalyzedModuleComponent op = (AnalyzedModuleComponent)treePath.getLastPathComponent();
-			removeTreeItem(StateService.instance().getAnalyzedSoftWareUnit(op.getUniqueName().toLowerCase()));
+			removeTreeItem(StateService.instance().getAnalyzedSoftWareUnit(op.getUniqueName()));
 			regixwrapper.addChild(op);
 		}
 		regixwrapper.setName(regExName);
@@ -182,7 +182,7 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 	
 	private void restoreRegex(RegexComponent tobeRestored) {
 		for (AbstractCombinedComponent unit : tobeRestored.getChildren()) {
-			AnalyzedModuleComponent referenceditem = StateService.instance().getAnalyzedSoftWareUnit(unit.getUniqueName().toLowerCase());
+			AnalyzedModuleComponent referenceditem = StateService.instance().getAnalyzedSoftWareUnit(unit.getUniqueName());
 			tree.restoreTreeItem(referenceditem);
 			tree.repaint();
 		}

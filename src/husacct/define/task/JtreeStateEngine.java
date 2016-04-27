@@ -169,7 +169,7 @@ public abstract class JtreeStateEngine {
 
 	public void registerImportedData() {
        for (String unigNames : allUnitsRegistry.getimportedUnits()) {
-		AnalyzedModuleComponent result = allUnitsRegistry.getAnalyzedUnit(unigNames.toLowerCase());
+		AnalyzedModuleComponent result = allUnitsRegistry.getAnalyzedUnit(unigNames);
 			if (result!=null) {
 				result.freeze();
 			}
