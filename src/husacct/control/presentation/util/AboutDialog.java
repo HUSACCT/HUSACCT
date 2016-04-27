@@ -30,7 +30,7 @@ public class AboutDialog extends JDialog{
 	private JPanel textPanel, gitForkPanel;
 	private JLabel forkLabel,pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
 	private JButton okButton, creditsButton;
-	private String versionNumber = "5.0";
+	private String versionNumber = "5.0.1";
 	private String copyRightText = "\u00a9 2016 HUSACCT (GNU General Public License)";
 	private MainController mainController;
 	private JPanel forkLabelPanel;
