@@ -29,7 +29,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private LineConnectionFigure	line;
 	private RelationType			relationType;
 	private TextFigure				amountFigure;
-	private TextFigure				fromtMultiplicity;
+	private TextFigure fromMultiplicity;
 	private TextFigure 				toMultiplicity;
 	
 
@@ -42,7 +42,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		
 		line = new LineConnectionFigure();
 		add(line);
-		fromtMultiplicity = new TextFigure();
+		fromMultiplicity = new TextFigure();
 		toMultiplicity = new TextFigure();
 		amountFigure = new TextFigure(amount);
 		if(amount.isEmpty()){
@@ -55,8 +55,8 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	}
 
 	public void setFromMultiplicity(String fromMultiplicity) {
-		this.fromtMultiplicity.setText(fromMultiplicity);
-		add(this.fromtMultiplicity);
+		this.fromMultiplicity.setText(fromMultiplicity);
+		add(this.fromMultiplicity);
 	}
 
 	public void setToMultiplicity(String toMultiplicity) {
@@ -262,9 +262,9 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		leftMidY += offsetY;
 		rightMidY -= offsetY;
 		
-		fromtMultiplicity.willChange();
-		fromtMultiplicity.setBounds(new Point2D.Double(leftMidX, leftMidY), null);
-		fromtMultiplicity.changed();
+		fromMultiplicity.willChange();
+		fromMultiplicity.setBounds(new Point2D.Double(leftMidX, leftMidY), null);
+		fromMultiplicity.changed();
 		
 		toMultiplicity.willChange();
 		toMultiplicity.setBounds(new Point2D.Double(rightMidX, rightMidY), null);

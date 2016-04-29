@@ -274,6 +274,11 @@ public class DrawingControllerTest {
 		assertEquals("Wrong amount of figures drawn", 7, nrOfModules);
 	}
 
+//	@Test
+	public void moduleAndRule_DrawRelation_NumberOfDependency(){
+		assertTrue(true);
+	}
+
 	
 	//
 	//private helpers
