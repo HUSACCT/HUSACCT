@@ -27,8 +27,13 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		FigureListener {
 	private static final long		serialVersionUID	= 1805821357919823648L;
 	private LineConnectionFigure	line;
-	private TextFigure				amountFigure;
 	private RelationType			relationType;
+	private TextFigure				amountFigure;
+	private TextFigure				fromtMultiplicity;
+	private TextFigure 				toMultiplicity;
+	
+
+	
 //	private boolean					violationRelation = false;
 	
 	public RelationFigure(String name, RelationType relationType, String amount) {
@@ -37,16 +42,32 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		
 		line = new LineConnectionFigure();
 		add(line);
-		
+		fromtMultiplicity = new TextFigure();
+		toMultiplicity = new TextFigure();
 		amountFigure = new TextFigure(amount);
-		add(amountFigure);
+		if(amount.isEmpty()){
+			amountFigure.setText("-1");
+		}else{
+			add(amountFigure);
+		}
 		
 		line.addFigureListener(this);
+	}
+
+	public void setFromMultiplicity(String fromMultiplicity) {
+		this.fromtMultiplicity.setText(fromMultiplicity);
+		add(this.fromtMultiplicity);
+	}
+
+	public void setToMultiplicity(String toMultiplicity) {
+		this.toMultiplicity.setText(toMultiplicity);
+		add(this.toMultiplicity);
 	}
 	
 	@Override
 	public void areaInvalidated(FigureEvent e) {
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
@@ -226,10 +247,35 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		amountFigure.changed();
 	}
 	
+	public void relayoutMultiplicities(){
+		double leftMidX = line.getEndPoint().x;
+		double leftMidY = line.getEndPoint().y;
+		
+		double rightMidX = line.getStartPoint().x;
+		double rightMidY = line.getStartPoint().y;
+		
+		double offsetX = leftMidX < rightMidX ? 15 : -15;
+		double offsetY = leftMidY < rightMidY ? 15 : -15;
+		
+		leftMidX += offsetX;
+		rightMidX -= offsetX;
+		leftMidY += offsetY;
+		rightMidY -= offsetY;
+		
+		fromtMultiplicity.willChange();
+		fromtMultiplicity.setBounds(new Point2D.Double(leftMidX, leftMidY), null);
+		fromtMultiplicity.changed();
+		
+		toMultiplicity.willChange();
+		toMultiplicity.setBounds(new Point2D.Double(rightMidX, rightMidY), null);
+		toMultiplicity.changed();
+	}
+	
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
 		line.updateConnection();
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
@@ -282,12 +328,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	public void transform(AffineTransform tx) {
 		line.updateConnection();
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
 	public void updateConnection() {
 		line.updateConnection();
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
