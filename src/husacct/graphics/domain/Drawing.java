@@ -12,6 +12,7 @@ import husacct.graphics.domain.linelayoutstrategies.ILineSeparationStrategy;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -87,6 +88,15 @@ public class Drawing extends QuadTreeDrawing {
 			}
 		}
 		return moduleFigures.toArray(new ModuleFigure[] {});
+	}
+
+	public BaseFigure[] getBaseFigures() {
+		ArrayList<BaseFigure> allFigures = new ArrayList<>();
+		for (Figure jhotdrawfigure : this.getChildren()) {
+			BaseFigure figure = (BaseFigure) jhotdrawfigure;
+			allFigures.add(figure);
+		}
+		return allFigures.toArray(new BaseFigure[allFigures.size()]);
 	}
 	
 	public boolean hasHiddenFigures() {

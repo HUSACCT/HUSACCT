@@ -149,7 +149,7 @@ public abstract class DrawingController {
 		updateLayout();
 		drawRelationFiguresForShownModules();
 	}
-	
+
 	public void drawRelationFiguresForShownModules() {
 		ModuleFigure[] shownModules = drawing.getShownModules();
 		for (ModuleFigure figureFrom : shownModules) {
@@ -294,7 +294,6 @@ public abstract class DrawingController {
 		} else if((selectedFigure instanceof ModuleFigure) || (selectedFigure instanceof ParentFigure)){
 			return getRulesBetween(selectedFigure, selectedFigure);
 		}else {
-		
 			return new RuleDTO[] {};
 		}
 	}
