@@ -121,7 +121,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		ArrowTip arrowTip = new ArrowTip(0.5, 7, 3.0);
+		ArrowTipFix arrowTip = new ArrowTipFix(0.5, 7, 3.0);
 		set(AttributeKeys.END_DECORATION, arrowTip);
 			
 		switch(relationType) {
@@ -136,12 +136,12 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 			// default is a straight line, so do nothing
 			break;
 		case INHERITANCELINK:
-			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, true, false);
+			arrowTip = new ArrowTipFix(0.5, 13.0, 11.5, false, true, false);
 			set(AttributeKeys.END_DECORATION, arrowTip);
 			break;
 		case IMPLEMENTSLINK:
-			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
-			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, true, true);
+			set(AttributeKeys.STROKE_DASHES, new double[] { 4.0, 4.0 });
+			arrowTip = new ArrowTipFix(0.5, 13.0, 11.5, false, true, true);
 			set(AttributeKeys.END_DECORATION, arrowTip);
 			break;
 		case RULELINK:
