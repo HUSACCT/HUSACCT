@@ -248,26 +248,26 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	}
 	
 	public void relayoutMultiplicities(){
-		double leftMidX = line.getEndPoint().x;
-		double leftMidY = line.getEndPoint().y;
+		double startFigureX = line.getStartPoint().x;
+		double startFigureY = line.getStartPoint().y;
 		
-		double rightMidX = line.getStartPoint().x;
-		double rightMidY = line.getStartPoint().y;
+		double endFigureX = line.getEndPoint().x;
+		double endFigureY = line.getEndPoint().y;
 		
-		double offsetX = leftMidX < rightMidX ? 15 : -15;
-		double offsetY = leftMidY < rightMidY ? 15 : -15;
+		double offsetX = startFigureX < endFigureX ? 15 : -15;
+		double offsetY = startFigureY < endFigureY ? 15 : -15;
 		
-		leftMidX += offsetX;
-		rightMidX -= offsetX;
-		leftMidY += offsetY;
-		rightMidY -= offsetY;
+		startFigureX += offsetX;
+		startFigureY += offsetY;
+		endFigureX -= offsetX;
+		endFigureY -= offsetY;
 		
 		fromMultiplicity.willChange();
-		fromMultiplicity.setBounds(new Point2D.Double(leftMidX, leftMidY), null);
+		fromMultiplicity.setBounds(new Point2D.Double(startFigureX, startFigureY), null);
 		fromMultiplicity.changed();
 		
 		toMultiplicity.willChange();
-		toMultiplicity.setBounds(new Point2D.Double(rightMidX, rightMidY), null);
+		toMultiplicity.setBounds(new Point2D.Double(endFigureX, endFigureY), null);
 		toMultiplicity.changed();
 	}
 	
