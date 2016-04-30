@@ -47,7 +47,10 @@ public class ArrowTipFix extends ArrowTip {
             color = (Color)f.get(AttributeKeys.STROKE_COLOR);
             if(color != null) {
                 g.setColor(color);
+
+                // this is the only change compared to ArrowTip:
                 Stroke stroke = isSolid() ? new BasicStroke() : AttributeKeys.getStroke(f);
+                
                 g.setStroke(stroke);
                 g.draw(path);
             }
