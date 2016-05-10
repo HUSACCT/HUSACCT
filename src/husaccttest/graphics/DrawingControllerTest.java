@@ -17,6 +17,7 @@ import husacct.graphics.domain.figures.ParentFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
+import husacct.graphics.task.DrawingSettingsHolder;
 import husacct.graphics.task.ModuleAndRuleController;
 import husaccttest.TestResourceFinder;
 import husaccttest.define.DefineSarServicesTest_SRMA;
@@ -163,8 +164,51 @@ public class DrawingControllerTest {
 		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"technology", "domain"});
 		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;
 		int numberOfParentFigures = analysed_getNumberOfParentFigures();
-		assertEquals("wrong amount of figures drawn",4, nrOfModules);
+		assertEquals("wrong amount of figures drawn",5, nrOfModules);
 		assertEquals(2, numberOfParentFigures);
+	}
+	
+	@Test
+	public void analysed_UmlLinksRelations(){
+		graphicsAnalysedController.drawArchitectureTopLevel();
+		graphicsAnalysedController.resetContextFigures();
+		graphicsAnalysedController.getDrawingSettingsHolder().zoomTypeChange("zoom");
+		graphicsAnalysedController.getDrawingSettingsHolder().setShowUmlLinkInsteadOfDependencies(true);
+		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"domain.umllinks"});
+		
+		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;
+		assertEquals("Incorrect number of modules",9, nrOfModules);
+		
+		RelationFigure[] relationsFigures = graphicsAnalysedController.getDrawing().getShownRelations();
+		
+		int nrOfRelations = relationsFigures.length;
+		assertEquals("Incorrect number of relations",10, nrOfRelations);
+		
+		int nrOfAttributeLinks = 0;
+		int nrOfInheritanceLinks = 0;
+		int nrOfImplementationLinks = 0;
+		
+		for (RelationFigure relationFigure : relationsFigures) {
+			switch (relationFigure.getRelationType()){
+			 case ATTRIBUTELINK:
+				 nrOfAttributeLinks++;
+				 break;
+			 case IMPLEMENTSLINK:
+				 nrOfImplementationLinks++;
+				 break;
+			 case INHERITANCELINK:
+				 nrOfInheritanceLinks++;
+				 break;
+			 default: 
+				 
+				 fail("Fail! Relation type is " + relationFigure.getRelationType().get());
+			}
+		}
+		
+		assertEquals("Incorrect number of attributelinks",8, nrOfAttributeLinks);
+		assertEquals("Incorrect number of inheritances",1, nrOfInheritanceLinks);
+		assertEquals("Incorrect number of implementations",1, nrOfImplementationLinks);
+		
 	}
 
 	private int analysed_getNumberOfParentFigures() {
@@ -276,6 +320,7 @@ public class DrawingControllerTest {
 
 //	@Test
 	public void moduleAndRule_DrawRelation_NumberOfDependency(){
+		
 		assertTrue(true);
 	}
 
