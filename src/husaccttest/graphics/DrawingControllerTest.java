@@ -316,30 +316,28 @@ public class DrawingControllerTest {
 		assertEquals("Wrong amount of figures drawn", 7, nrOfModules);
 	}
 
-//	@Test
-	public void moduleAndRule_DrawRelation_NumberOfDependency(){
+	@Test
+	public void moduleAndRule_NumberOfRulesDrawn(){
 		graphicsModuleAndRuleController.drawArchitectureTopLevel();
 		graphicsModuleAndRuleController.resetContextFigures();
 		graphicsModuleAndRuleController.getDrawingSettingsHolder().librariesHide();
-		graphicsModuleAndRuleController.getDrawingSettingsHolder().zoomTypeChange("zoom");
+		graphicsModuleAndRuleController.getDrawingSettingsHolder().zoomTypeChange("context");
 		graphicsModuleAndRuleController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology.PropertyRules", "Technology.RelationRules", "Presentation.RelationRules", "Domain.RelationRules"});
 
-		int nrOfRules = 0;
+		int nrOfRelationRules = 0;
+		RelationFigure[] relationFigures = graphicsModuleAndRuleController.getDrawing().getShownRelations();
+		for (RelationFigure relationFigure : relationFigures) {
+			nrOfRelationRules += graphicsModuleAndRuleController.getRulesOfFigure(relationFigure).length;
+		}
+		assertEquals("Incorrect number of shown rules", 8, nrOfRelationRules);
+
+
 		int nrOfSelfRules = 0;
 		ModuleFigure[] modules = graphicsModuleAndRuleController.getDrawing().getShownModules();
 		for (ModuleFigure moduleFigure : modules) {
-			RuleDTO[] rules = graphicsModuleAndRuleController.getRulesOfFigure(moduleFigure);
-			nrOfRules += rules.length;
-			for (RuleDTO rule : rules) {
-				if (rule.moduleFrom.equals(rule.moduleTo)) {
-					nrOfSelfRules++;
-				}
-			}
+			nrOfSelfRules += graphicsModuleAndRuleController.getRulesOfFigure(moduleFigure).length;
 		}
-		assertEquals("Incorrect number of rules",13,nrOfRules);
-
-		int nrOfShownRules = graphicsModuleAndRuleController.getDrawing().getShownRelations().length;
-		assertEquals("Visible rules cannot be self rules", nrOfRules - nrOfSelfRules, nrOfShownRules);
+		assertEquals("Incorrect number of self rules", 5, nrOfSelfRules);
 	}
 
 	
