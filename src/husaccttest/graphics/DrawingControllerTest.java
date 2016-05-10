@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.RuleDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -199,9 +200,8 @@ public class DrawingControllerTest {
 			 case INHERITANCELINK:
 				 nrOfInheritanceLinks++;
 				 break;
-			 default: 
-				 
-				 fail("Fail! Relation type is " + relationFigure.getRelationType().get());
+			 default:
+				 fail("Non-desired relation type: " + relationFigure.getRelationType().get());
 			}
 		}
 		
@@ -307,8 +307,6 @@ public class DrawingControllerTest {
 		graphicsModuleAndRuleController.drawArchitectureTopLevel();
 		graphicsModuleAndRuleController.resetContextFigures();
 		graphicsModuleAndRuleController.getDrawingSettingsHolder().librariesHide();
-		graphicsModuleAndRuleController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[]{"Technology"});
-		graphicsModuleAndRuleController.drawArchitectureTopLevel();
 		BaseFigure[] figures = graphicsModuleAndRuleController.getDrawing().getBaseFigures();
 		int nrOfModules = figures.length;
 		for (BaseFigure f : figures) {
@@ -320,8 +318,28 @@ public class DrawingControllerTest {
 
 //	@Test
 	public void moduleAndRule_DrawRelation_NumberOfDependency(){
-		
-		assertTrue(true);
+		graphicsModuleAndRuleController.drawArchitectureTopLevel();
+		graphicsModuleAndRuleController.resetContextFigures();
+		graphicsModuleAndRuleController.getDrawingSettingsHolder().librariesHide();
+		graphicsModuleAndRuleController.getDrawingSettingsHolder().zoomTypeChange("zoom");
+		graphicsModuleAndRuleController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"Technology.PropertyRules", "Technology.RelationRules", "Presentation.RelationRules", "Domain.RelationRules"});
+
+		int nrOfRules = 0;
+		int nrOfSelfRules = 0;
+		ModuleFigure[] modules = graphicsModuleAndRuleController.getDrawing().getShownModules();
+		for (ModuleFigure moduleFigure : modules) {
+			RuleDTO[] rules = graphicsModuleAndRuleController.getRulesOfFigure(moduleFigure);
+			nrOfRules += rules.length;
+			for (RuleDTO rule : rules) {
+				if (rule.moduleFrom.equals(rule.moduleTo)) {
+					nrOfSelfRules++;
+				}
+			}
+		}
+		assertEquals("Incorrect number of rules",13,nrOfRules);
+
+		int nrOfShownRules = graphicsModuleAndRuleController.getDrawing().getShownRelations().length;
+		assertEquals("Visible rules cannot be self rules", nrOfRules - nrOfSelfRules, nrOfShownRules);
 	}
 
 	
