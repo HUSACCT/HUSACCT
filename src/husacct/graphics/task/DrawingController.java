@@ -41,6 +41,8 @@ public abstract class DrawingController {
 	private final FigureConnectorStrategy		connectionStrategy;
 	private LayoutStrategy						layoutStrategy;
 	protected ModuleLayoutsEnum					layoutStrategyOption;
+
+	private static DrawingTypesEnum					controllerType;
 	
 	public ArrayList<ModuleFigure>				contextFigures; 			// List with all the figures with isContext = true, not being a line (public, because of testability)
 	protected HashMap<String, String> 			parentFigureNameAndTypeMap; // Map with key = uniqueName of the parent figure and value = type. 
@@ -51,6 +53,7 @@ public abstract class DrawingController {
 	
 	public static DrawingController getController(DrawingTypesEnum drawingType) {
 		DrawingController controller = null;
+		controllerType = drawingType;
 		if (drawingType == DrawingTypesEnum.IMPLEMENTED_ARCHITECTURE) {
 			controller = new AnalysedController();
 		} else if (drawingType == DrawingTypesEnum.INTENDED_ARCHITECTURE) {
@@ -109,6 +112,9 @@ public abstract class DrawingController {
 		clearDrawing();
 		for (ModuleFigure moduleFigure : modules) {
 			drawing.add(moduleFigure);
+			if (controllerType == DrawingTypesEnum.MODULE_RULE_ARCHITECTURE && hasRelationBetween(moduleFigure, moduleFigure)) {
+				moduleFigure.setVisibilityOfRulesIcon(true);
+			}
 		}
 		updateLayout();
 		drawRelationFiguresForShownModules();
