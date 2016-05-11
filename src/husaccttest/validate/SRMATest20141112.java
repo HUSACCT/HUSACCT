@@ -91,7 +91,7 @@ public class SRMATest20141112 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}
-		assertEquals(380, numberOfDependencies);
+		assertEquals(390, numberOfDependencies);
 	}
 
 

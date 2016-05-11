@@ -2,7 +2,7 @@
 
 	<property name="src.dir"		value="src"/>
 	<property name="build.dir"		value="build"/>
-	<property name="lib.dir"		value="lib" />	
+	<property name="lib.dir"		value="lib" />
 	
 	<property name="conf.dir"		value="${build.dir}/conf"/>
 	<property name="bin.dir" 		value="${build.dir}/bin"/>
@@ -73,6 +73,19 @@
 				<include name="husacct/common/resources/**/*" />
 			</fileset>
 		</jar>
+	</target>
+
+	<target name="test" depends="clean,compile,extractlib,addresources">
+		<junit fork="yes" printsummary="on" haltonfailure="yes">
+			<!-- Project classpath, must include junit.jar -->
+			<classpath>
+				<path refid="classpath" />
+				<pathelement location="${src.dir}/husaccttest/TestAll.java" />
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<test name="husaccttest.TestAll" haltonfailure="yes"/>
+
+		</junit>
 	</target>
 	
 </project>
