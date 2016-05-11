@@ -8,6 +8,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -85,5 +87,16 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	private void createModule(ArrayList<SoftwareUnitDTO> softwareUnits){
 		ModuleDTO newModule = defineSarService.addModule("Gateway", "**", ModuleTypes.COMPONENT.toString(), 0, softwareUnits);
 		addToReverseReconstructionList(newModule);
+	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Gateways_HUSACCT_Root;
+		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold, AlgorithmSettings.RelationType, AlgorithmSettings.Granularity};
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		return reconstructArchitecture;
 	}
 }

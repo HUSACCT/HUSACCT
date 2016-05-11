@@ -100,7 +100,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		allApproachedPanel.setLayout(new BorderLayout(0, 0));
 		
 		Object columnNames[] = getColumnNames();
-		Object rows[][] = getAllApproachesRows();
+		Object rows[][] = getAllApproachesRows2();
 		tableAllApproaches = new JTable(rows, columnNames);    
 		tableAllApproaches.setMinimumSize(new Dimension(600,150));
 		tableAllApproachesColumnModel = tableAllApproaches.getColumnModel();
@@ -122,7 +122,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					int row = tableAllApproaches.getSelectedRow();
+					/*int row = tableAllApproaches.getSelectedRow();
 					String data = (String) tableAllApproaches.getValueAt(row, 0);
 					Object[][] rowData = getParameters(data);
 					TableModel model = allParameterTable.getModel();
@@ -133,7 +133,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 						model.setValueAt(temp[1], i, 1);
 					}
 					
-					allParameterTable.setModel(model);
+					allParameterTable.setModel(model);*/
 				}
 			}
 		});
@@ -238,6 +238,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
   	    });
 	}
 	
+	
 	private Object[][] getAllApproachesRows(){
         Object ApproachesRows[][] = { 
             {Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
@@ -254,12 +255,26 @@ public class ApproachesTableJPanel extends HelpableJPanel {
         return ApproachesRows;
     }
 	
+	private Object[][] getAllApproachesRows2(){
+		ArrayList<Object[]> approachesRowsList = new ArrayList<>();
+		analyseTaskControl.createReconstructArchitectureList();
+		analyseTaskControl.reconstructArchitectureListDTO.createDynamicReconstructArchitectureDTOs();
+		for (ReconstructArchitectureDTO dto : analyseTaskControl.reconstructArchitectureListDTO.ReconstructArchitectureDTOList){
+			Object[] rowObject = {dto.approachConstant, dto.getTranslation()};
+			approachesRowsList.add(rowObject);
+		}
+		
+		Object[][] approachesRows = new Object[approachesRowsList.size()][];
+		approachesRows = approachesRowsList.toArray(approachesRows);
+		return approachesRows;
+	}
+	
 	private Object[][] getDistinctApproachesRows(){
 		Object ApproachesRows[][] = { 
-				{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
-				{Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition), 10},
-				{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10},
-				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}};
+				{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule)},
+				{Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition)},
+				{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original)},
+				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved)}};
 			return ApproachesRows;
 	}
 	
@@ -267,12 +282,10 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	
 	private Object[] getColumnNames(){
 		String approachesTranslation = localService.getTranslatedString("Approaches");
-		String thresholdTranslation = localService.getTranslatedString("Threshold");
 	
 		Object columnNames[] = {
 				approachesConstants, 
-				approachesTranslation, 
-				thresholdTranslation
+				approachesTranslation
 		};
 		return columnNames;
 	}

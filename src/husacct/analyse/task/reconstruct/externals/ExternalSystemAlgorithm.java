@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
@@ -46,6 +48,17 @@ public class ExternalSystemAlgorithm extends AlgorithmExternal{
 		} catch (Exception e) {
 	        logger.error(" Exception: "  + e );
 	    }
+	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Externals_Recognition;
+		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold, AlgorithmSettings.RelationType, AlgorithmSettings.Granularity};
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		return reconstructArchitecture;
 	}
 
 }

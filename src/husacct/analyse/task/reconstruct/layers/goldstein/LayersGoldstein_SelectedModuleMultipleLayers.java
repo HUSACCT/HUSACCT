@@ -6,6 +6,8 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -173,5 +175,16 @@ public class LayersGoldstein_SelectedModuleMultipleLayers extends AlgorithmGolds
 			bottomLayerId++;
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
+	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Multiple_Improved;
+		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold, AlgorithmSettings.RelationType, AlgorithmSettings.Granularity};
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		return reconstructArchitecture;
 	}
 }

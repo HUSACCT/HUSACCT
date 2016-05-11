@@ -31,4 +31,16 @@ public class AnalyseReconstructConstants {
 		public static final String umlLinks = "UmlLinks";
 		public static final String accessCallReferenceDependencies = "AccessCallReferenceDependencies";
 	}
+	
+	public static class Granularities{
+		public static final String PackagesInRootOnlyClasses = "Packages in Root (With classes only)";
+		public static final String PackagesWithAllClasses = "Packages (All with classes)";
+		public static final String Classes = "Classes";
+	}
+	
+	public static class AlgorithmSettings{
+		public static final String Threshold = "Threshold";
+		public static final String RelationType = "RelationType";
+		public static final String Granularity = "Granularity";
+	}
 }
