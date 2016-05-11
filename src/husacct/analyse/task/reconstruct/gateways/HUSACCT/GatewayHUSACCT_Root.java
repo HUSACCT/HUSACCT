@@ -1,15 +1,22 @@
 package husacct.analyse.task.reconstruct.gateways.HUSACCT;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.enums.ModuleTypes;
 
 public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	private String relationType;
+	private final Logger logger = Logger.getLogger(GatewayHUSACCT_Root.class);
 	//Gateway finder.
 	//Gateway: only has inside-dependencies towards it, so it is located in the bottom layer
 	//Gateway: is the only class with imports towards an external application 
@@ -24,6 +31,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		this.relationType = dto.getRelationType();
 		ArrayList<SoftwareUnitDTO> bottomLayer = identifyBottomLayer();
 		ArrayList<SoftwareUnitDTO> gateways = identifyGateWays(bottomLayer);
+		createModule(gateways);
 		gateways.getClass();//is alleen om de "gateways is unused" warning weg te halen.
 	}
 	
@@ -51,6 +59,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	
 	private ArrayList<SoftwareUnitDTO> identifyGateWays(ArrayList<SoftwareUnitDTO> bottomLayer){
 		ArrayList<SoftwareUnitDTO> gateways = new ArrayList<SoftwareUnitDTO>();
+		Set<SoftwareUnitDTO> set = new HashSet<SoftwareUnitDTO>();
 		DependencyDTO[] allDependecies = queryService.getAllDependencies();
 		for (SoftwareUnitDTO softwareUnitDTO : bottomLayer){
 			ArrayList<DependencyDTO> unitDependencies = new ArrayList<>();
@@ -59,20 +68,22 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 				if(dep.from.equals(softwareUnitDTO.uniqueName)){
 					unitDependencies.add(dep);
 					SoftwareUnitDTO depTo = queryService.getSoftwareUnitByUniqueName(dep.to);
-					if (depTo.type.toUpperCase().equals("EXTERNALLIBRARY")){
+					if (depTo.type.toUpperCase().equals("LIBRARY")){
 						unitExternalDependencies.add(dep);
 					}
 				}
 			}
 			int totalNumberOfDep = unitDependencies.size();
-			int thresHoldDependencies = (int) (totalNumberOfDep * (threshold*0.01));
-			int unitNumberOfExternalDep = unitExternalDependencies.size() - thresHoldDependencies;
-			if (unitNumberOfExternalDep > 0){
-				gateways.add(softwareUnitDTO);
+			double thresHoldDependencies = (double) (totalNumberOfDep * (threshold*0.01));
+			if(unitExternalDependencies.size() > thresHoldDependencies){
+				set.add(softwareUnitDTO);
 			}
 		}
-		
+		gateways.addAll(set);
 		return gateways;
 	}
-
+	private void createModule(ArrayList<SoftwareUnitDTO> softwareUnits){
+		ModuleDTO newModule = defineSarService.addModule("Gateway", "**", ModuleTypes.COMPONENT.toString(), 0, softwareUnits);
+		addToReverseReconstructionList(newModule);
+	}
 }
