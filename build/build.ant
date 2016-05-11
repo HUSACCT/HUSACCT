@@ -77,7 +77,7 @@
 
 	<target name="defaultTest">
 
-		<junit printsummary="yes" haltonfailure="no">
+		<junit haltonfailure="no">
 
 
 			<!-- Project classpath, must include junit.jar -->
@@ -86,12 +86,7 @@
 			<!-- test class -->
 			<classpath location="${src.dir}/husaccttest/TestAll.java" />
 
-			<test name="husaccttest.TestAll" haltonfailure="no" todir="${reports.dir}">
-				<formatter type="plain"/>
-				<formatter type="xml"/>
-
-			</test>
-
+			<test name="husaccttest.TestAll" haltonfailure="no"/>
 
 		</junit>
 	</target>
