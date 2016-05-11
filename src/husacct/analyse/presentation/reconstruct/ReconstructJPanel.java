@@ -47,8 +47,8 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		initUI();
 	}
 	
-	public JPanel createApproachesTableJPanel(){
-		approachesTableJPanel = new ApproachesTableJPanel();
+	public JPanel createApproachesTableJPanel(ReconstructJPanel panel){
+		approachesTableJPanel = new ApproachesTableJPanel(panel);
 		return approachesTableJPanel;
 	}
 	
@@ -58,7 +58,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	
 	public final void initUI(){
 		setLayout(new GridLayout(0, 1, 0, 0));
-		this.add(createApproachesTableJPanel(), BorderLayout.CENTER);
+		this.add(createApproachesTableJPanel(this), BorderLayout.CENTER);
 		
 		panel = new JPanel();
 		approachesTableJPanel.add(panel, BorderLayout.SOUTH);
@@ -183,6 +183,14 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			}
 		}
 
+	}
+	
+	public void setButtonVisibility(Boolean visibility){
+		applyButton.setVisible(visibility);
+		reverseButton.setVisible(visibility);
+		clearButton.setVisible(visibility);
+		testButton.setVisible(visibility);
+		
 	}
 	
 	private ModuleDTO getSelectedModule(){
