@@ -21,6 +21,7 @@ import husacct.common.locale.ILocaleService;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 
@@ -47,8 +48,15 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		initUI();
 	}
 	
-	public JPanel createApproachesTableJPanel(ReconstructJPanel panel){
-		approachesTableJPanel = new ApproachesTableJPanel(panel);
+
+	public JPanel createApproachesTableJPanel(){
+		try {
+			approachesTableJPanel = new ApproachesTableJPanel(analyseTaskControl,this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return approachesTableJPanel;
 	}
 	
@@ -58,7 +66,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	
 	public final void initUI(){
 		setLayout(new GridLayout(0, 1, 0, 0));
-		this.add(createApproachesTableJPanel(this), BorderLayout.CENTER);
+		this.add(createApproachesTableJPanel(), BorderLayout.CENTER);
 		
 		panel = new JPanel();
 		approachesTableJPanel.add(panel, BorderLayout.SOUTH);
@@ -93,8 +101,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		if (action.getSource() == applyButton) {
 			JTabbedPane tappedPane = approachesTableJPanel.tabbedPane;
 			ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
-			ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
-			buttonGroupTwo.getClass();// to remove the "is unused" warning
+			//ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
 
 			Component selectedTappedPane = tappedPane.getSelectedComponent();
 			JPanel selectedPanel = null;
@@ -122,14 +129,12 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			if (selectedRow >= 0){
 				String approach = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
 				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
-				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
 
 				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
 				ModuleDTO selectedModule = getSelectedModule();
 				dto.setSelectedModule(selectedModule);
 				dto.setApproach(approach);
-				dto.setThreshold(threshold);
-				dto.setRelationType(relationType);		
+				dto.setThreshold(threshold);	
 				
 				analyseTaskControl.reconstructArchitecture_Execute(dto);
 				ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
