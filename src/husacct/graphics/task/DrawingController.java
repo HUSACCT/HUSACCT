@@ -144,6 +144,9 @@ public abstract class DrawingController {
 				if (parentFigure != null){ 
 					parentFigure.add(childModuleFigure);
 				}
+				if (controllerType == DrawingTypesEnum.MODULE_RULE_ARCHITECTURE && hasRelationBetween(childModuleFigure, childModuleFigure)) {
+					childModuleFigure.setVisibilityOfRulesIcon(true);
+				}
 				drawing.add(childModuleFigure);
 			}
 			// Set the layout of the parent figure
