@@ -1,0 +1,4 @@
+language: java
+script: ant defaultTest -file build/build.ant
+jdk:
+  - oraclejdk8

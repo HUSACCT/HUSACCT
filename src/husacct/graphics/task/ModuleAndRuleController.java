@@ -35,6 +35,7 @@ public class ModuleAndRuleController extends DrawingController {
 		super.drawArchitectureTopLevel();
 		ModuleFigure[] shownModules = drawing.getShownModules();
 		ArrayList<ModuleFigure> modulesInRoot = new ArrayList<ModuleFigure>(Arrays.asList(shownModules));
+		modulesInRoot.forEach(moduleFigure -> moduleFigure.setVisible(true));
 		ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
 		for (ModuleFigure moduleFigure : modulesInRoot){
 			parentNames.add(moduleFigure.getUniqueName());

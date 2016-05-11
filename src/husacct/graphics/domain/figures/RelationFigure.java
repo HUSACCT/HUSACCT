@@ -27,8 +27,13 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		FigureListener {
 	private static final long		serialVersionUID	= 1805821357919823648L;
 	private LineConnectionFigure	line;
-	private TextFigure				amountFigure;
 	private RelationType			relationType;
+	private TextFigure				amountFigure;
+	private TextFigure fromMultiplicity;
+	private TextFigure 				toMultiplicity;
+	
+
+	
 //	private boolean					violationRelation = false;
 	
 	public RelationFigure(String name, RelationType relationType, String amount) {
@@ -37,16 +42,32 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		
 		line = new LineConnectionFigure();
 		add(line);
-		
+		fromMultiplicity = new TextFigure();
+		toMultiplicity = new TextFigure();
 		amountFigure = new TextFigure(amount);
-		add(amountFigure);
+		if(amount.isEmpty()){
+			amountFigure.setText("-1");
+		}else{
+			add(amountFigure);
+		}
 		
 		line.addFigureListener(this);
+	}
+
+	public void setFromMultiplicity(String fromMultiplicity) {
+		this.fromMultiplicity.setText(fromMultiplicity);
+		add(this.fromMultiplicity);
+	}
+
+	public void setToMultiplicity(String toMultiplicity) {
+		this.toMultiplicity.setText(toMultiplicity);
+		add(this.toMultiplicity);
 	}
 	
 	@Override
 	public void areaInvalidated(FigureEvent e) {
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
@@ -100,7 +121,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		ArrowTip arrowTip = new ArrowTip(0.5, 7, 3.0);
+		ArrowTipFix arrowTip = new ArrowTipFix(0.5, 7, 3.0);
 		set(AttributeKeys.END_DECORATION, arrowTip);
 			
 		switch(relationType) {
@@ -115,12 +136,12 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 			// default is a straight line, so do nothing
 			break;
 		case INHERITANCELINK:
-			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, true, false);
+			arrowTip = new ArrowTipFix(0.5, 13.0, 11.5, false, true, false);
 			set(AttributeKeys.END_DECORATION, arrowTip);
 			break;
 		case IMPLEMENTSLINK:
-			set(AttributeKeys.STROKE_DASHES, new double[] { 2.0, 2.0 });
-			arrowTip = new ArrowTip(0.5, 13.0, 11.5, false, true, true);
+			set(AttributeKeys.STROKE_DASHES, new double[] { 4.0, 4.0 });
+			arrowTip = new ArrowTipFix(0.5, 13.0, 11.5, false, true, true);
 			set(AttributeKeys.END_DECORATION, arrowTip);
 			break;
 		case RULELINK:
@@ -226,10 +247,35 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		amountFigure.changed();
 	}
 	
+	public void relayoutMultiplicities(){
+		double startFigureX = line.getStartPoint().x;
+		double startFigureY = line.getStartPoint().y;
+		
+		double endFigureX = line.getEndPoint().x;
+		double endFigureY = line.getEndPoint().y;
+		
+		double offsetX = startFigureX < endFigureX ? 15 : -15;
+		double offsetY = startFigureY < endFigureY ? 15 : -15;
+		
+		startFigureX += offsetX;
+		startFigureY += offsetY;
+		endFigureX -= offsetX;
+		endFigureY -= offsetY;
+		
+		fromMultiplicity.willChange();
+		fromMultiplicity.setBounds(new Point2D.Double(startFigureX, startFigureY), null);
+		fromMultiplicity.changed();
+		
+		toMultiplicity.willChange();
+		toMultiplicity.setBounds(new Point2D.Double(endFigureX, endFigureY), null);
+		toMultiplicity.changed();
+	}
+	
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
 		line.updateConnection();
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
@@ -282,12 +328,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	public void transform(AffineTransform tx) {
 		line.updateConnection();
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
 	public void updateConnection() {
 		line.updateConnection();
 		relayout();
+		relayoutMultiplicities();
 	}
 	
 	@Override
