@@ -75,7 +75,7 @@
 		</jar>
 	</target>
 
-	<target name="test" depends="compile">
+	<target name="test" depends="clean,compile,extractlib,addresources">
 		<junit fork="yes" printsummary="on" haltonfailure="yes">
 			<!-- Project classpath, must include junit.jar -->
 			<classpath>
