@@ -75,18 +75,15 @@
 		</jar>
 	</target>
 
-	<target name="defaultTest" depends="compile">
-
-		<junit haltonfailure="no">
-
-
+	<target name="test" depends="clean,compile,extractlib,addresources">
+		<junit fork="yes" printsummary="on" haltonfailure="yes">
 			<!-- Project classpath, must include junit.jar -->
-			<classpath refid="classpath" />
-
-			<!-- test class -->
-			<classpath location="${src.dir}/husaccttest/TestAll.java" />
-
-			<test name="husaccttest.TestAll" haltonfailure="no"/>
+			<classpath>
+				<path refid="classpath" />
+				<pathelement location="${src.dir}/husaccttest/TestAll.java" />
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<test name="husaccttest.TestAll" haltonfailure="yes"/>
 
 		</junit>
 	</target>
