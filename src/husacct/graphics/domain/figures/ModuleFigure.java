@@ -6,6 +6,7 @@ import husacct.common.Resource;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -25,9 +26,12 @@ public class ModuleFigure extends BaseFigure {
 	private TextFigure			moduleStereotype;
 	private BufferedImage 		moduleIcon;
 	private ImageFigure 		moduleIconFigure;
+	private BufferedImage		hasRulesIcon;
+	private ImageFigure			hasRulesIconFigure;
+
 
 	protected int				minWidth				= 100;
-	protected int				minHeight				= 50;
+	protected int				minHeight				= 60;
 	
 	public ModuleFigure(String name, String uniqueName, String moduleType) {
 		super(name, uniqueName, moduleType.toLowerCase());
@@ -80,10 +84,25 @@ public class ModuleFigure extends BaseFigure {
 				moduleIconFigure.setImage(null, moduleIcon);
 				children.add(moduleIconFigure);
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			moduleIconFigure = null;
 			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
 		}
+
+		try {
+			hasRulesIconFigure = new ImageFigure();
+			hasRulesIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
+			hasRulesIconFigure.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+			hasRulesIconFigure.setVisible(false);
+			hasRulesIcon = ImageIO.read(Resource.get(Resource.ICON_VALIDATE));
+			hasRulesIconFigure.setImage(null, hasRulesIcon);
+			children.add(hasRulesIconFigure);
+		} catch (IOException e) {
+			Logger.getLogger(this.getClass()).warn("failed to load rule icon image file");
+		}
+
+
+
 	}
 	
 	@Override
@@ -98,6 +117,7 @@ public class ModuleFigure extends BaseFigure {
 		other.moduleName = moduleName.clone();
 		other.moduleStereotype = moduleStereotype.clone();
 		other.moduleIconFigure = moduleIconFigure.clone();
+		other.hasRulesIconFigure = hasRulesIconFigure.clone();
 		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.body);
@@ -146,6 +166,14 @@ public class ModuleFigure extends BaseFigure {
 			double iconLeadY = iconAnchorY + moduleIcon.getHeight();
 			moduleIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
 		}
+
+		if (hasRulesIconFigure != null) {
+			double iconAnchorX = anchor.x + iconMarginX;
+			double iconAnchorY = lead.y - hasRulesIcon.getHeight();
+			double iconLeadX = iconAnchorX + iconWidth;
+			double iconLeadY = iconAnchorY + hasRulesIcon.getHeight();
+			hasRulesIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
 		
 		// Position name
 		double namePlusX = ((lead.x - anchor.x) - (textMargin + nameWidth + textMargin)) / 2;
@@ -193,6 +221,10 @@ public class ModuleFigure extends BaseFigure {
 		
 		invalidate();
 		*/
+	}
+
+	public void setVisibilityOfRulesIcon(boolean visible) {
+		hasRulesIconFigure.setVisible(visible);
 	}
 	
 	@Override

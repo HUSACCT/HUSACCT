@@ -48,13 +48,15 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		initUI();
 	}
 	
+
 	public JPanel createApproachesTableJPanel(){
 		try {
-			approachesTableJPanel = new ApproachesTableJPanel(analyseTaskControl);
+			approachesTableJPanel = new ApproachesTableJPanel(analyseTaskControl,this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return approachesTableJPanel;
 	}
 	
@@ -206,6 +208,14 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			}
 		}
 
+	}
+	
+	public void setButtonVisibility(Boolean visibility){
+		applyButton.setVisible(visibility);
+		reverseButton.setVisible(visibility);
+		clearButton.setVisible(visibility);
+		testButton.setVisible(visibility);
+		
 	}
 	
 	private ModuleDTO getSelectedModule(){

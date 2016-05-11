@@ -16,10 +16,15 @@ import husacct.common.locale.ILocaleService;
 
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -29,11 +34,16 @@ import javax.swing.table.TableModel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
+
 import javax.swing.JTable;
+
 import javax.swing.ListSelectionModel;
 
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JRadioButton;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -53,7 +63,11 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	private TableColumnModel tableDistinctApproachesColumnModel;
 	private ILocaleService localService;
 	private String approachesConstants = AnalyseReconstructConstants.ApproachesTable.ApproachesConstants;
+
+	private ReconstructJPanel panel;
+
 	private AnalyseTaskControl analyseTaskControl;
+
 	public JTabbedPane tabbedPane;
 	public JTable tableAllApproaches;
 	public JTable tableDistinctApproaches;
@@ -66,11 +80,13 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	 * Create the panel.
 	 * @throws IOException 
 	 */
-	public ApproachesTableJPanel(AnalyseTaskControl atc) throws IOException {
+
+	public ApproachesTableJPanel(AnalyseTaskControl atc, ReconstructJPanel panel	) throws IOException {
 		super();
 		analyseTaskControl = atc;
 		localService = ServiceProvider.getInstance().getLocaleService();
 		initUI();
+		this.panel = panel;
 		logger.info("Build Reconstruct tables");
 	}
 	
@@ -92,6 +108,23 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		
+		tabbedPane.addChangeListener(new ChangeListener(){
+			@Override
+			public void stateChanged(ChangeEvent e){
+				if(panel != null){
+					JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+					int selectedIndex = tabbedPane.getSelectedIndex();
+					if(selectedIndex == 2){
+						panel.setButtonVisibility(false);
+					}
+					else{
+						panel.setButtonVisibility(true);
+					}
+				}
+			}
+			
+		});
 		add(tabbedPane);
 				
 
@@ -164,9 +197,13 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 		String distinctApprTranslation = getTranslation(AnalyseReconstructConstants.ApproachesTable.PanelDistinctApproaches);
 		String allApprTranslation = getTranslation(AnalyseReconstructConstants.ApproachesTable.PanelAllApproaches);
+		
+		MojoJPanel mojoPanel = new MojoJPanel(/*analyseTaskControl*/);
 		tabbedPane.addTab(distinctApprTranslation, null, distinctApproachesPanel, null);
 		tabbedPane.addTab(allApprTranslation, null, allApproachedPanel, null);
-		
+
+		tabbedPane.addTab("Mojo", null, mojoPanel.createMojoPanel(), null);
+	
 		
 		JScrollPane parameterTableScrollPane = new JScrollPane(distinctParameterTable);
 		distinctApproachesPanel.add(parameterTableScrollPane, BorderLayout.CENTER);
