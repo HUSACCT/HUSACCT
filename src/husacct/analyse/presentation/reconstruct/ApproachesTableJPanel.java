@@ -8,7 +8,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.RelationTypes;
 import husacct.common.OSDetector;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -32,6 +31,7 @@ import org.apache.log4j.Logger;
 import javax.swing.table.TableModel;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 
@@ -39,13 +39,6 @@ import javax.swing.JTable;
 
 import javax.swing.ListSelectionModel;
 
-
-import java.awt.GridBagLayout;
-
-import javax.swing.JRadioButton;
-
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,8 +46,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import javax.swing.SwingConstants;
-import java.awt.Component;
 
 public class ApproachesTableJPanel extends HelpableJPanel {
 	private static final long serialVersionUID = 1L;
@@ -81,7 +72,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	 * @throws IOException 
 	 */
 
-	public ApproachesTableJPanel(AnalyseTaskControl atc, ReconstructJPanel panel	) throws IOException {
+	public ApproachesTableJPanel(AnalyseTaskControl atc, ReconstructJPanel panel) throws IOException {
 		super();
 		analyseTaskControl = atc;
 		localService = ServiceProvider.getInstance().getLocaleService();
@@ -114,8 +105,9 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			public void stateChanged(ChangeEvent e){
 				if(panel != null){
 					JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
-					int selectedIndex = tabbedPane.getSelectedIndex();
-					if(selectedIndex == 2){
+					Component selectedTappedPane = tabbedPane.getSelectedComponent();
+					JPanel selectedPanel = (JPanel) selectedTappedPane;
+					if(selectedPanel.getName().equals("Mojo")){
 						panel.setButtonVisibility(false);
 					}
 					else{
@@ -133,7 +125,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		allApproachedPanel.setLayout(new BorderLayout(0, 0));
 		
 		Object columnNames[] = getColumnNames();
-		Object rows[][] = getAllApproachesRows2();
+		Object rows[][] = getAllApproachesRows();
 		tableAllApproaches = new JTable(rows, columnNames);    
 		tableAllApproaches.setMinimumSize(new Dimension(600,150));
 		tableAllApproachesColumnModel = tableAllApproaches.getColumnModel();
@@ -201,9 +193,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		MojoJPanel mojoPanel = new MojoJPanel(/*analyseTaskControl*/);
 		tabbedPane.addTab(distinctApprTranslation, null, distinctApproachesPanel, null);
 		tabbedPane.addTab(allApprTranslation, null, allApproachedPanel, null);
-
 		tabbedPane.addTab("Mojo", null, mojoPanel.createMojoPanel(), null);
-	
 		
 		JScrollPane parameterTableScrollPane = new JScrollPane(distinctParameterTable);
 		distinctApproachesPanel.add(parameterTableScrollPane, BorderLayout.CENTER);
@@ -276,7 +266,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	}
 	
 	
-	private Object[][] getAllApproachesRows(){
+	/*private Object[][] getAllApproachesRows(){
         Object ApproachesRows[][] = { 
             {Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
             {Algorithm.Gateways_HUSACCT_Root, getTranslation(Algorithm.Gateways_HUSACCT_Root), 10},
@@ -290,9 +280,9 @@ public class ApproachesTableJPanel extends HelpableJPanel {
             {Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}};
                 
         return ApproachesRows;
-    }
+    }*/
 	
-	private Object[][] getAllApproachesRows2(){
+	private Object[][] getAllApproachesRows(){
 		ArrayList<Object[]> approachesRowsList = new ArrayList<>();
 		analyseTaskControl.createReconstructArchitectureList();
 		analyseTaskControl.reconstructArchitectureListDTO.createDynamicReconstructArchitectureDTOs();

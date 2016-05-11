@@ -23,14 +23,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.swing.ButtonGroup;
-
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private final Logger logger = Logger.getLogger(ReconstructJPanel.class);
-	private static final int approachesThresholdCollumn = 1;
 	private static final long serialVersionUID = 1L;
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
@@ -105,7 +102,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == applyButton) {
 			JTabbedPane tappedPane = approachesTableJPanel.tabbedPane;
-			ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
+			//ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
 			//ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
 
 			Component selectedTappedPane = tappedPane.getSelectedComponent();
@@ -168,7 +165,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
 		}
 		if (action.getSource() == testButton){
-			JTable approachesTable = approachesTableJPanel.tableAllApproaches;
+			/*JTable approachesTable = approachesTableJPanel.tableAllApproaches;
 			ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
 			ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
 			buttonGroupTwo.getClass();// to remove the "is unused" warning
@@ -196,7 +193,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			}
 			else{
 				logger.warn("No Approache selected");
-			}
+			}*/
 		}
 		if (action.getSource() == settingsButton){
 			JTable approachesTable = approachesTableJPanel.tableAllApproaches;
@@ -215,6 +212,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		reverseButton.setVisible(visibility);
 		clearButton.setVisible(visibility);
 		testButton.setVisible(visibility);
+		settingsButton.setVisible(visibility);
 		
 	}
 	

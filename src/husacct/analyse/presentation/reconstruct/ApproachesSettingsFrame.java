@@ -2,7 +2,6 @@ package husacct.analyse.presentation.reconstruct;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -132,7 +131,7 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	
 	private JPanel buildGranularityPanel(){
 		JPanel granularityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JLabel granularityLabel = new JLabel("Granularity");
+		JLabel granularityLabel = new JLabel(getTranslation("Granularity"));
 		granularityPanel.add(granularityLabel);
 		
 				
