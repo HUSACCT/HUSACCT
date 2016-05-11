@@ -75,7 +75,7 @@
 		</jar>
 	</target>
 
-	<target name="defaultTest">
+	<target name="defaultTest" depends="compile">
 
 		<junit haltonfailure="no">
 
