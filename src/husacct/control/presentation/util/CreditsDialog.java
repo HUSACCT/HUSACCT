@@ -82,7 +82,7 @@ public class CreditsDialog extends JDialog {
 		textPanel2.setLayout(new GridBagLayout());
 		processDescription = new JLabel("Process support version 1.0 and 2.0"  + ":");
 		processDescription.setFont(new Font("Arial", Font.BOLD, 14));
-		processLabel = new JTextArea("\n" + "Christian Köppe, Michiel Borkent");
+		processLabel = new JTextArea("\n" + "Christian K\u00F6ppe, Michiel Borkent");
 		processLabel.setLineWrap(true);
 		processLabel.setWrapStyleWord(true);
 		processLabel.setSize(new Dimension(400, 150));

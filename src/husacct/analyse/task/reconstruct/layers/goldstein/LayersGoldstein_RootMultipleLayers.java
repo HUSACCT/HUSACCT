@@ -270,6 +270,12 @@ public class LayersGoldstein_RootMultipleLayers extends AlgorithmGoldstein {
 			layers.put(bottomLayerId, assignedUnitsTopLayer);
 		}
 	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

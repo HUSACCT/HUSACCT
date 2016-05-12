@@ -29,6 +29,15 @@ public abstract class IAlgorithm {
 	
 	public abstract void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) throws Exception;
 	
+	/*
+	 * getAlgorithmSettings returns a ReconstructArchitectureDTO with all the info of the algorithm
+	 * -	witch thresholds it is going to use
+	 * -	the default values of the thresholds
+	 * - 	the constant of the algorithm
+	 */
+	public abstract ReconstructArchitectureDTO getAlgorithmThresholdSettings();
+	
+	
 	protected ModuleDTO createModule_andAddItToReverseList(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {
 		ModuleDTO newModule = defineSarService.addModule(name, parentLogicalPath, moduleType, hierarchicalLevel, softwareUnits);
 		if (!newModule.logicalPath.equals("")) {

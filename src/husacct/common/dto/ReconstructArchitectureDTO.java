@@ -1,14 +1,21 @@
 package husacct.common.dto;
 
+import husacct.ServiceProvider;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.common.locale.ILocaleService;
 
 //Owner: Analyse
 
 public class ReconstructArchitectureDTO extends AbstractDTO{
 	private ModuleDTO selectedModule = null; 
 	private String approach = "";
-	private int threshold = 0;
-	private String relationType = ""; 
+	public int threshold = 0;
+	public String relationType = ""; 
 	private String name = "";
+	public String approachConstant = "";
+	public String[] thresholdSettings;
+	public String granularity;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
     public ReconstructArchitectureDTO() {
     }
@@ -51,6 +58,17 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 
 	public void setName(String algorithmTestName) {
 		this.name = algorithmTestName;
+	}
+	
+	public String getTranslation(){
+		return localeService.getTranslatedString(approachConstant);
+	}
+	
+	private void setAbsoluteDefaults(){
+		thresholdSettings = new String[]{};
+		threshold = 10;
+		granularity = AnalyseReconstructConstants.Granularities.Classes;
+		relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 	}
 	
 	public String toString() {
