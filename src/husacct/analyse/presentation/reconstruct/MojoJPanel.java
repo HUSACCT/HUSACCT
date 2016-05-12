@@ -143,6 +143,7 @@ public class MojoJPanel implements ActionListener{
 		mojoPanel2.add(new JPanel());//empty grid cell
 		mojoPanel2.add(new JPanel());//empty grid cell
 		mojoPanel2.add(new JPanel());//empty grid cell
+		mojoPanel2.setName("Mojo");
 		
 		return mojoPanel2;
 	}

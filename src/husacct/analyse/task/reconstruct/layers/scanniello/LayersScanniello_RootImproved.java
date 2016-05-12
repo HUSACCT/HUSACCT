@@ -75,4 +75,10 @@ public class LayersScanniello_RootImproved extends AlgorithmScanniello{
 		}
 		return internalRootPackagesWithClasses;
 	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

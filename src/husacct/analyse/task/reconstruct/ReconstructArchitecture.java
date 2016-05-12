@@ -44,7 +44,7 @@ public class ReconstructArchitecture {
 				&& !dto.getSelectedModule().logicalPath.equals("");
 		
 		try {
-			switch (dto.getApproach()) {
+			switch (dto.approachConstant) {
 				case (Algorithm.Layers_Goldstein_Multiple_Improved):
 					if(moduleSelected){
 						 algorithm = new LayersGoldstein_SelectedModuleMultipleLayers(queryService);

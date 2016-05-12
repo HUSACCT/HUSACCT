@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
@@ -51,6 +53,17 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		
 		HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers = RestructureLayers(topLayers, bottomLayers, middleLayer);
 		this.buildStructure(structuredLayers, discLayer);
+	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Original;
+		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold, AlgorithmSettings.RelationType, AlgorithmSettings.Granularity};
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		return reconstructArchitecture;
 	}
 
 	

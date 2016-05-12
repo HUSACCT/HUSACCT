@@ -19,6 +19,7 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
+import husacct.common.dto.ReconstructArchitectureListDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.define.IDefineService;
@@ -33,7 +34,7 @@ public class AnalyseTaskControl {
     private HistoryLogger historyLogger;
     private ReconstructArchitecture reconstructArchitecture;
     private ILocaleService localeService;
-
+    public ReconstructArchitectureListDTO reconstructArchitectureListDTO;
     
     private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
 
@@ -176,5 +177,10 @@ public class AnalyseTaskControl {
 
 	public AnalysisStatisticsDTO getAnalysisStatistics(SoftwareUnitDTO selectedModule) {
 		return queryService.getAnalysisStatistics(selectedModule);
+	}
+	
+	public ReconstructArchitectureListDTO createReconstructArchitectureList(){
+		reconstructArchitectureListDTO = new ReconstructArchitectureListDTO(queryService);
+		return reconstructArchitectureListDTO;
 	}
 }
