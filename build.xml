@@ -33,9 +33,18 @@
 			<classpath refid="classpath" />
 		</javac>
 	</target>
+	
+	<!-- Extract external libraries -->
+	<target name="extractlib" depends="compile">
+		<unzip dest="${bin.dir}">
+			<fileset dir="${lib.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</unzip>
+	</target>
 
 	<!-- Run test classes -->
-	<target name="test" depends="compile">
+	<target name="test" depends="extractlib">
 		<junit fork="yes" printsummary="on" haltonfailure="yes">
 			<!-- Project classpath, must include junit.jar -->
 			<classpath>
@@ -45,15 +54,6 @@
 			<test name="husaccttest.TestAll" haltonfailure="yes"/>
 
 		</junit>
-	</target>
-	
-	<!-- Extract external libraries -->
-	<target name="extractlib" depends="test">
-		<unzip dest="${bin.dir}">
-			<fileset dir="${lib.dir}">
-				<include name="**/*.jar"/>
-			</fileset>
-		</unzip>
 	</target>
 	
 	<!-- Create runnable Jars -->
