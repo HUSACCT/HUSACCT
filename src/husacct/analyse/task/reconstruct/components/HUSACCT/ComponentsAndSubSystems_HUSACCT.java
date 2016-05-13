@@ -7,6 +7,8 @@ import java.util.HashSet;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -401,5 +403,14 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 			}
 		}
 		return newSoftwareUnitsInSelectedModuleList;
+	}
+
+	@Override
+	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
+		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold};
+		reconstructArchitecture.threshold = 10;
+		return reconstructArchitecture;
 	}
 }

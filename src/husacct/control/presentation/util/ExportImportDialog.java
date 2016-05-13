@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.reconstruct.MojoJPanel;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
@@ -23,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ExportImportDialog extends JDialog {
 
+	private MojoJPanel mojoPanel;
 	private static final long serialVersionUID = 1L;
 
 	private MainController mainController;
@@ -31,25 +33,41 @@ public class ExportImportDialog extends JDialog {
 	private JLabel pathLabel;
 	private JTextField pathText;
 	private JButton browseButton, exportImportButton;
+	private JButton mojoOrigin;
 
 	private File selectedFile;
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public ExportImportDialog(MainController mainController, String typeOfFunction) {
-		super(mainController.getMainGui(), true);
+	public void SARExportImportDialog(MainController mainController, String typeOfFunction, MojoJPanel mojoPanel, JButton origin) {
+		//super(mainController.getMainGui(), true);
+		this.mojoOrigin = origin;
+		this.mojoPanel = mojoPanel;
 		this.mainController = mainController;
 		this.typeOfFunction = typeOfFunction;
-		if (typeOfFunction.equals("ExportArchitecture")) {
-			setTitle(localeService.getTranslatedString("ExportArchitecture"));
-		} else if (typeOfFunction.equals("ExportAnalysisModel")) {
-			setTitle(localeService.getTranslatedString("ExportAnalysisModel"));
+		if (typeOfFunction.equals("ExportMojo")){
+			showFileDialog();
 		}
-		setup();
-		addComponents();
-		setListeners();
-		this.setVisible(true);
+	}
+	
+	public ExportImportDialog(MainController mainController, String typeOfFunction) {
+		super(mainController.getMainGui(), true);
+		if(!typeOfFunction.equals("ExportMojo")){
+			this.mainController = mainController;
+			this.typeOfFunction = typeOfFunction;
+			if (typeOfFunction.equals("ExportArchitecture")) {
+				setTitle(localeService.getTranslatedString("ExportArchitecture"));
+			} else if (typeOfFunction.equals("ExportAnalysisModel")) {
+				setTitle(localeService.getTranslatedString("ExportAnalysisModel"));
+			}
+			
+			setup();
+			addComponents();
+			setListeners();
+			this.setVisible(true);
+		}
+		
 	}
 	
 	private void setup(){
@@ -137,11 +155,25 @@ public class ExportImportDialog extends JDialog {
 
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			if(fileDialog.getSelectedFile().exists()){
-				setFile(fileDialog.getSelectedFile());
-			} else {
-				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			if (!typeOfFunction.equals("ExportMojo")){
+				if(fileDialog.getSelectedFile().exists()){
+					setFile(fileDialog.getSelectedFile());
+				} else {
+					setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+				}
 			}
+			else {
+				
+				
+				if(fileDialog.getSelectedFile().exists()){
+					mojoPanel.setText(fileDialog.getSelectedFile(), mojoOrigin);
+				}
+				else{
+					mojoPanel.setText(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()), mojoOrigin);
+				}
+				
+			}
+			
 		}
 	}
 
