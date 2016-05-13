@@ -16,11 +16,6 @@
 		<pathelement location="${src.dir}" />
 		<fileset dir="${lib.dir}" includes="*.jar" />
 	</path>
-
-	<path id="classpath.test">
-		<pathelement location="${bin.dir}" />
-		<pathelement location="${src.dir}" />
-	</path>
 	
 	<target name="main" depends="addresources"/>
 	
