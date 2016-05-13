@@ -37,7 +37,7 @@ public class TestResourceFinder {
 	public static String findHusacctWorkspace(String languageFolder, String workspaceName){
 		
 		String buildPrefix = ".." + File.separator;
-		String simplePath = testprojectFolder + File.separator + languageFolder + File.separator + "workspaces" + File.separator + workspaceName;
+		String simplePath =  testprojectFolder + File.separator + languageFolder + File.separator + "workspaces" + File.separator + workspaceName;
 		String pathFromBuild = buildPrefix + simplePath;
 		
 		String selectedPath = simplePath;

@@ -1,4 +1,6 @@
 language: java
-script: ant test -file build/build.ant
+script: ant test
 jdk:
   - oraclejdk8
+notifications:
+  slack: husacct:YpeL7dIr0OEKvPRCVIV03XCd
