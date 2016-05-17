@@ -1,5 +1,7 @@
 package domain.umllinks;
 
+import java.util.ArrayList;
+
 public class AssociationClass {
 
 	private OneToOneAssociation onetoone;

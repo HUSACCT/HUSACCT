@@ -45,7 +45,7 @@
 
 	<!-- Run test classes -->
 	<target name="test" depends="extractlib">
-		<junit fork="yes" printsummary="on" haltonfailure="yes">
+		<junit fork="yes" showoutput="on" printsummary="on" haltonfailure="yes">
 			<!-- Project classpath, must include junit.jar -->
 			<classpath>
 				<path refid="classpath" />
