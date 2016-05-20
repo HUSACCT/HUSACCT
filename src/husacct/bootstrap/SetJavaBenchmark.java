@@ -21,7 +21,7 @@ public class SetJavaBenchmark extends AbstractBootstrap{
 		}
 
 		if(paths.size() <= 0){
-			paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "java" + File.separator + "benchmark");
+			paths.add(new File("").getAbsolutePath() + "/" + "testprojects" + "/" + "java" + "/" + "benchmark");
 		}
 
 		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();

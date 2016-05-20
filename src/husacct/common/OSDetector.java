@@ -17,13 +17,13 @@ public class OSDetector {
         String os = System.getProperty("os.name").toLowerCase();
         if(os.contains("win")) {
         	operatingSystem = OS.WINDOWS;
-        	appPath = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+        	appPath = System.getProperty("user.home") + "/" + "HUSACCT" + "/";
         } else if(os.contains("nux") || os.contains("nix")) {
         	operatingSystem = OS.LINUX;
-        	appPath = System.getProperty("user.home") + File.separator + ".husacct" + File.separator;
+        	appPath = System.getProperty("user.home") + "/" + ".husacct" + "/";
         } else if(os.contains("mac")) {
         	operatingSystem = OS.MAC;
-        	appPath = System.getProperty("user.home") + File.separator + ".husacct" + File.separator;
+        	appPath = System.getProperty("user.home") + "/" + ".husacct" + "/";
         }
     }
 

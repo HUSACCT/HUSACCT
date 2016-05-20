@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class SetCSharpBenchmark extends AbstractBootstrap{
 	private String[] pathsToCustomTestProject = {};
-	private static final String PATH = new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "benchmark";
+	private static final String PATH = new File("").getAbsolutePath() + "/" + "testprojects" + "/" + "csharp" + "/" + "benchmark";
 	
 	@Override
 	public void execute() {

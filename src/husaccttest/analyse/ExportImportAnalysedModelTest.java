@@ -33,7 +33,7 @@ public class ExportImportAnalysedModelTest {
 	private static Logger logger;
 	private static IAnalyseService analyseService = null;
 	
-	private static final String exportFileName = "ExportFileAnalysedModel.XML";
+	private static final String exportFileName = "ExportFileAnalysedModel.xml";
 	private static String exportFilePath;
 	private static File exportFile;
 

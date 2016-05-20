@@ -21,7 +21,7 @@ public class TestResourceFinder {
 
 		String path = getBaseTestResourcesPath(languageFolder) + projectName;
 		checkFilePath(path);
-		return path + File.separator;
+		return path + "/";
 	}
 
 	/**Function to find the workspace file, holding in account if the build or the normal JUnit tests is requesting the path. 
@@ -29,27 +29,27 @@ public class TestResourceFinder {
 	// Requires two versions of the workspace: 1) JUnit version with project path = directory name within projectResources; 2) Build version with the project path = "..\" + directory name within projectResources
 	public static String findHusacctWorkspace(String languageFolder, String workspaceName){
 
-		String path =  getBaseTestResourcesPath(languageFolder) + WORKSPACES_FOLDER + File.separator + workspaceName;
+		String path =  getBaseTestResourcesPath(languageFolder) + WORKSPACES_FOLDER + "/" + workspaceName;
 		checkFilePath(path);
 		return path;
 	}
 
 	public static String findHusacctExportFile(String languageFolder, String exportFile){
 
-		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + File.separator + exportFile;
+		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/" + exportFile;
 		checkFilePath(path);
 		return path;
 	}
 
 	private static String getBaseTestResourcesPath(String languageFolder) {
-		return TESTPROJECT_FOLDER + File.separator + languageFolder + File.separator;
+		return TESTPROJECT_FOLDER + "/" + languageFolder + "/";
 	}
 
 	private static void checkFilePath(String path) {
 		File pathFile = new File(path);
 
 		if (!pathFile.exists()) {
-			Logger.getLogger(TestResourceFinder.class.getSimpleName()).severe("Workspace or file not found!");
+			Logger.getLogger(TestResourceFinder.class.getSimpleName()).severe("Workspace or file \""+path +"\" not found");
 		}
 	}
 

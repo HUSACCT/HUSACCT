@@ -11,7 +11,7 @@
         <Project>
           <name>SrmaTest2014-11-12 with Exceptions</name>
           <paths>
-            <path>testresources/java/SRMA20141112/src</path>
+            <path>testresources/java/srma20141112/src</path>
           </paths>
           <programmingLanguage>Java</programmingLanguage>
           <version>1.0</version>
