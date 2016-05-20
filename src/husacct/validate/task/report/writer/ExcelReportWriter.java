@@ -136,7 +136,7 @@ public class ExcelReportWriter extends ReportWriter {
 
     @Override
     public void createReport() throws DocumentException, MalformedURLException, IOException {
-        String fullPath = path + "\\" + fileName;
+        String fullPath = path + "/" + fileName;
     	File file = new File(fullPath);
         WorkbookSettings documentSettings = new WorkbookSettings();
         documentSettings.setLocale(ServiceProvider.getInstance().getLocaleService().getLocale());
