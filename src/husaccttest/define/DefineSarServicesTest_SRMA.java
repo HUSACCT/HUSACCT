@@ -221,7 +221,7 @@ public class DefineSarServicesTest_SRMA {
 		String fromModule = "Domain";
 		String toModule = "Presentation";
 		int numberOfDependencies = getNumberofDependenciesBetweenModulesInIntendedArchitecture(fromModule, toModule);
-		Assert.assertTrue(numberOfDependencies == 16);
+		Assert.assertEquals("Incorrect number of dependencies", numberOfDependencies, 16);
 	}
 	
 	//
