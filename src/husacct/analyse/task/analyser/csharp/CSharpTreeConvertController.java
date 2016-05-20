@@ -241,15 +241,16 @@ public class CSharpTreeConvertController {
 	    		// Create a No_Namespace package, extended with the directories in the sourceFilePath - projectPath.
 	    		String projectPath = cSharpAnalyser.getProjectPath();
 	    		projectPath = Matcher.quoteReplacement(projectPath);
-	    		String separator = File.separator;
-				projectPath = projectPath. replace(separator, "_");
+	    		char separator = '/';
+				projectPath = projectPath.replace(separator, '_');
+				sourceFilePath = sourceFilePath.replace('\\',separator);
 	    		String sourceFilePathReplace = Matcher.quoteReplacement(sourceFilePath);
 	    		sourceFilePathReplace = sourceFilePathReplace.replace(cSharpAnalyser.getFileExtension(), "");
 	    		int positionLastSeparator = sourceFilePathReplace.lastIndexOf(separator);
 	    		String sourceFilePathWithoutProjectPath = "";
 	    		if (positionLastSeparator >= 0) {
 		    		sourceFilePathReplace = sourceFilePathReplace.substring(0, positionLastSeparator);
-		    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, "_");
+		    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, '_');
 		    		if (sourceFilePathReplace.contains(projectPath)) {
 		    			sourceFilePathWithoutProjectPath = sourceFilePathReplace.replaceAll(projectPath, "");
 		    		}
