@@ -10,6 +10,7 @@ build.xml
 build/*
 manifest.mf
 nbproject/
+.travis.yml
 .classpath
 .project
 .settings
