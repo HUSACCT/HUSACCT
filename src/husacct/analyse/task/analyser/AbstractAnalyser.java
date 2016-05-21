@@ -13,7 +13,7 @@ public abstract class AbstractAnalyser {
     }
 
     public void analyseSourceFile(String projectPath, String sourceFilePath) {
-    	this.projectPath = projectPath;
+    	this.projectPath = projectPath.replace('\\','/');
         generateModelFromSourceFile(sourceFilePath);
     }
 
