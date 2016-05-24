@@ -31,7 +31,7 @@ public class ModuleFigure extends BaseFigure {
 
 
 	protected int				minWidth				= 100;
-	protected int				minHeight				= 60;
+	protected int				minHeight				= 65;
 	
 	public ModuleFigure(String name, String uniqueName, String moduleType) {
 		super(name, uniqueName, moduleType.toLowerCase());
@@ -94,7 +94,7 @@ public class ModuleFigure extends BaseFigure {
 			hasRulesIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
 			hasRulesIconFigure.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 			hasRulesIconFigure.setVisible(false);
-			hasRulesIcon = ImageIO.read(Resource.get(Resource.ICON_VALIDATE));
+			hasRulesIcon = ImageIO.read(Resource.get(Resource.ICON_INFO));
 			hasRulesIconFigure.setImage(null, hasRulesIcon);
 			children.add(hasRulesIconFigure);
 		} catch (IOException e) {
@@ -120,7 +120,7 @@ public class ModuleFigure extends BaseFigure {
 		other.children.add(other.body);
 		other.children.add(other.moduleName);
 		other.children.add(other.moduleStereotype);
-		if (moduleIconFigure != null)
+		if (other.moduleIconFigure != null)
 			other.children.add(other.moduleIconFigure);
 		
 		return other;
@@ -166,7 +166,7 @@ public class ModuleFigure extends BaseFigure {
 
 		if (hasRulesIconFigure != null) {
 			double iconAnchorX = anchor.x + iconMarginX;
-			double iconAnchorY = lead.y - hasRulesIcon.getHeight();
+			double iconAnchorY = lead.y - hasRulesIcon.getHeight() - iconMarginX;
 			double iconLeadX = iconAnchorX + iconWidth;
 			double iconLeadY = iconAnchorY + hasRulesIcon.getHeight();
 			hasRulesIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
