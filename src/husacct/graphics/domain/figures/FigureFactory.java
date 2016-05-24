@@ -25,10 +25,10 @@ public final class FigureFactory {
 	}
 	public RelationFigure createRelationFigure_UmlLink(UmlLinkDTO[] UmlLinkDTO) {
 		if (UmlLinkDTO.length <= 0) throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
-		RelationFigure UmlLinkFigure = new RelationFigure("Dependency from " + UmlLinkDTO[0].from + " to " + UmlLinkDTO[0].to, RelationType.fromString(UmlLinkDTO[0].type), "");
-		String multiplicityType = UmlLinkDTO[0].isComposite ? "*" : "1" ;
-		UmlLinkFigure.setFromMultiplicity(multiplicityType);
-		UmlLinkFigure.setToMultiplicity("1");
+
+		RelationFigure UmlLinkFigure = new RelationFigure("Dependency from " + UmlLinkDTO[0].from + " to " + UmlLinkDTO[0].to, RelationType.fromString(UmlLinkDTO[0].type), Integer.toString(UmlLinkDTO.length));
+		UmlLinkFigure.setComposite(UmlLinkDTO[0].isComposite);
+		UmlLinkFigure.setMultiplicity();
 		
 		return UmlLinkFigure;
 	}
