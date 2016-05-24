@@ -7,8 +7,10 @@ import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
+import husacct.analyse.task.reconstruct.parameters.NumberFieldPanel;
+import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
@@ -209,11 +211,21 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Improved;
-		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold, AlgorithmSettings.RelationType, AlgorithmSettings.Granularity};
+		reconstructArchitecture.parameterPanels = createParameterPanels();
 		reconstructArchitecture.threshold = 10;
-		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
 		return reconstructArchitecture;
+	}
+	
+	private ArrayList<ParameterPanel> createParameterPanels(){
+		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
+		
+		ParameterPanel numberField = new NumberFieldPanel("Threshold", AlgorithmParameter.Threshold, 10);
+		numberField.value = 10;
+		numberField.minimumValue = 0;
+		numberField.maximumValue = 100;
+		parameterPanels.add(numberField);
+		
+		return parameterPanels;
 	}
 
 
