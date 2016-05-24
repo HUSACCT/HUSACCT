@@ -49,7 +49,8 @@ public class TestResourceFinder {
 		File pathFile = new File(path);
 
 		if (!pathFile.exists()) {
-			Logger.getLogger(TestResourceFinder.class.getSimpleName()).severe("Workspace or file \""+path +"\" not found");
+			String className = TestResourceFinder.class.getSimpleName();
+			Logger.getLogger(className).severe(className+ ": Workspace or file \""+path +"\" not found");
 		}
 	}
 
