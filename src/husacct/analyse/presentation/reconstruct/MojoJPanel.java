@@ -1,7 +1,5 @@
 package husacct.analyse.presentation.reconstruct;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,22 +11,22 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.analyse.task.reconstruct.mojo.MoJo;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.control.task.MainController;
-import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
+import net.miginfocom.swing.MigLayout;
 
 public class MojoJPanel implements ActionListener{
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	private JButton browseGold, browseTC, store, calculate;
-	private JTextField textPath1, textPath2;
-	private JPanel compareMojoPanel;
-	private JComboBox<String> approaches;
-	private JLabel result;
+	private JButton exportBrowse, exportArchitecture;
+	private JButton compareBrowseGold, compareBrowseToCompare, compareArchitecture;
+	private JLabel exportTitle, exportPath;
+	private JLabel compareTitle, comparePathGold, comparePathToCompare, compareResult;
+	private JTextField exportText;
+	private JTextField compareTextGold, compareTextToCompare;
+	
 	
 	//private AnalyseTaskControl analyseTaskControl;
 	
@@ -40,157 +38,100 @@ public class MojoJPanel implements ActionListener{
 	 * @wbp.parser.entryPoint
 	 */
 	public JPanel createMojoPanel(){
-		JLabel path1 = new JLabel("Golden path:");
-		JLabel path2 = new JLabel("To Compare path:");
+		//export side
+		exportTitle = new JLabel("Export current Intended Architecture");
+		exportTitle.setFont (exportTitle.getFont().deriveFont (14.0f));
+		exportPath = new JLabel("Export path:");
+		exportText = new JTextField(40);
+		exportText.setEnabled(false);
 		
-		textPath1 = new JTextField(40);
-		textPath1.setEnabled(false);
-		textPath2 = new JTextField(40);
-		textPath2.setEnabled(false);
+		exportBrowse = new JButton("Browse");
+		exportBrowse.addActionListener(this);
+		exportArchitecture = new JButton("Export");
+		exportArchitecture.addActionListener(this);
+		exportArchitecture.setEnabled(false);
 		
-		approaches = new JComboBox<>();
-		approaches.addItem("hoi");
-		approaches.setMaximumSize(new Dimension(textPath2.getWidth(), textPath2.getHeight()));
+		//compare side
+		compareTitle = new JLabel("Compare Architectures");
+		compareTitle.setFont (compareTitle.getFont().deriveFont (14.0f));
+		comparePathGold = new JLabel("Golden standard:");
+		comparePathGold.setHorizontalAlignment(SwingConstants.RIGHT);
+		compareTextGold = new JTextField(40);
+		compareTextGold.setEnabled(false);
+		compareBrowseGold = new JButton("Browse");
+		compareBrowseGold.addActionListener(this);
 		
-		browseGold = new JButton("Browse");
-		browseGold.addActionListener(this);
 		
-		browseTC = new JButton("Browse");
-		browseTC.addActionListener(this);
+		comparePathToCompare = new JLabel("To compare:");
+		comparePathToCompare.setHorizontalAlignment(SwingConstants.RIGHT);
+		compareTextToCompare = new JTextField(40);
+		compareTextToCompare.setEnabled(false);
 		
-		store = new JButton("Store");	
-		store.addActionListener(this);
-		store.setEnabled(false);
+		compareBrowseToCompare= new JButton("Browse");
+		compareBrowseToCompare.addActionListener(this);
 		
-		calculate = new JButton("Calculate");	
-		calculate.addActionListener(this);
-		calculate.setEnabled(false);
+		compareArchitecture= new JButton("Compare Architectures");
+		compareArchitecture.addActionListener(this);
+		compareArchitecture.setEnabled(false);
+		
+		//result
+		compareResult = new JLabel();
+		compareResult.setVisible(false);
+		
+		
+		JPanel exportPanel = new JPanel();
+		exportPanel.setLayout(new MigLayout("wrap 3", "[left]", "[top]"));
+		exportPanel.add(exportTitle, "span 3");
+		exportPanel.add(exportPath, "skip 6");
+		exportPanel.add(exportText);
+		exportPanel.add(exportBrowse);
+		exportPanel.add(exportArchitecture, "skip 1");
+		
+		JPanel comparePanel = new JPanel();
+		comparePanel.setLayout(new MigLayout("wrap 3", "[left]", "[top]"));
+		comparePanel.add(compareTitle, "span 3");
+		comparePanel.add(comparePathGold, "skip 6");
+		comparePanel.add(compareTextGold);
+		comparePanel.add(compareBrowseGold);
+		comparePanel.add(comparePathToCompare, "skip 3");
+		comparePanel.add(compareTextToCompare);
+		comparePanel.add(compareBrowseToCompare);
+		comparePanel.add(compareArchitecture, "skip 1");
 		
 		JPanel resultPanel = new JPanel();		
-		result = new JLabel("");
-		result.setVisible(false);
-		result.setHorizontalAlignment(SwingConstants.LEFT);
-		resultPanel.add(result);
+		resultPanel.add(compareResult);
 		
+		JPanel mainPanel = new JPanel(new MigLayout("", "[0:0,grow 50,left][0:0,grow 50, left]", "[top]15[]"));
+		mainPanel.add(exportPanel);
+		mainPanel.add(comparePanel, "wrap");
+		mainPanel.add(resultPanel, "skip 1");
+		mainPanel.setName("Mojo");
 		
-		JPanel goldenMojoPanel = new JPanel();
-		GroupLayout layout = new GroupLayout(goldenMojoPanel);
-		goldenMojoPanel.setLayout(layout);
-		layout.setAutoCreateGaps(true);
-		layout.setAutoCreateContainerGaps(true);
-		
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addComponent(path1)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addComponent(textPath1)
-					.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(store)))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(browseGold))
-		);
-		
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(path1)
-						.addComponent(textPath1)
-						.addComponent(browseGold))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(store))
-		);
-		
-		
-		compareMojoPanel = new JPanel();
-		compareMojoPanel.setVisible(false);
-		
-		GroupLayout layoutC = new GroupLayout(compareMojoPanel);
-		compareMojoPanel.setLayout(layoutC);
-		
-		layoutC.setAutoCreateGaps(true);
-		layoutC.setAutoCreateContainerGaps(true);
-		
-		layoutC.setHorizontalGroup(layoutC.createSequentialGroup()
-				.addComponent(path2)
-				.addGroup(layoutC.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addComponent(textPath2)
-					.addGroup(layoutC.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(approaches)
-						.addComponent(calculate)))
-				.addGroup(layoutC.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(browseTC))
-		);
-		
-		layoutC.setVerticalGroup(layoutC.createSequentialGroup()
-				.addGroup(layoutC.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(path2)
-						.addComponent(textPath2)
-						.addComponent(browseTC))
-				.addGroup(layoutC.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(approaches))
-				.addGroup(layoutC.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(calculate))
-		);
-		
-		path1.setPreferredSize(new Dimension(path2.getWidth(), path2.getHeight()));
-		
-		JPanel mojoPanel2 = new JPanel();
-		mojoPanel2.setLayout(new GridLayout(4,2));
-		mojoPanel2.add(goldenMojoPanel);
-		mojoPanel2.add(new JPanel());//empty grid cell
-		mojoPanel2.add(compareMojoPanel);
-		mojoPanel2.add(new JPanel()); //empty grid cell
-		
-		mojoPanel2.add(resultPanel);
-		mojoPanel2.add(new JPanel());//empty grid cell
-		mojoPanel2.add(new JPanel());//empty grid cell
-		mojoPanel2.add(new JPanel());//empty grid cell
-		mojoPanel2.setName("Mojo");
-		
-		return mojoPanel2;
+		return mainPanel;
 	}
 	
 	MainController mainController = new MainController();
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == browseGold){
-			mainController.getExportImportController().showExportMojoGui(this, browseGold);
+		if(e.getSource() == exportBrowse){
+			mainController.getExportImportController().showExportMojoGui(this, exportBrowse, true);
 		}
-		
-		if(e.getSource() == store){
-			exportFile(textPath1);
-			
-			if (!textPath2.getText().trim().equals("")){
-				calculate.setEnabled(true);
-			}
-			compareMojoPanel.setVisible(true);
+		if(e.getSource() == exportArchitecture){
+			exportFile(exportText);
 		}
-		if(e.getSource() == browseTC){
-			mainController.getExportImportController().showExportMojoGui(this, browseTC);
-			calculate.setEnabled(true);
+		if(e.getSource() == compareBrowseGold){
+			mainController.getExportImportController().showExportMojoGui(this, compareBrowseGold, false);
 		}
-		if (e.getSource() == calculate){
-			IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-			IDefineSarService defineSarService = defineService.getSarService();
-			ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
-			String approach = (String) approaches.getSelectedItem();
-			int threshold = 10;
-			String relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-
-			ModuleDTO selectedModule = defineSarService.getModule_SelectedInGUI();
-			dto.setSelectedModule(selectedModule);
-			dto.setApproach(approach);
-			dto.setThreshold(threshold);
-			dto.setRelationType(relationType);
-			
-			/*analyseTaskControl.reconstructArchitecture_ClearAll();
-			analyseTaskControl.reconstructArchitecture_Execute(dto);*/
-			
-			exportFile(textPath2);
-			
-			MoJo mojoTest = new MoJo();
-	    	String[] daoArray = {textPath1.getText(), textPath2.getText(), "-fm"}; //"-fm is a different execution of mojo, see MoJo.java.showerrormessage() for more functions"
-	    	result.setText(mojoTest.executeMojo(daoArray, approaches.getSelectedItem().toString()));
-	    	result.setVisible(true);
+		if(e.getSource() == compareBrowseToCompare){
+			mainController.getExportImportController().showExportMojoGui(this, compareBrowseToCompare, false);
+		}
+		if (e.getSource() == compareArchitecture){
+			MoJo mojo = new MoJo();
+	    	String[] daoArray = {compareTextGold.getText(), compareTextToCompare.getText(), "-fm"}; //"-fm is a different execution of mojo, see MoJo.java.showerrormessage() for more functions"
+	    	double mojoResult = mojo.executeMojo(daoArray);
+	    	compareResult.setText("The compared architecture has a mojo percentage of " + mojoResult + "% compared to the selected golden standard.");
+	    	compareResult.setVisible(true);
 		}
 		
 	}
@@ -218,15 +159,21 @@ public class MojoJPanel implements ActionListener{
 	
 	public void setText(File file, JButton origin){
 		String replacedPath = file.getPath().replaceFirst(".xml", ".rsf");
-		if(origin == browseGold){
-			textPath1.setText(replacedPath);
-			store.setEnabled(true);
-			calculate.setEnabled(false);
+		if(origin == exportBrowse){
+			exportText.setText(replacedPath);
+			exportArchitecture.setEnabled(true);
 		}
-		else if(origin == browseTC){
-			textPath2.setText(replacedPath);
-			calculate.setEnabled(true);
+		else if(origin == compareBrowseGold){
+			compareTextGold.setText(replacedPath);
+			if(!compareTextToCompare.getText().trim().equals("")){
+				compareArchitecture.setEnabled(true);
+			}
 		}
-		
+		else if(origin == compareBrowseToCompare){
+			compareTextToCompare.setText(replacedPath);
+			if(!compareTextGold.getText().trim().equals("")){
+				compareArchitecture.setEnabled(true);
+			}
+		}
 	}
 }
