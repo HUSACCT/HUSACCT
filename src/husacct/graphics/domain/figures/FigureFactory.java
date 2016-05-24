@@ -2,6 +2,7 @@ package husacct.graphics.domain.figures;
 
 
 import java.awt.Color;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 
@@ -25,10 +26,10 @@ public final class FigureFactory {
 	}
 	public RelationFigure createRelationFigure_UmlLink(UmlLinkDTO[] UmlLinkDTO) {
 		if (UmlLinkDTO.length <= 0) throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
-		RelationFigure UmlLinkFigure = new RelationFigure("Dependency from " + UmlLinkDTO[0].from + " to " + UmlLinkDTO[0].to, RelationType.fromString(UmlLinkDTO[0].type), "");
-		String soortmultipliciteit = UmlLinkDTO[0].isComposite ? "*" : "1" ;
-		UmlLinkFigure.setFromMultiplicity(soortmultipliciteit);
-		UmlLinkFigure.setToMultiplicity("1");
+
+		RelationFigure UmlLinkFigure = new RelationFigure("Dependency from " + UmlLinkDTO[0].from + " to " + UmlLinkDTO[0].to, RelationType.fromString(UmlLinkDTO[0].type), Integer.toString(UmlLinkDTO.length));
+		UmlLinkFigure.setComposite(UmlLinkDTO[0].isComposite);
+		UmlLinkFigure.setMultiplicity();
 		
 		return UmlLinkFigure;
 	}
@@ -44,6 +45,18 @@ public final class FigureFactory {
 		if (ruleDTOs.length <= 0) throw new RuntimeException("No rules received. Cannot create a rule figure");
 		return new RelationFigure("Rule from " + ruleDTOs[0].moduleFrom.logicalPath + " to " + ruleDTOs[0].moduleTo.logicalPath, RelationType.RULELINK, Integer.toString(ruleDTOs.length));
 	}
+
+	public RelationFigure createRelationFigure_RuleViolation(ViolationDTO[] violationDTOs) {
+		HashSet<String> violatedRuleTypes = new HashSet<>();
+		for (ViolationDTO violationDTO : violationDTOs) {
+			violatedRuleTypes.add(violationDTO.ruleType.key);
+		}
+		RelationFigure violatedRelationFigure = new RelationFigure("Violated rule from " + violationDTOs[0].fromClasspath
+						+ " to " + violationDTOs[0].toClasspath, RelationType.VIOLATION, ""+violatedRuleTypes.size());
+		violatedRelationFigure.addDecorator(createViolationsDecorator());
+		return violatedRelationFigure;
+	}
+
 	
 	// May return null!
 	public ModuleFigure createModuleFigure(AbstractDTO dto) {

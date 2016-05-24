@@ -49,10 +49,12 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	private HashMap<String, String>			menuBarLocale;
 	
 	private final ContextMenuButton			zoomOptionsMenu;
-	
-	private boolean drawDependencyTypeToggle = true;
+
+	private boolean showDependencyOptions = false;
 	
 	public GraphicsMenuBar(DrawingTypesEnum drawingType) {
+		showDependencyOptions = drawingType == DrawingTypesEnum.IMPLEMENTED_ARCHITECTURE;
+
 		zoomOptionsMenu = new ContextMenuButton();
 		
 		icons = new HashMap<String, String>();
@@ -87,8 +89,6 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		actions.add(showViolationsButton);
 		actions.add(zoomSlider);
 		actions.add(outOfDateButton);
-		
-		drawDependencyTypeToggle = drawingType == DrawingTypesEnum.IMPLEMENTED_ARCHITECTURE;
 	}
 	
 	private void initializeComponents() {
@@ -220,13 +220,9 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		setButtonIcon(panToolButton, "panTool");
 		
-		graphicsOptionsDialog = new GraphicsOptionsDialog();
+		graphicsOptionsDialog = new GraphicsOptionsDialog(showDependencyOptions);
 		graphicsOptionsDialog.addListener(this);
 		graphicsOptionsDialog.setIcons(icons);
-		
-		if (!drawDependencyTypeToggle) {
-		    graphicsOptionsDialog.hideDependencyToggle();
-		}
 		
 		optionsDialogButton = new JButton();
 		optionsDialogButton.setSize(40, menuItemMaxHeight);
@@ -331,6 +327,10 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	
 	@Override
 	public void propertiesPaneShowDependencies(BaseFigure selectedLine) {
+	}
+	
+	@Override
+	public void propertiesPaneShowUmlLinks(BaseFigure selectedLine){
 	}
 	
 	@Override

@@ -99,7 +99,7 @@ public class ExportImportController {
 	}
 	
 	public void exportViolationsReport(File file){
-		Filename filename = new Filename(file, File.separatorChar, '.');
+		Filename filename = new Filename(file, '/', '.');
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		try {
 			validateService.exportViolations(file, filename.getExtension());
