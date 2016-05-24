@@ -6,7 +6,7 @@ import husacct.analyse.task.AnalyseTaskControl;
 
 public class MoJo {
 	private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
-    public String executeMojo(String[] args, String algorithmName) {
+    public double executeMojo(String[] args) {
         try
         {
             String sourceFile = null, targetFile = null, relFile = null;
@@ -50,9 +50,8 @@ public class MoJo {
                 if (args[2].equalsIgnoreCase("-fm"))
                 {
                     mjc = new MoJoCalculator(sourceFile, targetFile, relFile);
-                    String messagePart1 = "The algorithm \""+ algorithmName +"\" has a mojo percentage of ";
-                    String messagePart2 = "% compared to the created golden standard.";
-                    return messagePart1 + mjc.mojofm() + messagePart2;
+                   
+                    return mjc.mojofm();
                 }
                 else
                 // -e indicates EdgeMoJo (requires extra argument)
@@ -84,13 +83,9 @@ public class MoJo {
         catch (RuntimeException e)
         {
             logger.info(e.getMessage());
-            logger.info(e.getMessage());
-            logger.info(e.getMessage());
-            logger.info(e.getMessage());
-            logger.info(e.getMessage());
-            logger.info(e.getMessage());
+            
         }
-        return "No mojoFM";
+        return 0.0;
     }
 
     private static void showerrormsg() {

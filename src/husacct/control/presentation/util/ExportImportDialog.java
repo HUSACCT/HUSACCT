@@ -46,14 +46,13 @@ public class ExportImportDialog extends JDialog {
 		this.mojoPanel = mojoPanel;
 		this.mainController = mainController;
 		this.typeOfFunction = typeOfFunction;
-		if (typeOfFunction.equals("ExportMojo")){
-			showFileDialog();
-		}
+		showFileDialog();
+		
 	}
 	
 	public ExportImportDialog(MainController mainController, String typeOfFunction) {
 		super(mainController.getMainGui(), true);
-		if(!typeOfFunction.equals("ExportMojo")){
+		if(!typeOfFunction.equals("skipConstructor")){
 			this.mainController = mainController;
 			this.typeOfFunction = typeOfFunction;
 			if (typeOfFunction.equals("ExportArchitecture")) {
@@ -145,6 +144,9 @@ public class ExportImportDialog extends JDialog {
 				filter = new FileNameExtensionFilter("xls", "XLS", "xls");
 			}
 		}
+		if (typeOfFunction.toLowerCase().contains("mojo")){
+			filter = new FileNameExtensionFilter("rsf", "RSF", "rsf");
+		}
 
 		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filter);
 		if (typeOfFunction.startsWith("Import")) {
@@ -155,7 +157,7 @@ public class ExportImportDialog extends JDialog {
 
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			if (!typeOfFunction.equals("ExportMojo")){
+			if (!typeOfFunction.equals("ExportMojo") && !typeOfFunction.equals("ImportMojo")){
 				if(fileDialog.getSelectedFile().exists()){
 					setFile(fileDialog.getSelectedFile());
 				} else {
