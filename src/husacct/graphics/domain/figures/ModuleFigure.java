@@ -100,9 +100,6 @@ public class ModuleFigure extends BaseFigure {
 		} catch (IOException e) {
 			Logger.getLogger(this.getClass()).warn("failed to load rule icon image file");
 		}
-
-
-
 	}
 	
 	@Override

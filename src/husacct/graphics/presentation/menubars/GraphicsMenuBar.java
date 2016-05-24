@@ -334,6 +334,10 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	}
 	
 	@Override
+	public void propertiesPaneShowUmlLinks(BaseFigure selectedLine){
+	}
+	
+	@Override
 	public void propertiesPaneShowViolations(BaseFigure selectedLine) {
 	}
 	

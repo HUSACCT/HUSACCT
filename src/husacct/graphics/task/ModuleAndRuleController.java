@@ -11,6 +11,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.domain.DrawingView;
@@ -104,6 +105,23 @@ public class ModuleAndRuleController extends DrawingController {
 			}
 		}
 		return dependencies.toArray(new DependencyDTO[] {});
+	}
+	
+	@Override 
+	protected UmlLinkDTO[] getUmlLinksBetween(ModuleFigure figureFrom, ModuleFigure figureTo){
+		ArrayList<UmlLinkDTO> umlLinks = new ArrayList<UmlLinkDTO>();
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
+			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
+			for (String physicalClassPathFrom : physicalClassPathsFrom){
+				for (String physicalClassPathTo : physicalClassPathsTo) {
+					UmlLinkDTO[] foundDependencies = analyseService.getUmlLinksFromClassToToClass(physicalClassPathFrom, physicalClassPathTo);
+					for (UmlLinkDTO tempDependency : foundDependencies)
+						umlLinks.add(tempDependency);
+				}
+			}
+		}
+		return umlLinks.toArray(new UmlLinkDTO[] {});
 	}
 	
 	@Override
