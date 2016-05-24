@@ -163,9 +163,9 @@ public class ModuleAndRuleController extends DrawingController {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			try {
 				ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
-				DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
-				if ((violations != null) && (dependencies != null)) {
-					violationFigure = figureFactory.createRelationFigure_DependencyWithViolations(dependencies, violations);
+//				DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
+				if (violations != null) {
+					violationFigure = figureFactory.createRelationFigure_RuleViolation(violations);
 				}
 			} catch (Exception e) {
 				logger.error("Could not create a RelationFigure with Violations between given figures. " + e.getMessage());
