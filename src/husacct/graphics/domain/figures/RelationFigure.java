@@ -29,11 +29,9 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private LineConnectionFigure	line;
 	private RelationType			relationType;
 	private TextFigure				amountFigure;
-	private TextFigure fromMultiplicity;
+	private TextFigure 				fromMultiplicity;
 	private TextFigure 				toMultiplicity;
-	
-
-	
+		
 //	private boolean					violationRelation = false;
 	
 	public RelationFigure(String name, RelationType relationType, String amount) {
@@ -248,26 +246,26 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	}
 	
 	public void relayoutMultiplicities(){
-		double startFigureX = line.getStartPoint().x;
-		double startFigureY = line.getStartPoint().y;
+		double toFigureX = line.getStartPoint().x;
+		double toFigureY = line.getStartPoint().y;
 		
-		double endFigureX = line.getEndPoint().x;
-		double endFigureY = line.getEndPoint().y;
+		double fromFigureX = line.getEndPoint().x;
+		double fromFigureY = line.getEndPoint().y;
 		
-		double offsetX = startFigureX < endFigureX ? 15 : -15;
-		double offsetY = startFigureY < endFigureY ? 15 : -15;
+		double offsetX = toFigureX < fromFigureX ? 15 : -15;
+		double offsetY = toFigureY < fromFigureY ? 15 : -15;
 		
-		startFigureX += offsetX;
-		startFigureY += offsetY;
-		endFigureX -= offsetX;
-		endFigureY -= offsetY;
+		toFigureX += offsetX;
+		toFigureY += offsetY;
+		fromFigureX -= offsetX;
+		fromFigureY -= offsetY;
 		
 		fromMultiplicity.willChange();
-		fromMultiplicity.setBounds(new Point2D.Double(startFigureX, startFigureY), null);
+		fromMultiplicity.setBounds(new Point2D.Double(fromFigureX, fromFigureY), null);
 		fromMultiplicity.changed();
 		
 		toMultiplicity.willChange();
-		toMultiplicity.setBounds(new Point2D.Double(endFigureX, endFigureY), null);
+		toMultiplicity.setBounds(new Point2D.Double(toFigureX, toFigureY), null);
 		toMultiplicity.changed();
 	}
 	
