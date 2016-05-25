@@ -54,6 +54,7 @@ public class Resource {
 	public static final String ICON_LAYER = ICONSET_PATH + "define-layer.png";
 	public static final String ICON_MODULE = ICONSET_PATH + "module.png";
 	public static final String ICON_NEW = ICONSET_PATH + "new.png";
+	public static final String ICON_INFO = ICONSET_PATH + "info.png";
 	public static final String ICON_OPEN = ICONSET_PATH + "open.png";
 	public static final String ICON_OPTIONS = ICONSET_PATH + "options.png";
 	public static final String ICON_OUTOFDATE = ICONSET_PATH + "outofdate.png";

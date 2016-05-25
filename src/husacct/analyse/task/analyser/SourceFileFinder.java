@@ -15,6 +15,7 @@ class SourceFileFinder {
     }
 
     private List<MetaFile> walk(String path) {
+        path = path.replace('\\','/');
         File root = new File(path);
         File[] listFiles = root.listFiles();
         if (listFiles == null) {

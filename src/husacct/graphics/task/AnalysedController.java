@@ -66,7 +66,7 @@ public class AnalysedController extends DrawingController {
 		RelationFigure dependencyFigure = null;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			
-			if(this.drawingSettingsHolder.isShowUmlLinkInsteadOfDependencies()){
+			if(this.drawingSettingsHolder.isShowUmlLinkInsteadOfDependencies() ){
 				UmlLinkDTO[] umlLinks = analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 				try {
 					if (umlLinks.length > 0) {
@@ -97,6 +97,13 @@ public class AnalysedController extends DrawingController {
 			return analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		}
 		return new DependencyDTO[] {};
+	}
+	@Override
+	protected UmlLinkDTO[] getUmlLinksBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
+			return analyseService.getUmlLinksFromClassToToClass(figureFrom.getUniqueName(), figureTo.getUniqueName());
+		}
+		return new UmlLinkDTO[] {};
 	}
 	
 	@Override

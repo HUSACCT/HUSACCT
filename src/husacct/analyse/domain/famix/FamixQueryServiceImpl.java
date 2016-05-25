@@ -264,14 +264,14 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
     
     @Override
-    public HashSet<UmlLinkDTO> getUmlLinksFromClassToToClass(String fromClass, String toClass) {
-    	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
+    public UmlLinkDTO[] getUmlLinksFromClassToToClass(String fromClass, String toClass) {
+    	ArrayList<UmlLinkDTO> returnValue = new ArrayList<UmlLinkDTO>();
     	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getUmlLinksFromClassToToClass(fromClass, toClass);
     	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
     		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.type.toString());
     		returnValue.add(umlLinkDTO);
     	}
-    	return returnValue;
+    	return returnValue.toArray(new UmlLinkDTO[returnValue.size()]);
     }
 
     @Override

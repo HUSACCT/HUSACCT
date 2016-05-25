@@ -1,6 +1,7 @@
 package husaccttest;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 /*
  * This class have been developed in order to ensure test-code to find test projects which can be placed 
@@ -9,62 +10,48 @@ import java.io.File;
  */
 
 public class TestResourceFinder {
-	
-	private static final String testprojectFolder = "testresources";
-	
+
+	private static final String TESTPROJECT_FOLDER = "testresources";
+	public static final String WORKSPACES_FOLDER = "workspaces";
+	public static final String EXPORT_FOLDER = "export";
+
 	/**Function to find the current source path, holding in account if the build or the normal JUnit tests is requesting the path. 
 	 * Build tests will run from a different location, thus the path will be different. */
 	public static String findSourceCodeDirectory(String languageFolder, String projectName){
-		
-		String buildPrefix = ".." + File.separator;
-		String simplePath = testprojectFolder + File.separator + languageFolder + File.separator + projectName;
-		String pathFromBuild = buildPrefix + simplePath;
-		String[] possiblePaths = new String[]{simplePath, pathFromBuild};
-		
-		String selectedPath = simplePath;
-		for(String path: possiblePaths){
-			File directory = new File(path);
-			if(directory.isDirectory()){
-				selectedPath = path;
-			}
-		}
-		return selectedPath + File.separator;
+
+		String path = getBaseTestResourcesPath(languageFolder) + projectName;
+		checkFilePath(path);
+		return path + "/";
 	}
 
 	/**Function to find the workspace file, holding in account if the build or the normal JUnit tests is requesting the path. 
 	 * Build tests will run from a different location, thus the path will be different. */
 	// Requires two versions of the workspace: 1) JUnit version with project path = directory name within projectResources; 2) Build version with the project path = "..\" + directory name within projectResources
 	public static String findHusacctWorkspace(String languageFolder, String workspaceName){
-		
-		String buildPrefix = ".." + File.separator;
-		String simplePath = testprojectFolder + File.separator + languageFolder + File.separator + "workspaces" + File.separator + workspaceName;
-		String pathFromBuild = buildPrefix + simplePath;
-		
-		String selectedPath = simplePath;
-		// Determine if the build is running the test
-		File pathFromBuildDirectory = new File(pathFromBuild);
-		if (pathFromBuildDirectory.isDirectory()) {
-			// buildIsRunning = true;
-			selectedPath = pathFromBuild + "_build";
-		}
-		return selectedPath + File.separator;
+
+		String path =  getBaseTestResourcesPath(languageFolder) + WORKSPACES_FOLDER + "/" + workspaceName;
+		checkFilePath(path);
+		return path;
 	}
 
 	public static String findHusacctExportFile(String languageFolder, String exportFile){
-		
-		String buildPrefix = ".." + File.separator;
-		String simplePath = testprojectFolder + File.separator + languageFolder + File.separator + "export" + File.separator + exportFile;
-		String pathFromBuild = buildPrefix + simplePath;
-		
-		String selectedPath = simplePath;
-		// Determine if the build is running the test
-		File pathFromBuildDirectory = new File(pathFromBuild);
-		if (pathFromBuildDirectory.isDirectory()) {
-			// buildIsRunning = true;
-			selectedPath = pathFromBuild + "_build";
+
+		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/" + exportFile;
+		checkFilePath(path);
+		return path;
+	}
+
+	private static String getBaseTestResourcesPath(String languageFolder) {
+		return TESTPROJECT_FOLDER + "/" + languageFolder + "/";
+	}
+
+	private static void checkFilePath(String path) {
+		File pathFile = new File(path);
+
+		if (!pathFile.exists()) {
+			String className = TestResourceFinder.class.getSimpleName();
+			Logger.getLogger(className).severe(className+ ": Workspace or file \""+path +"\" not found");
 		}
-		
-		return selectedPath + File.separator;
 	}
 
 }

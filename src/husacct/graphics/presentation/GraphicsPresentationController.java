@@ -10,6 +10,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
@@ -303,6 +304,12 @@ public class GraphicsPresentationController implements UserInputListener{
 		graphicsFrame.showDependenciesProperties(dependencyDTOs);
 	}
 
+	@Override
+	public void propertiesPaneShowUmlLinks(BaseFigure selectedLine){
+		UmlLinkDTO[] umlLinkDTOs = drawingController.getUMLLinksOfLine(selectedLine);
+		graphicsFrame.showUMLLinkProperties(umlLinkDTOs);
+	}
+	
 	@Override
 	public void propertiesPaneShowViolations(BaseFigure selectedLine) {
 		ViolationDTO[] violationDTOs = drawingController.getViolationsOfLine(selectedLine);
