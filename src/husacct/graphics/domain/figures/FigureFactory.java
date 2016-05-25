@@ -47,12 +47,8 @@ public final class FigureFactory {
 	}
 
 	public RelationFigure createRelationFigure_RuleViolation(ViolationDTO[] violationDTOs) {
-		HashSet<String> violatedRuleTypes = new HashSet<>();
-		for (ViolationDTO violationDTO : violationDTOs) {
-			violatedRuleTypes.add(violationDTO.ruleType.key);
-		}
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated rule from " + violationDTOs[0].fromClasspath
-						+ " to " + violationDTOs[0].toClasspath, RelationType.VIOLATION, ""+violatedRuleTypes.size());
+						+ " to " + violationDTOs[0].toClasspath, RelationType.VIOLATION, ""+violationDTOs.length);
 		violatedRelationFigure.addDecorator(createViolationsDecorator());
 		return violatedRelationFigure;
 	}
