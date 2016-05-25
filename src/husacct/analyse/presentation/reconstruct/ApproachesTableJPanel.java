@@ -9,6 +9,7 @@ import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
 import husacct.common.OSDetector;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
@@ -23,7 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -84,14 +85,12 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	public void initUI() throws IOException{		
 		setLayout(new BorderLayout(0, 10));
 		
-		//String parameterColumnNames[] = getParameterTableColumnName();
-		Object[][] tempData = {
-			{"test", "test"},
-			{"test 1", "test 1"}
+				Object[][] tempData = {
+			{"", ""},
 		};
 		
 		Object[] cols = {
-			"parameter", "value"	
+			"Parameter", "Value"	
 		};
 		distinctParameterTable = new JTable(tempData, cols);
 		allParameterTable = new JTable(tempData, cols);
@@ -147,18 +146,29 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					/*int row = tableAllApproaches.getSelectedRow();
-					String data = (String) tableAllApproaches.getValueAt(row, 0);
-					Object[][] rowData = getParameters(data);
+					int selectedRow = tableAllApproaches.getSelectedRow();
+					
+					ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
+					ModuleDTO selectedModule = getSelectedModule();
+					String approachConstant = (String) tableAllApproaches.getModel().getValueAt(selectedRow, 0);
+					dto = analyseTaskControl.reconstructArchitectureListDTO.getReconstructArchitectureDTO(approachConstant);
+					dto.setSelectedModule(selectedModule);
+					
+					Object[][] rowData = getParameters(dto);
 					TableModel model = allParameterTable.getModel();
+					DefaultTableModel defaultTableModel = new DefaultTableModel();
+					defaultTableModel.addColumn("Parameter");
+					defaultTableModel.addColumn("Value");
 					
 					for(int i = 0; i < rowData.length; i++){
+						Object[] empty = {"", ""};
+						defaultTableModel.addRow(empty);
 						Object[] temp = rowData[i];
-						model.setValueAt(temp[0], i, 0);
-						model.setValueAt(temp[1], i, 1);
+						defaultTableModel.setValueAt(temp[0], i, 0);
+						defaultTableModel.setValueAt(temp[1], i, 1);
 					}
 					
-					allParameterTable.setModel(model);*/
+					allParameterTable.setModel(defaultTableModel);
 				}
 			}
 		});
@@ -204,65 +214,34 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					int row = tableDistinctApproaches.getSelectedRow();
-					String data = (String) tableDistinctApproaches.getValueAt(row, 0);
-					Object[][] rowData = getParameters(data);
-					TableModel model = distinctParameterTable.getModel();
+					int selectedRow = tableDistinctApproaches.getSelectedRow();
+					
+					ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
+					ModuleDTO selectedModule = getSelectedModule();
+					String approachConstant = (String) tableDistinctApproaches.getModel().getValueAt(selectedRow, 0);
+					dto = analyseTaskControl.reconstructArchitectureListDTO.getReconstructArchitectureDTO(approachConstant);
+					dto.setSelectedModule(selectedModule);
+					
+					Object[][] rowData = getParameters(dto);
+					TableModel model = allParameterTable.getModel();
+					DefaultTableModel defaultTableModel = new DefaultTableModel();
+					defaultTableModel.addColumn("Parameter");
+					defaultTableModel.addColumn("Value");
 					
 					for(int i = 0; i < rowData.length; i++){
+						Object[] empty = {"", ""};
+						defaultTableModel.addRow(empty);
 						Object[] temp = rowData[i];
-						model.setValueAt(temp[0], i, 0);
-						model.setValueAt(temp[1], i, 1);
+						defaultTableModel.setValueAt(temp[0], i, 0);
+						defaultTableModel.setValueAt(temp[1], i, 1);
 					}
 					
-					distinctParameterTable.setModel(model);
+					distinctParameterTable.setModel(defaultTableModel);
 				}
 			}
 		});
 		
 		tabbedPane.addTab(allApprTranslation, null, allApproachedPanel, null);
-		
-		String appFolder = OSDetector.getAppFolder();;
-		String filePath = appFolder + "\\thresholds.config";
-		File f = new File(filePath);
-		
-		//needs to be moved
-		if(f.exists()){
-			int rowCount = tableDistinctApproaches.getModel().getRowCount() - 1;
-			Scanner scanner = new Scanner(f);
-			scanner.useDelimiter(";");
-			int lineCounter = 0;
-			
-			while(scanner.hasNextLine()){
-				Object line = scanner.next();
-				tableDistinctApproaches.getModel().setValueAt(line, lineCounter, 2);
-				lineCounter++;
-			}
-			scanner.close();
-		} else{
-			f.createNewFile();
-		}
-		
-    	tableDistinctApproaches.getModel().addTableModelListener(new TableModelListener() {
-
-  	      public void tableChanged(TableModelEvent e) {
-  	        int rowCount = tableDistinctApproaches.getModel().getRowCount() - 1;
-			
-				PrintWriter writer;
-				try {
-					writer = new PrintWriter(f);
-					 for(int i = 0; i <= rowCount; i++){
-		  	        	 Object thresholdValue = tableDistinctApproaches.getModel().getValueAt(i, 2);
-		  	        	 String thresholdValueString = thresholdValue.toString();
-		  	        	 writer.print(";" + thresholdValueString);
-		  	         }
-					 writer.close();
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-  	      }
-  	    });
 	}
 	
 	
@@ -317,42 +296,20 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		return columnNames;
 	}
 	
-	private Object[][] getParameters(String algorithmName){		
-		if(algorithmName.equals("Component and Subsystem identification")){
-			Object[][] parameterRows = {
-					{"test", "test"},
-					
-			};
-			
-			return parameterRows;
-		} else if(algorithmName.equals("Layer identification: Goldstein - Original")){
-			Object[][] parameterRows = {
-					{"test 2", "test 2"},
-					
-			};
-			
-			return parameterRows;
-		} else if(algorithmName.equals("External System identification")){
-			Object[][] parameterRows = {
-					{"test 3", "test 3"},
-					
-			};
-			
-			return parameterRows;
-		} else if(algorithmName.equals("Layer identification: Scanniello - Improved")){
-			
-			Object[][] parameterRows = {
-					{"test 4", "test 4"},
-					
-			};
-			return parameterRows;
-		} else{
-			Object[][] parameterRows = {
-					{"null", "null"},
-					
-			};
-			return parameterRows;
-		}
+	private Object[][] getParameters(ReconstructArchitectureDTO dto){		
+		String selectedModuleName = dto.getSelectedModule().name;
+		String granularitySettings = dto.granularity;
+		String relationTypeSettings = dto.relationType;
+		int thresholdSettings = dto.threshold;
+		
+		Object[][] parameterRows = {
+				{"Selected Module", selectedModuleName},
+				{"Granularity", granularitySettings},
+				{"Relation Type", relationTypeSettings},
+				{"Threshold", thresholdSettings}
+		};
+		
+		return parameterRows;
 	}
 	
 	private String[] getParameterTableColumnName(){
@@ -373,4 +330,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
         TableColumn column = tableColumnModel.getColumn(index);
         tableColumnModel.removeColumn(column);
     }
+
+	private ModuleDTO getSelectedModule(){
+		return ServiceProvider.getInstance().getDefineService().getSarService().getModule_SelectedInGUI();
+	}
 }
