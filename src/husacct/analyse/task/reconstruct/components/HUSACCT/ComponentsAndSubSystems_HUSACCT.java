@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmSettings;
+import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -409,8 +409,15 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
-		reconstructArchitecture.thresholdSettings = new String[]{AlgorithmSettings.Threshold};
-		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.parameterPanels = createParameterPanels();
 		return reconstructArchitecture;
+	}
+	
+	private ArrayList<ParameterPanel> createParameterPanels(){
+		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
+		parameterPanels.add(ParameterPanel.DefaultParameterPanels.createThresholdParameter(10));
+		parameterPanels.add(ParameterPanel.DefaultParameterPanels.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
+		parameterPanels.add(ParameterPanel.DefaultParameterPanels.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		return parameterPanels;
 	}
 }
