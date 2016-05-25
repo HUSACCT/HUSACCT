@@ -203,7 +203,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		MojoJPanel mojoPanel = new MojoJPanel(/*analyseTaskControl*/);
 		tabbedPane.addTab(distinctApprTranslation, null, distinctApproachesPanel, null);
 		tabbedPane.addTab(allApprTranslation, null, allApproachedPanel, null);
-		tabbedPane.addTab("Mojo", null, mojoPanel.createMojoPanel(), null);
+		tabbedPane.addTab("Mojo",null, mojoPanel.createMojoPanel(),null);
 		
 		JScrollPane parameterTableScrollPane = new JScrollPane(distinctParameterTable);
 		distinctApproachesPanel.add(parameterTableScrollPane, BorderLayout.CENTER);
@@ -240,8 +240,6 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 				}
 			}
 		});
-		
-		tabbedPane.addTab(allApprTranslation, null, allApproachedPanel, null);
 	}
 	
 	

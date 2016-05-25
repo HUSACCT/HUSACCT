@@ -56,9 +56,16 @@ public class ExportImportController {
 		new ExportImportDialog(mainController, "ReportViolations");
 	}
 	
-	public void showExportMojoGui(MojoJPanel mojoPanel, JButton origin) {
-		ExportImportDialog dialog = new ExportImportDialog(mainController, "ExportMojo");
-		dialog.SARExportImportDialog(mainController, "ExportMojo", mojoPanel, origin);
+	public void showExportMojoGui(MojoJPanel mojoPanel, JButton origin, boolean isExport) {
+		String param = "";
+		if(isExport){
+			param = "ExportMojo";
+		}
+		else{
+			param = "ImportMojo";
+		}
+		ExportImportDialog dialog = new ExportImportDialog(mainController, "skipConstructor");
+		dialog.SARExportImportDialog(mainController, param, mojoPanel, origin);
 	}
 	
 	public void exportAnalysisModel(File file){
@@ -92,7 +99,7 @@ public class ExportImportController {
 	}
 	
 	public void exportViolationsReport(File file){
-		Filename filename = new Filename(file, File.separatorChar, '.');
+		Filename filename = new Filename(file, '/', '.');
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		try {
 			validateService.exportViolations(file, filename.getExtension());

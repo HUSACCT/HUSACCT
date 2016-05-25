@@ -12,6 +12,7 @@ import org.jhotdraw.draw.Figure;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.DrawingView;
@@ -283,6 +284,17 @@ public abstract class DrawingController {
 		}
 	}
 	
+	public UmlLinkDTO[] getUMLLinksOfLine(BaseFigure selectedLine){
+		if (selectedLine instanceof RelationFigure) {
+			ConnectionFigure cf = (ConnectionFigure) selectedLine;
+			ModuleFigure from = (ModuleFigure) cf.getStartFigure();
+			ModuleFigure to = (ModuleFigure) cf.getEndFigure();
+			return getUmlLinksBetween(from, to);
+		} else {
+			return new UmlLinkDTO[] {};
+		}
+	}
+	
 	public ViolationDTO[] getViolationsOfLine(BaseFigure selectedLine) {
 		if (selectedLine instanceof RelationFigure) {
 			ConnectionFigure cf = (ConnectionFigure) selectedLine;
@@ -499,6 +511,8 @@ public abstract class DrawingController {
 	protected abstract ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName);
 	
 	protected abstract DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
+	
+	protected abstract UmlLinkDTO[] getUmlLinksBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
 	
 	// Return null if no module is found, or if uniqueName = null, "", or "**".
 	protected abstract ModuleFigure getModuleFiguresByUniqueName(String uniqueName);

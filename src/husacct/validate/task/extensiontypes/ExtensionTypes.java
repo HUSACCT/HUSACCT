@@ -5,7 +5,8 @@ public class ExtensionTypes {
 		XLS("xls"),
 		HTML("html"),
 		PDF("pdf"),
-		XML("xml");
+		XML("xml"),
+		RSF("rsf");
 		
 		private String extension;
 

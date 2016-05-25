@@ -27,6 +27,8 @@ public interface UserInputListener {
 
 	public void propertiesPaneShowDependencies(BaseFigure selectedLine);
 	
+	public void propertiesPaneShowUmlLinks(BaseFigure selectedLine);
+	
 	public void propertiesPaneShowViolations(BaseFigure selectedLine);
 	
 	public void propertiesPaneShowRules(BaseFigure selectedFigure);

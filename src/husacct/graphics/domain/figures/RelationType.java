@@ -25,6 +25,16 @@ public enum RelationType {
 		return key;
 	}
 	
+	public static boolean isUmlLink(String type){
+		boolean returnType = false;
+		switch(type){
+			case "Inherits": returnType = true;
+			case "Implements": returnType = true;
+			case "Attribute": returnType = true;
+		}
+		return returnType;
+	}
+	
 	public static RelationType fromString(String enumName) {
 		switch(enumName) {
 			case "Inherits": return INHERITANCELINK;
@@ -33,5 +43,4 @@ public enum RelationType {
 			default: return null;
 		}
 	}
-
 }

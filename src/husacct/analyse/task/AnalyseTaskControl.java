@@ -110,57 +110,6 @@ public class AnalyseTaskControl {
 	public void reconstructArchitecture_ClearAll(){
 		reconstructArchitecture.clearAllModules();
 	}
-	
-	public void testAlgorithm(ReconstructArchitectureDTO dto){
-		//gets the golden standard (current intended architecture) and writes it to a file
-		ModuleDTO[] intendedArchitecture = reconstructArchitecture.getGoldenStandard();
-		File goldenStandard = exportToRSF(intendedArchitecture, "C:\\users\\jorns\\desktop\\Golden_Standard");
-		
-		if (reconstructArchitecture == null) {
-    		reconstructArchitecture = new ReconstructArchitecture(queryService);
-    	}
-		
-		//reset intended architecture 
-		reconstructArchitecture.clearAllModules();
-		
-		//runs the selected algorithm and writes it
-    	reconstructArchitecture.reconstructArchitecture_Execute(dto);
-    	intendedArchitecture = reconstructArchitecture.getGoldenStandard();
-    	File toCompare = exportToRSF(intendedArchitecture, "C:\\users\\jorns\\desktop\\To_Compare");
-    	
-    	//mojo Call (not yet implemented)
-    	MoJo mojoTest = new MoJo();
-    	String[] daoArray = {toCompare.getName(), goldenStandard.getName(), "-fm"}; //"-fm is a different execution of mojo, see MoJo.java.showerrormessage() for more functions"
-    	mojoTest.executeMojo(daoArray, localeService.getTranslatedString(dto.getApproach()));
-    	
-    	//remove the created files
-    	goldenStandard.delete();
-    	toCompare.delete();
-	}
-	
-	private File exportToRSF(ModuleDTO[] intendedArchitecture, String fileName){
-		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-		File exportFile = null;
-		try {
-			String completeFileName = fileName + ".rsf";
-			exportFile = new File(completeFileName);
-			exportFile.createNewFile();
-			FileWriter writer = new FileWriter(exportFile);
-			String toWrite = "";
-			for(ModuleDTO moduleDTO : intendedArchitecture){
-				for(String softwareDTOPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTO.logicalPath)){
-					toWrite = "contain " + moduleDTO.logicalPath + " " + softwareDTOPath + "\n";
-					writer.write(toWrite);
-				}
-			}
-			
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			logger.info("Error occured while writing the file");
-		}
-		return exportFile;
-	}
     
 	//Methods for AnalyseUIController
 	public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {

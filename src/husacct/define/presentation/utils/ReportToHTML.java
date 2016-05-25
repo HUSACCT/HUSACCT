@@ -43,7 +43,7 @@ public class ReportToHTML {
 		String content = getContent(moduleService.getRootModules());
 		htmlString = htmlString.replace("%SUMMARY%", summary);
 		htmlString = htmlString.replace("%CONTENT%", content);
-		File file = new File(OSDetector.getAppFolder() + File.separator + "report.html");	
+		File file = new File(OSDetector.getAppFolder() + "/" + "report.html");
 		try {
 			FileUtils.writeStringToFile(file, htmlString);
 			Desktop.getDesktop().browse(file.toURI());

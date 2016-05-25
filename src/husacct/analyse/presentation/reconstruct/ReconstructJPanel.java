@@ -31,7 +31,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private ApproachesTableJPanel approachesTableJPanel;
 	private AnalyseTaskControl analyseTaskControl;
-	private JButton applyButton, reverseButton, clearButton, testButton, settingsButton;
+	private JButton applyButton, reverseButton, clearButton, settingsButton;
 	private JPanel panel;
 	private ILocaleService localService;
 	
@@ -86,12 +86,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		panel.add(clearButton);
 		clearButton.setPreferredSize(new Dimension(100, 40));
 		clearButton.addActionListener(this);
-		
-		testButton = new JButton("Test");
-		panel.add(testButton);
-		testButton.setPreferredSize(new Dimension(100, 40));
-		testButton.addActionListener(this);
-		
+				
 		settingsButton = new JButton("Settings");
 		panel.add(settingsButton);
 		settingsButton.setPreferredSize(new Dimension(100, 40));
@@ -164,37 +159,6 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			analyseTaskControl.reconstructArchitecture_ClearAll();
 			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
 		}
-		if (action.getSource() == testButton){
-			/*JTable approachesTable = approachesTableJPanel.tableAllApproaches;
-			ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
-			ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
-			buttonGroupTwo.getClass();// to remove the "is unused" warning
-
-			int selectedRow = approachesTable.getSelectedRow();
-			if (selectedRow >= 0){
-				String approach = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-				int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
-				String relationType = (radioButtonsRelationType.getSelection() != null)	? radioButtonsRelationType.getSelection().getActionCommand() : "";
-
-				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
-				ModuleDTO selectedModule = getSelectedModule();
-				dto.setSelectedModule(selectedModule);
-				dto.setApproach(approach);
-				dto.setThreshold(threshold);
-				dto.setRelationType(relationType);		
-				
-				try {
-					analyseTaskControl.testAlgorithm(dto);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
-			}
-			else{
-				logger.warn("No Approache selected");
-			}*/
-		}
 		if (action.getSource() == settingsButton){
 			JTable approachesTable = approachesTableJPanel.tableAllApproaches;
 			int selectedRow = approachesTable.getSelectedRow();
@@ -211,7 +175,6 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		applyButton.setVisible(visibility);
 		reverseButton.setVisible(visibility);
 		clearButton.setVisible(visibility);
-		testButton.setVisible(visibility);
 		settingsButton.setVisible(visibility);
 		
 	}

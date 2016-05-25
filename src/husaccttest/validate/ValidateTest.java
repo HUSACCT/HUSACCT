@@ -112,7 +112,8 @@ public class ValidateTest {
 				ExtensionType.XLS.getExtension(),
 				ExtensionType.HTML.getExtension(),
 				ExtensionType.PDF.getExtension(), 
-				ExtensionType.XML.getExtension()				
+				ExtensionType.XML.getExtension(),
+				ExtensionType.RSF.getExtension()
 		};
 		
 		assertArrayEquals(exportExtensions, validate.getExportExtentions());

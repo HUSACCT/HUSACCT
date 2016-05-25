@@ -106,7 +106,7 @@ public abstract class ReportWriter {
 	}
 
 	protected String getFileName() {
-		return path + File.separator + fileName;
+		return path + "/" + fileName;
 	}
 
 	protected String translate(String key) {
