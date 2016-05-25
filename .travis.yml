@@ -7,4 +7,4 @@ script: ant main
 jdk:
   - oraclejdk8
 notifications:
-  slack: husacct:YpeL7dIr0OEKvPRCVIV03XCd
+  slack: husacct:9mBAc42rhBDMHq62uC7mZWp1
