@@ -38,7 +38,7 @@ public class AnalyseReconstructConstants {
 		public static final String Classes = "Classes";
 	}
 	
-	public static class AlgorithmSettings{
+	public static class AlgorithmParameter{
 		public static final String Threshold = "Threshold";
 		public static final String RelationType = "RelationType";
 		public static final String Granularity = "Granularity";

@@ -1,4 +1,4 @@
-package husacct.common.dto;
+package husacct.analyse.task.reconstruct;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -11,7 +11,8 @@ import java.util.List;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
-import husacct.analyse.task.reconstruct.IAlgorithm;
+import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.ReconstructArchitectureDTO;
 
 public class ReconstructArchitectureListDTO extends AbstractDTO{
 	public ArrayList<ReconstructArchitectureDTO> ReconstructArchitectureDTOList;
@@ -76,7 +77,7 @@ public class ReconstructArchitectureListDTO extends AbstractDTO{
 	
 	public void updateReconstructArchitectureDTO(ReconstructArchitectureDTO newDTO){
 		for(ReconstructArchitectureDTO oldDTO : ReconstructArchitectureDTOList){
-			if (oldDTO.equals(newDTO.approachConstant)){
+			if (oldDTO.approachConstant.equals(newDTO.approachConstant)){
 				oldDTO = newDTO;
 			}
 		}
