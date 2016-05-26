@@ -1,0 +1,9 @@
+contain TopLayer husacct.bootstrap
+contain TopLayer husacct.graphics
+contain TopLayer husacct.analyse
+contain TopLayer husacct.ServiceProvider
+contain TopLayer husacct.validate
+contain BottomLayer husacct.common
+contain BottomLayer husacct.Main
+contain BottomLayer husacct.define
+contain BottomLayer husacct.control
