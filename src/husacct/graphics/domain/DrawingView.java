@@ -229,7 +229,9 @@ public class DrawingView extends DefaultDrawingView {
 					inputListener.propertiesPaneShowDependencies(selectedFigure);
 				} else if(relationType == RelationType.RULELINK){
 					inputListener.propertiesPaneShowRules(selectedFigure);
-				} else{
+				} else if(RelationType.isUmlLink(relationType.get())){
+					inputListener.propertiesPaneShowUmlLinks(selectedFigure);
+				}else{
 					// TODO handle other cases of relation type
 				}
 			} else if(selectedFigure.isModule() || selectedFigure.isParent()) {

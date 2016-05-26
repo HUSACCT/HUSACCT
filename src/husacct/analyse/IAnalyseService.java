@@ -93,7 +93,7 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     /** Returns all the UML-Links going from the fromClass to the specific toClass.
      * fromClass and toClass must both be a unique name of FamixClass, or (in case of toClass) FamixLibrary (include "xLibraries."). 
      * */
-    public HashSet<UmlLinkDTO> getUmlLinksFromClassToToClass(String fromClass, String toClass);
+    public UmlLinkDTO[] getUmlLinksFromClassToToClass(String fromClass, String toClass);
 
 	/** Returns an array of all umlLinks  (enclosed in UmlLinkDTOs)between the analyzed units pathFrom and pathTo and all their siblings; a path may refer to a package too. 
      * Relatively fast function, based on HashMap. Both argument must match with an analysedModule.

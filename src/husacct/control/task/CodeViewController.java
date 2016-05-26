@@ -108,7 +108,7 @@ public class CodeViewController {
 		// Grab root path
 		ApplicationDTO application = controlService.getApplicationDTO();
 		ProjectDTO project = application.projects.get(0);
-		String rootPath = project.paths.get(0) + File.separator;
+		String rootPath = project.paths.get(0) + "/";
 		
 		// Final extension
 		String extension = "";
@@ -119,7 +119,7 @@ public class CodeViewController {
 		
 		// Check default conversion
 		fileName = classPath;
-		fileName = rootPath + fileName.replace(".", File.separator) + extension;
+		fileName = rootPath + fileName.replace(".", "/") + extension;
 		if(fileExists(fileName)){
 			logger.info("Basic path converter found the path: " + fileName);
 			filePath = fileName;
@@ -134,7 +134,7 @@ public class CodeViewController {
 				if(fileExists(winPath + extension))
 					break;
 				if(isDir(winPath + pathPart))
-					winPath += pathPart + File.separator;
+					winPath += pathPart + "/";
 				else
 					winPath += pathPart + ".";
 			}

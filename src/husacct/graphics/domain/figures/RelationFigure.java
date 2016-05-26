@@ -29,9 +29,10 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	private LineConnectionFigure	line;
 	private RelationType			relationType;
 	private TextFigure				amountFigure;
-	private TextFigure fromMultiplicity;
+	private TextFigure 				fromMultiplicity;
 	private TextFigure 				toMultiplicity;
-	
+	private boolean					composite = false;
+	private boolean					isUmlLink = false;
 
 	
 //	private boolean					violationRelation = false;
@@ -45,25 +46,21 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		fromMultiplicity = new TextFigure();
 		toMultiplicity = new TextFigure();
 		amountFigure = new TextFigure(amount);
-		if(amount.isEmpty()){
-			amountFigure.setText("-1");
-		}else{
-			add(amountFigure);
-		}
+		add(amountFigure);
 		
 		line.addFigureListener(this);
 	}
 
-	public void setFromMultiplicity(String fromMultiplicity) {
-		this.fromMultiplicity.setText(fromMultiplicity);
-		add(this.fromMultiplicity);
+	public void setMultiplicity() {
+		this.isUmlLink = true;
+		this.fromMultiplicity.setText(composite ? "*" : "1");
+		this.toMultiplicity.setText("1");
 	}
 
-	public void setToMultiplicity(String toMultiplicity) {
-		this.toMultiplicity.setText(toMultiplicity);
-		add(this.toMultiplicity);
+	public void setAmount(String amount){
+		this.amountFigure.setText(amount);
 	}
-	
+
 	@Override
 	public void areaInvalidated(FigureEvent e) {
 		relayout();
@@ -123,7 +120,22 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	public void draw(Graphics2D graphics) {
 		ArrowTipFix arrowTip = new ArrowTipFix(0.5, 7, 3.0);
 		set(AttributeKeys.END_DECORATION, arrowTip);
-			
+
+		ModuleFigure startFigure = (ModuleFigure )line.getStartFigure();
+		ModuleFigure endFigure = (ModuleFigure )line.getEndFigure();
+		String startFigureType = startFigure.getType();
+
+		String endFigureType = endFigure.getType();
+		if(isUmlLink) {
+			if (endFigureType.equals("package") || startFigureType.equals("package")) {
+				relationType = RelationType.ATTRIBUTELINK;
+			} else {
+				add(this.fromMultiplicity);
+				add(this.toMultiplicity);
+				remove(this.amountFigure);
+			}
+		}
+
 		switch(relationType) {
 		case DEPENDENCY:
 			double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
@@ -248,26 +260,26 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	}
 	
 	public void relayoutMultiplicities(){
-		double startFigureX = line.getStartPoint().x;
-		double startFigureY = line.getStartPoint().y;
+		double toFigureX = line.getStartPoint().x;
+		double toFigureY = line.getStartPoint().y;
 		
-		double endFigureX = line.getEndPoint().x;
-		double endFigureY = line.getEndPoint().y;
+		double fromFigureX = line.getEndPoint().x;
+		double fromFigureY = line.getEndPoint().y;
 		
-		double offsetX = startFigureX < endFigureX ? 15 : -15;
-		double offsetY = startFigureY < endFigureY ? 15 : -15;
+		double offsetX = toFigureX < fromFigureX ? 15 : -15;
+		double offsetY = toFigureY < fromFigureY ? 15 : -15;
 		
-		startFigureX += offsetX;
-		startFigureY += offsetY;
-		endFigureX -= offsetX;
-		endFigureY -= offsetY;
+		toFigureX += offsetX;
+		toFigureY += offsetY;
+		fromFigureX -= offsetX;
+		fromFigureY -= offsetY;
 		
 		fromMultiplicity.willChange();
-		fromMultiplicity.setBounds(new Point2D.Double(startFigureX, startFigureY), null);
+		fromMultiplicity.setBounds(new Point2D.Double(fromFigureX, fromFigureY), null);
 		fromMultiplicity.changed();
 		
 		toMultiplicity.willChange();
-		toMultiplicity.setBounds(new Point2D.Double(endFigureX, endFigureY), null);
+		toMultiplicity.setBounds(new Point2D.Double(toFigureX, toFigureY), null);
 		toMultiplicity.changed();
 	}
 	
@@ -343,5 +355,13 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		line.willChange();
 		amountFigure.willChange();
 		super.willChange();
+	}
+
+	public void setComposite(boolean composite) {
+		this.composite = composite;
+	}
+
+	public void setIsUmlLink(boolean isUmlLink) {
+		this.isUmlLink = isUmlLink;
 	}
 }

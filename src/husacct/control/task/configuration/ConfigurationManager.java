@@ -34,7 +34,7 @@ public class ConfigurationManager {
 		Properties props = new Properties();
 		try {
 			File directory = new File(OSDetector.getAppFolder());
-			File file = new File(OSDetector.getAppFolder() + File.separator + "config.properties");
+			File file = new File(OSDetector.getAppFolder() + "/" + "config.properties");
 			if(!directory.exists()) {
 				directory.mkdir();
 				file.createNewFile();
@@ -52,7 +52,7 @@ public class ConfigurationManager {
 	
 	public static void storeProperties(Properties props) {
 		try {
-			props.store(new FileOutputStream(OSDetector.getAppFolder() + File.separator + "config.properties"), null);
+			props.store(new FileOutputStream(OSDetector.getAppFolder() + "/" + "config.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

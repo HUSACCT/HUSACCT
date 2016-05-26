@@ -6,7 +6,7 @@ public class Access_1_1Exc {
 
 	private ASocialNetwork2 asocialnetwork;
 	
-	public Access_1_1(){
+	public Access_1_1Exc(){
 		System.out.println(asocialnetwork.type);
 	}
 }
