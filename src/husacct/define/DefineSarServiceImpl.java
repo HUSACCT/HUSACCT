@@ -23,7 +23,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	private DomainToDtoParser domainParser;
 	private ModuleDomainService moduleService;
 	private Logger logger = Logger.getLogger(DefineSarServiceImpl.class);
-	private long moduleIdOfModuleToSelectInUI;
+	private long moduleIdOfModuleToSelectInUI = 0;
 
 
 	public DefineSarServiceImpl(DefineServiceImpl defineService) {
@@ -63,9 +63,9 @@ public class DefineSarServiceImpl implements IDefineSarService {
 				long newSelectedModuleId = editedModule.getId();
 				if (newSelectedModuleId > 0) {
 					newSelectedModuleId = editedModule.getparent().getId();
+					moduleIdOfModuleToSelectInUI = newSelectedModuleId;
+					defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 				}
-				moduleIdOfModuleToSelectInUI = newSelectedModuleId;
-				defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -157,7 +157,9 @@ public class DefineSarServiceImpl implements IDefineSarService {
 
 	public void updateModulePanel() {
 		defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
-		defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
+		if (moduleIdOfModuleToSelectInUI > 0) {
+			defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
+		}
 	}
 	
 	private RuleTypeDTO getRuleType(String ruleTypeKey) {
