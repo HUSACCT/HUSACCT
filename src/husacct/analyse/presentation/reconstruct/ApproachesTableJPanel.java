@@ -8,7 +8,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
-import husacct.common.OSDetector;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -22,8 +21,6 @@ import javax.swing.event.ChangeListener;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -41,11 +38,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
 
 
 public class ApproachesTableJPanel extends HelpableJPanel {
@@ -250,7 +243,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
             {Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition), 10},
 
             {Algorithm.Layers_Goldstein_Multiple_Improved, getTranslation(Algorithm.Layers_Goldstein_Multiple_Improved), 10}, 
-            {Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original), 10}, 
+            {Algorithm.Layers_Goldstein_Root_Original, getTranslation(Algorithm.Layers_Goldstein_Root_Original), 10}, 
             {Algorithm.Layers_Goldstein_Root_Improved, getTranslation(Algorithm.Layers_Goldstein_Root_Improved), 10},
                 
             {Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original), 10}, 
@@ -277,7 +270,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		Object ApproachesRows[][] = { 
 				{Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule)},
 				{Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition)},
-				{Algorithm.Layers_Goldstein_Original, getTranslation(Algorithm.Layers_Goldstein_Original)},
+				{Algorithm.Layers_Goldstein_HUSACCT_SelectedModule, getTranslation(Algorithm.Layers_Goldstein_HUSACCT_SelectedModule)},
+				{Algorithm.Layers_HUSACCT_SelectedModule, getTranslation(Algorithm.Layers_HUSACCT_SelectedModule)},
 				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved)}};
 			return ApproachesRows;
 	}

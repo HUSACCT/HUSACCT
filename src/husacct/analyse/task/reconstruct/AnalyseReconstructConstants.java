@@ -8,9 +8,11 @@ public class AnalyseReconstructConstants {
 		public static final String Layers_Scanniello_Improved = "Layers_Scanniello_Improved";
 		
 		public static final String Layers_Goldstein_Multiple_Improved = "Layers_Goldstein_Multiple_Improved";
-		public static final String Layers_Goldstein_Original = "Layers_Goldstein_Original";
+		public static final String Layers_Goldstein_Root_Original = "Layers_Goldstein_Root_Original";
 		public static final String Layers_Goldstein_Root_Improved = "Layers_Goldstein_Root_Improved";
-		
+		public static final String Layers_Goldstein_HUSACCT_SelectedModule = "Layers_Goldstein_HUSACCT_SelectedModule";
+
+		public static final String Layers_HUSACCT_SelectedModule = "Layers_HUSACCT_SelectedModule";
 		public static final String Component_HUSACCT_SelectedModule = "Component_HUSACCT_SelectedModule";
 		
 		public static final String Gateways_HUSACCT_Root = "Gateways_HUSACCT_Root";

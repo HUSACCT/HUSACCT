@@ -103,7 +103,7 @@ public abstract class DrawingController {
 			drawingSettingsHolder.resetCurrentPaths();
 			drawModulesAndRelations_SingleLevel(includedModuleFiguresInRoot.toArray(new ModuleFigure[includedModuleFiguresInRoot.size()]));
 		} catch (Exception e) {
-			logger.error(" Exception: " + e.getMessage());
+			logger.warn(" Exception: " + e.getMessage());
 		}
 		return drawingView;
 	}
@@ -341,16 +341,25 @@ public abstract class DrawingController {
 	}
 
 	public DrawingView moduleOpen(String[] paths) {
-		saveSingleLevelFigurePositions();
-		if (paths.length == 0) 
-			drawArchitectureTopLevel();
-		else
-			gatherChildModuleFiguresAndContextFigures_AndDraw(paths);
+		try {
+			saveSingleLevelFigurePositions();
+			if (paths.length == 0) 
+				drawArchitectureTopLevel();
+			else
+				gatherChildModuleFiguresAndContextFigures_AndDraw(paths);
+		} catch (Exception e) {
+			logger.warn(" Exception: " + e.getMessage());
+		}
 		return drawingView;
 	}
 	
 	public DrawingView refreshDrawing() {
-		gatherChildModuleFiguresAndContextFigures_AndDraw(drawingSettingsHolder.getCurrentPaths());
+		try {
+			gatherChildModuleFiguresAndContextFigures_AndDraw(drawingSettingsHolder.getCurrentPaths());
+		} catch (Exception e) {
+			logger.warn(" Exception: " + e.getMessage());
+			drawArchitectureTopLevel();
+		}
 		return drawingView;
 	}
 	
@@ -442,7 +451,7 @@ public abstract class DrawingController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(" Exception: " + e.getMessage());
+			logger.warn(" Exception: " + e.getMessage());
 		}
 		return drawingView;
 	}
@@ -455,54 +464,58 @@ public abstract class DrawingController {
 	
 	public DrawingView zoomOut() {
 		// Objective: Collapse the ParentModule(s) witch is/are most decomposed.
-		resetContextFigures();
-		saveSingleLevelFigurePositions();
-		// Determine the decomposition level.
-		HashMap<String, Integer> pathsWithDecompositionLevel = new HashMap<String, Integer>(); 
-		int highestLevel = 0;
-		for (String currentPath : drawingSettingsHolder.getCurrentPaths()) {
-			if (currentPath != null) {
-				String[] levels = currentPath.split("\\.");
-				int decompositionLevel = levels.length;
-				pathsWithDecompositionLevel.put(currentPath, decompositionLevel);
-				if (decompositionLevel > highestLevel) {
-					highestLevel = decompositionLevel;
+		try {
+			resetContextFigures();
+			saveSingleLevelFigurePositions();
+			// Determine the decomposition level.
+			HashMap<String, Integer> pathsWithDecompositionLevel = new HashMap<String, Integer>(); 
+			int highestLevel = 0;
+			for (String currentPath : drawingSettingsHolder.getCurrentPaths()) {
+				if (currentPath != null) {
+					String[] levels = currentPath.split("\\.");
+					int decompositionLevel = levels.length;
+					pathsWithDecompositionLevel.put(currentPath, decompositionLevel);
+					if (decompositionLevel > highestLevel) {
+						highestLevel = decompositionLevel;
+					}
 				}
 			}
-		}
-		// Collapse the parent(s) with the highest decomposition level.
-		boolean drawTopLevel = true;
-		ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
-		HashSet<String> contextFigureNames = new HashSet<String>(); // Parent is a module to-be-zoomed-in 
-		for (String path : pathsWithDecompositionLevel.keySet()) {
-			String parentName;
-			if (pathsWithDecompositionLevel.get(path) == highestLevel) {
-				parentName = getUniqueNameOfParentModule(path);
-			} else {
-				parentName = path;
-			}
-			if (parentName.equals("")) {
-				contextFigureNames.add(path);
-			} else {
-				parentNames.add(parentName);
-				drawTopLevel = false;
-			}
-		}
-		if (drawTopLevel) {
-			drawArchitectureTopLevel();
-		} else {
-			//Determine the context figures
-			for (ModuleFigure moduleFigure : drawing.getShownModules()) {
-				String parentName = getUniqueNameOfParentModule(moduleFigure.getUniqueName());
+			// Collapse the parent(s) with the highest decomposition level.
+			boolean drawTopLevel = true;
+			ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
+			HashSet<String> contextFigureNames = new HashSet<String>(); // Parent is a module to-be-zoomed-in 
+			for (String path : pathsWithDecompositionLevel.keySet()) {
+				String parentName;
+				if (pathsWithDecompositionLevel.get(path) == highestLevel) {
+					parentName = getUniqueNameOfParentModule(path);
+				} else {
+					parentName = path;
+				}
 				if (parentName.equals("")) {
-					contextFigureNames.add(moduleFigure.getUniqueName());
-				}			
+					contextFigureNames.add(path);
+				} else {
+					parentNames.add(parentName);
+					drawTopLevel = false;
+				}
 			}
-			for (String contextFigureName : contextFigureNames) {
-				ModuleFigure contextFigure = getModuleFiguresByUniqueName(contextFigureName);
-				contextFigures.add(contextFigure);
+			if (drawTopLevel) {
+				drawArchitectureTopLevel();
+			} else {
+				//Determine the context figures
+				for (ModuleFigure moduleFigure : drawing.getShownModules()) {
+					String parentName = getUniqueNameOfParentModule(moduleFigure.getUniqueName());
+					if (parentName.equals("")) {
+						contextFigureNames.add(moduleFigure.getUniqueName());
+					}			
+				}
+				for (String contextFigureName : contextFigureNames) {
+					ModuleFigure contextFigure = getModuleFiguresByUniqueName(contextFigureName);
+					contextFigures.add(contextFigure);
+				}
+				gatherChildModuleFiguresAndContextFigures_AndDraw(parentNames.toArray(new String[] {}));
 			}
-			gatherChildModuleFiguresAndContextFigures_AndDraw(parentNames.toArray(new String[] {}));
+		} catch (Exception e) {
+			logger.warn(" Exception: " + e.getMessage());
 		}
 		return drawingView;
 	}
