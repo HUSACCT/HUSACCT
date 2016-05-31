@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
-import husacct.define.presentation.draganddrop.customdroptargetlisterner.SoftwareUnitDropListerner;
 import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTrasferhandler;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.DefinitionController;
@@ -62,11 +61,9 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	 */
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
-	private long _moduleId;
 
 	public SoftwareUnitJDialog(long moduleId) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), false);
-		_moduleId = moduleId;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
 		initUI();
@@ -81,6 +78,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
 			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			DefinitionController.getInstance().addObserver(this);
+			DefinitionController.getInstance().addObserverWithinDefineOfAnalyse(this);
 			this.getContentPane().add(this.createTypeSelectionPanel(), BorderLayout.NORTH);
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
@@ -221,7 +219,6 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 		this.softwareDefinitionTree = new AnalyzedModuleTree(JtreeController.instance().getRootOfModel());
 		this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
 		this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
-		SoftwareUnitDropListerner dropListener = new SoftwareUnitDropListerner(softwareDefinitionTree);
 		this.softwareDefinitionTree.setDragEnabled(true);
 
 	}
@@ -250,7 +247,6 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	private TreeSelectionListener treeselectionListener = new TreeSelectionListener() {
 		@Override
 		public void valueChanged(TreeSelectionEvent arg0) {
-			TreeSelectionModel paths = softwareDefinitionTree.getSelectionModel();
 			boolean isButtonAddEnabled = true;
 /*	Code disabled 2014-03-25, since in some cases the saveButton was disabled incorrectly 		
 			for (TreePath path : paths.getSelectionPaths()) {
@@ -329,7 +325,6 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	}
 
 	private void save() {
-		_moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		boolean canclose = false;
 		/* if(regExMappingPanel != null) { 
 		 * 	ExpressionEngine expressionEngine = new ExpressionEngine(); 

@@ -9,9 +9,13 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.GraphOfSuClusters;
 import husacct.analyse.task.reconstruct.IAlgorithm;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
+import husacct.analyse.task.reconstruct.parameters.NumberFieldPanel;
+import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
@@ -202,9 +206,21 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 	private void addIdentifiedLayersToIntendedArchitecture() {
 		int highestLevelLayer = layersWithNodesMap.size();
 		if (highestLevelLayer >= 2) {
-			// Reverse the layer levels. The numbering of the layers within the
-			// intended architecture is different: the highest level layer has hierarchicalLevel = 1
-			int lowestLevelLayer = 1;
+			// Determine the hierarchicalLevel of the layers. The hierarchicalLevel of the layers within the
+			// intended architecture is reversed to the one presented in the name to the users: the highest level layer has hierarchicalLevel = 1.
+			int hierarchicalLevel = highestLevelLayer;
+			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+			for (int levelInName : layersWithNodesMap.keySet()) {
+				Set<Integer> nodesOfLayer = layersWithNodesMap.get(levelInName);
+				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
+				for (int nodeId : nodesOfLayer) {
+					unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
+				}
+				layersWithSoftwareUnitsMap.put(hierarchicalLevel, unitsOfLayer);
+				hierarchicalLevel --;
+			}
+			
+/*			int lowestLevelLayer = 1;
 			int raise = highestLevelLayer - lowestLevelLayer;
 			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 			for (int i = lowestLevelLayer; i <= highestLevelLayer; i++) {
@@ -217,21 +233,75 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 				layersWithSoftwareUnitsMap.put(level, unitsOfLayer);
 				raise--;
 			}
-			
+*/			
 			int numberOfAddedLayers = 0;
-			for (int level : layersWithSoftwareUnitsMap.keySet()) {
-				ModuleDTO newModule = createModule_andAddItToReverseList("Layer" + level, selectedModule.logicalPath, "Layer", level, layersWithSoftwareUnitsMap.get(level));
+			int levelInName = highestLevelLayer;
+			for (int hierarchyLevel : layersWithSoftwareUnitsMap.keySet()) {
+				ArrayList<SoftwareUnitDTO> unitsOfLayer = layersWithSoftwareUnitsMap.get(hierarchyLevel);
+				String nameOfLayer = "Layer" + levelInName + determineLayerNameExtension(unitsOfLayer);
+				ModuleDTO newModule = createModule_andAddItToReverseList(nameOfLayer, selectedModule.logicalPath, "Layer", hierarchyLevel, unitsOfLayer);
 				if (!newModule.logicalPath.equals("")) {
 					numberOfAddedLayers ++;
+					levelInName --;
 				}
 			}
+
 			logger.info(" Number of added Layers: " + numberOfAddedLayers);
 		}
 	}
 
+	private String determineLayerNameExtension(ArrayList<SoftwareUnitDTO> unitsOfLayer) {
+		String nameExtension = "";
+		if (unitsOfLayer.size() == 1) {
+			SoftwareUnitDTO unit = unitsOfLayer.get(0);
+			if (!unit.name.equals("")) {
+				if (unit.name.length() > 12) {
+					nameExtension = "_" + unit.name.substring(0, 11);
+				} else {
+					nameExtension = "_" + unit.name;
+				}
+			}
+		} else {
+			String nameLargestUnit = "";
+			int highestLinesOfCode = 0; 
+			for (SoftwareUnitDTO unit : unitsOfLayer) {
+				int linesOfCode = queryService.getAnalysisStatistics(unit).selectionNrOfLinesOfCode;
+				if (linesOfCode > highestLinesOfCode) {
+					highestLinesOfCode = linesOfCode;
+					nameLargestUnit = unit.name;
+				}
+			}
+			if (!nameLargestUnit.equals("")) {
+				if (nameLargestUnit.length() > 12) {
+					nameLargestUnit = nameLargestUnit.substring(0, 11);
+				}
+				nameExtension = "_" + nameLargestUnit + "_etc"; 
+			}
+		}
+		return nameExtension;
+	}
+	
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
-		// TODO Auto-generated method stub
-		return null;
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_HUSACCT_SelectedModule;
+		reconstructArchitecture.parameterPanels = createParameterPanels();
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+
+		return reconstructArchitecture;
+	}
+	
+	private ArrayList<ParameterPanel> createParameterPanels(){
+		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
+		
+		ParameterPanel numberField = new NumberFieldPanel("Back Call threshold", AlgorithmParameter.Threshold, 10);
+		numberField.value = 10;
+		numberField.minimumValue = 0;
+		numberField.maximumValue = 100;
+		parameterPanels.add(numberField);
+		
+		return parameterPanels;
 	}
 }

@@ -47,11 +47,13 @@ import org.apache.log4j.Logger;
 		private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 		private ModuleDomainService moduleService;
 		private List<Observer> observersWithinDefine;
+		private List<Observer> observersWithinDefineOfAnalyse;
 		private Logger logger;
 		private long selectedModuleId = -1;
 
 		public DefinitionController() {
 			observersWithinDefine = new ArrayList<Observer>();
+			observersWithinDefineOfAnalyse = new ArrayList<Observer>();
 			logger = Logger.getLogger(DefinitionController.class);
 			moduleService = new ModuleDomainService();
 			appliedRuleService = new AppliedRuleDomainService();
@@ -73,6 +75,12 @@ import org.apache.log4j.Logger;
 		public void addObserver(Observer o) {
 			if (!observersWithinDefine.contains(o)) {
 				observersWithinDefine.add(o);
+			}
+		}
+
+		public void addObserverWithinDefineOfAnalyse(Observer o) {
+			if (!observersWithinDefineOfAnalyse.contains(o)) {
+				observersWithinDefineOfAnalyse.add(o);
 			}
 		}
 
@@ -169,6 +177,7 @@ import org.apache.log4j.Logger;
 
 		public void clearObserversWithinDefine() {
 			observersWithinDefine.clear();
+			observersWithinDefineOfAnalyse.clear();
 		}
 
 		public DefineInternalFrame getDefineInternalFrame() {
@@ -229,7 +238,7 @@ import org.apache.log4j.Logger;
 		}
 		
 		public void notifyAnalyzedObservers() {
-			for (Observer o : observersWithinDefine) {
+			for (Observer o : observersWithinDefineOfAnalyse) {
 				o.update(this, "updateSoftwareTree");
 			}
 		}
