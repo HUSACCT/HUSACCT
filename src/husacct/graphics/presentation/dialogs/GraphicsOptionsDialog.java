@@ -244,7 +244,12 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 
 			// TODO Use resources instead
 			// TODO filter for implemented diagram only?
-			String values[] = {"Dependency","UML Links", "Access/Call/Reference"};
+			String AllDependencies = localeService.getTranslatedString("AllDependencies");
+			String Associations = localeService.getTranslatedString("UmlLinks");
+			String AccessCallReference = localeService.getTranslatedString("AccessCallReferenceDependencies");
+
+			String values[] = {AllDependencies, Associations, AccessCallReference};
+
 			toggleDependencyType = new JComboBox<String>(values);
 			toggleDependencyType.setPreferredSize(new Dimension(elementWidth, elementHeight));
 			toggleDependencyType.addActionListener(new ActionListener() {
