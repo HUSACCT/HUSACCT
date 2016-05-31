@@ -1,4 +1,4 @@
-package husacct.analyse.task.reconstruct.layers;
+package husacct.analyse.task.reconstruct.layers.goldstein;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +9,13 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.GraphOfSuClusters;
 import husacct.analyse.task.reconstruct.IAlgorithm;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
+import husacct.analyse.task.reconstruct.parameters.NumberFieldPanel;
+import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
@@ -258,7 +262,25 @@ public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends I
 
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
-		// TODO Auto-generated method stub
-		return null;
+		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
+		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_HUSACCT_SelectedModule;
+		reconstructArchitecture.parameterPanels = createParameterPanels();
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+
+		return reconstructArchitecture;
+	}
+	
+	private ArrayList<ParameterPanel> createParameterPanels(){
+		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
+		
+		ParameterPanel numberField = new NumberFieldPanel("Threshold", AlgorithmParameter.Threshold, 10);
+		numberField.value = 10;
+		numberField.minimumValue = 0;
+		numberField.maximumValue = 100;
+		parameterPanels.add(numberField);
+		
+		return parameterPanels;
 	}
 }
