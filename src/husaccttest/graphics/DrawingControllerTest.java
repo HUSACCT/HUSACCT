@@ -7,6 +7,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.enums.DependencyOptionType;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -174,7 +175,7 @@ public class DrawingControllerTest {
 		graphicsAnalysedController.drawArchitectureTopLevel();
 		graphicsAnalysedController.resetContextFigures();
 		graphicsAnalysedController.getDrawingSettingsHolder().zoomTypeChange("zoom");
-		graphicsAnalysedController.getDrawingSettingsHolder().setShowUmlLinkInsteadOfDependencies(true);
+		graphicsAnalysedController.getDrawingSettingsHolder().setSelectedDependencyOption(DependencyOptionType.ONLY_UMLLINKS);
 		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"domain.umllinks"});
 		
 		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;

@@ -1,5 +1,7 @@
 package husacct.graphics.task;
 
+import husacct.common.enums.DependencyOptionType;
+
 public class DrawingSettingsHolder {
 	private boolean	areDependenciesShown = false;
 	private boolean	areExternalLibrariesShown = false;
@@ -7,16 +9,8 @@ public class DrawingSettingsHolder {
 	private boolean	areSmartLinesOn	= false;
 	private boolean	areViolationsShown = false;
 	private boolean	isZoomWithContextOn	= false;
-	private boolean showUmlLinkInsteadOfDependencies = false;
-	
+	private DependencyOptionType selectedDependencyOption = DependencyOptionType.ALL_DEPENDENCY;
 
-	public boolean isShowUmlLinkInsteadOfDependencies() {
-		return showUmlLinkInsteadOfDependencies;
-	}
-
-	public void setShowUmlLinkInsteadOfDependencies(boolean showUmlLinkInsteadOfDependencies) {
-		this.showUmlLinkInsteadOfDependencies = showUmlLinkInsteadOfDependencies;
-	}
 
 	private String[]	currentPaths	= new String[] {};
 	
@@ -112,5 +106,12 @@ public class DrawingSettingsHolder {
 	public boolean isZoomWithContextOn(){
 		return isZoomWithContextOn;
 	}
-	
+
+	public DependencyOptionType getSelectedDependencyOption() {
+		return selectedDependencyOption;
+	}
+
+	public void setSelectedDependencyOption(DependencyOptionType selectedDependencyOption) {
+		this.selectedDependencyOption = selectedDependencyOption;
+	}
 }
