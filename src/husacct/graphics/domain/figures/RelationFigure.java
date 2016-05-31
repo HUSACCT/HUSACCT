@@ -54,7 +54,6 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 	public void setMultiplicity() {
 		this.isUmlLink = true;
 		this.fromMultiplicity.setText(composite ? "*" : "1");
-		this.toMultiplicity.setText("1");
 	}
 
 	public void setAmount(String amount){
@@ -124,15 +123,16 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		ModuleFigure startFigure = (ModuleFigure )line.getStartFigure();
 		ModuleFigure endFigure = (ModuleFigure )line.getEndFigure();
 		String startFigureType = startFigure.getType();
-
 		String endFigureType = endFigure.getType();
+
 		if(isUmlLink) {
-			if (endFigureType.equals("package") || startFigureType.equals("package")) {
-				relationType = RelationType.ATTRIBUTELINK;
+			if (isPackageType(startFigureType, endFigureType)) {
+				relationType = RelationType.RULELINK;
+			} else if (relationType == RelationType.ATTRIBUTELINK){
+				addMultiplicity();
+				removeAmountFigure();
 			} else {
-				add(this.fromMultiplicity);
-				add(this.toMultiplicity);
-				remove(this.amountFigure);
+				removeAmountFigure();
 			}
 		}
 
@@ -164,7 +164,20 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		}
 		super.draw(graphics);
 	}
-	
+
+	private void addMultiplicity() {
+		add(this.fromMultiplicity);
+//		add(this.toMultiplicity);
+	}
+
+	private void removeAmountFigure() {
+		remove(this.amountFigure);
+	}
+
+	private boolean isPackageType(String startFigureType, String endFigureType) {
+		return endFigureType.equals("package") || startFigureType.equals("package");
+	}
+
 	@Override
 	public void figureAdded(FigureEvent e) {
 	}
