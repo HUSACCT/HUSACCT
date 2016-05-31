@@ -197,7 +197,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 					allAssignedSoftwareUnits.putAll(softwareUnits);
 			}
         } catch (Exception e) {
-	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        this.logger.warn(new Date().toString() + " Exception: "  + e );
 	        //e.printStackTrace();
         }
 		return allAssignedSoftwareUnits;
