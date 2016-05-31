@@ -101,7 +101,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected UmlLinkDTO[] getUmlLinksBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-			return analyseService.getUmlLinksFromClassToToClass(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			return analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		}
 		return new UmlLinkDTO[] {};
 	}
