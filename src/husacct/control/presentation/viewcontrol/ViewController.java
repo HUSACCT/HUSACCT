@@ -22,7 +22,7 @@ public class ViewController {
 	private InternalFrameController codeViewerContainer;
 	private InternalFrameController analyseSARController;
 	
-	private List<InternalFrameController> viewContainers = new ArrayList<InternalFrameController>();
+	private List<InternalFrameController> viewContainers = new ArrayList<>();
 	
 	public ViewController(MainController mainController){
 		defineContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
@@ -91,6 +91,7 @@ public class ViewController {
 		viewContainers.add(defineContainer);
 		viewContainers.add(definedArchitectureDiagramContainer);
 		viewContainers.add(analysedApplicationOverviewContainer);
+		viewContainers.add(moduleAndRuleDiagramContainer);
 		viewContainers.add(analyseSARController);
 		viewContainers.add(analysedArchitectureDiagramContainer);
 		viewContainers.add(validateContainer);
