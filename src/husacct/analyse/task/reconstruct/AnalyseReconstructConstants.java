@@ -14,6 +14,7 @@ public class AnalyseReconstructConstants {
 
 		public static final String Layers_HUSACCT_SelectedModule = "Layers_HUSACCT_SelectedModule";
 		public static final String Component_HUSACCT_SelectedModule = "Component_HUSACCT_SelectedModule";
+		public static final String CombinedAndIterative_HUSACCT_SelectedModule = "CombinedAndIterative_HUSACCT_SelectedModule";
 		
 		public static final String Gateways_HUSACCT_Root = "Gateways_HUSACCT_Root";
 		public static final String Adapter_Recognition = "Adapter_Recognition";
