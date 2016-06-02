@@ -117,7 +117,7 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 					}
 				}
 			}
-			analyseTaskControl.reconstructArchitectureListDTO.updateReconstructArchitectureDTO(dto);
+			analyseTaskControl.reconstructArchitectureDTOList.updateReconstructArchitectureDTO(dto);
 			frame.dispose();
 		}
 		else if(event.getSource() == cancelButton){

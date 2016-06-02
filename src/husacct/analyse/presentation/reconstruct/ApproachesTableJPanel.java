@@ -144,7 +144,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 					ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
 					ModuleDTO selectedModule = getSelectedModule();
 					String approachConstant = (String) tableAllApproaches.getModel().getValueAt(selectedRow, 0);
-					dto = analyseTaskControl.reconstructArchitectureListDTO.getReconstructArchitectureDTO(approachConstant);
+					dto = analyseTaskControl.reconstructArchitectureDTOList.getReconstructArchitectureDTO(approachConstant);
 					dto.setSelectedModule(selectedModule);
 					
 					Object[][] rowData = getParameters(dto);
@@ -212,7 +212,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 					ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
 					ModuleDTO selectedModule = getSelectedModule();
 					String approachConstant = (String) tableDistinctApproaches.getModel().getValueAt(selectedRow, 0);
-					dto = analyseTaskControl.reconstructArchitectureListDTO.getReconstructArchitectureDTO(approachConstant);
+					dto = analyseTaskControl.reconstructArchitectureDTOList.getReconstructArchitectureDTO(approachConstant);
 					dto.setSelectedModule(selectedModule);
 					
 					Object[][] rowData = getParameters(dto);
@@ -255,8 +255,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	private Object[][] getAllApproachesRows(){
 		ArrayList<Object[]> approachesRowsList = new ArrayList<>();
 		analyseTaskControl.createReconstructArchitectureList();
-		analyseTaskControl.reconstructArchitectureListDTO.createDynamicReconstructArchitectureDTOs();
-		for (ReconstructArchitectureDTO dto : analyseTaskControl.reconstructArchitectureListDTO.ReconstructArchitectureDTOList){
+		analyseTaskControl.reconstructArchitectureDTOList.createDynamicReconstructArchitectureDTOs();
+		for (ReconstructArchitectureDTO dto : analyseTaskControl.reconstructArchitectureDTOList.ReconstructArchitectureDTOList){
 			Object[] rowObject = {dto.approachConstant, dto.getTranslation()};
 			approachesRowsList.add(rowObject);
 		}
