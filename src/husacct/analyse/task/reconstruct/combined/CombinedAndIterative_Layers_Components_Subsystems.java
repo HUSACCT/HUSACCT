@@ -99,7 +99,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends IAlgorith
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.CombinedAndIterative_HUSACCT_SelectedModule;
 		reconstructArchitecture.parameterPanels = createParameterPanels();
-		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.threshold = 5;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
 

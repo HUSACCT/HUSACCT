@@ -1,7 +1,7 @@
 package husacct.analyse.task.reconstruct;
 
+import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +12,9 @@ public class GraphOfSuClusters {
 	HashMap<Integer, HashSet<SoftwareUnitDTO>> nodes; 	// Key = clusterIdx, Value = SU assigned to cohesive cluster of SU's.
 	HashMap<String, Integer> edges; 					// Key = clusterId1 + | + clusterId2, Value = number of dependencies from cluster1 to cluster2.
 	IAlgorithm iAlgoritm;
+	private int backCallThreshold;
+	private String typesOfDependencies;
+	private String granularity;
 	
 	public GraphOfSuClusters(IAlgorithm iAlgoritm) {
 		nodes = new HashMap<Integer, HashSet<SoftwareUnitDTO>>();
@@ -19,8 +22,11 @@ public class GraphOfSuClusters {
 		this.iAlgoritm = iAlgoritm;
 	}
 
-	public void initializeGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude, String typesOfDependencies, int backCallThreshold) {
-		createNodesInClusteredGraph(softwareUnitsToInclude, typesOfDependencies, backCallThreshold);
+	public void initializeGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude, ReconstructArchitectureDTO dto) {
+		backCallThreshold = dto.getThreshold();
+		typesOfDependencies = dto.getRelationType();
+		granularity = dto.granularity;
+		createNodesInClusteredGraph(softwareUnitsToInclude);
 		setEdges(typesOfDependencies);
 	}
 	
@@ -45,21 +51,37 @@ public class GraphOfSuClusters {
 	
 	/**
 	 * Creates a graph of clustered SotwareUnits. Each node is a software unit, or a cluster of units that are highly coupled.
+	 * Individual types may be clustered to one node, based on the granularity setting. 
 	 * A SoftwareUnit without cyclic dependencies (or a cyclic dependency below the backCallThreshold) gets its own node.
 	 * If SoftwareUnit su1 is using su2 and su2 is using su1 as well and the backCallThreshold ((su2-->su1 / su1-->su2) x 100) is bigger than 
 	 * the callBackThreshold percentage, than su1 and su2 are clustered into one node, since these software units need to stay in the same layer.
 	 * If su3 is also tightly coupled with su1 or su2, it is added to this cluster as well.   
 	 */
-	private void createNodesInClusteredGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude, String typesOfDependencies, int backCallThreshold) {
-		int highestNodeId = 0;
+	private void createNodesInClusteredGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude) {
+		int nodeIdofNodeWithClassesInRoot = 1;
+		int highestNodeId = 1;
 		@SuppressWarnings("unchecked")
 		ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeClone = (ArrayList<SoftwareUnitDTO>) softwareUnitsToInclude.clone();
 		
+		// If fromSoftwareUnit is not of type "package", while the granularity is set to packages, than add this SU to NodeWithClassesInRoot
+		for (SoftwareUnitDTO fromSoftwareUnit : softwareUnitsToInclude) {
+			// If fromSoftwareUnit is of type "class", while the granularity setting excludes classes, than add this SU to NodeWithClassesInRoot
+			if (!fromSoftwareUnit.type.toLowerCase().equals("package")) {
+				if (granularity.equals(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses)) {
+					if (!nodes.containsKey(nodeIdofNodeWithClassesInRoot)) {
+						addNode(nodeIdofNodeWithClassesInRoot);
+					}
+					addSoftwareUnitToNode(nodeIdofNodeWithClassesInRoot, fromSoftwareUnit);
+				}
+			}
+		}
+
 		for (SoftwareUnitDTO fromSoftwareUnit : softwareUnitsToInclude) {
 			/* Test code
-			if (softwareUnit.name.equals("Service")) {
+			if (fromSoftwareUnit.name.contains("productdispatcher")) {
 				boolean breakpoint = true;
 			} */
+			
 			for (SoftwareUnitDTO toSoftwareUnit : softwareUnitsToIncludeClone) {
 				if (!toSoftwareUnit.uniqueName.equals(fromSoftwareUnit.uniqueName)) {
 					int nrOfDependenciesFromsoftwareUnitToOther = iAlgoritm.getRelationsBetweenSoftwareUnits(fromSoftwareUnit.uniqueName, toSoftwareUnit.uniqueName, typesOfDependencies).size();
