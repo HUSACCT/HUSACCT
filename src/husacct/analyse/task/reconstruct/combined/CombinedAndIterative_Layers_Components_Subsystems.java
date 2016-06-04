@@ -56,13 +56,19 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends IAlgorith
 			algorithm = new Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon(queryService);
 			algorithm.executeAlgorithm(dto, queryService);
 			// b) If number of layers >= 3, than continue
-			ModuleDTO[] childModules = defineService.getModule_TheChildrenOfTheModule(dto.getSelectedModule().logicalPath); 
-			if (childModules.length < 3) { 
+			ModuleDTO[] childModules = defineService.getModule_TheChildrenOfTheModule(dto.getSelectedModule().logicalPath);
+			ArrayList<ModuleDTO> layers = new ArrayList<ModuleDTO>();
+			for (ModuleDTO childModule : childModules) {
+				if (childModule.type.equals(ModuleTypes.LAYER.toString())) {
+					layers.add(childModule);
+				}
+			}
+			if (layers.size() < 3) { 
 				// c) If number of layers < 3, than: i) reverse; ii) identify C&S; iii) continue
-				reverseLayers(childModules);
+				reverseLayers(layers);
 				algorithm = new ComponentsAndSubSystems_HUSACCT(queryService);
 				algorithm.executeAlgorithm(dto, queryService);
-			}			
+			}
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
 	    }
@@ -87,9 +93,9 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends IAlgorith
 		}
 	}
 
-	private void reverseLayers(ModuleDTO[] childModules) {
-		for(ModuleDTO module : childModules){
-			defineSarService.removeModule(module.logicalPath);
+	private void reverseLayers(ArrayList<ModuleDTO> layers) {
+		for(ModuleDTO layer : layers){
+			defineSarService.removeModule(layer.logicalPath);
 		}
 	}
 
