@@ -28,10 +28,6 @@ import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
 
-import com.sun.javafx.collections.MappingChange.Map;
-
-import javax.swing.table.TableModel;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -128,6 +124,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		Object columnNames[] = getColumnNames();
 		Object rows[][] = getAllApproachesRows();
 		tableAllApproaches = new JTable(rows, columnNames){
+			private static final long serialVersionUID = -1304690689139412746L;
+
 			public boolean isCellEditable(int row, int col){
 				return false;
 			}
@@ -196,6 +194,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		Object distinctApproachesRows[][] = getDistinctApproachesRows();
 		
 		tableDistinctApproaches = new JTable(distinctApproachesRows, distinctApproachesColumns){
+			private static final long serialVersionUID = -7444877138370325551L;
+
 			public boolean isCellEditable(int row, int col){
 				return false;
 			}
