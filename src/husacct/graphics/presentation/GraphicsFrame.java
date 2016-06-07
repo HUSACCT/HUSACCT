@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
@@ -29,6 +30,7 @@ import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.tables.DependencyTable;
 import husacct.graphics.presentation.tables.RuleTable;
+import husacct.graphics.presentation.tables.UmlLinkTable;
 import husacct.graphics.presentation.tables.ViolationTable;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 
@@ -294,6 +296,12 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
 		showProperties();
 		DependencyTable propertiesTable = new DependencyTable(dependencyDTOs);
+		propertiesScrollPane.setViewportView(propertiesTable);
+	}
+	
+	public void showUMLLinkProperties(UmlLinkDTO[] umlLinkDTOs){
+		showProperties();
+		UmlLinkTable propertiesTable = new UmlLinkTable(umlLinkDTOs);
 		propertiesScrollPane.setViewportView(propertiesTable);
 	}
 	

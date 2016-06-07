@@ -1,28 +1,20 @@
 package husacct.analyse.task;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
-import husacct.analyse.task.reconstruct.mojo.MoJo;
+import husacct.analyse.task.reconstruct.ReconstructArchitectureDTOList;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
-import husacct.common.dto.ReconstructArchitectureListDTO;
 import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.locale.ILocaleService;
-import husacct.define.IDefineService;
 
 public class AnalyseTaskControl {
 
@@ -33,8 +25,7 @@ public class AnalyseTaskControl {
     private DependencyReportController reportController;
     private HistoryLogger historyLogger;
     private ReconstructArchitecture reconstructArchitecture;
-    private ILocaleService localeService;
-    public ReconstructArchitectureListDTO reconstructArchitectureListDTO;
+    public ReconstructArchitectureDTOList reconstructArchitectureDTOList;
     
     private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
 
@@ -46,7 +37,6 @@ public class AnalyseTaskControl {
         this.analyserService = new ApplicationAnalyser();
         this.reportController = new DependencyReportController(queryService);
         this.historyLogger = new HistoryLogger();
-        this.localeService = ServiceProvider.getInstance().getLocaleService();
      }
 
     public void analyseApplication(String[] paths, String programmingLanguage) {
@@ -110,57 +100,6 @@ public class AnalyseTaskControl {
 	public void reconstructArchitecture_ClearAll(){
 		reconstructArchitecture.clearAllModules();
 	}
-	
-	public void testAlgorithm(ReconstructArchitectureDTO dto){
-		//gets the golden standard (current intended architecture) and writes it to a file
-		ModuleDTO[] intendedArchitecture = reconstructArchitecture.getGoldenStandard();
-		File goldenStandard = exportToRSF(intendedArchitecture, "C:\\users\\jorns\\desktop\\Golden_Standard");
-		
-		if (reconstructArchitecture == null) {
-    		reconstructArchitecture = new ReconstructArchitecture(queryService);
-    	}
-		
-		//reset intended architecture 
-		reconstructArchitecture.clearAllModules();
-		
-		//runs the selected algorithm and writes it
-    	reconstructArchitecture.reconstructArchitecture_Execute(dto);
-    	intendedArchitecture = reconstructArchitecture.getGoldenStandard();
-    	File toCompare = exportToRSF(intendedArchitecture, "C:\\users\\jorns\\desktop\\To_Compare");
-    	
-    	//mojo Call (not yet implemented)
-    	MoJo mojoTest = new MoJo();
-    	String[] daoArray = {toCompare.getName(), goldenStandard.getName(), "-fm"}; //"-fm is a different execution of mojo, see MoJo.java.showerrormessage() for more functions"
-    	mojoTest.executeMojo(daoArray, localeService.getTranslatedString(dto.getApproach()));
-    	
-    	//remove the created files
-    	goldenStandard.delete();
-    	toCompare.delete();
-	}
-	
-	private File exportToRSF(ModuleDTO[] intendedArchitecture, String fileName){
-		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-		File exportFile = null;
-		try {
-			String completeFileName = fileName + ".rsf";
-			exportFile = new File(completeFileName);
-			exportFile.createNewFile();
-			FileWriter writer = new FileWriter(exportFile);
-			String toWrite = "";
-			for(ModuleDTO moduleDTO : intendedArchitecture){
-				for(String softwareDTOPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTO.logicalPath)){
-					toWrite = "contain " + moduleDTO.logicalPath + " " + softwareDTOPath + "\n";
-					writer.write(toWrite);
-				}
-			}
-			
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			logger.info("Error occured while writing the file");
-		}
-		return exportFile;
-	}
     
 	//Methods for AnalyseUIController
 	public SoftwareUnitDTO[] getSoftwareUnitsInRoot() {
@@ -179,8 +118,8 @@ public class AnalyseTaskControl {
 		return queryService.getAnalysisStatistics(selectedModule);
 	}
 	
-	public ReconstructArchitectureListDTO createReconstructArchitectureList(){
-		reconstructArchitectureListDTO = new ReconstructArchitectureListDTO(queryService);
-		return reconstructArchitectureListDTO;
+	public ReconstructArchitectureDTOList createReconstructArchitectureList(){
+		reconstructArchitectureDTOList = new ReconstructArchitectureDTOList(queryService);
+		return reconstructArchitectureDTOList;
 	}
 }

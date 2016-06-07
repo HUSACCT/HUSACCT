@@ -33,7 +33,7 @@ public class ExportImportAnalysedModelTest {
 	private static Logger logger;
 	private static IAnalyseService analyseService = null;
 	
-	private static final String exportFileName = "ExportFileAnalysedModel.XML";
+	private static final String exportFileName = "ExportFileAnalysedModel.xml";
 	private static String exportFilePath;
 	private static File exportFile;
 
@@ -304,7 +304,7 @@ public class ExportImportAnalysedModelTest {
 	private boolean isUmlLinkDetected(String classFrom, String classTo, String attributeFrom, boolean isComposite, String linkType) {
 		boolean umlLinkDetected = false;
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		HashSet<UmlLinkDTO>  umlLinkDTOs = analyseService.getUmlLinksFromClassToToClass(classFrom, classTo);
+		UmlLinkDTO[]  umlLinkDTOs = analyseService.getUmlLinksFromClassToToClass(classFrom, classTo);
 		for (UmlLinkDTO linkDTO : umlLinkDTOs) {
 			if (linkDTO.from.equals(classFrom) && linkDTO.to.equals(classTo) && linkDTO.attributeFrom.equals(attributeFrom) && 
 					(linkDTO.isComposite == isComposite) && linkDTO.type.equals(linkType)) {

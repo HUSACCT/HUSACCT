@@ -5,6 +5,7 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
 
+import java.io.File;
 import java.util.Stack;
 import java.util.regex.Matcher;
 
@@ -239,16 +240,15 @@ public class CSharpTreeConvertController {
     		if (noNameSpaceString.equals("")) {
 	    		// Create a No_Namespace package, extended with the directories in the sourceFilePath - projectPath.
 	    		String projectPath = cSharpAnalyser.getProjectPath();
-	    		projectPath = Matcher.quoteReplacement(projectPath);
-	    		String separator = Matcher.quoteReplacement("\\");
-	    		projectPath = projectPath. replace(separator, "_");
-	    		String sourceFilePathReplace = Matcher.quoteReplacement(sourceFilePath);
+	    		char separator = '/';
+				projectPath = projectPath.replace(separator, '_');
+	    		String sourceFilePathReplace = sourceFilePath.replace('\\',separator);
 	    		sourceFilePathReplace = sourceFilePathReplace.replace(cSharpAnalyser.getFileExtension(), "");
 	    		int positionLastSeparator = sourceFilePathReplace.lastIndexOf(separator);
 	    		String sourceFilePathWithoutProjectPath = "";
 	    		if (positionLastSeparator >= 0) {
 		    		sourceFilePathReplace = sourceFilePathReplace.substring(0, positionLastSeparator);
-		    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, "_");
+		    		sourceFilePathReplace = sourceFilePathReplace.replace(separator, '_');
 		    		if (sourceFilePathReplace.contains(projectPath)) {
 		    			sourceFilePathWithoutProjectPath = sourceFilePathReplace.replaceAll(projectPath, "");
 		    		}
