@@ -11,7 +11,7 @@ import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.locale.ILocaleService;
 
 public abstract class ParameterPanel {
-	public Object value = null;
+	public Object defaultValue = null;
 	public Object minimumValue = null;
 	public Object maximumValue = null;
 	public String parameterConstant;
@@ -52,7 +52,7 @@ public abstract class ParameterPanel {
 	public static class DefaultParameterPanels{
 		public static ParameterPanel createThresholdParameter(int defaultValue){
 			ParameterPanel numberField = new NumberFieldPanel("Threshold", AlgorithmParameter.Threshold, 10);
-			numberField.value = defaultValue;
+			numberField.defaultValue = defaultValue;
 			numberField.minimumValue = 0;
 			numberField.maximumValue = 100;
 			return numberField;
@@ -63,7 +63,7 @@ public abstract class ParameterPanel {
 					new ComboBoxValue(getTranslation(RelationTypes.umlLinks), RelationTypes.umlLinks),
 					new ComboBoxValue(getTranslation(RelationTypes.accessCallReferenceDependencies), RelationTypes.accessCallReferenceDependencies)};
 			ParameterPanel comboBoxPanel = new ComboBoxPanel(getTranslation(AlgorithmParameter.RelationType), AlgorithmParameter.RelationType, comboBoxValues);
-			comboBoxPanel.value = defaultValue;
+			comboBoxPanel.defaultValue = defaultValue;
 			return comboBoxPanel;
 		}
 		public static ParameterPanel createGranularityPanel(String defaultValue){
@@ -72,7 +72,7 @@ public abstract class ParameterPanel {
 					new ComboBoxValue(getTranslation(Granularities.PackagesInRootOnlyClasses), Granularities.PackagesInRootOnlyClasses),
 					new ComboBoxValue(getTranslation(Granularities.PackagesWithAllClasses), Granularities.PackagesWithAllClasses)};
 			ParameterPanel comboBoxPanel = new ComboBoxPanel(getTranslation(AlgorithmParameter.Granularity), AlgorithmParameter.Granularity, comboBoxValues);
-			comboBoxPanel.value = defaultValue;
+			comboBoxPanel.defaultValue = defaultValue;
 			return comboBoxPanel;
 		}
 		private static String getTranslation(String translationKey){

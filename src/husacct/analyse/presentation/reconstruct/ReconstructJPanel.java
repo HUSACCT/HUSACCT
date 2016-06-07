@@ -108,7 +108,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 					ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
 					ModuleDTO selectedModule = getSelectedModule();
 					String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-					reconstructArchitectureDTO = analyseTaskControl.reconstructArchitectureDTOList.getReconstructArchitectureDTO(approachConstant);
+					reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 					reconstructArchitectureDTO.setSelectedModule(selectedModule);
 					analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
 					ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
@@ -138,8 +138,8 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			int selectedRow = approachesTable.getSelectedRow();
 			if (selectedRow >= 0){
 				String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.reconstructArchitectureDTOList.getReconstructArchitectureDTO(approachConstant);
-				new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO);
+				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+				new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO, approachesTableJPanel);
 			}
 		}
 

@@ -25,7 +25,7 @@ public class AnalyseTaskControl {
     private DependencyReportController reportController;
     private HistoryLogger historyLogger;
     private ReconstructArchitecture reconstructArchitecture;
-    public ReconstructArchitectureDTOList reconstructArchitectureDTOList;
+    private ReconstructArchitectureDTOList reconstructArchitectureDTOList;
     
     private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
 
@@ -121,5 +121,12 @@ public class AnalyseTaskControl {
 	public ReconstructArchitectureDTOList createReconstructArchitectureList(){
 		reconstructArchitectureDTOList = new ReconstructArchitectureDTOList(queryService);
 		return reconstructArchitectureDTOList;
+	}
+	
+	public ReconstructArchitectureDTOList getReconstructArchitectureDTOList(){
+		return reconstructArchitectureDTOList;
+	}
+	public void setReconstructArchitectureDTOList(ReconstructArchitectureDTOList reconArchiDTOList){
+		reconstructArchitectureDTOList = reconArchiDTOList;
 	}
 }

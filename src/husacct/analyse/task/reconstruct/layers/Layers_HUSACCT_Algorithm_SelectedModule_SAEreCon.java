@@ -297,7 +297,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
 		
 		ParameterPanel numberField = new NumberFieldPanel("Back Call threshold", AlgorithmParameter.Threshold, 10);
-		numberField.value = 10;
+		numberField.defaultValue = 10;
 		numberField.minimumValue = 0;
 		numberField.maximumValue = 100;
 		parameterPanels.add(numberField);

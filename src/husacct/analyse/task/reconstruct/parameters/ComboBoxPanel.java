@@ -54,7 +54,7 @@ public class ComboBoxPanel extends ParameterPanel{
 		catch(Exception e){
 			logger.error("Invalid cast from comboBox.getSelectedItem() - " + e);
 		}
-		return "something went wrong";
+		return null;
 	}
 	
 	

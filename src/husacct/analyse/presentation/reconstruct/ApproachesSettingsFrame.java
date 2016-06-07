@@ -8,12 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
@@ -33,11 +31,13 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	private JButton applyButton, cancelButton;
 	private JFrame frame;
 	private AnalyseTaskControl analyseTaskControl;
+	private ApproachesTableJPanel approachesTableJPanel;
 
 	
-	public ApproachesSettingsFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto){
+	public ApproachesSettingsFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, ApproachesTableJPanel apprTJP){
 		this.dto = dto;
 		this.analyseTaskControl = atc;
+		this.approachesTableJPanel = apprTJP;
 		buildFrame();
 	}
 	
@@ -117,7 +117,11 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 					}
 				}
 			}
-			analyseTaskControl.reconstructArchitectureDTOList.updateReconstructArchitectureDTO(dto);
+			analyseTaskControl.getReconstructArchitectureDTOList().updateReconstructArchitectureDTO(dto);
+			int selectedRow = approachesTableJPanel.tableAllApproaches.getSelectedRow();
+			int differentRow = selectedRow > 1 ? selectedRow -1 : selectedRow +1;
+			approachesTableJPanel.tableAllApproaches.setRowSelectionInterval(differentRow, differentRow);
+			approachesTableJPanel.tableAllApproaches.setRowSelectionInterval(selectedRow, selectedRow);
 			frame.dispose();
 		}
 		else if(event.getSource() == cancelButton){
