@@ -120,10 +120,6 @@ public class ReconstructArchitecture {
 	    }
 	}
 	
-	public ModuleDTO[] getGoldenStandard(){
-		return defineService.getAllModules();
-	}
-
 	public boolean getAlgorithmSucces(){
 		return algorithmSucces;
 	}
