@@ -59,7 +59,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	public ButtonGroup RadioButtonsRelationType;
 	public ButtonGroup radioButtonGroupTwo;
 	private JTable distinctParameterTable;
-	private JTable allParameterTable;
+	public JTable allParameterTable;
 
 	/**
 	 * Create the panel.
@@ -138,13 +138,14 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					int selectedRow = tableAllApproaches.getSelectedRow();
+				int selectedRow = tableAllApproaches.getSelectedRow();
+				if (!e.getValueIsAdjusting() && selectedRow >= 0) {
+					
 					
 					ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
 					ModuleDTO selectedModule = getSelectedModule();
 					String approachConstant = (String) tableAllApproaches.getModel().getValueAt(selectedRow, 0);
-					dto = analyseTaskControl.reconstructArchitectureDTOList.getReconstructArchitectureDTO(approachConstant);
+					dto = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 					dto.setSelectedModule(selectedModule);
 					
 					Object[][] rowData = getParameters(dto);
@@ -206,13 +207,13 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					int selectedRow = tableDistinctApproaches.getSelectedRow();
+				int selectedRow = tableDistinctApproaches.getSelectedRow();
+				if (!e.getValueIsAdjusting() && selectedRow >=0 ) {
 					
 					ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
 					ModuleDTO selectedModule = getSelectedModule();
 					String approachConstant = (String) tableDistinctApproaches.getModel().getValueAt(selectedRow, 0);
-					dto = analyseTaskControl.reconstructArchitectureDTOList.getReconstructArchitectureDTO(approachConstant);
+					dto = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 					dto.setSelectedModule(selectedModule);
 					
 					Object[][] rowData = getParameters(dto);
@@ -255,8 +256,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 	private Object[][] getAllApproachesRows(){
 		ArrayList<Object[]> approachesRowsList = new ArrayList<>();
 		analyseTaskControl.createReconstructArchitectureList();
-		analyseTaskControl.reconstructArchitectureDTOList.createDynamicReconstructArchitectureDTOs();
-		for (ReconstructArchitectureDTO dto : analyseTaskControl.reconstructArchitectureDTOList.ReconstructArchitectureDTOList){
+		analyseTaskControl.getReconstructArchitectureDTOList().createDynamicReconstructArchitectureDTOs();
+		for (ReconstructArchitectureDTO dto : analyseTaskControl.getReconstructArchitectureDTOList().ReconstructArchitectureDTOList){
 			Object[] rowObject = {dto.approachConstant, dto.getTranslation()};
 			approachesRowsList.add(rowObject);
 		}
