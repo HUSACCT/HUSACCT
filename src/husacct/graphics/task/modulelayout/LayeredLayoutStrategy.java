@@ -65,18 +65,16 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		drawing = theDrawing;
 	}
 
-	private void applyLayout() {
-		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
+	@Override
+	public void doLayout() {
+		initLayout();
+		calculateLayout();
+		applyLayout();
+	}
 
-		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
-
-		for (Node n : rootNodes) {
-			double width = positionFigure(n, startPoint);
-			n.setPositionUpdated(true);
-
-			startPoint.y = VERT_ITEM_SPACING;
-			startPoint.x += HORZ_ITEM_SPACING + width;
-		}
+	private void initLayout() {
+		nodes.clear();
+		connectors = ListUtils.select(drawing.getChildren(), connectorLambda);
 	}
 
 	private void calculateLayout() {
@@ -105,37 +103,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
 	}
 
-	private Point2D.Double calculateStartPosition(Node node, Double startPoint) {
-		Point2D.Double retVal = (Point2D.Double) startPoint.clone();
-		int lowestLevel = Integer.MAX_VALUE;
-
-		List<Node> connections = node.getConnections();
-		for (Node child : connections)
-			lowestLevel = Math.min(child.getLevel(), lowestLevel);
-
-		if (lowestLevel != Integer.MAX_VALUE && lowestLevel > 1)
-			retVal.y += (lowestLevel - 1) * (node.getHeight() + VERT_ITEM_SPACING);
-
-		return retVal;
-	}
-
-	@Override
-	public void doLayout() {
-		initLayout();
-		calculateLayout();
-		applyLayout();
-	}
-
-	private int getLowestParentLevel(Node node) {
-		int level = Node.UNINITIALIZED;
-
-		for (Node parent : node.getParents())
-			if (parent.getLevel() != INTERFACE_LEVEL)
-				level = Math.max(level, parent.getLevel());
-
-		return level;
-	}
-
 	private Node getNode(Figure figure) {
 		if (nodes.contains(figure))
 			return nodes.getByFigure(figure);
@@ -145,6 +112,16 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 
 			return node;
 		}
+	}
+
+	private void updateNodes(Node startNode, Node endNode) {
+		int startLevel = startNode.getLevel();
+		int endLevel = endNode.getLevel();
+
+		if (startLevel == Node.UNINITIALIZED || endLevel == Node.UNINITIALIZED)
+			initializeNodes(startNode, endNode);
+		else
+			rebalanceNodes(startNode, endNode);
 	}
 
 	private void initializeNodes(Node startNode, Node endNode) {
@@ -176,42 +153,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 
 		startNode.setLevel(startLevel);
 		endNode.setLevel(endLevel);
-	}
-
-	private void initLayout() {
-		nodes.clear();
-		connectors = ListUtils.select(drawing.getChildren(), connectorLambda);
-	}
-
-	// TODO: Patrick: Make sure that recursive calls to positionFigure() take
-	// into account
-	// that when 2(or more) child nodes are positioned the columnWidth should be
-	// as wide as nodeCount * nodeWidth(n) + (nodeCount * HORZ_ITEM_SPACING)
-	private double positionFigure(Node node, Point2D.Double startPoint) {
-
-		Point2D.Double position = (Point2D.Double) startPoint.clone();
-		Figure figure = node.getFigure();
-		double columnWidth = 0;
-
-		if (node.getLevel() == 0)
-			position = calculateStartPosition(node, startPoint);
-
-		updatePosition(figure, position);
-		node.setPositionUpdated(true);
-
-		columnWidth = node.getWidth();
-		position.y += node.getHeight() + VERT_ITEM_SPACING;
-		List<Node> connections = node.getConnections();
-		for (Node child : connections)
-			if (!child.isPositionUpdated() && child.getLevel() != node.getLevel()) {
-				columnWidth = Math.max(positionFigure(child, position), columnWidth);
-				position.y = startPoint.y;
-				position.x += child.getWidth() + HORZ_ITEM_SPACING;
-
-				child.setPositionUpdated(true);
-			}
-
-		return columnWidth;
 	}
 
 	private void rebalanceNodes(Node startNode, Node endNode) {
@@ -248,16 +189,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		endNode.setLevel(endLevel);
 	}
 
-	private void updateNodes(Node startNode, Node endNode) {
-		int startLevel = startNode.getLevel();
-		int endLevel = endNode.getLevel();
-
-		if (startLevel == Node.UNINITIALIZED || endLevel == Node.UNINITIALIZED)
-			initializeNodes(startNode, endNode);
-		else
-			rebalanceNodes(startNode, endNode);
-	}
-
 	private void updateNodesOnEqualLevel(Node startNode, Node endNode) {
 		if (startNode.isParentOf(endNode) && endNode.isParentOf(startNode)) {
 			int start = getLowestParentLevel(startNode);
@@ -272,6 +203,75 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			}
 		} else
 			endNode.setLevel(startNode.getLevel() + 1);
+	}
+
+	private int getLowestParentLevel(Node node) {
+		int level = Node.UNINITIALIZED;
+
+		for (Node parent : node.getParents())
+			if (parent.getLevel() != INTERFACE_LEVEL)
+				level = Math.max(level, parent.getLevel());
+
+		return level;
+	}
+
+	private void applyLayout() {
+		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
+
+		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
+
+		for (Node n : rootNodes) {
+			double width = positionFigure(n, startPoint);
+			n.setPositionUpdated(true);
+
+			startPoint.y = VERT_ITEM_SPACING;
+			startPoint.x += HORZ_ITEM_SPACING + width;
+		}
+	}
+
+	// TODO: Patrick: Make sure that recursive calls to positionFigure() take
+	// into account
+	// that when 2(or more) child nodes are positioned the columnWidth should be
+	// as wide as nodeCount * nodeWidth(n) + (nodeCount * HORZ_ITEM_SPACING)
+	private double positionFigure(Node node, Point2D.Double startPoint) {
+
+		Point2D.Double position = (Point2D.Double) startPoint.clone();
+		Figure figure = node.getFigure();
+		double columnWidth = 0;
+
+		if (node.getLevel() == 0)
+			position = calculateStartPosition(node, startPoint);
+
+		updatePosition(figure, position);
+		node.setPositionUpdated(true);
+
+		columnWidth = node.getWidth();
+		position.y += node.getHeight() + VERT_ITEM_SPACING;
+		List<Node> connections = node.getConnections();
+		for (Node child : connections)
+			if (!child.isPositionUpdated() && child.getLevel() != node.getLevel()) {
+				columnWidth = Math.max(positionFigure(child, position), columnWidth);
+				position.y = startPoint.y;
+				position.x += child.getWidth() + HORZ_ITEM_SPACING;
+
+				child.setPositionUpdated(true);
+			}
+
+		return columnWidth;
+	}
+
+	private Point2D.Double calculateStartPosition(Node node, Double startPoint) {
+		Point2D.Double retVal = (Point2D.Double) startPoint.clone();
+		int lowestLevel = Integer.MAX_VALUE;
+
+		List<Node> connections = node.getConnections();
+		for (Node child : connections)
+			lowestLevel = Math.min(child.getLevel(), lowestLevel);
+
+		if (lowestLevel != Integer.MAX_VALUE && lowestLevel > 1)
+			retVal.y += (lowestLevel - 1) * (node.getHeight() + VERT_ITEM_SPACING);
+
+		return retVal;
 	}
 
 	private void updatePosition(Figure figure, Point2D.Double point) {
