@@ -8,6 +8,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
+import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -26,6 +27,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
+
+import com.sun.javafx.collections.MappingChange.Map;
+
 import javax.swing.table.TableModel;
 
 import java.awt.Color;
@@ -38,6 +42,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.io.IOException;
 
 
@@ -85,8 +92,10 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		Object[] cols = {
 			"Parameter", "Value"	
 		};
-		distinctParameterTable = new JTable(tempData, cols);
+		distinctParameterTable = new JTable(tempData, getParameterTableColumnName());
+		distinctParameterTable.setEnabled(false);
 		allParameterTable = new JTable(tempData, cols);
+		allParameterTable.setEnabled(false);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
@@ -118,7 +127,12 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 		Object columnNames[] = getColumnNames();
 		Object rows[][] = getAllApproachesRows();
-		tableAllApproaches = new JTable(rows, columnNames);    
+		tableAllApproaches = new JTable(rows, columnNames){
+			public boolean isCellEditable(int row, int col){
+				return false;
+			}
+		};
+		tableAllApproaches.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableAllApproaches.setMinimumSize(new Dimension(600,150));
 		tableAllApproachesColumnModel = tableAllApproaches.getColumnModel();
 		hide(approachesConstants, tableAllApproachesColumnModel);
@@ -148,18 +162,21 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 					dto = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 					dto.setSelectedModule(selectedModule);
 					
-					Object[][] rowData = getParameters(dto);
-					TableModel model = allParameterTable.getModel();
+					HashMap<String, Object> rowData = getParameters(dto);
 					DefaultTableModel defaultTableModel = new DefaultTableModel();
 					defaultTableModel.addColumn("Parameter");
 					defaultTableModel.addColumn("Value");
 					
-					for(int i = 0; i < rowData.length; i++){
+					Iterator<Entry<String, Object>> iterator = rowData.entrySet().iterator();
+					int i = 0;
+					while(iterator.hasNext()){
 						Object[] empty = {"", ""};
 						defaultTableModel.addRow(empty);
-						Object[] temp = rowData[i];
+						HashMap.Entry<String, Object> entry = (HashMap.Entry<String, Object>) iterator.next();
+						Object[] temp = {entry.getKey(), entry.getValue()};
 						defaultTableModel.setValueAt(temp[0], i, 0);
 						defaultTableModel.setValueAt(temp[1], i, 1);
+						i++;
 					}
 					
 					allParameterTable.setModel(defaultTableModel);
@@ -177,7 +194,13 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 		Object distinctApproachesColumns[] = getColumnNames();
 		Object distinctApproachesRows[][] = getDistinctApproachesRows();
-		tableDistinctApproaches = new JTable(distinctApproachesRows, distinctApproachesColumns);
+		
+		tableDistinctApproaches = new JTable(distinctApproachesRows, distinctApproachesColumns){
+			public boolean isCellEditable(int row, int col){
+				return false;
+			}
+		};
+		
 		tableDistinctApproaches.setMinimumSize(new Dimension(600,150));
 		tableDistinctApproachesColumnModel = tableDistinctApproaches.getColumnModel();
 		tableDistinctApproaches.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -216,18 +239,21 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 					dto = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 					dto.setSelectedModule(selectedModule);
 					
-					Object[][] rowData = getParameters(dto);
-					TableModel model = allParameterTable.getModel();
+					HashMap<String, Object> rowData = getParameters(dto);
 					DefaultTableModel defaultTableModel = new DefaultTableModel();
 					defaultTableModel.addColumn("Parameter");
 					defaultTableModel.addColumn("Value");
 					
-					for(int i = 0; i < rowData.length; i++){
+					Iterator<Entry<String, Object>> iterator = rowData.entrySet().iterator();
+					int i = 0;
+					while(iterator.hasNext()){
 						Object[] empty = {"", ""};
 						defaultTableModel.addRow(empty);
-						Object[] temp = rowData[i];
+						HashMap.Entry<String, Object> entry = (HashMap.Entry<String, Object>) iterator.next();
+						Object[] temp = {entry.getKey(), entry.getValue()};
 						defaultTableModel.setValueAt(temp[0], i, 0);
 						defaultTableModel.setValueAt(temp[1], i, 1);
+						i++;
 					}
 					
 					distinctParameterTable.setModel(defaultTableModel);
@@ -235,23 +261,6 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			}
 		});
 	}
-	
-	
-	/*private Object[][] getAllApproachesRows(){
-        Object ApproachesRows[][] = { 
-            {Algorithm.Component_HUSACCT_SelectedModule, getTranslation(Algorithm.Component_HUSACCT_SelectedModule), 10},
-            {Algorithm.Gateways_HUSACCT_Root, getTranslation(Algorithm.Gateways_HUSACCT_Root), 10},
-            {Algorithm.Externals_Recognition, getTranslation(Algorithm.Externals_Recognition), 10},
-
-            {Algorithm.Layers_Goldstein_Multiple_Improved, getTranslation(Algorithm.Layers_Goldstein_Multiple_Improved), 10}, 
-            {Algorithm.Layers_Goldstein_Root_Original, getTranslation(Algorithm.Layers_Goldstein_Root_Original), 10}, 
-            {Algorithm.Layers_Goldstein_Root_Improved, getTranslation(Algorithm.Layers_Goldstein_Root_Improved), 10},
-                
-            {Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original), 10}, 
-            {Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved), 10}};
-                
-        return ApproachesRows;
-    }*/
 	
 	private Object[][] getAllApproachesRows(){
 		ArrayList<Object[]> approachesRowsList = new ArrayList<>();
@@ -289,18 +298,22 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		return columnNames;
 	}
 	
-	private Object[][] getParameters(ReconstructArchitectureDTO dto){		
+	private HashMap<String, Object> getParameters(ReconstructArchitectureDTO dto){		
 		String selectedModuleName = dto.getSelectedModule().name;
-		String granularitySettings = dto.granularity;
-		String relationTypeSettings = dto.relationType;
-		int thresholdSettings = dto.threshold;
 		
-		Object[][] parameterRows = {
-				{"Selected Module", selectedModuleName},
-				{"Granularity", granularitySettings},
-				{"Relation Type", relationTypeSettings},
-				{"Threshold", thresholdSettings}
-		};
+		if(selectedModuleName.equals("") || selectedModuleName.equals("SoftwareArchitecture")){
+			selectedModuleName = getTranslation("Root");
+		}
+		
+		HashMap<String, Object> parameterRows = new HashMap<>();
+		
+		for(ParameterPanel p : dto.parameterPanels){
+			if(p.getValue() == null || p.getValue().equals(0)){
+				parameterRows.put(p.parameterConstant, p.defaultValue);
+			} else{
+				parameterRows.put(p.parameterConstant, p.getValue());
+			}
+		}
 		
 		return parameterRows;
 	}

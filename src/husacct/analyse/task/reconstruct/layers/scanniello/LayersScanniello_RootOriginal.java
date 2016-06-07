@@ -70,7 +70,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
 		
 		ParameterPanel numberField = new NumberFieldPanel("Threshold", AlgorithmParameter.Threshold, 10);
-		numberField.value = 10;
+		numberField.defaultValue = 10;
 		numberField.minimumValue = 0;
 		numberField.maximumValue = 100;
 		parameterPanels.add(numberField);
