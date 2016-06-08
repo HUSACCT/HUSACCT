@@ -494,6 +494,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			int index = modules.indexOf(module);
 			if (index >= 0) {
 				modules.remove(index);
+				logger.info(String.format(" Module removed from the registry: " + module.getId() + " " + module.getName()));
 			}
 			updateWarnings();
 		} catch (Exception r) {
@@ -579,6 +580,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 		modules.remove(moduleIndex);
 		modules.add(moduleIndex, updatedModule);
+		logger.info(String.format(" Module updated in the registry: " + updatedModule.getId() + " " + updatedModule.getName()));
 		if (updatedModule instanceof Component) {
 			SoftwareArchitecture.getInstance().addModuleToParent(updatedModule.getId(),updatedModule.getSubModules().get(0));
 		}

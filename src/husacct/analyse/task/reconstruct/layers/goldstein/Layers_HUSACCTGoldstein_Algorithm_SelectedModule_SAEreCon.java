@@ -23,8 +23,6 @@ import husacct.common.enums.ModuleTypes;
 
 public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends IAlgorithm{
 	private ModuleDTO selectedModule;
-	private int backCallThreshold;
-	private String typesOfDependencies;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
@@ -45,8 +43,6 @@ public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends I
 				selectedModule.logicalPath = "**"; // Root of intended software architecture
 				selectedModule.type = "Root"; // Root of intended software architecture
 			}
-			backCallThreshold = dto.getThreshold();
-			typesOfDependencies = dto.getRelationType();
 
 			// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
 			if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
@@ -67,7 +63,7 @@ public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends I
 				softwareUnitsToIncludeInAlgorithm = getRelevantSoftwareUnits();
 			}
 			
-			graphOfSuClusters.initializeGraph(softwareUnitsToIncludeInAlgorithm, typesOfDependencies, backCallThreshold);
+			graphOfSuClusters.initializeGraph(softwareUnitsToIncludeInAlgorithm, dto);
 			Set<Integer> allNodes = graphOfSuClusters.getNodes();
 	
 			identifyLayers(allNodes);

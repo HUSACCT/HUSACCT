@@ -381,7 +381,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 
 	private void addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap() {
 		if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
-			for (ModuleDTO subModule : selectedModule.subModules) {
+			for (ModuleDTO subModule : defineService.getModule_TheChildrenOfTheModule(selectedModule.logicalPath)) {
 				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
 					defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath);
 					for (String assignedUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)) {
