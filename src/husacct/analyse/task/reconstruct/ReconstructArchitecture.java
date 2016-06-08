@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
+import husacct.analyse.task.reconstruct.combined.CombinedAndIterative_Layers_Components_Subsystems;
 import husacct.analyse.task.reconstruct.components.HUSACCT.ComponentsAndSubSystems_HUSACCT;
 import husacct.analyse.task.reconstruct.externals.ExternalSystemAlgorithm;
 import husacct.analyse.task.reconstruct.gateways.HUSACCT.GatewayHUSACCT_Root;
@@ -76,6 +77,9 @@ public class ReconstructArchitecture {
 				case (Algorithm.Component_HUSACCT_SelectedModule):
 					algorithm = new ComponentsAndSubSystems_HUSACCT(queryService);
 					break;
+				case (Algorithm.CombinedAndIterative_HUSACCT_SelectedModule):
+					algorithm = new CombinedAndIterative_Layers_Components_Subsystems(queryService);
+					break;
 				case (Algorithm.Gateways_HUSACCT_Root):
 					algorithm = new GatewayHUSACCT_Root(queryService);
 					break;
@@ -120,10 +124,6 @@ public class ReconstructArchitecture {
 	    }
 	}
 	
-	public ModuleDTO[] getGoldenStandard(){
-		return defineService.getAllModules();
-	}
-
 	public boolean getAlgorithmSucces(){
 		return algorithmSucces;
 	}

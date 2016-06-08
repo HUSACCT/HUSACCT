@@ -11,8 +11,7 @@ import org.apache.log4j.Logger;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
-import husacct.analyse.task.reconstruct.parameters.NumberFieldPanel;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -45,58 +44,82 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 			if (!"**".equals(selectedModule.logicalPath)) {
 				softwareUnitsToIncludeInAlgorithm = getRelevantSoftwareUnits();
 			}
-			HashMap<String, ArrayList<SoftwareUnitDTO>> gateways = identifyGateWays(softwareUnitsToIncludeInAlgorithm);
-			createModule(gateways);
+			HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateways = identifyGateWays(softwareUnitsToIncludeInAlgorithm);
+			createModule(gateways,selectedModule);
 			
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
 	    }
 	}
 	
-	private HashMap<String, ArrayList<SoftwareUnitDTO>> identifyGateWays(ArrayList<SoftwareUnitDTO> selectedUnits){
-		ArrayList<SoftwareUnitDTO> gateways = new ArrayList<SoftwareUnitDTO>();
-		
-		String gatewayName = "";
-		HashMap<String, ArrayList<SoftwareUnitDTO>> mapOfGateways = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-		Set<SoftwareUnitDTO> chosenClasses = new HashSet<SoftwareUnitDTO>();
-				
-		SoftwareUnitDTO library = null;		
-
-		for (SoftwareUnitDTO softwareUnitDTO : selectedUnits){
-						
-			DependencyDTO[] allDependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnitDTO.uniqueName,"");
-
-			Set<SoftwareUnitDTO> set = new HashSet<SoftwareUnitDTO>();
-			ArrayList<DependencyDTO> unitDependencies = new ArrayList<>();
-			ArrayList<DependencyDTO> unitExternalDependencies = new ArrayList<>();
-			for(DependencyDTO dep : allDependencies){
-				if(dep.from.equals(softwareUnitDTO.uniqueName)){
-					unitDependencies.add(dep);
-					SoftwareUnitDTO depTo = queryService.getSoftwareUnitByUniqueName(dep.to);
-					if (depTo.type.toUpperCase().equals("LIBRARY")){
-						unitExternalDependencies.add(dep);
-						library = depTo;
+	private ArrayList<SoftwareUnitDTO> getChildUnitsOutOfPackage(SoftwareUnitDTO softwareUnit){
+		ArrayList<SoftwareUnitDTO> listOfClassesFound = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> originalUnit = new ArrayList<SoftwareUnitDTO>();
+		originalUnit.add(softwareUnit);
+		if(softwareUnit.type == "package"){
+			SoftwareUnitDTO[] list = queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName);
+			for(SoftwareUnitDTO unit: list){
+				if(unit.type == "package"){
+					for(SoftwareUnitDTO childUnit : queryService.getChildUnitsOfSoftwareUnit(unit.uniqueName)){
+						listOfClassesFound.add(childUnit);
 					}
 				}
+				listOfClassesFound.add(unit);
 			}
-			
-			int totalNumberOfDep = unitDependencies.size();
-			double thresHoldDependencies = (double) (totalNumberOfDep * (threshold*0.01));
-			
-			if((totalNumberOfDep * .6) <= unitExternalDependencies.size() && totalNumberOfDep > 0){
-				set.add(softwareUnitDTO);	
-			}
-			
-			gatewayName = softwareUnitDTO.uniqueName.substring(softwareUnitDTO.uniqueName.lastIndexOf(".")+1);
-			gateways.addAll(set);			
-
-			chosenClasses = determineClassWithMostDependencies(library, gateways);
-			if(chosenClasses.contains(softwareUnitDTO)){
-				mapOfGateways = addSoftwareUnitToHashMap(softwareUnitDTO, library.name, mapOfGateways);	
-			}
-			set = new HashSet<SoftwareUnitDTO>();	
+			return listOfClassesFound;
 		}
+		return originalUnit;
+	}
+	
+	private HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> identifyGateWays(ArrayList<SoftwareUnitDTO> selectedUnits){
+		ArrayList<SoftwareUnitDTO> gateways = new ArrayList<SoftwareUnitDTO>();
+		
+		HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> mapOfGateways = new HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>>();
+		Set<SoftwareUnitDTO> chosenClasses = new HashSet<SoftwareUnitDTO>();
+		String gatewayName = "";
+		SoftwareUnitDTO library = null;	
+		
+		
+
+		for (SoftwareUnitDTO softwareUnitParent : selectedUnits){		
+			for(SoftwareUnitDTO softwareUnit : getChildUnitsOutOfPackage(softwareUnitParent)){
+			
+				DependencyDTO[] allDependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName,"");
+	
+				Set<SoftwareUnitDTO> set = new HashSet<SoftwareUnitDTO>();
+				ArrayList<DependencyDTO> unitDependencies = new ArrayList<>();
+				ArrayList<DependencyDTO> unitExternalDependencies = new ArrayList<>();
+				for(DependencyDTO dep : allDependencies){
+					if(dep.from.equals(softwareUnit.uniqueName)){
+						unitDependencies.add(dep);
+						SoftwareUnitDTO depTo = queryService.getSoftwareUnitByUniqueName(dep.to);
+						if (depTo.type.toUpperCase().equals("LIBRARY")){
+							unitExternalDependencies.add(dep);
+							library = depTo;
+						}
+					}
+				}
+				
+				int totalNumberOfDep = unitDependencies.size();
+				double thresHoldDependencies = (double) (totalNumberOfDep * (threshold*0.01));
+				
+				if((totalNumberOfDep * .6) <= unitExternalDependencies.size() && totalNumberOfDep > 0){
+					set.add(softwareUnit);	
+				}
+				
+				gatewayName = softwareUnit.uniqueName.substring(softwareUnit.uniqueName.lastIndexOf(".")+1);
+				gateways.addAll(set);			
+	
+				chosenClasses = determineClassWithMostDependencies(library, gateways);
+				if(chosenClasses.contains(softwareUnit)){
+					mapOfGateways = addSoftwareUnitToHashMap(softwareUnit, library, mapOfGateways);	
+				}
+				set = new HashSet<SoftwareUnitDTO>();	
+			}
+		}	
+		
 		return mapOfGateways;
+		
 	}
 	
 	private Set<SoftwareUnitDTO> determineClassWithMostDependencies(SoftwareUnitDTO library, ArrayList<SoftwareUnitDTO> listOfClasses){
@@ -115,11 +138,11 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 			    }
 			    setOfClasses.add(maxEntry.getKey());	    
 			}
-		}
+		} 
 		return setOfClasses;
 	}
 	
-	private HashMap<String,ArrayList<SoftwareUnitDTO>> addSoftwareUnitToHashMap(SoftwareUnitDTO softwareUnit, String keyOfHashMap, HashMap<String,ArrayList<SoftwareUnitDTO>> hashMap) {
+	private HashMap<SoftwareUnitDTO,ArrayList<SoftwareUnitDTO>> addSoftwareUnitToHashMap(SoftwareUnitDTO softwareUnit, SoftwareUnitDTO keyOfHashMap, HashMap<SoftwareUnitDTO,ArrayList<SoftwareUnitDTO>> hashMap) {
 		if(!hashMap.containsKey(keyOfHashMap)){
 			ArrayList<SoftwareUnitDTO> softwareUnitsOfClass = new ArrayList<SoftwareUnitDTO>();
 			softwareUnitsOfClass.add(softwareUnit);
@@ -132,19 +155,24 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		}
 		return hashMap;
 	}
-	private void createModule(HashMap<String, ArrayList<SoftwareUnitDTO>> gateways){
-		ModuleDTO newModule = new ModuleDTO();
-		for(HashMap.Entry<String, ArrayList<SoftwareUnitDTO>> gateway : gateways.entrySet()){
+	private void createModule(HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateways, ModuleDTO selectedModule){
+		ModuleDTO gatewayModule = new ModuleDTO();
+		for(HashMap.Entry<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateway : gateways.entrySet()){
 			if(!"".equals(gateway.getKey())){
-				newModule = defineSarService.addModule(gateway.getKey() + " Gateway", "**", ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
+				gatewayModule = defineSarService.addModule(gateway.getKey().name + " Gateway", "**", ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
+				if(gatewayModule.logicalPath != ""){
+					createRuleType(gatewayModule,selectedModule);
+				}
 			}
-//			createRuleType();
+			
 		}
-		addToReverseReconstructionList(newModule);
+		addToReverseReconstructionList(gatewayModule);
 	}
-//	private void createRuleType(){
-//		defineSarService.addMainRule("**", "**", "IsNotAllowedToUse");
-//	}
+	private void createRuleType(ModuleDTO libraryModule, ModuleDTO moduleTo){
+		
+		defineSarService.addMainRule(libraryModule.logicalPath, moduleTo.logicalPath, "IsTheOnlyModuleAllowedToUse");
+		
+	}
 
 	private ArrayList<SoftwareUnitDTO> getSetOfChildSoftwareUnits(SoftwareUnitDTO parentSoftwareUnit) {
 		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
@@ -210,24 +238,18 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	}
 	
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
   		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
   		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Gateways_HUSACCT_Root;
- 		reconstructArchitecture.parameterPanels = createParameterPanels();
   		reconstructArchitecture.threshold = 10;
+  		reconstructArchitecture.parameterDTOs = createParameterPanels();
   		return reconstructArchitecture;
   	}
- 	
- 	private ArrayList<ParameterPanel> createParameterPanels(){
- 		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
- 		
- 		ParameterPanel numberField = new NumberFieldPanel("Threshold", AlgorithmParameter.Threshold, 10);
- 		numberField.value = 10;
- 		numberField.minimumValue = 0;
- 		numberField.maximumValue = 100;
- 		parameterPanels.add(numberField);
- 		
- 		return parameterPanels;
- 	}
-
+	private ArrayList<ReconstructArchitectureParameterDTO> createParameterPanels(){
+		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		return parameterDTOs;
+	}
 }

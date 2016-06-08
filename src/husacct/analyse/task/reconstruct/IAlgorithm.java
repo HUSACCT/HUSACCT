@@ -35,7 +35,7 @@ public abstract class IAlgorithm {
 	 * -	the default values of the thresholds
 	 * - 	the constant of the algorithm
 	 */
-	public abstract ReconstructArchitectureDTO getAlgorithmThresholdSettings();
+	public abstract ReconstructArchitectureDTO getAlgorithmParameterSettings();
 	
 	
 	protected ModuleDTO createModule_andAddItToReverseList(String name, String parentLogicalPath, String moduleType, int hierarchicalLevel, ArrayList<SoftwareUnitDTO> softwareUnits) {

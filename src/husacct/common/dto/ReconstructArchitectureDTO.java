@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import husacct.ServiceProvider;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.locale.ILocaleService;
 
 //Owner: Analyse
@@ -16,7 +16,7 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 	public String relationType = ""; 
 	private String name = "";
 	public String approachConstant = "";
-	public ArrayList<ParameterPanel> parameterPanels;
+	public ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs;
 	public String granularity;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
@@ -69,7 +69,7 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 	}
 	
 	private void setAbsoluteDefaults(){
-		parameterPanels = new ArrayList<>();
+		parameterDTOs = new ArrayList<>();
 		threshold = 10;
 		granularity = AnalyseReconstructConstants.Granularities.Classes;
 		relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;

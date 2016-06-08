@@ -72,11 +72,10 @@ public class ModuleDomainService {
 				newModule.addSUDefinition(new SoftwareUnitDefinition(softwareUnit.uniqueName, softwareUnitDefinitionType));
 			}
 		}
-		
+
 		// 3) Add module to parent
 		long parentModuleId = SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath).getId();
 		message = addModuleToParent(parentModuleId, newModule);
-
 		if (message.equals("")) {
 			logger.info(" Module added with name: " + newModule.getName() + ", Type: " + newModule.getType() + ", Assigned units: " + newModule.countSoftwareUnits());
 			return newModule;

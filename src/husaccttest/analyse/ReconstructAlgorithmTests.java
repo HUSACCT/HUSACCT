@@ -13,10 +13,10 @@ import org.junit.BeforeClass;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
-import husacct.common.dto.SoftwareUnitDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -30,12 +30,11 @@ public class ReconstructAlgorithmTests {
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
-	private static IDefineService defineService;
-	private final static String workspace = "Workspace_HUSACCT_20_Arch_Without_ANTLR.xml";
+	private final static String workspace = "CoCoMe_Workspace.xml";
 	private static Logger logger;
 	private static IAnalyseService analyseService = null;
 	
-	private static final String exportFile = "ExportFileAnalysedModel_HUSACCT20_WithoutAntlr.xml";
+	private static final String exportFile = "CoCoMe-AnalysisModel.xml";
 	private static String exportFilePath;
 	@BeforeClass
 	public static void beforeClass() {
@@ -44,7 +43,6 @@ public class ReconstructAlgorithmTests {
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
 			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 			
-			defineService = ServiceProvider.getInstance().getDefineService();
 			//Import analysed model
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -82,8 +80,11 @@ public class ReconstructAlgorithmTests {
 	@Test
 	public void TestAlgorithms(){
 		boolean algortithmSucces = false;
+		boolean testResult = false;
+		boolean totalResult =true;
 		ArrayList<ReconstructArchitectureDTO> reconstructionArchitectureDTOs = createTestReconstructArchitectureDTOs();
 		for (ReconstructArchitectureDTO dto : reconstructionArchitectureDTOs){
+			testResult = false;
 			try{
 				logger.info("Algorithm: '" + dto.getName() + "' started");
 				
@@ -91,6 +92,55 @@ public class ReconstructAlgorithmTests {
 				
 				if (algortithmSucces){
 					logger.info("Algorithm: '" + dto.getName() + "' " + "Tested succesfully");
+					IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+					
+					switch (dto.approachConstant) {
+					case AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved:
+						ArrayList<String> shouldBeList = new ArrayList<>();
+						shouldBeList.add("Layer1");
+						shouldBeList.add("Layer2");
+						shouldBeList.add("Layer3");
+						
+						ArrayList<String> nameList = new ArrayList<>();
+						for(ModuleDTO moduleDTO : defineService.getAllModules()){
+							nameList.add(moduleDTO.logicalPath);
+						}
+						if(nameList.containsAll(shouldBeList) &&shouldBeList.containsAll(nameList) ){
+							testResult = true;
+						}
+						break;
+					case AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original:
+						shouldBeList = new ArrayList<>();
+						shouldBeList.add("Layer1");
+						shouldBeList.add("Layer2");
+						
+						nameList = new ArrayList<>();
+						for(ModuleDTO moduleDTO : defineService.getAllModules()){
+							nameList.add(moduleDTO.logicalPath);
+						}
+						if(nameList.containsAll(shouldBeList) &&shouldBeList.containsAll(nameList) ){
+							testResult = true;
+						}
+						
+						break;
+					case AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule:
+						shouldBeList = new ArrayList<>();
+						shouldBeList.add("org");
+						
+						
+						nameList = new ArrayList<>();
+						for(ModuleDTO moduleDTO : defineService.getAllModules()){
+							nameList.add(moduleDTO.logicalPath);
+						}
+						if(nameList.containsAll(shouldBeList) &&shouldBeList.containsAll(nameList)){
+							testResult = true;
+						}
+						break;
+					}
+					
+					
+					
+					
 				}else{
 					logger.error("Algorithm: '" + dto.getName() + "' " + "Failed");
 				}
@@ -99,10 +149,48 @@ public class ReconstructAlgorithmTests {
 				logger.error("Error: " + e);
 			}
 			
-			Assert.assertTrue(algortithmSucces);
+			if (totalResult && !testResult){
+				totalResult = false;
+			}
+			analyseService.reconstructArchitecture_ClearAll();
+			String result = testResult ? " ran succesfully" : " FAILED";
+			logger.info(dto.approachConstant + result);
+			
 		}
+		Assert.assertTrue(totalResult);
 	}
 	
+	private static ArrayList<ReconstructArchitectureDTO> createTestReconstructArchitectureDTOs(){
+		ArrayList<ReconstructArchitectureDTO> testDtos = new ArrayList<>();
+		
+		//Scanniello - Improved
+		ReconstructArchitectureDTO scannielloImproved = new ReconstructArchitectureDTO();
+		scannielloImproved.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved;
+		scannielloImproved.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		scannielloImproved.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		scannielloImproved.setSelectedModule(new ModuleDTO("**", "**", "package", new ModuleDTO[]{}));
+		scannielloImproved.threshold = 10;
+		testDtos.add(scannielloImproved);
+		
+		//Goldstein - Original
+		ReconstructArchitectureDTO goldsteinOriginal = new ReconstructArchitectureDTO();
+		goldsteinOriginal.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original;
+		goldsteinOriginal.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		goldsteinOriginal.relationType = AnalyseReconstructConstants.RelationTypes.accessCallReferenceDependencies;
+		goldsteinOriginal.threshold = 10;
+		testDtos.add(goldsteinOriginal);
+		
+		//Component
+		ReconstructArchitectureDTO component = new ReconstructArchitectureDTO();
+		component.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
+		component.granularity = AnalyseReconstructConstants.Granularities.Classes;
+		component.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		component.setSelectedModule(new ModuleDTO("**", "**", "package", new ModuleDTO[]{}));
+		component.threshold = 10;
+		testDtos.add(component);
+		
+		return testDtos;
+	}
 	
 	
 	
@@ -155,38 +243,5 @@ public class ReconstructAlgorithmTests {
 		ServiceProvider.getInstance().getValidateService().checkConformance();
 		ServiceProvider.getInstance().getControlService().setValidate(false);
 		logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
-	}
-	
-	private static ArrayList<ReconstructArchitectureDTO> createTestReconstructArchitectureDTOs(){
-		ArrayList<ReconstructArchitectureDTO> testDtos = new ArrayList<>();
-		SoftwareUnitDTO firstSoftwareUnitFromRoot = getFirstSoftwareUnitFromRoot();
-		ModuleDTO firstModuleFromRoot = defineService.getModule_BasedOnSoftwareUnitName(firstSoftwareUnitFromRoot.uniqueName);
-				
-		ReconstructArchitectureDTO ScannielloLayers_RootOriginal = new ReconstructArchitectureDTO();
-		ScannielloLayers_RootOriginal.setApproach("Scanniello - originalRoot");
-		ScannielloLayers_RootOriginal.setThreshold(10);
-		ScannielloLayers_RootOriginal.setName("Scanniello Layers Root Original");
-		testDtos.add(ScannielloLayers_RootOriginal);
-		
-		ReconstructArchitectureDTO ScannielloLayers_RootImprover = new ReconstructArchitectureDTO();
-		ScannielloLayers_RootImprover.setApproach("Scanniello - improved");
-		ScannielloLayers_RootImprover.setThreshold(10);
-		ScannielloLayers_RootImprover.setName("Scanniello Layers Root Improved");
-		testDtos.add(ScannielloLayers_RootImprover);
-
-		ReconstructArchitectureDTO ScannielloLayers_SelectedModuleImprover = new ReconstructArchitectureDTO();
-		ScannielloLayers_SelectedModuleImprover.setApproach("Scanniello - improved");
-		ScannielloLayers_SelectedModuleImprover.setThreshold(10);
-		ScannielloLayers_SelectedModuleImprover.setName("Scanniello Layers SelectedModule Improved");
-		ScannielloLayers_SelectedModuleImprover.setSelectedModule(firstModuleFromRoot);
-		testDtos.add(ScannielloLayers_SelectedModuleImprover);		
-		
-		return testDtos;
-	}
-	
-	private static SoftwareUnitDTO getFirstSoftwareUnitFromRoot(){
-		SoftwareUnitDTO[] allSoftwareUntisFromRoot = analyseService.getSoftwareUnitsInRoot();
-		SoftwareUnitDTO firstSoftwareUnitFromRoot = allSoftwareUntisFromRoot[0];
-		return firstSoftwareUnitFromRoot;
 	}
 }
