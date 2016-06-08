@@ -18,7 +18,7 @@ public class MojoTest {
 	}
 	
 	@Test
-	public void MojoTest() {
+	public void MojoUnitTest() {
 		//get the 2 files
 		String goldenPath = TestResourceFinder.findMojoTestFile("mojo", "MojoTestGoldenStandard.rsf");
 		String comparePath = TestResourceFinder.findMojoTestFile("mojo", "MojoTestToCompare.rsf");

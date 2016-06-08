@@ -10,7 +10,6 @@ import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.presentation.reconstruct.AnalyseInternalSARFrame;
 import husacct.analyse.task.AnalyseTaskControl;
-import husacct.bootstrap.Analyse;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;

@@ -17,7 +17,6 @@ import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
-import husacct.common.dto.SoftwareUnitDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
