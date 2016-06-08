@@ -213,6 +213,11 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 
 	@Override
+	public String showMojoExportImportDialog(boolean isExport) {
+		return mainController.getExportImportController().showExportImportMojoGUI(isExport);
+	}
+	
+	@Override
 	public void addProjectForListening(String path) {
 		try {
 			fileController.addProject(path);
