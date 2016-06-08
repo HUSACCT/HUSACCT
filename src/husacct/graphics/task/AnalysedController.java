@@ -11,6 +11,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.enums.DependencyOptionType;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
@@ -65,32 +66,49 @@ public class AnalysedController extends DrawingController {
 	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-			
-			if(this.drawingSettingsHolder.isShowUmlLinkInsteadOfDependencies() ){
-				UmlLinkDTO[] umlLinks = analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
-				try {
-					if (umlLinks.length > 0) {
-						dependencyFigure = figureFactory.createRelationFigure_UmlLink(umlLinks);
-					}
-				} catch (Exception e) {
-					logger.error(" Could not create a dependency figure.");
-					e.printStackTrace();
-				}				
-			} else {
-			
-				DependencyDTO[] dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
-				try {
-					if (dependencies.length > 0) {
-						dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
-					}
-				} catch (Exception e) {
-					logger.error(" Could not create a dependency figure." + e.getMessage());
-				}
+
+			switch(this.drawingSettingsHolder.getSelectedDependencyOption()){
+				case ONLY_UMLLINKS:
+					dependencyFigure = createUmlLinkRelationFigure(figureFrom, figureTo, dependencyFigure);
+					break;
+				case ACCESS_CALL_REFERENCE:
+//					throw new IllegalStateException("Not implemented yet");
+//					break;
+					logger.error(DependencyOptionType.ACCESS_CALL_REFERENCE.toString() + " not yet implemented");
+				case ALL_DEPENDENCY:
+					dependencyFigure = createDependencyRelationFigure(figureFrom, figureTo, dependencyFigure);
+					break;
+				default: throw new IllegalStateException("Unknown option type");
 			}
 		}
 		return dependencyFigure;
 	}
-	
+
+	private RelationFigure createDependencyRelationFigure(ModuleFigure figureFrom, ModuleFigure figureTo, RelationFigure dependencyFigure) {
+		DependencyDTO[] dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+		try {
+            if (dependencies.length > 0) {
+                dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
+            }
+        } catch (Exception e) {
+            logger.error(" Could not create a dependency figure." + e.getMessage());
+        }
+		return dependencyFigure;
+	}
+
+	private RelationFigure createUmlLinkRelationFigure(ModuleFigure figureFrom, ModuleFigure figureTo, RelationFigure dependencyFigure) {
+		UmlLinkDTO[] umlLinks = analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+		try {
+            if (umlLinks.length > 0) {
+                dependencyFigure = figureFactory.createRelationFigure_UmlLink(umlLinks);
+            }
+        } catch (Exception e) {
+            logger.error(" Could not create a dependency figure.");
+            e.printStackTrace();
+        }
+		return dependencyFigure;
+	}
+
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
@@ -101,7 +119,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected UmlLinkDTO[] getUmlLinksBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-			return analyseService.getUmlLinksFromClassToToClass(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			return analyseService.getUmlLinksFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		}
 		return new UmlLinkDTO[] {};
 	}
