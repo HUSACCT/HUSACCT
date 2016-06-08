@@ -1,5 +1,6 @@
 package husacct.analyse.task.reconstruct;
 
+import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 import java.util.ArrayList;
@@ -7,11 +8,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 public class GraphOfSuClusters {
 	
-	HashMap<Integer, HashSet<SoftwareUnitDTO>> nodes; 	// Key = clusterIdx, Value = SU assigned to cohesive cluster of SU's.
-	HashMap<String, Integer> edges; 					// Key = clusterId1 + | + clusterId2, Value = number of dependencies from cluster1 to cluster2.
+	HashMap<Integer, HashSet<SoftwareUnitDTO>> nodes; 	// Key = nodeId, Value = SU assigned to cohesive cluster of SU's.
+	HashMap<String, Integer> edges; 					// Key = fromNodeId1 + "." + toNodeId2, Value = number of dependencies from node1 to node2.
 	IAlgorithm iAlgoritm;
+	private int backCallThreshold;
+	private String typesOfDependencies;
+	private String granularity;
+	private String selectedModule;
+	private final Logger logger = Logger.getLogger(GraphOfSuClusters.class);
 	
 	public GraphOfSuClusters(IAlgorithm iAlgoritm) {
 		nodes = new HashMap<Integer, HashSet<SoftwareUnitDTO>>();
@@ -19,9 +27,17 @@ public class GraphOfSuClusters {
 		this.iAlgoritm = iAlgoritm;
 	}
 
-	public void initializeGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude, String typesOfDependencies, int backCallThreshold) {
-		createNodesInClusteredGraph(softwareUnitsToInclude, typesOfDependencies, backCallThreshold);
-		setEdges(typesOfDependencies);
+	public void initializeGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude, ReconstructArchitectureDTO dto) {
+		try {
+			backCallThreshold = dto.getThreshold();
+			typesOfDependencies = dto.getRelationType();
+			granularity = dto.granularity;
+			selectedModule = dto.getSelectedModule().name;
+			createNodesInClusteredGraph(softwareUnitsToInclude);
+			setEdges(typesOfDependencies);
+		} catch (Exception e) {
+	        logger.warn(" Exception: "  + e );
+	    }
 	}
 	
 	// The returned set is backed by the map, so changes to the map are reflected in the set, and vice-versa. Beware of concurrent modifications.
@@ -45,47 +61,66 @@ public class GraphOfSuClusters {
 	
 	/**
 	 * Creates a graph of clustered SotwareUnits. Each node is a software unit, or a cluster of units that are highly coupled.
+	 * Individual types may be clustered into one node, based on the granularity setting. 
 	 * A SoftwareUnit without cyclic dependencies (or a cyclic dependency below the backCallThreshold) gets its own node.
 	 * If SoftwareUnit su1 is using su2 and su2 is using su1 as well and the backCallThreshold ((su2-->su1 / su1-->su2) x 100) is bigger than 
 	 * the callBackThreshold percentage, than su1 and su2 are clustered into one node, since these software units need to stay in the same layer.
 	 * If su3 is also tightly coupled with su1 or su2, it is added to this cluster as well.   
 	 */
-	private void createNodesInClusteredGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude, String typesOfDependencies, int backCallThreshold) {
-		int highestNodeId = 0;
-		@SuppressWarnings("unchecked")
-		ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeClone = (ArrayList<SoftwareUnitDTO>) softwareUnitsToInclude.clone();
+	private void createNodesInClusteredGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude) {
+		int nodeIdofNodeWithClassesInRoot = 1;
+		int highestNodeId = 1;
+		ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeClone = new ArrayList<SoftwareUnitDTO> (softwareUnitsToInclude);
 		
+		// 1) If fromSoftwareUnit is not of type "package", while the granularity is set to packages, than add this SU to NodeWithClassesInRoot
+		for (SoftwareUnitDTO fromSoftwareUnit : softwareUnitsToInclude) {
+			// If fromSoftwareUnit is of type "class", while the granularity setting excludes classes, than add this SU to NodeWithClassesInRoot
+			if (!fromSoftwareUnit.type.toLowerCase().equals("package")) {
+				if (granularity.equals(AnalyseReconstructConstants.Granularities.Packages)) {
+					if (!nodes.containsKey(nodeIdofNodeWithClassesInRoot)) {
+						addNode(nodeIdofNodeWithClassesInRoot);
+					}
+					addSoftwareUnitToNode(nodeIdofNodeWithClassesInRoot, fromSoftwareUnit);
+				}
+			}
+		}
+		// 2) Add all software units to a node and cluster units with direct cyclic dependencies above backCallThreshold into one node.
 		for (SoftwareUnitDTO fromSoftwareUnit : softwareUnitsToInclude) {
 			/* Test code
-			if (softwareUnit.name.equals("Service")) {
+			if (fromSoftwareUnit.name.contains("productdispatcher")) {
 				boolean breakpoint = true;
 			} */
+			
 			for (SoftwareUnitDTO toSoftwareUnit : softwareUnitsToIncludeClone) {
 				if (!toSoftwareUnit.uniqueName.equals(fromSoftwareUnit.uniqueName)) {
-					int nrOfDependenciesFromsoftwareUnitToOther = iAlgoritm.getRelationsBetweenSoftwareUnits(fromSoftwareUnit.uniqueName, toSoftwareUnit.uniqueName, typesOfDependencies).size();
-					int nrOfDependenciesFromOtherTosoftwareUnit = iAlgoritm.getRelationsBetweenSoftwareUnits(toSoftwareUnit.uniqueName, fromSoftwareUnit.uniqueName, typesOfDependencies).size();
-					if (nrOfDependenciesFromsoftwareUnitToOther > 0) {
-						if (nrOfDependenciesFromOtherTosoftwareUnit > 0) {
-							if (nrOfDependenciesFromsoftwareUnitToOther >= nrOfDependenciesFromOtherTosoftwareUnit) { // Prevents erroneously added highly coupled units.
-								int backCallPercentage = ((nrOfDependenciesFromOtherTosoftwareUnit * 100) / nrOfDependenciesFromsoftwareUnitToOther);
+					int nrOfDependenciesFromTo = iAlgoritm.getRelationsBetweenSoftwareUnits(fromSoftwareUnit.uniqueName, toSoftwareUnit.uniqueName, typesOfDependencies).size();
+					int nrOfDependenciesToFrom = iAlgoritm.getRelationsBetweenSoftwareUnits(toSoftwareUnit.uniqueName, fromSoftwareUnit.uniqueName, typesOfDependencies).size();
+					if (nrOfDependenciesFromTo > 0) {
+						if (nrOfDependenciesToFrom > 0) {
+							if (nrOfDependenciesFromTo >= nrOfDependenciesToFrom) { // Prevents erroneously added highly coupled units.
+								int backCallPercentage = ((nrOfDependenciesToFrom * 100) / nrOfDependenciesFromTo);
 								if (backCallPercentage > backCallThreshold) {
 									// SoftwareUnit and otherSoftwareUnit are highly coupled.
 									// Per from and to: Find node that contains the unit
-									int nodeIdFrom = findClusterThatContainsSoftwareUnit(fromSoftwareUnit);
-									int nodeIdTo = findClusterThatContainsSoftwareUnit(fromSoftwareUnit);
+									int nodeIdFrom = findNodeThatContainsSoftwareUnit(fromSoftwareUnit);
+									int nodeIdTo = findNodeThatContainsSoftwareUnit(toSoftwareUnit);
 									if ((nodeIdFrom == 0) && (nodeIdTo == 0)) {
-										// If no cluster is found: a) raise highestNodeId; create new node with both units. 
+										// If no node is found: a) raise highestNodeId; b) create new node with both units. 
 										highestNodeId ++;
 										addNode(highestNodeId);
 										addSoftwareUnitToNode(highestNodeId, fromSoftwareUnit);
 										addSoftwareUnitToNode(highestNodeId, toSoftwareUnit);
-									} else {
-										// If a node is found, add units to node.
-										if (nodeIdFrom != 0) {
-											addSoftwareUnitToNode(nodeIdFrom, toSoftwareUnit);
-										} else if (nodeIdTo != 0){
-											addSoftwareUnitToNode(nodeIdTo, fromSoftwareUnit);
-										} 
+									} else if ((nodeIdFrom != 0) && (nodeIdTo == 0)) {
+										// If one node is found, add units to node.
+										addSoftwareUnitToNode(nodeIdFrom, toSoftwareUnit);
+									} else if ((nodeIdFrom == 0) && (nodeIdTo != 0)){
+										addSoftwareUnitToNode(nodeIdTo, fromSoftwareUnit);
+									} else if ((nodeIdFrom != 0) && (nodeIdTo != 0) && (nodeIdFrom != nodeIdTo)) {
+										// If both nodes are found, add the units of one node to the other node, and remove the empty node.
+										for (SoftwareUnitDTO su : getSoftwareUnitsOfNode(nodeIdTo)) {
+											addSoftwareUnitToNode(nodeIdFrom, su);
+										}
+										nodes.remove(nodeIdTo);
 									}
 								}
 							}
@@ -95,9 +130,9 @@ public class GraphOfSuClusters {
 			}
 		}
 
-		// Add non-coupled units as nodes to graph 
+		// 3) Add non-coupled units as nodes to graph 
 		for	(SoftwareUnitDTO softwareUnit : softwareUnitsToIncludeClone) {
-			int clusterId = findClusterThatContainsSoftwareUnit(softwareUnit);
+			int clusterId = findNodeThatContainsSoftwareUnit(softwareUnit);
 			if (clusterId == 0) {
 				highestNodeId ++;
 				addNode(highestNodeId);
@@ -105,14 +140,55 @@ public class GraphOfSuClusters {
 				
 			}
 		}
+		// 4) Iteratively, merge nodes with direct cyclic dependencies above backCallThreshold.
+		try {
+			HashMap<Integer, Integer> nodesToMerge = new HashMap<Integer, Integer>();
+			boolean repeatClusteringOverAllNodes = true;
+			while (repeatClusteringOverAllNodes) {
+				setEdges(typesOfDependencies);
+				repeatClusteringOverAllNodes = false;
+				for (int fromNodeId : getNodes()) {
+					for (int toNodeId : getNodes()) {
+						if (fromNodeId != toNodeId) {
+							int nrOfDependenciesFromTo = getNumberOfDependencies(fromNodeId, toNodeId);
+							int nrOfDependenciesToFrom = getNumberOfDependencies(toNodeId, fromNodeId);
+							if (nrOfDependenciesFromTo > 0) {
+								if (nrOfDependenciesToFrom > 0) {
+									if (nrOfDependenciesFromTo >= nrOfDependenciesToFrom) { // Prevents erroneously added highly coupled units.
+										int backCallPercentage = ((nrOfDependenciesToFrom * 100) / nrOfDependenciesToFrom);
+										if (backCallPercentage > backCallThreshold) {
+											// The two nodes are highly coupled, so merge them and repeat the procedure
+											nodesToMerge.put(fromNodeId, toNodeId);
+											repeatClusteringOverAllNodes = true;
+											logger.info(" Merging: " + selectedModule + " " + fromNodeId  + " " + toNodeId );
+										}
+									}
+								}
+							}
+						}
+					}
+					for (int fromNode : nodesToMerge.keySet()) {
+						int toNode = nodesToMerge.get(fromNode);
+						if (nodes.containsKey(toNode)) {
+							for (SoftwareUnitDTO su : getSoftwareUnitsOfNode(toNode)) {
+								addSoftwareUnitToNode(fromNode, su);
+							}
+							nodes.remove(toNode);
+						}
+					}
+					if (nodesToMerge.size() > 0) {
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+	        logger.warn(" Exception: "  + e );
+	        //e.printStackTrace();
+	    }
 	}
 	
 	private void setEdges(String typesOfDependencies) {
 		for (int fromNode : getNodes()) {
-			/* Test code
-			if (fromSoftwareUnit.equals("Service")) {
-				boolean breakpoint = true;
-			} */
 			for (int toNode : getNodes()) {
 				int totalNumber = 0;
 				for (SoftwareUnitDTO fromSoftwareUnit : nodes.get(fromNode)) {
@@ -129,8 +205,8 @@ public class GraphOfSuClusters {
 		}
 	}
 
-	// Returns clusterId if cluster that contains softwareUnit, or 0 if it is not contained in a cluster. 
-	private int findClusterThatContainsSoftwareUnit(SoftwareUnitDTO softareUnit) {
+	// Returns nodeId if node that contains softwareUnit, or 0 if it is not contained in a node. 
+	private int findNodeThatContainsSoftwareUnit(SoftwareUnitDTO softareUnit) {
 		int returnValue = 0;
 		for (int nodeId : getNodes()) {
 			for (SoftwareUnitDTO unitOfNode : getSoftwareUnitsOfNode(nodeId)) {

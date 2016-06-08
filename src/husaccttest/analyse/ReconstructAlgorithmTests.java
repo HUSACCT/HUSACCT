@@ -244,5 +244,4 @@ public class ReconstructAlgorithmTests {
 		ServiceProvider.getInstance().getControlService().setValidate(false);
 		logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
 	}
-	
 }
