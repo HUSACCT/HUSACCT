@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -406,18 +406,18 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
-		reconstructArchitecture.parameterPanels = createParameterPanels();
+		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
 	
-	private ArrayList<ParameterPanel> createParameterPanels(){
-		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
-		parameterPanels.add(ParameterPanel.DefaultParameterPanels.createThresholdParameter(10));
-		parameterPanels.add(ParameterPanel.DefaultParameterPanels.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-		parameterPanels.add(ParameterPanel.DefaultParameterPanels.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
-		return parameterPanels;
+	private ArrayList<ReconstructArchitectureParameterDTO> createParameterPanels(){
+		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		return parameterDTOs;
 	}
 }

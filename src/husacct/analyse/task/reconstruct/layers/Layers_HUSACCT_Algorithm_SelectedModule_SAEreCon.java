@@ -13,9 +13,7 @@ import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.GraphOfSuClusters;
 import husacct.analyse.task.reconstruct.IAlgorithm;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
-import husacct.analyse.task.reconstruct.parameters.NumberFieldPanel;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
@@ -282,26 +280,21 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_HUSACCT_SelectedModule;
-		reconstructArchitecture.parameterPanels = createParameterPanels();
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
-
+		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
 	
-	private ArrayList<ParameterPanel> createParameterPanels(){
-		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
-		
-		ParameterPanel numberField = new NumberFieldPanel("Back Call threshold", AlgorithmParameter.Threshold, 10);
-		numberField.value = 10;
-		numberField.minimumValue = 0;
-		numberField.maximumValue = 100;
-		parameterPanels.add(numberField);
-		
-		return parameterPanels;
+	private ArrayList<ReconstructArchitectureParameterDTO> createParameterPanels(){
+		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		return parameterDTOs;
 	}
 }

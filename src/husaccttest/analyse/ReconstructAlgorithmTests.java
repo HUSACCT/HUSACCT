@@ -181,6 +181,13 @@ public class ReconstructAlgorithmTests {
 		ScannielloLayers_SelectedModuleImprover.setSelectedModule(firstModuleFromRoot);
 		testDtos.add(ScannielloLayers_SelectedModuleImprover);		
 		
+		ReconstructArchitectureDTO Gateway_SelectedModule = new ReconstructArchitectureDTO();
+		Gateway_SelectedModule.setApproach("Gateway");
+		Gateway_SelectedModule.setThreshold(10);
+		Gateway_SelectedModule.setName("Gateway SelectedModule");
+		Gateway_SelectedModule.setSelectedModule(firstModuleFromRoot);
+		testDtos.add(Gateway_SelectedModule);	
+		
 		return testDtos;
 	}
 	
