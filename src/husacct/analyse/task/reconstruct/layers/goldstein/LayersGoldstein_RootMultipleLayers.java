@@ -272,7 +272,7 @@ public class LayersGoldstein_RootMultipleLayers extends AlgorithmGoldstein {
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		// TODO Auto-generated method stub
 		return null;
 	}

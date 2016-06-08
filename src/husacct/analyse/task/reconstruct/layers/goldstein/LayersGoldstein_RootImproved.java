@@ -206,7 +206,7 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Improved;
 		reconstructArchitecture.threshold = 10;

@@ -238,7 +238,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	}
 	
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
   		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
   		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Gateways_HUSACCT_Root;
   		reconstructArchitecture.threshold = 10;

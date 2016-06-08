@@ -406,7 +406,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();

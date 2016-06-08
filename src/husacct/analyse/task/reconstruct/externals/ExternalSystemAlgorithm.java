@@ -50,7 +50,7 @@ public class ExternalSystemAlgorithm extends AlgorithmExternal{
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Externals_Recognition;
 		reconstructArchitecture.threshold = 10;

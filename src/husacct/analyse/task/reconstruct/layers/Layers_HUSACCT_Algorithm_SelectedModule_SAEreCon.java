@@ -280,7 +280,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 10;

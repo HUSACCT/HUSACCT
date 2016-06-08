@@ -178,7 +178,7 @@ public class LayersGoldstein_SelectedModuleMultipleLayers extends AlgorithmGolds
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Multiple_Improved;
 		reconstructArchitecture.threshold = 10;

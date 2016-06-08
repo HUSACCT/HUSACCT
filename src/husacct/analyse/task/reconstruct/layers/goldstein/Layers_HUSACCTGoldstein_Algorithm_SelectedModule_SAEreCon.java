@@ -255,7 +255,7 @@ public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends I
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 10;

@@ -103,7 +103,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends IAlgorith
 
 	
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.CombinedAndIterative_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 5;

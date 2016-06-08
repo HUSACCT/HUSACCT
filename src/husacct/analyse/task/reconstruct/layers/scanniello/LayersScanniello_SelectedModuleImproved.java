@@ -165,7 +165,7 @@ public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello
 	}
 
 	@Override
-	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
+	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved;
 		reconstructArchitecture.threshold = 10;
