@@ -48,7 +48,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 		
 		for (Class<?> approachClass : approachClasses){
 			try {
-				Method m = approachClass.getMethod("getAlgorithmThresholdSettings");
+				Method m = approachClass.getMethod("getAlgorithmParameterSettings");
 				
 				Constructor<?> cons = approachClass.getConstructor(IModelQueryService.class);
 				cons.setAccessible(true);
