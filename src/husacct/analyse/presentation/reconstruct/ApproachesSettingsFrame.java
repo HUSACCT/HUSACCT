@@ -14,18 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import org.apache.log4j.Logger;
-
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
 
 public class ApproachesSettingsFrame extends HelpableJInternalFrame implements ActionListener{
-	private final Logger logger = Logger.getLogger(ApproachesSettingsFrame.class);
+	//private final Logger logger = Logger.getLogger(ApproachesSettingsFrame.class);
 	private static final long serialVersionUID = 1L;
 	private ReconstructArchitectureDTO dto;
 	private JButton applyButton, cancelButton;
@@ -45,7 +43,7 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 		frame = new JFrame("Approach Settings");
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.pack();
-		frame.setSize(400, 400);
+		frame.setSize(600, 400);
 		frame.setVisible(true);
 		frame.getContentPane().add(buildPanel(), BorderLayout.CENTER);
 	}
@@ -55,8 +53,14 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 		mainPanel.add(this.buildApproachLabel(), BorderLayout.NORTH);
 		
 		JPanel parametersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		for (ParameterPanel pPanel : dto.parameterPanels){
-			parametersPanel.add(pPanel.createPanel(dto));
+		
+		for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
+			ReconstructArchitectureParameterPanel parameterPanel = ReconstructArchitectureParameterPanel.getParameterPanel(parameterDTO, dto);
+			parameterDTO.parameterPanel = parameterPanel;
+			
+			JPanel panel = parameterPanel.createPanel();
+			parametersPanel.add(panel);
+			
 		}
 		mainPanel.add(parametersPanel, BorderLayout.CENTER);
 		mainPanel.add(this.buildButtonPanel(), BorderLayout.SOUTH);
@@ -93,29 +97,9 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == applyButton) {
-			for (ParameterPanel pPanel : dto.parameterPanels){
-				if (pPanel.parameterConstant.equals(AlgorithmParameter.Threshold)){
-					try{
-						dto.threshold = (int) pPanel.getValue();
-					}catch(Exception e){
-						logger.error("threshold invalid cast: " + e);
-					}
-				}
-				else if (pPanel.parameterConstant.equals(AlgorithmParameter.RelationType)){
-					try {
-						dto.relationType = (String) pPanel.getValue();
-					}catch(Exception e){
-						logger.error("RelationType value cast Exception: " + e);
-					}
-					
-				}
-				else if (pPanel.parameterConstant.equals(AlgorithmParameter.Granularity)){
-					try{
-						dto.granularity = (String) pPanel.getValue();
-					}catch(Exception e){
-						
-					}
-				}
+			for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
+				Object value = parameterDTO.parameterPanel.getValue();
+				dto = ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, dto, value);
 			}
 			analyseTaskControl.getReconstructArchitectureDTOList().updateReconstructArchitectureDTO(dto);
 			int selectedRow = approachesTableJPanel.tableAllApproaches.getSelectedRow();

@@ -6,9 +6,7 @@ import java.util.List;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
-import husacct.analyse.task.reconstruct.parameters.NumberFieldPanel;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
@@ -61,22 +59,17 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Original;
-		reconstructArchitecture.parameterPanels = createParameterPanels();
 		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
 	
-	private ArrayList<ParameterPanel> createParameterPanels(){
-		ArrayList<ParameterPanel> parameterPanels = new ArrayList<>();
-		
-		ParameterPanel numberField = new NumberFieldPanel("Threshold", AlgorithmParameter.Threshold, 10);
-		numberField.defaultValue = 10;
-		numberField.minimumValue = 0;
-		numberField.maximumValue = 100;
-		parameterPanels.add(numberField);
-		
-		return parameterPanels;
+	private ArrayList<ReconstructArchitectureParameterDTO> createParameterPanels(){
+		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		return parameterDTOs;
 	}
-
 	
 }

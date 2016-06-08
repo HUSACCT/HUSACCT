@@ -5,10 +5,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
-import husacct.analyse.task.reconstruct.parameters.ParameterPanel;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -27,10 +28,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
-
-import com.sun.javafx.collections.MappingChange.Map;
-
-import javax.swing.table.TableModel;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -94,6 +91,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		};
 		distinctParameterTable = new JTable(tempData, getParameterTableColumnName());
 		distinctParameterTable.setEnabled(false);
+		distinctParameterTable.setVisible(false);
 		allParameterTable = new JTable(tempData, cols);
 		allParameterTable.setEnabled(false);
 		
@@ -110,6 +108,9 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 					JPanel selectedPanel = (JPanel) selectedTappedPane;
 					if(selectedPanel.getName().equals("Mojo")){
 						panel.setButtonVisibility(false);
+					}
+					else if (selectedPanel.getName().equals("DistinctApproaches")){
+						panel.setDistinctApproachesVisibility();
 					}
 					else{
 						panel.setButtonVisibility(true);
@@ -133,6 +134,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 			}
 		};
 		tableAllApproaches.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableAllApproaches.setName("tableAllApproaches");
 		tableAllApproaches.setMinimumSize(new Dimension(600,150));
 		tableAllApproachesColumnModel = tableAllApproaches.getColumnModel();
 		hide(approachesConstants, tableAllApproachesColumnModel);
@@ -202,6 +204,7 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		};
 		
 		tableDistinctApproaches.setMinimumSize(new Dimension(600,150));
+		tableDistinctApproaches.setName("tableDistinctApproaches");
 		tableDistinctApproachesColumnModel = tableDistinctApproaches.getColumnModel();
 		tableDistinctApproaches.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		hide(approachesConstants, tableDistinctApproachesColumnModel);
@@ -307,11 +310,13 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		
 		HashMap<String, Object> parameterRows = new HashMap<>();
 		
-		for(ParameterPanel p : dto.parameterPanels){
-			if(p.getValue() == null || p.getValue().equals(0)){
-				parameterRows.put(p.parameterConstant, p.defaultValue);
+		for(ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
+			Object value = ReconstructArchitectureParameterPanel.getValueFromReconstructArchitectureDTO(parameterDTO.parameterConstant, dto);
+				
+			if(value != null && !value.toString().isEmpty()){
+				parameterRows.put(parameterDTO.parameterConstant, value);
 			} else{
-				parameterRows.put(p.parameterConstant, p.getValue());
+				parameterRows.put(parameterDTO.parameterConstant, parameterDTO.defaultValue);
 			}
 		}
 		

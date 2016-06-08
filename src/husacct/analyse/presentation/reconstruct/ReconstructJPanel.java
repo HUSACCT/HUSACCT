@@ -12,8 +12,10 @@ import javax.swing.JTable;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -89,6 +91,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 				
 		settingsButton = new JButton("Settings");
 		panel.add(settingsButton);
+		settingsButton.setVisible(false);
 		settingsButton.setPreferredSize(new Dimension(100, 40));
 		settingsButton.addActionListener(this);
 	}
@@ -104,14 +107,11 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 				JTable approachesTable = getApproachesTable(selectedPanel);
 						
 				int selectedRow = approachesTable.getSelectedRow();
-				if (selectedRow >= 0){
-					ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
-					ModuleDTO selectedModule = getSelectedModule();
-					String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-					reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
-					reconstructArchitectureDTO.setSelectedModule(selectedModule);
-					analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
-					ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+				if (selectedRow >= 0 && approachesTable.getName().equals("tableAllApproaches")){
+					executeFromAllApproachesTable(approachesTable, selectedRow);
+				}
+				else if(selectedRow >= 0 && approachesTable.getName().equals("tableDistinctApproaches")){
+					executeFromDistinctApproachesTable(approachesTable, selectedRow);
 				}
 				else{
 					logger.warn("No Approache selected");
@@ -150,8 +150,38 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		reverseButton.setVisible(visibility);
 		clearButton.setVisible(visibility);
 		settingsButton.setVisible(visibility);
-		
 	}
+	
+	public void setDistinctApproachesVisibility(){
+		settingsButton.setVisible(false);
+	}
+	
+	
+	private void executeFromAllApproachesTable(JTable approachesTable, int selectedRow){
+		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
+		ModuleDTO selectedModule = getSelectedModule();
+		String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
+		reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+		reconstructArchitectureDTO.setSelectedModule(selectedModule);
+		analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
+		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+	}
+	
+	
+	private void executeFromDistinctApproachesTable(JTable approachesTable, int selectedRow){
+		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
+		ModuleDTO selectedModule = getSelectedModule();
+		String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
+		reconstructArchitectureDTO = createDefaultReconstructArchitectureDTO(approachConstant);
+		reconstructArchitectureDTO.setSelectedModule(selectedModule);
+		reconstructArchitectureDTO.approachConstant = approachConstant;
+		analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
+		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+	}
+	
+	
+	
+	
 	
 	private JTable getApproachesTable(JPanel selectedPanel){
 		JTable approachesTable = approachesTableJPanel.tableAllApproaches;
@@ -173,4 +203,14 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		return ServiceProvider.getInstance().getDefineService().getSarService().getModule_SelectedInGUI();
 	}
 
+	private ReconstructArchitectureDTO createDefaultReconstructArchitectureDTO(String approachConstant){
+		ReconstructArchitectureDTO customDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+		ReconstructArchitectureDTO defaultDTO = new ReconstructArchitectureDTO();
+		for (ReconstructArchitectureParameterDTO parameterDTO : customDTO.parameterDTOs){
+			ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, defaultDTO, parameterDTO.defaultValue);
+		}
+		return defaultDTO;
+		
+	}
+	
 }
