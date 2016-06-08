@@ -127,7 +127,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure,
 
 		if(isUmlLink) {
 			if (isPackageType(startFigureType, endFigureType)) {
-				relationType = RelationType.RULELINK;
+				relationType = RelationType.ATTRIBUTELINK;
 			} else if (relationType == RelationType.ATTRIBUTELINK){
 				addMultiplicity();
 				removeAmountFigure();
