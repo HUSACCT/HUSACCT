@@ -154,6 +154,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
 	
 	@Override
+	public void reconstructArchitecture_ClearAll() {
+		analyseTaskControl.reconstructArchitecture_ClearAll();
+	}
+	
+	@Override
     public boolean reconstructArchitecture_Execute(ReconstructArchitectureDTO dto) {
     	analyseTaskControl.reconstructArchitecture_Execute(dto);
     	return analyseTaskControl.getAlgorithmSucces();
@@ -195,5 +200,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
     	return queryService.getUmlLinksFromSoftwareUnitToSoftwareUnit(pathFrom, pathTo);
     }
+
+	
     
 }
