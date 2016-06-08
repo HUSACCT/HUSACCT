@@ -44,7 +44,6 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 			if (!"**".equals(selectedModule.logicalPath)) {
 				softwareUnitsToIncludeInAlgorithm = getRelevantSoftwareUnits();
 			}
-			
 			HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateways = identifyGateWays(softwareUnitsToIncludeInAlgorithm);
 			createModule(gateways,selectedModule);
 			
@@ -53,20 +52,38 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 	    }
 	}
 	
+	private ArrayList<SoftwareUnitDTO> getChildUnitsOutOfPackage(SoftwareUnitDTO softwareUnit){
+		ArrayList<SoftwareUnitDTO> listOfClassesFound = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> originalUnit = new ArrayList<SoftwareUnitDTO>();
+		originalUnit.add(softwareUnit);
+		if(softwareUnit.type == "package"){
+			SoftwareUnitDTO[] list = queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName);
+			for(SoftwareUnitDTO unit: list){
+				if(unit.type == "package"){
+					for(SoftwareUnitDTO childUnit : queryService.getChildUnitsOfSoftwareUnit(unit.uniqueName)){
+						listOfClassesFound.add(childUnit);
+					}
+				}
+				listOfClassesFound.add(unit);
+			}
+			return listOfClassesFound;
+		}
+		return originalUnit;
+	}
+	
 	private HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> identifyGateWays(ArrayList<SoftwareUnitDTO> selectedUnits){
 		ArrayList<SoftwareUnitDTO> gateways = new ArrayList<SoftwareUnitDTO>();
 		
-		String gatewayName = "";
 		HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> mapOfGateways = new HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>>();
 		Set<SoftwareUnitDTO> chosenClasses = new HashSet<SoftwareUnitDTO>();
-				
+		String gatewayName = "";
 		SoftwareUnitDTO library = null;	
 		
 		
 
-		for (SoftwareUnitDTO softwareUnit : selectedUnits){
+		for (SoftwareUnitDTO softwareUnitParent : selectedUnits){		
+			for(SoftwareUnitDTO softwareUnit : getChildUnitsOutOfPackage(softwareUnitParent)){
 			
-//			for(SoftwareUnitDTO softwareUnitDTO : queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName)){		
 				DependencyDTO[] allDependencies = queryService.getDependenciesFromSoftwareUnitToSoftwareUnit(softwareUnit.uniqueName,"");
 	
 				Set<SoftwareUnitDTO> set = new HashSet<SoftwareUnitDTO>();
@@ -99,7 +116,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 				}
 				set = new HashSet<SoftwareUnitDTO>();	
 			}
-//		}	
+		}	
 		
 		return mapOfGateways;
 		
@@ -139,18 +156,20 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		return hashMap;
 	}
 	private void createModule(HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateways, ModuleDTO selectedModule){
-		ModuleDTO newModule = new ModuleDTO();
+		ModuleDTO gatewayModule = new ModuleDTO();
 		for(HashMap.Entry<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateway : gateways.entrySet()){
 			if(!"".equals(gateway.getKey())){
-				newModule = defineSarService.addModule(gateway.getKey().name + " Gateway", "**", ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
-				createRuleType(newModule,selectedModule);
-				
+				gatewayModule = defineSarService.addModule(gateway.getKey().name + " Gateway", "**", ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
+				if(gatewayModule.logicalPath != ""){
+					createRuleType(gatewayModule,selectedModule);
+				}
 			}
 			
 		}
-		addToReverseReconstructionList(newModule);
+		addToReverseReconstructionList(gatewayModule);
 	}
 	private void createRuleType(ModuleDTO libraryModule, ModuleDTO moduleTo){
+		
 		defineSarService.addMainRule(libraryModule.logicalPath, moduleTo.logicalPath, "IsTheOnlyModuleAllowedToUse");
 		
 	}

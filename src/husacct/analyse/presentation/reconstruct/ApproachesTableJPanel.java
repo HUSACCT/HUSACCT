@@ -129,6 +129,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		Object columnNames[] = getColumnNames();
 		Object rows[][] = getAllApproachesRows();
 		tableAllApproaches = new JTable(rows, columnNames){
+			private static final long serialVersionUID = -1304690689139412746L;
+
 			public boolean isCellEditable(int row, int col){
 				return false;
 			}
@@ -198,6 +200,8 @@ public class ApproachesTableJPanel extends HelpableJPanel {
 		Object distinctApproachesRows[][] = getDistinctApproachesRows();
 		
 		tableDistinctApproaches = new JTable(distinctApproachesRows, distinctApproachesColumns){
+			private static final long serialVersionUID = -7444877138370325551L;
+
 			public boolean isCellEditable(int row, int col){
 				return false;
 			}
