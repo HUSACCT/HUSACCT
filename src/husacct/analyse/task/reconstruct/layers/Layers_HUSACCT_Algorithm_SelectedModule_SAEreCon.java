@@ -21,13 +21,13 @@ import husacct.common.enums.ModuleTypes;
 
 public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm{
 	private ModuleDTO selectedModule;
-	private int backCallThreshold;
-	private String typesOfDependencies;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
 	private GraphOfSuClusters graphOfSuClusters; // Each node in the graph represents 1-n SoftwareUnits. If *, it is a cohesive cluster of SUs. 
 	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<Integer, Set<Integer>>();
+	private int backCallThreshold;
+
 
 	public Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon (IModelQueryService queryService) {
 		super(queryService);
@@ -37,19 +37,22 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 	@Override
 	public void executeAlgorithm(ReconstructArchitectureDTO dto, IModelQueryService queryService) {
 		try {
-			selectedModule = dto.getSelectedModule();
-			if (selectedModule.logicalPath.equals("")) {
-				selectedModule.logicalPath = "**"; // Root of intended software architecture
-				selectedModule.type = "Root"; // Root of intended software architecture
-			}
 			backCallThreshold = dto.getThreshold();
-			typesOfDependencies = dto.getRelationType();
-
+			selectedModule = dto.getSelectedModule();
+			
 			// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
 			if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
 				return;
+			} else if (selectedModule.logicalPath.equals("")) {
+				selectedModule.logicalPath = "**"; // Root of intended software architecture
+				selectedModule.type = "Root"; // Root of intended software architecture
 			}
 	
+			/* Test code
+			if (selectedModule.name.contains("validate")) {
+				boolean breakpoint = true;
+			} */
+
 			// Select the set of SUs to be used, and activate the component-identifying algorithm  
 			if (selectedModule.logicalPath == "**") {
 				for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
@@ -64,11 +67,13 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 				softwareUnitsToIncludeInAlgorithm = getRelevantSoftwareUnits();
 			}
 			
-			graphOfSuClusters.initializeGraph(softwareUnitsToIncludeInAlgorithm, typesOfDependencies, backCallThreshold);
+			graphOfSuClusters.initializeGraph(softwareUnitsToIncludeInAlgorithm, dto);
 			Set<Integer> allNodes = graphOfSuClusters.getNodes();
 	
 			identifyLayers(allNodes);
-			addIdentifiedLayersToIntendedArchitecture();
+			if (layersWithNodesMap.size() >= 2) {
+				addIdentifiedLayersToIntendedArchitecture();
+			}
 		} catch (Exception e) {
 	        logger.warn(" Exception: "  + e );
 	    }
@@ -99,23 +104,32 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 	 * @param bottomLayerId
 	 */
 	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId) {
+		/* Test code
+		if (selectedModule.name.contains("graphics")) {
+			boolean breakpoint = true;
+		} */
 		HashSet<Integer> assignedNodesNewBottomLayer = new HashSet<Integer>();
 		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<Integer>();
 		for (int fromNodeId : layersWithNodesMap.get(bottomLayerId)) {
 			boolean fromNodeUsesAnotherNode = false;
-			for (int toNodeId : layersWithNodesMap.get(bottomLayerId)) {
+			HashSet<Integer> clone = new HashSet<Integer>(layersWithNodesMap.get(bottomLayerId)); 
+			for (int toNodeId : clone) {
 				if (fromNodeId != toNodeId) {
-					int nrOfDependenciesFromNodeToToNode = graphOfSuClusters.getNumberOfDependencies(fromNodeId, toNodeId);
-					int nrOfDependenciesFromToNodeToNode = graphOfSuClusters.getNumberOfDependencies(toNodeId, fromNodeId);
-					if (nrOfDependenciesFromNodeToToNode > 0) {
-						if (nrOfDependenciesFromNodeToToNode > nrOfDependenciesFromToNodeToNode) {
-							fromNodeUsesAnotherNode = true;
+					int nrOfDependenciesFromTo = graphOfSuClusters.getNumberOfDependencies(fromNodeId, toNodeId);
+					int nrOfDependenciesToFrom = graphOfSuClusters.getNumberOfDependencies(toNodeId, fromNodeId);
+					if (nrOfDependenciesFromTo > 0) {
+						if (nrOfDependenciesFromTo > nrOfDependenciesToFrom) {
+							int backCallPercentage = ((nrOfDependenciesToFrom * 100) / nrOfDependenciesFromTo);
+							if (backCallPercentage <= backCallThreshold) {
+								fromNodeUsesAnotherNode = true;
+							} else {
+								// The fromNode and toNode are highly coupled, so leave them in the same layer.
+							}
 						}
 					}
 				}
 			}
 			if (fromNodeUsesAnotherNode) {
-				// Assign unit to the new top layer
 				assignedNodesNewTopLayer.add(fromNodeId);
 			} else { 
 				// Leave unit in the lower layer
@@ -132,8 +146,72 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 		}
 	}
 	
+	private void addIdentifiedLayersToIntendedArchitecture() {
+		int highestLevelLayer = layersWithNodesMap.size();
+		// Determine the hierarchicalLevels of the layers. The hierarchicalLevel of a layer within Define 
+		// is as follows: the highest level layer has hierarchicalLevel = 1; the one below 2, etc.
+		int hierarchicalLevel = highestLevelLayer;
+		TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		for (int levelInName : layersWithNodesMap.keySet()) {
+			Set<Integer> nodesOfLayer = layersWithNodesMap.get(levelInName);
+			ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
+			for (int nodeId : nodesOfLayer) {
+				unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
+			}
+			layersWithSoftwareUnitsMap.put(hierarchicalLevel, unitsOfLayer);
+			hierarchicalLevel --;
+		}
+		// Determine the names of the layers. The layer-level in the layer name is reversed to the hierarchicalLevel within Define. 
+		// The lowest level layer has levelInName = 1; the one above 2, etc.
+		int numberOfAddedLayers = 0;
+		int levelInName = highestLevelLayer;
+		for (int hierarchyLevel : layersWithSoftwareUnitsMap.keySet()) {
+			ArrayList<SoftwareUnitDTO> unitsOfLayer = layersWithSoftwareUnitsMap.get(hierarchyLevel);
+			String nameOfLayer = "Layer" + levelInName + determineLayerNameExtension(unitsOfLayer);
+			ModuleDTO newModule = createModule_andAddItToReverseList(nameOfLayer, selectedModule.logicalPath, "Layer", hierarchyLevel, unitsOfLayer);
+			if (!newModule.logicalPath.equals("")) {
+				numberOfAddedLayers ++;
+				levelInName --;
+			}
+		}
+		logger.info(" Number of added Layers: " + numberOfAddedLayers);
+	}
+
+	// If only one software unit is assigned, the name of this unit is returned.
+	// If several units are assigned, the name of the latgest unit is returned plus + "_etc".
+	private String determineLayerNameExtension(ArrayList<SoftwareUnitDTO> unitsOfLayer) {
+		String nameExtension = "";
+		if (unitsOfLayer.size() == 1) {
+			SoftwareUnitDTO unit = unitsOfLayer.get(0);
+			if (!unit.name.equals("")) {
+				if (unit.name.length() > 12) {
+					nameExtension = "_" + unit.name.substring(0, 11);
+				} else {
+					nameExtension = "_" + unit.name;
+				}
+			}
+		} else {
+			String nameLargestUnit = "";
+			int highestLinesOfCode = 0; 
+			for (SoftwareUnitDTO unit : unitsOfLayer) {
+				int linesOfCode = queryService.getAnalysisStatistics(unit).selectionNrOfLinesOfCode;
+				if (linesOfCode > highestLinesOfCode) {
+					highestLinesOfCode = linesOfCode;
+					nameLargestUnit = unit.name;
+				}
+			}
+			if (!nameLargestUnit.equals("")) {
+				if (nameLargestUnit.length() > 12) {
+					nameLargestUnit = nameLargestUnit.substring(0, 11);
+				}
+				nameExtension = "_" + nameLargestUnit + "_etc"; 
+			}
+		}
+		return nameExtension;
+	}
+	
 	// Returns the SUs assigned to selectedModule or, if only one SU is assigned, the children of this SU.
-	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. Prepare. 
+	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
 		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
 		addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
@@ -159,10 +237,10 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 		}
 		return softwareUnitsToReturn;
 	}
-	
+
 	private void addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap() {
 		if (selectedModule.type.equals(ModuleTypes.COMPONENT.toString())) {
-			for (ModuleDTO subModule : selectedModule.subModules) {
+			for (ModuleDTO subModule : defineService.getModule_TheChildrenOfTheModule(selectedModule.logicalPath)) {
 				if (subModule.type.equals(ModuleTypes.FACADE.toString())) {
 					defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath);
 					for (String assignedUnitUniqueName : defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath)) {
@@ -201,84 +279,6 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends IAlgorithm
 		return childSoftwareUnits;
 	}
 
-	private void addIdentifiedLayersToIntendedArchitecture() {
-		int highestLevelLayer = layersWithNodesMap.size();
-		if (highestLevelLayer >= 2) {
-			// Determine the hierarchicalLevel of the layers. The hierarchicalLevel of the layers within the
-			// intended architecture is reversed to the one presented in the name to the users: the highest level layer has hierarchicalLevel = 1.
-			int hierarchicalLevel = highestLevelLayer;
-			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-			for (int levelInName : layersWithNodesMap.keySet()) {
-				Set<Integer> nodesOfLayer = layersWithNodesMap.get(levelInName);
-				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
-				for (int nodeId : nodesOfLayer) {
-					unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
-				}
-				layersWithSoftwareUnitsMap.put(hierarchicalLevel, unitsOfLayer);
-				hierarchicalLevel --;
-			}
-			
-/*			int lowestLevelLayer = 1;
-			int raise = highestLevelLayer - lowestLevelLayer;
-			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
-			for (int i = lowestLevelLayer; i <= highestLevelLayer; i++) {
-				Set<Integer> nodesOfLayer = layersWithNodesMap.get(i);
-				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
-				for (int nodeId : nodesOfLayer) {
-					unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
-				}
-				int level = lowestLevelLayer + raise;
-				layersWithSoftwareUnitsMap.put(level, unitsOfLayer);
-				raise--;
-			}
-*/			
-			int numberOfAddedLayers = 0;
-			int levelInName = highestLevelLayer;
-			for (int hierarchyLevel : layersWithSoftwareUnitsMap.keySet()) {
-				ArrayList<SoftwareUnitDTO> unitsOfLayer = layersWithSoftwareUnitsMap.get(hierarchyLevel);
-				String nameOfLayer = "Layer" + levelInName + determineLayerNameExtension(unitsOfLayer);
-				ModuleDTO newModule = createModule_andAddItToReverseList(nameOfLayer, selectedModule.logicalPath, "Layer", hierarchyLevel, unitsOfLayer);
-				if (!newModule.logicalPath.equals("")) {
-					numberOfAddedLayers ++;
-					levelInName --;
-				}
-			}
-
-			logger.info(" Number of added Layers: " + numberOfAddedLayers);
-		}
-	}
-
-	private String determineLayerNameExtension(ArrayList<SoftwareUnitDTO> unitsOfLayer) {
-		String nameExtension = "";
-		if (unitsOfLayer.size() == 1) {
-			SoftwareUnitDTO unit = unitsOfLayer.get(0);
-			if (!unit.name.equals("")) {
-				if (unit.name.length() > 12) {
-					nameExtension = "_" + unit.name.substring(0, 11);
-				} else {
-					nameExtension = "_" + unit.name;
-				}
-			}
-		} else {
-			String nameLargestUnit = "";
-			int highestLinesOfCode = 0; 
-			for (SoftwareUnitDTO unit : unitsOfLayer) {
-				int linesOfCode = queryService.getAnalysisStatistics(unit).selectionNrOfLinesOfCode;
-				if (linesOfCode > highestLinesOfCode) {
-					highestLinesOfCode = linesOfCode;
-					nameLargestUnit = unit.name;
-				}
-			}
-			if (!nameLargestUnit.equals("")) {
-				if (nameLargestUnit.length() > 12) {
-					nameLargestUnit = nameLargestUnit.substring(0, 11);
-				}
-				nameExtension = "_" + nameLargestUnit + "_etc"; 
-			}
-		}
-		return nameExtension;
-	}
-	
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmThresholdSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
