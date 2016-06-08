@@ -39,6 +39,7 @@ public class AnalyseReconstructConstants {
 		public static final String PackagesInRootOnlyClasses = "PackagesInRoot(WithClassesOnly)";
 		public static final String PackagesWithAllClasses = "Packages(Allwithclasses)";
 		public static final String Classes = "Classes";
+		public static final String Packages = "Packages";
 	}
 	
 	public static class AlgorithmParameter{
