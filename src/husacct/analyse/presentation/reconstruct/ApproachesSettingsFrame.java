@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	private JFrame frame;
 	private AnalyseTaskControl analyseTaskControl;
 	private ApproachesTableJPanel approachesTableJPanel;
+	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<String, ReconstructArchitectureParameterPanel>();
 
 	
 	public ApproachesSettingsFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, ApproachesTableJPanel apprTJP){
@@ -56,7 +58,7 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 		
 		for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
 			ReconstructArchitectureParameterPanel parameterPanel = ReconstructArchitectureParameterPanel.getParameterPanel(parameterDTO, dto);
-			parameterDTO.parameterPanel = parameterPanel;
+			parameterDTOPanels.put(parameterDTO.parameterConstant, parameterPanel);
 			
 			JPanel panel = parameterPanel.createPanel();
 			parametersPanel.add(panel);
@@ -98,7 +100,7 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == applyButton) {
 			for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
-				Object value = parameterDTO.parameterPanel.getValue();
+				Object value = getParameterPanelValue(parameterDTO.parameterConstant);
 				dto = ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, dto, value);
 			}
 			analyseTaskControl.getReconstructArchitectureDTOList().updateReconstructArchitectureDTO(dto);
@@ -112,5 +114,11 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 			frame.dispose();
 		}
 		
+	}
+	
+	private Object getParameterPanelValue(String parameterConstant){
+		ReconstructArchitectureParameterPanel parameterPanel = parameterDTOPanels.get(parameterConstant);
+		Object parameterPanelValue = parameterPanel.getValue();
+		return parameterPanelValue;
 	}
 }

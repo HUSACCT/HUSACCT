@@ -242,6 +242,8 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
   		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
   		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Gateways_HUSACCT_Root;
   		reconstructArchitecture.threshold = 10;
+  		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+  		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
   		reconstructArchitecture.parameterDTOs = createParameterPanels();
   		return reconstructArchitecture;
   	}

@@ -169,6 +169,8 @@ public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved;
 		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}

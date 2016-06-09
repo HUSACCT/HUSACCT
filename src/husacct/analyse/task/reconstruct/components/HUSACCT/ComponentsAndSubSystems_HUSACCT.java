@@ -409,6 +409,9 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
+		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
