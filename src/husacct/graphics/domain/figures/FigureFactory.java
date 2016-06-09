@@ -52,7 +52,7 @@ public final class FigureFactory {
 			uniqueRuleViolations.add(violationDTO.ruleType.key);
 		}
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated rule from " + violationDTOs[0].fromClasspath
-						+ " to " + violationDTOs[0].toClasspath, RelationType.VIOLATION, ""+uniqueRuleViolations.size());
+						+ " to " + violationDTOs[0].toClasspath, RelationType.VIOLATION, ""+uniqueRuleViolations.size() + " (" +violationDTOs.length + ")");
 		violatedRelationFigure.addDecorator(createViolationsDecorator());
 		return violatedRelationFigure;
 	}
