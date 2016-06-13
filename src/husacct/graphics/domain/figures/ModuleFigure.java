@@ -2,7 +2,10 @@ package husacct.graphics.domain.figures;
 
 
 import husacct.common.Resource;
+import org.apache.log4j.Logger;
+import org.jhotdraw.draw.*;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
@@ -10,17 +13,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.ImageFigure;
-import org.jhotdraw.draw.RectangleFigure;
-import org.jhotdraw.draw.TextFigure;
-
 public class ModuleFigure extends BaseFigure {
 	private static final long	serialVersionUID	= -2743753116624138171L;
+	public static final double STROKE_WIDTH = 0.0;
 	private RectangleFigure		body;
 	private TextFigure			moduleName;
 	private TextFigure			moduleStereotype;
@@ -51,33 +46,47 @@ public class ModuleFigure extends BaseFigure {
 		children.add(moduleStereotype);
 		
 		moduleIconFigure = new ImageFigure();
-		moduleIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		moduleIconFigure.set(AttributeKeys.STROKE_WIDTH, STROKE_WIDTH);
 		moduleIconFigure.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		try {
 			URL componentImageURL = null;
 			// Set Icons: First icons Intended Architecture diagram, second implemented, third default.
-			if (type.equals("layer")) {
-				componentImageURL = Resource.get(Resource.ICON_LAYER);
-			} else if (type.equals("component")) {
-				componentImageURL = Resource.get(Resource.ICON_COMPONENT);
-			} else if (type.equals("facade")) {
-				componentImageURL = Resource.get(Resource.ICON_FACADE);
-			} else if (type.equals("subsystem")) {
-				componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
-			} else if (type.equals("library")) {
-				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
-			} else if (type.equals("externallibrary")) {
-				componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
-			} else if (type.equals("package")) {
-				componentImageURL = Resource.get(Resource.ICON_PACKAGE);
-			} else if (type.equals("class") || type.equals("abstract")) {
-				componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
-			} else if (type.equals("interface")) {
-				componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
-			} else if (type.equals("project")) {
-				componentImageURL = Resource.get(Resource.ICONSET_PATH);
-			} else{
-				componentImageURL = Resource.get(Resource.ICON_MODULE);
+			switch(type) {
+				case "layer":
+					componentImageURL = Resource.get(Resource.ICON_LAYER);
+					break;
+				case : "component"
+					componentImageURL = Resource.get(Resource.ICON_COMPONENT);
+					break;
+				case: "facade"
+					componentImageURL = Resource.get(Resource.ICON_FACADE);
+					break;
+				case: "subsystem"
+					componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
+					break;
+				case: "library"
+					componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
+					break;
+				case: "externallibrary"
+					componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
+					break;
+				case: "package"
+					componentImageURL = Resource.get(Resource.ICON_PACKAGE);
+					break;
+				case: "class"
+					componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
+					break;
+				case: "abstract"
+					componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
+					break;
+				case: "interface"
+					componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
+					break;
+				case: "project"
+					componentImageURL = Resource.get(Resource.ICONSET_PATH);
+					break;
+				default:
+					componentImageURL = Resource.get(Resource.ICON_MODULE);
 			}
 			if(componentImageURL != null){
 				moduleIcon = ImageIO.read(componentImageURL);
@@ -91,7 +100,8 @@ public class ModuleFigure extends BaseFigure {
 
 		try {
 			hasRulesIconFigure = new ImageFigure();
-			hasRulesIconFigure.set(AttributeKeys.STROKE_WIDTH, 0.0);
+			hasRulesIconFigure.set(AttributeKeys.STROKE_WIDTH, STROKE_WIDTH);
+			hasRulesIconFigure.set(AttributeKeys.STROKE_WIDTH, STROKE_WIDTH);
 			hasRulesIconFigure.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 			hasRulesIconFigure.setVisible(false);
 			hasRulesIcon = ImageIO.read(Resource.get(Resource.ICON_INFO));
@@ -181,43 +191,6 @@ public class ModuleFigure extends BaseFigure {
 		moduleName.setBounds(nameTextAnchor, null);
 
 		invalidate();
-
-		
-		/*
-		// Calculate max text width +20 extra
-		double maxTextWidth;
-		if(moduleName.getBounds().width >= moduleStereotype.getBounds().width) 
-			maxTextWidth = moduleName.getBounds().width + 20;
-		else
-			maxTextWidth = moduleStereotype.getBounds().width + 20;
-		if ((lead.x - anchor.x) < maxTextWidth)
-			lead.x = anchor.x + maxTextWidth;
-
-		body.setBounds(anchor, lead);
-		
-		// Calculate max text height
-		double totalTextHeight = moduleName.getBounds().height + moduleStereotype.getBounds().height;
-		
-		// Centralize text boxes
-		double plusX = ((lead.x - anchor.x) - maxTextWidth) / 2;
-		double plusY = ((lead.y - anchor.y) - totalTextHeight) / 2;
-		
-		// Centralize moduleName
-		Point2D.Double moduleNametextAnchor = (Double) anchor.clone();
-		moduleNametextAnchor.x += plusX + (maxTextWidth - moduleName.getBounds().width) / 2;
-		moduleNametextAnchor.y += plusY + moduleStereotype.getBounds().height;
-		moduleName.setBounds(moduleNametextAnchor, null);
-
-		if (moduleIconFigure != null) {
-			double iconAnchorX = lead.x - 3 - moduleIcon.getWidth();
-			double iconAnchorY = anchor.y + 4;
-			double iconLeadX = iconAnchorX + moduleIcon.getWidth();
-			double iconLeadY = iconAnchorY + moduleIcon.getHeight();
-			moduleIconFigure.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
-		}
-		
-		invalidate();
-		*/
 	}
 
 	public void setVisibilityOfRulesIcon(boolean visible) {

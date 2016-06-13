@@ -126,14 +126,13 @@ public class AnalysedController extends DrawingController {
 	
 	@Override
 	protected boolean hasRelationBetween(ModuleFigure figureFrom, ModuleFigure figureTo){
-		boolean b = false;
-		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-			if((analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName()).length > 0) || 
-					(analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureTo.getUniqueName(), figureFrom.getUniqueName()).length > 0)){
-				b = true;
-			}
-		}
-		return b;		
+		return (
+				(figureFrom != null)
+					&& (figureTo != null)
+					&& !figureFrom.getUniqueName().equals(figureTo.getUniqueName())
+					&& ((analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName()).length > 0)
+						|| (analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureTo.getUniqueName(), figureFrom.getUniqueName()).length > 0))
+		);
 	}
 
 	@Override
