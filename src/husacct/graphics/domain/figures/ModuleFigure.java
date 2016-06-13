@@ -52,37 +52,37 @@ public class ModuleFigure extends BaseFigure {
 			URL componentImageURL = null;
 			// Set Icons: First icons Intended Architecture diagram, second implemented, third default.
 			switch(type) {
-				case "layer":
+				case 1: "layer":
 					componentImageURL = Resource.get(Resource.ICON_LAYER);
 					break;
-				case : "component"
+				case 2: "component"
 					componentImageURL = Resource.get(Resource.ICON_COMPONENT);
 					break;
-				case: "facade"
+				case 3: "facade"
 					componentImageURL = Resource.get(Resource.ICON_FACADE);
 					break;
-				case: "subsystem"
+				case 4: "subsystem"
 					componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
 					break;
-				case: "library"
+				case 5: "library"
 					componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
 					break;
-				case: "externallibrary"
+				case 6: "externallibrary"
 					componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
 					break;
-				case: "package"
+				case 7: "package"
 					componentImageURL = Resource.get(Resource.ICON_PACKAGE);
 					break;
-				case: "class"
+				case 8: "class"
 					componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
 					break;
-				case: "abstract"
+				case 9: "abstract"
 					componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
 					break;
-				case: "interface"
+				case 10: "interface"
 					componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
 					break;
-				case: "project"
+				case 11: "project"
 					componentImageURL = Resource.get(Resource.ICONSET_PATH);
 					break;
 				default:
