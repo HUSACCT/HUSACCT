@@ -115,9 +115,9 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends IAlgorith
 	
 	private ArrayList<ReconstructArchitectureParameterDTO> createParameterPanels(){
 		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(5));
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.Packages));
 		return parameterDTOs;
 	}
 

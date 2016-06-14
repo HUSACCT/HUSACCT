@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -139,7 +140,12 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			if (selectedRow >= 0){
 				String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
 				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
-				new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO, approachesTableJPanel);
+				if (!reconstructArchitectureDTO.parameterDTOs.isEmpty()){
+					new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO, approachesTableJPanel);
+				}
+				else{
+					JOptionPane.showMessageDialog(this, "this approach has no settings");
+				}
 			}
 		}
 
@@ -154,6 +160,9 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	
 	public void setDistinctApproachesVisibility(){
 		settingsButton.setVisible(false);
+		applyButton.setVisible(true);
+		reverseButton.setVisible(true);
+		clearButton.setVisible(true);
 	}
 	
 	

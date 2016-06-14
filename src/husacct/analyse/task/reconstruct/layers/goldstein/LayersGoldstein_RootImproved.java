@@ -210,6 +210,8 @@ public class LayersGoldstein_RootImproved extends AlgorithmGoldstein{
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Improved;
 		reconstructArchitecture.threshold = 10;
+		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
