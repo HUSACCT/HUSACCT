@@ -130,15 +130,15 @@ public abstract class DrawingController {
 				parentFigure = createParentFigure(parentUniqueName);
 				drawing.add(parentFigure);
 			}
-			addChildFiguresToParentFigure(modules, parentFigure);
+			addChildFiguresToParentFigure(modules, parentFigure, parentUniqueName);
 		}
 		updateLayout();
 		drawRelationFiguresForShownModules();
 	}
 
 	private void addChildFiguresToParentFigure(HashMap<String, ArrayList<ModuleFigure>> modules,
-			ParentFigure parentFigure) {
-		String parentUniqueName = parentFigure.getUniqueName();
+			ParentFigure parentFigure, String parentUniqueName) {
+		//String parentUniqueName = parentFigure.getUniqueName();
 		for (ModuleFigure childModuleFigure : modules.get(parentUniqueName)) {
 			if (parentFigure != null){ 
 				parentFigure.add(childModuleFigure);
