@@ -55,34 +55,34 @@ public class ModuleFigure extends BaseFigure {
 				case "layer":
 					componentImageURL = Resource.get(Resource.ICON_LAYER);
 					break;
-				case : "component"
+				case "component":
 					componentImageURL = Resource.get(Resource.ICON_COMPONENT);
 					break;
-				case: "facade"
+				case "facade":
 					componentImageURL = Resource.get(Resource.ICON_FACADE);
 					break;
-				case: "subsystem"
+				case "subsystem":
 					componentImageURL = Resource.get(Resource.ICON_SUBSYSTEM);
 					break;
-				case: "library"
+				case "library":
 					componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_GREEN);
 					break;
-				case: "externallibrary"
+				case "externallibrary":
 					componentImageURL = Resource.get(Resource.ICON_EXTERNALLIB_BLUE);
 					break;
-				case: "package"
+				case "package":
 					componentImageURL = Resource.get(Resource.ICON_PACKAGE);
 					break;
-				case: "class"
+				case "class":
 					componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
 					break;
-				case: "abstract"
+				case "abstract":
 					componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
 					break;
-				case: "interface"
+				case "interface":
 					componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
 					break;
-				case: "project"
+				case "project":
 					componentImageURL = Resource.get(Resource.ICONSET_PATH);
 					break;
 				default:
