@@ -37,4 +37,6 @@ public interface IControlService extends IObservableService{
 	
 	public void addProjectForListening(String path);
 	public void addFileChangeListener(IFileChangeListener listener);
+	
+	public String showMojoExportImportDialog(boolean isExport);
 }

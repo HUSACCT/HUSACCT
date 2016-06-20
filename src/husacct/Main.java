@@ -1,12 +1,11 @@
 package husacct;
 
 import husacct.control.IControlService;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.net.URL;
 import java.util.Date;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 public class Main {
 	
@@ -21,7 +20,7 @@ public class Main {
 	private void setLog4jConfiguration(){
 		URL propertiesFile = getClass().getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
-	}
+	}//Test Comment for crucible
 	
 	private void printSystemInfo(){
 		Logger logger = Logger.getLogger(Main.class);

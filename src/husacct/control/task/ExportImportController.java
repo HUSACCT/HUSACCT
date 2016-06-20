@@ -2,7 +2,6 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.analyse.presentation.reconstruct.MojoJPanel;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.SoftwareUnitDTO;
@@ -16,8 +15,6 @@ import husacct.validate.IValidateService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.JButton;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -56,7 +53,7 @@ public class ExportImportController {
 		new ExportImportDialog(mainController, "ReportViolations");
 	}
 	
-	public void showExportMojoGui(MojoJPanel mojoPanel, JButton origin, boolean isExport) {
+	public String showExportImportMojoGUI(boolean isExport) {
 		String param = "";
 		if(isExport){
 			param = "ExportMojo";
@@ -65,7 +62,7 @@ public class ExportImportController {
 			param = "ImportMojo";
 		}
 		ExportImportDialog dialog = new ExportImportDialog(mainController, "skipConstructor");
-		dialog.SARExportImportDialog(mainController, param, mojoPanel, origin);
+		return dialog.SARExportImportDialog(mainController, param);
 	}
 	
 	public void exportAnalysisModel(File file){

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -12,8 +13,10 @@ import javax.swing.JTable;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -89,6 +92,7 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 				
 		settingsButton = new JButton("Settings");
 		panel.add(settingsButton);
+		settingsButton.setVisible(false);
 		settingsButton.setPreferredSize(new Dimension(100, 40));
 		settingsButton.addActionListener(this);
 	}
@@ -96,56 +100,27 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == applyButton) {
-			JTabbedPane tappedPane = approachesTableJPanel.tabbedPane;
-			//ButtonGroup radioButtonsRelationType = approachesTableJPanel.RadioButtonsRelationType;
-			//ButtonGroup buttonGroupTwo = approachesTableJPanel.radioButtonGroupTwo;
-
-			Component selectedTappedPane = tappedPane.getSelectedComponent();
-			JPanel selectedPanel = null;
 			try{
-				selectedPanel = (JPanel) selectedTappedPane;
-			}catch(Exception e){
-				logger.error("unable to cast JPanel: " + e);
-			}
-				
-			JTable approachesTable = approachesTableJPanel.tableAllApproaches;
-			if (selectedPanel != null){
-				if(selectedPanel.getName().equals(AnalyseReconstructConstants.ApproachesTable.PanelAllApproaches)){
-					approachesTable = approachesTableJPanel.tableAllApproaches;
+				JTabbedPane tappedPane = approachesTableJPanel.tabbedPane;
+				Component selectedTappedPane = tappedPane.getSelectedComponent();
+				JPanel selectedPanel = (JPanel) selectedTappedPane;
+					
+				JTable approachesTable = getApproachesTable(selectedPanel);
+						
+				int selectedRow = approachesTable.getSelectedRow();
+				if (selectedRow >= 0 && approachesTable.getName().equals("tableAllApproaches")){
+					executeFromAllApproachesTable(approachesTable, selectedRow);
 				}
-				else if (selectedPanel.getName().equals(AnalyseReconstructConstants.ApproachesTable.PanelDistinctApproaches)){
-					approachesTable = approachesTableJPanel.tableDistinctApproaches;
+				else if(selectedRow >= 0 && approachesTable.getName().equals("tableDistinctApproaches")){
+					executeFromDistinctApproachesTable(approachesTable, selectedRow);
+				}
+				else{
+					logger.warn("No Approache selected");
 				}
 			}
-			else{
-				logger.error("SelectedPanel is null");
+			catch(Exception e){
+				logger.error("Approaches Apply Exception: " + e);
 			}
-			
-			
-			int selectedRow = approachesTable.getSelectedRow();
-			if (selectedRow >= 0){
-				/*String approach = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-				//int threshold = Integer.parseInt(approachesTable.getValueAt(selectedRow, approachesThresholdCollumn).toString());
-
-				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
-				ModuleDTO selectedModule = getSelectedModule();
-				dto.setSelectedModule(selectedModule);
-				dto.setApproach(approach);
-				//dto.setThreshold(threshold);	*/
-				
-				
-				ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
-				ModuleDTO selectedModule = getSelectedModule();
-				String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-				dto = analyseTaskControl.reconstructArchitectureListDTO.getReconstructArchitectureDTO(approachConstant);
-				dto.setSelectedModule(selectedModule);
-				analyseTaskControl.reconstructArchitecture_Execute(dto);
-				ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
-			}
-			else{
-				logger.warn("No Approache selected");
-			}
-
 		}
 		if (action.getSource() == reverseButton) {
 			JTable allApproachesTable = approachesTableJPanel.tableAllApproaches;
@@ -164,8 +139,13 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 			int selectedRow = approachesTable.getSelectedRow();
 			if (selectedRow >= 0){
 				String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.reconstructArchitectureListDTO.getReconstructArchitectureDTO(approachConstant);
-				new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO);
+				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+				if (!reconstructArchitectureDTO.parameterDTOs.isEmpty()){
+					new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO, approachesTableJPanel);
+				}
+				else{
+					JOptionPane.showMessageDialog(this, "this approach has no settings");
+				}
 			}
 		}
 
@@ -176,11 +156,70 @@ public class ReconstructJPanel extends HelpableJPanel implements ActionListener{
 		reverseButton.setVisible(visibility);
 		clearButton.setVisible(visibility);
 		settingsButton.setVisible(visibility);
-		
+	}
+	
+	public void setDistinctApproachesVisibility(){
+		settingsButton.setVisible(false);
+		applyButton.setVisible(true);
+		reverseButton.setVisible(true);
+		clearButton.setVisible(true);
+	}
+	
+	
+	private void executeFromAllApproachesTable(JTable approachesTable, int selectedRow){
+		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
+		ModuleDTO selectedModule = getSelectedModule();
+		String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
+		reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+		reconstructArchitectureDTO.setSelectedModule(selectedModule);
+		analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
+		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+	}
+	
+	
+	private void executeFromDistinctApproachesTable(JTable approachesTable, int selectedRow){
+		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
+		ModuleDTO selectedModule = getSelectedModule();
+		String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
+		reconstructArchitectureDTO = createDefaultReconstructArchitectureDTO(approachConstant);
+		reconstructArchitectureDTO.setSelectedModule(selectedModule);
+		reconstructArchitectureDTO.approachConstant = approachConstant;
+		analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
+		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+	}
+	
+	
+	
+	
+	
+	private JTable getApproachesTable(JPanel selectedPanel){
+		JTable approachesTable = approachesTableJPanel.tableAllApproaches;
+		if (selectedPanel != null){
+			if(selectedPanel.getName().equals(AnalyseReconstructConstants.ApproachesTable.PanelAllApproaches)){
+				approachesTable = approachesTableJPanel.tableAllApproaches;
+			}
+			else if (selectedPanel.getName().equals(AnalyseReconstructConstants.ApproachesTable.PanelDistinctApproaches)){
+				approachesTable = approachesTableJPanel.tableDistinctApproaches;
+			}
+		}
+		else{
+			logger.error("SelectedPanel is null");
+		}
+		return approachesTable;
 	}
 	
 	private ModuleDTO getSelectedModule(){
 		return ServiceProvider.getInstance().getDefineService().getSarService().getModule_SelectedInGUI();
 	}
 
+	private ReconstructArchitectureDTO createDefaultReconstructArchitectureDTO(String approachConstant){
+		ReconstructArchitectureDTO customDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+		ReconstructArchitectureDTO defaultDTO = new ReconstructArchitectureDTO();
+		for (ReconstructArchitectureParameterDTO parameterDTO : customDTO.parameterDTOs){
+			ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, defaultDTO, parameterDTO.defaultValue);
+		}
+		return defaultDTO;
+		
+	}
+	
 }

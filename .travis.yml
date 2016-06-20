@@ -1,10 +1,11 @@
 language: java
 before_script:
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - "sh -e /etc/init.d/xvfb start" # this is a virtual screen
   - sleep 3 # give xvfb some time to start
 script: ant main
 jdk:
   - oraclejdk8
 notifications:
-  slack: husacct:YpeL7dIr0OEKvPRCVIV03XCd
+  slack: husacct:dzyOOT9XxkAKgVhRg5I72WSo`
+

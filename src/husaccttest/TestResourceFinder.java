@@ -40,6 +40,12 @@ public class TestResourceFinder {
 		checkFilePath(path);
 		return path;
 	}
+	
+	public static String findMojoTestFile(String resourceFolder, String fileName){
+		String path = getBaseTestResourcesPath(resourceFolder) + fileName;
+		checkFilePath(path);
+		return path;
+	}
 
 	private static String getBaseTestResourcesPath(String languageFolder) {
 		return TESTPROJECT_FOLDER + "/" + languageFolder + "/";

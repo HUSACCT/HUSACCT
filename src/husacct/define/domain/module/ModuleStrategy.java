@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
+import org.apache.log4j.Logger;
 
+public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
+	private final Logger logger = Logger.getLogger(ModuleStrategy.class);
 	protected static long STATIC_ID = 1;
 	protected long id;
 	protected String name;
@@ -106,7 +108,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		if(!mappedSUunits.contains(unit) && !this.hasSoftwareUnitDirectly(unit.getName())) {
 			mappedSUunits.add(unit);
 		}else{
-			System.out.println("This software unit has already been added!");
+			logger.info("This software unit has already been added!");
 		}
 	}
 
@@ -114,7 +116,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		if(mappedSUunits.contains(unit) && this.hasSoftwareUnitDirectly(unit.getName())) {
 			mappedSUunits.remove(unit);
 		}else{
-			System.out.println("This software unit does not exist!");
+			logger.info("This software unit does not exist!");
 		}
 	}
 	
@@ -126,16 +128,16 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		if(!mappedRegExSUunits.contains(unit)) {
 			mappedRegExSUunits.add(unit);
 		}else{
-			System.out.println("This regex software unit has already been added!");
+			logger.info("This regex software unit has already been added!");
 		}
 	}
 
 	public void removeSURegExDefinition(SoftwareUnitRegExDefinition unit){
-		System.out.println(unit.getName());
+		logger.info(unit.getName());
 		if(mappedRegExSUunits.contains(unit)) {
 			mappedRegExSUunits.remove(unit);
 		}else{
-			System.out.println("This regex software unit does not exist!");
+			logger.info("This regex software unit does not exist!");
 		}
 	}
 

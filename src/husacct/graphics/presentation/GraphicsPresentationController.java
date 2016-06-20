@@ -4,6 +4,7 @@ package husacct.graphics.presentation;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingWorker;
 
+import husacct.common.enums.DependencyOptionType;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
@@ -390,9 +391,8 @@ public class GraphicsPresentationController implements UserInputListener{
 		drawingsSettingsHolder.zoomTypeChange(zoomType);
 	}
 	
-	public void dependencyTypeChange(){
-	    boolean currentSetting = drawingsSettingsHolder.isShowUmlLinkInsteadOfDependencies();
-	    drawingsSettingsHolder.setShowUmlLinkInsteadOfDependencies(!currentSetting);
+	public void dependencyTypeChange(DependencyOptionType option){
+		drawingsSettingsHolder.setSelectedDependencyOption(option);
 	    refreshDrawing();
 	}
 

@@ -1,8 +1,6 @@
 package husacct.graphics.presentation.dialogs;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import husacct.common.enums.DependencyOptionType;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
@@ -49,8 +48,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private boolean 								refreshDrawingRequired = false;
 	
 	private int										totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
-	private HashMap<String, ModuleLayoutsEnum>	layoutStrategiesTranslations;
+	private HashMap<String, ModuleLayoutsEnum>		layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
+	private HashMap<String, DependencyOptionType>	dependencyOptionTypeTranslations;
+	private String[]								dependencyOptionItems;
 	private ILocaleService							localeService = ServiceProvider.getInstance().getLocaleService();
 	private JComboBox<String> toggleDependencyType;
 	private boolean 								showDependencyOptions;
@@ -84,6 +85,16 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			String translation = localeService.getTranslatedString(strategy.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
+			i++;
+		}
+
+		dependencyOptionTypeTranslations = new HashMap<String, DependencyOptionType>();
+		i = 0;
+		dependencyOptionItems = new String[DependencyOptionType.values().length];
+		for (DependencyOptionType optionType : DependencyOptionType.values()) {
+			String translation = localeService.getTranslatedString(optionType.getType());
+			dependencyOptionTypeTranslations.put(translation, optionType);
+			dependencyOptionItems[i] = translation;
 			i++;
 		}
 		
@@ -241,18 +252,17 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			dependencyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
 
 			dependencyPanel.add(dependencyLabel);
-
-			// TODO Use resources instead
-			// TODO filter for implemented diagram only?
-			String values[] = {"Dependency","UML Links", "Access/Call/Reference"};
-			toggleDependencyType = new JComboBox<String>(values);
+			
+			toggleDependencyType = new JComboBox<String>(dependencyOptionItems);
 			toggleDependencyType.setPreferredSize(new Dimension(elementWidth, elementHeight));
 			toggleDependencyType.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					for(UserInputListener listener : listeners){
 						if (listener instanceof GraphicsMenuBar){
-							((GraphicsMenuBar)listener).dependencyTypeChange();
+							Object o = ((JComboBox)arg0.getSource()).getSelectedItem();
+							DependencyOptionType option = dependencyOptionTypeTranslations.get(o);
+							((GraphicsMenuBar)listener).dependencyTypeChange(option);
 						}
 					}
 				}

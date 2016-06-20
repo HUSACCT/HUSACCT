@@ -1,7 +1,6 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.reconstruct.MojoJPanel;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
@@ -24,32 +23,28 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ExportImportDialog extends JDialog {
 
-	private MojoJPanel mojoPanel;
 	private static final long serialVersionUID = 1L;
-
+	
 	private MainController mainController;
 	private String typeOfFunction;
 	
 	private JLabel pathLabel;
 	private JTextField pathText;
 	private JButton browseButton, exportImportButton;
-	private JButton mojoOrigin;
+	private String mojoText = "";
 
 	private File selectedFile;
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public void SARExportImportDialog(MainController mainController, String typeOfFunction, MojoJPanel mojoPanel, JButton origin) {
-		//super(mainController.getMainGui(), true);
-		this.mojoOrigin = origin;
-		this.mojoPanel = mojoPanel;
+	public String SARExportImportDialog(MainController mainController, String typeOfFunction) {
 		this.mainController = mainController;
 		this.typeOfFunction = typeOfFunction;
 		showFileDialog();
-		
+		return mojoText;
 	}
-	
+		
 	public ExportImportDialog(MainController mainController, String typeOfFunction) {
 		super(mainController.getMainGui(), true);
 		if(!typeOfFunction.equals("skipConstructor")){
@@ -168,10 +163,11 @@ public class ExportImportDialog extends JDialog {
 				
 				
 				if(fileDialog.getSelectedFile().exists()){
-					mojoPanel.setText(fileDialog.getSelectedFile(), mojoOrigin);
+					mojoText = fileDialog.getSelectedFile().getAbsolutePath();
 				}
 				else{
-					mojoPanel.setText(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()), mojoOrigin);
+					File mojoFile = new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription());
+					mojoText = mojoFile.getAbsolutePath();
 				}
 				
 			}

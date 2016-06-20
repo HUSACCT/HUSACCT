@@ -197,7 +197,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 					allAssignedSoftwareUnits.putAll(softwareUnits);
 			}
         } catch (Exception e) {
-	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        this.logger.warn(new Date().toString() + " Exception: "  + e );
 	        //e.printStackTrace();
         }
 		return allAssignedSoftwareUnits;
@@ -308,9 +308,27 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public ModuleDTO[] getAllModules(){
+		allModules = new ArrayList<>();
 		ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
-		return domainParser.parseRootModules(modules.toArray(new ModuleStrategy[modules.size()]));
+		for(ModuleStrategy module : modules){
+			allModules.add(module);
+			if(!module.getSubModules().isEmpty()){
+				getSubModulesFromModuleStrategy(module);
+			}
+		}
+		return domainParser.parseRootModules(allModules.toArray(new ModuleStrategy[allModules.size()]));
 		 
+	}
+	
+	private ArrayList<ModuleStrategy> allModules;
+	
+	private void getSubModulesFromModuleStrategy(ModuleStrategy module){
+		for(ModuleStrategy subModule : module.getSubModules()){
+			allModules.add(subModule);
+			if(!subModule.getSubModules().isEmpty()){
+				getSubModulesFromModuleStrategy(subModule);
+			}
+		}
 	}
 	
 	@Override
