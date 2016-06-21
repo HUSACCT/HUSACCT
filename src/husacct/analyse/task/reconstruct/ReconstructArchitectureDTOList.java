@@ -20,7 +20,7 @@ import husacct.common.dto.ReconstructArchitectureDTO;
 
 public class ReconstructArchitectureDTOList extends AbstractDTO{
 	private final Logger logger = Logger.getLogger(ReconstructArchitectureDTOList.class);
-	public ArrayList<ReconstructArchitectureDTO> ReconstructArchitectureDTOList;
+	public ArrayList<ReconstructArchitectureDTO> reconstructArchitectureDTOList;
 	private IModelQueryService queryService;
  
 	public ReconstructArchitectureDTOList(IModelQueryService qs){
@@ -29,24 +29,21 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 	
 	
 	public void createDynamicReconstructArchitectureDTOs(){
-		ReconstructArchitectureDTOList = new ArrayList<ReconstructArchitectureDTO>();
+		reconstructArchitectureDTOList = new ArrayList<>();
 		
 		Package reconstructPackage = IAlgorithm.class.getPackage();
-		List<Class<?>> classes = this.find(reconstructPackage);
+		List<Class<?>> allClassesInPackage = this.findAllClassesInPackage(reconstructPackage);
 		
-		ArrayList<Class<?>> approachClasses = new ArrayList<Class<?>>();
+		ArrayList<Class<?>> allAlgorithmClasses = findAllAlgorithmClasses(allClassesInPackage);
 		
-		for (Class<?> potentialClass : classes){
-			boolean extendsIAlgorithm = IAlgorithm.class.isAssignableFrom(potentialClass);
-			boolean isAbstractClass = Modifier.isAbstract(potentialClass.getModifiers());
-			if (extendsIAlgorithm && !isAbstractClass){
-				logger.info(potentialClass.getName());
-				approachClasses.add(potentialClass);
-			}
-		}
+		//AlgorithmParameterSettings are stored in a reconstructArchitectureDTO.
+		reconstructArchitectureDTOList = getAllAlgorithmParameterSettings(allAlgorithmClasses);
+	}
 
-		
-		for (Class<?> approachClass : approachClasses){
+
+	private ArrayList<ReconstructArchitectureDTO> getAllAlgorithmParameterSettings(ArrayList<Class<?>> allAlgorithmClasses) {
+		ArrayList<ReconstructArchitectureDTO> reconstructArchitectureDTOs = new ArrayList<>();
+		for (Class<?> approachClass : allAlgorithmClasses){
 			try {
 				Method m = approachClass.getMethod("getAlgorithmParameterSettings");
 				
@@ -60,22 +57,34 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 				if (!raIsNull){
 					boolean raConstantHasValue = classReconstructArchitectureDTO.approachConstant!= null && !classReconstructArchitectureDTO.approachConstant.isEmpty();
 					if (raConstantHasValue){
-						ReconstructArchitectureDTOList.add(classReconstructArchitectureDTO);
+						reconstructArchitectureDTOs.add(classReconstructArchitectureDTO);
 					}
 				}
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
-		
+		return reconstructArchitectureDTOs;
+	}
+
+
+	private ArrayList<Class<?>> findAllAlgorithmClasses(List<Class<?>> classes) {
+		ArrayList<Class<?>> approachClasses = new ArrayList<Class<?>>();
+		for (Class<?> potentialClass : classes){
+			boolean extendsIAlgorithm = IAlgorithm.class.isAssignableFrom(potentialClass);
+			boolean isAbstractClass = Modifier.isAbstract(potentialClass.getModifiers());
+			if (extendsIAlgorithm && !isAbstractClass){
+				logger.info(potentialClass.getName());
+				approachClasses.add(potentialClass);
+			}
+		}
+		return approachClasses;
 	}
 	
 	public ReconstructArchitectureDTO getReconstructArchitectureDTO(String approachConstant){
 		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
-		for (ReconstructArchitectureDTO dto : ReconstructArchitectureDTOList){
+		for (ReconstructArchitectureDTO dto : reconstructArchitectureDTOList){
 			if (dto.approachConstant.equals(approachConstant)){
 				reconstructArchitectureDTO = dto;
 			}
@@ -84,7 +93,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 	}
 	
 	public void updateReconstructArchitectureDTO(ReconstructArchitectureDTO newDTO){
-		for(ReconstructArchitectureDTO oldDTO : ReconstructArchitectureDTOList){
+		for(ReconstructArchitectureDTO oldDTO : reconstructArchitectureDTOList){
 			if (oldDTO.approachConstant.equals(newDTO.approachConstant)){
 				oldDTO = newDTO;
 			}
@@ -93,69 +102,111 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 
 	private static final String BAD_PACKAGE_ERROR = "Unable to get resources from path '%s'. Are you sure the package '%s' exists?";
 
-	public List<Class<?>> find(Package pkg) {
-		List<Class<?>> classes = new ArrayList<Class<?>>();
+	public List<Class<?>> findAllClassesInPackage(Package pkg) {
+		ArrayList<Class<?>> allClassesInPackage = new ArrayList<Class<?>>();
 		String pkgName = pkg.getName();
-		String scannedPath = pkgName.replace('.', '/');
-		URL scannedUrl = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
-		if (scannedUrl == null) {
-			logger.error(String.format(BAD_PACKAGE_ERROR, scannedPath, pkgName));
+		String packagePath = pkgName.replace('.', '/');
+		URL packageUrl = Thread.currentThread().getContextClassLoader().getResource(packagePath);
+		
+		if (packageUrl != null) {
+			String originalFilePath = packageUrl.getFile();
+			String filePathWithRegularSpaces = convertSpacesInFilePath(originalFilePath);
+
+			File scannedDir = getFile(filePathWithRegularSpaces);
+
+			boolean isRunnableJar = scannedDir == null || !scannedDir.exists();
+			if (!isRunnableJar) {
+				allClassesInPackage = getAllClassesInPackageFromProjectFile(pkgName, scannedDir);
+			} else {
+				allClassesInPackage = getAllClassesInPackageFromJar(pkgName, packagePath, originalFilePath, scannedDir);
+			}
 		}
+		else{logger.error(String.format(BAD_PACKAGE_ERROR, packagePath, pkgName));}
+		
+		return allClassesInPackage;
+	}
 
-		String originalFilePath = scannedUrl.getFile();
-		String correctedFilePath = correctSpacesInFilePath(originalFilePath);
 
+	private ArrayList<Class<?>> getAllClassesInPackageFromJar(String pkgName, String packagePath, String originalFilePath, File scannedDir) {
+		ArrayList<Class<?>> allClassesInPackage = new ArrayList<>();
+		try {
+			JarFile jarFile = getJarFile(originalFilePath);
+			Enumeration<JarEntry> entries = jarFile.entries();
+			
+			while (entries.hasMoreElements()) {
+				JarEntry entry = entries.nextElement();
+				String entryName = entry.getName();
+				
+				Class<?> foundClass = findClassInElement(packagePath, entryName);
+				if (foundClass != null) allClassesInPackage.add(foundClass);
+			}
+			jarFile.close();
+		} catch (IOException e) {
+			throw new RuntimeException(pkgName + " (" + scannedDir + ") does not appear to be a valid package", e);
+		}
+		return allClassesInPackage;
+	}
+
+
+	private Class<?> findClassInElement(String packagePath, String entryName) {
+		Class<?> foundClass = null;
+		boolean startsWithPackagePath = entryName.startsWith(packagePath);
+		boolean correctPackageLength = entryName.length() > (packagePath.length() + "/".length());
+		boolean endsWithClass = entryName.endsWith(".class");
+		
+		if (startsWithPackagePath && correctPackageLength && endsWithClass) {
+			String className = entryName.replace('/', '.').replace('\\', '.');
+			int endIndex = entryName.length() - ".class".length();
+			className = className.substring(0, endIndex);
+			try {
+				foundClass = Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				logger.error(className + " class could not be added to List<Class<?>> classes " + e);
+			}
+		}
+		return foundClass;
+	}
+
+
+	private JarFile getJarFile(String originalFilePath) throws IOException {
+		String jarPath = originalFilePath.replaceFirst("[.]jar[!].*", ".jar");
+		jarPath = jarPath.replaceFirst("file:", "");
+		logger.info(jarPath);
+		JarFile jarFile = new JarFile(jarPath);
+		return jarFile;
+	}
+
+
+	private ArrayList<Class<?>> getAllClassesInPackageFromProjectFile(String pkgName, File scannedDir) {
+		ArrayList<Class<?>> classesInPackage = new ArrayList<>();
+		try {
+			for (File file : scannedDir.listFiles()) {
+				List<Class<?>> allClassesInFile = findClassesInFile(file, pkgName);
+				classesInPackage.addAll(allClassesInFile);
+			}
+		} catch (Exception e) {
+			logger.error("scannedDir is empty: " + e);
+		}
+		return classesInPackage;
+	}
+
+
+	private File getFile(String filePathWithRegularSpaces) {
 		File scannedDir = null;
 		try {
-			scannedDir = new File(correctedFilePath);
+			scannedDir = new File(filePathWithRegularSpaces);
 		} catch (Exception e) {
 			logger.info(scannedDir + " not found, expecting java is running from JAR");
 		}
-
-		if (scannedDir != null && scannedDir.exists()) {
-			try {
-				for (File file : scannedDir.listFiles()) {
-					classes.addAll(findClassesInProject(file, pkgName));
-				}
-			} catch (Exception e) {
-				logger.error("scannedDir is empty: " + e);
-			}
-		} else {
-			try {
-				String jarPath = originalFilePath.replaceFirst("[.]jar[!].*", ".jar").replaceFirst("file:", "");
-				logger.info(jarPath);
-				@SuppressWarnings("resource")
-				JarFile jarFile = new JarFile(jarPath);
-				Enumeration<JarEntry> entries = jarFile.entries();
-				while (entries.hasMoreElements()) {
-					JarEntry entry = entries.nextElement();
-					String entryName = entry.getName();
-					if (entryName.startsWith(scannedPath) && entryName.length() > (scannedPath.length() + "/".length())) {
-						if (entryName.endsWith(".class")) {
-							String className = entryName.replace('/', '.').replace('\\', '.');
-							int endIndex = entryName.length() - ".class".length();
-							className = className.substring(0, endIndex);
-							try {
-								classes.add(Class.forName(className));
-							} catch (ClassNotFoundException e) {
-								logger.error(className + " class could not be added to List<Class<?>> classes " + e);
-							}
-						}
-					}
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(pkgName + " (" + scannedDir + ") does not appear to be a valid package", e);
-			}
-		}
-		return classes;
+		return scannedDir;
 	}
 
-	private List<Class<?>> findClassesInProject(File file, String pkgName) {
+	private List<Class<?>> findClassesInFile(File file, String pkgName) {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		String resource = pkgName + "." + file.getName();
 		if (file.isDirectory()) {
 			for (File child : file.listFiles()) {
-				classes.addAll(findClassesInProject(child, resource));
+				classes.addAll(findClassesInFile(child, resource));
 			}
 		} else if (resource.endsWith(".class")) {
 			int endIndex = resource.length() - ".class".length();
@@ -169,7 +220,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 		return classes;
 	}
 	   
-	private String correctSpacesInFilePath(String originalPath) {
+	private String convertSpacesInFilePath(String originalPath) {
 		String correctedPath = originalPath.replaceAll("%20", " ");
 		return correctedPath;
 	}

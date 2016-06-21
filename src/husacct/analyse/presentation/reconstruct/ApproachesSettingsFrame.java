@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import husacct.ServiceProvider;
+import husacct.analyse.presentation.reconstruct.approaches.AllApproachesJPanel;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
@@ -30,14 +31,14 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	private JButton applyButton, cancelButton;
 	private JFrame frame;
 	private AnalyseTaskControl analyseTaskControl;
-	private ApproachesTableJPanel approachesTableJPanel;
+	private AllApproachesJPanel allApproachesJPanel;
 	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<String, ReconstructArchitectureParameterPanel>();
 
 	
-	public ApproachesSettingsFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, ApproachesTableJPanel apprTJP){
+	public ApproachesSettingsFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, AllApproachesJPanel allApJp){
 		this.dto = dto;
 		this.analyseTaskControl = atc;
-		this.approachesTableJPanel = apprTJP;
+		this.allApproachesJPanel = allApJp;
 		buildFrame();
 	}
 	
@@ -99,21 +100,29 @@ public class ApproachesSettingsFrame extends HelpableJInternalFrame implements A
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == applyButton) {
-			for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
-				Object value = getParameterPanelValue(parameterDTO.parameterConstant);
-				dto = ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, dto, value);
-			}
-			analyseTaskControl.getReconstructArchitectureDTOList().updateReconstructArchitectureDTO(dto);
-			int selectedRow = approachesTableJPanel.tableAllApproaches.getSelectedRow();
-			int differentRow = selectedRow > 1 ? selectedRow -1 : selectedRow +1;
-			approachesTableJPanel.tableAllApproaches.setRowSelectionInterval(differentRow, differentRow);
-			approachesTableJPanel.tableAllApproaches.setRowSelectionInterval(selectedRow, selectedRow);
+			setParameterValues();
+			resetParameterTable();
 			frame.dispose();
 		}
 		else if(event.getSource() == cancelButton){
 			frame.dispose();
 		}
 		
+	}
+
+	private void resetParameterTable() {
+		int selectedRow = allApproachesJPanel.allApproachesTable.getSelectedRow();
+		int differentRow = selectedRow > 1 ? selectedRow -1 : selectedRow +1;
+		allApproachesJPanel.allApproachesTable.setRowSelectionInterval(differentRow, differentRow);
+		allApproachesJPanel.allApproachesTable.setRowSelectionInterval(selectedRow, selectedRow);
+	}
+
+	private void setParameterValues() {
+		for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
+			Object value = getParameterPanelValue(parameterDTO.parameterConstant);
+			dto = ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, dto, value);
+		}
+		analyseTaskControl.getReconstructArchitectureDTOList().updateReconstructArchitectureDTO(dto);
 	}
 	
 	private Object getParameterPanelValue(String parameterConstant){
