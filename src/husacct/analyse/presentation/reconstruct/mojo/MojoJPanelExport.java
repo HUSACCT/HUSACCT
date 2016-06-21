@@ -108,7 +108,9 @@ public class MojoJPanelExport extends HelpableJPanel implements ActionListener {
 			String toWrite = "";
 			for(ModuleDTO moduleDTO : defineService.getAllModules()){
 				for(String softwareDTOPath : defineService.getAssignedSoftwareUnitsOfModule(moduleDTO.logicalPath)){
-					toWrite = "contain " + moduleDTO.logicalPath + " " + softwareDTOPath + "\n";
+					String moduleDTOPath = moduleDTO.logicalPath.replaceAll(" ", "%20");
+					String softwareDTOPathNoSpaces = softwareDTOPath.replaceAll(" ", "%20");
+					toWrite = "contain " + moduleDTOPath + " " + softwareDTOPathNoSpaces + "\n";
 					writer.write(toWrite);
 				}
 			}
