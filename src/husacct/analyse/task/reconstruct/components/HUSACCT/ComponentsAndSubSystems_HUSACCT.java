@@ -99,13 +99,13 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 						// 2) Get all dependencies on softwareUnit
 						ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
 						dependenciesList.addAll(getRelationsBetweenSoftwareUnits(softwareUnit.uniqueName, "", relationType));
-						// 3) Determine if the software unit implement an interface	
+						// 3) Determine if the software unit implements an interface	
 						for(DependencyDTO dependency : dependenciesList){		
 							if(dependency.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
 								// 4) Get the used interface.
 								SoftwareUnitDTO interfaceClass = queryService.getSoftwareUnitByUniqueName(dependency.to);
 								// Check if the interface justifies the identification of a Component.
-								boolean interfaceIsSpecificForUnit = isInterfaceSpecificForUnit(interfaceClass);
+								boolean interfaceIsSpecificForUnit = isInterfaceSpecificForUnit(interfaceClass, softwareUnitInSelectedModule);
 								boolean isInterfaceOfParent = isInterfaceTheInterfaceOfTheParentModule(interfaceClass, selectedModule);
 								if (interfaceIsSpecificForUnit && !isInterfaceOfParent) {
 									// The softwareUnitInSelectedModule is identified as a Component
@@ -280,7 +280,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	}
 	
 	// Checks if the interface is implemented only a few times. Otherwise it is possibly a utility.
-	private boolean isInterfaceSpecificForUnit(SoftwareUnitDTO interfaceClass) {
+	private boolean isInterfaceSpecificForUnit(SoftwareUnitDTO interfaceClass, String unitUniqueName) {
 		/* if (interfaceClass.uniqueName.contains("IAnalyseService")) {
 			boolean breakpoint = true;
 		} */
@@ -291,7 +291,9 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 		int numberOfImplementsDependencies = 0;
 		for(DependencyDTO dependencyOnInterface : dependenciesList){		
 			if(dependencyOnInterface.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
-				numberOfImplementsDependencies ++;
+				if (!dependencyOnInterface.from.startsWith(unitUniqueName)) {
+					numberOfImplementsDependencies ++;
+				}
 			}
 		}
 		if (numberOfImplementsDependencies <= 2) { // One for the implementing facade and maybe one for a service stub. 
