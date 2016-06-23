@@ -122,62 +122,66 @@ public abstract class DrawingController {
 		drawingView.cannotZoomOut();
 	}
 	
-	protected void drawModulesAndRelations_MultiLevel(HashMap<String, ArrayList<ModuleFigure>> modules) {
+	protected void drawModulesAndRelationsMultiLevel(HashMap<String, ArrayList<ModuleFigure>> modules) {
 		clearDrawing();
 		for (String parentUniqueName : modules.keySet()) {
 			ParentFigure parentFigure = null;
 			if (!parentUniqueName.isEmpty()) {
-				// Add the parent figure
-				if (parentFigureNameAndTypeMap.containsKey(parentUniqueName)) {
-					String parentType = parentFigureNameAndTypeMap.get(parentUniqueName);
-					if ((parentType != null) && !parentType.equals("")) {
-						parentFigure = figureFactory.createParentFigure(parentUniqueName, parentType);
-					} else {
-						parentFigure = figureFactory.createParentFigure(parentUniqueName, "");
-					}
-				} else {
-					parentFigure = figureFactory.createParentFigure(parentUniqueName, "");
-				}
+				parentFigure = createParentFigure(parentUniqueName);
 				drawing.add(parentFigure);
 			}
-			// Add the children to the parent figure (or else, they become part of the root)  
-			for (ModuleFigure childModuleFigure : modules.get(parentUniqueName)) {
-				if (parentFigure != null){ 
-					parentFigure.add(childModuleFigure);
-				}
-				if (controllerType == DrawingTypesEnum.MODULE_RULE_ARCHITECTURE && hasRelationBetween(childModuleFigure, childModuleFigure)) {
-					childModuleFigure.setVisibilityOfRulesIcon(true);
-				}
-				drawing.add(childModuleFigure);
-			}
-			// Set the layout of the parent figure
-			if (parentFigure != null){ 
-				ContainerLayoutStrategy cls = new ContainerLayoutStrategy(parentFigure);
-				cls.doLayout();
-			}
+			addChildFiguresToParentFigure(modules, parentFigure, parentUniqueName);
 		}
 		updateLayout();
 		drawRelationFiguresForShownModules();
+	}
+
+	private void addChildFiguresToParentFigure(HashMap<String, ArrayList<ModuleFigure>> modules,
+			ParentFigure parentFigure, String parentUniqueName) {
+		//String parentUniqueName = parentFigure.getUniqueName();
+		for (ModuleFigure childModuleFigure : modules.get(parentUniqueName)) {
+			if (parentFigure != null){ 
+				parentFigure.add(childModuleFigure);
+			}
+			if (controllerType == DrawingTypesEnum.MODULE_RULE_ARCHITECTURE && hasRelationBetween(childModuleFigure, childModuleFigure)) {
+				childModuleFigure.setVisibilityOfRulesIcon(true);
+			}
+			drawing.add(childModuleFigure);
+		}
+		// Set the layout of the parent figure
+		if (parentFigure != null){ 
+			ContainerLayoutStrategy cls = new ContainerLayoutStrategy(parentFigure);
+			cls.doLayout();
+		}
+	}
+
+	private ParentFigure createParentFigure(String parentUniqueName) {
+		ParentFigure parentFigure;
+		if (parentFigureNameAndTypeMap.containsKey(parentUniqueName)) {
+			String parentType = parentFigureNameAndTypeMap.get(parentUniqueName);
+			if ((parentType != null) && !parentType.equals("")) {
+				parentFigure = figureFactory.createParentFigure(parentUniqueName, parentType);
+			} else {
+				parentFigure = figureFactory.createParentFigure(parentUniqueName, "");
+			}
+		} else {
+			parentFigure = figureFactory.createParentFigure(parentUniqueName, "");
+		}
+		return parentFigure;
 	}
 
 	public void drawRelationFiguresForShownModules() {
 		ModuleFigure[] shownModules = drawing.getShownModules();
 		for (ModuleFigure figureFrom : shownModules) {
 			for (ModuleFigure figureTo : shownModules) {
-				if (figureFrom != figureTo) {
-					if (hasRelationBetween(figureFrom, figureTo)) {
+				if (figureFrom != figureTo && hasRelationBetween(figureFrom, figureTo)) {
 						boolean drawRelationsWithoutViolations = true;
 						if (drawingSettingsHolder.areViolationsShown()) {
 							// Draw RelationFigures with Violations
 							ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
 							if (violations.length > 0){ 
 								drawRelationsWithoutViolations = false;
-								figureFrom.addDecorator(figureFactory.createViolationsDecorator());
-								RelationFigure violationFigure = getRelationFigureWithViolationsBetween(figureFrom, figureTo);
-								if (violationFigure != null) {
-									connectionStrategy.connect(violationFigure, figureFrom, figureTo);
-									drawing.add(violationFigure);
-								}
+								createViolationConnector(figureFrom, figureTo);
 							}
 						}
 						if (drawingSettingsHolder.areDependenciesShown() && drawRelationsWithoutViolations) {
@@ -188,7 +192,6 @@ public abstract class DrawingController {
 								drawing.add(dependencyFigure);
 							}
 						}
-					}
 				}
 			}
 		}
@@ -197,6 +200,15 @@ public abstract class DrawingController {
 		}
 		if (drawingSettingsHolder.areLinesProportionalWide()) { 
 			drawing.updateLineFigureThicknesses(drawing.getMaxAll());
+		}
+	}
+
+	private void createViolationConnector(ModuleFigure figureFrom, ModuleFigure figureTo) {
+		figureFrom.addDecorator(figureFactory.createViolationsDecorator());
+		RelationFigure violationFigure = getRelationFigureWithViolationsBetween(figureFrom, figureTo);
+		if (violationFigure != null) {
+			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
+			drawing.add(violationFigure);
 		}
 	}
 	
@@ -268,7 +280,7 @@ public abstract class DrawingController {
 				ArrayList<ModuleFigure> onlyParentChildren = parentChildrenMap.get(onlyParentModule);
 				this.drawModulesAndRelations_SingleLevel(onlyParentChildren.toArray(new ModuleFigure[] {}));
 			} else {
-				this.drawModulesAndRelations_MultiLevel(parentChildrenMap);
+				this.drawModulesAndRelationsMultiLevel(parentChildrenMap);
 			}
 		}
 	}
