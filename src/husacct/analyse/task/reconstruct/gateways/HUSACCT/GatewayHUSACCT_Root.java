@@ -159,7 +159,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		ModuleDTO gatewayModule = new ModuleDTO();
 		for(HashMap.Entry<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateway : gateways.entrySet()){
 			if(!"".equals(gateway.getKey())){
-				gatewayModule = defineSarService.addModule(gateway.getKey().name + " Gateway", "**", ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
+				gatewayModule = defineSarService.addModule(gateway.getKey().name + " Gateway", selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
 				if(gatewayModule.logicalPath != ""){
 					createRuleType(gatewayModule,selectedModule);
 				}
@@ -169,9 +169,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		addToReverseReconstructionList(gatewayModule);
 	}
 	private void createRuleType(ModuleDTO libraryModule, ModuleDTO moduleTo){
-		
-		defineSarService.addMainRule(libraryModule.logicalPath, moduleTo.logicalPath, "IsTheOnlyModuleAllowedToUse");
-		
+		defineSarService.addMainRule(moduleTo.logicalPath, libraryModule.logicalPath, "IsTheOnlyModuleAllowedToUse");
 	}
 
 	private ArrayList<SoftwareUnitDTO> getSetOfChildSoftwareUnits(SoftwareUnitDTO parentSoftwareUnit) {
@@ -242,6 +240,8 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
   		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
   		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Gateways_HUSACCT_Root;
   		reconstructArchitecture.threshold = 10;
+  		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
+  		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
   		reconstructArchitecture.parameterDTOs = createParameterPanels();
   		return reconstructArchitecture;
   	}
