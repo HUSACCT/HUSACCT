@@ -51,6 +51,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         this.analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         super.notifyServiceListeners();
+        //Test
     }
 
     @Override
@@ -145,6 +146,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         this.analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         super.notifyServiceListeners();
+        //Test
     }
 
 	@Override
@@ -173,6 +175,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override // From ISaveable
 	public void loadWorkspaceData(Element rootElement) {
 		persistencyService.loadWorkspaceData(rootElement);
+		//Test
 	}
 
 	@Override
