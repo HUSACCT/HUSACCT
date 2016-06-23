@@ -1,4 +1,4 @@
-package husacct.analyse.presentation.reconstruct;
+package husacct.analyse.presentation.reconstruct.mojo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

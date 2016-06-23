@@ -1,4 +1,4 @@
-package husacct.analyse.presentation.reconstruct;
+package husacct.analyse.presentation.reconstruct.mojo;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
