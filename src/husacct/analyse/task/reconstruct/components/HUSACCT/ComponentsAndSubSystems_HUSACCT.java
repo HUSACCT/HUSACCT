@@ -279,29 +279,54 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 		return hashMap;
 	}
 	
-	// Checks if the interface is implemented only a few times. Otherwise it is possibly a utility.
+	/** 
+	 * Checks that the interface is a child or sibling of the given unit, and that no other units implement the interface.
+	 * Exceptions apply for test and stub classes.
+	 * @param interfaceClass
+	 * @param unitUniqueName
+	 * @returns true if the interface is specific for the unit, otherwise it returns false.
+	 */
 	private boolean isInterfaceSpecificForUnit(SoftwareUnitDTO interfaceClass, String unitUniqueName) {
-		/* if (interfaceClass.uniqueName.contains("IAnalyseService")) {
+		/* if (interfaceClass.uniqueName.contains("Centric.GwsLib.IMTFormData")) {
 			boolean breakpoint = true;
 		} */
-		boolean interfaceIsSpecificForUnit = false;
-		// Get all dependencies on the interfaceClass
-		ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
-		dependenciesList.addAll(getRelationsBetweenSoftwareUnits("",interfaceClass.uniqueName, relationType));
-		int numberOfImplementsDependencies = 0;
-		for(DependencyDTO dependencyOnInterface : dependenciesList){		
-			if(dependencyOnInterface.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
-				if (!dependencyOnInterface.from.startsWith(unitUniqueName)) {
-					numberOfImplementsDependencies ++;
+		boolean interfaceIsSpecificForUnit = true;
+		// 1) Check that the interface is a child or a sibling of the passed unit.
+		boolean interfaceIsChild = true;
+		boolean interfaceIsSibling = false;
+		// 1a) Check that the interface is a child of the passed unit.
+		if (!interfaceClass.uniqueName.startsWith(unitUniqueName)) {
+			interfaceIsChild = false;
+			// 1) Check that the interface is a sibling of the passed unit.
+			SoftwareUnitDTO parent = queryService.getParentUnitOfSoftwareUnit(unitUniqueName);
+			SoftwareUnitDTO[] childUnits = queryService.getChildUnitsOfSoftwareUnit(parent.uniqueName);
+			for (SoftwareUnitDTO childUnit : childUnits) {
+				if (childUnit.uniqueName.equals(interfaceClass.uniqueName)) {
+					interfaceIsSibling = true;
 				}
 			}
 		}
-		if (numberOfImplementsDependencies <= 2) { // One for the implementing facade and maybe one for a service stub. 
-			interfaceIsSpecificForUnit = true;
+		if (!interfaceIsChild && !interfaceIsSibling) {
+			interfaceIsSpecificForUnit = false;
+		} else {
+			// 2) Check that the interface is not also implemented by other units (excluding stubs and test classes).
+			ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
+			dependenciesList.addAll(getRelationsBetweenSoftwareUnits("",interfaceClass.uniqueName, relationType));
+			for(DependencyDTO dependencyOnInterface : dependenciesList){		
+				if(dependencyOnInterface.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
+					if (!dependencyOnInterface.from.startsWith(unitUniqueName)) {
+						// Exclude implementing classes with test or Stub in their name
+						String fromNameInLC = dependencyOnInterface.from.toLowerCase();
+						if (!fromNameInLC.contains("stub") && !fromNameInLC.contains("test")) {
+							interfaceIsSpecificForUnit = false;
+						}
+					}
+				}
+			}
 		}
 		return interfaceIsSpecificForUnit;
 	}
-
+	
 	// Checks if the passed interface is already assigned, in case the parent module is a component, to the interface of the parent module 
 	private boolean isInterfaceTheInterfaceOfTheParentModule(SoftwareUnitDTO interfaceClass, ModuleDTO parent) {
 		boolean isInterfaceOfParent = false;
