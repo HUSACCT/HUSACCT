@@ -155,7 +155,7 @@ public class GraphOfSuClusters {
 							if (nrOfDependenciesFromTo > 0) {
 								if (nrOfDependenciesToFrom > 0) {
 									if (nrOfDependenciesFromTo >= nrOfDependenciesToFrom) { // Prevents erroneously added highly coupled units.
-										int backCallPercentage = ((nrOfDependenciesToFrom * 100) / nrOfDependenciesToFrom);
+										int backCallPercentage = ((nrOfDependenciesToFrom * 100) / nrOfDependenciesFromTo);
 										if (backCallPercentage > backCallThreshold) {
 											// The two nodes are highly coupled, so merge them and repeat the procedure
 											nodesToMerge.put(fromNodeId, toNodeId);
