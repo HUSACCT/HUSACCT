@@ -75,7 +75,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 			boolean extendsIAlgorithm = IAlgorithm.class.isAssignableFrom(potentialClass);
 			boolean isAbstractClass = Modifier.isAbstract(potentialClass.getModifiers());
 			if (extendsIAlgorithm && !isAbstractClass){
-				logger.info(potentialClass.getName());
+				// logger.info(potentialClass.getName());
 				approachClasses.add(potentialClass);
 			}
 		}

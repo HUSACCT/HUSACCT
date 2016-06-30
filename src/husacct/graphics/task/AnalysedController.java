@@ -12,7 +12,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.enums.DependencyOptionType;
+import husacct.common.enums.DependencyTypeOption;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 import husacct.graphics.domain.figures.RelationFigure;
@@ -77,32 +77,30 @@ public class AnalysedController extends DrawingController {
 	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-
 			switch(this.drawingSettingsHolder.getSelectedDependencyOption()){
 				case ONLY_UMLLINKS:
 					dependencyFigure = createUmlLinkRelationFigure(figureFrom, figureTo, dependencyFigure);
 					break;
-				case ACCESS_CALL_REFERENCE:
-//					throw new IllegalStateException("Not implemented yet");
-//					break;
-					logger.error(DependencyOptionType.ACCESS_CALL_REFERENCE.toString() + " not yet implemented");
-				case ALL_DEPENDENCY:
+				default: 
 					dependencyFigure = createDependencyRelationFigure(figureFrom, figureTo, dependencyFigure);
-					break;
-				default: throw new IllegalStateException("Unknown option type");
 			}
 		}
 		return dependencyFigure;
 	}
 
 	private RelationFigure createDependencyRelationFigure(ModuleFigure figureFrom, ModuleFigure figureTo, RelationFigure dependencyFigure) {
-		DependencyDTO[] dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
 		try {
+			DependencyDTO[] dependencies;
+			if (this.drawingSettingsHolder.getSelectedDependencyOption().equals(DependencyTypeOption.ACCESS_CALL_REFERENCE)) {
+				dependencies = analyseService.getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			} else {
+				dependencies = analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(figureFrom.getUniqueName(), figureTo.getUniqueName());
+			}
             if (dependencies.length > 0) {
                 dependencyFigure = figureFactory.createRelationFigure_Dependency(dependencies);
             }
         } catch (Exception e) {
-            logger.error(" Could not create a dependency figure." + e.getMessage());
+            logger.error(" Could not create a dependency figure: " + e.getMessage());
         }
 		return dependencyFigure;
 	}

@@ -3,14 +3,14 @@ package husacct.common.enums;
 /**
  * Created by Lars on 31-5-2016.
  */
-public enum DependencyOptionType {
+public enum DependencyTypeOption {
     ALL_DEPENDENCY("AllDependencies"),
-    ONLY_UMLLINKS("UmlLinks"),
-    ACCESS_CALL_REFERENCE("AccessCallReferenceDependencies");
+    ACCESS_CALL_REFERENCE("AccessCallReferenceDependencies"),
+    ONLY_UMLLINKS("UmlLinks");
 
     private String type;
 
-    DependencyOptionType(String type){
+    DependencyTypeOption(String type){
         this.type = type;
     }
 
@@ -18,7 +18,7 @@ public enum DependencyOptionType {
         return type;
     }
 
-    public static DependencyOptionType getOptionType(String s) {
+    public static DependencyTypeOption getOptionType(String s) {
         return null;
     }
 }

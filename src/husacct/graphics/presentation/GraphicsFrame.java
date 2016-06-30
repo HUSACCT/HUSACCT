@@ -378,8 +378,8 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 				localeService.getTranslatedString("HideModules"));
 		menuBarLocale.put("RestoreHiddenModules",
 				localeService.getTranslatedString("RestoreHiddenModules"));
-		menuBarLocale.put("DependencyType", 
-		                localeService.getTranslatedString("DependencyType"));
+		menuBarLocale.put("DependencyTypesOptions", 
+		                localeService.getTranslatedString("DependencyTypesOptions"));
 		menuBar.setLocale(menuBarLocale);
 		
 		ROOT_LEVEL = localeService.getTranslatedString("Root");

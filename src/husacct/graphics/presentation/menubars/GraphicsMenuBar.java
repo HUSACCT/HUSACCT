@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import husacct.common.enums.DependencyOptionType;
+import husacct.common.enums.DependencyTypeOption;
 import org.apache.log4j.Logger;
 
 import husacct.common.Resource;
@@ -526,7 +526,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		zoomSlider.setValue(value);
 	}
 
-  public void dependencyTypeChange(DependencyOptionType option) {
+  public void dependencyTypeChange(DependencyTypeOption option) {
       for (UserInputListener listener : listeners)
           if (listener instanceof GraphicsPresentationController) {
               ((GraphicsPresentationController) listener).dependencyTypeChange(option);

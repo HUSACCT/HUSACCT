@@ -19,7 +19,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import husacct.common.enums.DependencyOptionType;
+import husacct.common.enums.DependencyTypeOption;
+
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
@@ -50,10 +51,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	private int										totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
 	private HashMap<String, ModuleLayoutsEnum>		layoutStrategiesTranslations;
 	private String[]								layoutStrategyItems;
-	private HashMap<String, DependencyOptionType>	dependencyOptionTypeTranslations;
+	private HashMap<String, DependencyTypeOption>	dependencyOptionTypeTranslations;
 	private String[]								dependencyOptionItems;
 	private ILocaleService							localeService = ServiceProvider.getInstance().getLocaleService();
-	private JComboBox<String> toggleDependencyType;
+	private JComboBox<String> 						toggleDependencyType;
 	private boolean 								showDependencyOptions;
 
 	public GraphicsOptionsDialog(boolean showDependencyOptions) {
@@ -70,7 +71,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		totalWidth = 550;
 		totalHeight = 290;
 		paddingSize = 10;
-		labelWidth = 100;
+		labelWidth = 110;
 		elementHeight = 20;
 		elementWidth = totalWidth - labelWidth - paddingSize * 2 - 20;
 		
@@ -88,10 +89,10 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			i++;
 		}
 
-		dependencyOptionTypeTranslations = new HashMap<String, DependencyOptionType>();
+		dependencyOptionTypeTranslations = new HashMap<String, DependencyTypeOption>();
 		i = 0;
-		dependencyOptionItems = new String[DependencyOptionType.values().length];
-		for (DependencyOptionType optionType : DependencyOptionType.values()) {
+		dependencyOptionItems = new String[DependencyTypeOption.values().length];
+		for (DependencyTypeOption optionType : DependencyTypeOption.values()) {
 			String translation = localeService.getTranslatedString(optionType.getType());
 			dependencyOptionTypeTranslations.put(translation, optionType);
 			dependencyOptionItems[i] = translation;
@@ -260,8 +261,8 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 				public void actionPerformed(ActionEvent arg0) {
 					for(UserInputListener listener : listeners){
 						if (listener instanceof GraphicsMenuBar){
-							Object o = ((JComboBox)arg0.getSource()).getSelectedItem();
-							DependencyOptionType option = dependencyOptionTypeTranslations.get(o);
+							String selection = (String) toggleDependencyType.getSelectedItem();
+							DependencyTypeOption option = dependencyOptionTypeTranslations.get(selection);
 							((GraphicsMenuBar)listener).dependencyTypeChange(option);
 						}
 					}
@@ -471,7 +472,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
 			zoomLabel.setText(menuBarLocale.get("Zoom"));
-			if (showDependencyOptions) dependencyLabel.setText(menuBarLocale.get("DependencyType"));
+			if (showDependencyOptions) dependencyLabel.setText(menuBarLocale.get("DependencyTypesOptions"));
 			layoutStrategyLabel.setText(menuBarLocale.get("LayoutStrategy"));
 			zoomInButton.setText(menuBarLocale.get("ZoomIn"));
 			zoomOutButton.setText(menuBarLocale.get("ZoomOut"));

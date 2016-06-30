@@ -1,6 +1,6 @@
 package husacct.graphics.task;
 
-import husacct.common.enums.DependencyOptionType;
+import husacct.common.enums.DependencyTypeOption;
 
 public class DrawingSettingsHolder {
 	private boolean	areDependenciesShown = false;
@@ -9,7 +9,7 @@ public class DrawingSettingsHolder {
 	private boolean	areSmartLinesOn	= false;
 	private boolean	areViolationsShown = false;
 	private boolean	isZoomWithContextOn	= false;
-	private DependencyOptionType selectedDependencyOption = DependencyOptionType.ALL_DEPENDENCY;
+	private DependencyTypeOption selectedDependencyOption = DependencyTypeOption.ALL_DEPENDENCY;
 
 
 	private String[]	currentPaths	= new String[] {};
@@ -107,11 +107,11 @@ public class DrawingSettingsHolder {
 		return isZoomWithContextOn;
 	}
 
-	public DependencyOptionType getSelectedDependencyOption() {
+	public DependencyTypeOption getSelectedDependencyOption() {
 		return selectedDependencyOption;
 	}
 
-	public void setSelectedDependencyOption(DependencyOptionType selectedDependencyOption) {
+	public void setSelectedDependencyOption(DependencyTypeOption selectedDependencyOption) {
 		this.selectedDependencyOption = selectedDependencyOption;
 	}
 }

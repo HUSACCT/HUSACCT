@@ -6,8 +6,7 @@ import static org.junit.Assert.fail;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.RuleDTO;
-import husacct.common.enums.DependencyOptionType;
+import husacct.common.enums.DependencyTypeOption;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -19,7 +18,6 @@ import husacct.graphics.domain.figures.ParentFigure;
 import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
-import husacct.graphics.task.DrawingSettingsHolder;
 import husacct.graphics.task.ModuleAndRuleController;
 import husaccttest.TestResourceFinder;
 import husaccttest.define.DefineSarServicesTest_SRMA;
@@ -175,7 +173,7 @@ public class DrawingControllerTest {
 		graphicsAnalysedController.drawArchitectureTopLevel();
 		graphicsAnalysedController.resetContextFigures();
 		graphicsAnalysedController.getDrawingSettingsHolder().zoomTypeChange("zoom");
-		graphicsAnalysedController.getDrawingSettingsHolder().setSelectedDependencyOption(DependencyOptionType.ONLY_UMLLINKS);
+		graphicsAnalysedController.getDrawingSettingsHolder().setSelectedDependencyOption(DependencyTypeOption.ONLY_UMLLINKS);
 		graphicsAnalysedController.gatherChildModuleFiguresAndContextFigures_AndDraw(new String[] {"domain.umllinks"});
 		
 		int nrOfModules = graphicsAnalysedController.getDrawing().getShownModules().length;
@@ -272,7 +270,7 @@ public class DrawingControllerTest {
 				}
 			}
 		}
-		assertEquals("wrong amount of figures drawn", 3, nrOfModules);
+		assertEquals("wrong amount of figures drawn", 4, nrOfModules);
 		assertEquals(1, numberOfParentFigures);
 	}
 
