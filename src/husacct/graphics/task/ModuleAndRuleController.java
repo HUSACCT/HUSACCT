@@ -71,6 +71,19 @@ public class ModuleAndRuleController extends DrawingController {
 	}
 	
 	@Override
+	protected HashSet<String> getChildenOfParent(String parentName) {
+		if (parentName.equals("")) {
+			parentName = "**"; // Root within Define.
+		}
+		ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
+		HashSet<String> knownChildren = new HashSet<String>();
+		for (ModuleDTO child : children) {
+			knownChildren.add(child.logicalPath);
+		}
+		return knownChildren;
+	}
+
+	@Override
 	protected ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName) {
 		if (parentName.equals("")) {
 			parentName = "**"; // Root within Define.

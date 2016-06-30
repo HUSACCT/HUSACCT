@@ -2,6 +2,7 @@ package husacct.graphics.task;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
@@ -51,6 +52,16 @@ public class AnalysedController extends DrawingController {
 		return rootModuleFigures;
 	}
 	
+	@Override
+	protected HashSet<String> getChildenOfParent(String parentName) {
+		SoftwareUnitDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);
+		HashSet<String> knownChildren = new HashSet<String>();
+		for (SoftwareUnitDTO child : children) {
+			knownChildren.add(child.uniqueName);
+		}
+		return knownChildren;
+	}
+
 	@Override
 	protected ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName) {
 		SoftwareUnitDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);

@@ -69,7 +69,7 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 		}
 		int minWidth = newSize.width + HORZ_SPACING;
 		int minHeight = newSize.height + VERT_SPACING;
-		container.setMinimalSizes(minWidth, minHeight);
+		//container.setMinimalSizes(minWidth, minHeight);
 		
 		Rectangle2D.Double bounds = container.getBounds();
 		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);

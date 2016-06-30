@@ -22,16 +22,15 @@ import org.jhotdraw.draw.event.FigureListener;
 
 public class ParentFigure extends BaseFigure {
 	private static final long	serialVersionUID		= 101138923385231941L;
-	private static final Color	defaultContainerColor	= new Color(204, 204,
-																255);
+	private static final Color	defaultContainerColor	= new Color(204, 204, 255);
 	private RectangleFigure		body;
 	private TextFigure			moduleName;
 	private TextFigure			moduleStereotype;
 	private BufferedImage 		moduleIcon;
 	private ImageFigure 		moduleIconFigure;
 	
-	protected int				minWidth				= 400;
-	protected int				minHeight				= 400;
+	protected int				minWidth				= 200;
+	protected int				minHeight				= 200;
 	
 	private ArrayList<Figure>	childrenOwnImpl;
 	private double				currentPositionX, currentPositionY;
@@ -271,6 +270,7 @@ public class ParentFigure extends BaseFigure {
 			 iconWidth = moduleIcon.getWidth();
 		}
 		double totalHeaderWidth = textGap + nameWidth + textGap + stereotypeWidth + textGap + iconWidth + iconMarginX;
+		this.minWidth = (int) totalHeaderWidth;
 
 		// Set bounds body
 		if (lead.x - anchor.x < minWidth) lead.x = anchor.x + minWidth;

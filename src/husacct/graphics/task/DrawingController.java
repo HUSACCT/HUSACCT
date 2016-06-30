@@ -225,9 +225,10 @@ public abstract class DrawingController {
 			if (contextFigures.size() > 0) {
 				// a) Filter out context figures that are children of one of the parents.
 				HashSet<ModuleFigure> filteredContextFigures = new HashSet<ModuleFigure>();
-				for (ModuleFigure contextFigure : contextFigures) {
-					for (String parentName : parentNames) {
-						if (!contextFigure.getUniqueName().startsWith(parentName)) {
+				for (String parentName : parentNames) {
+					HashSet<String> children = getChildenOfParent(parentName);
+					for (ModuleFigure contextFigure : contextFigures) {
+						if (!children.contains(contextFigure.getUniqueName())) {
 							filteredContextFigures.add(contextFigure);
 						}
 					}
@@ -521,6 +522,8 @@ public abstract class DrawingController {
 	}
 	
 	// Abstract	methods
+	protected abstract HashSet<String> getChildenOfParent(String parentName);
+	
 	protected abstract ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName);
 	
 	protected abstract DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo);
