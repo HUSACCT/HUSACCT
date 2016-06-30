@@ -30,7 +30,7 @@ public class ParentFigure extends BaseFigure {
 	private ImageFigure 		moduleIconFigure;
 	
 	protected int				minWidth				= 200;
-	protected int				minHeight				= 200;
+	protected int				minHeight				= 150;
 	
 	private ArrayList<Figure>	childrenOwnImpl;
 	private double				currentPositionX, currentPositionY;

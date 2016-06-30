@@ -24,7 +24,6 @@ import husacct.graphics.domain.figures.RelationFigure;
 import husacct.graphics.task.modulelayout.BasicLayoutStrategy;
 import husacct.graphics.task.modulelayout.ContainerLayoutStrategy;
 import husacct.graphics.task.modulelayout.FigureConnectorStrategy;
-import husacct.graphics.task.modulelayout.LayeredLayoutStrategy;
 import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 import husacct.graphics.task.modulelayout.NoLayoutStrategy;
 import husacct.graphics.task.modulelayout.layered.LayoutStrategy;
@@ -381,9 +380,9 @@ public abstract class DrawingController {
 			case BASIC_LAYOUT:
 				layoutStrategy = new BasicLayoutStrategy(drawing);
 				break;
-			case LAYERED_LAYOUT:
+			/* case LAYERED_LAYOUT:
 				layoutStrategy = new LayeredLayoutStrategy(drawing);
-				break;
+				break; */
 			case NO_LAYOUT:
 				layoutStrategy = new NoLayoutStrategy();
 				break;
