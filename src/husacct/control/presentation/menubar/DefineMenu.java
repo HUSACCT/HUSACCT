@@ -19,10 +19,10 @@ import husacct.control.task.States;
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
 	private MainController mainController;
-	private JMenu architectureDiagram;
+//	private JMenu architectureDiagram;
+//	private JMenuItem moduleAndRuleDiagramItem; //Disabled in vs 5.1; waiting for improvement; see Graphics system documentation
 	private JMenuItem defineArchitectureItem;
-	private JMenuItem moduleAndDependenciesDiagramItem;
-	private JMenuItem moduleAndRuleDiagramItem;
+	private JMenuItem definedArchitectureDiagramItem;
 	private JMenuItem reportArchitectureItem;
 	private JMenuItem exportArchitectureItem;
 	private JMenuItem importArchitectureItem;
@@ -42,14 +42,10 @@ public class DefineMenu extends JMenu{
 		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
 		defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				
-		moduleAndDependenciesDiagramItem = new JMenuItem(localeService.getTranslatedString("ModuleAndDependenciesDiagram"));
-		moduleAndDependenciesDiagramItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
-		moduleAndDependenciesDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
+		definedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("DefinedArchitectureDiagram"));
+		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
+		definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 		
-		moduleAndRuleDiagramItem = new JMenuItem(localeService.getTranslatedString("ModuleAndRuleDiagram"));
-		moduleAndRuleDiagramItem.setAccelerator(KeyStroke.getKeyStroke('M', KeyEvent.CTRL_DOWN_MASK));
-		moduleAndRuleDiagramItem.setMnemonic(getMnemonicKeycode("ModuleAndRuleDiagramMnemonic"));
-				
 		exportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ExportArchitecture"));
 		exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));		
 				
@@ -59,12 +55,20 @@ public class DefineMenu extends JMenu{
 		reportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReportArchitecture"));
 		reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
 		
+		/*
 		architectureDiagram = new JMenu(localeService.getTranslatedString("DefinedArchitectureDiagram"));
+		moduleAndDependenciesDiagramItem = new JMenuItem(localeService.getTranslatedString("ModuleAndDependenciesDiagram"));
+		moduleAndDependenciesDiagramItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
+		moduleAndDependenciesDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
+		moduleAndRuleDiagramItem = new JMenuItem(localeService.getTranslatedString("ModuleAndRuleDiagram"));
+		moduleAndRuleDiagramItem.setAccelerator(KeyStroke.getKeyStroke('M', KeyEvent.CTRL_DOWN_MASK));
+		moduleAndRuleDiagramItem.setMnemonic(getMnemonicKeycode("ModuleAndRuleDiagramMnemonic"));
 		architectureDiagram.add(moduleAndDependenciesDiagramItem);
 		architectureDiagram.add(moduleAndRuleDiagramItem);
+		*/
 		
 		this.add(defineArchitectureItem);
-		this.add(architectureDiagram);
+		this.add(definedArchitectureDiagramItem);
 		this.add(exportArchitectureItem);
 		this.add(importArchitectureItem);
 		this.add(reportArchitectureItem);
@@ -78,19 +82,21 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
-		moduleAndDependenciesDiagramItem.addActionListener(new ActionListener(){
+		definedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showDefinedArchitectureDiagram();
 			}
 		});
 		
+		/*
 		moduleAndRuleDiagramItem.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showModuleAndRuleDiagram();
 			}
 		});
+		*/
 		
 		exportArchitectureItem.addActionListener(new ActionListener(){
 			@Override
@@ -118,8 +124,8 @@ public class DefineMenu extends JMenu{
 			@Override
 			public void changeState(List<States> states) {
 				defineArchitectureItem.setEnabled(false);
-				moduleAndDependenciesDiagramItem.setEnabled(false);
-				moduleAndRuleDiagramItem.setEnabled(false);
+				definedArchitectureDiagramItem.setEnabled(false);
+				//moduleAndRuleDiagramItem.setEnabled(false);
 				importArchitectureItem.setEnabled(false);
 				exportArchitectureItem.setEnabled(false);
 				reportArchitectureItem.setEnabled(false);
@@ -131,8 +137,8 @@ public class DefineMenu extends JMenu{
 				
 				if(states.contains(States.DEFINED) || states.contains(States.MAPPED)){
 					exportArchitectureItem.setEnabled(true);
-					moduleAndDependenciesDiagramItem.setEnabled(true);
-					moduleAndRuleDiagramItem.setEnabled(true);
+					definedArchitectureDiagramItem.setEnabled(true);
+					//moduleAndRuleDiagramItem.setEnabled(true);
 					reportArchitectureItem.setEnabled(true);
 				}
 			}
@@ -144,14 +150,14 @@ public class DefineMenu extends JMenu{
 			public void update() {
 				defineMenu.setText(localeService.getTranslatedString("Define"));
 				defineArchitectureItem.setText(localeService.getTranslatedString("DefineArchitecture"));
-				moduleAndDependenciesDiagramItem.setText(localeService.getTranslatedString("ModuleAndDependenciesDiagram"));
-				moduleAndRuleDiagramItem.setText(localeService.getTranslatedString("ModuleAndRuleDiagram"));
-				moduleAndRuleDiagramItem.setMnemonic(getMnemonicKeycode("ModuleAndRuleDiagramMnemonic"));
+				definedArchitectureDiagramItem.setText(localeService.getTranslatedString("DefinedArchitectureDiagram"));
+				//moduleAndRuleDiagramItem.setText(localeService.getTranslatedString("ModuleAndRuleDiagram"));
 				exportArchitectureItem.setText(localeService.getTranslatedString("ExportArchitecture"));
 				importArchitectureItem.setText(localeService.getTranslatedString("ImportArchitecture"));
 				reportArchitectureItem.setText(localeService.getTranslatedString("ReportArchitecture"));
 				defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
-				moduleAndDependenciesDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
+				definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
+				//moduleAndRuleDiagramItem.setMnemonic(getMnemonicKeycode("ModuleAndRuleDiagramMnemonic"));
 				exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));	
 				importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
 				reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
@@ -162,12 +168,14 @@ public class DefineMenu extends JMenu{
 	public JMenuItem getDefineArchitectureItem(){
 		return defineArchitectureItem;
 	}
-	public JMenuItem getModuleAndDependenciesDiagramItem(){
-		return moduleAndDependenciesDiagramItem;
+	public JMenuItem definedArchitectureDiagramItem(){
+		return definedArchitectureDiagramItem;
 	}
+	/*
 	public JMenuItem getModuleAndRuleDiagramItem(){
 		return moduleAndRuleDiagramItem;
 	}
+	*/
 	public JMenuItem getExportArchitectureItem(){
 		return exportArchitectureItem;
 	}
@@ -176,9 +184,6 @@ public class DefineMenu extends JMenu{
 	}
 	public JMenuItem getReportArchitectureItem(){
 		return reportArchitectureItem;
-	}
-	public JMenu getArchitectureDiagram(){
-		return architectureDiagram;
 	}
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = localeService.getTranslatedString(translatedString);

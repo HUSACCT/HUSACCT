@@ -14,7 +14,7 @@ public class ViewController {
 	
 	private InternalFrameController defineContainer;
 	private InternalFrameController definedArchitectureDiagramContainer;
-	private InternalFrameController moduleAndRuleDiagramContainer;
+	// private InternalFrameController moduleAndRuleDiagramContainer; //Disabled in vs 5.1; waiting for improvement
 	private InternalFrameController analysedApplicationOverviewContainer;
 	private InternalFrameController analysedArchitectureDiagramContainer;
 	private InternalFrameController validateContainer;
@@ -32,19 +32,20 @@ public class ViewController {
 			}
 		};
 		
-		definedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "ModuleAndDependenciesDiagram"){
+		definedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "DefinedArchitectureDiagram"){
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getDefinedArchitectureGUI();
 			}
 		};
 		
+		/*
 		moduleAndRuleDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "ModuleAndRuleDiagram"){
 			@Override
 			public JInternalFrame getInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getModuleAndRuleGUI();
 			}
-		};
+		}; */
 		
 		analysedApplicationOverviewContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "AnalysedArchitectureOverview") {
 			@Override
@@ -91,7 +92,7 @@ public class ViewController {
 		viewContainers.add(defineContainer);
 		viewContainers.add(definedArchitectureDiagramContainer);
 		viewContainers.add(analysedApplicationOverviewContainer);
-		viewContainers.add(moduleAndRuleDiagramContainer);
+		// viewContainers.add(moduleAndRuleDiagramContainer);
 		viewContainers.add(analyseSARController);
 		viewContainers.add(analysedArchitectureDiagramContainer);
 		viewContainers.add(validateContainer);
@@ -108,10 +109,11 @@ public class ViewController {
 		ServiceProvider.getInstance().getGraphicsService().drawDefinedArchitecture();
 	}
 	
+	/*
 	public void showModuleAndRuleDiagram() {
 		moduleAndRuleDiagramContainer.showView();
 		ServiceProvider.getInstance().getGraphicsService().drawModuleAndRuleArchitecture();
-	}
+	} */
 	
 	public void showApplicationOverviewGui() {
 		analysedApplicationOverviewContainer.showView();
