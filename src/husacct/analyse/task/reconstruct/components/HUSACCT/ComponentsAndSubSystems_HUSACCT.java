@@ -287,9 +287,6 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	 * @returns true if the interface is specific for the unit, otherwise it returns false.
 	 */
 	private boolean isInterfaceSpecificForUnit(SoftwareUnitDTO interfaceClass, String unitUniqueName) {
-		/* if (interfaceClass.uniqueName.contains("Centric.GwsLib.IMTFormData")) {
-			boolean breakpoint = true;
-		} */
 		boolean interfaceIsSpecificForUnit = true;
 		// 1) Check that the interface is a child or a sibling of the passed unit.
 		boolean interfaceIsChild = true;

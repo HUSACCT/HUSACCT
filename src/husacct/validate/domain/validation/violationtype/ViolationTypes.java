@@ -9,6 +9,7 @@ public enum ViolationTypes implements IViolationType {
 	DECLARATION("Declaration", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	INHERITANCE("Inheritance", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	ANNOTATION("Annotation", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
+	REFERENCE("Reference", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	
 	PUBLIC("public", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	PROTECTED("protected", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),

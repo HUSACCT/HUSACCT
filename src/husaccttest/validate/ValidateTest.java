@@ -217,16 +217,16 @@ public class ValidateTest {
 	@Test
 	public void getViolationTypesJavaLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
-		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
+		assertEquals(7, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(7, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
 		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 
 /*	@Test
 	public void getViolationTypesCSharpLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
-		assertEquals(6, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
+		assertEquals(7, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(7, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
 		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 */
