@@ -11,7 +11,6 @@ import husacct.common.Resource;
 import husacct.control.task.MainController;
 
 public class ViewController {
-	
 	private InternalFrameController defineContainer;
 	private InternalFrameController definedArchitectureDiagramContainer;
 	// private InternalFrameController moduleAndRuleDiagramContainer; //Disabled in vs 5.1; waiting for improvement
@@ -120,7 +119,23 @@ public class ViewController {
 	}
 	
 	public void showAnalyseSarGui() {
+		// Iconify all shown InternalFrames
+		for (InternalFrameController ifController : viewContainers) {
+			JInternalFrame internalFrame = ifController.getInternalFrame();
+			if (internalFrame.isShowing()) {
+				if (!internalFrame.isIcon()) {
+					ifController.iconifyInternalFrame();
+				}
+			}
+		}
+		// Show the Define frame in its restored size
+		if (!defineContainer.getInternalFrame().isShowing()) {
+			defineContainer.showView();
+		}
+		defineContainer.restoreInternalFrame();
+		// Show the AnalyseSAR frame in its restored size (the size en position are set in the frame's overridden setBounds().
 		analyseSARController.showView();
+		analyseSARController.restoreInternalFrame();
 	}
 	
 	public void showAnalysedArchitectureDiagram() {	

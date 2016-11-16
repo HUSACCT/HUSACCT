@@ -38,6 +38,14 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
     @Override
     public void actionPerformed(ActionEvent clickEvent) {
     }
+    
+    @Override
+    public void setBounds(int x, int y, int width, int height) {
+    	int paneWidth = getParent().getWidth();
+    	int paneHeight = getParent().getHeight();
+    	Dimension sarSize = getMinimumSize();
+    	super.setBounds(paneWidth - sarSize.width -1, paneHeight - sarSize.height -1, sarSize.width, sarSize.height);
+    }
 
     @Override
     public void update() {

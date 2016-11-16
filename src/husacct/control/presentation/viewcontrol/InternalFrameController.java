@@ -31,7 +31,7 @@ abstract public class InternalFrameController {
 	private JToggleButton toggleButton;
 
 	public static final Dimension defaultDimension = new Dimension(950, 600);
-	private static Point lastStartPosition = new Point(0, 0);
+	private static Point lastStartPosition = new Point(-19, -19);
 	private static Point positionIncrement = new Point(20, 20);
 	private Point startPosition = new Point(0, 0);
 	private boolean isMaximixed = true;
@@ -125,7 +125,7 @@ abstract public class InternalFrameController {
 		}
 	}
 
-	private void setInternalFrameAndButtonVisible(){
+	public void setInternalFrameAndButtonVisible(){
 		if (internalFrame != null) {
 			internalFrame.setVisible(true);
 			taskBar.addToggleButton(toggleButton);
@@ -166,7 +166,7 @@ abstract public class InternalFrameController {
 	}
 	
 	public static void resetLastStartPosition() {
-		lastStartPosition = new Point(0, 0);
+		lastStartPosition = new Point(-19, -19);
 	}
 
 	private void calculateNewStartPosition(){

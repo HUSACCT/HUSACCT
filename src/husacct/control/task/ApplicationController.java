@@ -80,10 +80,6 @@ public class ApplicationController {
 		analyseThread.run();	
 	}
 	
-	public void reconstructArchitecture(){
-		ServiceProvider.getInstance().getAnalyseService().reconstructArchitecture_Initiate();
-	}
-	
 	public LoadingDialog getCurrentLoader() {
 		return this.currentLoader;
 	}

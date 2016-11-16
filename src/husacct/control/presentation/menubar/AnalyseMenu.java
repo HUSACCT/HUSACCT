@@ -6,7 +6,6 @@ import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.States;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -30,7 +29,7 @@ public class AnalyseMenu extends JMenu{
 	private JMenuItem importAnalysisModelItem;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-	
+
 	public AnalyseMenu(final MainController mainController){
 		super();
 		this.mainController = mainController;
@@ -119,9 +118,7 @@ public class AnalyseMenu extends JMenu{
 		
 		reconstructArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getApplicationController().reconstructArchitecture();
 				mainController.getViewController().showAnalyseSarGui();
-				mainController.getViewController().showDefineArchitecture();
 			}
 		});
 		
