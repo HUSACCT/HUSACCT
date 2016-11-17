@@ -22,13 +22,6 @@ public class AnalyseReconstructConstants {
 		public static final String Externals_Recognition = "Externals_Recognition";
 	}
 	
-	public static class ApproachesTable{
-		public static final String ApproachesConstants = "ApproachesConstants";
-		public static final String PanelAllApproaches = "AllApproaches";
-		public static final String PanelDistinctApproaches = "DistinctApproaches";
-		
-	}
-	
 	public static class RelationTypes{
 		public static final String allDependencies = "AllDependencies";
 		public static final String umlLinks = "UmlLinks";

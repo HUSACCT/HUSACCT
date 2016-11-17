@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
@@ -32,7 +31,7 @@ public class DistinctApproachesPanel extends HelpableJPanel implements ActionLis
 	private static final long serialVersionUID = 10903678111609565L;
 	private static final ILocaleService localService = ServiceProvider.getInstance().getLocaleService();
 	private final Logger logger = Logger.getLogger(AllApproachesJPanel.class);
-	private String approachesConstants = AnalyseReconstructConstants.ApproachesTable.ApproachesConstants;
+	private String approachesConstants = "ApproachesConstants";
 	private JTable distinctApproachesTable;
 	private JButton applyButton, reverseButton, clearAllButton;
 	private AnalyseTaskControl analyseTaskControl;
@@ -46,7 +45,7 @@ public class DistinctApproachesPanel extends HelpableJPanel implements ActionLis
 		setLayout(new BorderLayout());
 		
 		JPanel distinctApproachesPanel = new JPanel();
-		distinctApproachesPanel.setName(AnalyseReconstructConstants.ApproachesTable.PanelDistinctApproaches);
+		distinctApproachesPanel.setName(getTranslation("DistinctApproaches"));
 		distinctApproachesPanel.setLayout(new BorderLayout(0, 0));
 		
 		Object distinctApproachesColumns[] = getColumnNames();

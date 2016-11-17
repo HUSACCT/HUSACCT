@@ -9,12 +9,15 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import husacct.ServiceProvider;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
+import husacct.common.locale.ILocaleService;
 
 public class ApproachesTableSelectionListener implements ListSelectionListener {
+	private final ILocaleService localService = ServiceProvider.getInstance().getLocaleService();
 	private JTable tableApproaches;
 	private AnalyseTaskControl analyseTaskControl;
 	private JTable allParameterTable;
@@ -37,8 +40,8 @@ public class ApproachesTableSelectionListener implements ListSelectionListener {
 			
 			HashMap<String, Object> rowData = getParameters(dto);
 			DefaultTableModel defaultTableModel = new DefaultTableModel();
-			defaultTableModel.addColumn("Parameter");
-			defaultTableModel.addColumn("Value");
+			defaultTableModel.addColumn(localService.getTranslatedString("Parameter"));
+			defaultTableModel.addColumn(localService.getTranslatedString("Value"));
 			
 			Iterator<Entry<String, Object>> iterator = rowData.entrySet().iterator();
 			int i = 0;

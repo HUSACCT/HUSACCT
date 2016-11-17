@@ -6,9 +6,10 @@ import husacct.common.help.Helpable;
 import husacct.control.presentation.MainGui;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 
 public class HelpableJDialog extends JDialog{
+
+	private static final long serialVersionUID = 1L;
 
 	public HelpableJDialog(MainGui mainGui, boolean b) {
 		super(mainGui, b);

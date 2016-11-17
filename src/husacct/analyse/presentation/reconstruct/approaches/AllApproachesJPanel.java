@@ -2,6 +2,7 @@ package husacct.analyse.presentation.reconstruct.approaches;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -23,9 +25,8 @@ import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.reconstruct.ApproachesSettingsFrame;
+import husacct.analyse.presentation.reconstruct.EditApproachFrame;
 import husacct.analyse.task.AnalyseTaskControl;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -33,16 +34,16 @@ import husacct.common.locale.ILocaleService;
 
 public class AllApproachesJPanel extends HelpableJPanel implements ActionListener {
 	private static final long serialVersionUID = 8208626960034851199L;
-	private static final ILocaleService localService = ServiceProvider.getInstance().getLocaleService();
+	private final ILocaleService localService = ServiceProvider.getInstance().getLocaleService();
 	private final Logger logger = Logger.getLogger(AllApproachesJPanel.class);
 	
-	private String approachesConstants = AnalyseReconstructConstants.ApproachesTable.ApproachesConstants;
+	private String approachesConstants = "ApproachesConstants";
 	private AnalyseTaskControl analyseTaskControl;
 	private TableColumnModel tableAllApproachesColumnModel;
-	private JButton applyButton, reverseButton, clearAllButton, settingsButton;
+	private JButton applyButton, reverseButton, clearAllButton, editApproachButton;
 	
 	public JTable allApproachesTable;
-	public JTable allApproachesParameterTable;
+	public JTable parameterTable;
 	
 	public AllApproachesJPanel(AnalyseTaskControl analyseTaskControl) throws IOException {
 		this.analyseTaskControl = analyseTaskControl;
@@ -53,7 +54,8 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 		setLayout(new BorderLayout());
 		
 		JPanel allApproachedPanel = new JPanel();
-		allApproachedPanel.setName(AnalyseReconstructConstants.ApproachesTable.PanelAllApproaches);
+		allApproachedPanel.setName(localService.getTranslatedString("Approaches"));
+		//allApproachedPanel.setBorder(new TitledBorder(localService.getTranslatedString("Approaches")));
 		allApproachedPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		//Setup AllAproachesTable
@@ -62,18 +64,23 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 		allApproachesTable = setupAllApproachesTable(columnNames, rows);
 						
 		Dimension allApproachestableSize = allApproachesTable.getPreferredSize();
-		JScrollPane allApproachesTableScrollPane = setupAllAproachesScrollPane(allApproachestableSize, allApproachesTable);
+		JScrollPane allApproachesTableScrollPane = setupScrollPane(allApproachestableSize, allApproachesTable);
+		allApproachesTableScrollPane.setBorder(new TitledBorder(localService.getTranslatedString("Approaches")));
 		
-		
-		//Setup AllAproacheParameterTable
+		//Setup ParameterTable
+		/* JPanel parametersPanel = new JPanel();
+		parametersPanel.setBorder(new TitledBorder(localService.getTranslatedString("Parameters")));
+		parametersPanel.setLayout(new GridLayout(0, 1, 0, 0)); */
+
 		Object[][] tempData = {{ "", "" }};
-		Object[] cols = { "Parameter", "Value" };
-		allApproachesParameterTable = setupAllAproachesParameterTable(tempData, cols);
+		Object[] cols = { localService.getTranslatedString("Parameter"), localService.getTranslatedString("Value") };
+		parameterTable = setupParameterTable(tempData, cols);
 				
-		Dimension parameterTableSize = allApproachesParameterTable.getPreferredSize();
-		JScrollPane allApproachesParameterScrollPane = setupAllAproachesScrollPane(parameterTableSize, allApproachesParameterTable);
+		Dimension parameterTableSize = parameterTable.getPreferredSize();
+		JScrollPane allApproachesParameterScrollPane = setupScrollPane(parameterTableSize, parameterTable);
+		allApproachesParameterScrollPane.setBorder(new TitledBorder(localService.getTranslatedString("Parameters")));
 		
-		ListSelectionListener allApproachesSelectionListener = new ApproachesTableSelectionListener(allApproachesTable, analyseTaskControl, allApproachesParameterTable);
+		ListSelectionListener allApproachesSelectionListener = new ApproachesTableSelectionListener(allApproachesTable, analyseTaskControl, parameterTable);
 		allApproachesTable.getSelectionModel().addListSelectionListener(allApproachesSelectionListener);
 		
 		
@@ -82,11 +89,12 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 		allApproachedPanel.add(allApproachesParameterScrollPane);
 		
 		this.add(allApproachedPanel, BorderLayout.CENTER);
+		//this.add(parametersPanel, BorderLayout.CENTER);
 		JPanel buttonPanel = setupButtonPanel();
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 
-	private JScrollPane setupAllAproachesScrollPane(Dimension tableSize, JTable table) {
+	private JScrollPane setupScrollPane(Dimension tableSize, JTable table) {
 		JScrollPane tableScrollPane = new JScrollPane(table);
 		int tableheight = tableSize.height + table.getRowHeight()*table.getRowCount()+50;
 		tableScrollPane.setPreferredSize(new Dimension(tableSize.width, tableheight));
@@ -94,27 +102,24 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 	}
 
 	private JTable setupAllApproachesTable(Object[] columnNames, Object[][] rows) {
-		JTable table = new JTable(rows, columnNames){
+		JTable table = new JTable  (rows, columnNames){
 			private static final long serialVersionUID = -1304690689139412746L;
 			public boolean isCellEditable(int row, int col){
 				return false;
 			}
 		};
-		
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setName("tableAllApproaches");
-		table.setMinimumSize(new Dimension(600,150));
-		
+		table.getTableHeader().setUI(null);
 		tableAllApproachesColumnModel = table.getColumnModel();
 		hideColumn(approachesConstants, tableAllApproachesColumnModel);
 		return table;
 	}
 	
 	private Object[] getColumnNames(){
-		String approachesTranslation = localService.getTranslatedString("Approaches");
 		Object columnNames[] = {
 				approachesConstants, 
-				approachesTranslation
+				localService.getTranslatedString("Approaches")
 		};
 		return columnNames;
 	}
@@ -139,9 +144,11 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 		tableColumnModel.removeColumn(column);
 	}
 	
-	private JTable setupAllAproachesParameterTable(Object[][] rows, Object[] columns){
+	private JTable setupParameterTable(Object[][] rows, Object[] columns){
 		JTable table = new JTable(rows, columns);
 		table.setEnabled(false);
+		Color background = new Color(242, 242, 242);
+		table.setBackground(background);
 		return table;
 		
 	}
@@ -153,25 +160,26 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 		String applyTranslation = localService.getTranslatedString("Apply");
 		applyButton = new JButton(applyTranslation);
 		buttonPanel.add(applyButton);
-		applyButton.setPreferredSize(new Dimension(100, 40));
+		applyButton.setPreferredSize(new Dimension(140, 40));
 		applyButton.addActionListener(this);
 
 		String reverseTranslation = localService.getTranslatedString("Reverse");
 		reverseButton = new JButton(reverseTranslation);
 		buttonPanel.add(reverseButton);
-		reverseButton.setPreferredSize(new Dimension(reverseButton.getPreferredSize().width, 40));
+		reverseButton.setPreferredSize(new Dimension(140, 40));
 		reverseButton.addActionListener(this);
 		
 		String clearAllTranslation = localService.getTranslatedString("ClearAll");
 		clearAllButton = new JButton(clearAllTranslation);
 		buttonPanel.add(clearAllButton);
-		clearAllButton.setPreferredSize(new Dimension(100, 40));
+		clearAllButton.setPreferredSize(new Dimension(140, 40));
 		clearAllButton.addActionListener(this);
 				
-		settingsButton = new JButton("Settings");
-		buttonPanel.add(settingsButton);
-		settingsButton.setPreferredSize(new Dimension(100, 40));
-		settingsButton.addActionListener(this);
+		String editApproach = localService.getTranslatedString("EditApproach");
+		editApproachButton = new JButton(editApproach);
+		buttonPanel.add(editApproachButton);
+		editApproachButton.setPreferredSize(new Dimension(140, 40));
+		editApproachButton.addActionListener(this);
 		
 		return buttonPanel;
 	}
@@ -203,20 +211,20 @@ public class AllApproachesJPanel extends HelpableJPanel implements ActionListene
 			analyseTaskControl.reconstructArchitecture_ClearAll();
 			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
 		}
-		if (action.getSource() == settingsButton){
+		if (action.getSource() == editApproachButton){
 			int selectedRow = allApproachesTable.getSelectedRow();
 			if (selectedRow >= 0){
 				String approachConstant = (String) allApproachesTable.getModel().getValueAt(selectedRow, 0);
 				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 				if (!reconstructArchitectureDTO.parameterDTOs.isEmpty()){
-					new ApproachesSettingsFrame(analyseTaskControl, reconstructArchitectureDTO, this);
+					new EditApproachFrame(analyseTaskControl, reconstructArchitectureDTO, this);
 				}
 				else{
-					JOptionPane.showMessageDialog(this, "this approach has no settings");
+					JOptionPane.showMessageDialog(this, localService.getTranslatedString("ApproachWithoutParametersWarning"));
 				}
 			}
 			else{
-				logger.warn("No Approache selected");
+				JOptionPane.showMessageDialog(this, localService.getTranslatedString("NoApproachSelectedWarning"));
 			}
 		}	
 	}

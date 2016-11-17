@@ -3,9 +3,11 @@ package husacct.analyse.presentation.reconstruct;
 import husacct.ServiceProvider;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJInternalFrame;
+import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +17,10 @@ import javax.swing.JPanel;
 public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements ActionListener, IServiceListener {
 
     private static final long serialVersionUID = 1L;
-	private JPanel overviewPanel;
+	private final ILocaleService localService = ServiceProvider.getInstance().getLocaleService();
 	protected AnalyseTaskControl analyseTaskControl;
+	private JPanel overviewPanel;
+	private ReconstructJPanel reconstructJPanel;
 
     public AnalyseInternalSARFrame(AnalyseTaskControl atc) {
     	analyseTaskControl = atc;
@@ -25,26 +29,41 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
     }
 
     private void registerLocaleChangeListener() {
-        ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
+    	localService.addServiceListener(this);
     }
 
-    public void reloadText() {
-        this.setTitle("Software Architectur Reconstruction"); // Translate, original: controller.translate("AnalysedWindowTitle")
-        this.invalidate();
-        this.revalidate();
-        this.repaint();
+    public void initUI(){
+    	//Dimension minimumSize = new Dimension(740, 350); // The minimal minimumSize 
+    	Dimension minimumSize = new Dimension(800, 400);
+		setMinimumSize(minimumSize);
+    	addReconstructPanel();
     }
 
+	private void addReconstructPanel() {
+		this.overviewPanel = new JPanel();
+		BorderLayout borderLayout = new BorderLayout();
+		this.overviewPanel.setLayout(borderLayout);
+		reconstructJPanel = new ReconstructJPanel(analyseTaskControl);
+		this.overviewPanel.add(reconstructJPanel);
+		this.overviewPanel.setSize(20, 20);
+		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
+	}
+    
     @Override
     public void actionPerformed(ActionEvent clickEvent) {
     }
     
     @Override
     public void setBounds(int x, int y, int width, int height) {
-    	int paneWidth = getParent().getWidth();
-    	int paneHeight = getParent().getHeight();
     	Dimension sarSize = getMinimumSize();
-    	super.setBounds(paneWidth - sarSize.width -1, paneHeight - sarSize.height -1, sarSize.width, sarSize.height);
+    	Container c = getParent();
+    	if (c != null) {
+	    	int paneWidth = getParent().getWidth();
+	    	int paneHeight = getParent().getHeight();
+	    	super.setBounds(paneWidth - sarSize.width -1, paneHeight - sarSize.height -1, sarSize.width, sarSize.height);
+    	} else {
+        	super.setBounds(0, 0, sarSize.width, sarSize.height);
+    	}
     }
 
     @Override
@@ -52,18 +71,12 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
         reloadText();
     }
     
-	private void addReconstructPanel() {
-		this.overviewPanel = new JPanel();
-		BorderLayout borderLayout = new BorderLayout();
-		this.overviewPanel.setLayout(borderLayout);
-		this.overviewPanel.add(new ReconstructJPanel(analyseTaskControl));
-		this.overviewPanel.setSize(20, 20);
-		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
-	}
-    
-    public void initUI(){
-    	Dimension minimumSize = new Dimension(740, 350);
-		setMinimumSize(minimumSize);
-    	this.addReconstructPanel();
+    public void reloadText() {
+        this.setTitle(localService.getTranslatedString("SoftwareArchitectureReconstruction"));
+        reconstructJPanel.reload();
+        this.invalidate();
+        this.revalidate();
+        this.repaint();
     }
+
 }
