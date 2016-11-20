@@ -9,8 +9,8 @@ import javax.swing.border.LineBorder;
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.reconstruct.approaches.AllApproachesJPanel;
-import husacct.analyse.presentation.reconstruct.approaches.DistinctApproachesPanel;
+import husacct.analyse.presentation.reconstruct.approaches.PracticalApproachesJPanel;
+import husacct.analyse.presentation.reconstruct.approaches.ResearchApproachesHUPanel;
 import husacct.analyse.presentation.reconstruct.mojo.MojoJPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.common.help.presentation.HelpableJPanel;
@@ -43,11 +43,11 @@ public class ReconstructJPanel extends HelpableJPanel{
 	private void addTabs(){
 		tabbedPane.removeAll();
 		try{
-			String allApprTranslation = getTranslation("AllApproaches");
-			tabbedPane.addTab(allApprTranslation, null, new AllApproachesJPanel(analyseTaskControl), null);
+			String allApprTranslation = getTranslation("PracticalApproaches");
+			tabbedPane.addTab(allApprTranslation, null, new PracticalApproachesJPanel(analyseTaskControl), null);
 			
-			String distinctApprTranslation = getTranslation("DistinctApproaches");
-			tabbedPane.addTab(distinctApprTranslation, null, new DistinctApproachesPanel(analyseTaskControl), null);
+			String distinctApprTranslation = getTranslation("ResearchApproachesHU");
+			tabbedPane.addTab(distinctApprTranslation, null, new ResearchApproachesHUPanel(analyseTaskControl), null);
 		
 			MojoJPanel mojoPanel = new MojoJPanel();
 			tabbedPane.addTab("Mojo",null, mojoPanel.createMojoPanel(),null);

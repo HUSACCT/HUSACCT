@@ -10,6 +10,8 @@ import javax.swing.JInternalFrame;
 
 public class HelpableJInternalFrame extends JInternalFrame{
 
+	private static final long serialVersionUID = 1L;
+
 	public HelpableJInternalFrame(MainGui mainGui, boolean b) {
 		
 		Helpable help = new Helpable(this);

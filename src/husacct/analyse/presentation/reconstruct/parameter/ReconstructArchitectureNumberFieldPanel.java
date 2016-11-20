@@ -33,10 +33,11 @@ public class ReconstructArchitectureNumberFieldPanel extends ReconstructArchitec
 		
 		if(parameterDTO instanceof ReconstructArchitectureNumberFieldDTO) {
 			numberFieldDTO = (ReconstructArchitectureNumberFieldDTO) parameterDTO;
-			numberFieldPanel.setPreferredSize(new Dimension(600, 30));
+			numberFieldPanel.setPreferredSize(new Dimension(400, 30));
 			
 			String translatedLabel = getTranslation(numberFieldDTO.label_TranslationKey);
 			numberFieldLabel = new JLabel(translatedLabel);
+			numberFieldLabel.setPreferredSize(new Dimension(120, 30));
 			
 			NumberFormatter numberFormat = createFormatter();
 			numberField = new JFormattedTextField(numberFormat);

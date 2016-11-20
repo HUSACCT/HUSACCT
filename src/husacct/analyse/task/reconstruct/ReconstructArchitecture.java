@@ -5,18 +5,19 @@ import org.apache.log4j.Logger;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithm;
-import husacct.analyse.task.reconstruct.combined.CombinedAndIterative_Layers_Components_Subsystems;
-import husacct.analyse.task.reconstruct.components.HUSACCT.ComponentsAndSubSystems_HUSACCT;
-import husacct.analyse.task.reconstruct.externals.ExternalSystemAlgorithm;
-import husacct.analyse.task.reconstruct.gateways.HUSACCT.GatewayHUSACCT_Root;
-import husacct.analyse.task.reconstruct.layers.Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon;
-import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootImproved;
-import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootMultipleLayers;
-import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_RootOriginal;
-import husacct.analyse.task.reconstruct.layers.goldstein.LayersGoldstein_SelectedModuleMultipleLayers;
-import husacct.analyse.task.reconstruct.layers.goldstein.Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon;
-import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_RootOriginal;
-import husacct.analyse.task.reconstruct.layers.scanniello.LayersScanniello_SelectedModuleImproved;
+import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
+import husacct.analyse.task.reconstruct.algorithms.hu.combined.CombinedAndIterative_Layers_Components_Subsystems;
+import husacct.analyse.task.reconstruct.algorithms.hu.components.ComponentsAndSubSystems_HUSACCT;
+import husacct.analyse.task.reconstruct.algorithms.hu.externals.ExternalSystemAlgorithm;
+import husacct.analyse.task.reconstruct.algorithms.hu.gateways.GatewayHUSACCT_Root;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_RootImproved;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_RootMultipleLayers;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_RootOriginal;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_SelectedModuleMultipleLayers;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.LayersScanniello_RootOriginal;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.LayersScanniello_SelectedModuleImproved;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.define.IDefineSarService;
@@ -28,7 +29,7 @@ public class ReconstructArchitecture {
 	private IModelQueryService queryService;
 	private IDefineService defineService;
 	private IDefineSarService defineSarService;
-	private IAlgorithm algorithm = null;
+	private Algorithm_SuperClass algorithm = null;
 	private boolean algorithmSucces = true; //this variable is necessary for the JUnit tests
 
 	public ReconstructArchitecture(IModelQueryService queryService) {

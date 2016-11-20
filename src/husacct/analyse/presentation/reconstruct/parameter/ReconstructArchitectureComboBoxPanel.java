@@ -30,10 +30,11 @@ public class ReconstructArchitectureComboBoxPanel extends ReconstructArchitectur
 		if (parameterDTO instanceof ReconstructArchitectureComboBoxDTO){
 			comboBoxDTO = (ReconstructArchitectureComboBoxDTO) parameterDTO;
 			comboBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			comboBoxPanel.setPreferredSize(new Dimension(600, 30));
+			comboBoxPanel.setPreferredSize(new Dimension(400, 30));
 			
 			String labelTranslation = getTranslation(parameterDTO.label_TranslationKey);
 			JLabel jLabel = new JLabel(labelTranslation);
+			jLabel.setPreferredSize(new Dimension(120, 30));
 			comboBoxPanel.add(jLabel);
 			
 			ComboBoxValue[] comboBoxValues = comboBoxDTO.comboBoxValues;

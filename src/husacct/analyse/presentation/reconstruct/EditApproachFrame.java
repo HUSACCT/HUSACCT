@@ -10,13 +10,16 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
 
 import husacct.ServiceProvider;
-import husacct.analyse.presentation.reconstruct.approaches.AllApproachesJPanel;
+import husacct.analyse.presentation.reconstruct.approaches.ApproachesJPanel;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
@@ -32,13 +35,12 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	private ReconstructArchitectureDTO dto;
 	private JPanel mainPanel;
 	private JButton applyButton, cancelButton;
-	//private JFrame frame;
 	private AnalyseTaskControl analyseTaskControl;
-	private AllApproachesJPanel allApproachesJPanel;
+	private ApproachesJPanel allApproachesJPanel;
 	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<String, ReconstructArchitectureParameterPanel>();
 
 	
-	public EditApproachFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, AllApproachesJPanel allApJp){
+	public EditApproachFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, ApproachesJPanel allApJp){
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.dto = dto;
 		this.analyseTaskControl = atc;
@@ -57,7 +59,7 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
     	Container c = getParent();
     	if (c != null) {
 	    	int paneWidth = getParent().getWidth();
-	    	setBounds(paneWidth - minimumSize.width -2, 0, minimumSize.width, minimumSize.height);
+	    	setBounds(paneWidth - minimumSize.width -10, 45, minimumSize.width, minimumSize.height);
     	} else {
         	setBounds(0, 0, minimumSize.width, minimumSize.height);
     	}
@@ -68,32 +70,35 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	
 	private void buildMainPanel(){
 		mainPanel = new JPanel(new BorderLayout());
-		mainPanel.add(this.buildApproachLabel(), BorderLayout.NORTH);
-		
-		JPanel parameterListPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
-			ReconstructArchitectureParameterPanel parameterPanel = ReconstructArchitectureParameterPanel.getParameterPanel(parameterDTO, dto);
-			parameterDTOPanels.put(parameterDTO.parameterConstant, parameterPanel);
-			
-			JPanel panel = parameterPanel.createPanel();
-			parameterListPanel.add(panel);
-		}
-		mainPanel.add(parameterListPanel, BorderLayout.CENTER);
-
+		mainPanel.add(buildApproachPanel(), BorderLayout.NORTH);
+		mainPanel.add(buildParameterPanel(), BorderLayout.CENTER);
 		mainPanel.add(buildButtonPanel(), BorderLayout.SOUTH);
 	}
 
-	private JPanel buildApproachLabel(){
+	private JPanel buildApproachPanel(){
 		JPanel approachLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JLabel approachLabelLabel = new JLabel(getTranslation("Approach") + ": " + dto.approachConstant);
+		approachLabelPanel.setBorder(new TitledBorder(localService.getTranslatedString("Approach")));
+		JLabel approachLabelLabel = new JLabel(getTranslation(dto.approachConstant));
 		approachLabelPanel.add(approachLabelLabel);
 		return approachLabelPanel;
 	}
 	
-	
+	private JScrollPane buildParameterPanel() {
+		JPanel parameterListPanel = new JPanel();
+		parameterListPanel.setLayout(new BoxLayout(parameterListPanel, BoxLayout.Y_AXIS));
+		for (ReconstructArchitectureParameterDTO parameterDTO : dto.parameterDTOs){
+			ReconstructArchitectureParameterPanel parameterPanel = ReconstructArchitectureParameterPanel.getParameterPanel(parameterDTO, dto);
+			parameterDTOPanels.put(parameterDTO.parameterConstant, parameterPanel);
+			JPanel panel = parameterPanel.createPanel();
+			parameterListPanel.add(panel);
+		}
+		JScrollPane parameterListScrollPane = new JScrollPane(parameterListPanel);
+		parameterListScrollPane.setBorder(new TitledBorder(localService.getTranslatedString("Parameters")));
+		return parameterListScrollPane;
+	}
+
 	private JPanel buildButtonPanel(){
 		JPanel buttonPanel = new JPanel(new FlowLayout());
-		//JPanel buttonPanel = new JPanel(new GridLayout(1,1,0,5));
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 5, 50));
 
 		String applyTranslation = localService.getTranslatedString("Apply");
@@ -130,10 +135,10 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	}
 
 	private void resetParameterTable() {
-		int selectedRow = allApproachesJPanel.allApproachesTable.getSelectedRow();
+		int selectedRow = allApproachesJPanel.approachesTable.getSelectedRow();
 		int differentRow = selectedRow > 1 ? selectedRow -1 : selectedRow +1;
-		allApproachesJPanel.allApproachesTable.setRowSelectionInterval(differentRow, differentRow);
-		allApproachesJPanel.allApproachesTable.setRowSelectionInterval(selectedRow, selectedRow);
+		allApproachesJPanel.approachesTable.setRowSelectionInterval(differentRow, differentRow);
+		allApproachesJPanel.approachesTable.setRowSelectionInterval(selectedRow, selectedRow);
 	}
 
 	private void setParameterValues() {

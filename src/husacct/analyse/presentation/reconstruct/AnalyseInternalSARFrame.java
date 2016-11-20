@@ -33,8 +33,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
     }
 
     public void initUI(){
-    	//Dimension minimumSize = new Dimension(740, 350); // The minimal minimumSize 
-    	Dimension minimumSize = new Dimension(800, 400);
+    	Dimension minimumSize = new Dimension(800, 400); // The technical minimumSize = (740, 350)
 		setMinimumSize(minimumSize);
     	addReconstructPanel();
     }

@@ -15,6 +15,7 @@ import java.util.jar.JarFile;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
+import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 
@@ -25,13 +26,14 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
  
 	public ReconstructArchitectureDTOList(IModelQueryService qs){
 		this.queryService = qs;
+		createDynamicReconstructArchitectureDTOs();
 	}
 	
 	
 	public void createDynamicReconstructArchitectureDTOs(){
 		reconstructArchitectureDTOList = new ArrayList<>();
 		
-		Package reconstructPackage = IAlgorithm.class.getPackage();
+		Package reconstructPackage = Algorithm_SuperClass.class.getPackage();
 		List<Class<?>> allClassesInPackage = this.findAllClassesInPackage(reconstructPackage);
 		
 		ArrayList<Class<?>> allAlgorithmClasses = findAllAlgorithmClasses(allClassesInPackage);
@@ -72,7 +74,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 	private ArrayList<Class<?>> findAllAlgorithmClasses(List<Class<?>> classes) {
 		ArrayList<Class<?>> approachClasses = new ArrayList<Class<?>>();
 		for (Class<?> potentialClass : classes){
-			boolean extendsIAlgorithm = IAlgorithm.class.isAssignableFrom(potentialClass);
+			boolean extendsIAlgorithm = Algorithm_SuperClass.class.isAssignableFrom(potentialClass);
 			boolean isAbstractClass = Modifier.isAbstract(potentialClass.getModifiers());
 			if (extendsIAlgorithm && !isAbstractClass){
 				// logger.info(potentialClass.getName());

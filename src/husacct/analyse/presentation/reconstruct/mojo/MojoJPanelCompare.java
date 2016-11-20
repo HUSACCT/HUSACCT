@@ -53,8 +53,8 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
 		compareArchitecture.addActionListener(this);
 		compareArchitecture.setEnabled(false);
 		
-		//result
-		compareResult = new JLabel("The mojo percentage from the above files is: ");
+		//Result field
+		compareResult = new JLabel("The calculated Mojo percentage is: ");
 	}
 	
 	private void createLayout(){
@@ -71,8 +71,9 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
 	                .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 	            		.addComponent(compareTextGold)
 	            		.addComponent(compareTextToCompare)
-	            		.addComponent(compareArchitecture)
-	            		.addComponent(compareResult))
+	                	.addGroup(groupLayout.createSequentialGroup()
+	                			.addComponent(compareArchitecture)
+	                			.addComponent(compareResult)))
 	                .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 	                	.addComponent(compareBrowseGold)
 	                	.addComponent(compareBrowseToCompare))
@@ -91,10 +92,9 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
             		.addComponent(compareTextToCompare)
             		.addComponent(compareBrowseToCompare))
         		.addContainerGap()
+                .addGap(25)
         		.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-        			.addComponent(compareArchitecture))
-        		.addContainerGap()
-        		.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        			.addComponent(compareArchitecture)
             		.addComponent(compareResult))));
         this.setLayout(groupLayout);
         
@@ -114,7 +114,7 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
 			MoJo mojo = new MoJo();
 	    	String[] daoArray = {compareTextGold.getText(), compareTextToCompare.getText(), "-fm"}; //"-fm is a different execution of mojo, see MoJo.java.showerrormessage() for more functions"
 	    	double mojoResult = mojo.executeMojo(daoArray);
-	    	compareResult.setText("The mojo percentage from the above files is: " + mojoResult + "%");
+	    	compareResult.setText("The calculated Mojo percentage is: " + mojoResult + "%");
 		}
 		
 	}
