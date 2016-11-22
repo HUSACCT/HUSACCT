@@ -285,7 +285,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends Algorithm_
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
@@ -294,7 +294,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon extends Algorithm_
 		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesAndClasses));
 		return parameterDTOs;
 	}
 }

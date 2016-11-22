@@ -68,10 +68,8 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
     @Override
     public JInternalFrame getJInternalSARFrame() {
-        //if (analyseInternalSARFrame == null) {
-        	reconstructArchitecture_Initiate();
-        	analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
-        //}
+    	reconstructArchitecture_Initiate();
+    	analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         return analyseInternalSARFrame;
     }
     

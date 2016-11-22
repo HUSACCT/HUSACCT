@@ -77,6 +77,7 @@ public class MoJoCalculator {
     }
 
     public double mojofm() {
+    	double returnValue = 0;
 
         commonPrep();
 
@@ -87,7 +88,8 @@ public class MoJoCalculator {
         maxbipartiteMatching();
 
         /* Calculate MoJoFM value */
-        return mojofmValue(cardinalitiesInB, numberOfObjectsInA, calculateCost());
+        returnValue = mojofmValue(cardinalitiesInB, numberOfObjectsInA, calculateCost());
+        return returnValue;
     }
 
     public double edgemojo() {

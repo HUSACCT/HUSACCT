@@ -61,7 +61,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Original;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
@@ -70,7 +70,7 @@ public class LayersScanniello_RootOriginal extends AlgorithmScanniello{
 		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesAndClasses));
 		return parameterDTOs;
 	}
 	

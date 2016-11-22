@@ -108,7 +108,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends Algorithm
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.CombinedAndIterative_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 5;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.Packages;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}

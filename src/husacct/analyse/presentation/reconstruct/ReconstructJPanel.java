@@ -50,7 +50,7 @@ public class ReconstructJPanel extends HelpableJPanel{
 			tabbedPane.addTab(distinctApprTranslation, null, new ResearchApproachesHUPanel(analyseTaskControl), null);
 		
 			MojoJPanel mojoPanel = new MojoJPanel();
-			tabbedPane.addTab("Mojo",null, mojoPanel.createMojoPanel(),null);
+			tabbedPane.addTab("MoJo",null, mojoPanel.createMojoPanel(),null);
 		}catch(Exception e){
 			logger.error("initUI() failt: " + e);
 		}

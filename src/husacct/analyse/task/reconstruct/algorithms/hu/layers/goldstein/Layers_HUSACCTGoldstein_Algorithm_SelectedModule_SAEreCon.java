@@ -260,7 +260,7 @@ public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends A
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
@@ -269,7 +269,7 @@ public class Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon extends A
 		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesAndClasses));
 		return parameterDTOs;
 	}
 

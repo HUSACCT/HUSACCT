@@ -433,18 +433,18 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
-		reconstructArchitecture.threshold = 10;
+		//reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		//reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
 	
 	private ArrayList<ReconstructArchitectureParameterDTO> createParameterPanels(){
 		ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
+		//parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
 		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-		parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
+		//parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesWithAllClasses));
 		return parameterDTOs;
 	}
 }

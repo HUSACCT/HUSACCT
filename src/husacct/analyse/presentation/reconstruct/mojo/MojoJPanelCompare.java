@@ -33,7 +33,7 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
 	}
 	
 	private void setPageComponents(){
-		comparePathGold = new JLabel("Golden standard:");
+		comparePathGold = new JLabel("Gold standard:");
 		comparePathGold.setHorizontalAlignment(SwingConstants.RIGHT);
 		compareTextGold = new JTextField(40);
 		compareTextGold.setEnabled(false);
@@ -54,7 +54,7 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
 		compareArchitecture.setEnabled(false);
 		
 		//Result field
-		compareResult = new JLabel("The calculated Mojo percentage is: ");
+		compareResult = new JLabel("The calculated MoJoFM value is: " + "   %");
 	}
 	
 	private void createLayout(){
@@ -114,7 +114,7 @@ public class MojoJPanelCompare extends HelpableJPanel implements ActionListener{
 			MoJo mojo = new MoJo();
 	    	String[] daoArray = {compareTextGold.getText(), compareTextToCompare.getText(), "-fm"}; //"-fm is a different execution of mojo, see MoJo.java.showerrormessage() for more functions"
 	    	double mojoResult = mojo.executeMojo(daoArray);
-	    	compareResult.setText("The calculated Mojo percentage is: " + mojoResult + "%");
+	    	compareResult.setText("The calculated MoJoFM value is: " + mojoResult + "%");
 		}
 		
 	}

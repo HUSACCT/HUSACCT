@@ -53,11 +53,11 @@ public class AnalyseMenu extends JMenu{
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
-		analysisHistoryItem = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
-		analysisHistoryItem.setMnemonic(getMnemonicKeycode("AnalyseHistoryMnemonic"));
-		
 		reconstructArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReconstructArchitecture"));
 		reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
+		
+		analysisHistoryItem = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
+		analysisHistoryItem.setMnemonic(getMnemonicKeycode("AnalyseHistoryMnemonic"));
 		
 		exportAnalysisModelItem = new JMenuItem(localeService.getTranslatedString("ExportAnalysisModel"));
 		exportAnalysisModelItem.setMnemonic(getMnemonicKeycode("ExportAnalysisModelMnemonic"));
@@ -72,8 +72,8 @@ public class AnalyseMenu extends JMenu{
 		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
-		this.add(analysisHistoryItem);
 		this.add(reconstructArchitectureItem);
+		this.add(analysisHistoryItem);
 		this.add(exportAnalysisModelItem);
 		this.add(importAnalysisModelItem);
 		this.add(reportDependenciesItem);

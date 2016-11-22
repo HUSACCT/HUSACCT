@@ -29,8 +29,8 @@ public class AnalyseReconstructConstants {
 	}
 	
 	public static class Granularities{
-		public static final String PackagesInRootOnlyClasses = "PackagesInRoot(WithClassesOnly)";
-		public static final String PackagesWithAllClasses = "Packages(Allwithclasses)";
+		//public static final String PackagesInRootOnlyClasses = "PackagesInRoot(WithClassesOnly)";
+		public static final String PackagesAndClasses = "PackagesAndClasses";
 		public static final String Classes = "Classes";
 		public static final String Packages = "Packages";
 	}

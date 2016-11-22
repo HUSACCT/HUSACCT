@@ -166,7 +166,7 @@ public class ReconstructAlgorithmTests {
 		//Scanniello - Improved
 		ReconstructArchitectureDTO scannielloImproved = new ReconstructArchitectureDTO();
 		scannielloImproved.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved;
-		scannielloImproved.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		scannielloImproved.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		scannielloImproved.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		scannielloImproved.setSelectedModule(new ModuleDTO("**", "**", "package", new ModuleDTO[]{}));
 		scannielloImproved.threshold = 10;
@@ -175,7 +175,7 @@ public class ReconstructAlgorithmTests {
 		//Goldstein - Original
 		ReconstructArchitectureDTO goldsteinOriginal = new ReconstructArchitectureDTO();
 		goldsteinOriginal.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original;
-		goldsteinOriginal.granularity = AnalyseReconstructConstants.Granularities.PackagesWithAllClasses;
+		goldsteinOriginal.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		goldsteinOriginal.relationType = AnalyseReconstructConstants.RelationTypes.accessCallReferenceDependencies;
 		goldsteinOriginal.threshold = 10;
 		testDtos.add(goldsteinOriginal);
