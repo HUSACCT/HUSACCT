@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
 import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
 import husacct.analyse.task.reconstruct.algorithms.hu.components.ComponentsAndSubSystems_HUSACCT;
 import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon;
@@ -108,7 +107,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends Algorithm
 		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.CombinedAndIterative_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 5;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
+		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.Packages;
 		reconstructArchitecture.parameterDTOs = createParameterPanels();
 		return reconstructArchitecture;
 	}
