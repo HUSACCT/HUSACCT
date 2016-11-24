@@ -7,23 +7,24 @@ Save the jar in a suitable directory.<br>
 2. Open/Start the HUSACCT jar<br>
 a. The tool starts when you open or double click the jar-file (if your local Java-settings are ok).<br>
 <br>
-b. If not (and you are running Windows), create a shortcut and edit Target to:<br>
-java -jar <pathToHUSACCT>HUSACCT_4.x.jar<br>
-For example: "C:\Program Files (x86)\Java\jre7\bin\java.exe" -jar C:\Tools\HUSACCT\HUSACCT_4.0.jar<br>
+b. If not, create a shortcut and edit Target e.g. to (in case of Windows):<br>
+java -jar <pathToHUSACCT>HUSACCT_5.1.jar<br>
+For example: "C:\Program Files\Java\jre1.8.0_73\bin\java.exe" -jar C:\Tools\HUSACCT\HUSACCT_5.1.jar<br>
 <br>
-c. Alternatively, create a .bat file to start HUSACCT. For example, to start HUSACT_4.0: <br>
-Create a txt file in the same dir as HUSACCT and type: java -jar HUSACCT_4.0.jar<br>
-Save this file as: HUSACCT_4.0Start.bat<br>
-Double click this .bat file will start up HUSACCT.<br>
+c. Alternatively, create a .bat file to start HUSACCT. For example, to start HUSACT_5.1: <br>
+Create a txt file in the same dir as HUSACCT and type: java -jar HUSACCT_5.1.jar<br>
+Save this file as: HUSACCT_5.1Start.bat<br>
+Double clicking on this .bat file will start up HUSACCT.<br>
 <br>
 d. Alternatively, start a Command prompt.<br>
 Go to the directory with the HUSACCT jar and start the tool from the command line.<br>
-For example: C:\Tools>java -jar HUSACCT_4.0.jar.<br>
+For example: C:\Tools>java -jar HUSACCT_5.1.jar.<br>
 <br>
 Note 1: HUSACCT 4.x requires Java 1.8. If needed, check the Java version: java –version.<br>
 <br>
-Note 2: In case of large systems, you can get an OutOfMemoryError with the message “Java heap space”. With the -Xmx JVM argument, you can set the heap size. For instance, allow the JVM to use 1 GB (1024 MB) of memory. E.g. with the following command in a (Windows) bat file: <br> 
-java -jar -Xmx1024m HUSACCT_4.0.jar.
+Note 2: In case of large systems, you can get an OutOfMemoryError with the message “Java heap space”. With the -Xmx JVM argument, you can set the heap size. 
+For instance, for systems over 1.000.000 lines of code, allow the JVM to use 4 GB of memory. E.g. with the following command in a (Windows) shortcut or bat file: <br> 
+java -jar -Xmx4g  HUSACCT_5.1.jar
 
 
 </p>

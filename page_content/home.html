@@ -1,11 +1,25 @@
 <h1>HUSACCT Home</h1>
-<p>HUSACCT provides support for software architecture compliance checking (SACC) of Java and C# systems.
-SACC monitors the conformance of the implemented architecture (in the source code) to the intended software architecture (in the system's design).<br> 
-The prominent feature of HUSACCT is the support of semantically rich modular architectures (SRMAs), which are composed of modules of different types (like software subsystems, layers and components) and rules of different types.
-To perform an SACC, an intended software architecture is defined first. Next, HUSACCT checks the compliance to these rules, based on static analysis of the source code, and it reports infringements.<br>
-Apart from ACC-support, HUSACCT provides support for architecture reconstruction as well: the static structure of the software may be visualized, browsed, and reported.</p>
+<p>HUSACCT provides support for software architecture reconstruction (SAR) and software architecture compliance checking (SACC) with respect to the modular architecture of Java and C# systems.<br>
+SACC functionality monitors the conformance of the implemented architecture (in the source code) to the intended software architecture (in the design).<br>
+Basic SAR functionality helps to get an understanding of the implemented architecture, e.g. by browsing or visualizing the software units (packages, 
+namespaces, classes) with their dependencies. <br>
+More advanced SAR functionality aids the reconstruction of the system’s intended architecture in terms 
+of logical modules such as layers, components and subsystems.
+<br> 
+<br>
+The prominent feature of HUSACCT is the support of semantically rich modular architectures, which are composed of modules of different types (like 
+subsystems, layers , components and external systems) and rules of different types. To perform an SACC, first an intended software architecture has 
+to be defined which describes the modules and their types, the rules (constraints), and the assignment of implemented software units to the modules. 
+Next, HUSACCT checks the compliance to the defined rules, based on static analysis of the source code, and it reports violations to the rules.
+<br>
+</p>
 <h2>Introduction video: HUSACCT Demonstration</h2>
 <p><iframe width="560" height="315" src="http://www.youtube.com/embed/HT9wTbjCJMc" frameborder="0" allowfullscreen></iframe></p> <br>
-<h2>HUSACCT & HU University of Applied Sciences</h2>
-<p>HUSACCT means: HU Software Architecture Compliance Checking Tool, where HU stands for: <a href="http://international.hu.nl/" title="HU" target="_blank">HU University of Applied Sciences Utrecht</a>.
-The HUSACCT project is conducted at the Institute for ICT, located in Utrecht, The Netherlands. Students of the specialization "Advanced Software Architecture" have participated actively during the spring semesters of 2011-2013.</p>
+<h2>License and Warranty</h2>
+<p>
+HUSACCT is free-to-use open-source software. You can make use of HUSACCT free of charge under the terms of the GNU Affero General Public License 
+as published by the Free Software Foundation. See the User Manual for the details.</p>
+<h2>HUSACCT Development</h2>
+<p>HUSACCT means: HU Software Architecture Compliance Checking Tool, where HU stands for: <a href="http://international.hu.nl/" title="HU" target="_blank">HU University of Applied Sciences Utrecht</a>, which is located in Utrecht, the Netherlands.
+HUSACCT has been developed at the Institute for ICT, and has started as part of the PhD research of Leo Pruijt, the architect and lead developer of HUSACCT. 
+Students of the specialization "Advanced Software Engineering" have participated actively in the development.</p>
