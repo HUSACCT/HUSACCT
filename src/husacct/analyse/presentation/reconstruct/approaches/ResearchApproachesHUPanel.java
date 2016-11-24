@@ -16,6 +16,7 @@ public class ResearchApproachesHUPanel extends ApproachesJPanel implements Actio
 	@Override
 	protected Object[][] getApproachesRows(){
 		Object approachesRows[][] = { 
+				{Algorithm.Layers_HUSACCT_SAEroCon2016, getTranslation(Algorithm.Layers_HUSACCT_SAEroCon2016)},
 				{Algorithm.Layers_Scanniello_Improved, getTranslation(Algorithm.Layers_Scanniello_Improved)},
 				{Algorithm.Layers_Scanniello_Original, getTranslation(Algorithm.Layers_Scanniello_Original)},
 				{Algorithm.Layers_Goldstein_HUSACCT_SelectedModule, getTranslation(Algorithm.Layers_Goldstein_HUSACCT_SelectedModule)},

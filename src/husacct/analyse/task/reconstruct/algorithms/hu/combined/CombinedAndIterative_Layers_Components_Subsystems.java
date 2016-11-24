@@ -8,7 +8,7 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
 import husacct.analyse.task.reconstruct.algorithms.hu.components.ComponentsAndSubSystems_HUSACCT;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
@@ -51,7 +51,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends Algorithm
 	private void identifyLayersComponentsOrSubsystems(ReconstructArchitectureDTO dto) {
 		try {
 			// a) First identify layers
-			algorithm = new Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon(queryService);
+			algorithm = new Layers_HUSACCT_Algorithm_SelectedModule(queryService);
 			algorithm.executeAlgorithm(dto, queryService);
 			// b) If number of layers >= 3, than continue
 			ModuleDTO[] childModules = defineService.getModule_TheChildrenOfTheModule(dto.getSelectedModule().logicalPath);

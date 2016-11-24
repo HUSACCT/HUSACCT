@@ -10,14 +10,12 @@ import husacct.analyse.task.reconstruct.algorithms.hu.combined.CombinedAndIterat
 import husacct.analyse.task.reconstruct.algorithms.hu.components.ComponentsAndSubSystems_HUSACCT;
 import husacct.analyse.task.reconstruct.algorithms.hu.externals.ExternalSystemAlgorithm;
 import husacct.analyse.task.reconstruct.algorithms.hu.gateways.GatewayHUSACCT_Root;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_RootImproved;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_RootMultipleLayers;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_RootOriginal;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.LayersGoldstein_SelectedModuleMultipleLayers;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.LayersScanniello_RootOriginal;
-import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.LayersScanniello_SelectedModuleImproved;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SAEroCon2016;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.Layers_Goldstein_Root_Initial;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.Layers_Goldstein_HUSACCT_Algorithm_SelectedModule;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.Layers_Scanniello_Root_Initial;
+import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.Layers_Scanniello_SelectedModule_Improved;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.define.IDefineSarService;
@@ -43,49 +41,37 @@ public class ReconstructArchitecture {
 	}
 
 	public void reconstructArchitecture_Execute(ReconstructArchitectureDTO dto) {
-		boolean moduleSelected = 	dto.getSelectedModule() != null 
-				&& !dto.getSelectedModule().logicalPath.equals("**") 
-				&& !dto.getSelectedModule().logicalPath.equals("");
-		
 		try {
 			switch (dto.approachConstant) {
-				case (Algorithm.Layers_Goldstein_Multiple_Improved):
-					if(moduleSelected){
-						 algorithm = new LayersGoldstein_SelectedModuleMultipleLayers(queryService);
-					}
-					else{ //is root
-						 algorithm = new LayersGoldstein_RootMultipleLayers(queryService);
-					}
-					break;
-				case (Algorithm.Layers_Goldstein_Root_Improved):
-					algorithm = new LayersGoldstein_RootImproved(queryService);
-					break;
-				case (Algorithm.Layers_Goldstein_Root_Original):
-					algorithm = new LayersGoldstein_RootOriginal(queryService);
-					break;
-				case (Algorithm.Layers_Goldstein_HUSACCT_SelectedModule):
-					algorithm = new Layers_HUSACCTGoldstein_Algorithm_SelectedModule_SAEreCon(queryService);
-					break;
-				case (Algorithm.Layers_Scanniello_Improved):
-					algorithm = new LayersScanniello_SelectedModuleImproved(queryService);
-					break;
-				case (Algorithm.Layers_Scanniello_Original):
-					algorithm = new LayersScanniello_RootOriginal(queryService);
-					break;
 				case (Algorithm.Layers_HUSACCT_SelectedModule):
-					algorithm = new Layers_HUSACCT_Algorithm_SelectedModule_SAEreCon(queryService);
+					algorithm = new Layers_HUSACCT_Algorithm_SelectedModule(queryService);
 					break;
 				case (Algorithm.Component_HUSACCT_SelectedModule):
 					algorithm = new ComponentsAndSubSystems_HUSACCT(queryService);
 					break;
+				case (Algorithm.Externals_Recognition):
+					algorithm = new ExternalSystemAlgorithm(queryService);
+					break;
 				case (Algorithm.CombinedAndIterative_HUSACCT_SelectedModule):
 					algorithm = new CombinedAndIterative_Layers_Components_Subsystems(queryService);
 					break;
+				case (Algorithm.Layers_HUSACCT_SAEroCon2016):
+					algorithm = new Layers_HUSACCT_Algorithm_SAEroCon2016(queryService);
+					break;
+				case (Algorithm.Layers_Goldstein_Root_Original):
+					algorithm = new Layers_Goldstein_Root_Initial(queryService);
+					break;
+				case (Algorithm.Layers_Goldstein_HUSACCT_SelectedModule):
+					algorithm = new Layers_Goldstein_HUSACCT_Algorithm_SelectedModule(queryService);
+					break;
+				case (Algorithm.Layers_Scanniello_Improved):
+					algorithm = new Layers_Scanniello_SelectedModule_Improved(queryService);
+					break;
+				case (Algorithm.Layers_Scanniello_Original):
+					algorithm = new Layers_Scanniello_Root_Initial(queryService);
+					break;
 				case (Algorithm.Gateways_HUSACCT_Root):
 					algorithm = new GatewayHUSACCT_Root(queryService);
-					break;
-				case (Algorithm.Externals_Recognition):
-					algorithm = new ExternalSystemAlgorithm(queryService);
 					break;
 				default:
 					algorithm = null;	

@@ -15,14 +15,14 @@ import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.enums.ModuleTypes;
 
 
-public class LayersScanniello_SelectedModuleImproved extends AlgorithmScanniello{		
+public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello_SuperClass{		
 	ModuleDTO selectedModule;
 	ArrayList<String> softwareUnitsInSelectedModuleList;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
 	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
 	
-	public LayersScanniello_SelectedModuleImproved (IModelQueryService queryService) {
+	public Layers_Scanniello_SelectedModule_Improved (IModelQueryService queryService) {
 		super(queryService);
 	}
 	

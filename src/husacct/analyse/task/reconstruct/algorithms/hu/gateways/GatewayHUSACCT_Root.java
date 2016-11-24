@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.AlgorithmParameter;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
@@ -76,7 +75,6 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		
 		HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> mapOfGateways = new HashMap<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>>();
 		Set<SoftwareUnitDTO> chosenClasses = new HashSet<SoftwareUnitDTO>();
-		String gatewayName = "";
 		SoftwareUnitDTO library = null;	
 		
 		
@@ -101,13 +99,10 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 				}
 				
 				int totalNumberOfDep = unitDependencies.size();
-				double thresHoldDependencies = (double) (totalNumberOfDep * (threshold*0.01));
-				
 				if((totalNumberOfDep * .6) <= unitExternalDependencies.size() && totalNumberOfDep > 0){
 					set.add(softwareUnit);	
 				}
 				
-				gatewayName = softwareUnit.uniqueName.substring(softwareUnit.uniqueName.lastIndexOf(".")+1);
 				gateways.addAll(set);			
 	
 				chosenClasses = determineClassWithMostDependencies(library, gateways);

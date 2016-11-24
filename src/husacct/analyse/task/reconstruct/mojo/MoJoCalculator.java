@@ -284,8 +284,22 @@ public class MoJoCalculator {
      * max(mno(any_A,B)) * 100%
      */
     private double mojofmValue(@SuppressWarnings("rawtypes") Vector number_of_B, long obj_number, long totalCost) {
-        long maxDis = maxDistanceTo(number_of_B, obj_number);
-        return Math.rint((1 - (double) totalCost / (double) maxDis) * 10000) / 100;
+    	/*
+    	 * This method is edited specifically for HUSACCT to prevent that incompatible intended architecture, 
+    	 * with one overlapping module (e.g. ExternalSystems, or xLibraries) receive a result of 100%. Due to the 
+    	 * following characteristic of MoJo (see ReadME in mojo.jar): "If the two decompositions do not refer to the 
+    	 * same set of clustered objects, only the intersection of the two sets will be considered."
+    	 */
+    	double mojofmValue = 0;
+    	long maxDis = maxDistanceTo(number_of_B, obj_number);
+        if (totalCost == 0) {
+        	if (obj_number > 1) {
+            	mojofmValue = Math.rint((1 - (double) totalCost / (double) maxDis) * 10000) / 100;
+        	}
+        } else {
+        	mojofmValue = Math.rint((1 - (double) totalCost / (double) maxDis) * 10000) / 100;
+        }
+        return mojofmValue;
     }
 
     /* calculate the max(mno(B, any_A)), which is also the max(mno(any_A, B)) */

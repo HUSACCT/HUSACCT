@@ -6,6 +6,7 @@ import husacct.analyse.task.AnalyseTaskControl;
 
 public class MoJo {
 	private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
+	
     public double executeMojo(String[] args) {
         try
         {
@@ -77,7 +78,7 @@ public class MoJo {
             else
             {
                 mjc = new MoJoCalculator(sourceFile, targetFile, relFile);
-                logger.info(mjc.mojo());
+                return mjc.mojo();
             }
         }
         catch (RuntimeException e)

@@ -8,18 +8,19 @@ import org.apache.log4j.Logger;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
+import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
-public class LayersGoldstein_RootOriginal extends AlgorithmGoldstein{
+public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 		private int layerThreshold;
 		private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses;
 		private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
 		private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 		
-		public LayersGoldstein_RootOriginal (IModelQueryService queryService) {
+		public Layers_Goldstein_Root_Initial (IModelQueryService queryService) {
 			super(queryService);
 		}
 			
@@ -194,7 +195,7 @@ public class LayersGoldstein_RootOriginal extends AlgorithmGoldstein{
 			reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original;
 			reconstructArchitecture.threshold = 10;
 			reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
-			reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
+			reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.Packages;
 			reconstructArchitecture.parameterDTOs = createParameterPanels();
 			return reconstructArchitecture;
 		}
@@ -203,7 +204,7 @@ public class LayersGoldstein_RootOriginal extends AlgorithmGoldstein{
 			ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs = new ArrayList<>();
 			parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createThresholdParameter(10));
 			parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createRelationTypeParameter(AnalyseReconstructConstants.RelationTypes.allDependencies));
-			parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.PackagesAndClasses));
+			parameterDTOs.add(ReconstructArchitectureParameterDTO.DefaultParameterDTOs.createGranularityPanel(AnalyseReconstructConstants.Granularities.Packages));
 			return parameterDTOs;
 		}
 

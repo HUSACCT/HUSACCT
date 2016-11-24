@@ -12,7 +12,7 @@ import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.enums.ModuleTypes;
 
-public abstract class AlgorithmScanniello extends Algorithm_SuperClass{
+public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	protected static final int topLayerKey = 1;
 	protected static final int middleLayerKey = 2;
 	protected static final int bottomLayerKey = 3;
@@ -20,7 +20,7 @@ public abstract class AlgorithmScanniello extends Algorithm_SuperClass{
 	
 	protected int threshold;
 
-	protected AlgorithmScanniello(IModelQueryService queryService) {
+	protected Layers_Scanniello_SuperClass(IModelQueryService queryService) {
 		super(queryService);
 	}
 	

@@ -1,7 +1,6 @@
 package husacct.analyse.task.reconstruct.algorithms;
 
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Granularities;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 

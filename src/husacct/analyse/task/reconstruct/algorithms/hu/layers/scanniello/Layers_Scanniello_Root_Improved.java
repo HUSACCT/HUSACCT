@@ -8,9 +8,9 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
-public class LayersScanniello_RootImproved extends AlgorithmScanniello{
+public class Layers_Scanniello_Root_Improved extends Layers_Scanniello_SuperClass{
 
-	public LayersScanniello_RootImproved (IModelQueryService queryService) {
+	public Layers_Scanniello_Root_Improved (IModelQueryService queryService) {
 		super(queryService);
 	}
 	
