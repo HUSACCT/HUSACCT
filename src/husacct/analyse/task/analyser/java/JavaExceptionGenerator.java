@@ -1,13 +1,13 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import org.antlr.runtime.tree.CommonTree;
 
 class JavaExceptionGenerator extends JavaGenerator {
 
-    private static final int catchNode = JavaParser.CATCH;
-    private static final int throwNewNode = JavaParser.THROW;
-    private static final int typeIdentifierNode = JavaParser.QUALIFIED_TYPE_IDENT;
+    private static final int catchNode = Java7Parser.CATCH;
+    private static final int throwNewNode = Java7Parser.THROW;
+    private static final int typeIdentifierNode = Java7Parser.QUALIFIED_TYPE_IDENT;
     private String exceptionType;
     private String fromClass;
     private String exceptionClass;
@@ -54,9 +54,9 @@ class JavaExceptionGenerator extends JavaGenerator {
 
     private String parserUniquename(CommonTree tree) {
         String path = "";
-        if (tree.getType() == JavaParser.DOT) {
+        if (tree.getType() == Java7Parser.DOT) {
             path += packageClassPath(tree);
-        } else if (tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT) {
+        } else if (tree.getType() == Java7Parser.QUALIFIED_TYPE_IDENT) {
             int childcount = tree.getChildCount();
             for (int iterator = 0; iterator < childcount; iterator++) {
                 path += !path.equals("") ? "." : "";
@@ -72,7 +72,7 @@ class JavaExceptionGenerator extends JavaGenerator {
         String path = "";
         int totalElements = tree.getChildCount();
         for (int iterator = 0; iterator < totalElements; iterator++) {
-            if (tree.getChild(iterator).getType() == JavaParser.DOT) {
+            if (tree.getChild(iterator).getType() == Java7Parser.DOT) {
                 path += packageClassPath((CommonTree) tree.getChild(iterator));
             } else {
                 path += !path.equals("") ? "." : "";

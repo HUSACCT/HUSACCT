@@ -1,13 +1,16 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
-import husacct.analyse.infrastructure.antlr.java.JavaParser.compilationUnit_return;
-
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.CompilationUnitContext;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.log4j.Logger;
 
 class JavaTreeConvertController {
+
+	private CompilationUnitContext compilationUnit;
+	private ParseTreeWalker walker;
 	private String sourceFilePath = "";
     private int numberOfLinesOfCode = 0;
     private String theClass = null;
@@ -16,105 +19,58 @@ class JavaTreeConvertController {
     private String parentClass = null;
     private int classCount = 0;
     private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
-    private JavaPackageGenerator javaPackageGenerator;
-    private JavaClassGenerator javaClassGenerator;
-    private JavaAnnotationGenerator javaAnnotationGenerator;
-    private JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator;
-    private JavaImplementsDefinitionGenerator implementsGenerator;
-    private JavaImportGenerator javaImportGenerator;
+    private PackageAnalyser packageAnalyser;
+    private TypeDeclarationAnalyser typeDeclarationAnalyser;
     private JavaMethodGeneratorController methodGenerator;
     private JavaAttributeAndLocalVariableGenerator javaAttributeGenerator;
 
-    public JavaTreeConvertController() {
-        javaPackageGenerator = new JavaPackageGenerator();
+    public JavaTreeConvertController(CompilationUnitContext compilationUnit) {
+    	this.compilationUnit = compilationUnit;
         methodGenerator = new JavaMethodGeneratorController();
         javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator();
-        javaImportGenerator = new JavaImportGenerator();
-        javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
-        implementsGenerator = new JavaImplementsDefinitionGenerator();
-        javaAnnotationGenerator = new JavaAnnotationGenerator();
     }
 
-    public void delegateASTToGenerators(String sourceFilePath, int nrOfLinesOfCode, JavaParser javaParser) throws RecognitionException {
-    	compilationUnit_return compilationUnit;
-    	CommonTree compilationUnitTree;
+    public void delegateASTToGenerators(String sourceFilePath, int nrOfLinesOfCode, Java7Parser java7Parser) throws RecognitionException {
+    	this.sourceFilePath = sourceFilePath;
+    	this.numberOfLinesOfCode = nrOfLinesOfCode;
     	try {
-    		/* Test and Debug
-    		if (sourceFilePath.contains("InheritanceExtends")) {
-    			boolean breakpoint = true;
-    		} */
-    		
-    		this.sourceFilePath = sourceFilePath;
-        	this.numberOfLinesOfCode = nrOfLinesOfCode;
-	        compilationUnit = javaParser.compilationUnit();
-	        if (compilationUnit != null) {
-	        	compilationUnitTree = (CommonTree) compilationUnit.getTree();
-	        	if (compilationUnitTree != null) {
-		        	createClassInformation(compilationUnitTree);
-			        if ((this.theClass != null) && !this.theClass.equals("")) {
-			        	delegateASTToGenerators(compilationUnitTree);
-			        }
-	        	}
-	        } 
+    		// Test and Debug
+    		if (sourceFilePath.contains("AnnotationDependency")) {
+    		} //
+        	analysePackage();
+        	analyseTypeDeclaration();
+        	analyseImports();
     	}
     	catch (Exception e) {
-    		logger.error("Exception: "+ e);
+    		String location;
+    		if ((thePackage != null) && (theClass != null)) {
+    			location = thePackage + "." + theClass;
+    		} else {
+    			location = sourceFilePath;
+    		}
+    		logger.warn(e.getMessage() + " - in file: " + location);
     		//e.printStackTrace();
     	}
     }
 
-    private void createClassInformation(CommonTree completeTree) {
-        CommonTree classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.CLASS);
-        if (classTree == null) {
-            classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.INTERFACE);
-        }
-        if (classTree == null) {
-            classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.ENUM);
-        }
-        if (classTree == null) {
-            classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.AT);
-        }
-        if (classTree != null) {
-        	determineThePackage(completeTree);
-        	javaClassGenerator = new JavaClassGenerator(thePackage);
-            int classType = classTree.getType();
-            switch (classType) {
-                case JavaParser.CLASS:
-                    this.theClass = this.currentClass = delegateClass(classTree, false, false, false);
-                    break;
-                case JavaParser.INTERFACE:
-                    this.theClass = this.currentClass = delegateClass(classTree, false, true, false);
-                    break;
-                case JavaParser.AT: // Annotation Type, currently handled as interface
-                    this.theClass = this.currentClass = delegateClass(classTree, false, true, false);
-                    break;
-                case JavaParser.ENUM:
-                    this.theClass = this.currentClass = delegateClass(classTree, false, false, true);
-                    break;
-                default:
-                    this.warnNotSupportedClassType(classType, classTree);
-            }
-        }
+    private void analysePackage() {
+        packageAnalyser = new PackageAnalyser();
+        walker = new ParseTreeWalker();
+        walker.walk(packageAnalyser, compilationUnit);
+        this.thePackage = packageAnalyser.getPackage();
     }
     
-    private void determineThePackage(CommonTree completeTree) {
-        CommonTree packageTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.PACKAGE);
-        if (packageTree != null) {
-            this.thePackage = javaPackageGenerator.generateModel(packageTree);
-        } else {
-    		this.thePackage = javaPackageGenerator.generateNoPackage_Package();
-        }
+    private void analyseTypeDeclaration() {
+    	typeDeclarationAnalyser = new TypeDeclarationAnalyser(thePackage, sourceFilePath, numberOfLinesOfCode, false, "");
+        walker.walk(typeDeclarationAnalyser, compilationUnit);
+        this.theClass = typeDeclarationAnalyser.getUniqueNameOfType();
     }
     
-    private void warnNotSupportedClassType(int typeId, CommonTree classTree){
-    	String warnMessage = "Detected a non-supported type";
-    	if(typeId != 0)
-    		warnMessage += " [Probably type id " + typeId + " ]";
-    	if(classTree != null)
-    		warnMessage += " Info: " + classTree.toString();
-    	logger.warn(warnMessage);
+    private void analyseImports() {
+    	ImportAnalyser importAnalyser = new ImportAnalyser(this.theClass);
+        walker.walk(importAnalyser, compilationUnit);
     }
-
+    
     private void delegateASTToGenerators(CommonTree tree) {
         if (tree != null) {
         	CommonTree childNode;
@@ -122,13 +78,13 @@ class JavaTreeConvertController {
                 childNode = (CommonTree) tree.getChild(i);
                 int nodeType = childNode.getType();
                 switch (nodeType) {
-                    case JavaParser.CLASS: case JavaParser.ENUM: case JavaParser.INTERFACE:	
+                    case Java7Parser.CLASS: case Java7Parser.ENUM: case Java7Parser.INTERFACE:	
                         if (classCount > 0) {
                             CommonTree innerClassTree = childNode;
                             this.parentClass = currentClass;
-                            if (nodeType == JavaParser.INTERFACE) {
+                            if (nodeType == Java7Parser.INTERFACE) {
                             	this.currentClass = delegateClass(innerClassTree, true, true, false);
-                            } else if (nodeType == JavaParser.ENUM){
+                            } else if (nodeType == Java7Parser.ENUM){
                             	this.currentClass = delegateClass(innerClassTree, true, false, true);
                             } else {
                             	this.currentClass = delegateClass(innerClassTree, true, false, false);
@@ -140,26 +96,22 @@ class JavaTreeConvertController {
                             delegateASTToGenerators(childNode);
                         }
                         break;
-                    case JavaParser.IMPORT:
-                        delegateImport(childNode);
+                    case Java7Parser.IMPORT:
+                        //delegateImport(childNode);
                         break;
-                    case JavaParser.AT:
+                    case Java7Parser.AT:
                         delegateAnnotation(childNode);
                         break;
-                    case JavaParser.IMPLEMENTS_CLAUSE:
-                        delegateImplementsDefinition(childNode);
-                        break;
-                    case JavaParser.EXTENDS_CLAUSE:
-                        delegateInheritanceDefinition(childNode);
-                        break;
-                    case JavaParser.VAR_DECLARATION:
+                    /*
+                   case Java7Parser.VAR_DECLARATION:
                         delegateAttribute(childNode);
                         break;
-                    case JavaParser.FUNCTION_METHOD_DECL:
-                    case JavaParser.CONSTRUCTOR_DECL:
-                    case JavaParser.VOID_METHOD_DECL:
+                    case Java7Parser.FUNCTION_METHOD_DECL:
+                    case Java7Parser.CONSTRUCTOR_DECL:
+                    case Java7Parser.VOID_METHOD_DECL:
                         delegateMethod(childNode);
                         break;
+                    */
     	            default: 
                         delegateASTToGenerators(childNode);
                         break;
@@ -171,27 +123,15 @@ class JavaTreeConvertController {
     private String delegateClass(CommonTree classTree, boolean isInnerClass, boolean isInterface, boolean isEnumeration) {
         String analysedClass = null;
         if (isInnerClass) {
-            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, true, parentClass, isInterface, isEnumeration);
+            //analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, true, parentClass, isInterface, isEnumeration);
         } else {
-            analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, false, "", isInterface, isEnumeration);
+            //analysedClass = javaClassGenerator.generateToDomain(sourceFilePath, numberOfLinesOfCode, classTree, false, "", isInterface, isEnumeration);
         }
         return analysedClass;
     }
 
     private void delegateAnnotation(CommonTree annotationTree) {
-        javaAnnotationGenerator.generateToDomain(annotationTree, this.currentClass, "class");
-    }
-
-    private void delegateImplementsDefinition(CommonTree treeNode) {
-        implementsGenerator.generateToDomain(treeNode, this.currentClass);
-    }
-
-    private void delegateInheritanceDefinition(CommonTree treeNode) {
-    	javaInheritanceDefinitionGenerator.generateToDomain(treeNode, this.currentClass);
-    }
-
-    private void delegateImport(CommonTree importTree) {
-        javaImportGenerator.generateToDomain(importTree, this.currentClass);
+        //javaAnnotationGenerator.generateToDomain(annotationTree, this.currentClass, "class");
     }
 
     private void delegateAttribute(CommonTree attributeTree) {

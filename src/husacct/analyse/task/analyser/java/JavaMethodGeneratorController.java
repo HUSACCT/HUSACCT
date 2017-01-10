@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -43,16 +43,16 @@ class JavaMethodGeneratorController extends JavaGenerator {
     private void checkMethodType(CommonTree methodTree) {
         int methodTreeType = methodTree.getType();
         switch(methodTreeType) {
-        case JavaParser.CONSTRUCTOR_DECL: 
+        case Java7Parser.CONSTRUCTOR_DECL: 
             declaredReturnType = "";
             isConstructor = true;
             name = getClassOfUniqueName(belongsToClass);
             break;
-        case JavaParser.VOID_METHOD_DECL:
+        case Java7Parser.VOID_METHOD_DECL:
             declaredReturnType = "";
             isConstructor = false;
         	break;
-        case JavaParser.FUNCTION_METHOD_DECL:
+        case Java7Parser.FUNCTION_METHOD_DECL:
             isConstructor = false;
         	break;
         default:
@@ -80,53 +80,53 @@ class JavaMethodGeneratorController extends JavaGenerator {
         	} */
 
             switch(treeType) {
-	            case JavaParser.ABSTRACT: 
+	            case Java7Parser.ABSTRACT: 
 	            	isAbstract = true;
 	            	break;
-	            case JavaParser.AT:
+	            case Java7Parser.AT:
 	            	JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator();
 	                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "method");
 	            	break;
-	            case JavaParser.STATIC: 
+	            case Java7Parser.STATIC: 
 	            	hasClassScope = true; 
 	            	break;
-	            case JavaParser.PUBLIC: 
+	            case Java7Parser.PUBLIC: 
 	            	accessControlQualifier = "public"; 
 	            	break;
-	            case JavaParser.PRIVATE: 
+	            case Java7Parser.PRIVATE: 
 	            	accessControlQualifier = "private"; 
 	            	break;
-	            case JavaParser.PROTECTED: 
+	            case Java7Parser.PROTECTED: 
 	            	accessControlQualifier = "protected"; 
 	            	break;
-	            case JavaParser.TYPE: 
+	            case Java7Parser.TYPE: 
 	            	getReturnType(child); 
 		            walkThroughChildren = false;
 	            	break;
-	            case JavaParser.IDENT: 
+	            case Java7Parser.Identifier: 
 	            	name = child.getText(); 
 	            	lineNumber = child.getLine();
 	            	break;
-	            case JavaParser.THROW: 
+	            case Java7Parser.THROW: 
 	            	delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
-	            case JavaParser.THROWS: 
+	            case Java7Parser.THROWS: 
 	            	delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
-	            case JavaParser.THROWS_CLAUSE: 
+	            case Java7Parser.THROWS_CLAUSE: 
 	            	delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
-	            case JavaParser.FORMAL_PARAM_LIST: 
+	            case Java7Parser.FORMAL_PARAM_LIST: 
 	            	if (child.getChildCount() > 0) {
 	                    JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
 	                    signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
 	    	            walkThroughChildren = false;
 	                }
 	            	break;
-	            case JavaParser.BLOCK_SCOPE: {
+	            case Java7Parser.BLOCK_SCOPE: {
 	            	setSignature();
 	                JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
 	                javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.name + signature);

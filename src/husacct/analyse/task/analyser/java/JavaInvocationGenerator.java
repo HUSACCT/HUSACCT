@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -65,9 +65,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
     		createPropertyOrFieldInvocationDomainObject();
     		
     		int treeType = treeNode.getType();
-        	if((treeType == JavaParser.ASSIGN) || (treeType == JavaParser.NOT_EQUAL) || (treeType == JavaParser.EQUAL) 
-        			|| (treeType == JavaParser.GREATER_OR_EQUAL) || (treeType == JavaParser.LESS_OR_EQUAL)
-        			|| (treeType == JavaParser.LESS_THAN) || (treeType == JavaParser.GREATER_THAN)){
+        	if((treeType == Java7Parser.ASSIGN) || (treeType == Java7Parser.NOTEQUAL) || (treeType == Java7Parser.EQUAL) 
+        			|| (treeType == Java7Parser.GE) || (treeType == Java7Parser.LE)
+        			|| (treeType == Java7Parser.LT) || (treeType == Java7Parser.GT)){
         		// Create invocation of variable at right side of =
         		this.to = rightVariableInAssignment;
         		createPropertyOrFieldInvocationDomainObject();
@@ -88,10 +88,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
     	try {
     		int treeType = tree.getType();
     		if (tree.getText().equals("STATIC_ARRAY_CREATOR")) {
-    			treeType = JavaParser.STATIC_ARRAY_CREATOR;	
+    			treeType = Java7Parser.STATIC_ARRAY_CREATOR;	
     		}
     		switch(treeType) {
-	        case JavaParser.DOT: // "."
+	        case Java7Parser.DOT: // "."
 	        	String left = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	if ((left == "") || (right == "")) {
@@ -100,25 +100,25 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		    		returnValue += left + "." + right;
 	        	}
 	            break;
-	        case JavaParser.METHOD_CALL:
+	        case Java7Parser.METHOD_CALL:
 	        	String left1 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right1 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	right1 = nullifyIfStringContainsDot(right1);
 	    		returnValue += left1 + "(" + right1 + ")";
 	            break;
-	        case JavaParser.CLASS_CONSTRUCTOR_CALL: 
+	        case Java7Parser.CLASS_CONSTRUCTOR_CALL: 
 	        	String left2 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right2 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	right2 = nullifyIfStringContainsDot(right2);
 	    		returnValue += left2 + "(" + right2 + ")";
 	            break;
-	        case JavaParser.SUPER_CONSTRUCTOR_CALL: 
+	        case Java7Parser.SUPER_CONSTRUCTOR_CALL: 
 	        	String superConstructorCallArg = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	superConstructorCallArg = nullifyIfStringContainsDot(superConstructorCallArg);
 	        	returnValue += "superBaseClass" + "(" + superConstructorCallArg + ")";
 	            break;
-	        case JavaParser.STATIC_ARRAY_CREATOR: 
-	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == JavaParser.IDENT))) {
+	        case Java7Parser.STATIC_ARRAY_CREATOR: 
+	        	if ((tree.getChildCount() > 0) && ((tree.getChild(0).getType() == Java7Parser.QUALIFIED_TYPE_IDENT) || (tree.getChild(0).getType() == Java7Parser.Identifier))) {
 		        	String left3 = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 		        	String right3 = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 		        	right3 = nullifyIfStringContainsDot(right3);
@@ -127,12 +127,12 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	        		returnValue += "";
 	        	}
 	            break;
-	        case JavaParser.VAR_DECLARATOR: case JavaParser.VAR_DECLARATOR_LIST:
+	        case Java7Parser.VAR_DECLARATOR: case Java7Parser.VAR_DECLARATOR_LIST:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	            break;
-	        case JavaParser.TYPE: case JavaParser.QUALIFIED_TYPE_IDENT:
+	        case Java7Parser.TYPE: case Java7Parser.QUALIFIED_TYPE_IDENT:
                 // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
-                CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) tree, JavaParser.GENERIC_TYPE_ARG_LIST);
+                CommonTree genericType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) tree, Java7Parser.GENERIC_TYPE_ARG_LIST);
                 if ((genericType != null) && (dependencySubType != null)) {
                 	addGenericTypeParameters(genericType, belongsToClass, dependencySubType);
                 } 
@@ -145,10 +145,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	            	returnValue = returnValue.substring(0, returnValue.length() - 1); //deleting the last point
 	            }
 	            break;
-	        case JavaParser.EXPR: case JavaParser.PARENTESIZED_EXPR:
+	        case Java7Parser.EXPR: case Java7Parser.PARENTESIZED_EXPR:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	            break;
-	        case JavaParser.ARGUMENT_LIST:
+	        case Java7Parser.ARGUMENT_LIST:
 	    		for (int i = 0; i < tree.getChildCount(); i++) {
 	    			String argTo= getCompleteToString((CommonTree) tree.getChild(i), belongsToClass, dependencySubType);
 	    			createPropertyOrFieldInvocationDomainObject(argTo, (CommonTree) tree.getChild(i));
@@ -163,41 +163,41 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	                } 
 	    		}
 	            break;
-	        case JavaParser.PLUS:
+	        case Java7Parser.ADD:
 	        	returnValue += getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
     			String argTo= getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	        	createPropertyOrFieldInvocationDomainObject(argTo, (CommonTree) tree.getChild(1));
 	        	break;
-	        case JavaParser.IDENT:
+	        case Java7Parser.Identifier:
 	        	returnValue = tree.getText();
 	            break;
-	        case JavaParser.THIS:
+	        case Java7Parser.THIS:
 	        	returnValue = "";
 	            break;
-	        case JavaParser.SUPER:
+	        case Java7Parser.SUPER:
 	        	returnValue = "superBaseClass";
 	            break;
-	        case JavaParser.DECIMAL_LITERAL: case JavaParser.INT: 
+	        case Java7Parser.DECIMAL_LITERAL: case Java7Parser.INT: 
 	        	returnValue += "int";
 	            break;
-	        case JavaParser.STRING_LITERAL:
+	        case Java7Parser.STRING_LITERAL:
 	        	returnValue += "String";
 	            break;
-	        case JavaParser.TRUE: case JavaParser.FALSE: case JavaParser.BOOLEAN:
+	        case Java7Parser.BooleanLiteral: case Java7Parser.BOOLEAN:
 	        	returnValue += "boolean";
 	            break;
-	        case JavaParser.CHAR: 
+	        case Java7Parser.CHAR: 
 	        	returnValue += "char";
 	            break;
-	        case JavaParser.BYTE:
+	        case Java7Parser.BYTE:
 	        	returnValue += "byte";
 	            break;
-	        case JavaParser.CAST_EXPR:
+	        case Java7Parser.CAST_EXPR:
 	    		returnValue += getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
 	    		// Create association of typecast-type access
-	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
+	    		CommonTree typeChild = (CommonTree) tree.getFirstChildWithType(Java7Parser.TYPE);
 	        	if (typeChild != null) {
-	        		CommonTree identChild = (CommonTree) typeChild.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+	        		CommonTree identChild = (CommonTree) typeChild.getFirstChildWithType(Java7Parser.QUALIFIED_TYPE_IDENT);
 	        		if ((identChild != null) && (identChild.getChildCount() > 0)) {
 	        			String typeCastTo = identChild.getChild(0).getText();
 	                    for (int i = 1; i < identChild.getChildCount(); i++) { // In case of inner classes
@@ -234,11 +234,11 @@ public class JavaInvocationGenerator extends JavaGenerator {
         for (int j = 0; j < numberOfTypeParameters; j++) {
             CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
         	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
-            CommonTree genericTypeRecursive = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, JavaParser.GENERIC_TYPE_ARG_LIST);
+            CommonTree genericTypeRecursive = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, Java7Parser.GENERIC_TYPE_ARG_LIST);
             if (genericTypeRecursive != null) {
             	addGenericTypeParameters(genericTypeRecursive, belongsToClass, dependencySubType);
             } else {
-	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
+	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, Java7Parser.QUALIFIED_TYPE_IDENT);
 	            if (qualifiedType != null) {
 	            	String parameterTypeOfGeneric = getCompleteToString(qualifiedType, from, null); // Last argument = null, since no recursion should take place here.
 	                if ((parameterTypeOfGeneric != null) && (dependencySubType != null)) {

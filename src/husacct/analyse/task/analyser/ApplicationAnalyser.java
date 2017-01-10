@@ -21,6 +21,7 @@ public class ApplicationAnalyser {
     }
 
     public void analyseApplication(String[] paths, String programmingLanguage) {
+        this.logger.info(new Date().toString() + " Start: Parse sourcefiles");
         AbstractAnalyser analyser = builder.getAnalyser(programmingLanguage);
         SourceFileFinder sourceFileFinder = new SourceFileFinder();
         String sourceFileExtension = getExtensionForLanguage(programmingLanguage);
@@ -39,7 +40,7 @@ public class ApplicationAnalyser {
             }
         }
 
-        this.logger.info(new Date().toString() + " Finished: Model generated from sourcefile");
+        this.logger.info(new Date().toString() + " Finished: Parse sourcefiles");
         analyser.connectDependencies();
         //this.logger.info(new Date().toString() + " Finished: Connecting dependencies");
         //required for clearing the buffers after analysis is finished

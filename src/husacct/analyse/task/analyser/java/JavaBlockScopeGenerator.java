@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -32,33 +32,33 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	    	} */ 
 
 	        switch(treeType) {
-	        case JavaParser.VAR_DECLARATION:
+	        case Java7Parser.VAR_DECLARATION:
 	            if (child.getChildCount() > 0) {
 	            	detectAndProcessAnonymousClass(child);
 	            	javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
 		            walkThroughChildren = false;
 	            }
 	            break;
-	        case JavaParser.CLASS_CONSTRUCTOR_CALL: case JavaParser.SUPER_CONSTRUCTOR_CALL:
+	        case Java7Parser.CLASS_CONSTRUCTOR_CALL: case Java7Parser.SUPER_CONSTRUCTOR_CALL:
             	detectAndProcessAnonymousClass(child);
 	            delegateInvocation(child, "invocConstructor");
 	            walkThroughChildren = false;
 	            break;
-	        case JavaParser.RETURN: case JavaParser.CAST_EXPR: case JavaParser.ASSIGN: case JavaParser.NOT_EQUAL: case JavaParser.EQUAL: case JavaParser.GREATER_OR_EQUAL: 
-        	case JavaParser.LESS_OR_EQUAL: case JavaParser.LESS_THAN: case JavaParser.GREATER_THAN:
+	        case Java7Parser.RETURN: case Java7Parser.CAST_EXPR: case Java7Parser.ASSIGN: case Java7Parser.NOTEQUAL: case Java7Parser.EQUAL: case Java7Parser.GE: 
+        	case Java7Parser.LE: case Java7Parser.LT: case Java7Parser.GT:
 	            delegateInvocation(child, "AccessVariable");
 	            walkThroughChildren = false;
 	            break;
-	        case JavaParser.METHOD_CALL: 
+	        case Java7Parser.METHOD_CALL: 
             	detectAndProcessAnonymousClass(child);
 	            delegateInvocation(child, "invocMethod");
 	            walkThroughChildren = false;
 	            break;
-	        case JavaParser.THROW: case JavaParser.CATCH: case JavaParser.THROWS:
+	        case Java7Parser.THROW: case Java7Parser.CATCH: case Java7Parser.THROWS:
 	            delegateException(child);
 	            walkThroughChildren = false;
 	        	break;
-	        case JavaParser.FOR_EACH: case JavaParser.FOR: case JavaParser.WHILE:
+	        case Java7Parser.FOR_EACH: case Java7Parser.FOR: case Java7Parser.WHILE:
 	            delegateLoop(child);
 	            walkThroughChildren = false;
 	            break;
@@ -67,9 +67,9 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	        	walkThroughBlockScope(child);
 	        } else {
 	        	int ttype = child.getType();
-	        	if ((ttype != JavaParser.FOR_EACH) && (ttype != JavaParser.FOR) && (ttype != JavaParser.WHILE)) {
-		        	Tree descendant = child.getFirstChildWithType(JavaParser.BLOCK_SCOPE);
-			        if ((descendant != null) || (child.getType() == JavaParser.BLOCK_SCOPE)) {
+	        	if ((ttype != Java7Parser.FOR_EACH) && (ttype != Java7Parser.FOR) && (ttype != Java7Parser.WHILE)) {
+		        	Tree descendant = child.getFirstChildWithType(Java7Parser.BLOCK_SCOPE);
+			        if ((descendant != null) || (child.getType() == Java7Parser.BLOCK_SCOPE)) {
 			        	walkThroughBlockScope(child);
 			        }
 	        	}
@@ -104,7 +104,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
     	for (int i = 0; i < tree.getChildCount(); i++) {
 	    	CommonTree child = (CommonTree) tree.getChild(i);
 	        treeType = child.getType();
-        	if (treeType == JavaParser.CLASS_TOP_LEVEL_SCOPE) {
+        	if (treeType == Java7Parser.CLASS_TOP_LEVEL_SCOPE) {
         		walkThroughBlockScope(child);
         		break;
         	}

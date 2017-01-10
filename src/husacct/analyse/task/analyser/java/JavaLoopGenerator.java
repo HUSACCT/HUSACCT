@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -22,9 +22,9 @@ public class JavaLoopGenerator extends JavaGenerator {
         this.belongsToMethod = belongsToMethod;
     	variableTypeForLoop = "";
         javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-        if (loopTree.getType() == JavaParser.FOR || loopTree.getType() == JavaParser.WHILE) {
+        if (loopTree.getType() == Java7Parser.FOR || loopTree.getType() == Java7Parser.WHILE) {
             walkForAndWhileAST(loopTree);
-        } else if (loopTree.getType() == JavaParser.FOR_EACH) {
+        } else if (loopTree.getType() == Java7Parser.FOR_EACH) {
             walkForEachAST(loopTree);
         } else {
             logger.warn("Found unknown type looping during analysis");
@@ -38,21 +38,21 @@ public class JavaLoopGenerator extends JavaGenerator {
             Tree child = tree.getChild(i);
             int treeType = child.getType();    
             switch(treeType) {
-            case JavaParser.VAR_DECLARATION:
+            case Java7Parser.VAR_DECLARATION:
                 javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
                 deleteTreeChild(child);
                 break;
-            case JavaParser.METHOD_CALL:
+            case Java7Parser.METHOD_CALL:
                 javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
                 break;
-            case JavaParser.DOT:
+            case Java7Parser.DOT:
                 CommonTree newTree = new CommonTree();
                 newTree.addChild(child);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
                 deleteTreeChild(child);
                 break;
-            case JavaParser.BLOCK_SCOPE:
+            case Java7Parser.BLOCK_SCOPE:
                 delegateBlockScope(child);
             }
             walkForAndWhileAST(child);
@@ -66,18 +66,18 @@ public class JavaLoopGenerator extends JavaGenerator {
             child = tree.getChild(childCount);
             int treeType = child.getType();
             switch(treeType) {
-            case JavaParser.VAR_DECLARATION:
+            case Java7Parser.VAR_DECLARATION:
                 javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
                 deleteTreeChild(child);
                 break;
-            case JavaParser.TYPE:
+            case Java7Parser.TYPE:
             	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.DECL_TYPE_PARAMETER);
                 if (foundType != null) {
                     this.variableTypeForLoop = foundType;
                 }
                 deleteTreeChild(child);
                 break;
-            case JavaParser.IDENT:
+            case Java7Parser.Identifier:
             	String foundName = javaInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, null);
             	int lineNumber = 0;
                 if (foundName != null) {
@@ -91,22 +91,22 @@ public class JavaLoopGenerator extends JavaGenerator {
                 }
                 deleteTreeChild(child);
                 break;
-            case JavaParser.CAST_EXPR:
+            case Java7Parser.CAST_EXPR:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
             	break;
-            case JavaParser.METHOD_CALL:
+            case Java7Parser.METHOD_CALL:
                 javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
             	break;
-            case JavaParser.DOT:
+            case Java7Parser.DOT:
                 CommonTree newTree = new CommonTree();
                 newTree.addChild(child);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
                 deleteTreeChild(child);
             	break;
-            case JavaParser.BLOCK_SCOPE:
+            case Java7Parser.BLOCK_SCOPE:
                 delegateBlockScope(child);
                 break;
             }

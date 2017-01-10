@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.common.enums.DependencySubTypes;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class JavaParameterGenerator extends JavaGenerator {
         for (int currentChild = 0; currentChild < totalParameters; currentChild++) {
             CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
             int treeType = child.getType();
-            if (treeType == JavaParser.FORMAL_PARAM_STD_DECL) {
+            if (treeType == Java7Parser.FORMAL_PARAM_STD_DECL) {
                 getParameterName(child);
                 getTypeOfParameter(child);
                 if (this.nameFound && this.declareTypeFound) {
@@ -58,7 +58,7 @@ public class JavaParameterGenerator extends JavaGenerator {
     }
 
     private void getParameterName(CommonTree tree) {
-        Tree parameterNameTree = tree.getFirstChildWithType(JavaParser.IDENT);
+        Tree parameterNameTree = tree.getFirstChildWithType(Java7Parser.Identifier);
         if (parameterNameTree != null) {
             this.declareName = parameterNameTree.getText();
             if ((this.declareName != null)&& (!this.declareName.trim().equals(""))) {
@@ -68,7 +68,7 @@ public class JavaParameterGenerator extends JavaGenerator {
     }
 
     private void getTypeOfParameter(CommonTree tree) {
-        CommonTree typeOfParameterTree = JavaGeneratorToolkit.getFirstDescendantWithType(tree, JavaParser.TYPE);
+        CommonTree typeOfParameterTree = JavaGeneratorToolkit.getFirstDescendantWithType(tree, Java7Parser.TYPE);
         if (typeOfParameterTree != null) {
         	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
            	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.DECL_PARAMETER);

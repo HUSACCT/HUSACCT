@@ -2,7 +2,7 @@ package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -85,35 +85,35 @@ class JavaAttributeAndLocalVariableGenerator {
             switch(treeType)
             {
             // The first three cases are the default ones for a variable declaration, in order of appearance 
-            case JavaParser.MODIFIER_LIST:
+            case Java7Parser.MODIFIER_LIST:
                 setModifiers(child);
                 walkThroughChildren = false;
             	break;
-            case JavaParser.TYPE:
+            case Java7Parser.TYPE:
             	setType(child);
                 walkThroughChildren = false;
             	break;
-            case JavaParser.VAR_DECLARATOR_LIST:
+            case Java7Parser.VAR_DECLARATOR_LIST:
                 setName(child);
                 // Walk through the children is needed, since these children may represent assignment statements too.
             	break;
         	// A variable declaration may present as prefix of the variable declaration
-            case JavaParser.AT:
+            case Java7Parser.AT:
                 annotationGenerator = new JavaAnnotationGenerator();
                 annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "variable");
             	break;
         	// Assignment statements are passed to a suitable method of JavaInvocationGenerator 
-            case JavaParser.EXPR:
+            case Java7Parser.EXPR:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 walkThroughChildren = false;
             	break;
-            case JavaParser.METHOD_CALL:
+            case Java7Parser.METHOD_CALL:
             	javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                	javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
 	            walkThroughChildren = false;
 	            break;
-            case JavaParser.CLASS_CONSTRUCTOR_CALL:
+            case Java7Parser.CLASS_CONSTRUCTOR_CALL:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, belongsToMethod);
                 walkThroughChildren = false;
@@ -133,19 +133,19 @@ class JavaAttributeAndLocalVariableGenerator {
             int treeType = ModifierList.getChild(i).getType();
             switch(treeType)
             {
-	            case JavaParser.PRIVATE:
+	            case Java7Parser.PRIVATE:
 	            	accessControlQualifier = "private";
 	            	break;
-	            case JavaParser.PUBLIC:
+	            case Java7Parser.PUBLIC:
 	            	accessControlQualifier = "public";
 	            	break;
-	            case JavaParser.PROTECTED:
+	            case Java7Parser.PROTECTED:
 	            	accessControlQualifier = "protected";
 	            	break;
-	            case JavaParser.STATIC:
+	            case Java7Parser.STATIC:
 	            	hasClassScope = true;
 	            	break;
-	            case JavaParser.FINAL:
+	            case Java7Parser.FINAL:
 	                isFinal = true;
 	            	break;
         	}
@@ -163,7 +163,7 @@ class JavaAttributeAndLocalVariableGenerator {
     private void setType(Tree typeTree) {
         javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
         // Check if the types is a generic type. If so, determine the subType and attributeName, based on the number of type parameters.
-        CommonTree typeArgumentList = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.GENERIC_TYPE_ARG_LIST);
+        CommonTree typeArgumentList = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, Java7Parser.GENERIC_TYPE_ARG_LIST);
         if (typeArgumentList != null) {
         	this.declareType = typeArgumentList.getParent().getText(); // Container type, e.g. ArrayList;
         	this.isComposite = true;
@@ -171,7 +171,7 @@ class JavaAttributeAndLocalVariableGenerator {
         } else {
         	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeTree, belongsToClass, dependencySubType);
         	//	Check if the type contains an Array declaration.
-            CommonTree arrayType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, JavaParser.ARRAY_DECLARATOR);
+            CommonTree arrayType = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, Java7Parser.ARRAY_DECLARATOR);
             if (arrayType != null) {
             	this.isComposite = true;
             	if (!hasClassScope) { 
@@ -188,12 +188,12 @@ class JavaAttributeAndLocalVariableGenerator {
         for (int j = 0; j < numberOfTypeParameters; j++) {
             CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
         	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
-            CommonTree genericTypeRecursive = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, JavaParser.GENERIC_TYPE_ARG_LIST);
+            CommonTree genericTypeRecursive = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, Java7Parser.GENERIC_TYPE_ARG_LIST);
             if (genericTypeRecursive != null) {
             	levelOfRecursionWithinGenericType ++; // Needed to prevent that this.typeInClassDiagram is set with a type included in a recursive generic type. 
             	addGenericTypeParameters(genericTypeRecursive);
             } else {
-	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, JavaParser.QUALIFIED_TYPE_IDENT);
+	            CommonTree qualifiedType = JavaGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, Java7Parser.QUALIFIED_TYPE_IDENT);
 	            if (qualifiedType != null) {
 	                javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);
 	            	String parameterTypeOfGeneric = javaInvocationGenerator.getCompleteToString(qualifiedType, belongsToClass, null); // Null to prevent redundancy in creation of TypeParameters. 
@@ -217,8 +217,8 @@ class JavaAttributeAndLocalVariableGenerator {
         for (int i = 0; i < varDeclaratorListTree.getChildCount(); i++) {
             Tree varDeclaratorTree = varDeclaratorListTree.getChild(i);
             int treeType = varDeclaratorTree.getType();
-            if (treeType == JavaParser.VAR_DECLARATOR) {
-            	CommonTree IdentTree = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) varDeclaratorTree, JavaParser.IDENT);
+            if (treeType == Java7Parser.VAR_DECLARATOR) {
+            	CommonTree IdentTree = JavaGeneratorToolkit.getFirstDescendantWithType((CommonTree) varDeclaratorTree, Java7Parser.Identifier);
                 if (IdentTree != null) {
                     this.name = IdentTree.getText();
                     this.lineNumber = IdentTree.getLine();

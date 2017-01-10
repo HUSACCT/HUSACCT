@@ -31,7 +31,7 @@ public class TreePrinter {
 	
 	private void printDetailedTreeOutput(CommonTree tree) {
 		DOTTreeGenerator gen = new DOTTreeGenerator();
-		System.out.println(gen.toDOT(tree));
+		//System.out.println(gen.toDOT(tree));
 		System.out.println("\n Use: http://graphviz-dev.appspot.com");
 	}
 	
