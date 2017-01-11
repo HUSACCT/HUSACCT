@@ -1,7 +1,11 @@
 namespace Technology.Direct.Dao
 {
-	public abstract interface ISierraDAO
-	{
-		public static string NAME = "ISierraDAO";
+	interface ISierraDAO {
+		// Property declaration:
+        string Name
+        {
+            get;
+            set;
+        }
 	}
 }

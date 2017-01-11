@@ -309,7 +309,8 @@ public class CSharpLexer extends Lexer {
     public Token nextToken() {
         super.nextToken();
         if (tokens.size() == 0) {
-            return Token.EOF_TOKEN;
+            // antlr 3.2: return Token.EOF_TOKEN;
+            return getEOFToken(); // since antlr 3.5
         }
         return tokens.remove();
     }
