@@ -1,33 +1,34 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.PackageDeclarationContext;
 
 class PackageAnalyser extends JavaGenerator {
 
-	private String thePackage;
+	private String uniqueName;
+	private String name;
+	private String belongsToPackage;
 	
-	@Override 
-	public void enterPackageDeclaration(Java7Parser.PackageDeclarationContext ctx) { 
-		String uniqueName = ctx.qualifiedName().getText();
-        if (uniqueName != null) {
-            addPackageToModel(uniqueName);
-            this.thePackage = uniqueName;
-        } else {
-    		this.thePackage = generateNoPackage_Package();
-        }
+	public PackageAnalyser(PackageDeclarationContext packageDeclaration) {
+		if (packageDeclaration != null && packageDeclaration.qualifiedName() != null) {
+			String uniquePackageName = packageDeclaration.qualifiedName().getText();
+	        if (uniquePackageName != null) {
+	            uniqueName = uniquePackageName;
+	            belongsToPackage = getParentPackageName();
+	            name = getNameOfPackage();
+	        } else {
+	            uniqueName = "No_Package";
+	            belongsToPackage = "";
+	            name = "No_Package_HUSACCT_Defined";
+	        }
+	        createPackage(name, uniqueName, belongsToPackage);
+		}
 	}
 
-	public String getPackage() {
-		return thePackage;
+	public String getPackageUniqueName() {
+		return uniqueName;
 	}
 	
-	public void addPackageToModel(String uniqueName) {
-        String belongsToPackage = getParentPackageName(uniqueName);
-        String name = getNameOfPackage(uniqueName);
-        createPackage(name, uniqueName, belongsToPackage);
-    }
-
-    private String getParentPackageName(String uniqueName) {
+    private String getParentPackageName() {
         String[] allPackages = splitPackages(uniqueName);
         String parentPackage = "";
         for (int i = 0; i < allPackages.length - 1; i++) {
@@ -40,7 +41,7 @@ class PackageAnalyser extends JavaGenerator {
         return parentPackage;
     }
 
-    private String getNameOfPackage(String uniqueName) {
+    private String getNameOfPackage() {
         String[] allPackages = splitPackages(uniqueName);
         return allPackages[allPackages.length - 1];
     }
@@ -48,14 +49,6 @@ class PackageAnalyser extends JavaGenerator {
     private String[] splitPackages(String completePackageName) {
         String escapedPoint = "\\.";
         return completePackageName.split(escapedPoint);
-    }
-
-    private String generateNoPackage_Package() {
-        String uniqueName = "No_Package";
-        String belongsToPackage = "";
-        String name = "No_Package_HUSACCT_Defined";
-        createPackage(name, uniqueName, belongsToPackage);
-        return uniqueName;
     }
 
     private void createPackage(String name, String uniqueName, String belongsToPackage) {

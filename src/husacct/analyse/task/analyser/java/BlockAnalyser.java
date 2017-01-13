@@ -5,16 +5,16 @@ import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
-public class JavaBlockScopeGenerator extends JavaGenerator {
+public class BlockAnalyser extends JavaGenerator {
 
     private String belongsToClass;
     private String belongsToMethod;
-    JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator;
+    VariableAnalyser javaLocalVariableGenerator;
 
     public void walkThroughBlockScope(CommonTree tree, String belongsToClass, String belongsToMethod) {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
-        javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
+        javaLocalVariableGenerator = new VariableAnalyser(belongsToClass);
         walkThroughBlockScope(tree);
     }
     
@@ -31,7 +31,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 	    		}
 	    	} */ 
 
-	        switch(treeType) {
+/*	        switch(treeType) {
 	        case Java7Parser.VAR_DECLARATION:
 	            if (child.getChildCount() > 0) {
 	            	detectAndProcessAnonymousClass(child);
@@ -74,12 +74,12 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 			        }
 	        	}
 	        }
-	    }
+*/	    }
     }
 
 
     private void delegateInvocation(Tree treeNode, String type) {
-        JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+        AccessAndCallAnalyser javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
         if (type.equals("invocConstructor")) {
             javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
         } else if (type.equals("invocMethod")) {
@@ -104,7 +104,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
     	for (int i = 0; i < tree.getChildCount(); i++) {
 	    	CommonTree child = (CommonTree) tree.getChild(i);
 	        treeType = child.getType();
-        	if (treeType == Java7Parser.CLASS_TOP_LEVEL_SCOPE) {
+        	if (treeType == Java7Parser.VOID) { //CLASS_TOP_LEVEL_SCOPE) {
         		walkThroughBlockScope(child);
         		break;
         	}

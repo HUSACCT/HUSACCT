@@ -7,7 +7,7 @@ class JavaExceptionGenerator extends JavaGenerator {
 
     private static final int catchNode = Java7Parser.CATCH;
     private static final int throwNewNode = Java7Parser.THROW;
-    private static final int typeIdentifierNode = Java7Parser.QUALIFIED_TYPE_IDENT;
+    private static final int typeIdentifierNode = Java7Parser.VOID; //QUALIFIED_TYPE_IDENT;
     private String exceptionType;
     private String fromClass;
     private String exceptionClass;
@@ -56,7 +56,7 @@ class JavaExceptionGenerator extends JavaGenerator {
         String path = "";
         if (tree.getType() == Java7Parser.DOT) {
             path += packageClassPath(tree);
-        } else if (tree.getType() == Java7Parser.QUALIFIED_TYPE_IDENT) {
+        } else if (tree.getType() == Java7Parser.VOID) { //.QUALIFIED_TYPE_IDENT) {
             int childcount = tree.getChildCount();
             for (int iterator = 0; iterator < childcount; iterator++) {
                 path += !path.equals("") ? "." : "";

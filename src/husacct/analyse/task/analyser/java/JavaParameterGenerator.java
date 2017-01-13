@@ -44,7 +44,7 @@ public class JavaParameterGenerator extends JavaGenerator {
         for (int currentChild = 0; currentChild < totalParameters; currentChild++) {
             CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
             int treeType = child.getType();
-            if (treeType == Java7Parser.FORMAL_PARAM_STD_DECL) {
+            if (treeType == Java7Parser.VOID) { //FORMAL_PARAM_STD_DECL) {
                 getParameterName(child);
                 getTypeOfParameter(child);
                 if (this.nameFound && this.declareTypeFound) {
@@ -68,9 +68,9 @@ public class JavaParameterGenerator extends JavaGenerator {
     }
 
     private void getTypeOfParameter(CommonTree tree) {
-        CommonTree typeOfParameterTree = JavaGeneratorToolkit.getFirstDescendantWithType(tree, Java7Parser.TYPE);
+        CommonTree typeOfParameterTree = JavaGeneratorToolkit.getFirstDescendantWithType(tree, Java7Parser.VOID); //.TYPE
         if (typeOfParameterTree != null) {
-        	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+        	AccessAndCallAnalyser javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
            	this.declareType = javaInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.DECL_PARAMETER);
             this.lineNumber = typeOfParameterTree.getLine();
             if (this.declareType.endsWith(".")) {

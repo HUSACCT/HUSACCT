@@ -9,22 +9,22 @@ import org.apache.log4j.Logger;
 
 public class JavaLoopGenerator extends JavaGenerator {
 
-    private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
+    private Logger logger = Logger.getLogger(AccessAndCallAnalyser.class);
     private String belongsToClass;
     private String belongsToMethod;
     private String variableTypeForLoop;
-    JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
-    JavaInvocationGenerator javaInvocationGenerator;
-    JavaBlockScopeGenerator javaBlockScopeGenerator;
+    VariableAnalyser javaLocalVariableGenerator = new VariableAnalyser(belongsToClass);
+    AccessAndCallAnalyser javaInvocationGenerator;
+    BlockAnalyser javaBlockScopeGenerator;
 
     public void generateToDomainFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod) {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
     	variableTypeForLoop = "";
-        javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+        javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
         if (loopTree.getType() == Java7Parser.FOR || loopTree.getType() == Java7Parser.WHILE) {
             walkForAndWhileAST(loopTree);
-        } else if (loopTree.getType() == Java7Parser.FOR_EACH) {
+        } else if (loopTree.getType() == Java7Parser.VOID) { //FOR_EACH) {
             walkForEachAST(loopTree);
         } else {
             logger.warn("Found unknown type looping during analysis");
@@ -33,7 +33,7 @@ public class JavaLoopGenerator extends JavaGenerator {
     }
     
     private void walkForAndWhileAST(Tree tree) {
-		int size = tree.getChildCount();
+/*		int size = tree.getChildCount();
         for (int i = 0; i < size; i++) {
             Tree child = tree.getChild(i);
             int treeType = child.getType();    
@@ -57,10 +57,10 @@ public class JavaLoopGenerator extends JavaGenerator {
             }
             walkForAndWhileAST(child);
         }
-    }
+*/    }
 
     private void walkForEachAST(Tree tree) {
-    	Tree child;
+/*    	Tree child;
     	int size = tree.getChildCount();
         for (int childCount = 0; childCount < size; childCount++) {
             child = tree.getChild(childCount);
@@ -92,7 +92,7 @@ public class JavaLoopGenerator extends JavaGenerator {
                 deleteTreeChild(child);
                 break;
             case Java7Parser.CAST_EXPR:
-                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+                javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
             	break;
@@ -112,7 +112,7 @@ public class JavaLoopGenerator extends JavaGenerator {
             }
             walkForEachAST(child);
         }
-    }
+*/    }
 
     private void deleteTreeChild(Tree treeNode) {
         for (int child = 0; child < treeNode.getChildCount();) {
@@ -121,7 +121,7 @@ public class JavaLoopGenerator extends JavaGenerator {
     }
 
     private void delegateBlockScope(Tree child) {
-        JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
+        BlockAnalyser javaBlockScopeGenerator = new BlockAnalyser();
         javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.belongsToMethod);
         deleteTreeChild(child);
     }

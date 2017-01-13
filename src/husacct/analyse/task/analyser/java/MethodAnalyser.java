@@ -7,7 +7,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
-class JavaMethodGeneratorController extends JavaGenerator {
+class MethodAnalyser extends JavaGenerator {
 
     private boolean hasClassScope = false;
     private boolean isAbstract = false;
@@ -20,10 +20,10 @@ class JavaMethodGeneratorController extends JavaGenerator {
     public String name;
     public String uniqueName;
     private int lineNumber;
-    private Logger logger = Logger.getLogger(JavaMethodGeneratorController.class);
-    JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
+    private Logger logger = Logger.getLogger(MethodAnalyser.class);
+    VariableAnalyser javaLocalVariableGenerator ; //= new VariableAnalyser();
 
-    public void delegateMethodBlock(CommonTree methodTree, String className) {
+    public void AnalyseMethod(CommonTree methodTree, String className) {
         this.belongsToClass = className;
         lineNumber = methodTree.getLine();
         hasClassScope = false;
@@ -43,16 +43,16 @@ class JavaMethodGeneratorController extends JavaGenerator {
     private void checkMethodType(CommonTree methodTree) {
         int methodTreeType = methodTree.getType();
         switch(methodTreeType) {
-        case Java7Parser.CONSTRUCTOR_DECL: 
+        case Java7Parser.VOID: //CONSTRUCTOR_DECL: 
             declaredReturnType = "";
             isConstructor = true;
             name = getClassOfUniqueName(belongsToClass);
             break;
-        case Java7Parser.VOID_METHOD_DECL:
+        case Java7Parser.ADD: //VOID_METHOD_DECL:
             declaredReturnType = "";
             isConstructor = false;
         	break;
-        case Java7Parser.FUNCTION_METHOD_DECL:
+        case Java7Parser.AND: //FUNCTION_METHOD_DECL:
             isConstructor = false;
         	break;
         default:
@@ -84,8 +84,8 @@ class JavaMethodGeneratorController extends JavaGenerator {
 	            	isAbstract = true;
 	            	break;
 	            case Java7Parser.AT:
-	            	JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator();
-	                annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "method");
+	            	//AnnotationAnalyser annotationGenerator = new AnnotationAnalyser();
+	                //annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "method");
 	            	break;
 	            case Java7Parser.STATIC: 
 	            	hasClassScope = true; 
@@ -99,11 +99,11 @@ class JavaMethodGeneratorController extends JavaGenerator {
 	            case Java7Parser.PROTECTED: 
 	            	accessControlQualifier = "protected"; 
 	            	break;
-	            case Java7Parser.TYPE: 
+/*	            case Java7Parser.TYPE: 
 	            	getReturnType(child); 
 		            walkThroughChildren = false;
 	            	break;
-	            case Java7Parser.Identifier: 
+*/	            case Java7Parser.Identifier: 
 	            	name = child.getText(); 
 	            	lineNumber = child.getLine();
 	            	break;
@@ -115,7 +115,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
 	            	delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
-	            case Java7Parser.THROWS_CLAUSE: 
+/*	            case Java7Parser.THROWS_CLAUSE: 
 	            	delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
@@ -133,7 +133,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
 		            walkThroughChildren = false;
 	                break;
 	            }
-	            default: break;
+*/	            default: break;
             }
 	        if (walkThroughChildren) {
 	        	WalkThroughMethod(child);
@@ -153,7 +153,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
     }
 
     private void getReturnType(Tree tree) {
-    	JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+    	AccessAndCallAnalyser javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
     	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree, belongsToClass, DependencySubTypes.DECL_RETURN_TYPE);
         if (foundType != null) {
             this.declaredReturnType = foundType;

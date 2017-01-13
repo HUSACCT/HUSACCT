@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeDeclarationContext;
 import husacct.analyse.task.analyser.VisibilitySet;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -32,52 +33,26 @@ class TypeDeclarationAnalyser extends JavaGenerator {
         }
     }
 
-	@Override 
-	public void enterClassOrInterfaceModifier(Java7Parser.ClassOrInterfaceModifierContext ctx) {
-		if (ctx != null) {
-			// Determine annotation
-			if (ctx.annotation() != null) {
-				new JavaAnnotationGenerator(ctx.annotation(), this.uniqueName);
-			}
-			
-			// Determine this.isAbstract
-			for (ParseTree child : ctx.children) {
-				String modifier = child.getText();
-				if (modifier.equals("abstract")) {
-					this.isAbstract = true;
-				}
-			}
-		}
-			
-		//Determine this.visibility
-        if (ctx == null || ctx.getChildCount() < 1) {
-            this.visibility = VisibilitySet.DEFAULT.toString();
-        } else {
-			for (ParseTree child : ctx.children) {
-				String modifier = child.getText();
-	            if (VisibilitySet.isValidVisibillity(modifier)) {
-	            	this.visibility = modifier;
-	            } else {
-	                this.visibility = VisibilitySet.DEFAULT.toString();
-	            }
-			}
- 		}
-	}
-	
-	@Override 
-	public void enterTypeDeclaration(Java7Parser.TypeDeclarationContext ctx) {
-		if (ctx != null) {
-			if (ctx.classDeclaration() != null) {
-				this.name  = ctx.classDeclaration().Identifier().getText();
-			} else if (ctx.interfaceDeclaration() != null) {
+	public void analyseTypeDeclaration(TypeDeclarationContext typeDeclaration) {
+		if (typeDeclaration != null) {
+			if (typeDeclaration.classDeclaration() != null) {
+				this.name  = typeDeclaration.classDeclaration().Identifier().getText();
+				determineUniqueName();
+				analyseClassDeclaration(typeDeclaration.classDeclaration());
+			} else if (typeDeclaration.interfaceDeclaration() != null) {
 				isInterface = true;
-				this.name  = ctx.interfaceDeclaration().Identifier().getText();
-			} else if (ctx.enumDeclaration() != null) {
+				this.name  = typeDeclaration.interfaceDeclaration().Identifier().getText();
+				determineUniqueName();
+				analyseInterfaceDeclaration(typeDeclaration.interfaceDeclaration());
+			} else if (typeDeclaration.enumDeclaration() != null) {
 				isEnumeration = true;
-				this.name  = ctx.enumDeclaration().Identifier().getText();
-			} else if (ctx.annotationTypeDeclaration() != null) {
+				this.name  = typeDeclaration.enumDeclaration().Identifier().getText();
+				determineUniqueName();
+				analyseEnumDeclaration(typeDeclaration.enumDeclaration());
+			} else if (typeDeclaration.annotationTypeDeclaration() != null) {
 				isInterface = true; // Annotation is handled as interface
-				this.name  = ctx.annotationTypeDeclaration().Identifier().getText();
+				determineUniqueName();
+				this.name  = typeDeclaration.annotationTypeDeclaration().Identifier().getText();
 			}
 			// Determine uniqueName
 			if (isNestedClass) {
@@ -90,6 +65,8 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 	            }
 	            this.belongsToClass = "";
 	        }
+			
+			processModifiers(typeDeclaration);
 
 			// Add type to Model
 	        if (!name.equals("") && !belongsToPackage.equals("")) {
@@ -98,8 +75,50 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 		}
 	}
 
-	@Override 
-	public void enterClassDeclaration(Java7Parser.ClassDeclarationContext ctx) {
+	private void determineUniqueName() {
+		if (isNestedClass) {
+	        this.uniqueName = belongsToClass + "." + name;
+	    } else {
+	        if (belongsToPackage.equals("")) {
+	            this.uniqueName = name;
+	        } else {
+	            this.uniqueName = belongsToPackage + "." + name;
+	        }
+	        this.belongsToClass = "";
+	    }
+	}
+
+	
+	private void processModifiers(TypeDeclarationContext typeDeclaration) {
+		if (typeDeclaration.classOrInterfaceModifier() != null) {
+			// Detect and creates Annotation dependencies
+	    	int size = typeDeclaration.classOrInterfaceModifier().size();
+	    	for (int i = 0; i < size; i++) {
+				if (typeDeclaration.classOrInterfaceModifier(i).annotation() != null) {
+					new AnnotationAnalyser(typeDeclaration.classOrInterfaceModifier(i).annotation(), this.uniqueName);
+				}
+			}
+		
+			// Determine this.isAbstract
+			for (ParseTree child : typeDeclaration.classOrInterfaceModifier()) {
+				String modifier = child.getText();
+				if (modifier.equals("abstract")) {
+					this.isAbstract = true;
+				}
+			}
+			
+			//Determine this.visibility
+	        this.visibility = VisibilitySet.DEFAULT.toString();
+			for (ParseTree child : typeDeclaration.classOrInterfaceModifier()) {
+				String modifier = child.getText();
+	            if (VisibilitySet.isValidVisibillity(modifier)) {
+	            	this.visibility = modifier;
+	            }
+			}
+		}
+	}
+
+	private void analyseClassDeclaration(Java7Parser.ClassDeclarationContext ctx) {
 		// Determine extends clause
 		if (ctx.typeType() != null) {
 			if(!ctx.typeType().getText().equals("")) {
@@ -125,10 +144,46 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 				}
 			}
 		}
+		
+		// Delegate the body
+		if (ctx.classBody() != null) {
+			new ClassBodyAnalyser(uniqueName, ctx.classBody());
+		}
+	}
 
+	private void analyseInterfaceDeclaration(Java7Parser.InterfaceDeclarationContext ctx) {
+		// Determine extends clause
+		if (ctx.typeList() != null) {
+			for (ParseTree extendsType : ctx.typeList().children) {
+			    String to = extendsType.getText();
+				if(!extendsType.getText().equals("")) {
+				    String from = this.uniqueName;
+				    int lineNumber = ctx.typeList().start.getLine();
+			        if (!SkippedTypes.isSkippable(to)) {
+			            modelService.createInheritanceDefinition(from, to, lineNumber);
+			        }
+				}
+			}
+		}
 	}
 
 	
+	private void analyseEnumDeclaration(Java7Parser.EnumDeclarationContext ctx) {
+		// Determine implements clause
+		if (ctx.typeList() != null) {
+			for (ParseTree implementsType : ctx.typeList().children) {
+			    String to = implementsType.getText();
+				if(!implementsType.getText().equals("")) {
+				    String from = this.uniqueName;
+				    int lineNumber = ctx.typeList().start.getLine();
+			        if (!SkippedTypes.isSkippable(to)) {
+			            modelService.createImplementsDefinition(from, to, lineNumber);
+			        }
+				}
+			}
+		}
+	}
+
 	public String getUniqueNameOfType() {
         return uniqueName;
 	}

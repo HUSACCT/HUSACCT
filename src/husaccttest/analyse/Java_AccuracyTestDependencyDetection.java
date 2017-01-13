@@ -264,8 +264,35 @@ public class Java_AccuracyTestDependencyDetection {
 
 	// Annotation	
 	@Test
-	public void AnnotationDependency(){
+	public void AnnotationDependencyClass(){
 		String fromClass = "domain.direct.violating.AnnotationDependency";
+		String toClass = "technology.direct.dao.SettingsAnnotation";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Annotation");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "", false));
+	}
+
+	@Test
+	public void AnnotationDependencyInstanceVariable(){
+		String fromClass = "domain.direct.violating.DeclarationVariableInstance";
+		String toClass = "technology.direct.dao.SettingsAnnotation";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Annotation");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "", false));
+	}
+
+	@Test
+	public void AnnotationDependencyLocalVariable(){
+		String fromClass = "domain.direct.violating.DeclarationVariableLocal";
+		String toClass = "technology.direct.dao.SettingsAnnotation";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Annotation");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "", false));
+	}
+
+	@Test
+	public void AnnotationDependencyMethod(){
+		String fromClass = "domain.direct.violating.DeclarationReturnType";
 		String toClass = "technology.direct.dao.SettingsAnnotation";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Annotation");

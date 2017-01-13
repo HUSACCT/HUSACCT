@@ -6,7 +6,7 @@ import husacct.common.enums.DependencySubTypes;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
-public class JavaInvocationGenerator extends JavaGenerator {
+public class AccessAndCallAnalyser extends JavaGenerator {
 
     private String from;
     private String to = "";
@@ -14,10 +14,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
     private String rightVariableInAssignment = "";
     private int lineNumber;
     private String belongsToMethod;
-    private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
+    private Logger logger = Logger.getLogger(AccessAndCallAnalyser.class);
 
 
-    public JavaInvocationGenerator(String uniqueClassName) {
+    public AccessAndCallAnalyser(String uniqueClassName) {
         from = uniqueClassName;
     }
 
@@ -82,7 +82,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
      */
     public String getCompleteToString(CommonTree tree, String belongsToClass, DependencySubTypes dependencySubType) {  
     	String returnValue = "";
-    	if (tree == null) {
+/*    	if (tree == null) {
     		return returnValue;
     	}
     	try {
@@ -213,7 +213,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
     	} catch (Exception e) {
     		logger.error("Exception: "+ e);
     	}
-        return returnValue;
+*/        return returnValue;
     }
     
     private void createPropertyOrFieldInvocationDomainObject() {
@@ -229,7 +229,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
     }
 
     // Detects generic type parameters, also in complex types, like: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
-    private void addGenericTypeParameters(CommonTree genericType, String belongsToClass, DependencySubTypes dependencySubType) {
+/*    private void addGenericTypeParameters(CommonTree genericType, String belongsToClass, DependencySubTypes dependencySubType) {
         int numberOfTypeParameters = genericType.getChildCount();
         for (int j = 0; j < numberOfTypeParameters; j++) {
             CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
@@ -249,7 +249,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
             }
         }
 	}
-
+*/
     private String nullifyIfStringContainsDot(String argument) {
     	String returnValue = "";
 		if (!argument.contains(".")) { // Currently, arguments with a "." or "," disable the indirect dependency detection algorithm. In case of future improvements: create a FamixArgument object per argument. 

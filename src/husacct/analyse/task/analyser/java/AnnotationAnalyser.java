@@ -6,14 +6,14 @@ import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 
-class JavaAnnotationGenerator {
+class AnnotationAnalyser {
 
     private String name;
     private String uniqueName;
     private int lineNumber;
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
-    public JavaAnnotationGenerator(Java7Parser.AnnotationContext ctx, String belongsToClass) {
+    public AnnotationAnalyser(Java7Parser.AnnotationContext ctx, String belongsToClass) {
         if ((ctx != null) && (belongsToClass != null) && !belongsToClass.equals("")) {
         	if (ctx.annotationName() != null) {
 	        	name = ctx.annotationName().getText();
