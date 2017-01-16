@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 
 
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ModifierContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeArgumentContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeArgumentsContext;
 import husacct.analyse.domain.IModelCreationService;
@@ -19,27 +20,35 @@ abstract class JavaGenerator {
 
     protected IModelCreationService modelService = new FamixCreationServiceImpl();
     
-    protected String determineVisibility(List<Java7Parser.ModifierContext> modifierList) {
+    protected String determineVisibility(List<ModifierContext> modifierList) {
     	String visibility = VisibilitySet.DEFAULT.toString();
-        if (modifierList != null && modifierList.size() >= 1) {
-			for (ParseTree child : modifierList) {
-				String modifier = child.getText();
-	            if (VisibilitySet.isValidVisibillity(modifier)) {
-	            	visibility = modifier;
-	            } else {
-	                visibility = VisibilitySet.DEFAULT.toString();
+        if (modifierList != null) {
+			for (ModifierContext modifier : modifierList) {
+	            if (VisibilitySet.isValidVisibillity(modifier.getText())) {
+	            	visibility = modifier.getText();
 	            }
 			}
  		}
         return visibility;
     }
 
-    protected boolean determineIsFinal(List<Java7Parser.ModifierContext> modifierList) {
+    protected boolean determineIsAbstract(List<ModifierContext> modifierList) {
+    	boolean isAbstract = false;
+        if (modifierList != null) {
+			for (ModifierContext modifier : modifierList) {
+	            if (modifier.getText().equals("abstract")) {
+	            	isAbstract = true;
+	            } 
+			}
+ 		}
+        return isAbstract;
+    }
+
+    protected boolean determineIsFinal(List<ModifierContext> modifierList) {
     	boolean isFinal = false;
-        if (modifierList != null && modifierList.size() >= 1) {
-			for (ParseTree child : modifierList) {
-				String modifier = child.getText();
-	            if (modifier.equals("final")) {
+        if (modifierList != null) {
+			for (ModifierContext modifier : modifierList) {
+	            if (modifier.getText().equals("final")) {
 	            	isFinal = true;
 	            } 
 			}
@@ -49,10 +58,9 @@ abstract class JavaGenerator {
 
     protected boolean determineIsStatic(List<Java7Parser.ModifierContext> modifierList) {
     	boolean isStatic = false;
-        if (modifierList != null && modifierList.size() >= 1) {
-			for (ParseTree child : modifierList) {
-				String modifier = child.getText();
-	            if (modifier.equals("static")) {
+        if (modifierList != null) {
+			for (ModifierContext modifier : modifierList) {
+	            if (modifier.getText().equals("static")) {
 	            	isStatic = true;
 	            } 
 			}
@@ -71,11 +79,21 @@ abstract class JavaGenerator {
  		}
     }
     
-    // Transforms the output of Identifier() to a String
-    protected String transformIdentifierToString(List<TerminalNode> identifier) {
+    /** Transforms the output of a list of Identifiers to a String. E.g. needed to transform TypeType.Identifier().
+     * 
+     * @param List<TerminalNode> identifierList
+     * @return String
+     */
+    protected String transformIdentifierToString(List<TerminalNode> identifierList) {
     	String returnValue = "";
-    	for(TerminalNode node : identifier){
-    		returnValue += node.getText();
+    	int sequence = 1;
+    	for(TerminalNode identifier : identifierList){
+    		if (sequence == 1) {
+    			returnValue += identifier.getText();
+    		} else {
+    			returnValue += "." + identifier.getText();
+    		}
+    		sequence ++;
     	}
     	return returnValue;
     }

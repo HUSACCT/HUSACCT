@@ -28,7 +28,19 @@ class ClassBodyAnalyser extends JavaGenerator {
 			variableAnalyser.generateAttributeToDomain(modifierList, member.fieldDeclaration());
 		} else if (member.methodDeclaration() != null) {
 			MethodAnalyser methodAnalyser = new MethodAnalyser();
-			//methodAnalyser.AnalyseMethod(
+			//methodAnalyser.AnalyseMethod( classDeclaration
+		} else if (member.classDeclaration() != null) {
+			TypeDeclarationAnalyser nestedTypeAnalyser = new TypeDeclarationAnalyser();
+			nestedTypeAnalyser.analyseNestedClassDeclaration(modifierList, member.classDeclaration(), belongsToClass);
+		} else if (member.interfaceDeclaration() != null) {
+			TypeDeclarationAnalyser nestedTypeAnalyser = new TypeDeclarationAnalyser();
+			nestedTypeAnalyser.analyseNestedInterfaceDeclaration(modifierList, member.interfaceDeclaration(), belongsToClass);
+		} else if (member.enumDeclaration() != null) {
+			TypeDeclarationAnalyser nestedTypeAnalyser = new TypeDeclarationAnalyser();
+			nestedTypeAnalyser.analyseNestedEnumDeclaration(modifierList, member.enumDeclaration(), belongsToClass);
+		} else if (member.annotationTypeDeclaration() != null) {
+			TypeDeclarationAnalyser nestedTypeAnalyser = new TypeDeclarationAnalyser();
+			nestedTypeAnalyser.analyseNestedAnnotationTypeDeclaration(modifierList, member.annotationTypeDeclaration(), belongsToClass);
 		}
 
 	}

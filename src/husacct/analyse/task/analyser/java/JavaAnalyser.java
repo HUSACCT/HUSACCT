@@ -23,7 +23,6 @@ import husacct.analyse.task.analyser.AbstractAnalyser;
 public class JavaAnalyser extends AbstractAnalyser {
 
 	private CompilationUnitContext compilationUnit;
-
 	private CharStream charStream;
     private Logger logger = Logger.getLogger(JavaAnalyser.class);
 
@@ -31,8 +30,7 @@ public class JavaAnalyser extends AbstractAnalyser {
         try {
         	Java7Parser javaParser = generateJavaParser(sourceFilePath);
             int nrOfLinesOfCode = determineNumberOfLinesOfCode();
-            JavaTreeConvertController javaTreeParserDelegater = new JavaTreeConvertController(compilationUnit);
-            javaTreeParserDelegater.delegateASTToGenerators(sourceFilePath, nrOfLinesOfCode, javaParser);
+            CompilationUnitAnalyser javaTreeParserDelegater = new CompilationUnitAnalyser(compilationUnit, sourceFilePath, nrOfLinesOfCode, javaParser);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +48,7 @@ public class JavaAnalyser extends AbstractAnalyser {
 		try {
 			compilationUnit = javaParser.compilationUnit();
 			int nrOfChildren = compilationUnit.getChildCount();
-    		logger.info(" SLL " + filePath + " NrOfChildren: " + nrOfChildren);
+    		//logger.info(" SLL " + filePath + " NrOfChildren: " + nrOfChildren);
 		}
     	catch (RuntimeException ex) {
     		if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {

@@ -2,26 +2,29 @@ package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.CompilationUnitContext;
-import org.antlr.runtime.RecognitionException;
 import org.apache.log4j.Logger;
 
-class JavaTreeConvertController {
-
+class CompilationUnitAnalyser {
+	
+	private static String sourceFilePath = "";
+    private static String thePackage;
 	private CompilationUnitContext compilationUnit;
-	private String sourceFilePath = "";
     private int numberOfLinesOfCode = 0;
     private String theClass = null;
-    private String thePackage = null;
-    private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
-    private TypeDeclarationAnalyser typeDeclarationAnalyser;
+    private Logger logger = Logger.getLogger(CompilationUnitAnalyser.class);
 
-    public JavaTreeConvertController(CompilationUnitContext compilationUnit) {
-
-    	this.compilationUnit = compilationUnit;
+    public static String getPackage() {
+    	return thePackage;
     }
-
-    public void delegateASTToGenerators(String sourceFilePath, int nrOfLinesOfCode, Java7Parser java7Parser) throws RecognitionException {
-    	this.sourceFilePath = sourceFilePath;
+    
+    public static String getSourceFilePath() {
+    	return sourceFilePath;
+    }
+    
+    public CompilationUnitAnalyser(CompilationUnitContext compilationUnit, String sourceFileLocation, int nrOfLinesOfCode, Java7Parser java7Parser) {
+    	thePackage = null;
+    	this.compilationUnit = compilationUnit;
+    	sourceFilePath = sourceFileLocation;
     	this.numberOfLinesOfCode = nrOfLinesOfCode;
     	try {
     		/* Test and Debug
@@ -46,16 +49,16 @@ class JavaTreeConvertController {
     private void analysePackage() {
         PackageAnalyser packageAnalyser;
         packageAnalyser = new PackageAnalyser(compilationUnit.packageDeclaration());
-        this.thePackage = packageAnalyser.getPackageUniqueName();
+        thePackage = packageAnalyser.getPackageUniqueName();
     }
     
     private void analyseTypeDeclaration() {
     	int size = compilationUnit.typeDeclaration().size();
     	for (int i = 0; i < size; i++) {
-        	typeDeclarationAnalyser = new TypeDeclarationAnalyser(thePackage, sourceFilePath, numberOfLinesOfCode, false, "");
-        	typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i));
+    		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
+        	String className = typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i), sourceFilePath, numberOfLinesOfCode);
         	if (i == 0) {
-                this.theClass = typeDeclarationAnalyser.getUniqueNameOfType();
+                this.theClass = className;
         	}
     	}
     }
