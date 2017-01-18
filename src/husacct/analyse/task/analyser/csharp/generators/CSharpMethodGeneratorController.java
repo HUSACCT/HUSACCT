@@ -15,7 +15,6 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	String accessControlQualifier;
 	String paramTypesInSignature = "";
 	String returnType = "";
-	boolean isPureAccessor = false; //Not known
 	boolean isConstructor = false;
 	boolean isAbstract = false;
 	boolean hasClassScope = false;
@@ -115,9 +114,9 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 		String argumentTypes = createArgumentString();
 		this.uniqueName = getMethodUniqueName(belongsToClass, name, argumentTypes);
 		if(SkippableTypes.isSkippable(returnType)){
-			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, argumentTypes, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
         } else {
-    		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, returnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
         }
 	}
 

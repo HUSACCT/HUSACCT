@@ -16,7 +16,7 @@ public class CSharpExceptionGenerator extends CSharpGenerator {
         this.lineNumber = tree.getLine();
         this.fromClass = theClass;
         setExceptionType(tree);
-        modelService.createException(fromClass, exceptionClass, lineNumber, exceptionType);
+        modelService.createException(fromClass, exceptionClass, lineNumber);
     }
 
     private void setExceptionType(CommonTree tree) {

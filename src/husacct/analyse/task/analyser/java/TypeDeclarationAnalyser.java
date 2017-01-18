@@ -41,8 +41,7 @@ class TypeDeclarationAnalyser extends JavaGenerator {
      * @param linesOfCode
      * @return
      */
-    public String analyseTypeDeclaration(TypeDeclarationContext typeDeclaration, String sourceFilePath, int linesOfCode) {
-        this.sourceFilePath = sourceFilePath;
+    public String analyseTypeDeclaration(TypeDeclarationContext typeDeclaration, int linesOfCode) {
         this.nrOfLinesOfCode = linesOfCode;
         // Determine this.isAbstract and this.visibility
         if (typeDeclaration.classOrInterfaceModifier() != null) {
@@ -173,6 +172,17 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 		this.name  = annotationTypeDeclaration.Identifier().getText();
 		determineUniqueName();
 	    addTypeToModel();
+	}
+
+	
+	/** 
+	 * @param typeDeclaration
+	 * @param parentClassName
+	 */
+	public void analyseNestedTypeDeclaration(TypeDeclarationContext typeDeclaration, String parentClassName) {
+        this.isNestedClass = true;
+        this.belongsToClass = parentClassName;
+        analyseTypeDeclaration(typeDeclaration, 0);
 	}
 
 	

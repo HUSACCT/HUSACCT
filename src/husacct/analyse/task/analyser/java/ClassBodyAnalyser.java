@@ -25,10 +25,10 @@ class ClassBodyAnalyser extends JavaGenerator {
 	private void analyseMemberDeclaration(List<ModifierContext> modifierList, MemberDeclarationContext member) {
 		if (member.fieldDeclaration() != null) {
 			VariableAnalyser variableAnalyser = new VariableAnalyser(belongsToClass);
-			variableAnalyser.generateAttributeToDomain(modifierList, member.fieldDeclaration());
+			variableAnalyser.analyseVariable(modifierList, member.fieldDeclaration());
 		} else if (member.methodDeclaration() != null) {
-			MethodAnalyser methodAnalyser = new MethodAnalyser();
-			//methodAnalyser.AnalyseMethod( classDeclaration
+			MethodAnalyser methodAnalyser = new MethodAnalyser(belongsToClass);
+			methodAnalyser.analyseMethod(modifierList, member.methodDeclaration());
 		} else if (member.classDeclaration() != null) {
 			TypeDeclarationAnalyser nestedTypeAnalyser = new TypeDeclarationAnalyser();
 			nestedTypeAnalyser.analyseNestedClassDeclaration(modifierList, member.classDeclaration(), belongsToClass);

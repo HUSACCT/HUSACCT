@@ -52,15 +52,14 @@ public class DelegateBuffer {
 	private void writeToFamix(CommonTree delegateTree) {
 		String accessControlQualifier = getVisibility(delegateTree);
 		String uniqueName = packageAndClassName + "." + name + "(" + paramTypesInSignature + ")"; 
-		boolean pureAccessor = false;
 		boolean isConstructor = false;
 		boolean isAbstract = true;
 		boolean hasClassScope = true;
 		int lineNumber = delegateTree.getLine();
 		if(SkippableTypes.isSkippable(returntype)){
-			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, paramTypesInSignature, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+			modelService.createMethodOnly(name, uniqueName, accessControlQualifier, paramTypesInSignature, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
         } else {
-    		modelService.createMethod(name, uniqueName, accessControlQualifier, paramTypesInSignature, pureAccessor, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
+    		modelService.createMethod(name, uniqueName, accessControlQualifier, paramTypesInSignature, returntype, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
         }
 	}
 }

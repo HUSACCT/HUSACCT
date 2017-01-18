@@ -16,9 +16,8 @@ class FamixMethod extends FamixBehaviouralEntity {
         importRepresentation += "\nisAbstract: " + isAbstract;
         importRepresentation += "\nisConstructor: " + isConstructor;
 
-        importRepresentation += "\naccessControlQualifier: " + accessControlQualifier;
+        importRepresentation += "\nvisibility: " + super.visibility;
         importRepresentation += "\nsignature: " + signature;
-        importRepresentation += "\nisPureAccessor: " + isPureAccessor;
         importRepresentation += "\ndeclaredReturnType: " + declaredReturnType;
 
         importRepresentation += "\n";

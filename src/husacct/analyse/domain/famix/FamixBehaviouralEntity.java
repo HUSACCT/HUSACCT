@@ -2,9 +2,7 @@ package husacct.analyse.domain.famix;
 
 class FamixBehaviouralEntity extends FamixEntity {
 
-    public String accessControlQualifier;
     public String signature;
-    public boolean isPureAccessor;
     public String declaredReturnType;
     public String declareReturnClass;
     public String belongsToClass;
@@ -14,10 +12,8 @@ class FamixBehaviouralEntity extends FamixEntity {
         importRepresentation += "\nname: " + super.name;
         importRepresentation += "\nuniquename: " + super.uniqueName;
         importRepresentation += "\nbelongsToClass: " + belongsToClass;
-
-        importRepresentation += "\naccessControlQualifier: " + accessControlQualifier;
+        importRepresentation += "\nvisibility: " + super.visibility;
         importRepresentation += "\nsignature: " + signature;
-        importRepresentation += "\nisPureAccessor: " + isPureAccessor;
         importRepresentation += "\ndeclaredReturnType: " + declaredReturnType;
 
         importRepresentation += "\n";

@@ -7,6 +7,8 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.FieldDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.LocalVariableDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.ModifierContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeArgumentContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeArgumentsContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeTypeContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.VariableDeclaratorContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.VariableDeclaratorsContext;
@@ -21,8 +23,8 @@ class VariableAnalyser extends JavaGenerator{
     private int lineNumber = 0;
     private String belongsToMethod = "";
     private String declareType = "";			// Type of the attribute. In case of an instance variable with a generic type e.g. ArrayList<Person>, this value is ArrayList.
-    private String typeInClassDiagram = ""; 	// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is Person.
     private boolean isComposite = false; 		// False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[]. 
+    private String typeInClassDiagram = ""; 	// E.g. in case of an instance variable with a generic type ArrayList<Person>, this value is Person.
     private boolean isLocalVariable = false;
 	private DependencySubTypes dependencySubType = null;
 
@@ -32,10 +34,10 @@ class VariableAnalyser extends JavaGenerator{
         this.belongsToClass = belongsToClass;
     }
     
-    public void generateAttributeToDomain(List<ModifierContext> modifierList, FieldDeclarationContext fieldDeclaration) {
+    public void analyseVariable(List<ModifierContext> modifierList, FieldDeclarationContext fieldDeclaration) {
         /* Test helpers
     	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_OneTypeParameter")) {
-    		if (modifierList.get(0).start.getLine() == 20) {
+    		if (modifierList.get(0).start.getLine() == 18) {
     				boolean breakpoint = true;
     		}
     	} */
@@ -50,23 +52,27 @@ class VariableAnalyser extends JavaGenerator{
 			dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
 		}
 		dispatchAnnotationsOfMember(modifierList, belongsToClass);
-		determineType(fieldDeclaration.typeType());
-		determineNameAndDispatchAssignment(fieldDeclaration.variableDeclarators());
+		this.declareType = determineTypeOfTypeType(fieldDeclaration.typeType(), belongsToClass, dependencySubType);
+		if (!hasClassScope) {
+			determine_isComposite_and_typeInClassDiagram(fieldDeclaration.typeType());
+		}
+		determine_name(fieldDeclaration.variableDeclarators());
+		dispatchAssignment(fieldDeclaration.variableDeclarators());
     }
 
-    public void generateLocalVariableToDomain(LocalVariableDeclarationContext localVariableDeclaration, String belongsToClass, String belongsToMethod) {
+    public void analyseLocalVariable(LocalVariableDeclarationContext localVariableDeclaration, String belongsToMethod) {
         this.isLocalVariable = true;
-        this.isFinal = determineIsFinalForLocalVariable(localVariableDeclaration);
+        this.isFinal = determine_IsFinalForLocalVariable(localVariableDeclaration);
 		this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
-        this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         dispatchAnnotationsOfLocalVariable(localVariableDeclaration);
-		determineType(localVariableDeclaration.typeType());
-		determineNameAndDispatchAssignment(localVariableDeclaration.variableDeclarators());
+        this.declareType = determineTypeOfTypeType(localVariableDeclaration.typeType(), belongsToClass, dependencySubType);
+		determine_name(localVariableDeclaration.variableDeclarators());
+		dispatchAssignment(localVariableDeclaration.variableDeclarators());
     }
 
     // Still needed in J7?
-    public void generateLocalVariableForLoopToDomain(String belongsToClass, String belongsToMethod, String name, String type, int line) {
+    public void analyseLocalVariableForLoop(String belongsToClass, String belongsToMethod, String name, String type, int line) {
         isLocalVariable = true;
 		dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
         this.belongsToClass = belongsToClass;
@@ -77,7 +83,7 @@ class VariableAnalyser extends JavaGenerator{
         createLocalVariableObject();
     }
 
-    private void determineNameAndDispatchAssignment(VariableDeclaratorsContext attributeTree) {
+    private void determine_name(VariableDeclaratorsContext attributeTree) {
     	for (VariableDeclaratorContext variableDeclarator : attributeTree.variableDeclarator()) {
     		if (variableDeclarator.variableDeclaratorId() != null) {
     			if (variableDeclarator.variableDeclaratorId().Identifier() != null) {
@@ -90,34 +96,43 @@ class VariableAnalyser extends JavaGenerator{
 	                }
     			}
     		}
-    		// In case of assignment: variable declaration = xxx
+    	}
+     }
+
+    private void dispatchAssignment(VariableDeclaratorsContext attributeTree) {
+    	for (VariableDeclaratorContext variableDeclarator : attributeTree.variableDeclarator()) {
     		if (variableDeclarator.variableInitializer() != null) {
-    			String vi = variableDeclarator.variableInitializer().getText();
-    			String vi2 = vi;
-    			// javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
+    			if (variableDeclarator.variableInitializer().expression() != null) {
+    		        StatementAnalyser expressionAnalyser = new StatementAnalyser(this.belongsToClass);
+        			expressionAnalyser.analyseExpression(variableDeclarator.variableInitializer().expression(), belongsToMethod);
+    			}
     		}
     	}
      }
 
-    private void determineType(TypeTypeContext typeTree) {
-		if (typeTree.primitiveType() != null) {
-			this.declareType = typeTree.getText();
-		} else if (typeTree.classOrInterfaceType() != null) {
-			this.declareType = transformIdentifierToString(typeTree.classOrInterfaceType().Identifier());
-        	//	Check if the type contains an Array declaration.
-            if (typeTree.stop.getText().equals("]")) {
+    private void determine_isComposite_and_typeInClassDiagram(TypeTypeContext typeTree) {
+    	if (typeTree.classOrInterfaceType() != null) {
+            if (typeTree.stop.getText().equals("]")) { // In case of array, e.g. VariableDTO[]
             	this.isComposite = true;
             	if (!hasClassScope) { 
                 	this.typeInClassDiagram = this.declareType;
             	}
-            } else if (typeTree.classOrInterfaceType().typeArguments() != null) { // Check if the contains generic type parameters. 
-            	this.typeInClassDiagram = dispatchGenericTypeParameters(belongsToClass, typeTree.classOrInterfaceType().typeArguments(), 0, dependencySubType);
-				this.isComposite = true;
-			}
+            } else if (typeTree.classOrInterfaceType().typeArguments() != null) { // Check on (generic) type parameters. 
+        		for (TypeArgumentsContext typeArguments : typeTree.classOrInterfaceType().typeArguments()) {
+        			for (TypeArgumentContext typeArgument : typeArguments.typeArgument()) {
+        				this.typeInClassDiagram = transformIdentifierToString(typeArgument.typeType().classOrInterfaceType().Identifier());
+           				// Note in both cases Person will be assigned: ArrayList<Person>, HashMap<String, Person>.
+                    	this.isComposite = true;
+        			}
+        		}
+            }
 		}
+    	if (!isComposite) {
+    		this.typeInClassDiagram = this.declareType;
+    	}
     }
 
-    private boolean determineIsFinalForLocalVariable(LocalVariableDeclarationContext localVariableDeclaration) {
+    private boolean determine_IsFinalForLocalVariable(LocalVariableDeclarationContext localVariableDeclaration) {
     	boolean isFinalReturn = false;
         if (localVariableDeclaration.variableModifier() != null) {
         	int size = localVariableDeclaration.variableModifier().size();

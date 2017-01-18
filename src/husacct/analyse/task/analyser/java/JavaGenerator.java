@@ -1,16 +1,12 @@
 package husacct.analyse.task.analyser.java;
 
 import java.util.List;
-
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
-
-
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.ModifierContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeArgumentContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeArgumentsContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeTypeContext;
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.task.analyser.VisibilitySet;
@@ -98,10 +94,23 @@ abstract class JavaGenerator {
     	return returnValue;
     }
     
+    protected String determineTypeOfTypeType(TypeTypeContext typeTree, String belongsToClass, DependencySubTypes dependencySubType) {
+    	String returnType = "";
+    	if (typeTree != null) {
+			if (typeTree.primitiveType() != null) {
+				returnType = typeTree.getText();
+			} else if (typeTree.classOrInterfaceType() != null) {
+				returnType = transformIdentifierToString(typeTree.classOrInterfaceType().Identifier());
+		       if (typeTree.classOrInterfaceType().typeArguments() != null) { // Check if the contains generic type parameters. 
+		        	dispatchGenericTypeParameters(belongsToClass, typeTree.classOrInterfaceType().typeArguments(), dependencySubType);
+		       }
+			}
+    	}
+		return returnType;
+    }
+
     // Detects generic type parameters recursively. Also in complex types such as: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
-    protected String dispatchGenericTypeParameters(String belongsToClass, List<TypeArgumentsContext> typeArgumentsList, int recursionLevel, DependencySubTypes dependencySubType) {
-    	String typeInClassDiagram = "";
-    	int levelOfRecursion = recursionLevel + 1;
+    protected void dispatchGenericTypeParameters(String belongsToClass, List<TypeArgumentsContext> typeArgumentsList, DependencySubTypes dependencySubType) {
 		for (TypeArgumentsContext typeArguments : typeArgumentsList) {
 			for (TypeArgumentContext typeArgument : typeArguments.typeArgument()) {
 				String parameterTypeOfGeneric = transformIdentifierToString(typeArgument.typeType().classOrInterfaceType().Identifier());
@@ -110,15 +119,11 @@ abstract class JavaGenerator {
 				// Check if typeArgument contains type parameters too (recursively)
 				if ((typeArgument.typeType().classOrInterfaceType() != null) 
 					&& (typeArgument.typeType().classOrInterfaceType().typeArguments() != null)) {
-					dispatchGenericTypeParameters(belongsToClass, typeArgument.typeType().classOrInterfaceType().typeArguments(), levelOfRecursion, dependencySubType);
+					dispatchGenericTypeParameters(belongsToClass, typeArgument.typeType().classOrInterfaceType().typeArguments(), dependencySubType);
 				}
-            	// If the variable is an instance variable, return this.typeInClassDiagram
-                if ((dependencySubType == DependencySubTypes.DECL_INSTANCE_VAR) && (levelOfRecursion == 1)) { // E.g. ArrayList<Person>. In case of HashMap<String, Person> Person will be assigned.
-            		typeInClassDiagram = parameterTypeOfGeneric; 
-                }
-			}
+ 			}
 		}
-		return typeInClassDiagram;
+		return;
     }
 
 }

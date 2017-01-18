@@ -17,17 +17,17 @@ public interface IModelCreationService {
 
     public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber, String annotatedElement);
 
-    public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
+    public void createException(String fromClass, String ExceptionClass, int lineNumber);
 
     public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
-            boolean isPureAccessor, String declaredReturnType,
-            String belongsToClass, boolean isConstructor, boolean isAbstract,
-            boolean hasClassScope, int lineNumber);
+            String declaredReturnType, String belongsToClass,
+            boolean isConstructor, boolean isAbstract, boolean hasClassScope,
+            int lineNumber);
 
     public void createMethodOnly(String name, String uniqueName, String accessControlQualifier, String signature,
-            boolean isPureAccessor, String declaredReturnType,
-            String belongsToClass, boolean isConstructor, boolean isAbstract,
-            boolean hasClassScope, int lineNumber);
+            String declaredReturnType, String belongsToClass,
+            boolean isConstructor, boolean isAbstract, boolean hasClassScope,
+            int lineNumber);
 
     public void createInheritanceDefinition(String from, String to, int lineNumber);
 

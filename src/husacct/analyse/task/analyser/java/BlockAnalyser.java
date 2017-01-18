@@ -1,6 +1,9 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.BlockContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.BlockStatementContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ExpressionContext;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -9,13 +12,44 @@ public class BlockAnalyser extends JavaGenerator {
 
     private String belongsToClass;
     private String belongsToMethod;
-    VariableAnalyser javaLocalVariableGenerator;
+    VariableAnalyser javaLocalVariableGenerator= new VariableAnalyser(belongsToClass);
+    CommonTree tree;
 
-    public void walkThroughBlockScope(CommonTree tree, String belongsToClass, String belongsToMethod) {
+    public BlockAnalyser(BlockContext block, String belongsToClass, String belongsToMethod) {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
-        javaLocalVariableGenerator = new VariableAnalyser(belongsToClass);
-        walkThroughBlockScope(tree);
+        for (BlockStatementContext blockStatement : block.blockStatement()) {
+            
+            /* Test helpers
+        	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_MultipleTypeParameters")) {
+        		if (blockStatement.start.getLine() == 14) {
+        				boolean breakpoint = true;
+        		}
+        	} */
+            
+        	if (blockStatement.localVariableDeclarationStatement() != null && 
+        			blockStatement.localVariableDeclarationStatement().localVariableDeclaration() != null) {
+    			VariableAnalyser variableAnalyser = new VariableAnalyser(this.belongsToClass);
+    			variableAnalyser.analyseLocalVariable(blockStatement.localVariableDeclarationStatement().localVariableDeclaration(), this.belongsToMethod);
+        	}
+        	if (blockStatement.typeDeclaration() != null) {
+        		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
+            	typeDeclarationAnalyser.analyseNestedTypeDeclaration(blockStatement.typeDeclaration(), belongsToClass);
+        	}
+        	if (blockStatement.statement() != null) {
+        		if (blockStatement.statement().block() != null) {
+        			new BlockAnalyser(blockStatement.statement().block(), this.belongsToClass, this.belongsToMethod);
+        		} else if (blockStatement.statement().expression() != null) {
+    		        StatementAnalyser expressionAnalyser = new StatementAnalyser(this.belongsToClass);
+        			expressionAnalyser.analyseStatement(blockStatement.statement(), this.belongsToMethod);
+/*        			for (ExpressionContext expression : blockStatement.statement().expression()) {
+	    		        AccessAndCallAnalyser expressionAnalyser = new AccessAndCallAnalyser(this.belongsToClass);
+	        			expressionAnalyser.generatePropertyOrFieldInvocToDomain(expression, this.belongsToMethod);
+        			}
+*/        		}
+        	}
+        }
+        
     }
     
     private void walkThroughBlockScope(Tree tree) {
@@ -32,13 +66,6 @@ public class BlockAnalyser extends JavaGenerator {
 	    	} */ 
 
 /*	        switch(treeType) {
-	        case Java7Parser.VAR_DECLARATION:
-	            if (child.getChildCount() > 0) {
-	            	detectAndProcessAnonymousClass(child);
-	            	javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
-		            walkThroughChildren = false;
-	            }
-	            break;
 	        case Java7Parser.CLASS_CONSTRUCTOR_CALL: case Java7Parser.SUPER_CONSTRUCTOR_CALL:
             	detectAndProcessAnonymousClass(child);
 	            delegateInvocation(child, "invocConstructor");
@@ -79,13 +106,13 @@ public class BlockAnalyser extends JavaGenerator {
 
 
     private void delegateInvocation(Tree treeNode, String type) {
-        AccessAndCallAnalyser javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
+        StatementAnalyser javaInvocationGenerator = new StatementAnalyser(this.belongsToClass);
         if (type.equals("invocConstructor")) {
             javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
         } else if (type.equals("invocMethod")) {
             javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
         } else if (type.equals("AccessVariable")) {
-            javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
+            //javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) treeNode, this.belongsToMethod);
         }
     }
 

@@ -9,19 +9,19 @@ import org.apache.log4j.Logger;
 
 public class JavaLoopGenerator extends JavaGenerator {
 
-    private Logger logger = Logger.getLogger(AccessAndCallAnalyser.class);
+    private Logger logger = Logger.getLogger(StatementAnalyser.class);
     private String belongsToClass;
     private String belongsToMethod;
     private String variableTypeForLoop;
     VariableAnalyser javaLocalVariableGenerator = new VariableAnalyser(belongsToClass);
-    AccessAndCallAnalyser javaInvocationGenerator;
+    StatementAnalyser javaInvocationGenerator;
     BlockAnalyser javaBlockScopeGenerator;
 
     public void generateToDomainFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod) {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
     	variableTypeForLoop = "";
-        javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
+        javaInvocationGenerator = new StatementAnalyser(this.belongsToClass);
         if (loopTree.getType() == Java7Parser.FOR || loopTree.getType() == Java7Parser.WHILE) {
             walkForAndWhileAST(loopTree);
         } else if (loopTree.getType() == Java7Parser.VOID) { //FOR_EACH) {
@@ -121,8 +121,8 @@ public class JavaLoopGenerator extends JavaGenerator {
     }
 
     private void delegateBlockScope(Tree child) {
-        BlockAnalyser javaBlockScopeGenerator = new BlockAnalyser();
-        javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.belongsToMethod);
+        //BlockAnalyser javaBlockScopeGenerator = new BlockAnalyser();
+        //javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.belongsToMethod);
         deleteTreeChild(child);
     }
 }

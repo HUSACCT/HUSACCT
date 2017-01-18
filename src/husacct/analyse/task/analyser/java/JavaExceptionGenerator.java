@@ -8,7 +8,6 @@ class JavaExceptionGenerator extends JavaGenerator {
     private static final int catchNode = Java7Parser.CATCH;
     private static final int throwNewNode = Java7Parser.THROW;
     private static final int typeIdentifierNode = Java7Parser.VOID; //QUALIFIED_TYPE_IDENT;
-    private String exceptionType;
     private String fromClass;
     private String exceptionClass;
     private int lineNumber;
@@ -16,24 +15,14 @@ class JavaExceptionGenerator extends JavaGenerator {
     public void generateToDomain(CommonTree tree, String theClass) {
     	this.fromClass = "";
     	this.exceptionClass = "";
-    	this.exceptionType = "";
     	this.lineNumber = 0;
     	
         this.lineNumber = tree.getLine();
         this.fromClass = theClass;
 
         setExceptionClass(tree);
-
-        if (isCatchedException(tree)) {
-            this.exceptionType = "catch";
-        } else if (isThrowedException(tree)) {
-            this.exceptionType = "throw";
-        } else {
-            this.exceptionType = "throws";
-        }
-
         if (!fromClass.equals("") && !exceptionClass.equals("")) {
-        	modelService.createException(fromClass, exceptionClass, lineNumber, exceptionType);
+        	modelService.createException(fromClass, exceptionClass, lineNumber);
         }
     }
 

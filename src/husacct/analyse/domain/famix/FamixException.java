@@ -1,12 +1,14 @@
 package husacct.analyse.domain.famix;
 
+import husacct.common.enums.DependencySubTypes;
+import husacct.common.enums.DependencyTypes;
+
 class FamixException extends FamixAssociation {
 
     public FamixException() {
-        super.type = "Declaration";
-        super.subType = "Exception";
+        super.type = DependencyTypes.DECLARATION.toString();
+        super.subType = DependencySubTypes.DECL_EXCEPTION.toString();
     }
-    public String exceptionType;
 
     public String toString() {
         String representation = "";
@@ -14,7 +16,6 @@ class FamixException extends FamixAssociation {
         representation += "From class: " + super.from;
         representation += "\nException class referred: " + super.to;
         representation += "\nLinenumber in code: " + super.lineNumber;
-        representation += "\nType of exception: " + exceptionType + "\n\n";
         return representation;
     }
 }

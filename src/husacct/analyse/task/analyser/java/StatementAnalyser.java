@@ -1,12 +1,21 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.List;
+
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ExpressionContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.StatementContext;
 import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.apache.log4j.Logger;
 
-public class AccessAndCallAnalyser extends JavaGenerator {
+public class StatementAnalyser extends JavaGenerator {
 
     private String from;
     private String to = "";
@@ -14,10 +23,10 @@ public class AccessAndCallAnalyser extends JavaGenerator {
     private String rightVariableInAssignment = "";
     private int lineNumber;
     private String belongsToMethod;
-    private Logger logger = Logger.getLogger(AccessAndCallAnalyser.class);
+    private Logger logger = Logger.getLogger(StatementAnalyser.class);
 
 
-    public AccessAndCallAnalyser(String uniqueClassName) {
+    public StatementAnalyser(String uniqueClassName) {
         from = uniqueClassName;
     }
 
@@ -45,10 +54,47 @@ public class AccessAndCallAnalyser extends JavaGenerator {
         }
     }
 
-    public void generatePropertyOrFieldInvocToDomain(CommonTree treeNode, String belongsToMethod) {
+    public void analyseStatement(StatementContext statement, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
-        this.lineNumber = treeNode.getLine();
-        if (treeNode != null) {
+		String rs = statement.getText();
+		if ((statement.statementExpression() != null) && (statement.statementExpression().expression() != null) &&(statement.statementExpression().expression().getChildCount() >= 1)) {
+			String rs1 = statement.statementExpression().expression().getText();
+			if (statement.statementExpression().expression().getChildCount() == 3) {
+				if (statement.statementExpression().expression().getChild(1) instanceof TerminalNodeImpl) {
+					if (statement.statementExpression().expression().getChild(0) instanceof ExpressionContext && 
+							(statement.statementExpression().expression().getChild(2) instanceof ExpressionContext)) {
+						// E.g: expression "=" expression
+						addExpressionToModel((ExpressionContext) statement.statementExpression().expression().getChild(0));
+						addExpressionToModel((ExpressionContext) statement.statementExpression().expression().getChild(2));
+					}
+				}
+			}
+			if (rs1.endsWith(")")) {
+				// E.g: hashMap.clear()
+				this.to = rs1;
+				this.lineNumber = statement.start.getLine();
+				createPropertyOrFieldInvocationDomainObject();
+			}
+		}
+    	if (statement.getChild(0).getText().equals("return")) {
+    		// E.g: return pDao.get(0).toString()
+			if (statement.getChild(1) instanceof ExpressionContext) {
+				addExpressionToModel((ExpressionContext) statement.getChild(1));
+			}
+    	}
+    }
+
+    private void addExpressionToModel(ExpressionContext expression) {
+    	this.lineNumber = expression.getStart().getLine();
+    	this.to = expression.getText();
+		createPropertyOrFieldInvocationDomainObject();
+    }
+
+    public void analyseExpression(ExpressionContext expression, String belongsToMethod) {
+        this.belongsToMethod = belongsToMethod;
+        addExpressionToModel(expression);
+        
+/*        if (treeNode != null) {
             for (int childCount = 0; childCount < treeNode.getChildCount(); childCount++) {
                 CommonTree childNode = (CommonTree) treeNode.getChild(childCount);
                 if (childCount == 0) {
@@ -64,7 +110,7 @@ public class AccessAndCallAnalyser extends JavaGenerator {
     		this.to = leftVariableInAssignment;
     		createPropertyOrFieldInvocationDomainObject();
     		
-    		int treeType = treeNode.getType();
+    		int treeType = treeNode.getStart().getType();
         	if((treeType == Java7Parser.ASSIGN) || (treeType == Java7Parser.NOTEQUAL) || (treeType == Java7Parser.EQUAL) 
         			|| (treeType == Java7Parser.GE) || (treeType == Java7Parser.LE)
         			|| (treeType == Java7Parser.LT) || (treeType == Java7Parser.GT)){
@@ -73,7 +119,7 @@ public class AccessAndCallAnalyser extends JavaGenerator {
         		createPropertyOrFieldInvocationDomainObject();
         	}
         }
-    }
+*/    }
 
     /* Returns the complete string of an expression of a variable, also in case of chaining call/access combinations.
      * In case of a type cast, it does not include the type cast in the returnValue, but it creates a declaration association.

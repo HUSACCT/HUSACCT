@@ -1,6 +1,14 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.List;
+
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.FormalParameterContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.MethodDeclarationContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ModifierContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.QualifiedNameContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.QualifiedNameListContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeTypeContext;
 import husacct.common.enums.DependencySubTypes;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -11,62 +19,58 @@ class MethodAnalyser extends JavaGenerator {
 
     private boolean hasClassScope = false;
     private boolean isAbstract = false;
-    private boolean isConstructor;
+    private boolean isConstructor = false;
     private String belongsToClass;
-    private String accessControlQualifier = "package-private";
-    private boolean isPureAccessor;
+    private String visibility = "public";
     private String declaredReturnType;
-    private String signature = "";
-    public String name;
-    public String uniqueName;
-    private int lineNumber;
-    private Logger logger = Logger.getLogger(MethodAnalyser.class);
-    VariableAnalyser javaLocalVariableGenerator ; //= new VariableAnalyser();
+    private String parameterList = "()";
+    public String name = "";
+    public String uniqueName = "";
+    private int lineNumber = 0;
 
-    public void AnalyseMethod(CommonTree methodTree, String className) {
-        this.belongsToClass = className;
-        lineNumber = methodTree.getLine();
-        hasClassScope = false;
-        isAbstract = false;
-        isConstructor = false;
-        accessControlQualifier = "package-private";
-        isPureAccessor = false;
-        declaredReturnType = "";
-        signature = "";
-        name = "";
-        uniqueName  = "";
-        checkMethodType(methodTree);
-        WalkThroughMethod(methodTree);
-        createMethodObject();
+    private Logger logger = Logger.getLogger(MethodAnalyser.class);
+
+    public MethodAnalyser(String belongsToClass) {
+        this.belongsToClass = belongsToClass;
+    }
+    public void analyseMethod(List<ModifierContext> modifierList, MethodDeclarationContext methodDeclaration) {
+    	try {
+	    	lineNumber = methodDeclaration.start.getLine();
+	    	visibility = determineVisibility(modifierList);
+	        hasClassScope = determineIsStatic(modifierList);
+	        isAbstract = determineIsAbstract(modifierList);
+	    	declaredReturnType = getReturnType(methodDeclaration.typeType());
+	        name = methodDeclaration.Identifier().getText();
+	        if (methodDeclaration.formalParameters() != null && methodDeclaration.formalParameters().formalParameterList() != null){
+	            ParameterAnalyser javaParameterGenerator = new ParameterAnalyser();
+	            parameterList = "(" + javaParameterGenerator.generateParameterObjects(methodDeclaration.formalParameters().formalParameterList(), name, belongsToClass) + ")";
+	        } 
+	        createMethodObject();
+	        if (methodDeclaration.qualifiedNameList() != null) {
+	        	delegateException(methodDeclaration.qualifiedNameList());
+	        }
+	        if (methodDeclaration.methodBody() != null && methodDeclaration.methodBody().block() != null) {
+	        	new BlockAnalyser(methodDeclaration.methodBody().block(), belongsToClass, this.name + parameterList);
+	        }
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
     }
 
-    private void checkMethodType(CommonTree methodTree) {
-        int methodTreeType = methodTree.getType();
-        switch(methodTreeType) {
-        case Java7Parser.VOID: //CONSTRUCTOR_DECL: 
-            declaredReturnType = "";
-            isConstructor = true;
-            name = getClassOfUniqueName(belongsToClass);
-            break;
-        case Java7Parser.ADD: //VOID_METHOD_DECL:
-            declaredReturnType = "";
-            isConstructor = false;
-        	break;
-        case Java7Parser.AND: //FUNCTION_METHOD_DECL:
-            isConstructor = false;
-        	break;
-        default:
-        	logger.warn("MethodGenerator couldn't find a valid function type");
-        	break;
-        	}
-        }
-        
+    public void analyseConstructor(List<ModifierContext> modifierList, MethodDeclarationContext methodDeclaration) {
+        declaredReturnType = "";
+        isConstructor = true;
+    	name = getClassOfUniqueName(belongsToClass);
+    }
+    
     private String getClassOfUniqueName(String uniqueName) {
         String[] parts = uniqueName.split("\\.");
         return parts[parts.length - 1];
     }
 
-    private void WalkThroughMethod(Tree tree) {
+    private void WalkThroughMethod() {
+    	Tree tree = null;
         for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
             Tree child = tree.getChild(childCount);
 	        boolean walkThroughChildren = true;
@@ -91,13 +95,13 @@ class MethodAnalyser extends JavaGenerator {
 	            	hasClassScope = true; 
 	            	break;
 	            case Java7Parser.PUBLIC: 
-	            	accessControlQualifier = "public"; 
+	            	visibility = "public"; 
 	            	break;
 	            case Java7Parser.PRIVATE: 
-	            	accessControlQualifier = "private"; 
+	            	visibility = "private"; 
 	            	break;
 	            case Java7Parser.PROTECTED: 
-	            	accessControlQualifier = "protected"; 
+	            	visibility = "protected"; 
 	            	break;
 /*	            case Java7Parser.TYPE: 
 	            	getReturnType(child); 
@@ -108,11 +112,11 @@ class MethodAnalyser extends JavaGenerator {
 	            	lineNumber = child.getLine();
 	            	break;
 	            case Java7Parser.THROW: 
-	            	delegateException(child); 
+	            	//delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
 	            case Java7Parser.THROWS: 
-	            	delegateException(child); 
+	            	//delegateException(child); 
 		            walkThroughChildren = false;
 	            	break;
 /*	            case Java7Parser.THROWS_CLAUSE: 
@@ -136,38 +140,37 @@ class MethodAnalyser extends JavaGenerator {
 */	            default: break;
             }
 	        if (walkThroughChildren) {
-	        	WalkThroughMethod(child);
+	        	WalkThroughMethod();
 	        }
         }
     }
 
-    private void setSignature() {
-        if (signature.equals("")) {
-            signature = "()";
-        }
+    private void delegateException(QualifiedNameListContext nameList) {
+    	for (QualifiedNameContext name : nameList.qualifiedName()) {
+    		String exceptionType = name.getText();
+    		int exceptionlineNr = name.start.getLine();
+            if (!belongsToClass.equals("") && !exceptionType.equals("")) {
+            	modelService.createException(belongsToClass, exceptionType, exceptionlineNr);
+            }
+    	}
     }
 
-    private void delegateException(Tree exceptionTree) {
-        JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator();
-        exceptionGenerator.generateToDomain((CommonTree) exceptionTree, this.belongsToClass);
-    }
-
-    private void getReturnType(Tree tree) {
-    	AccessAndCallAnalyser javaInvocationGenerator = new AccessAndCallAnalyser(this.belongsToClass);
-    	String foundType = javaInvocationGenerator.getCompleteToString((CommonTree) tree, belongsToClass, DependencySubTypes.DECL_RETURN_TYPE);
-        if (foundType != null) {
-            this.declaredReturnType = foundType;
-        } else {
-        	this.declaredReturnType = "";
-       	}
+    private String getReturnType(TypeTypeContext returnTypeContext) {
+    	String returnType;
+    	if (returnTypeContext == null) {
+    		returnType = "";
+    	} else {
+    		returnType = determineTypeOfTypeType(returnTypeContext, belongsToClass, DependencySubTypes.DECL_RETURN_TYPE);
+    	}
+    	return returnType;
     }
 
     private void createMethodObject() {
-        uniqueName = belongsToClass + "." + this.name + signature;
+        uniqueName = belongsToClass + "." + this.name + parameterList;
 		if(SkippedTypes.isSkippable(declaredReturnType)){
-	        modelService.createMethodOnly(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+	        modelService.createMethodOnly(name, uniqueName, visibility, parameterList, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
         } else {
-            modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+            modelService.createMethod(name, uniqueName, visibility, parameterList, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
         }
     }
 }

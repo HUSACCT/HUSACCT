@@ -28,7 +28,8 @@ class CompilationUnitAnalyser {
     	this.numberOfLinesOfCode = nrOfLinesOfCode;
     	try {
     		/* Test and Debug
-    		if (sourceFilePath.contains("AnnotationDependency")) {
+    		if (sourceFilePath.contains("AccessInstanceVariableLibraryClass")) {
+    			int i = 1;
     		} */
         	analysePackage();
         	analyseTypeDeclaration();
@@ -56,7 +57,7 @@ class CompilationUnitAnalyser {
     	int size = compilationUnit.typeDeclaration().size();
     	for (int i = 0; i < size; i++) {
     		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
-        	String className = typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i), sourceFilePath, numberOfLinesOfCode);
+        	String className = typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i), numberOfLinesOfCode);
         	if (i == 0) {
                 this.theClass = className;
         	}
