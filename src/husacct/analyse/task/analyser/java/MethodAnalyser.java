@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.java;
 import java.util.List;
 
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ConstructorDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.FormalParameterContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.MethodDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.ModifierContext;
@@ -58,10 +59,30 @@ class MethodAnalyser extends JavaGenerator {
 		}
     }
 
-    public void analyseConstructor(List<ModifierContext> modifierList, MethodDeclarationContext methodDeclaration) {
-        declaredReturnType = "";
-        isConstructor = true;
-    	name = getClassOfUniqueName(belongsToClass);
+    public void analyseConstructor(List<ModifierContext> modifierList, ConstructorDeclarationContext methodDeclaration) {
+    	try {
+            isConstructor = true;
+            lineNumber = methodDeclaration.start.getLine();
+	    	visibility = determineVisibility(modifierList);
+	        hasClassScope = determineIsStatic(modifierList);
+	        isAbstract = determineIsAbstract(modifierList);
+	    	declaredReturnType =  "";
+	        name = methodDeclaration.Identifier().getText();
+	        if (methodDeclaration.formalParameters() != null && methodDeclaration.formalParameters().formalParameterList() != null){
+	            ParameterAnalyser javaParameterGenerator = new ParameterAnalyser();
+	            parameterList = "(" + javaParameterGenerator.generateParameterObjects(methodDeclaration.formalParameters().formalParameterList(), name, belongsToClass) + ")";
+	        } 
+	        createMethodObject();
+	        if (methodDeclaration.qualifiedNameList() != null) {
+	        	delegateException(methodDeclaration.qualifiedNameList());
+	        }
+	        if (methodDeclaration.constructorBody() != null && methodDeclaration.constructorBody().block() != null) {
+	        	new BlockAnalyser(methodDeclaration.constructorBody().block(), belongsToClass, this.name + parameterList);
+	        }
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
     }
     
     private String getClassOfUniqueName(String uniqueName) {

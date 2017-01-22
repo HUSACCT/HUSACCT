@@ -11,7 +11,14 @@ class ClassBodyAnalyser extends JavaGenerator {
     private String belongsToClass;
  
     public ClassBodyAnalyser(String belongsToClass, ClassBodyContext classBody) {
-        this.belongsToClass = belongsToClass;
+        // Test helpers
+    	if (belongsToClass.equals("domain.direct.violating.CallInstance")) {
+    		//if (blockStatement.start.getLine() == 11) {
+    				boolean breakpoint = true;
+    		//}
+    	} //
+ 
+    	this.belongsToClass = belongsToClass;
         int size = classBody.classBodyDeclaration().size();
         for (int i=0 ; i < size ; i++) {
         	if (classBody.classBodyDeclaration(i).block() != null) {
@@ -29,6 +36,9 @@ class ClassBodyAnalyser extends JavaGenerator {
 		} else if (member.methodDeclaration() != null) {
 			MethodAnalyser methodAnalyser = new MethodAnalyser(belongsToClass);
 			methodAnalyser.analyseMethod(modifierList, member.methodDeclaration());
+		} else if (member.constructorDeclaration() != null) {
+			MethodAnalyser methodAnalyser = new MethodAnalyser(belongsToClass);
+			methodAnalyser.analyseConstructor(modifierList, member.constructorDeclaration());
 		} else if (member.classDeclaration() != null) {
 			TypeDeclarationAnalyser nestedTypeAnalyser = new TypeDeclarationAnalyser();
 			nestedTypeAnalyser.analyseNestedClassDeclaration(modifierList, member.classDeclaration(), belongsToClass);

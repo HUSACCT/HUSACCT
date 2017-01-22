@@ -1,57 +1,169 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.List;
+
 import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.BlockContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.BlockStatementContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.CatchClauseContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.ExpressionContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ResourceContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.StatementContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.SwitchBlockStatementGroupContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.SwitchLabelContext;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.log4j.Logger;
 
 public class BlockAnalyser extends JavaGenerator {
 
     private String belongsToClass;
     private String belongsToMethod;
-    VariableAnalyser javaLocalVariableGenerator= new VariableAnalyser(belongsToClass);
-    CommonTree tree;
+    private String to = "";
+    private int lineNumber;
+
+    private Logger logger = Logger.getLogger(BlockAnalyser.class);
 
     public BlockAnalyser(BlockContext block, String belongsToClass, String belongsToMethod) {
         this.belongsToClass = belongsToClass;
         this.belongsToMethod = belongsToMethod;
-        for (BlockStatementContext blockStatement : block.blockStatement()) {
-            
-            /* Test helpers
-        	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_MultipleTypeParameters")) {
-        		if (blockStatement.start.getLine() == 14) {
-        				boolean breakpoint = true;
-        		}
-        	} */
-            
-        	if (blockStatement.localVariableDeclarationStatement() != null && 
-        			blockStatement.localVariableDeclarationStatement().localVariableDeclaration() != null) {
-    			VariableAnalyser variableAnalyser = new VariableAnalyser(this.belongsToClass);
-    			variableAnalyser.analyseLocalVariable(blockStatement.localVariableDeclarationStatement().localVariableDeclaration(), this.belongsToMethod);
-        	}
-        	if (blockStatement.typeDeclaration() != null) {
-        		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
-            	typeDeclarationAnalyser.analyseNestedTypeDeclaration(blockStatement.typeDeclaration(), belongsToClass);
-        	}
-        	if (blockStatement.statement() != null) {
-        		if (blockStatement.statement().block() != null) {
-        			new BlockAnalyser(blockStatement.statement().block(), this.belongsToClass, this.belongsToMethod);
-        		} else if (blockStatement.statement().expression() != null) {
-    		        StatementAnalyser expressionAnalyser = new StatementAnalyser(this.belongsToClass);
-        			expressionAnalyser.analyseStatement(blockStatement.statement(), this.belongsToMethod);
-/*        			for (ExpressionContext expression : blockStatement.statement().expression()) {
-	    		        AccessAndCallAnalyser expressionAnalyser = new AccessAndCallAnalyser(this.belongsToClass);
-	        			expressionAnalyser.generatePropertyOrFieldInvocToDomain(expression, this.belongsToMethod);
-        			}
-*/        		}
-        	}
-        }
-        
+    	try {
+	        for (BlockStatementContext blockStatement : block.blockStatement()) {
+	            
+	            // Test helpers
+	        	if (belongsToClass.equals("domain.direct.violating.CallConstructor")) {
+    					boolean breakpoint = true;
+	        	} //
+	            
+	        	if (blockStatement.localVariableDeclarationStatement() != null && 
+	        			blockStatement.localVariableDeclarationStatement().localVariableDeclaration() != null) {
+	    			VariableAnalyser variableAnalyser = new VariableAnalyser(this.belongsToClass);
+	    			variableAnalyser.analyseLocalVariable(blockStatement.localVariableDeclarationStatement().localVariableDeclaration(), this.belongsToMethod);
+	        	}
+	        	if (blockStatement.typeDeclaration() != null) {
+	        		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
+	            	typeDeclarationAnalyser.analyseNestedTypeDeclaration(blockStatement.typeDeclaration(), belongsToClass);
+	        	}
+	        	if (blockStatement.statement() != null) {
+	        		analyseStatement(blockStatement.statement());
+	        	}
+	        }
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " " + e.getMessage());
+		}
     }
     
+    public void analyseStatement(StatementContext statement) {
+		String rs = statement.getText();
+		if (statement.block() != null) {
+			new BlockAnalyser(statement.block(), this.belongsToClass, this.belongsToMethod);
+		} 
+		if (!statement.statement().isEmpty()) {
+			for (StatementContext subStatement : statement.statement()) {
+				analyseStatement(subStatement);
+			}
+		}
+		if (!statement.expression().isEmpty()) {
+			for (ExpressionContext subExpression : statement.expression()) {
+				analyseExpression(subExpression);
+			}
+		}
+		if ((statement.statementExpression() != null) && (statement.statementExpression().expression() != null)) {
+			analyseExpression(statement.statementExpression().expression());
+		}
+		if ((statement.parExpression() != null) && (statement.parExpression().expression() != null)) {
+			analyseExpression(statement.parExpression().expression());
+		}
+		if (statement.forControl() != null) {
+			if (statement.forControl().expression() != null) {
+				analyseExpression(statement.forControl().expression());
+			} else if (statement.forControl().enhancedForControl() != null) {
+				if (statement.forControl().enhancedForControl().typeType() != null) {
+	    			VariableAnalyser variableAnalyser = new VariableAnalyser(this.belongsToClass);
+	    			variableAnalyser.analyseForControlVariable(statement.forControl().enhancedForControl(), this.belongsToMethod);
+				}
+				if (statement.forControl().enhancedForControl().expression() != null) {
+					analyseExpression(statement.forControl().enhancedForControl().expression());
+				}
+			}
+		}
+		if (!statement.catchClause().isEmpty()) {
+			for (CatchClauseContext catchClause : statement.catchClause()) {
+    			VariableAnalyser variableAnalyser = new VariableAnalyser(this.belongsToClass);
+    			variableAnalyser.analyseCatchClauseVariable(catchClause, this.belongsToMethod);
+    			if (catchClause.block() != null) {
+    				new BlockAnalyser(catchClause.block(), this.belongsToClass, this.belongsToMethod);
+    			}
+			}
+		}
+		if (statement.finallyBlock() != null) {
+			if (statement.finallyBlock().block() != null){
+				new BlockAnalyser(statement.finallyBlock().block(), this.belongsToClass, this.belongsToMethod);
+			}
+		}
+		if ((statement.resourceSpecification() != null) && !statement.resourceSpecification().isEmpty()) {
+			for (ResourceContext resource : statement.resourceSpecification().resources().resource()) {
+    			VariableAnalyser variableAnalyser = new VariableAnalyser(this.belongsToClass);
+    			variableAnalyser.analyseResourceVariable(resource, this.belongsToMethod);
+				if (resource.expression() != null) {
+					analyseExpression(resource.expression());
+				}
+			}
+		}
+		if (!statement.switchBlockStatementGroup().isEmpty()) {
+			for (SwitchBlockStatementGroupContext switchBlockStatementGroup : statement.switchBlockStatementGroup()) {
+				if (switchBlockStatementGroup.switchLabel() != null) {
+					analyseSwitchLabel(switchBlockStatementGroup.switchLabel());
+				}
+			}
+		}
+		if (!statement.switchLabel().isEmpty()) {
+			analyseSwitchLabel(statement.switchLabel());
+		}
+		if (statement.Identifier() != null) {
+			this.lineNumber = statement.start.getLine();
+			this.to = statement.Identifier().getText();
+			addAssociationToModel(); 
+		}
+    }
+
+    private void analyseExpression(ExpressionContext expression) {
+		ExpressionAnalyser expressionAnalyser = new ExpressionAnalyser(belongsToClass, belongsToMethod);
+		expressionAnalyser.analyseExpression(expression);
+    }
+
+
+    private void addAssociationToModel() {
+        if ((to != null) && !to.trim().equals("") && !SkippedTypes.isSkippable(to)) {
+            modelService.createVariableInvocation(belongsToClass, to, lineNumber, belongsToMethod);
+        }
+        to = "";
+        lineNumber = 0;
+    }
+    
+    private void analyseSwitchLabel(List<SwitchLabelContext> switchLabelList) {
+    	for(SwitchLabelContext switchLabel : switchLabelList) {
+    		if((switchLabel.constantExpression() != null) && (switchLabel.constantExpression().expression() != null)) {
+    			analyseExpression(switchLabel.constantExpression().expression());
+    		}
+    		if((switchLabel.enumConstantName() != null) && (switchLabel.enumConstantName().Identifier() != null)) {
+    			this.lineNumber = switchLabel.enumConstantName().start.getLine();
+    			this.to = switchLabel.enumConstantName().Identifier().getText();
+    			addAssociationToModel(); 
+    		}
+    	}
+    }
+	    
+
+
+    
+    // Verwijder na afronding J7
+    VariableAnalyser javaLocalVariableGenerator= new VariableAnalyser(belongsToClass);
+    CommonTree tree;
+
     private void walkThroughBlockScope(Tree tree) {
 	    for (int i = 0; i < tree.getChildCount(); i++) {
 	    	CommonTree child = (CommonTree) tree.getChild(i);

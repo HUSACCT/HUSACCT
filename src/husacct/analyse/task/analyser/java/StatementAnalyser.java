@@ -11,6 +11,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.apache.log4j.Logger;
@@ -57,25 +58,31 @@ public class StatementAnalyser extends JavaGenerator {
     public void analyseStatement(StatementContext statement, String belongsToMethod) {
         this.belongsToMethod = belongsToMethod;
 		String rs = statement.getText();
-		if ((statement.statementExpression() != null) && (statement.statementExpression().expression() != null) &&(statement.statementExpression().expression().getChildCount() >= 1)) {
+		if ((statement.statementExpression() != null) && (statement.statementExpression().expression() != null)) {
 			String rs1 = statement.statementExpression().expression().getText();
-			if (statement.statementExpression().expression().getChildCount() == 3) {
-				if (statement.statementExpression().expression().getChild(1) instanceof TerminalNodeImpl) {
-					if (statement.statementExpression().expression().getChild(0) instanceof ExpressionContext && 
-							(statement.statementExpression().expression().getChild(2) instanceof ExpressionContext)) {
-						// E.g: expression "=" expression
-						addExpressionToModel((ExpressionContext) statement.statementExpression().expression().getChild(0));
-						addExpressionToModel((ExpressionContext) statement.statementExpression().expression().getChild(2));
+			delegateExpression(statement.statementExpression().expression());
+			
+/*			if (statement.statementExpression().expression().getChildCount() == 4) {
+				delegateExpression(statement.statementExpression().expression());
+			}
+			if (statement.statementExpression().expression().getChildCount() >= 1) {
+				if (statement.statementExpression().expression().getChildCount() == 3) {
+					if (statement.statementExpression().expression().getChild(1) instanceof TerminalNodeImpl) {
+						if (statement.statementExpression().expression().getChild(0) instanceof ExpressionContext && 
+								(statement.statementExpression().expression().getChild(2) instanceof ExpressionContext)) {
+							// E.g: expression "=" expression
+							addExpressionToModel((ExpressionContext) statement.statementExpression().expression().getChild(0));
+							addExpressionToModel((ExpressionContext) statement.statementExpression().expression().getChild(2));
+						}
 					}
 				}
-			}
-			if (rs1.endsWith(")")) {
-				// E.g: hashMap.clear()
-				this.to = rs1;
-				this.lineNumber = statement.start.getLine();
-				createPropertyOrFieldInvocationDomainObject();
-			}
-		}
+				if (rs1.endsWith(")")) {
+					// E.g: hashMap.clear()
+					this.to = rs1;
+					this.lineNumber = statement.start.getLine();
+					createPropertyOrFieldInvocationDomainObject();
+				}
+*/			}
     	if (statement.getChild(0).getText().equals("return")) {
     		// E.g: return pDao.get(0).toString()
 			if (statement.getChild(1) instanceof ExpressionContext) {
@@ -84,6 +91,22 @@ public class StatementAnalyser extends JavaGenerator {
     	}
     }
 
+    // To do: 1) niet zuinig; replacement van argumenten werkt niet goed!
+    private void delegateExpression(ExpressionContext expression) {
+		ExpressionAnalyser expressionAnalyser = new ExpressionAnalyser(from, belongsToMethod);
+		ParseTreeWalker walker = new ParseTreeWalker();
+		//walker.walk(expressionAnalyser, expression);
+    	this.lineNumber = expression.getStart().getLine();
+    	this.to = expression.getText();
+    	// this.to = expressionAnalyser.getExpressionText();
+		createPropertyOrFieldInvocationDomainObject();
+		if (expression.expression() != null) {
+			for (ExpressionContext subExpression : expression.expression()) {
+				delegateExpression(subExpression);
+			}
+		}
+    }
+    
     private void addExpressionToModel(ExpressionContext expression) {
     	this.lineNumber = expression.getStart().getLine();
     	this.to = expression.getText();
