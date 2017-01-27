@@ -321,9 +321,9 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructor_GenericType_MultipleTypeParameters(){
 		String fromClass = "Domain.Direct.Violating.CallConstructor_GenericType_MultipleTypeParameters";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_TYPE_PARAMETER.toString(), false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.UserDAO", typesToFind, DependencySubTypes.DECL_TYPE_PARAMETER.toString(), false));
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.UserDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
 
 	@Test
@@ -532,8 +532,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationParameter_GenericType_OneTypeParameter(){
 		String fromClass = "Domain.Direct.Violating.DeclarationParameter_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Parameter", false));
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
 
 	@Test
@@ -549,8 +549,8 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationReturnType_GenericType_OneTypeParameter(){
 		String fromClass = "Domain.Direct.Violating.DeclarationReturnType_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.DECL_RETURN_TYPE.toString(), false));
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
 
 	@Test
@@ -594,27 +594,29 @@ public class CSharp_AccuracyTestDependencyDetection {
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
 		ArrayList<String> typesToFind = new ArrayList<String>();
 		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.AccountDAO", typesToFind, "Instance Variable", false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.BadgesDAO", typesToFind, "Instance Variable", false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.CheckInDAO", typesToFind, "Instance Variable", false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.AccountDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
+		typesToFind.clear();
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.BadgesDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.CheckInDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
 
 	@Test
 	public void DeclarationVariableInstance_GenericType_MultipleTypeParameters(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Instance Variable", false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, "Instance Variable", false));
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
 
 	@Test
 	public void DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex";
 		ArrayList<String> typesToFind = new ArrayList<String>();
-		typesToFind.add("Declaration");
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, "Instance Variable", false));
-		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, "Instance Variable", false));
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
 
 	@Test

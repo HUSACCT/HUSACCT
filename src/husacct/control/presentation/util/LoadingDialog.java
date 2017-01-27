@@ -136,7 +136,7 @@ public class LoadingDialog extends JDialog implements Runnable {
 	public void run() {
 		try{
 			super.setVisible(true);
-			super.setAlwaysOnTop(true);
+			super.setAlwaysOnTop(false);
 		} catch (Exception exception) {
 			this.logger.warn("Exception: " + exception.getClass() + exception.getMessage());
 		}

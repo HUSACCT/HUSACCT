@@ -64,12 +64,12 @@ abstract class JavaGenerator {
         return isStatic;
     }
 
-    protected void dispatchAnnotationsOfMember(List<Java7Parser.ModifierContext> modifierList, String belongsToClass) {
+    protected void dispatchAnnotationsOfMember(List<ModifierContext> modifierList, String belongsToClass) {
         if (modifierList != null) {
-        	int size = modifierList.size();
-        	for (int i = 0; i < size; i++) {
-            	if (modifierList.get(i).classOrInterfaceModifier().annotation() != null) {
-    				new AnnotationAnalyser(modifierList.get(i).classOrInterfaceModifier().annotation(), belongsToClass);
+        	//int size = modifierList.size();
+        	for (ModifierContext modifier : modifierList) {
+            	if ((modifier.classOrInterfaceModifier() != null) && (modifier.classOrInterfaceModifier().annotation() != null)) {
+    				new AnnotationAnalyser(modifier.classOrInterfaceModifier().annotation(), belongsToClass);
             	}
 			}
  		}
@@ -94,15 +94,15 @@ abstract class JavaGenerator {
     	return returnValue;
     }
     
-    protected String determineTypeOfTypeType(TypeTypeContext typeTree, String belongsToClass, DependencySubTypes dependencySubType) {
+    protected String determineTypeOfTypeType(TypeTypeContext typeType, String belongsToClass, DependencySubTypes dependencySubType) {
     	String returnType = "";
-    	if (typeTree != null) {
-			if (typeTree.primitiveType() != null) {
-				returnType = typeTree.getText();
-			} else if (typeTree.classOrInterfaceType() != null) {
-				returnType = transformIdentifierToString(typeTree.classOrInterfaceType().Identifier());
-		       if (typeTree.classOrInterfaceType().typeArguments() != null) { // Check if the contains generic type parameters. 
-		        	dispatchGenericTypeParameters(belongsToClass, typeTree.classOrInterfaceType().typeArguments(), dependencySubType);
+    	if (typeType != null) {
+			if (typeType.primitiveType() != null) {
+				returnType = typeType.getText();
+			} else if (typeType.classOrInterfaceType() != null) {
+				returnType = transformIdentifierToString(typeType.classOrInterfaceType().Identifier());
+		       if (typeType.classOrInterfaceType().typeArguments() != null) { // Check if the contains generic type parameters. 
+		        	analyseTypeArguments(belongsToClass, typeType.classOrInterfaceType().typeArguments());
 		       }
 			}
     	}
@@ -110,20 +110,16 @@ abstract class JavaGenerator {
     }
 
     // Detects generic type parameters recursively. Also in complex types such as: HashMap<ProfileDAO, ArrayList<FriendsDAO>>>
-    protected void dispatchGenericTypeParameters(String belongsToClass, List<TypeArgumentsContext> typeArgumentsList, DependencySubTypes dependencySubType) {
+    protected void analyseTypeArguments(String belongsToClass, List<TypeArgumentsContext> typeArgumentsList) {
 		for (TypeArgumentsContext typeArguments : typeArgumentsList) {
 			for (TypeArgumentContext typeArgument : typeArguments.typeArgument()) {
-				String parameterTypeOfGeneric = transformIdentifierToString(typeArgument.typeType().classOrInterfaceType().Identifier());
-            	int currentLineNumber = typeArgument.typeType().classOrInterfaceType().start.getLine();
-            	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
-				// Check if typeArgument contains type parameters too (recursively)
-				if ((typeArgument.typeType().classOrInterfaceType() != null) 
-					&& (typeArgument.typeType().classOrInterfaceType().typeArguments() != null)) {
-					dispatchGenericTypeParameters(belongsToClass, typeArgument.typeType().classOrInterfaceType().typeArguments(), dependencySubType);
-				}
+				if (typeArgument.typeType() != null) {
+					String parameterTypeOfGeneric = determineTypeOfTypeType(typeArgument.typeType(), belongsToClass, DependencySubTypes.REF_TYPE);
+	            	int currentLineNumber = typeArgument.typeType().start.getLine();
+	            	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric);
+				} 
  			}
 		}
-		return;
     }
 
 }

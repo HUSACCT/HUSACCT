@@ -30,7 +30,7 @@ public class JavaAnalyser extends AbstractAnalyser {
         try {
         	Java7Parser javaParser = generateJavaParser(sourceFilePath);
             int nrOfLinesOfCode = determineNumberOfLinesOfCode();
-            CompilationUnitAnalyser javaTreeParserDelegater = new CompilationUnitAnalyser(compilationUnit, sourceFilePath, nrOfLinesOfCode, javaParser);
+            new CompilationUnitAnalyser(compilationUnit, sourceFilePath, nrOfLinesOfCode, javaParser);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class JavaAnalyser extends AbstractAnalyser {
 		javaParser.setErrorHandler(new BailErrorStrategy());
 		try {
 			compilationUnit = javaParser.compilationUnit();
-			int nrOfChildren = compilationUnit.getChildCount();
+			//int nrOfChildren = compilationUnit.getChildCount();
     		//logger.info(" SLL " + filePath + " NrOfChildren: " + nrOfChildren);
 		}
     	catch (RuntimeException ex) {
@@ -64,8 +64,8 @@ public class JavaAnalyser extends AbstractAnalyser {
 		    		logger.warn(e.getMessage() + " - in file: " + filePath);
 	    		}
 			} else {
-	    		logger.warn(ex.getMessage() + " - in file: " + filePath);
-	    		//e.printStackTrace();
+	    		logger.warn(ex.getCause().toString() + " - in file: " + filePath);
+	    		//ex.printStackTrace();
 			}
     	}
         return javaParser;

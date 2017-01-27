@@ -82,36 +82,39 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 	}
 
 	private void processClassDeclaration(ClassDeclarationContext classDeclaration){
-		this.name  = classDeclaration.Identifier().getText();
-		determineUniqueName();
-        addTypeToModel();
-		// Determine extends clause
-		if (classDeclaration.typeType() != null) {
-			if(!classDeclaration.typeType().getText().equals("")) {
-			    String from = this.uniqueName;
-			    String to = classDeclaration.typeType().getText();
-			    int lineNumber = classDeclaration.typeType().start.getLine();
-		        if (!SkippedTypes.isSkippable(to)) {
-		            modelService.createInheritanceDefinition(from, to, lineNumber);
-		        }
-			}
-		}
-		// Determine implements clause
-		if (classDeclaration.typeList() != null) {
-			for (ParseTree implementsType : classDeclaration.typeList().children) {
-			    String to = implementsType.getText();
-				if(!implementsType.getText().equals("")) {
+		if (classDeclaration.Identifier() != null) {
+			this.name  = classDeclaration.Identifier().getText();
+			determineUniqueName();
+	        addTypeToModel();
+			// Determine extends clause
+			if (classDeclaration.typeType() != null) {
+				if(!classDeclaration.typeType().getText().equals("")) {
 				    String from = this.uniqueName;
-				    int lineNumber = classDeclaration.typeList().start.getLine();
+				    String to = classDeclaration.typeType().getText();
+				    int lineNumber = classDeclaration.typeType().start.getLine();
 			        if (!SkippedTypes.isSkippable(to)) {
-			            modelService.createImplementsDefinition(from, to, lineNumber);
+			            modelService.createInheritanceDefinition(from, to, lineNumber);
 			        }
 				}
 			}
-		}
-		// Delegate the body
-		if (classDeclaration.classBody() != null) {
-			new ClassBodyAnalyser(uniqueName, classDeclaration.classBody());
+			// Determine implements clause
+			if (classDeclaration.typeList() != null) {
+				for (ParseTree implementsType : classDeclaration.typeList().children) {
+				    String to = implementsType.getText();
+					if(!implementsType.getText().equals("") && !implementsType.getText().equals(",")) {
+					    String from = this.uniqueName;
+					    int lineNumber = classDeclaration.typeList().start.getLine();
+				        if (!SkippedTypes.isSkippable(to)) {
+				            modelService.createImplementsDefinition(from, to, lineNumber);
+				        }
+					}
+				}
+			}
+			// Delegate the body
+			if (classDeclaration.classBody() != null) {
+				TypeBodyAnalyser typeBodyAnalyser = new TypeBodyAnalyser(uniqueName);
+				typeBodyAnalyser.analyseClassBody(classDeclaration.classBody());
+			}
 		}
 	}
 	
@@ -145,6 +148,11 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 				}
 			}
 		}
+		// Delegate the body
+		if ( interfaceDeclaration.interfaceBody() != null) {
+			TypeBodyAnalyser typeBodyAnalyser = new TypeBodyAnalyser(uniqueName);
+			typeBodyAnalyser.analyseInterfaceBody(interfaceDeclaration.interfaceBody());
+		}
 	}
 
 	private void processEnumDeclaration(EnumDeclarationContext enumDeclaration) {
@@ -165,6 +173,11 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 				}
 			}
 		}
+		// Delegate the body
+		if ( enumDeclaration.enumBodyDeclarations() != null) {
+			TypeBodyAnalyser typeBodyAnalyser = new TypeBodyAnalyser(uniqueName);
+			typeBodyAnalyser.analyseEnumBody(enumDeclaration.enumConstants(), enumDeclaration.enumBodyDeclarations());
+		}
 	}
 
 	private void processAnnotationTypeDeclaration(AnnotationTypeDeclarationContext annotationTypeDeclaration) {
@@ -172,6 +185,11 @@ class TypeDeclarationAnalyser extends JavaGenerator {
 		this.name  = annotationTypeDeclaration.Identifier().getText();
 		determineUniqueName();
 	    addTypeToModel();
+		// Delegate the body
+		if ( annotationTypeDeclaration.annotationTypeBody() != null) {
+			TypeBodyAnalyser typeBodyAnalyser = new TypeBodyAnalyser(uniqueName);
+			typeBodyAnalyser.analyseAnnotationBody(annotationTypeDeclaration.annotationTypeBody());
+		}
 	}
 
 	

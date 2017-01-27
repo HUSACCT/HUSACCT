@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 class CompilationUnitAnalyser {
 	
 	private static String sourceFilePath = "";
-    private static String thePackage;
+    private static String thePackage = "";
 	private CompilationUnitContext compilationUnit;
     private int numberOfLinesOfCode = 0;
     private String theClass = null;
@@ -22,18 +22,19 @@ class CompilationUnitAnalyser {
     }
     
     public CompilationUnitAnalyser(CompilationUnitContext compilationUnit, String sourceFileLocation, int nrOfLinesOfCode, Java7Parser java7Parser) {
-    	thePackage = null;
     	this.compilationUnit = compilationUnit;
     	sourceFilePath = sourceFileLocation;
     	this.numberOfLinesOfCode = nrOfLinesOfCode;
     	try {
     		/* Test and Debug
-    		if (sourceFilePath.contains("AccessInstanceVariableLibraryClass")) {
+    		if (sourceFilePath.contains("testcases\\taskdefs\\apt\\AptExample.java")) {
     			int i = 1;
     		} */
-        	analysePackage();
-        	analyseTypeDeclaration();
-        	analyseImports();
+    		if (compilationUnit != null) {
+	        	analysePackage();
+	        	analyseTypeDeclaration();
+	        	analyseImports();
+    		}
     	}
     	catch (Exception e) {
     		String location;
@@ -54,17 +55,21 @@ class CompilationUnitAnalyser {
     }
     
     private void analyseTypeDeclaration() {
-    	int size = compilationUnit.typeDeclaration().size();
-    	for (int i = 0; i < size; i++) {
-    		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
-        	String className = typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i), numberOfLinesOfCode);
-        	if (i == 0) {
-                this.theClass = className;
-        	}
+    	if (compilationUnit.typeDeclaration() != null) {
+	    	int size = compilationUnit.typeDeclaration().size();
+	    	for (int i = 0; i < size; i++) {
+	    		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
+	        	String className = typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i), numberOfLinesOfCode);
+	        	if (i == 0) {
+	                this.theClass = className;
+	        	}
+	    	}
     	}
     }
     
     private void analyseImports() {
-    	new ImportAnalyser(this.theClass, compilationUnit.importDeclaration());
+    	if (compilationUnit.importDeclaration() != null) {
+    		new ImportAnalyser(this.theClass, compilationUnit.importDeclaration());
+    	}
     }
 }

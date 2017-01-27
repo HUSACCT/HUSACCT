@@ -2,10 +2,15 @@ package husacct.analyse.task.analyser.java;
 
 import java.util.List;
 
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.apache.log4j.Logger;
+
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.CatchClauseContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.CatchTypeContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ConstDeclarationContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.ConstantDeclaratorContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.EnhancedForControlContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.FieldDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.LocalVariableDeclarationContext;
@@ -19,6 +24,7 @@ import husacct.analyse.infrastructure.antlr.java.Java7Parser.VariableDeclaratorC
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.VariableDeclaratorIdContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.VariableDeclaratorsContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.VariableModifierContext;
+import husacct.analyse.task.analyser.VisibilitySet;
 import husacct.common.enums.DependencySubTypes;
 
 class VariableAnalyser extends JavaGenerator{
@@ -36,6 +42,7 @@ class VariableAnalyser extends JavaGenerator{
 	private DependencySubTypes dependencySubType = null;
 
     private IModelCreationService modelService = new FamixCreationServiceImpl();
+    private Logger logger = Logger.getLogger(VariableAnalyser.class);
 
     public VariableAnalyser(String belongsToClass) {
         this.belongsToClass = belongsToClass;
@@ -43,70 +50,150 @@ class VariableAnalyser extends JavaGenerator{
     
     public void analyseVariable(List<ModifierContext> modifierList, FieldDeclarationContext fieldDeclaration) {
         /* Test helpers
-    	if (belongsToClass.contains("DeclarationVariableInstance_GenericType_OneTypeParameter")) {
-    		if (modifierList.get(0).start.getLine() == 18) {
+    	if (belongsToClass.contains("husacct.analyse.task.reconstruct.ReconstructArchitectureDTOList")) {
+    		if (fieldDeclaration.start.getLine() == 37) {
     				boolean breakpoint = true;
     		}
     	} */
-
-        this.isLocalVariable = false;
-        this.visibility = determineVisibility(modifierList);
-        this.isFinal = determineIsFinal(modifierList);
-        this.hasClassScope = determineIsStatic(modifierList);
-		if (hasClassScope) {
-			dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
-		} else {
-			dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
+    	try {
+	        this.isLocalVariable = false;
+	        this.visibility = determineVisibility(modifierList);
+	        this.isFinal = determineIsFinal(modifierList);
+	        this.hasClassScope = determineIsStatic(modifierList);
+			if (hasClassScope) {
+				dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
+			} else {
+				dependencySubType = DependencySubTypes.DECL_INSTANCE_VAR;
+			}
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
+			this.declareType = determineTypeOfTypeType(fieldDeclaration.typeType(), belongsToClass, dependencySubType);
+			if (!hasClassScope) {
+				determine_isComposite_and_typeInClassDiagram(fieldDeclaration.typeType());
+			}
+			determine_name(fieldDeclaration.variableDeclarators());
+			dispatchAssignment(fieldDeclaration.variableDeclarators());
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + fieldDeclaration.start.getLine() + " " + e.getMessage());
 		}
-		dispatchAnnotationsOfMember(modifierList, belongsToClass);
-		this.declareType = determineTypeOfTypeType(fieldDeclaration.typeType(), belongsToClass, dependencySubType);
-		if (!hasClassScope) {
-			determine_isComposite_and_typeInClassDiagram(fieldDeclaration.typeType());
-		}
-		determine_name(fieldDeclaration.variableDeclarators());
-		dispatchAssignment(fieldDeclaration.variableDeclarators());
     }
 
     public void analyseLocalVariable(LocalVariableDeclarationContext localVariableDeclaration, String belongsToMethod) {
-        this.isLocalVariable = true;
-        this.isFinal = determine_IsFinalForLocalVariable(localVariableDeclaration);
-		this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
-        this.belongsToMethod = belongsToMethod;
-        dispatchAnnotationsOfLocalVariable(localVariableDeclaration.variableModifier());
-        this.declareType = determineTypeOfTypeType(localVariableDeclaration.typeType(), belongsToClass, dependencySubType);
-		determine_name(localVariableDeclaration.variableDeclarators());
-		dispatchAssignment(localVariableDeclaration.variableDeclarators());
+    	try {
+	    	this.isLocalVariable = true;
+	        this.isFinal = determine_IsFinalForLocalVariable(localVariableDeclaration);
+			this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
+	        this.belongsToMethod = belongsToMethod;
+	        dispatchAnnotationsOfLocalVariable(localVariableDeclaration.variableModifier());
+	        this.declareType = determineTypeOfTypeType(localVariableDeclaration.typeType(), belongsToClass, dependencySubType);
+			determine_name(localVariableDeclaration.variableDeclarators());
+			dispatchAssignment(localVariableDeclaration.variableDeclarators());
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + localVariableDeclaration.start.getLine() + " " + e.getMessage());
+		}
     }
 
     public void analyseForControlVariable(EnhancedForControlContext enhancedForControl, String belongsToMethod) {
-        this.isLocalVariable = true;
-        this.belongsToMethod = belongsToMethod;
-		this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
-        dispatchAnnotationsOfLocalVariable(enhancedForControl.variableModifier());
-        this.declareType = determineTypeOfTypeType(enhancedForControl.typeType(), belongsToClass, dependencySubType);
-		determine_name(enhancedForControl.variableDeclaratorId());
+    	try {
+    		this.isLocalVariable = true;
+	        this.belongsToMethod = belongsToMethod;
+			this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
+	        dispatchAnnotationsOfLocalVariable(enhancedForControl.variableModifier());
+	        this.declareType = determineTypeOfTypeType(enhancedForControl.typeType(), belongsToClass, dependencySubType);
+			determine_name(enhancedForControl.variableDeclaratorId());
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + enhancedForControl.start.getLine() + " " + e.getMessage());
+		}
     }
 
     public void analyseCatchClauseVariable(CatchClauseContext catchClause, String belongsToMethod) {
-        this.isLocalVariable = true;
-        this.belongsToMethod = belongsToMethod;
-		this.dependencySubType = DependencySubTypes.DECL_EXCEPTION;
-        dispatchAnnotationsOfLocalVariable(catchClause.variableModifier());
-        this.declareType = determine_type(catchClause.catchType());
-		this.name = catchClause.Identifier().getText();
-		this.lineNumber = catchClause.start.getLine();
-        createObject();
+    	try {
+	    	this.isLocalVariable = true;
+	        this.belongsToMethod = belongsToMethod;
+			this.dependencySubType = DependencySubTypes.DECL_EXCEPTION;
+	        dispatchAnnotationsOfLocalVariable(catchClause.variableModifier());
+	        this.declareType = determine_type(catchClause.catchType());
+			this.name = catchClause.Identifier().getText();
+			this.lineNumber = catchClause.start.getLine();
+	        createObject();
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + catchClause.start.getLine() + " " + e.getMessage());
+		}
     }
 
     public void analyseResourceVariable(ResourceContext resource, String belongsToMethod) {
-        this.isLocalVariable = true;
-        this.belongsToMethod = belongsToMethod;
-		this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
-        dispatchAnnotationsOfLocalVariable(resource.variableModifier());
-        this.declareType = resource.classOrInterfaceType().getText();
-		determine_name(resource.variableDeclaratorId());
+    	try {
+	    	this.isLocalVariable = true;
+	        this.belongsToMethod = belongsToMethod;
+			this.dependencySubType = DependencySubTypes.DECL_LOCAL_VAR;
+	        dispatchAnnotationsOfLocalVariable(resource.variableModifier());
+	        this.declareType = resource.classOrInterfaceType().getText();
+			determine_name(resource.variableDeclaratorId());
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + resource.start.getLine() + " " + e.getMessage());
+		}
     }
 
+    public void analyseConstant(List<ModifierContext> modifierList, ConstDeclarationContext constDeclaration) {
+    	try {
+	        this.isLocalVariable = false;
+	        this.visibility = VisibilitySet.PUBLIC.toString();
+	        this.isFinal = true;
+	        this.hasClassScope = true;
+			dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
+			this.declareType = determineTypeOfTypeType(constDeclaration.typeType(), belongsToClass, dependencySubType);
+			for (ConstantDeclaratorContext constantDeclarator : constDeclaration.constantDeclarator()) {
+				if (constantDeclarator.Identifier() != null) {
+					this.lineNumber = constantDeclarator.start.getLine();
+					this.name = constantDeclarator.Identifier().getText();
+					createObject();
+				}
+    			if ((constantDeclarator.variableInitializer() != null) && (constantDeclarator.variableInitializer().expression() != null)) {
+    				new ExpressionAnalyser(belongsToClass, belongsToMethod, constantDeclarator.variableInitializer().expression());
+    			}
+			}
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + constDeclaration.start.getLine() + " " + e.getMessage());
+		}
+    }
+    
+    public void analyseEnumConstant(TerminalNode identifier) {
+    	try {
+	        this.isLocalVariable = false;
+	        this.visibility = VisibilitySet.PUBLIC.toString();
+	        this.isFinal = true;
+	        this.hasClassScope = true;
+			dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
+			this.declareType = belongsToClass;
+			this.name = identifier.getText();
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + identifier.getText());
+		}
+    }
+    
+    public void analyseAnnotationConstant(List<ModifierContext> modifierList, TypeTypeContext typeType, VariableDeclaratorsContext variableDeclarators) {
+    	try {
+	        this.isLocalVariable = false;
+	        this.visibility = VisibilitySet.PUBLIC.toString();
+	        this.isFinal = true;
+	        this.hasClassScope = true;
+			dependencySubType = DependencySubTypes.DECL_CLASS_VAR;
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
+			this.declareType = determineTypeOfTypeType(typeType, belongsToClass, dependencySubType);
+			determine_name(variableDeclarators);
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + " Line: " + typeType.start.getLine() + " " + e.getMessage());
+		}
+    }
+    
     private void determine_name(VariableDeclaratorsContext variableDeclaratorsList) {
     	for (VariableDeclaratorContext variableDeclarator : variableDeclaratorsList.variableDeclarator()) {
     		determine_name(variableDeclarator.variableDeclaratorId());
@@ -135,26 +222,27 @@ class VariableAnalyser extends JavaGenerator{
     	for (VariableDeclaratorContext variableDeclarator : attributeTree.variableDeclarator()) {
     		if (variableDeclarator.variableInitializer() != null) {
     			if (variableDeclarator.variableInitializer().expression() != null) {
-    				ExpressionAnalyser expressionAnalyser = new ExpressionAnalyser(belongsToClass, belongsToMethod);
-    				expressionAnalyser.analyseExpression(variableDeclarator.variableInitializer().expression());
+    				new ExpressionAnalyser(belongsToClass, belongsToMethod, variableDeclarator.variableInitializer().expression());
     			}
     		}
     	}
      }
 
-    private void determine_isComposite_and_typeInClassDiagram(TypeTypeContext typeTree) {
-    	if (typeTree.classOrInterfaceType() != null) {
-            if (typeTree.stop.getText().equals("]")) { // In case of array, e.g. VariableDTO[]
+    private void determine_isComposite_and_typeInClassDiagram(TypeTypeContext typeType) {
+    	if (typeType.classOrInterfaceType() != null) {
+            if (typeType.stop.getText().equals("]")) { // In case of array, e.g. VariableDTO[]
             	this.isComposite = true;
             	if (!hasClassScope) { 
                 	this.typeInClassDiagram = this.declareType;
             	}
-            } else if (typeTree.classOrInterfaceType().typeArguments() != null) { // Check on (generic) type parameters. 
-        		for (TypeArgumentsContext typeArguments : typeTree.classOrInterfaceType().typeArguments()) {
+            } else if (typeType.classOrInterfaceType().typeArguments() != null) { // Check on (generic) type parameters. 
+        		for (TypeArgumentsContext typeArguments : typeType.classOrInterfaceType().typeArguments()) {
         			for (TypeArgumentContext typeArgument : typeArguments.typeArgument()) {
-        				this.typeInClassDiagram = transformIdentifierToString(typeArgument.typeType().classOrInterfaceType().Identifier());
-           				// Note in both cases Person will be assigned: ArrayList<Person>, HashMap<String, Person>.
-                    	this.isComposite = true;
+        				if (typeArgument.typeType() != null) {
+	        				this.typeInClassDiagram = transformIdentifierToString(typeArgument.typeType().classOrInterfaceType().Identifier());
+	           				// Note in both cases Person will be assigned: ArrayList<Person>, HashMap<String, Person>.
+	                    	this.isComposite = true;
+        				}
         			}
         		}
             }
@@ -181,7 +269,6 @@ class VariableAnalyser extends JavaGenerator{
     }
 
     private void dispatchAnnotationsOfLocalVariable(List<VariableModifierContext> variableModifierList) {
-    	int size = variableModifierList.size();
     	for (VariableModifierContext variableModifier : variableModifierList) {
         	if (variableModifier.annotation() != null) {
 				new AnnotationAnalyser(variableModifier.annotation(), this.belongsToClass);

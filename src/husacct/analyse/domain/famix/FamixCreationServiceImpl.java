@@ -234,18 +234,16 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
     
     @Override
-    public void createTypeParameter(String belongsToClass, int lineNumber, String parameterType, DependencySubTypes dependencySubTypes) {
+    public void createTypeParameter(String belongsToClass, int lineNumber, String parameterType) {
     	// Currently, the parameter type (e.g. in case of HashSet<PT1>, or HashMap<PT2, PT3>) is not created as FamixObject.
     	// Only the association is created, necessary to report the dependency on the declared type.
-    	if (dependencySubTypes != null) {
-	        FamixAssociation fAssocation = new FamixAssociation();
-	        fAssocation.from = belongsToClass;
-	        fAssocation.to = parameterType;
-	        fAssocation.type = DependencyTypes.DECLARATION.toString();
-	        fAssocation.subType = dependencySubTypes.toString();
-	        fAssocation.lineNumber = lineNumber;
-	        model.waitingAssociations.add(fAssocation);
-    	}
+        FamixAssociation fAssocation = new FamixAssociation();
+        fAssocation.from = belongsToClass;
+        fAssocation.to = parameterType;
+        fAssocation.type = DependencyTypes.REFERENCE.toString();
+        fAssocation.subType = DependencySubTypes.REF_TYPE.toString();
+        fAssocation.lineNumber = lineNumber;
+        model.waitingAssociations.add(fAssocation);
     }
 
      @Override

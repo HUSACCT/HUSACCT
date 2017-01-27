@@ -249,7 +249,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	            	String parameterTypeOfGeneric = getCompleteToString(qualifiedType, from, null); // Last argument = null, since no recursion should take place here.
 	                if ((parameterTypeOfGeneric != null) && (dependencySubType != null)) {
 	                	int currentLineNumber = qualifiedType.getLine();
-	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
+	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric);
 	                }
 	            }
             }

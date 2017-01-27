@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.infrastructure.antlr.java.Java7Parser;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.AnnotationContext;
 
 class AnnotationAnalyser {
 
@@ -13,11 +13,11 @@ class AnnotationAnalyser {
     private int lineNumber;
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 
-    public AnnotationAnalyser(Java7Parser.AnnotationContext ctx, String belongsToClass) {
-        if ((ctx != null) && (belongsToClass != null) && !belongsToClass.equals("")) {
-        	if (ctx.annotationName() != null) {
-	        	name = ctx.annotationName().getText();
-	        	lineNumber = ctx.getStart().getLine();
+    public AnnotationAnalyser(AnnotationContext annotation, String belongsToClass) {
+        if ((annotation != null) && (belongsToClass != null) && !belongsToClass.equals("")) {
+        	if (annotation.annotationName() != null) {
+	        	name = annotation.annotationName().getText();
+	        	lineNumber = annotation.getStart().getLine();
 		    	if (!name.equals("") && !isSkippable(name)) { 
 			        this.uniqueName = belongsToClass + "." + this.name; 
 			        modelService.createAnnotation(belongsToClass, this.name, this.name, this.uniqueName, this.lineNumber, "");

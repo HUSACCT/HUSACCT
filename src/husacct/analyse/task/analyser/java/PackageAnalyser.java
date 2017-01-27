@@ -4,9 +4,9 @@ import husacct.analyse.infrastructure.antlr.java.Java7Parser.PackageDeclarationC
 
 class PackageAnalyser extends JavaGenerator {
 
-	private String uniqueName;
-	private String name;
-	private String belongsToPackage;
+	private String uniqueName = "";
+	private String name = "";
+	private String belongsToPackage = "";
 	
 	public PackageAnalyser(PackageDeclarationContext packageDeclaration) {
 		if (packageDeclaration != null && packageDeclaration.qualifiedName() != null) {

@@ -2,9 +2,11 @@ package husacct.analyse.task.analyser.java;
 
 import java.util.List;
 
-import husacct.analyse.infrastructure.antlr.java.Java7Parser;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.ConstructorDeclarationContext;
-import husacct.analyse.infrastructure.antlr.java.Java7Parser.FormalParameterContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.GenericConstructorDeclarationContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.GenericInterfaceMethodDeclarationContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.GenericMethodDeclarationContext;
+import husacct.analyse.infrastructure.antlr.java.Java7Parser.InterfaceMethodDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.MethodDeclarationContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.ModifierContext;
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.QualifiedNameContext;
@@ -12,8 +14,7 @@ import husacct.analyse.infrastructure.antlr.java.Java7Parser.QualifiedNameListCo
 import husacct.analyse.infrastructure.antlr.java.Java7Parser.TypeTypeContext;
 import husacct.common.enums.DependencySubTypes;
 
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.log4j.Logger;
 
 class MethodAnalyser extends JavaGenerator {
@@ -34,7 +35,15 @@ class MethodAnalyser extends JavaGenerator {
     public MethodAnalyser(String belongsToClass) {
         this.belongsToClass = belongsToClass;
     }
+
     public void analyseMethod(List<ModifierContext> modifierList, MethodDeclarationContext methodDeclaration) {
+        /* Test helpers
+    	if (belongsToClass.contains("org.apache.tools.ant.util.WorkerAnt")) {
+    		if (methodDeclaration.start.getLine() == 80) {
+    				boolean breakpoint = true;
+    		}
+    	} */
+
     	try {
 	    	lineNumber = methodDeclaration.start.getLine();
 	    	visibility = determineVisibility(modifierList);
@@ -47,6 +56,7 @@ class MethodAnalyser extends JavaGenerator {
 	            parameterList = "(" + javaParameterGenerator.generateParameterObjects(methodDeclaration.formalParameters().formalParameterList(), name, belongsToClass) + ")";
 	        } 
 	        createMethodObject();
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
 	        if (methodDeclaration.qualifiedNameList() != null) {
 	        	delegateException(methodDeclaration.qualifiedNameList());
 	        }
@@ -55,10 +65,22 @@ class MethodAnalyser extends JavaGenerator {
 	        }
     	}
 		catch (Exception e) {
-			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+			logger.warn(" Exception while processing: " + belongsToClass + " line : " + methodDeclaration.start.getLine() + " " + e.getMessage());
 		}
     }
 
+    public void analysegenericMethod(List<ModifierContext> modifierList, GenericMethodDeclarationContext genericMethod) {
+    	try {
+    		if (genericMethod.methodDeclaration() != null) {
+    			analyseMethod(modifierList, genericMethod.methodDeclaration());
+    		}
+    		// Currently no analysis of typeParameters()
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
+    }
+    
     public void analyseConstructor(List<ModifierContext> modifierList, ConstructorDeclarationContext methodDeclaration) {
     	try {
             isConstructor = true;
@@ -73,6 +95,7 @@ class MethodAnalyser extends JavaGenerator {
 	            parameterList = "(" + javaParameterGenerator.generateParameterObjects(methodDeclaration.formalParameters().formalParameterList(), name, belongsToClass) + ")";
 	        } 
 	        createMethodObject();
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
 	        if (methodDeclaration.qualifiedNameList() != null) {
 	        	delegateException(methodDeclaration.qualifiedNameList());
 	        }
@@ -85,85 +108,67 @@ class MethodAnalyser extends JavaGenerator {
 		}
     }
     
-    private String getClassOfUniqueName(String uniqueName) {
-        String[] parts = uniqueName.split("\\.");
-        return parts[parts.length - 1];
+    public void analyseGenericConstructor(List<ModifierContext> modifierList, GenericConstructorDeclarationContext genericConstructor) {
+    	try {
+    		if (genericConstructor.constructorDeclaration() != null) {
+    			analyseConstructor(modifierList, genericConstructor.constructorDeclaration());
+    		}
+    		// Currently no analysis of typeParameters()
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
+    }
+    
+    public void analyseInterfaceMethod(List<ModifierContext> modifierList, InterfaceMethodDeclarationContext methodDeclaration) {
+    	try {
+	    	lineNumber = methodDeclaration.start.getLine();
+	    	visibility = determineVisibility(modifierList);
+	        hasClassScope = determineIsStatic(modifierList);
+	        isAbstract = determineIsAbstract(modifierList);
+	    	declaredReturnType = getReturnType(methodDeclaration.typeType());
+	        name = methodDeclaration.Identifier().getText();
+	        if (methodDeclaration.formalParameters() != null && methodDeclaration.formalParameters().formalParameterList() != null){
+	            ParameterAnalyser javaParameterGenerator = new ParameterAnalyser();
+	            parameterList = "(" + javaParameterGenerator.generateParameterObjects(methodDeclaration.formalParameters().formalParameterList(), name, belongsToClass) + ")";
+	        } 
+	        createMethodObject();
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
+	        if (methodDeclaration.qualifiedNameList() != null) {
+	        	delegateException(methodDeclaration.qualifiedNameList());
+	        }
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
     }
 
-    private void WalkThroughMethod() {
-    	Tree tree = null;
-        for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
-            Tree child = tree.getChild(childCount);
-	        boolean walkThroughChildren = true;
-            int treeType = child.getType();
-        	
-        	/* Test helper
-        	if (belongsToClass.contains("org.eclipse.ui.internal.views.markers.MarkerFieldFilterGroup")){
-        		if (lineNumber == 522) {
-        			int breakpoint = 1;
-        		}
-        	} */
-
-            switch(treeType) {
-	            case Java7Parser.ABSTRACT: 
-	            	isAbstract = true;
-	            	break;
-	            case Java7Parser.AT:
-	            	//AnnotationAnalyser annotationGenerator = new AnnotationAnalyser();
-	                //annotationGenerator.generateToDomain((CommonTree) child, belongsToClass, "method");
-	            	break;
-	            case Java7Parser.STATIC: 
-	            	hasClassScope = true; 
-	            	break;
-	            case Java7Parser.PUBLIC: 
-	            	visibility = "public"; 
-	            	break;
-	            case Java7Parser.PRIVATE: 
-	            	visibility = "private"; 
-	            	break;
-	            case Java7Parser.PROTECTED: 
-	            	visibility = "protected"; 
-	            	break;
-/*	            case Java7Parser.TYPE: 
-	            	getReturnType(child); 
-		            walkThroughChildren = false;
-	            	break;
-*/	            case Java7Parser.Identifier: 
-	            	name = child.getText(); 
-	            	lineNumber = child.getLine();
-	            	break;
-	            case Java7Parser.THROW: 
-	            	//delegateException(child); 
-		            walkThroughChildren = false;
-	            	break;
-	            case Java7Parser.THROWS: 
-	            	//delegateException(child); 
-		            walkThroughChildren = false;
-	            	break;
-/*	            case Java7Parser.THROWS_CLAUSE: 
-	            	delegateException(child); 
-		            walkThroughChildren = false;
-	            	break;
-	            case Java7Parser.FORMAL_PARAM_LIST: 
-	            	if (child.getChildCount() > 0) {
-	                    JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
-	                    signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
-	    	            walkThroughChildren = false;
-	                }
-	            	break;
-	            case Java7Parser.BLOCK_SCOPE: {
-	            	setSignature();
-	                JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
-	                javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.name + signature);
-		            walkThroughChildren = false;
-	                break;
-	            }
-*/	            default: break;
-            }
-	        if (walkThroughChildren) {
-	        	WalkThroughMethod();
-	        }
-        }
+    public void analyseGenericInterfaceMethod(List<ModifierContext> modifierList, GenericInterfaceMethodDeclarationContext genericMethod) {
+    	try {
+    		if (genericMethod.interfaceMethodDeclaration() != null) {
+    			analyseInterfaceMethod(modifierList, genericMethod.interfaceMethodDeclaration());
+    		}
+    		// Currently no analysis of typeParameters()
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
+    }
+    
+    public void analyseAnnotationMethod(List<ModifierContext> modifierList, TypeTypeContext typeType, TerminalNode identifier) {
+    	try {
+	    	lineNumber = typeType.start.getLine();
+	    	visibility = determineVisibility(modifierList);
+	        hasClassScope = determineIsStatic(modifierList);
+	        isAbstract = determineIsAbstract(modifierList);
+	    	declaredReturnType = getReturnType(typeType);
+	        name = identifier.getText();
+	        createMethodObject();
+			dispatchAnnotationsOfMember(modifierList, belongsToClass);
+    	}
+		catch (Exception e) {
+			logger.warn(" Exception while processing: " + belongsToClass + e.getMessage());
+		}
     }
 
     private void delegateException(QualifiedNameListContext nameList) {

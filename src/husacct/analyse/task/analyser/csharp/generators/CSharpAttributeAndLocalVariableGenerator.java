@@ -188,7 +188,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	                    	}
 	                    }
 	                	int currentLineNumber = qualifiedType.getLine();
-	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric, dependencySubType);
+	                	modelService.createTypeParameter(belongsToClass, currentLineNumber, parameterTypeOfGeneric);
 	                }
 	            }
             }

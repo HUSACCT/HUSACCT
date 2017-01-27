@@ -15,8 +15,10 @@ class ImportAnalyser extends JavaGenerator {
 
     public ImportAnalyser(String importingType, List<ImportDeclarationContext> importList){
         for (ImportDeclarationContext importDeclaration : importList) {
-			this.importedType = importDeclaration.qualifiedName().getText();
-			this.completeImportDeclaration = importedType;
+        	if (importDeclaration.qualifiedName() != null) {
+				this.importedType = importDeclaration.qualifiedName().getText();
+				this.completeImportDeclaration = importedType;
+        	}
 	        this.lineNumber = importDeclaration.start.getLine();
 	        for (ParseTree child : importDeclaration.children) {
 	        	String t = child.getText();
