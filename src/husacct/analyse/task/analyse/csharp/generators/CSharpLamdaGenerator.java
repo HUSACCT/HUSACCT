@@ -1,0 +1,16 @@
+package husacct.analyse.task.analyse.csharp.generators;
+
+import husacct.analyse.task.analyse.csharp.generators.buffers.BufferService;
+
+import org.antlr.runtime.tree.CommonTree;
+
+public class CSharpLamdaGenerator {
+	
+	public void delegateDelegateToBuffer(CommonTree delegateTree, String packageAndClassName) {
+		BufferService.getInstance().addDelegate(packageAndClassName, delegateTree);
+	}
+	
+	public void delegateLambdaToBuffer(CommonTree delegateTree, String packageAndClassName, String belongsToMethod) {
+		BufferService.getInstance().addLambda(packageAndClassName, belongsToMethod, delegateTree);
+	}
+}

@@ -318,8 +318,8 @@ class FamixCreationPostProcessor {
 		        String uniqueNameFrom = association.from;
 
             	/* //Test helper
-            	if (association.from.contains("InheritanceExtendsLibraryClass")){
-            		if(association.lineNumber == 5) {
+            	if (association.from.contains("CSharpTreeConvertController")){
+            		if(association.lineNumber == 26) {
             			boolean breakpoint = true; }
             	} */
 
@@ -445,8 +445,8 @@ class FamixCreationPostProcessor {
                 }
 
                 /* Test helper
-            	if (fromExists && association.from.contains("CallInstanceLibraryClass")) {
-            		if (association.lineNumber == 10) {
+            	if (fromExists && association.from.contains("CSharpTreeConvertController")) {
+            		if (association.lineNumber == 26) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -971,11 +971,11 @@ class FamixCreationPostProcessor {
         	waitingDerivedAssociations.clear();
     		waitingDerivedAssociations.addAll(addedInvocations);
     		addedInvocations.clear();
-        	this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
+        	// this.logger.info(new Date().toString() + " Number of derived Associations: " + numberOfDerivedAssociations);
     		processWaitingDerivedAssociations();
     	} else if ((waitingDerivedAssociations != null) && (waitingDerivedAssociations.size() > 0)) {
-    		FamixInvocation lastInvocatioInLargeChain = waitingDerivedAssociations.get(waitingDerivedAssociations.size() - 1);
-        	this.logger.info(new Date().toString() + " Last large chain in: " + lastInvocatioInLargeChain.from  + " , line: " + lastInvocatioInLargeChain.lineNumber);
+    		//FamixInvocation lastInvocatioInLargeChain = waitingDerivedAssociations.get(waitingDerivedAssociations.size() - 1);
+        	// this.logger.info(new Date().toString() + " Last large chain in: " + lastInvocatioInLargeChain.from  + " , line: " + lastInvocatioInLargeChain.lineNumber);
         	waitingDerivedAssociations.clear();
     	}
     }

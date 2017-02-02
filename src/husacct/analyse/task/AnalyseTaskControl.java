@@ -7,7 +7,7 @@ import org.jdom2.Element;
 
 import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.task.analyser.ApplicationAnalyser;
+import husacct.analyse.task.analyse.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.analyse.task.reconstruct.ReconstructArchitectureDTOList;
 import husacct.common.dto.AnalysisStatisticsDTO;

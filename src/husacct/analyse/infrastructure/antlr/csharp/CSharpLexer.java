@@ -1,7 +1,7 @@
 // $ANTLR 3.4 C:\\Users\\chw\\workspace-cloudmig\\CSharpKDMDiscoverer\\grammars\\CSharpLexer.g 2013-01-09 17:08:25
 package husacct.analyse.infrastructure.antlr.csharp;
 
-import husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit;
+import husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -12,7 +12,10 @@ import java.util.Queue;
 
 
 
+
 import org.antlr.runtime.*;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.Lexer;
 import org.apache.log4j.Logger;
 
 import java.util.Stack;
@@ -309,8 +312,8 @@ public class CSharpLexer extends Lexer {
     public Token nextToken() {
         super.nextToken();
         if (tokens.size() == 0) {
-            // antlr 3.2: return Token.EOF_TOKEN;
-            return getEOFToken(); // since antlr 3.5
+        	//return Token.EOF_TOKEN; // antlr 3.2: 
+            return super.getEOFToken(); 	  // since antlr 3.5
         }
         return tokens.remove();
     }

@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -1175,6 +1174,61 @@ public class Java_AccuracyTestDependencyDetection {
 			correctNrOfACR_Dependencies = true;
 		}
 		Assert.assertTrue(correctNrOfACR_Dependencies);
+	}
+
+	// Statements and Expressions
+	@Test
+	public void Statement_LambdaExpression(){
+		String fromClass = "domain.direct.violating.Statement_LambdaExpression";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		// Tests expression before lambda expression
+		typesToFind.add("Reference");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		// Tests expression after ->
+		typesToFind.clear();
+		typesToFind.add("Access");
+		toClass = "technology.direct.dao.ProfileDAO";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		toClass = "technology.direct.dao.CheckInDAO";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
+	}
+
+	@Test
+	public void Statement_MethodReference(){
+		String fromClass = "domain.direct.violating.Statement_MethodReference";
+		String toClass = "xLibraries.java.lang.System";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		// Tests expressions before ::
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+		typesToFind.clear();
+		typesToFind.add("Reference");
+		toClass = "xLibraries.java.util.List";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
+	}
+
+	@Test
+	public void Statement_Switch(){
+		String fromClass = "domain.direct.violating.Statement_Switch";
+		String toClass = "technology.direct.dao.ProfileDAO";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		// Tests expression after case statement
+		typesToFind.add("Call");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Method", false));
+		// Tests statement in case blockStatement
+		typesToFind.clear();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", false));
+		// Tests parExpression after switch statement
+		toClass = "technology.direct.dao.UserDAO";
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, DependencySubTypes.ACC_INSTANCE_VAR_CONST.toString(), false));
+		// Tests statement in default blockStatement
+		toClass = "technology.direct.dao.CheckInDAO";
+		// Tests statement in default blockStatement
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", false));
+		// Tests expression with access of static variable after case statement
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, DependencySubTypes.ACC_CLASS_VAR.toString(), false));
 	}
 
 	
