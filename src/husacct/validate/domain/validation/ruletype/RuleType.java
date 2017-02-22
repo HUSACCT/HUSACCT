@@ -10,7 +10,6 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -80,7 +79,7 @@ public abstract class RuleType {
 		return severity;
 	}
 
-	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
+	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule);
 
 	protected ArrayList<Mapping> getAllClasspathsOfModule(ModuleDTO module, String[] violationTypeKeys) {
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
@@ -121,117 +120,90 @@ public abstract class RuleType {
 		}
 		return exceptionClassPathFromTos;
 	}
-protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, ConfigurationServiceImpl configuration) {
+
+	// Used to create violations on: All relation rules + Facade convention 
+	protected Violation createViolation(RuleDTO rule, DependencyDTO dependency, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
-		Message message = new Message(rootRule);
 
-		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-		LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
-		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-
-		Severity severity = getSeverity(configuration, this.severity, null);
-
-		Violation newViolation = new Violation();
-		newViolation = newViolation
-				.setSeverity(severity.clone())
-				.setRuletypeKey(this.key)
-				.setClassPathFrom(classPathFrom.getPhysicalPath())
-				.setClassPathTo(classPathTo.getPhysicalPath())
-				.setMessage(message)
-				.setLogicalModules(logicalModules);
-		return newViolation;
-	}
-	
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, DependencyDTO dependency, ConfigurationServiceImpl configuration) {
-		initializeViolationTypeFactory(configuration);
-		Message message = new Message(rootRule);
-
-		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-		LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
-		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-
-		final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
+		Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
 		Severity severity = getSeverity(configuration, this.severity, violationTypeSeverity);
 
 		Violation newViolation = new Violation()
-				.setLineNumber(dependency.lineNumber)
-				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setViolationTypeKey(dependency.type)
-				.setdependencySubType(dependency.subType)
+				.setLogicalModules(getLogicalModules(rule))
 				.setClassPathFrom(dependency.from)
 				.setClassPathTo(dependency.to)
+				.setLineNumber(dependency.lineNumber)
+				.setSeverity(severity.clone())
+				.setViolationTypeKey(dependency.type)
+				.setdependencySubType(dependency.subType)
 				.setInDirect(dependency.isIndirect)
 				.setIsInheritanceRelated(dependency.isInheritanceRelated)
-				.setIsInnerClassRelated(dependency.isInnerClassRelated)
-				.setMessage(message)
-				.setLogicalModules(logicalModules);
+				.setIsInnerClassRelated(dependency.isInnerClassRelated);
 		return newViolation;
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules, ConfigurationServiceImpl configuration) {
+	// Used to create violations on: Inheritance convention
+	protected Violation createViolation(RuleDTO rule, Mapping classPathFrom, Mapping classPathTo, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
-		Message message = new Message(rootRule);
 		Severity severity = getSeverity(configuration, this.severity, null);
-
 		Violation newViolation = new Violation();
 		newViolation = newViolation
-				.setClassPathFrom(logicalModules.getLogicalModuleFrom().getLogicalModulePath())
-				.setClassPathTo(logicalModules.getLogicalModuleTo().getLogicalModulePath())
-				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setMessage(message)
-				.setLogicalModules(logicalModules);
-		return newViolation;
-	}
-
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, ConfigurationServiceImpl configuration) {
-		initializeViolationTypeFactory(configuration);
-		Message message = new Message(rootRule);
-
-		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-
-		Severity severity = getSeverity(configuration, this.severity, null);
-
-		Violation newViolation = new Violation();
-		newViolation = newViolation
-				.setSeverity(severity.clone())
-				.setRuletypeKey(this.key)
+				.setLogicalModules(getLogicalModules(rule))
 				.setClassPathFrom(classPathFrom.getPhysicalPath())
-				.setMessage(message)
-				.setLogicalModules(logicalModules);
+				.setClassPathTo(classPathTo.getPhysicalPath())
+				.setSeverity(severity.clone());
+		return newViolation;
+	}
+	
+	// Used to create violations on: Must use rule
+	protected Violation createViolation(RuleDTO rule, ConfigurationServiceImpl configuration) {
+		initializeViolationTypeFactory(configuration);
+		Severity severity = getSeverity(configuration, this.severity, null);
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setRuletypeKey(this.key)
+				.setLogicalModules(getLogicalModules(rule))
+				.setSeverity(severity.clone());
 		return newViolation;
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration) {
+	// Used to create violations on: Naming convention
+	protected Violation createViolation(RuleDTO rule, String classPathFrom, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
-		Message message = new Message(rootRule);
-		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
+		Severity severity = getSeverity(configuration, this.severity, null);
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setRuletypeKey(this.key)
+				.setLogicalModules(getLogicalModules(rule))
+				.setClassPathFrom(classPathFrom)
+				.setSeverity(severity.clone());
+		return newViolation;
+	}
 
+	// Used to create violations on: Visibility convention
+	protected Violation createViolation(RuleDTO rule, String classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration) {
+		initializeViolationTypeFactory(configuration);
 		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);
-
 		Severity severity = getSeverity(configuration, this.severity, violationTypeSeverity);
-
 		Violation newViolation = new Violation();
 		newViolation = newViolation
-				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)
-				.setViolationTypeKey(violationTypeKey)
-				.setClassPathFrom(classPathFrom.getPhysicalPath())
-				.setMessage(message)
-				.setLogicalModules(logicalModules);
+				.setLogicalModules(getLogicalModules(rule))
+				.setClassPathFrom(classPathFrom)
+				.setSeverity(severity.clone())
+				.setViolationTypeKey(violationTypeKey);
 		return newViolation;
 	}
 
-	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {
+	protected void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {
 		if (violationTypeFactory == null) {
 			this.violationTypeFactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		}
 	}
 
-	private Severity getViolationTypeSeverity(String violationTypeKey) {
+	protected Severity getViolationTypeSeverity(String violationTypeKey) {
 		try {
 			return violationTypeFactory.createViolationType(this.key, violationTypeKey).getSeverity();
 		} catch (ViolationTypeNotFoundException e) {
@@ -240,7 +212,7 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 		return null;
 	}
 
-	private Severity getSeverity(ConfigurationServiceImpl configuration, Severity ruleTypeSeverity, Severity violationTypeSeverity) {
+	protected Severity getSeverity(ConfigurationServiceImpl configuration, Severity ruleTypeSeverity, Severity violationTypeSeverity) {
 		if (violationTypeSeverity == null && ruleTypeSeverity == null) {
 			return null;
 		}
@@ -270,6 +242,13 @@ protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Map
 		}
 	}
 
+	private LogicalModules getLogicalModules(RuleDTO rule) {
+		LogicalModule logicalModuleFrom = new LogicalModule(rule.moduleFrom.logicalPath, "");
+		LogicalModule logicalModuleTo = new LogicalModule(rule.moduleTo.logicalPath, ""); 
+		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+		return logicalModules;
+	}
+	
 	public boolean equals(RuleTypes desiredRuleType) {
 		return this.getKey().equals(desiredRuleType.toString());
 	}

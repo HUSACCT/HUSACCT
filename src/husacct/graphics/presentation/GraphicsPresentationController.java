@@ -101,8 +101,10 @@ public class GraphicsPresentationController implements UserInputListener{
 
 	// Creates a drawing of the top-level modules of the architecture
 	public void drawArchitectureTopLevel() {
-		graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
-		executeDrawingTask("drawArchitectureTopLevel", new String[] {});
+		if (drawingView != null) {
+			graphicsFrame.attachDrawingViewAndShowDrawing(drawingView);
+			executeDrawingTask("drawArchitectureTopLevel", new String[] {});
+		}
 	}
 
 	/* 

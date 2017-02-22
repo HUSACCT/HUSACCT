@@ -1,6 +1,5 @@
 package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
-import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -27,7 +26,7 @@ public class NamingConvention extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		violations.clear();
 		if (currentRule.exceptionRules.length > 0) {
 			for (RuleDTO exception : currentRule.exceptionRules) {
@@ -38,16 +37,16 @@ public class NamingConvention extends RuleType {
 			}
 		}
 		if (arrayContainsValue(currentRule.violationTypeKeys, "package")) {
-			checkPackageConvention(currentRule, rootRule, configuration);
+			checkPackageConvention(currentRule, configuration);
 		}
 
 		if (arrayContainsValue(currentRule.violationTypeKeys, "class")) {
-			checkClassConvention(currentRule, rootRule, configuration);
+			checkClassConvention(currentRule, configuration);
 		}
 		return violations;
 	}
 
-	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
+	private List<Violation> checkPackageConvention(RuleDTO currentRule, ConfigurationServiceImpl configuration) {
 		ArrayList<Mapping> packageMappings = getAllPhysicalPackagePathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		String regex = Regex.makeRegexString(currentRule.regex);
 
@@ -55,7 +54,7 @@ public class NamingConvention extends RuleType {
 			SoftwareUnitDTO analysedModule = analyseService.getSoftwareUnitByUniqueName(currentPackage.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && nameDoesNotMatchException(analysedModule.name)) {
 				if (analysedModule.type.toLowerCase().equals("package")){
-					Violation violation = createViolation(rootRule, currentPackage, configuration);
+					Violation violation = createViolation(currentRule, currentPackage.getPhysicalPath(), configuration);
 					violations.add(violation);
 					
 				}
@@ -64,14 +63,14 @@ public class NamingConvention extends RuleType {
 		return violations;
 	}
 
-	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
+	private List<Violation> checkClassConvention(RuleDTO currentRule, ConfigurationServiceImpl configuration) {
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		String regex = Regex.makeRegexString(currentRule.regex);
 		
 		for (Mapping physicalClasspathFrom : fromMappings) {
 			SoftwareUnitDTO analysedModule = analyseService.getSoftwareUnitByUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("class") && nameDoesNotMatchException(analysedModule.name)) {
-				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
+				Violation violation = createViolation(currentRule, physicalClasspathFrom.getPhysicalPath(), configuration);
 				violations.add(violation);
 			}
 		}

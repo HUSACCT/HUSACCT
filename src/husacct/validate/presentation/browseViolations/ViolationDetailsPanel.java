@@ -1,8 +1,10 @@
 package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ModuleDTO;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.Color;
@@ -104,9 +106,29 @@ public class ViolationDetailsPanel extends JPanel implements ActionListener {
 		if (!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
-			detailLogicalModuleFromValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
-			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
-			detailMessageValue.setText(task.getMessage(violation.getMessage(), violation));
+			String logicalModulePathOfFromClass = "";
+			String logicalModulePathOfToClass = "";
+			if (violation.getRuletypeKey().toLowerCase().equals(RuleTypes.MUST_USE.toString().toLowerCase())) {
+				// Get the logical modules of the rule since there are no classPaths
+				logicalModulePathOfFromClass = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+				logicalModulePathOfToClass = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+			} else {
+				if (violation.getClassPathFrom() != null && !violation.getClassPathFrom().equals("")) {
+					ModuleDTO logicalModuleOfFromClass = ServiceProvider.getInstance().getDefineService().getModule_BasedOnSoftwareUnitName(violation.getClassPathFrom());
+					if (logicalModuleOfFromClass != null) {
+						logicalModulePathOfFromClass = logicalModuleOfFromClass.logicalPath;
+					}
+				}
+				if (violation.getClassPathTo() != null && !violation.getClassPathTo().equals("")) {
+					ModuleDTO logicalModuleOfToClass = ServiceProvider.getInstance().getDefineService().getModule_BasedOnSoftwareUnitName(violation.getClassPathTo());
+					if (logicalModuleOfToClass != null) {
+						logicalModulePathOfToClass = logicalModuleOfToClass.logicalPath;
+					}
+				}
+			}
+			detailLogicalModuleFromValue.setText(logicalModulePathOfFromClass);
+			detailLogicalModuleToValue.setText(logicalModulePathOfToClass);
+			detailMessageValue.setText(task.getMessage(violation));
 			detailSeverityValue.setText("" + violation.getSeverity());
 			// Set data needed in case the source code viewer is activated
 			sourceClassPath = violation.getClassPathFrom();

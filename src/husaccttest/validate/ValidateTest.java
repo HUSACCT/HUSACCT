@@ -11,13 +11,13 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ViolationTypeDTO;
+import husacct.common.enums.ExtensionTypes;
 import husacct.common.enums.ModuleTypes;
 import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.validation.ruletype.RuleTypeCategories;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
-import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
 import java.net.URL;
@@ -109,11 +109,10 @@ public class ValidateTest {
 	@Test
 	public void getExportExtentions() {
 		String[] exportExtensions = new String[] { 
-				ExtensionType.XLS.getExtension(),
-				ExtensionType.HTML.getExtension(),
-				ExtensionType.PDF.getExtension(), 
-				ExtensionType.XML.getExtension(),
-				ExtensionType.RSF.getExtension()
+				ExtensionTypes.XLS.getExtension(),
+				ExtensionTypes.HTML.getExtension(),
+				ExtensionTypes.PDF.getExtension(), 
+				ExtensionTypes.XML.getExtension()
 		};
 		
 		assertArrayEquals(exportExtensions, validate.getExportExtentions());

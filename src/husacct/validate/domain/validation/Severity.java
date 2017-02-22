@@ -26,7 +26,7 @@ public class Severity implements Cloneable {
 		return severityKey;
 	}
 
-	public String getSeverityName() {
+	public String getSeverityKeyTranslated() {
 		return ServiceProvider.getInstance().getLocaleService()
 				.getTranslatedString(severityKey);
 	}
@@ -45,7 +45,7 @@ public class Severity implements Cloneable {
 
 	@Override
 	public String toString() {
-		return getSeverityName();
+		return getSeverityKeyTranslated();
 	}
 
 	@Override

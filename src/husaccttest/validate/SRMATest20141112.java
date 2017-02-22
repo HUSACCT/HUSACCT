@@ -2,8 +2,6 @@ package husaccttest.validate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
@@ -274,7 +272,8 @@ public class SRMATest20141112 {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(2, violations.length);
+		int length = violations.length;
+		assertEquals(2, length);
 	}
 
 	@Test

@@ -54,9 +54,9 @@ public class ViolationDataModel extends AbstractTableModel {
 			else if (columnKey.equals(columnKeys[1])) 
 				return row.toClasspath;
 			else if (columnKey.equals(columnKeys[2])) {
-				return localeService.getTranslatedString(row.ruleType.key);
+				return localeService.getTranslatedString(row.ruleTypeKey);
 			} else if (columnKey.equals(columnKeys[3])) { 
-				return localeService.getTranslatedString(row.violationType.key);
+				return localeService.getTranslatedString(row.violationTypeKey);
 			} else if (columnKey.equals(columnKeys[4])) 
 				return row.linenumber;
 			else

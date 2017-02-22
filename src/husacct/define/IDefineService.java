@@ -153,6 +153,18 @@ public interface IDefineService extends ISaveable, IObservableService {
 	 */
 	public void reportArchitecture(String fullFilePath);
 
+	/**
+	 * Finds and returns all rules with the matching parameters. 
+	 * @param pathFrom - Logical module from
+	 * @param pathTo - Logical module to
+	 * @return - Array of RuleDTO, which is empty if no rules are found.
+	 */
 	public RuleDTO[] getRulesByLogicalPath(String pathFrom, String pathTo);
+	
+	/** Gets the main rule that matches the arguments. So, no exception rule.
+	 * 	Returns null if no matching rule is found.
+	 *  Returns the last found rule, if several rules are found. In that case a warning message is logged.
+	 */
+	public RuleDTO getMainRuleBy_From_To_RuleTypeKey(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey);
 
 }

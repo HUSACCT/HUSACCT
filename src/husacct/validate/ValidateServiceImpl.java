@@ -166,6 +166,15 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	 * {@inheritDoc}
 	 */
 	@Override
+	public ViolationDTO[] identifyNewViolations(File previousViolationsFile) {
+		return task.identifyNewViolations(previousViolationsFile);
+	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public boolean isValidated() {
 		return validationExecuted;
 	}

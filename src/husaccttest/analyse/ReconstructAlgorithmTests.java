@@ -50,7 +50,7 @@ public class ReconstructAlgorithmTests {
 			workspaceController.closeWorkspace();
 			loadWorkspace(workspacePath);
 			getAnalyseStatistics();
-			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFile);
+			exportFilePath = TestResourceFinder.getExportFolderForTest("java") + exportFile;
 			importAnalysisModel();
 			getAnalyseStatistics();
 			

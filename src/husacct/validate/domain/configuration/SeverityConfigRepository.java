@@ -34,7 +34,7 @@ class SeverityConfigRepository {
 
 	Severity getSeverityByName(String severityName) {
 		for (Severity customSeverity : currentSeverities) {
-			if (!severityName.isEmpty() && (severityName.toLowerCase().equals(customSeverity.getSeverityKey().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getSeverityName().toLowerCase()))) {
+			if (!severityName.isEmpty() && (severityName.toLowerCase().equals(customSeverity.getSeverityKey().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getSeverityKeyTranslated().toLowerCase()))) {
 				return customSeverity;
 			}
 		}

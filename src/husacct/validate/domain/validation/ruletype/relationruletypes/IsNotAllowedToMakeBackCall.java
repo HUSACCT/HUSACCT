@@ -29,7 +29,7 @@ public class IsNotAllowedToMakeBackCall extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO rule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rule) {
 		violations.clear();
 		this.currentRule = rule;
 		this.logicalPathLayerFrom = currentRule.moduleFrom.logicalPath;
@@ -54,7 +54,7 @@ public class IsNotAllowedToMakeBackCall extends RuleType {
 						DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 						if(violatingDependencies != null){
 							for(DependencyDTO dependency : violatingDependencies){
-								Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+								Violation violation = createViolation(rule, dependency, configuration);
 		                        violations.add(violation);
 							}
 						}

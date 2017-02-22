@@ -51,7 +51,7 @@ public class ArchitectureReconstructionTest_Husacct20_Without_Antlr {
 			workspaceController.closeWorkspace();
 			loadWorkspace(workspacePath);
 			analyseStatisticsBeforeReconstruction = getAnalyseStatistics();
-			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFile);
+			exportFilePath = TestResourceFinder.getExportFolderForTest("java") + exportFile;
 			importAnalysisModel();
 			analyseStatisticsAfterReconstruction = getAnalyseStatistics();
 			

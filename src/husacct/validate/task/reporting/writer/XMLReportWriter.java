@@ -1,0 +1,101 @@
+package husacct.validate.task.reporting.writer;
+
+import husacct.common.enums.ExtensionTypes;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.internaltransferobjects.ViolationsPerSeverity;
+import husacct.validate.task.TaskServiceImpl;
+import husacct.validate.task.reporting.Report;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+
+public class XMLReportWriter extends ReportWriter {
+
+	public XMLReportWriter(Report report, String path, String fileName, TaskServiceImpl taskServiceImpl) {
+		super(report, path, fileName, ExtensionTypes.XML, taskServiceImpl);
+	}
+
+	@Override
+	public void createReport() throws IOException {
+		Document document = new Document();
+
+		Element reportElement = new Element("report");
+		document.setRootElement(reportElement);
+
+		Element projectName = new Element("projectName");
+		projectName.setText(report.getProjectName());
+		reportElement.addContent(projectName);
+
+		Element projectVersion = new Element("version");
+		projectVersion.setText(report.getVersion());
+		reportElement.addContent(projectVersion);
+
+		Element totalViolations = new Element("totalViolations");
+		totalViolations.setText("" + report.getViolations().getValue().size());
+		reportElement.addContent(totalViolations);
+
+		Element violationGeneratedOn = new Element("violationsGeneratedOn");
+		violationGeneratedOn.setText(report.getFormattedDate());
+		reportElement.addContent(violationGeneratedOn);
+
+		Element violationsSeverities = new Element("violations");
+		violationsSeverities.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
+		
+		for (ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
+			Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
+			violationElement.setText("" + violationPerSeverity.getAmount());
+			violationsSeverities.addContent(violationElement);
+		}
+		reportElement.addContent(violationsSeverities);
+
+		Element violations = new Element("violations");
+		reportElement.addContent(violations);
+
+		for (Violation violation : report.getViolations().getValue()) {
+			Element xmlViolation = new Element("violation");
+
+			Element source = new Element("source");
+			Element target = new Element("target");
+			Element lineNr = new Element("lineNr");
+			Element severity = new Element("severity");
+			Element ruleType = new Element("ruleType");
+			Element dependencyKind = new Element("dependencyKind");
+			Element isDirect = new Element("isDirect");
+
+			target.setText(violation.getClassPathTo());
+			source.setText(violation.getClassPathFrom());
+			lineNr.setText("" + violation.getLinenumber());
+			severity.setText(violation.getSeverity().getSeverityKeyTranslated());
+			if (violation.getLogicalModules() != null) {
+				String message = taskServiceImpl.getMessage(violation);
+				if (message != null) {
+					ruleType.setText(message);
+				} else {
+					ruleType.setText("");
+				}
+			}
+			dependencyKind.setText(violation.getViolationTypeKey());
+			isDirect.setText("" + violation.getIsIndirect());
+
+			xmlViolation.addContent(source);
+			xmlViolation.addContent(target);
+			xmlViolation.addContent(lineNr);
+			xmlViolation.addContent(severity);
+			xmlViolation.addContent(ruleType);
+			xmlViolation.addContent(dependencyKind);
+			xmlViolation.addContent(isDirect);
+
+			violations.addContent(xmlViolation);
+		}
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		FileWriter fileWriter = new FileWriter(getFileName());
+		outputter.output(document, fileWriter);
+		fileWriter.close();
+	}
+}

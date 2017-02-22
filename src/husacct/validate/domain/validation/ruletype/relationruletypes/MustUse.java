@@ -7,8 +7,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -23,7 +21,7 @@ public class MustUse extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		violations.clear();
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
@@ -47,10 +45,7 @@ public class MustUse extends RuleType {
 		}
 		
 		if (!isUsingModule) {
-			LogicalModule logicalModuleFrom = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.type);
-			LogicalModule logicalModuleTo = new LogicalModule(currentRule.moduleTo.logicalPath, currentRule.moduleTo.type);
-			LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-			Violation violation = createViolation(rootRule, logicalModules, configuration);
+			Violation violation = createViolation(currentRule, configuration);
 			violations.add(violation);
 		}		
 		

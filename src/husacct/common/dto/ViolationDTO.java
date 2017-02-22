@@ -1,47 +1,40 @@
 package husacct.common.dto;
 
-import java.awt.Color;
-
 public class ViolationDTO extends AbstractDTO {
-	public final String fromClasspath;
-	public final String toClasspath;
-	public final String logicalModuleFrom;
-	public final String logicalModuleTo;
-	public final RuleTypeDTO ruleType;
-	public final ViolationTypeDTO violationType;
-	public final String message;
-	public final int linenumber;
-	public String dependencySubType;
+	public final String fromClasspath;		// Path of the software unit with the violation
+	public final String toClasspath;		// Path of the software unit that is depended-upon
+	public final int linenumber;			// Line in the source of the fromClass that contains the violating code construct
+	public final String violationTypeKey; 	// Contains dependencyType (for dependency-related rule types) or visibilityType, etc. 
+	public final String dependencySubType;
 	public final boolean indirect;
-	
-	public final Color severityColor;
-	public final String severityName;
-	public final int severityValue;
+	public final String severityKey;
+	// The following three identify the violated rule: ruleTypeKey + logicalModuleFrom + logicalModuleTo
+	public final String ruleTypeKey;		// Identifier of RuleType; the type of rule
+	public final String logicalModuleFrom;	// Of the violated rule; not of the from-to software units
+	public final String logicalModuleTo;	// Of the violated rule; not of the from-to software units
 
-	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message, String dependencySubType, int linenumber, Color severityColor, String severityName, int severityValue, boolean isIndirect) {
-		this.indirect = isIndirect;
+
+	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, String violationType, String ruleType, String dependencySubType, int linenumber, String severityKey, boolean isIndirect) {
 		this.fromClasspath = fromClasspath;
 		this.toClasspath = toClasspath;
 		this.logicalModuleFrom = logicalModuleFrom;
 		this.logicalModuleTo = logicalModuleTo;
-		this.violationType = violationType;
-		this.ruleType = ruleType;
-		this.message = message;
-		this.dependencySubType = dependencySubType;
+		this.ruleTypeKey = ruleType;
 		this.linenumber = linenumber;
-		this.severityColor = severityColor;
-		this.severityName = severityName;
-		this.severityValue = severityValue;
+		this.violationTypeKey = violationType;
+		this.dependencySubType = dependencySubType;
+		this.indirect = isIndirect;
+		this.severityKey = severityKey;
 	}
 	
     public String toString() {
     	
         String representation = "";
-        representation += "\nfromClasspath: " + fromClasspath;
-        representation += "\ntoClasspath: " + toClasspath;
-        representation += "\nlogicalModuleFrom: " + logicalModuleFrom;
-        representation += "\nlogicalModuleTo: " + logicalModuleTo;
-        representation += ruleType.toString();
+        representation += "\n fromClasspath: " + fromClasspath;
+        representation += "\n toClasspath: " + toClasspath;
+        representation += "\n logicalModuleFrom: " + logicalModuleFrom;
+        representation += "\n logicalModuleTo: " + logicalModuleTo;
+        representation += "\n ruleTypeKey: " + ruleTypeKey;
         representation += "linenumber: " + linenumber + ", dependencySubType: " + dependencySubType;
         representation += ", indirect: " + indirect;
         representation += "\n";

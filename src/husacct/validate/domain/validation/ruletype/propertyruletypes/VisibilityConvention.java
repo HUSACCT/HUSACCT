@@ -22,7 +22,7 @@ public class VisibilityConvention extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		violations.clear();
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 
@@ -36,7 +36,7 @@ public class VisibilityConvention extends RuleType {
 					}
 				}
 				if (violationCounter == currentRule.violationTypeKeys.length && currentRule.violationTypeKeys.length != 0) {
-					Violation violation = createViolation(rootRule, physicalClasspathFrom, analysedModule.visibility, configuration);
+					Violation violation = createViolation(currentRule, physicalClasspathFrom.getPhysicalPath(), analysedModule.visibility, configuration);
 					violations.add(violation);
 				}
 				violationCounter = 0;

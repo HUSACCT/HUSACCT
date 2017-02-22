@@ -8,17 +8,16 @@ import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.SeverityChangedException;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.task.export.ExportController;
-import husacct.validate.task.fetch.ImportController;
-import husacct.validate.task.filter.FilterController;
+import husacct.validate.task.exporting.ExportController;
+import husacct.validate.task.importing.ImportController;
 
+import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,6 +133,11 @@ public class TaskServiceImpl {
 		return configuration.getSeverityFromKey(language, key);
 	}
 
+	public ViolationDTO[] identifyNewViolations(File previousViolationsFile) {
+		return filterController.identifyNewViolations(previousViolationsFile);
+	}
+
+	
 	public void importValidationWorkspace(Element element) throws DatatypeConfigurationException {
 		importController.importWorkspace(element);
 	}
@@ -201,8 +205,8 @@ public class TaskServiceImpl {
 		configuration.setActiveViolationTypes(language, activeViolations);
 	}
 
-	public String getMessage(Message message, Violation violation) {
-		return domain.getMessage(message, violation);
+	public String getMessage(Violation violation) {
+		return domain.getMessage(violation);
 	}
 
 	public void subscribe(Observer frame) {

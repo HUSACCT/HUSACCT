@@ -1,0 +1,2600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<husacct version="5.1">
+  <husacct.control.ControlServiceImpl>
+    <workspace name="HUSACCT_Current_Architecture" language="en" />
+  </husacct.control.ControlServiceImpl>
+  <husacct.define.DefineServiceImpl>
+    <Application>
+      <name>HUSACCT_Current_Architecture</name>
+      <version>2.5</version>
+      <projects>
+        <Project>
+          <name>HUSACCT_Current_Architecture</name>
+          <paths>
+            <path>C:\Tools\EclipseWorkspace\HUSACCT\src\husacct</path>
+          </paths>
+          <programmingLanguage>Java</programmingLanguage>
+          <version>2.5</version>
+          <description />
+        </Project>
+      </projects>
+      <Architecture>
+        <name>SoftwareArchitecture</name>
+        <description>This is the root of the architecture</description>
+        <modules>
+          <ModuleStrategy>
+            <type>Component</type>
+            <description />
+            <id>1</id>
+            <name>General GUI and Control</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>husacct.control</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+              <SoftwareUnitDefinition>
+                <name>husacct.Main</name>
+                <type>CLASS</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>husacct.control</path>
+              <path>husacct.Main</path>
+            </PhysicalPaths>
+            <SubModules>
+              <ModuleStrategy>
+                <type>Facade</type>
+                <description>this is the Facade of your Component</description>
+                <id>2</id>
+                <name>Interface&lt;General GUI and Control&gt;</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.control.IControlService</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.control.ILocaleChangeListener</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.control.IControlService</path>
+                  <path>husacct.control.ILocaleChangeListener</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>23</id>
+                    <name>ServiceProvider</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.ServiceProvider</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.ServiceProvider</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>50</id>
+                <name>Task</name>
+                <HierarchicalLevel>95</HierarchicalLevel>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>59</id>
+                    <name>Presentation</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.control.presentation</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.control.presentation</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>61</id>
+                    <name>Task</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.control.task</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.control.task</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>51</id>
+                <name>Domain</name>
+                <HierarchicalLevel>96</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.control.domain</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.control.domain</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>SubSystem</type>
+                <description />
+                <id>25</id>
+                <name>Bootstrap</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.bootstrap</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.bootstrap</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+            </SubModules>
+          </ModuleStrategy>
+          <ModuleStrategy>
+            <type>Component</type>
+            <description />
+            <id>3</id>
+            <name>Analyse</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>husacct.analyse</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>husacct.analyse</path>
+            </PhysicalPaths>
+            <SubModules>
+              <ModuleStrategy>
+                <type>Facade</type>
+                <description>this is the Facade of your Component</description>
+                <id>4</id>
+                <name>Facade&lt;Analyse&gt;</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.IAnalyseService</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.analyse.IAnalyseService</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>31</id>
+                <name>Presentation</name>
+                <HierarchicalLevel>97</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.presentation</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.analyse.presentation</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>33</id>
+                <name>Task</name>
+                <HierarchicalLevel>98</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.task</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.analyse.task</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>57</id>
+                    <name>AnalyseTaskController</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.analyse.task.AnalyseTaskControl</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.analyse.task.AnalyseTaskControl</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>34</id>
+                <name>Domain</name>
+                <HierarchicalLevel>99</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.domain</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.analyse.domain</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>Component</type>
+                    <description />
+                    <id>52</id>
+                    <name>Famix</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.analyse.domain.famix</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.analyse.domain.famix</path>
+                    </PhysicalPaths>
+                    <SubModules>
+                      <ModuleStrategy>
+                        <type>Facade</type>
+                        <description>This module represents the interface(s) of the component.</description>
+                        <id>53</id>
+                        <name>Interface&lt;Famix&gt;</name>
+                        <SoftwareUnitDefinitions>
+                          <SoftwareUnitDefinition>
+                            <name>husacct.analyse.domain.IModelCreationService</name>
+                            <type>INTERFACE</type>
+                          </SoftwareUnitDefinition>
+                          <SoftwareUnitDefinition>
+                            <name>husacct.analyse.domain.IModelPersistencyService</name>
+                            <type>INTERFACE</type>
+                          </SoftwareUnitDefinition>
+                          <SoftwareUnitDefinition>
+                            <name>husacct.analyse.domain.IModelQueryService</name>
+                            <type>INTERFACE</type>
+                          </SoftwareUnitDefinition>
+                        </SoftwareUnitDefinitions>
+                        <PhysicalPaths>
+                          <path>husacct.analyse.domain.IModelCreationService</path>
+                          <path>husacct.analyse.domain.IModelPersistencyService</path>
+                          <path>husacct.analyse.domain.IModelQueryService</path>
+                        </PhysicalPaths>
+                      </ModuleStrategy>
+                    </SubModules>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>35</id>
+                <name>InfraAbstraction</name>
+                <HierarchicalLevel>100</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.infrastructure</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.abstraction</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.analyse.infrastructure</path>
+                  <path>husacct.analyse.abstraction</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>SubSystem</type>
+                <description />
+                <id>55</id>
+                <name>AnalyseServiceImpl</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.analyse.AnalyseServiceImpl</name>
+                    <type>CLASS</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.analyse.AnalyseServiceImpl</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+            </SubModules>
+          </ModuleStrategy>
+          <ModuleStrategy>
+            <type>Component</type>
+            <description />
+            <id>5</id>
+            <name>Define</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>husacct.define</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>husacct.define</path>
+            </PhysicalPaths>
+            <SubModules>
+              <ModuleStrategy>
+                <type>Facade</type>
+                <description>this is the Facade of your Component</description>
+                <id>6</id>
+                <name>Facade&lt;Define&gt;</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.IDefineService</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.IDefineSarService</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.define.IDefineService</path>
+                  <path>husacct.define.IDefineSarService</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>12</id>
+                <name>Presentation</name>
+                <HierarchicalLevel>101</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.presentation</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.define.presentation</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>13</id>
+                <name>Task</name>
+                <HierarchicalLevel>102</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.task</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.DomainParser</name>
+                    <type>CLASS</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.DefineServiceImpl</name>
+                    <type>CLASS</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.define.task</path>
+                  <path>husacct.define.DomainParser</path>
+                  <path>husacct.define.DefineServiceImpl</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>14</id>
+                <name>Domain</name>
+                <HierarchicalLevel>103</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.domain</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.define.domain</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>15</id>
+                <name>Infrastructure</name>
+                <HierarchicalLevel>104</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.define.persistency</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.define.persistency</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>30</id>
+                    <name>Persistency</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.define.persistency.DomainXML</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.define.persistency.PersistentDomain</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.define.persistency.XMLDomain</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.define.persistency.DomainXML</path>
+                      <path>husacct.define.persistency.PersistentDomain</path>
+                      <path>husacct.define.persistency.XMLDomain</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+            </SubModules>
+          </ModuleStrategy>
+          <ModuleStrategy>
+            <type>Component</type>
+            <description />
+            <id>7</id>
+            <name>Validate</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>husacct.validate</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>husacct.validate</path>
+            </PhysicalPaths>
+            <SubModules>
+              <ModuleStrategy>
+                <type>Facade</type>
+                <description>this is the Facade of your Component</description>
+                <id>8</id>
+                <name>Facade&lt;Validate&gt;</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.validate.IValidateService</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.validate.domain.validation.Severity</name>
+                    <type>CLASS</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.validate.IValidateService</path>
+                  <path>husacct.validate.domain.validation.Severity</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>46</id>
+                <name>Presentation</name>
+                <HierarchicalLevel>105</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.validate.presentation</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.validate.presentation</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>47</id>
+                <name>Task</name>
+                <HierarchicalLevel>106</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.validate.task</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.validate.task</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>48</id>
+                <name>Domain</name>
+                <HierarchicalLevel>107</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.validate.domain</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.validate.domain</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+            </SubModules>
+          </ModuleStrategy>
+          <ModuleStrategy>
+            <type>Component</type>
+            <description />
+            <id>9</id>
+            <name>Graphics</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>husacct.graphics</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>husacct.graphics</path>
+            </PhysicalPaths>
+            <SubModules>
+              <ModuleStrategy>
+                <type>Facade</type>
+                <description>this is the Facade of your Component</description>
+                <id>10</id>
+                <name>Facade&lt;Graphics&gt;</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.graphics.IGraphicsService</name>
+                    <type>INTERFACE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.graphics.IGraphicsService</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>38</id>
+                <name>Presentation</name>
+                <HierarchicalLevel>108</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.graphics.presentation</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.graphics.presentation</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>42</id>
+                    <name>AllowedToBeCalledByDrawingController</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.graphics.presentation.UserInputListener</name>
+                        <type>INTERFACE</type>
+                      </SoftwareUnitDefinition>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.graphics.presentation.menubars.ContextMenu</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.graphics.presentation.UserInputListener</path>
+                      <path>husacct.graphics.presentation.menubars.ContextMenu</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>39</id>
+                <name>Task</name>
+                <HierarchicalLevel>109</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.graphics.task</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.graphics.task</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>40</id>
+                <name>Domain</name>
+                <HierarchicalLevel>110</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.graphics.domain</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.graphics.domain</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>SubSystem</type>
+                    <description />
+                    <id>44</id>
+                    <name>AllowedToBeCalledByPresentation</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.graphics.domain.Drawing</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.graphics.domain.DrawingView</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                      <SoftwareUnitDefinition>
+                        <name>husacct.graphics.domain.figures.BaseFigure</name>
+                        <type>CLASS</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>husacct.graphics.domain.Drawing</path>
+                      <path>husacct.graphics.domain.DrawingView</path>
+                      <path>husacct.graphics.domain.figures.BaseFigure</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>Layer</type>
+                <description />
+                <id>41</id>
+                <name>Abstraction</name>
+                <HierarchicalLevel>111</HierarchicalLevel>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>husacct.graphics.abstraction</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>husacct.graphics.abstraction</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+            </SubModules>
+          </ModuleStrategy>
+          <ModuleStrategy>
+            <type>SubSystem</type>
+            <description />
+            <id>27</id>
+            <name>Common</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>husacct.common</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>husacct.common</path>
+            </PhysicalPaths>
+          </ModuleStrategy>
+          <ModuleStrategy>
+            <type>ExternalLibrary</type>
+            <description />
+            <id>17</id>
+            <name>ExternalSystems</name>
+            <SoftwareUnitDefinitions>
+              <SoftwareUnitDefinition>
+                <name>xLibraries</name>
+                <type>PACKAGE</type>
+              </SoftwareUnitDefinition>
+            </SoftwareUnitDefinitions>
+            <PhysicalPaths>
+              <path>xLibraries</path>
+            </PhysicalPaths>
+            <SubModules>
+              <ModuleStrategy>
+                <type>ExternalLibrary</type>
+                <description />
+                <id>19</id>
+                <name>JXL</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>xLibraries.jxl</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>xLibraries.jxl</path>
+                </PhysicalPaths>
+                <SubModules>
+                  <ModuleStrategy>
+                    <type>ExternalLibrary</type>
+                    <description />
+                    <id>21</id>
+                    <name>Write</name>
+                    <SoftwareUnitDefinitions>
+                      <SoftwareUnitDefinition>
+                        <name>xLibraries.jxl.write</name>
+                        <type>PACKAGE</type>
+                      </SoftwareUnitDefinition>
+                    </SoftwareUnitDefinitions>
+                    <PhysicalPaths>
+                      <path>xLibraries.jxl.write</path>
+                    </PhysicalPaths>
+                  </ModuleStrategy>
+                </SubModules>
+              </ModuleStrategy>
+              <ModuleStrategy>
+                <type>ExternalLibrary</type>
+                <description />
+                <id>28</id>
+                <name>Java-GUI</name>
+                <SoftwareUnitDefinitions>
+                  <SoftwareUnitDefinition>
+                    <name>xLibraries.java.awt</name>
+                    <type>PACKAGE</type>
+                  </SoftwareUnitDefinition>
+                  <SoftwareUnitDefinition>
+                    <name>xLibraries.javax.swing</name>
+                    <type>LIBRARY</type>
+                  </SoftwareUnitDefinition>
+                </SoftwareUnitDefinitions>
+                <PhysicalPaths>
+                  <path>xLibraries.java.awt</path>
+                  <path>xLibraries.javax.swing</path>
+                </PhysicalPaths>
+              </ModuleStrategy>
+            </SubModules>
+          </ModuleStrategy>
+        </modules>
+        <rules>
+          <AppliedRule>
+            <id>0</id>
+            <type>FacadeConvention</type>
+            <moduleFrom>1</moduleFrom>
+            <moduleTo>1</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+FacadeConventionDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>2</id>
+            <type>FacadeConvention</type>
+            <moduleFrom>3</moduleFrom>
+            <moduleTo>3</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+FacadeConventionDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>4</id>
+            <type>FacadeConvention</type>
+            <moduleFrom>5</moduleFrom>
+            <moduleTo>5</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+FacadeConventionDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>6</id>
+            <type>FacadeConvention</type>
+            <moduleFrom>7</moduleFrom>
+            <moduleTo>7</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+FacadeConventionDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>8</id>
+            <type>FacadeConvention</type>
+            <moduleFrom>9</moduleFrom>
+            <moduleTo>9</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+FacadeConventionDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>14</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>3</moduleFrom>
+            <moduleTo>7</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies>
+              <dependency>Access</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Call</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Import</dependency>
+              <dependency>Inheritance</dependency>
+            </dependencies>
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>16</id>
+            <type>IsTheOnlyModuleAllowedToUse</type>
+            <moduleFrom>1</moduleFrom>
+            <moduleTo>9</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies>
+              <dependency>Access</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Call</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Import</dependency>
+              <dependency>Inheritance</dependency>
+            </dependencies>
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>24</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>12</moduleFrom>
+            <moduleTo>12</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>26</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>12</moduleFrom>
+            <moduleTo>12</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>33</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>23</moduleFrom>
+            <moduleTo>3</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>2</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>35</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>25</moduleFrom>
+            <moduleTo>3</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>2</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>37</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>23</moduleFrom>
+            <moduleTo>5</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>4</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>39</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>25</moduleFrom>
+            <moduleTo>5</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>4</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>41</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>23</moduleFrom>
+            <moduleTo>7</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>6</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>43</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>25</moduleFrom>
+            <moduleTo>7</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>6</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>45</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>23</moduleFrom>
+            <moduleTo>9</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>8</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>47</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>25</moduleFrom>
+            <moduleTo>9</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>8</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>49</id>
+            <type>IsOnlyAllowedToUse</type>
+            <moduleFrom>27</moduleFrom>
+            <moduleTo>27</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>50</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>13</moduleFrom>
+            <moduleTo>13</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>52</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>13</moduleFrom>
+            <moduleTo>13</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>54</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>14</moduleFrom>
+            <moduleTo>14</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>56</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>14</moduleFrom>
+            <moduleTo>14</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>58</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>15</moduleFrom>
+            <moduleTo>15</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>60</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>15</moduleFrom>
+            <moduleTo>15</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>63</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>13</moduleFrom>
+            <moduleTo>28</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>65</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>15</moduleFrom>
+            <moduleTo>14</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies>
+              <dependency>Import</dependency>
+              <dependency>Call</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Inheritance</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>Access</dependency>
+            </dependencies>
+            <isException>true</isException>
+            <parentAppliedRuleId>60</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>66</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>31</moduleFrom>
+            <moduleTo>31</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>68</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>31</moduleFrom>
+            <moduleTo>31</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>70</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>33</moduleFrom>
+            <moduleTo>33</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>72</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>33</moduleFrom>
+            <moduleTo>33</moduleTo>
+            <enabled>false</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>74</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>34</moduleFrom>
+            <moduleTo>34</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>76</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>34</moduleFrom>
+            <moduleTo>34</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>78</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>35</moduleFrom>
+            <moduleTo>35</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>80</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>35</moduleFrom>
+            <moduleTo>35</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>82</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>33</moduleFrom>
+            <moduleTo>28</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>84</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>27</moduleFrom>
+            <moduleTo>17</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>49</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>86</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>38</moduleFrom>
+            <moduleTo>38</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>88</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>38</moduleFrom>
+            <moduleTo>38</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>90</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>39</moduleFrom>
+            <moduleTo>39</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>92</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>39</moduleFrom>
+            <moduleTo>39</moduleTo>
+            <enabled>false</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>94</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>40</moduleFrom>
+            <moduleTo>40</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>96</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>40</moduleFrom>
+            <moduleTo>40</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>98</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>41</moduleFrom>
+            <moduleTo>41</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>100</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>41</moduleFrom>
+            <moduleTo>41</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>102</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>38</moduleFrom>
+            <moduleTo>44</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>88</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>104</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>40</moduleFrom>
+            <moduleTo>42</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>94</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>106</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>40</moduleFrom>
+            <moduleTo>5</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>108</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>40</moduleFrom>
+            <moduleTo>3</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>116</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>40</moduleFrom>
+            <moduleTo>7</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>118</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>46</moduleFrom>
+            <moduleTo>46</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>120</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>46</moduleFrom>
+            <moduleTo>46</moduleTo>
+            <enabled>false</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>122</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>47</moduleFrom>
+            <moduleTo>47</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>124</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>47</moduleFrom>
+            <moduleTo>47</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>126</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>48</moduleFrom>
+            <moduleTo>48</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>128</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>48</moduleFrom>
+            <moduleTo>48</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>134</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>50</moduleFrom>
+            <moduleTo>50</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>136</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>50</moduleFrom>
+            <moduleTo>50</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>138</id>
+            <type>IsNotAllowedToMakeBackCall</type>
+            <moduleFrom>51</moduleFrom>
+            <moduleTo>51</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeBackCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>140</id>
+            <type>IsNotAllowedToMakeSkipCall</type>
+            <moduleFrom>51</moduleFrom>
+            <moduleTo>51</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+IsNotAllowedToMakeSkipCallDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>141</id>
+            <type>FacadeConvention</type>
+            <moduleFrom>52</moduleFrom>
+            <moduleTo>52</moduleTo>
+            <enabled>true</enabled>
+            <description>This is a default rule for this type of module.
+FacadeConventionDescription</description>
+            <regex />
+            <dependencies />
+            <isException>false</isException>
+          </AppliedRule>
+          <AppliedRule>
+            <id>143</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>55</moduleFrom>
+            <moduleTo>52</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>141</parentAppliedRuleId>
+          </AppliedRule>
+          <AppliedRule>
+            <id>145</id>
+            <type>IsAllowedToUse</type>
+            <moduleFrom>57</moduleFrom>
+            <moduleTo>52</moduleTo>
+            <enabled>true</enabled>
+            <description />
+            <regex />
+            <dependencies />
+            <isException>true</isException>
+            <parentAppliedRuleId>141</parentAppliedRuleId>
+          </AppliedRule>
+        </rules>
+      </Architecture>
+    </Application>
+  </husacct.define.DefineServiceImpl>
+  <husacct.analyse.AnalyseServiceImpl>
+    <rootElementAnalyse />
+  </husacct.analyse.AnalyseServiceImpl>
+  <husacct.validate.ValidateServiceImpl>
+    <validate>
+      <severities>
+        <severity>
+          <severityKey>Low</severityKey>
+          <id>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</id>
+          <color>-65536</color>
+        </severity>
+        <severity>
+          <severityKey>Medium</severityKey>
+          <id>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</id>
+          <color>-65536</color>
+        </severity>
+        <severity>
+          <severityKey>High</severityKey>
+          <id>a211c054-4769-4510-b92d-1b2fe5fc5ef0</id>
+          <color>-65536</color>
+        </severity>
+      </severities>
+      <severitiesPerTypesPerProgrammingLanguages>
+        <severityPerTypePerProgrammingLanguage language="C#">
+          <severityPerType>
+            <typeKey>Call</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>private</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>package</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Import</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Reference</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Inheritance</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Access</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Annotation</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>default</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>public</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Declaration</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>class</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+        </severityPerTypePerProgrammingLanguage>
+        <severityPerTypePerProgrammingLanguage language="Java">
+          <severityPerType>
+            <typeKey>Call</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>private</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>package</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Import</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Reference</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Inheritance</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Access</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Annotation</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>default</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>public</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Declaration</typeKey>
+            <severityId>9dffb48d-b119-4ed0-97b8-a75e61fa5bbe</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>class</typeKey>
+            <severityId>db6ae2ec-8f22-4841-8ede-cb7c87d777fb</severityId>
+          </severityPerType>
+        </severityPerTypePerProgrammingLanguage>
+      </severitiesPerTypesPerProgrammingLanguages>
+      <activeViolationTypes>
+        <activeViolationType language="C#">
+          <ruleType type="FacadeConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="InheritanceConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="NamingConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeBackCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeSkipCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsOnlyAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsTheOnlyModuleAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="MustUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+        </activeViolationType>
+        <activeViolationType language="Java">
+          <ruleType type="FacadeConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="InheritanceConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="NamingConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeBackCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeSkipCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsOnlyAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsTheOnlyModuleAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="MustUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>Call</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Access</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Inheritance</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Reference</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+        </activeViolationType>
+      </activeViolationTypes>
+    </validate>
+  </husacct.validate.ValidateServiceImpl>
+  <husacct.graphics.GraphicsServiceImpl>
+    <ArchitecureGraphicsService>
+      <analysedController showDependencies="true" showViolations="false" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
+      <definedController showDependencies="true" showViolations="false" smartLines="true" layoutStrategy="BASIC_LAYOUT" />
+    </ArchitecureGraphicsService>
+  </husacct.graphics.GraphicsServiceImpl>
+</husacct>

@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.enums.ExtensionTypes;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
@@ -38,13 +39,6 @@ public class ExportImportDialog extends JDialog {
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public String SARExportImportDialog(MainController mainController, String typeOfFunction) {
-		this.mainController = mainController;
-		this.typeOfFunction = typeOfFunction;
-		showFileDialog();
-		return mojoText;
-	}
-		
 	public ExportImportDialog(MainController mainController, String typeOfFunction) {
 		super(mainController.getMainGui(), true);
 		if(!typeOfFunction.equals("skipConstructor")){
@@ -64,6 +58,13 @@ public class ExportImportDialog extends JDialog {
 		
 	}
 	
+	public String SARExportImportDialog(MainController mainController, String typeOfFunction) {
+		this.mainController = mainController;
+		this.typeOfFunction = typeOfFunction;
+		showFileDialog();
+		return mojoText;
+	}
+		
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
@@ -133,7 +134,9 @@ public class ExportImportDialog extends JDialog {
 			if (typeOfFunction.equals("ReportViolations")) {
 				String[] fileExtensions = mainController.getExportImportController().getExportExtensionsValidate();
 				for(String extension : fileExtensions){
-					filters.add(new FileNameExtensionFilter(extension, extension));
+					if (!extension.equals(ExtensionTypes.XML.toString().toLowerCase())) {
+						filters.add(new FileNameExtensionFilter(extension, extension));
+					}
 				}
 			} else {
 				filter = new FileNameExtensionFilter("xls", "XLS", "xls");
@@ -160,8 +163,6 @@ public class ExportImportDialog extends JDialog {
 				}
 			}
 			else {
-				
-				
 				if(fileDialog.getSelectedFile().exists()){
 					mojoText = fileDialog.getSelectedFile().getAbsolutePath();
 				}
@@ -169,9 +170,7 @@ public class ExportImportDialog extends JDialog {
 					File mojoFile = new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription());
 					mojoText = mojoFile.getAbsolutePath();
 				}
-				
 			}
-			
 		}
 	}
 

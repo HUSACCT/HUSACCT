@@ -1,6 +1,5 @@
 package husacct.validate.domain.validation.internaltransferobjects;
 
-import husacct.common.dto.SoftwareUnitDTO;
 import husacct.validate.domain.validation.DefaultSeverities;
 
 public class CategoryKeySeverityDTO {

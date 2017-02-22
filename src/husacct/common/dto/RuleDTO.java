@@ -1,17 +1,18 @@
 package husacct.common.dto;
 
 public class RuleDTO extends AbstractDTO {
-	public String ruleTypeKey;
+	public String ruleTypeKey;			// Identifier of RuleType. Identifier of the rule = ruleTypeKey + logicalModuleFrom + logicalModuleTo
+	public ModuleDTO moduleFrom;		// Logical Module-From
+	public ModuleDTO moduleTo;			// Logical Module-To
 	public boolean enabled;
-	public String[] violationTypeKeys;
-	public ModuleDTO moduleFrom;
-	public ModuleDTO moduleTo;
-	public String regex = "";
+	public String[] violationTypeKeys;	// DependencyType(s) (in case of dependency-related rules) or visibility-setting(s)
+	public String regex = "";			// Regular expression used in naming convention
 	public boolean isException;
+	public RuleDTO mainRule;			// May be null; filled in case of an exception rule
 	public RuleDTO[] exceptionRules;
 	
 	public RuleDTO(String ruleTypeKey, boolean enabled, ModuleDTO moduleTo, ModuleDTO moduleFrom, 
-			String[] violationTypeKeys, String regex, RuleDTO[] exceptionRules, boolean isException) {
+			String[] violationTypeKeys, String regex, boolean isException, RuleDTO mainRule, RuleDTO[] exceptionRules) {
 		super();
 		this.ruleTypeKey = ruleTypeKey;
 		this.enabled = enabled;
@@ -19,14 +20,19 @@ public class RuleDTO extends AbstractDTO {
 		this.moduleFrom = moduleFrom;
 		this.moduleTo = moduleTo;
 		this.regex = regex;
-		this.exceptionRules = exceptionRules;
 		this.isException = isException;
+		this.mainRule = mainRule;
+		this.exceptionRules = exceptionRules;
 	}
 	
     public String toString() {
+    	String mainRuleKey = "";
+    	if ((mainRule != null) && (mainRule.ruleTypeKey != null)) {
+    		mainRuleKey = mainRule.ruleTypeKey;
+    	}
     	
         String representation = "";
-        representation += "\nRuleTypeKey: " + ruleTypeKey + ", IsException: " + isException;
+        representation += "\nRuleTypeKey: " + ruleTypeKey + ", IsException: " + isException + " To: " + mainRuleKey;
         representation += "\nModuleFrom: " + moduleFrom.logicalPath;
         representation += "\nModuleTo: " + moduleTo.logicalPath;
         representation += "\nRegEx: " + regex;

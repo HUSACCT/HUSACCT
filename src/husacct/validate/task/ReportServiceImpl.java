@@ -1,10 +1,10 @@
 package husacct.validate.task;
 
+import husacct.common.enums.ExtensionTypes;
 import husacct.validate.domain.exception.FileNotAccessibleException;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.task.extensiontypes.ExtensionTypes;
-import husacct.validate.task.report.ExportReportFactory;
+import husacct.validate.task.reporting.ExportReportFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public String[] getExportExtentions() {
-		return new ExtensionTypes().getExtensionTypes();
+		return ExtensionTypes.getExtensionTypes();
 	}
 
 	@Override

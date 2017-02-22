@@ -49,7 +49,7 @@ public final class FigureFactory {
 	public RelationFigure createRelationFigure_RuleViolation(ViolationDTO[] violationDTOs) {
 		HashSet<String> uniqueRuleViolations = new HashSet<>();
 		for (ViolationDTO violationDTO : violationDTOs) {
-			uniqueRuleViolations.add(violationDTO.ruleType.key);
+			uniqueRuleViolations.add(violationDTO.ruleTypeKey);
 		}
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated rule from " + violationDTOs[0].fromClasspath
 						+ " to " + violationDTOs[0].toClasspath, RelationType.VIOLATION, ""+uniqueRuleViolations.size() + " (" +violationDTOs.length + ")");

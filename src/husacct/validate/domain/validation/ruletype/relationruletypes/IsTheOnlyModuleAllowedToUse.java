@@ -1,16 +1,12 @@
 package husacct.validate.domain.validation.ruletype.relationruletypes;
 
-import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -28,7 +24,7 @@ public class IsTheOnlyModuleAllowedToUse extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		violations.clear();
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
@@ -54,20 +50,7 @@ public class IsTheOnlyModuleAllowedToUse extends RuleType {
 					// Do nothing
 				}
 				else{
-                    Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
-                    Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-                    
-					// Get logicalModuleFrom based on dependency.from and add it to the violation
-                    ModuleDTO moduleFrom = ServiceProvider.getInstance().getDefineService().getModule_BasedOnSoftwareUnitName(dependency.from);
-					if(moduleFrom != null){
-						// Add moduleFrom to violation.logicalModules, so that graphics can include these violations in architecture diagrams
-						LogicalModules logicalModulesOld = violation.getLogicalModules();
-						LogicalModule logicalModuleTo = logicalModulesOld.getLogicalModuleTo();
-						LogicalModule logicalModuleFrom = new LogicalModule(moduleFrom.logicalPath, moduleFrom.type);
-						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-						violation.setLogicalModules(logicalModules);
-					}
-
+                    Violation violation = createViolation(currentRule, dependency, configuration);
                     violations.add(violation);
 				}
 			}

@@ -115,6 +115,13 @@ public interface IValidateService extends IObservableService {
 	public boolean isValidated();
 
 	/**
+	 * Identifies new violations in comparison to the violations in previousViolationsFile
+	 * @param previousViolationsFile: an xml-file containing the data of violations detected in the past
+	 * @return Array of identified new violations (only the new ones)
+	 */
+	public ViolationDTO[] identifyNewViolations(File previousViolationsFile);
+	
+	/**
 	 * Returns a JInternalFrame where the user can browse the found violations
 	 * 
 	 * @return the JInternalFrame

@@ -61,7 +61,7 @@ public class CheckConformanceController {
 							if (!appliedRule.isException){
 								List<Violation> newViolations = null;
 								RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-								newViolations = rule.check(configuration, appliedRule, appliedRule);
+								newViolations = rule.check(configuration, appliedRule);
 								violationList.addAll(newViolations);
 							}
 	

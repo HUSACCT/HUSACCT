@@ -31,7 +31,7 @@ public class IsNotAllowedToMakeSkipCall extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO rule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rule) {
 		violations.clear();
 		try {
 			this.currentRule = rule;
@@ -58,7 +58,7 @@ public class IsNotAllowedToMakeSkipCall extends RuleType {
 							DependencyDTO[] violatingDependencies = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 							if(violatingDependencies != null){
 								for(DependencyDTO dependency : violatingDependencies){
-									Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+									Violation violation = createViolation(rule, dependency, configuration);
 			                        violations.add(violation);
 								}
 							}

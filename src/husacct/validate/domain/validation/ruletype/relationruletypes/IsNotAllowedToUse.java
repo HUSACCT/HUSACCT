@@ -22,7 +22,7 @@ public class IsNotAllowedToUse extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		violations.clear();
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
@@ -39,7 +39,7 @@ public class IsNotAllowedToUse extends RuleType {
 					if(violatingDependencies != null && violatingDependencies.length > 0){
 						for(DependencyDTO dependency : violatingDependencies){
 							if(dependency != null){
-								Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+								Violation violation = createViolation(currentRule, dependency, configuration);
 		                        violations.add(violation);
 							}
 						}

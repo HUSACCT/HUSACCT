@@ -70,19 +70,33 @@ public class AppliedRuleDomainService {
 	 */
 	public AppliedRuleStrategy getAppliedMainRuleBy_From_To_RuleTypeKey(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
 		AppliedRuleStrategy foundRule = null;
+		long fromId = -1;
+		long toId = -1;
 		ModuleDomainService moduleService = new ModuleDomainService();
-		long fromId = moduleService.getModuleByLogicalPath(moduleFromLogicalPath).getId();
-		long toId = moduleService.getModuleByLogicalPath(moduleTologicalPath).getId();
-		ArrayList<AppliedRuleStrategy> allDefinedRules = getAllAppliedRules(); // Includes exceptions.
-		int numberOfFoundRules = 0;
-		for (AppliedRuleStrategy definedRule : allDefinedRules) {
-			if (!definedRule.isException() && (definedRule.getModuleFrom().getId() == fromId) && (definedRule.getModuleTo().getId() == toId) && definedRule.getRuleTypeKey().equals(ruleTypeKey)) {
-				foundRule = definedRule;
-				numberOfFoundRules ++;
+		if (moduleFromLogicalPath != null && !moduleFromLogicalPath.equals("")) {
+			ModuleStrategy moduleFrom = moduleService.getModuleByLogicalPath(moduleFromLogicalPath);
+			if (moduleFrom != null) {
+				fromId = moduleFrom.getId();
 			}
 		}
-		if (numberOfFoundRules > 1) {
-	        this.logger.warn(new Date().toString() + " Duplicate rules with logical key (from, to, ruleTypeKey: "  + moduleFromLogicalPath + ", " + moduleTologicalPath + ", " + ruleTypeKey);
+		if (moduleTologicalPath != null && !moduleTologicalPath.equals("")) {
+			ModuleStrategy moduleTo = moduleService.getModuleByLogicalPath(moduleTologicalPath);
+			if (moduleTo != null) {
+				toId = moduleTo.getId();
+			}
+		}
+		if (fromId != -1 && toId != -1 ) {
+			ArrayList<AppliedRuleStrategy> allDefinedRules = getAllAppliedRules(); // Includes exceptions.
+			int numberOfFoundRules = 0;
+			for (AppliedRuleStrategy definedRule : allDefinedRules) {
+				if (!definedRule.isException() && (definedRule.getModuleFrom().getId() == fromId) && (definedRule.getModuleTo().getId() == toId) && definedRule.getRuleTypeKey().equals(ruleTypeKey)) {
+					foundRule = definedRule;
+					numberOfFoundRules ++;
+				}
+			}
+			if (numberOfFoundRules > 1) {
+		        this.logger.warn(new Date().toString() + " Duplicate rules with logical key (from, to, ruleTypeKey: "  + moduleFromLogicalPath + ", " + moduleTologicalPath + ", " + ruleTypeKey);
+			}
 		}
 		return foundRule;
 	}

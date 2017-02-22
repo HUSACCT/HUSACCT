@@ -14,7 +14,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -65,7 +64,7 @@ public class ExportImportAnalysedModelTest {
 			}
 			
 			analyseStatisticsBeforeExport = getAnalyseStatistics();
-			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFileName);
+			exportFilePath = TestResourceFinder.getExportFolderForTest("java") + exportFileName;
 			exportFile = new File(exportFilePath);
 			exportAnalysisModel();
 

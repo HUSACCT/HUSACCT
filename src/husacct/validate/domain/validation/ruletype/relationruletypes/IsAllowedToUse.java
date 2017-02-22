@@ -21,7 +21,7 @@ public class IsAllowedToUse extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		// Return no violations because is allowed to use is always true
 		return Collections.emptyList();
 	}

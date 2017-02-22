@@ -9,19 +9,18 @@ public class Violation {
 	// =======================================
 	// VARIABLES
 	// =======================================
+	private String classPathFrom;			// Path of the software unit with the violation
+	private String classPathTo;				// Path of the software unit that is depended-upon
 	private int linenumber;
-	private Severity severity;
-	private String ruletypeKey;
-	private String violationTypeKey;
-	private String classPathFrom;
-	private String classPathTo;
-	private LogicalModules logicalModules;
-	private Message message;
+	private LogicalModules logicalModules;	// Of the violated rule; not of the from-to software units
+	private String ruleTypeKey;				// Identifier of RuleType. Identifier of the violated rule = ruleTypeKey + logicalModuleFrom + logicalModuleTo
+	private String violationTypeKey;		// DependencyType (in case of dependency-related rules), visibility-setting, or naming regex
 	private String dependencySubType;
 	private boolean inDirect;
-	private boolean isInheritanceRelated; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends. 
-	private boolean isInnerClassRelated; // True, if the from-class or to-class is an inner class
-	private Calendar occured;
+	private Severity severity;
+	private boolean isInheritanceRelated; 	// True, if the invoked method or accessed variable is inherited. Furthermore if type starts with extends. 
+	private boolean isInnerClassRelated; 	// True, if the from-class or to-class is an inner class
+	private Calendar occured;				// Date of detection of the violation
 
 	// =======================================
 	// CONSTRUCTOR
@@ -34,7 +33,7 @@ public class Violation {
 	public Violation(){
 		this.linenumber = 0;
 		this.severity = null;
-		this.ruletypeKey = "";
+		this.ruleTypeKey = "";
 		this.violationTypeKey = "";
 		this.classPathFrom = "";
 		this.classPathTo = "";
@@ -44,7 +43,6 @@ public class Violation {
 		this.isInnerClassRelated = false;
 		this.occured = Calendar.getInstance(); 	// Occurred is by default "now".
 		this.logicalModules = null;
-		this.message = null;
 	}
 
 	// =======================================
@@ -61,7 +59,7 @@ public class Violation {
 	}
 	
 	public Violation setRuletypeKey(String ruletypeKey){
-		this.ruletypeKey = ruletypeKey;
+		this.ruleTypeKey = ruletypeKey;
 		return this;
 	}
 	
@@ -110,11 +108,6 @@ public class Violation {
 		return this;
 	}
 	
-	public Violation setMessage(Message message){
-		this.message = message;
-		return this;
-	}
-
 	// =======================================
 	// GETTERS
 	// =======================================
@@ -155,15 +148,11 @@ public class Violation {
 	}
 
 	public String getRuletypeKey() {
-		return ruletypeKey;
+		return ruleTypeKey;
 	}
 
 	public LogicalModules getLogicalModules() {
 		return logicalModules;
-	}
-
-	public Message getMessage() {
-		return message;
 	}
 
 	public Severity getSeverity() {
@@ -176,7 +165,7 @@ public class Violation {
         representation += "\ntoClasspath: " + classPathTo;
         representation += "\nlogicalModuleFrom: " + logicalModules.getLogicalModuleFrom().getLogicalModulePath();
         representation += "\nlogicalModuleTo: " + logicalModules.getLogicalModuleTo().getLogicalModulePath();
-        representation += "\nruleType: " + ruletypeKey;
+        representation += "\nruleType: " + ruleTypeKey;
         representation += ", line: " + linenumber;
         representation += ", violationType: " + violationTypeKey + ", subType: " + dependencySubType;
         representation += ", indirect: " + inDirect + ", isInheritanceRelated: " + isInheritanceRelated + ", isInnerClassRelated: " + isInnerClassRelated;

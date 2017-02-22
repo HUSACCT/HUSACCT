@@ -53,7 +53,7 @@ class ViolationRepository {
 	}
 
 	// Objectives: 1) create and fill violationFromToHashMap, 2) remove duplicates.
-	void filterAndSortAllViolations(){
+	public void filterAndSortAllViolations(){
 		int beforeNrOfViolations = violationsList.size();
 		ArrayList<Violation> filteredViolationsList = new ArrayList<Violation>();
 		String violationFromToKey;
@@ -90,7 +90,7 @@ class ViolationRepository {
 		}
 		
         violationsList = filteredViolationsList;
-        sortViolationsPerRule(); // Do this afterwards, to prevent duplicate violations.
+        sortViolationsPerRule(); // Do this after filtering, to prevent duplicate violations.
         this.logger.info(new Date().toString() + " Before/After filterAndSortAllViolations:  " + beforeNrOfViolations + "/" + violationsList.size());
 	}
 	
@@ -102,9 +102,8 @@ class ViolationRepository {
 		String moduleTo;
 		String searchKey;
 		for (Violation violation : violationsList) {
-			// Note: message refers to moduleFrom and moduleTo of the original rule, while the violation itself may refer to another moduleFrom or moduleTo 
-			moduleFrom = violation.getMessage().getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
-			moduleTo = violation.getMessage().getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+			moduleFrom = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+			moduleTo = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 			searchKey = "";
 			searchKey = moduleFrom + "::" + moduleTo + "::" + violation.getRuletypeKey();
 			if(violationsPerRuleTreeMap.containsKey(searchKey)) {

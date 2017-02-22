@@ -18,7 +18,6 @@ public class TestResourceFinder {
 	/**Function to find the current source path, holding in account if the build or the normal JUnit tests is requesting the path. 
 	 * Build tests will run from a different location, thus the path will be different. */
 	public static String findSourceCodeDirectory(String languageFolder, String projectName){
-
 		String path = getBaseTestResourcesPath(languageFolder) + projectName;
 		checkFilePath(path);
 		return path + "/";
@@ -28,19 +27,16 @@ public class TestResourceFinder {
 	 * Build tests will run from a different location, thus the path will be different. */
 	// Requires two versions of the workspace: 1) JUnit version with project path = directory name within projectResources; 2) Build version with the project path = "..\" + directory name within projectResources
 	public static String findHusacctWorkspace(String languageFolder, String workspaceName){
-
 		String path =  getBaseTestResourcesPath(languageFolder) + WORKSPACES_FOLDER + "/" + workspaceName;
 		checkFilePath(path);
 		return path;
 	}
 
-	public static String findHusacctExportFile(String languageFolder, String exportFile){
-
-		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/" + exportFile;
-		checkFilePath(path);
+	public static String getExportFolderForTest(String languageFolder){
+		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/";
 		return path;
 	}
-	
+
 	public static String findMojoTestFile(String resourceFolder, String fileName){
 		String path = getBaseTestResourcesPath(resourceFolder) + fileName;
 		checkFilePath(path);
@@ -53,7 +49,6 @@ public class TestResourceFinder {
 
 	private static void checkFilePath(String path) {
 		File pathFile = new File(path);
-
 		if (!pathFile.exists()) {
 			String className = TestResourceFinder.class.getSimpleName();
 			Logger.getLogger(className).severe(className+ ": Workspace or file \""+path +"\" not found");

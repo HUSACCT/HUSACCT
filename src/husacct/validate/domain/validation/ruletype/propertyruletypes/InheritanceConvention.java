@@ -22,7 +22,7 @@ public class InheritanceConvention extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule) {
 		violations.clear();
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
@@ -42,7 +42,7 @@ public class InheritanceConvention extends RuleType {
 						}	
 					}
 					if(classInherits == false){
-						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, configuration);
+						Violation violation = createViolation(currentRule, classPathFrom, classPathTo, configuration);
 	                    violations.add(violation);
 					}
 				}

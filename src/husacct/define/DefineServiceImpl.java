@@ -409,4 +409,15 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		}
 		return matchingRules.toArray(new RuleDTO[matchingRules.size()]);
 	}
+	
+	@Override
+	public RuleDTO getMainRuleBy_From_To_RuleTypeKey(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
+		AppliedRuleStrategy mainRule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey(moduleFromLogicalPath, moduleTologicalPath, ruleTypeKey);
+		if (mainRule != null) {
+			RuleDTO mainRuleDTO = domainParser.parseRule(mainRule, false);
+			return mainRuleDTO;
+		} else {
+			return null;
+		}
+	}
 }

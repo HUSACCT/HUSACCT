@@ -199,7 +199,7 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 		clearModel(severityModel);
 		severities = taskServiceImpl.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[] {severity.getSeverityName(), severity.getColor()});
+			severityModel.addRow(new Object[] {severity.getSeverityKeyTranslated(), severity.getColor()});
 		}
 	}
 
