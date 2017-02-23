@@ -61,7 +61,8 @@ public class GraphicsPresentationController implements UserInputListener{
 			analyseService.addServiceListener(new IServiceListener() {
 				@Override
 				public void update() {
-					GraphicsPresentationController.this.drawArchitectureTopLevel();
+					GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
+					//GraphicsPresentationController.this.drawArchitectureTopLevel();
 				}
 			});
 	
@@ -88,7 +89,8 @@ public class GraphicsPresentationController implements UserInputListener{
 				@Override
 				public void update() {
 					if (GraphicsPresentationController.this.drawingsSettingsHolder.areViolationsShown()) {
-						GraphicsPresentationController.this.refreshDrawing();
+						GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
+						//GraphicsPresentationController.this.refreshDrawing();
 					}
 				}
 			});

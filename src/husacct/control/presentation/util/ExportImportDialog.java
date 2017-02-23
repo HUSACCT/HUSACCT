@@ -116,9 +116,9 @@ public class ExportImportDialog extends JDialog {
 					} else if (typeOfFunction.equals("ReportDependencies")) {
 						mainController.getExportImportController().reportDependencies(selectedFile);
 					} else if (typeOfFunction.equals("ExportViolations")) {
-						mainController.getExportImportController().exportViolationsReport(selectedFile);
+						mainController.getExportImportController().exportViolations(selectedFile);
 					} else if (typeOfFunction.equals("ReportViolations")) {
-						mainController.getExportImportController().exportViolationsReport(selectedFile);
+						mainController.getExportImportController().exportViolations(selectedFile);
 					}
 
 				dispose();

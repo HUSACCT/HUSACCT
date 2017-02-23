@@ -4,6 +4,7 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.services.IObservableService;
 import husacct.validate.domain.validation.Violation;
 
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.AbstractMap.SimpleEntry;
 
 import javax.swing.JInternalFrame;
+
+import org.jdom2.Element;
 
 public interface IValidateService extends IObservableService {
 
@@ -119,7 +122,7 @@ public interface IValidateService extends IObservableService {
 	 * @param previousViolationsFile: an xml-file containing the data of violations detected in the past
 	 * @return Array of identified new violations (only the new ones)
 	 */
-	public ViolationDTO[] identifyNewViolations(File previousViolationsFile);
+	public ViolationImExportDTO[] identifyNewViolations(Element previousViolations);
 	
 	/**
 	 * Returns a JInternalFrame where the user can browse the found violations

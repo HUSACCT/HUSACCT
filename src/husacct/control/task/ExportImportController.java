@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.dto.ViolationImExportDTO;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.ExportImportDialog;
 import husacct.control.presentation.util.Filename;
@@ -95,7 +96,7 @@ public class ExportImportController {
 		}
 	}
 	
-	public void exportViolationsReport(File file){
+	public void exportViolations(File file){
 		Filename filename = new Filename(file, '/', '.');
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		try {
@@ -105,7 +106,6 @@ public class ExportImportController {
 			controlService.showErrorMessage(exception.getMessage());
 		}
 	}
-	
 	
 	public void reportArchitecture(File file){
 		try {
@@ -152,6 +152,22 @@ public class ExportImportController {
 		}
 	}
 
+	public ViolationImExportDTO[] identifyNewViolations(File previousViolationsFile) {
+		ViolationImExportDTO[] newViolations = null;
+		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		resourceData.put("file", previousViolationsFile);
+		IResource xmlResource = ResourceFactory.get("xml");
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		try {
+			Document doc = xmlResource.load(resourceData);	
+			Element logicalData = doc.getRootElement();
+			newViolations = validateService.identifyNewViolations(logicalData);
+		} catch (Exception exception){
+			logger.error("Unable to import logical architecture: " + exception.getCause().toString());
+		}
+		return newViolations;
+	}
+	
 	public void importAnalysisModel(File file){
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", file);

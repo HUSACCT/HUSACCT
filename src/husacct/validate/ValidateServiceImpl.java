@@ -5,6 +5,7 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
@@ -166,8 +167,8 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ViolationDTO[] identifyNewViolations(File previousViolationsFile) {
-		return task.identifyNewViolations(previousViolationsFile);
+	public ViolationImExportDTO[] identifyNewViolations(Element previousViolations) {
+		return task.identifyNewViolations(previousViolations);
 	}
 
 	

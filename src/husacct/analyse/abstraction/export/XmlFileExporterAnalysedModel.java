@@ -1,8 +1,5 @@
 package husacct.analyse.abstraction.export;
 
-import java.lang.reflect.Field;
-
-import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 import husacct.ServiceProvider;
@@ -13,6 +10,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.UmlLinkDTO;
+import husacct.common.imexport.XmlConversionUtils;
 
 public class XmlFileExporterAnalysedModel {
 
@@ -23,7 +21,6 @@ public class XmlFileExporterAnalysedModel {
     private Element librariesElement;
     private Element dependenciesElement;
     private Element umlLinksElement;
-    private Logger husacctLogger = Logger.getLogger(XmlFileExporterAnalysedModel.class);
 
     public XmlFileExporterAnalysedModel() {
         writeApplicationElement();
@@ -66,31 +63,7 @@ public class XmlFileExporterAnalysedModel {
     }
 
     public Element writeDtoToXml(String elementName, AbstractDTO dto) {
-    	Element dtoElement = new Element(elementName);
-    	Class<?> d = dto.getClass();
-    	try {
-			String propertyName = "";
-    		String valueString = "";
-    		Field[] fields = d.getDeclaredFields();
-    		for( Field field : fields ){
-    			propertyName = field.getName();
-    			Object value = field.get(dto);
-    			if (value != null) {
-    				valueString = field.get(dto).toString();
-    			}
-    			dtoElement.addContent(new Element(propertyName).setText(valueString));
-    		 }
-		} catch (IllegalAccessException e) {
-            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		} catch (Exception e) {
-            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		}
-        return dtoElement;
+        return XmlConversionUtils.writeDtoToXml(elementName, dto);
     }
     
     public Element getXML() {

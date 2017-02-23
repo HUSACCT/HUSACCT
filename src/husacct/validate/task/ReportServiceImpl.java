@@ -4,7 +4,7 @@ import husacct.common.enums.ExtensionTypes;
 import husacct.validate.domain.exception.FileNotAccessibleException;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.task.reporting.ExportReportFactory;
+import husacct.validate.task.imexporting.reporting.ExportReportFactory;
 
 import java.io.File;
 import java.io.IOException;

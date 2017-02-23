@@ -5,12 +5,17 @@ import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.ViolationImExportDTO;
 import husacct.validate.IValidateService;
 import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.task.imexporting.importing.ImportViolations;
 import husacct.control.ControlServiceImpl;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.resources.IResource;
+import husacct.control.task.resources.ResourceFactory;
 import husacct.define.IDefineService;
 import husaccttest.TestResourceFinder;
 
@@ -18,9 +23,12 @@ import java.io.File;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -364,6 +372,47 @@ public class SRMATest20141112 {
 			assertTrue(isValidatedCorrectly);	
 		}
 		assertEquals(4, violations.length);
+	}
+
+	// Export and Import Violations Tests
+
+	@Test
+	public void isNumberOfExportedViolationsCorrect() {
+		IValidateService validate = ServiceProvider.getInstance().getValidateService();
+		boolean isValidatedCorrectly = false;
+		int numberOfViolationsInModel = 0;
+		int numberOfViolationsInXML = 0;
+		String exportFilePath = TestResourceFinder.getExportFolderForTest("java") + "ExportImportViolationsTest" + "." + "xml";
+		try {
+			numberOfViolationsInModel = validate.getAllViolations().getValue().size();
+			File exportFile = new File(exportFilePath);
+			exportFile.delete();
+			exportFile = new File(exportFilePath);
+			mainController.getExportImportController().exportViolations(exportFile);
+			numberOfViolationsInXML = countNumberOfViolationsInExportFile(exportFile);
+			exportFile.delete();
+		} catch (ProgrammingLanguageNotFoundException e) {
+			assertTrue(isValidatedCorrectly);
+		}
+		assertTrue(numberOfViolationsInModel == numberOfViolationsInXML);
+	}
+
+	private int countNumberOfViolationsInExportFile(File exportile) {
+		int numberOfViolations = 0;
+		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		resourceData.put("file", exportile);
+		IResource xmlResource = ResourceFactory.get("xml");
+		try {
+			Document doc = xmlResource.load(resourceData);	
+			Element logicalData = doc.getRootElement();
+			ImportViolations importer = new ImportViolations();
+			List<ViolationImExportDTO> previousViolationsDtoList = importer.importViolations(logicalData);
+			numberOfViolations = previousViolationsDtoList.size();
+		} catch (Exception exception){
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			controlService.showErrorMessage(exception.getMessage());
+		}
+		return numberOfViolations;
 	}
 
 	//private helpers; from Maven plugin

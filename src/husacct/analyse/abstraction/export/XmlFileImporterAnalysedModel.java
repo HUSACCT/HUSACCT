@@ -1,10 +1,8 @@
 package husacct.analyse.abstraction.export;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 import husacct.analyse.abstraction.dto.ClassDTO;
@@ -13,6 +11,7 @@ import husacct.analyse.abstraction.dto.PackageDTO;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.UmlLinkDTO;
+import husacct.common.imexport.XmlConversionUtils;
 
 public class XmlFileImporterAnalysedModel {
 
@@ -21,7 +20,6 @@ public class XmlFileImporterAnalysedModel {
     private Element librariesElement = new Element("Libraries");
     private Element dependenciesElement = new Element("Dependencies");
     private Element umlLinksElement = new Element("UmlLinks");
-    private Logger husacctLogger = Logger.getLogger(XmlFileImporterAnalysedModel.class);
 
     public XmlFileImporterAnalysedModel(Element analyseElement) {
 		for (Element rootElement : analyseElement.getChildren()) {
@@ -102,40 +100,7 @@ public class XmlFileImporterAnalysedModel {
     }
 
     public AbstractDTO writeElementToDto(Element element, AbstractDTO dto) {
-    	Class<?> d = dto.getClass();
-    	try {
-			String propertyName;
-			Class<?> propertyType;
-    		String valueString = "";
-    		boolean valueBoolean = false;
-    		int valueInt = 0;
-    		Field[] fields = d.getDeclaredFields();
-    		for( Field field : fields ){
-    			propertyName = field.getName();
-    			if (element.getChildText(propertyName) != null) {
-	    			propertyType = field.getType();
-	        		if (propertyType == String.class) {
-		    			valueString = element.getChildText(propertyName);
-		        		field.set(dto, valueString);
-	        		} else {
-	        			if (propertyType == boolean.class) {
-		        			valueBoolean = Boolean.parseBoolean(element.getChildText(propertyName));
-			        		field.set(dto, valueBoolean);
-		        		} else if (propertyType == int.class) {
-		        			valueInt = Integer.parseInt(element.getChildText(propertyName));
-			        		field.set(dto, valueInt);
-		        		}
-	        		}
-    			}
-    		}
-		} catch (IllegalAccessException e) {
-            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		}
-        return dto;
+        return XmlConversionUtils.writeElementToDto(element, dto);
     }
 
 }

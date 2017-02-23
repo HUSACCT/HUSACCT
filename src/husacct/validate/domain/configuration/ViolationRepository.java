@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-class ViolationRepository {
+public class ViolationRepository {
 
 	private List<Violation> violationsList;
 	private HashMap<String, HashMap<String, Violation>> violationFromToHashMap;
@@ -28,11 +28,11 @@ class ViolationRepository {
 		this.setRepositoryCalendar(Calendar.getInstance());
 	}
 
-	void addViolation(List<Violation> newViolations) {
+	public void addViolation(List<Violation> newViolations) {
 		this.violationsList = newViolations;
 	}
 
-	void addViolation(Violation violation) {
+	public void addViolation(Violation violation) {
 		this.violationsList.add(violation);
 	}
 	

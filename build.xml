@@ -88,4 +88,17 @@
 		</jar>
 	</target>
 	
+	<!-- Run SACC test to compare implemented to intended architecture-->
+	<target name="sacc" depends="addresources">
+		<junit fork="yes" printsummary="on" haltonfailure="yes">
+			<!-- Project classpath, must include junit.jar -->
+			<classpath>
+				<path refid="classpath" />
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<test name="husaccttest.SaccOnHusacct" haltonfailure="yes"/>
+		</junit>
+	</target>
+
+	
 </project>
