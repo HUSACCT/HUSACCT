@@ -15,7 +15,7 @@ public class ImportSeverities {
 	private Logger logger = Logger.getLogger(ImportSeverities.class);
 
 	public List<Severity> importSeverities(Element element) {
-		List<Severity> severities = new ArrayList<Severity>();
+		List<Severity> severities = new ArrayList<>();
 
 		for (Element severityElement : element.getChildren()) {
 			UUID id = UUID.fromString(severityElement.getChildText("id"));

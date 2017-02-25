@@ -22,10 +22,10 @@ import husacct.common.enums.ModuleTypes;
 public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 	private ModuleDTO selectedModule;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
-	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
+	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<>();
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<>();
 	private GraphOfSuClusters graphOfSuClusters; // Each node in the graph represents 1-n SoftwareUnits. If *, it is a cohesive cluster of SUs. 
-	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<Integer, Set<Integer>>();
+	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<>();
 
 	public Layers_HUSACCT_Algorithm_SAEroCon2016 (IModelQueryService queryService) {
 		super(queryService);
@@ -95,8 +95,8 @@ public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 	 * @param bottomLayerId
 	 */
 	private void identifyTopLayerBasedOnUnitsInBottomLayer(int bottomLayerId) {
-		HashSet<Integer> assignedNodesNewBottomLayer = new HashSet<Integer>();
-		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<Integer>();
+		HashSet<Integer> assignedNodesNewBottomLayer = new HashSet<>();
+		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<>();
 		for (int fromNodeId : layersWithNodesMap.get(bottomLayerId)) {
 			boolean fromNodeUsesAnotherNode = false;
 			for (int toNodeId : layersWithNodesMap.get(bottomLayerId)) {
@@ -131,7 +131,7 @@ public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 	// Returns the SUs assigned to selectedModule or, if only one SU is assigned, the children of this SU.
 	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. Prepare. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
-		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<>();
 		addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
 		
 		int numberOfAssignedSoftwareUnits = defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath).size();
@@ -177,7 +177,7 @@ public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 	 * @return ArrayList<String> with unique names of children, or an empty list, if no child SoftwareUnits are existing.
 	 */
 	private ArrayList<SoftwareUnitDTO> getSetOfChildSoftwareUnits(SoftwareUnitDTO parentSoftwareUnit) {
-		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<>();
 		SoftwareUnitDTO softwareUnit = parentSoftwareUnit;
 		while (childSoftwareUnits.size() < 2) {
 			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName));
@@ -204,10 +204,10 @@ public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 			// intended architecture is different: the highest level layer has hierarchicalLevel = 1
 			int lowestLevelLayer = 1;
 			int raise = highestLevelLayer - lowestLevelLayer;
-			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<>();
 			for (int i = lowestLevelLayer; i <= highestLevelLayer; i++) {
 				Set<Integer> nodesOfLayer = layersWithNodesMap.get(i);
-				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
+				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<>();
 				for (int nodeId : nodesOfLayer) {
 					unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
 				}

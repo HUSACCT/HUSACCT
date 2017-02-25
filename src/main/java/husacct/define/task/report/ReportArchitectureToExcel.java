@@ -39,7 +39,7 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
     private WritableWorkbook workbook;
     private WritableCellFormat timesBold, timesBold_AlignmentRight, timesBold_AlignmentCentre;
     private WritableCellFormat times, times_AlignmentRight, times_AlignmentCentre;
-    private Map<Integer, Integer> dimensions = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> dimensions = new HashMap<>();
     private int sheetNr = 0;
     private int rowNrAllModules = 1; // Identifies each row in the allModulesSheet
     private int moduleNr = 1; // identifies each module in the allModulesSheet
@@ -107,7 +107,7 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
         writeAllRulesWithExceptionsTableHeaders(sheet, 3);
         int row = 4;
 		RuleDTO[] allRules = super.getAllRulesWithExceptions();
-		TreeMap<String, RuleDTO> rulesMap = new TreeMap<String ,RuleDTO>();
+		TreeMap<String, RuleDTO> rulesMap = new TreeMap<>();
         for (RuleDTO rule : allRules) {
 			String searchKey =  rule.moduleFrom.logicalPath + "::" + rule.moduleTo.logicalPath + "::" + rule.ruleTypeKey;
 				rulesMap.put(searchKey, rule);
@@ -173,7 +173,7 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
         Label toLabel = new Label(5, row, to, times);
         Label expressionLabel = new Label(6, row, expression, times);
 
-        List<Label> labelArray = new ArrayList<Label>();
+        List<Label> labelArray = new ArrayList<>();
         labelArray.add(idLabel);
         labelArray.add(exceptionLabel);
         labelArray.add(fromLabel);
@@ -229,11 +229,11 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
 		for(ModuleStrategy module : modules) {
 			String moduleName = getModuleIndent(moduleIndentNr) + module.getName() + " (" + super.translate(module.getType()).toLowerCase() + ")";
 			HashMap<String, String> softwareUnits = module.getSoftwareUnitNames(); // HashMap<name, type>
-			Set<String> suSet = new TreeSet<String>(softwareUnits.keySet());
+			Set<String> suSet = new TreeSet<>(softwareUnits.keySet());
 			Object[] suArray = suSet.toArray();
 			int suArraySize = suArray.length;
 			HashMap<String, Boolean> appliedRules = getAppliedRules(module.getId()); // HashMap<name, type>
-			Set<String> arSet = new TreeSet<String>(appliedRules.keySet());
+			Set<String> arSet = new TreeSet<>(appliedRules.keySet());
 			Object[] arArray = arSet.toArray();
 			int arArraySize = arArray.length;
 			int largestSetSize = suArraySize;
@@ -281,7 +281,7 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
 	        Label softwareUnitLabel = new Label(3, rowNrAllModules, softwareUnit, times);
 	        Label ruleTypeLabel = new Label(4, rowNrAllModules, super.translate(ruleType), times);
 	
-	        List<Label> labelArray = new ArrayList<Label>();
+	        List<Label> labelArray = new ArrayList<>();
 	        labelArray.add(idLabel);
 	        labelArray.add(moduleLabel);
 	        labelArray.add(softwareUnitLabel);

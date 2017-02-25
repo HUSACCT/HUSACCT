@@ -30,16 +30,16 @@ class FamixModel extends FamixObject {
 
     private FamixModel() {
         this.modelCreationDate = new Date().toString();
-        waitingAssociations = new ArrayList<FamixAssociation>();
-        waitingStructuralEntities = new ArrayList<FamixStructuralEntity>();
-        associations = new ArrayList<FamixAssociation>();
-        classes = new HashMap<String, FamixClass>();
-        packages = new TreeMap<String, FamixPackage>();
-        imports = new HashMap<String, FamixImport>();
-        libraries = new HashMap<String, FamixLibrary>();
-        structuralEntities = new HashMap<String, FamixStructuralEntity>();
-        behaviouralEntities = new HashMap<String, FamixBehaviouralEntity>();
-        umlLinks = new HashMap<String, HashMap<String, HashSet<FamixUmlLink>>>();
+        waitingAssociations = new ArrayList<>();
+        waitingStructuralEntities = new ArrayList<>();
+        associations = new ArrayList<>();
+        classes = new HashMap<>();
+        packages = new TreeMap<>();
+        imports = new HashMap<>();
+        libraries = new HashMap<>();
+        structuralEntities = new HashMap<>();
+        behaviouralEntities = new HashMap<>();
+        umlLinks = new HashMap<>();
         totalNumberOfLinesOfCode = 0;
     }
 
@@ -173,12 +173,12 @@ class FamixModel extends FamixObject {
     		if (mapOfLinksPerFromClass.containsKey(famixUmlLink.to)) {
     			setOfLinksPerToClass = mapOfLinksPerFromClass.get(famixUmlLink.to);
     		} else {
-    			setOfLinksPerToClass = new HashSet<FamixUmlLink>();
+    			setOfLinksPerToClass = new HashSet<>();
     			mapOfLinksPerFromClass.put(famixUmlLink.to, setOfLinksPerToClass);
     		}
     	} else {
-			setOfLinksPerToClass = new HashSet<FamixUmlLink>();
-			mapOfLinksPerFromClass = new HashMap<String, HashSet<FamixUmlLink>>();
+			setOfLinksPerToClass = new HashSet<>();
+			mapOfLinksPerFromClass = new HashMap<>();
 			mapOfLinksPerFromClass.put(famixUmlLink.to, setOfLinksPerToClass);
 			umlLinks.put(famixUmlLink.from, mapOfLinksPerFromClass);
     	}
@@ -207,7 +207,7 @@ class FamixModel extends FamixObject {
      * fromClass must be a unique name of FamixClass (not of an xLibraries). 
      */
     public HashSet<FamixUmlLink> getUmlLinksFromClassToOtherClasses(String fromClass) {
-    	HashSet<FamixUmlLink> returnValue = new HashSet<FamixUmlLink>();
+    	HashSet<FamixUmlLink> returnValue = new HashSet<>();
     	if (umlLinks.containsKey(fromClass)) {
     		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(fromClass);
     		for (String toClass : mapOfLinksPerFromClass.keySet()) {
@@ -222,7 +222,7 @@ class FamixModel extends FamixObject {
      * fromClass and toClass must both be a unique name of FamixClass (not of an xLibraries). 
      * */
     public HashSet<FamixUmlLink> getUmlLinksFromClassToToClass(String fromClass, String toClass) {
-    	HashSet<FamixUmlLink> returnValue = new HashSet<FamixUmlLink>();
+    	HashSet<FamixUmlLink> returnValue = new HashSet<>();
     	if (umlLinks.containsKey(fromClass)) {
     		HashMap<String, HashSet<FamixUmlLink>> mapOfLinksPerFromClass = umlLinks.get(fromClass);
     		if (mapOfLinksPerFromClass.containsKey(toClass)) {

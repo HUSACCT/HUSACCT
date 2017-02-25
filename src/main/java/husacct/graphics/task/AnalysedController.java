@@ -41,7 +41,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
 		SoftwareUnitDTO[] rootModules = analyseService.getSoftwareUnitsInRoot();
-		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
+		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<>();
 		for (SoftwareUnitDTO rootModule : rootModules) {
 			if (rootModule.name.toLowerCase().equals("xlibraries")){
 				rootModule.type = "library";
@@ -55,7 +55,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected HashSet<String> getChildenOfParent(String parentName) {
 		SoftwareUnitDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);
-		HashSet<String> knownChildren = new HashSet<String>();
+		HashSet<String> knownChildren = new HashSet<>();
 		for (SoftwareUnitDTO child : children) {
 			knownChildren.add(child.uniqueName);
 		}
@@ -65,7 +65,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected ArrayList<ModuleFigure> getChildModuleFiguresOfParent(String parentName) {
 		SoftwareUnitDTO[] children = analyseService.getChildUnitsOfSoftwareUnit(parentName);
-		ArrayList<ModuleFigure> knownChildren = new ArrayList<ModuleFigure>();
+		ArrayList<ModuleFigure> knownChildren = new ArrayList<>();
 		for (AbstractDTO child : children) {
 			ModuleFigure moduleFigure = figureFactory.createModuleFigure(child);
 			knownChildren.add(moduleFigure);

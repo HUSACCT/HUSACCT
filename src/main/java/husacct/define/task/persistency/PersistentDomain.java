@@ -60,7 +60,7 @@ public class PersistentDomain implements ISaveable {
 		xmlToDomainParser = new XMLDomain(workspaceData);
 		workspaceApplication = xmlToDomainParser.createApplication();
 
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		ArrayList<ProjectDTO> projects = new ArrayList<>();
 		for (Project project : workspaceApplication.getProjects()) {
 			projects.add(new ProjectDTO(project.getName(), project
 					.getPaths(), project.getProgrammingLanguage(), project

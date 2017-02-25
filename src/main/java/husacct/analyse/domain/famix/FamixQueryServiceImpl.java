@@ -91,8 +91,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     // Query dependencies of all types
     @Override
     public DependencyDTO[] getDependenciesFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
-        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
-	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
+        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<>();
     	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
     	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
         for (String fromTypeName : allFromTypeNames) {
@@ -118,8 +118,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     // Query only dependencies of the types Access, Call, and Reference (representing "Executing" activities).
     @Override
     public DependencyDTO[] getDependencies_OnlyAccessCallAndReferences_FromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
-        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
-	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
+        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<>();
     	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
     	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
         for (String fromTypeName : allFromTypeNames) {
@@ -140,7 +140,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     @Override
 	public DependencyDTO[] getDependencies_OnlyAccessCallAndReferences_FromClassToClass(String classPathFrom, String classPathTo){
     	ArrayList<DependencyDTO> DependencyDTOs = dependencyFinder.getDependenciesFromTo(classPathFrom, classPathTo);
-    	ArrayList<DependencyDTO> result = new ArrayList<DependencyDTO>();
+    	ArrayList<DependencyDTO> result = new ArrayList<>();
     	for (DependencyDTO dependency : DependencyDTOs) {
         	if (dependency.type.equals(DependencyTypes.ACCESS.toString()) || dependency.type.equals(DependencyTypes.CALL.toString())|| dependency.type.equals(DependencyTypes.REFERENCE.toString())) {
         		result.add(dependency);
@@ -153,13 +153,13 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     // Returns List with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
     @Override
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName){
-    	List<String> returnValue = new ArrayList<String>(getPhysicalClassPathsOfSoftwareUnit(uniqueName)); 
+    	List<String> returnValue = new ArrayList<>(getPhysicalClassPathsOfSoftwareUnit(uniqueName));
     	return returnValue;
     }
     
     // Returns TreeSet with unique names of all types (classes, interfaces, inner classes) within the SoftwareUnit with uniqueName  
     private TreeSet<String> getPhysicalClassPathsOfSoftwareUnit(String uniqueName){
-		TreeSet<String> uniqueNamesAllFoundTypes = new TreeSet<String>();
+		TreeSet<String> uniqueNamesAllFoundTypes = new TreeSet<>();
 		if (!theModel.packages.containsKey(uniqueName)) { // Add only classes and libraries
 			uniqueNamesAllFoundTypes.add(uniqueName);
 		}
@@ -176,13 +176,13 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     // Returns List with unique names of all packages within this SoftwareUnit  
     @Override
     public List<String> getAllPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
-    	List<String> returnValue = new ArrayList<String>(getPhysicalPackagePathsOfSoftwareUnit(uniqueName)); 
+    	List<String> returnValue = new ArrayList<>(getPhysicalPackagePathsOfSoftwareUnit(uniqueName));
     	return returnValue;
     }
     
     // Returns TreeSet with unique names of all packages within this SoftwareUnit  
     private TreeSet<String> getPhysicalPackagePathsOfSoftwareUnit(String uniqueName){
-		TreeSet<String> uniqueNamesAllFoundPackages = new TreeSet<String>();
+		TreeSet<String> uniqueNamesAllFoundPackages = new TreeSet<>();
 		if (theModel.packages.containsKey(uniqueName)) { // Add only packages
 			//uniqueNamesAllFoundPackages.add(uniqueName);
 		}
@@ -254,7 +254,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public HashSet<UmlLinkDTO> getUmlLinksFromClassToOtherClasses(String fromClass) {
-    	HashSet<UmlLinkDTO> returnValue = new HashSet<UmlLinkDTO>();
+    	HashSet<UmlLinkDTO> returnValue = new HashSet<>();
     	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getUmlLinksFromClassToOtherClasses(fromClass);
     	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
     		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.type.toString());
@@ -265,7 +265,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     
     @Override
     public UmlLinkDTO[] getUmlLinksFromClassToToClass(String fromClass, String toClass) {
-    	ArrayList<UmlLinkDTO> returnValue = new ArrayList<UmlLinkDTO>();
+    	ArrayList<UmlLinkDTO> returnValue = new ArrayList<>();
     	HashSet<FamixUmlLink> setOfFamixUmlLinks = theModel.getUmlLinksFromClassToToClass(fromClass, toClass);
     	for (FamixUmlLink umlLink : setOfFamixUmlLinks) {
     		UmlLinkDTO umlLinkDTO = new UmlLinkDTO(umlLink.from, umlLink.to, umlLink.attributeFrom, umlLink.isComposite, umlLink.type.toString());
@@ -276,8 +276,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public UmlLinkDTO[] getUmlLinksFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
-        List<UmlLinkDTO> foundUmlLinksReturnList = new ArrayList<UmlLinkDTO>();
-	    TreeMap<String, UmlLinkDTO> foundUmlLinksTreeMap = new TreeMap<String, UmlLinkDTO>();
+        List<UmlLinkDTO> foundUmlLinksReturnList = new ArrayList<>();
+	    TreeMap<String, UmlLinkDTO> foundUmlLinksTreeMap = new TreeMap<>();
     	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
     	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
         for (String fromTypeName : allFromTypeNames) {
@@ -296,8 +296,8 @@ public class FamixQueryServiceImpl implements IModelQueryService {
 
     @Override
     public DependencyDTO[] getUmlLinksAsDependencyDtosFromSoftwareUnitToSoftwareUnit(String pathFrom, String pathTo) {
-        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
-	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
+        List<DependencyDTO> foundDependenciesReturnList = new ArrayList<>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<>();
     	TreeSet<String> allFromTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathFrom);
     	TreeSet<String> allToTypeNames = getPhysicalClassPathsOfSoftwareUnit(pathTo);
         for (String fromTypeName : allFromTypeNames) {

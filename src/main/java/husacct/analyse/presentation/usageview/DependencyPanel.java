@@ -52,8 +52,8 @@ public class DependencyPanel extends HelpableJPanel implements TreeSelectionList
     private JPanel numberOfDependenciesPanel, filterPanel;
 	private JLabel totalDependenciesLabel, totalDependenciesNumber;
 	private AbstractTableModel tableModel;
-    private List<SoftwareUnitDTO> fromSelected = new ArrayList<SoftwareUnitDTO>();
-    private List<SoftwareUnitDTO> toSelected = new ArrayList<SoftwareUnitDTO>();
+    private List<SoftwareUnitDTO> fromSelected = new ArrayList<>();
+    private List<SoftwareUnitDTO> toSelected = new ArrayList<>();
     protected List<DependencyDTO> filteredList;
     private AnalyseUIController dataControl;
 
@@ -62,7 +62,7 @@ public class DependencyPanel extends HelpableJPanel implements TreeSelectionList
         createLayout();
 
         dependencyTable = new HelpableJTable();
-        tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>(), dataControl);
+        tableModel = new DependencyTableModel(new ArrayList<>(), dataControl);
 
         dependencyTable.setModel(tableModel);
         dependencyScrollPane.setViewportView(dependencyTable);
@@ -254,7 +254,7 @@ public class DependencyPanel extends HelpableJPanel implements TreeSelectionList
     }
     
     private void updateDependencyTable(boolean indirect, boolean direct){
-    	filteredList = new ArrayList<DependencyDTO>();
+    	filteredList = new ArrayList<>();
         List<DependencyDTO> allDependencies = dataControl.listDependencies(fromSelected, toSelected);
         if (indirect && direct) {
         	filteredList.addAll(allDependencies);

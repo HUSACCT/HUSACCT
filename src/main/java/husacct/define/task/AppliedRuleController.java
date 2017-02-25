@@ -161,8 +161,8 @@ public class AppliedRuleController extends PopUpController {
 		}
 
 		int index = 0;
-		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
-		ArrayList<String> ruleTypeValues = new ArrayList<String>();
+		ArrayList<String> ruleTypeKeys = new ArrayList<>();
+		ArrayList<String> ruleTypeValues = new ArrayList<>();
 		RuleTypeDTO[] allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(selectedModule.getType());
 
 		// Present all allowed rules, not sorted on Category	
@@ -221,8 +221,8 @@ public class AppliedRuleController extends PopUpController {
 								"No exception keys found for ruletype: " + this.getSelectedRuleTypeKey());
 					}
 					// Fill combobox with exceptionruletypes of that rule
-					ArrayList<String> ruleTypeKeys = new ArrayList<String>();
-					ArrayList<String> ruleTypeValues = new ArrayList<String>();
+					ArrayList<String> ruleTypeKeys = new ArrayList<>();
+					ArrayList<String> ruleTypeValues = new ArrayList<>();
 					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes) {
 						ruleTypeKeys.add(ruleDTO.key);
 						String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleDTO.key);
@@ -241,7 +241,7 @@ public class AppliedRuleController extends PopUpController {
 
 	public HashMap<String, Object> getAppliedRuleDetails(long appliedRuleId) {
 		AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
+		HashMap<String, Object> ruleDetails = new HashMap<>();
 		ruleDetails.put("id", rule.getId());
 		ruleDetails.put("description", rule.getDescription());
 		ruleDetails.put("dependencies", rule.getDependencyTypes());
@@ -259,7 +259,7 @@ public class AppliedRuleController extends PopUpController {
 	public ArrayList<DataHelper> getChildModules(long parentModuleId) {
 		ArrayList<Long> moduleIds = moduleService
 				.getSubModuleIds(parentModuleId);
-		ArrayList<DataHelper> moduleNames = new ArrayList<DataHelper>();
+		ArrayList<DataHelper> moduleNames = new ArrayList<>();
 		for (long moduleId : moduleIds) {
 			if (moduleId != getCurrentModuleId()) {
 				DataHelper datahelper = new DataHelper();
@@ -290,11 +290,11 @@ public class AppliedRuleController extends PopUpController {
 	 * Getters & Setters
 	 */
 	public ArrayList<HashMap<String, Object>> getExceptionRules() {
-		ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();
+		ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<>();
 		if (currentAppliedRuleId != -1L) {
 			ArrayList<AppliedRuleStrategy> exceptions = SoftwareArchitecture.getInstance().getAppliedRuleById(currentAppliedRuleId).getExceptions();
 			for (AppliedRuleStrategy exception : exceptions) {
-				HashMap<String, Object> exceptionRule = new HashMap<String, Object>();
+				HashMap<String, Object> exceptionRule = new HashMap<>();
 				exceptionRule.put("id", exception.getId());
 				exceptionRule.put("ruleTypeKey", exception.getRuleTypeKey());
 				exceptionRule.put("moduleFromId", exception.getModuleFrom().getId());
@@ -383,12 +383,12 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	public ArrayList<DataHelper> getSiblingModules(long moduleId) {
-		ArrayList<Long> moduleIds = new ArrayList<Long>();
+		ArrayList<Long> moduleIds = new ArrayList<>();
 		for (Long modId : moduleService.getSiblingModuleIds(moduleId)) {
 			moduleIds.addAll(moduleService.getSubModuleIds(modId));
 		}
 
-		ArrayList<DataHelper> moduleNames = new ArrayList<DataHelper>();
+		ArrayList<DataHelper> moduleNames = new ArrayList<>();
 		for (long modId : moduleIds) {
 			if (modId != getCurrentModuleId()) {
 				DataHelper datahelper = new DataHelper();
@@ -402,7 +402,7 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	public ArrayList<ViolationTypeDTO> getViolationTypesByRuleType(String ruleTypeKey) {
-		ArrayList<ViolationTypeDTO> violationTypeDtoList = new ArrayList<ViolationTypeDTO>();
+		ArrayList<ViolationTypeDTO> violationTypeDtoList = new ArrayList<>();
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
 
 		for (CategoryDTO categorie : categories) {

@@ -37,7 +37,7 @@ public class IsNotAllowedToMakeBackCall extends RuleType {
 		List<ModuleDTO> brotherModules = Arrays.asList(defineService.getModule_TheChildrenOfTheModule(defineService.getModule_TheParentOfTheModule(logicalPathLayerFrom)));
 		List<ModuleDTO> potentialLayersToBeBackCalled = selectPotentialLayersToBeBackCalled(brotherModules);
 		if(potentialLayersToBeBackCalled.size() >= 1){
-			List<Mapping> modulesTo = new ArrayList<Mapping>();
+			List<Mapping> modulesTo = new ArrayList<>();
 			for(ModuleDTO layerTo : potentialLayersToBeBackCalled){ 
 				modulesTo.addAll(getAllClasspathsOfModule(layerTo, currentRule.violationTypeKeys));
 			}

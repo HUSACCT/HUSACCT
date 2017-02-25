@@ -31,20 +31,20 @@ public class FacadeConvention extends RuleType {
 		fromMappings = getAllClasspathsOfModule(currentRule.moduleFrom, currentRule.violationTypeKeys);
 
 		// Create HashMap with all classes within the component; these classes are allowed to use each other
-		HashMap<String, Mapping> allInComponentMap = new HashMap<String, Mapping>();
+		HashMap<String, Mapping> allInComponentMap = new HashMap<>();
 		for(Mapping from : fromMappings){
 			allInComponentMap.put(from.getPhysicalPath(), from);
 		}
 		
 		// Create HashMap with all allowed-to-use-classes (the classes mapped to the facade(s)). Note: This HashMap is not used, but useful for debugging, and the costs are low.   
-		HashMap<String, Mapping> facadeMap = new HashMap<String, Mapping>();
+		HashMap<String, Mapping> facadeMap = new HashMap<>();
 		ArrayList<Mapping> facadeMappings = getAllClassPathsOfFacadeOfComponent(currentRule.moduleFrom, currentRule.violationTypeKeys);
 		for(Mapping facadeClassPath : facadeMappings){
 			facadeMap.put(facadeClassPath.getPhysicalPath(), facadeClassPath);
 		}
 
 		// Create HashMap with all not allowed-to-use-classes (all other classes (so not facade-classes) within the component)
-		HashMap<String, Mapping> classesHiddeninComponentMap = new HashMap<String, Mapping>();
+		HashMap<String, Mapping> classesHiddeninComponentMap = new HashMap<>();
 		for (Mapping mappingFrom : fromMappings) {
 			if(!facadeMap.containsKey(mappingFrom.getPhysicalPath())) {
 				classesHiddeninComponentMap.put(mappingFrom.getPhysicalPath(), mappingFrom);
@@ -72,7 +72,7 @@ public class FacadeConvention extends RuleType {
 	}
 	
 	private ArrayList<Mapping> getAllClassPathsOfFacadeOfComponent(ModuleDTO module, String[] violationTypeKeys) {
-		ArrayList<Mapping> mappingFacade = new ArrayList<Mapping>();
+		ArrayList<Mapping> mappingFacade = new ArrayList<>();
 		for (ModuleDTO subModule : defineService.getModule_TheChildrenOfTheModule(module.logicalPath)) {
 			if (subModule.type.toLowerCase().equals("facade"))
 				mappingFacade.addAll(getAllClasspathsOfModule(subModule, violationTypeKeys));

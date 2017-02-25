@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public  class WarningComponent  {
 
 private WarningMessage decourWarningMessage;
-	private ArrayList<WarningComponent> warnings = new ArrayList<WarningComponent>();	
+	private ArrayList<WarningComponent> warnings = new ArrayList<>();
 
 public WarningComponent(WarningMessage msg) {
 	decourWarningMessage=msg;

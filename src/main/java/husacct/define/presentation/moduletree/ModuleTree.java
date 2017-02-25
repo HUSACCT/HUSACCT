@@ -67,7 +67,7 @@ public class ModuleTree extends JTree {
     }
 
     public void setSelectedRow(Long moduleId) {
-		ArrayList<Object> pathParts = new ArrayList<Object>();
+		ArrayList<Object> pathParts = new ArrayList<>();
 	
 		TreeModel model = getModel();
 		if (model != null) {

@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class WarningMessageContainer {
-	private ArrayList<WarningMessageContainer> warnings= new ArrayList<WarningMessageContainer>();
+	private ArrayList<WarningMessageContainer> warnings= new ArrayList<>();
 	private WarningMessage warning;
 	
 	

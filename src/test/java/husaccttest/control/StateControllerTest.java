@@ -47,7 +47,7 @@ public class StateControllerTest {
 			}
 		});
 		
-		List<States> states = new ArrayList<States>();
+		List<States> states = new ArrayList<>();
 		states.add(States.NONE);
 		states.add(States.DEFINED);
 		states.add(States.MAPPED);

@@ -339,7 +339,7 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 	}
 	
 	private void updateComponentsLocaleStrings() {
-		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
+		HashMap<String, String> menuBarLocale = new HashMap<>();
 		menuBarLocale.put("DiagramOptions",
 				localeService.getTranslatedString("DiagramOptions"));
 		menuBarLocale.put("Options",

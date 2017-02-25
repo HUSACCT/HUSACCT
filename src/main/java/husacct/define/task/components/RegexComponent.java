@@ -14,7 +14,7 @@ public class RegexComponent extends AnalyzedModuleComponent {
     private static final long serialVersionUID = 4392727725986533362L;
     private AnalyzedModuleComponent excludedModules = new AnalyzedModuleComponent(
 	    "root", "Excluded Modules", "SEARCH", "public");
-    private ArrayList<AbstractCombinedComponent> softwareUnit = new ArrayList<AbstractCombinedComponent>();
+    private ArrayList<AbstractCombinedComponent> softwareUnit = new ArrayList<>();
     private String type = "";
     private String uniqueName = "";
     private String visibility;

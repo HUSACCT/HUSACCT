@@ -13,9 +13,9 @@ import java.util.List;
 
 public class StateController {
 
-	private List<States> states = new ArrayList<States>();
+	private List<States> states = new ArrayList<>();
 
-	private ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
+	private ArrayList<IStateChangeListener> stateListeners = new ArrayList<>();
 
 	private WorkspaceController workspaceController;
 
@@ -53,7 +53,7 @@ public class StateController {
 		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 
-		List<States> newStates = new ArrayList<States>();
+		List<States> newStates = new ArrayList<>();
 
 		if(validateService.isValidated()){
 			newStates.add(States.VALIDATED);

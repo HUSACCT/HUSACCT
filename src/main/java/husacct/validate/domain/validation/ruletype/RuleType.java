@@ -82,29 +82,29 @@ public abstract class RuleType {
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO currentRule);
 
 	protected ArrayList<Mapping> getAllClasspathsOfModule(ModuleDTO module, String[] violationTypeKeys) {
-		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		List<String> physicalClassPaths = new ArrayList<String>();
+		HashSet<Mapping> classpathsFrom = new HashSet<>();
+		List<String> physicalClassPaths = new ArrayList<>();
 		physicalClassPaths.addAll(defineService.getModule_AllPhysicalClassPathsOfModule(module.logicalPath));
 		for (String classpath : physicalClassPaths) {
 			Mapping mapping = new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys);
 			classpathsFrom.add(mapping);
 		}
-		return new ArrayList<Mapping>(classpathsFrom);
+		return new ArrayList<>(classpathsFrom);
 	}
 
 	protected ArrayList<Mapping> getAllPhysicalPackagePathsOfModule(ModuleDTO module, String[] violationTypeKeys) {
-		HashSet<Mapping> packagePathsFrom = new HashSet<Mapping>();
-		List<String> physicalPackagePaths = new ArrayList<String>();
+		HashSet<Mapping> packagePathsFrom = new HashSet<>();
+		List<String> physicalPackagePaths = new ArrayList<>();
 		physicalPackagePaths.addAll(defineService.getModule_AllPhysicalPackagePathsOfModule(module.logicalPath));
 		for (String classpath : physicalPackagePaths) {
 			Mapping mapping = new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys);
 			packagePathsFrom.add(mapping);
 		}
-		return new ArrayList<Mapping>(packagePathsFrom);
+		return new ArrayList<>(packagePathsFrom);
 	}
 
 	protected HashSet<String> getAllExceptionFromTos(RuleDTO rule){
-		HashSet<String> exceptionClassPathFromTos = new HashSet<String>();
+		HashSet<String> exceptionClassPathFromTos = new HashSet<>();
 		if (rule.exceptionRules.length > 0){
 			//Create mappings for exception rules
 			for (RuleDTO exceptionRule : rule.exceptionRules) {

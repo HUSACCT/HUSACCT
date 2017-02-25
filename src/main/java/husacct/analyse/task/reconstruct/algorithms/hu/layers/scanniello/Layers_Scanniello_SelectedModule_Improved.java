@@ -19,8 +19,8 @@ public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello
 	ModuleDTO selectedModule;
 	ArrayList<String> softwareUnitsInSelectedModuleList;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
-	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
+	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<>();
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<>();
 	
 	public Layers_Scanniello_SelectedModule_Improved (IModelQueryService queryService) {
 		super(queryService);
@@ -114,7 +114,7 @@ public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello
 	// Returns the SUs assigned to selectedModule or, if only one SU is assigned, the children of this SU.
 	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. Prepare. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
-		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<>();
 		addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
 		
 		int numberOfAssignedSoftwareUnits = defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath).size();
@@ -144,7 +144,7 @@ public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello
 	 * @return ArrayList<String> with unique names of children, or an empty list, if no child SoftwareUnits are existing.
 	 */
 	private ArrayList<SoftwareUnitDTO> getSetOfChildSoftwareUnits(SoftwareUnitDTO parentSoftwareUnit) {
-		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<>();
 		SoftwareUnitDTO softwareUnit = parentSoftwareUnit;
 		while (childSoftwareUnits.size() < 2) {
 			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName));

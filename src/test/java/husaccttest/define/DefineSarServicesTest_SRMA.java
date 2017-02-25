@@ -81,7 +81,7 @@ public class DefineSarServicesTest_SRMA {
 	public void addModuleTest() {
 		defineService = ServiceProvider.getInstance().getDefineService();
 		defineSarService = defineService.getSarService();
-		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<>();
 		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.softwareunit1", "softwareunit1", "Package", "public");
 		newSoftwareUnits.add(newUnit);
 		defineSarService.addModule("TestModule1", "Presentation", "Layer", 1, newSoftwareUnits);
@@ -137,7 +137,7 @@ public class DefineSarServicesTest_SRMA {
 	public void editModuleTest_SoftwareUnits() {
 		defineService = ServiceProvider.getInstance().getDefineService();
 		defineSarService = defineService.getSarService();
-		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<>();
 		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.relationrules.newsoftwareunit", "newsoftwareunit", "Package", "public");
 		newSoftwareUnits.add(newUnit);
 		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, null, 0, newSoftwareUnits);
@@ -237,7 +237,7 @@ public class DefineSarServicesTest_SRMA {
 		logger.info(String.format("Loading workspace %s", location));
 		File file = new File(location);
 		if(file.exists()){
-			HashMap<String, Object> dataValues = new HashMap<String, Object>();
+			HashMap<String, Object> dataValues = new HashMap<>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
 			if(workspaceController.isOpenWorkspace()){
@@ -261,7 +261,7 @@ public class DefineSarServicesTest_SRMA {
 		defineService = ServiceProvider.getInstance().getDefineService();
 		HashSet<String> physicalFromClassPaths = defineService.getModule_AllPhysicalClassPathsOfModule(fromModule);
 		HashSet<String> physicalToClassPaths = defineService.getModule_AllPhysicalClassPathsOfModule(toModule);
-		ArrayList<DependencyDTO> allFoundDependencies = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> allFoundDependencies = new ArrayList<>();
 		for (String fromPackages : physicalFromClassPaths) {
 			for (String toPackages: physicalToClassPaths) {
 				for (DependencyDTO dependency : analyseService.getDependenciesFromSoftwareUnitToSoftwareUnit(fromPackages, toPackages)) {

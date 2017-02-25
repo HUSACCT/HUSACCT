@@ -83,12 +83,12 @@ class Cluster {
         this.m = m;
         this.no = no;
         tags = new int[m];
-        objectList = new Vector<Vector<String>>(m);
-        groupList = new Vector<Integer>();
+        objectList = new Vector<>(m);
+        groupList = new Vector<>();
         for (int j = 0; j < m; j++)
         {
             tags[j] = 0;
-            objectList.add(j, new Vector<String>());
+            objectList.add(j, new Vector<>());
         }
     }
 

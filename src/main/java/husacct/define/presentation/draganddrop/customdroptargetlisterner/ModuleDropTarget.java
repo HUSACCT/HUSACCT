@@ -88,7 +88,7 @@ public class ModuleDropTarget implements DropTargetListener {
 
 			AnalyzedModuleTree palo = (AnalyzedModuleTree) arg
 					.getTransferable().getTransferData(currentFlavor);
-			ArrayList<AnalyzedModuleComponent> tobesaved = new ArrayList<AnalyzedModuleComponent>();
+			ArrayList<AnalyzedModuleComponent> tobesaved = new ArrayList<>();
 			for (TreePath pathe : palo.getSelectionPaths()) {
 
 				AnalyzedModuleComponent top = (AnalyzedModuleComponent) pathe

@@ -355,14 +355,14 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 		FamixPackage externalRoot = model.packages.get(rootLibraryPackage);
 		externalRoot.external = true;
 		// Select all imported types. Note: key of imports is combined from.to.
-		HashMap<String, Boolean> completeImportStrings = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> completeImportStrings = new HashMap<>();
 		for(String importKey : model.imports.keySet()){
 			FamixImport foundImport = model.imports.get(importKey);
 			completeImportStrings.put(foundImport.completeImportString, foundImport.importsCompletePackage);
 		}
 		// Get a list of rootPackagesWithClasses: the first packages (starting from the root) that contain one or more classes.
 		// These rootPackagesWithClasses identify the paths to the systems internal classes. 
-		ArrayList<String> rootPackagesWithClassList = new ArrayList<String>();
+		ArrayList<String> rootPackagesWithClassList = new ArrayList<>();
 		FamixModuleFinder fmf = new FamixModuleFinder(model);
 		List<SoftwareUnitDTO> rootModules = fmf.getRootModules();
 		for (SoftwareUnitDTO rootModule : rootModules) {

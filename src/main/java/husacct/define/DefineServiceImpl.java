@@ -113,7 +113,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath) {
-		HashSet<String> resultClasses = new HashSet<String>();
+		HashSet<String> resultClasses = new HashSet<>();
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
 		// Get the physical classPaths of all classes represented by the SUs
 		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
@@ -132,7 +132,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override // Returns all paths of subpackages (and subsub, etc) within the assigned software units, but not the paths of these assigned software units
 	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath){
-		HashSet<String> resultPackages = new HashSet<String>();
+		HashSet<String> resultPackages = new HashSet<>();
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
 		// Get the physical classPaths of all classes represented by the SUs
 		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
@@ -150,7 +150,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public HashSet<String> getAssignedSoftwareUnitsOfModule(String logicalPath){
-		HashSet<String> resultSetOfSoftwareUnits = new HashSet<String>();
+		HashSet<String> resultSetOfSoftwareUnits = new HashSet<>();
 		try {
 			if ((logicalPath != null) && !logicalPath.equals("**")) {
 				// 1 Get the module
@@ -180,7 +180,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	 * @return TreeMap<String, SoftwareUnitDefinition>
 	 */
 	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
-		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<>();
 		try {
 			ModuleStrategy[] modules = null;
 			// 1 Get the module(s)

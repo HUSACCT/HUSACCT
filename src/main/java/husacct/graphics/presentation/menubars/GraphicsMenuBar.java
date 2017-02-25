@@ -35,7 +35,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	private static final long				serialVersionUID	= -7419378432318031359L;
 	
 	protected Logger						logger				= Logger.getLogger(GraphicsMenuBar.class);
-	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
+	private ArrayList<UserInputListener>	listeners			= new ArrayList<>();
 	
 	private HashMap<String, String>			icons;
 	private ArrayList<JComponent>			actions;
@@ -58,7 +58,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 
 		zoomOptionsMenu = new ContextMenuButton();
 		
-		icons = new HashMap<String, String>();
+		icons = new HashMap<>();
 		icons.put("options", Resource.ICON_OPTIONS);
 		icons.put("zoomIn", Resource.ICON_ZOOM);
 		icons.put("zoomInContext", Resource.ICON_ZOOMCONTEXT);
@@ -78,7 +78,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		actions = new ArrayList<JComponent>();
+		actions = new ArrayList<>();
 		actions.add(zoomInButton);
 		actions.add(zoomOutButton);
 		actions.add(refreshButton);

@@ -11,7 +11,7 @@ public class ViolationDtoAssembler {
 	}
 
 	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
-		List<ViolationDTO> violationDTOList = new ArrayList<ViolationDTO>();
+		List<ViolationDTO> violationDTOList = new ArrayList<>();
 
 		for (Violation violation : violations) {
 			ViolationDTO violationDTO = createViolationDTO(violation);

@@ -19,7 +19,7 @@ import java.util.List;
 public class NamingConvention extends RuleType {
 
 	private final static EnumSet<RuleTypes> exceptionRuleTypes = EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION);
-	private HashMap<String, String> exceptionRegExes = new HashMap<String, String>();
+	private HashMap<String, String> exceptionRegExes = new HashMap<>();
 
 	public NamingConvention(String key, String category, List<ViolationType> violationTypes, Severity severity) {
 		super(key, category, violationTypes, exceptionRuleTypes, severity);

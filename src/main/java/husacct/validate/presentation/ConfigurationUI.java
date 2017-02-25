@@ -45,7 +45,7 @@ public final class ConfigurationUI extends HelpableJInternalFrame implements Obs
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public ConfigurationUI(TaskServiceImpl ts) {
-		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
+		tabs = new ArrayList<>();
 
 		taskServiceImpl = ts;
 		taskServiceImpl.subscribe(this);

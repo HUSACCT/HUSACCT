@@ -116,7 +116,7 @@ public class XmlResource implements IResource{
 	
 	@Override
 	public boolean save(Document doc, HashMap<String, Object> dataValues) {
-		HashMap<String,Object> config = new HashMap<String, Object>();
+		HashMap<String,Object> config = new HashMap<>();
 		config.put("doCompress", true);
 		config.put("doPasswordProtection", false);
 		save(doc, dataValues, config);

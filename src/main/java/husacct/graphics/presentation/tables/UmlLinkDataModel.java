@@ -20,7 +20,7 @@ public class UmlLinkDataModel extends AbstractTableModel {
 	public UmlLinkDataModel(UmlLinkDTO[] dtos) {
 		localeService = ServiceProvider.getInstance().getLocaleService();
 		columnKeys = new String[] { "From", "To", "Type", "Attribute" };
-		columnNames = new HashMap<String, String>();
+		columnNames = new HashMap<>();
 		columnNames.put(columnKeys[0], localeService.getTranslatedString(columnKeys[0]));
 		columnNames.put(columnKeys[1], localeService.getTranslatedString(columnKeys[1]));
 		columnNames.put(columnKeys[2], localeService.getTranslatedString(columnKeys[2]));

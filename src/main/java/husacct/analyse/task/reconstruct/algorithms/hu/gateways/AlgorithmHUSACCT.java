@@ -17,7 +17,7 @@ public abstract class AlgorithmHUSACCT extends Algorithm_SuperClass{
 	}
 		
 	protected ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<>();
 		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
 			DependencyDTO[] dependencies = null;
 			switch (relationType) {
@@ -37,7 +37,7 @@ public abstract class AlgorithmHUSACCT extends Algorithm_SuperClass{
 	}
 	
 	protected ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitDTO, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<>();
 		for (SoftwareUnitDTO possibleDependency : sofwareUnitDTOs){
 			DependencyDTO[] dependencies = null;
 			switch (relationType) {

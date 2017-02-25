@@ -13,7 +13,7 @@ import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
 public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitSeperatedInterface,IAppliedRuleSeperatedInterface{
- private List<IseparatedDefinition> observers = new ArrayList<IseparatedDefinition>();
+ private List<IseparatedDefinition> observers = new ArrayList<>();
  private static UndoRedoService instance =null;
  public static UndoRedoService getInstance()
  {
@@ -139,7 +139,7 @@ public class UndoRedoService  implements IModuleSeperatedInterface,ISofwareUnitS
 	
 	public List<Object> getSeperatedSofwareUnitInterfacess(Class c)
 	{
-		ArrayList<Object> results = new ArrayList<Object>();
+		ArrayList<Object> results = new ArrayList<>();
 		
 		for (IseparatedDefinition result : observers) {
 			

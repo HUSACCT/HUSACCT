@@ -52,8 +52,8 @@ import org.apache.log4j.Logger;
 		private long selectedModuleId = -1;
 
 		public DefinitionController() {
-			observersWithinDefine = new ArrayList<Observer>();
-			observersWithinDefineOfAnalyse = new ArrayList<Observer>();
+			observersWithinDefine = new ArrayList<>();
+			observersWithinDefineOfAnalyse = new ArrayList<>();
 			logger = Logger.getLogger(DefinitionController.class);
 			moduleService = new ModuleDomainService();
 			appliedRuleService = new AppliedRuleDomainService();
@@ -93,7 +93,7 @@ import org.apache.log4j.Logger;
 		 * module.
 		 */
 		public HashMap<String, Object> getModuleDetails(long moduleId) {
-			HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
+			HashMap<String, Object> moduleDetails = new HashMap<>();
 
 			if (moduleId != -1) {
 				try {
@@ -150,7 +150,7 @@ import org.apache.log4j.Logger;
 		public HashMap<String, Object> getRuleDetailsByAppliedRuleId(
 				long appliedRuleId) {
 			AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-			HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
+			HashMap<String, Object> ruleDetails = new HashMap<>();
 			ruleDetails.put("id", rule.getId());
 			ruleDetails.put("description", rule.getDescription());
 			ruleDetails.put("dependencies", rule.getDependencyTypes());

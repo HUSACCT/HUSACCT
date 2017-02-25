@@ -29,7 +29,7 @@ public abstract class ReconstructArchitectureParameterDTO {
 		
 		public static ReconstructArchitectureParameterDTO createRelationTypeParameter(String defaultValue){
 			Field[] relationTypeFields = AnalyseReconstructConstants.RelationTypes.class.getDeclaredFields();
-			ArrayList<ComboBoxValue> comboBoxValues = new ArrayList<ComboBoxValue>();
+			ArrayList<ComboBoxValue> comboBoxValues = new ArrayList<>();
 			for(Field field : relationTypeFields){
 				try {
 					String fieldName = field.getName();
@@ -49,7 +49,7 @@ public abstract class ReconstructArchitectureParameterDTO {
 		
 		public static ReconstructArchitectureParameterDTO createGranularityPanel(String defaultValue){
 			Field[] granularitieFields = AnalyseReconstructConstants.Granularities.class.getDeclaredFields();
-			ArrayList<ComboBoxValue> comboBoxValues = new ArrayList<ComboBoxValue>();
+			ArrayList<ComboBoxValue> comboBoxValues = new ArrayList<>();
 			for(Field field : granularitieFields){
 				try {
 					String fieldName = field.getName();

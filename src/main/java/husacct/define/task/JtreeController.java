@@ -205,7 +205,7 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 	}
 	
 	public List<AbstractCombinedComponent> getRootprojectsModules() {
-		List<AbstractCombinedComponent> returnList = new ArrayList<AbstractCombinedComponent>();
+		List<AbstractCombinedComponent> returnList = new ArrayList<>();
 		for (AbstractCombinedComponent result : getRootOfModel().getChildren()) {
 			if (result.getType().toLowerCase().equals("root")) {
 				returnList.addAll(result.getChildren());

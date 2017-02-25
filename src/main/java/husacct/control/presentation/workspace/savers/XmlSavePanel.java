@@ -200,7 +200,7 @@ public class XmlSavePanel extends SaverPanel{
 	
 	@Override
 	public HashMap<String, Object> getData() {
-		HashMap<String, Object> data = new HashMap<String, Object>();
+		HashMap<String, Object> data = new HashMap<>();
 		data.put("file", selectedFile);
 		return data;
 	}
@@ -264,7 +264,7 @@ public class XmlSavePanel extends SaverPanel{
 
 	@Override
 	public HashMap<String, Object> getConfig() {
-		HashMap<String, Object> config = new HashMap<String, Object>();
+		HashMap<String, Object> config = new HashMap<>();
 		config.put("doCompress", this.doCompress.isSelected());
 		if(getPassword() != null) {
 			config.put("doPasswordProtection", this.doPasswordProtect.isSelected());

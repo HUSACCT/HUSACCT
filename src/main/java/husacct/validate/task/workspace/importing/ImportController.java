@@ -25,7 +25,7 @@ public class ImportController {
 	public ImportController(ConfigurationServiceImpl configuration) {
 		this.configuration = configuration;
 		this.importFactory = new ImportFactory();
-		this.severities = new ArrayList<Severity>();
+		this.severities = new ArrayList<>();
 	}
 
 	public void importWorkspace(Element element) throws DatatypeConfigurationException {

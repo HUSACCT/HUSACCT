@@ -18,7 +18,7 @@ public class CategoryDtoAssembler {
 	}
 
 	public CategoryDTO[] createCategoryDTO(List<RuleType> rules) {
-		List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
+		List<CategoryDTO> categories = new ArrayList<>();
 		List<String> categoryKeys = getCategoryKeyList(rules);
 
 		for (String key : categoryKeys) {
@@ -31,16 +31,16 @@ public class CategoryDtoAssembler {
 	}
 
 	private List<String> getCategoryKeyList(List<RuleType> rules) {
-		Set<String> categoryKeys = new HashSet<String>();
+		Set<String> categoryKeys = new HashSet<>();
 
 		for (RuleType rule : rules) {
 			categoryKeys.add(rule.getCategoryKey());
 		}
-		return new ArrayList<String>(categoryKeys);
+		return new ArrayList<>(categoryKeys);
 	}
 
 	private List<RuleType> getRulesByCategorykey(List<RuleType> rules, String categoryKey) {
-		List<RuleType> categoryRules = new ArrayList<RuleType>();
+		List<RuleType> categoryRules = new ArrayList<>();
 
 		for (RuleType rule : rules) {
 			if (rule.getCategoryKey().equals(categoryKey)) {

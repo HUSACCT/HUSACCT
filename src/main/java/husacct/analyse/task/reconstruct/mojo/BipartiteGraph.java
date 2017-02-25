@@ -38,15 +38,15 @@ class BipartiteGraph {
         this.rightpoints = rightpoints;
         this.points = points;
 
-        adjacentList = new Vector<Vector<Integer>>(points);
+        adjacentList = new Vector<>(points);
         vertex = new Vertex[points];
-        augmentPath = new Vector<Integer>();
+        augmentPath = new Vector<>();
 
         for (int i = 0; i < points; i++)
         {
             vertex[i] = new Vertex();
             if (i < leftpoints) vertex[i].isLeft = true;
-            adjacentList.add(i, new Vector<Integer>());
+            adjacentList.add(i, new Vector<>());
         }
 
     }

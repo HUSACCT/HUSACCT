@@ -12,13 +12,13 @@ public class Facade extends AbstractModule {
 
 	@Override
 	public List<RuleType> initDefaultModuleRuleTypes() {
-		List<RuleType> defaultRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> defaultRuleTypes = new ArrayList<>();
 		return defaultRuleTypes;
 	}
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> allowedRuleTypes = new ArrayList<>();
 		return allowedRuleTypes;
 	}
 }

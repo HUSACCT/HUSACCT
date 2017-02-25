@@ -45,7 +45,7 @@ public class ReportServiceImpl implements IReportService {
 		try {
 			if (file.createNewFile()) {
 				ViolationHistory violationHistory = taskServiceImpl.getViolationHistoryByDate(date);
-				reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), file.getName(), file.getParent(), violationHistory.getSeverities());
+				reportFactory.exportReport(fileType, new SimpleEntry<>(violationHistory.getDate(), violationHistory.getViolations()), file.getName(), file.getParent(), violationHistory.getSeverities());
 				return;
 			}
 		} catch (IOException e) {

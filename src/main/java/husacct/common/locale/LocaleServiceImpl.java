@@ -30,7 +30,7 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 	private ResourceBundle resourceBundle;
 	private Locale currentLocale;
 
-	private List<Locale> availableLocales = new ArrayList<Locale>();
+	private List<Locale> availableLocales = new ArrayList<>();
 
 	public LocaleServiceImpl(){
 		detectLocales();
@@ -136,7 +136,7 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 			String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
 			JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
 			Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-			Set<String> result = new HashSet<String>(); //avoid duplicates in case it is a subdirectory
+			Set<String> result = new HashSet<>(); //avoid duplicates in case it is a subdirectory
 			while(entries.hasMoreElements()) {
 				String name = entries.nextElement().getName();
 				if (name.startsWith(strippedPath)) { //filter according to the path

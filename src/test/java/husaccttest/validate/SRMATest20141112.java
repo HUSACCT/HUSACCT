@@ -399,7 +399,7 @@ public class SRMATest20141112 {
 
 	private int countNumberOfViolationsInExportFile(File exportile) {
 		int numberOfViolations = 0;
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", exportile);
 		IResource xmlResource = ResourceFactory.get("xml");
 		try {
@@ -426,7 +426,7 @@ public class SRMATest20141112 {
 		logger.info(String.format("Loading workspace %s", location));
 		File file = new File(location);
 		if(file.exists()){
-			HashMap<String, Object> dataValues = new HashMap<String, Object>();
+			HashMap<String, Object> dataValues = new HashMap<>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
 			if(workspaceController.isOpenWorkspace()){

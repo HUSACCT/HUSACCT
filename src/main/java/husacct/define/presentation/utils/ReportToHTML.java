@@ -119,7 +119,7 @@ public class ReportToHTML {
 	}
 
 	private HashMap<String, Boolean> getAppliedRules(long moduleId){
-		HashMap<String, Boolean> appliedRules = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> appliedRules = new HashMap<>();
 		for(AppliedRuleStrategy rule : ruleService.getAllMainRules()){
 			if(rule.getModuleFrom().getId() == moduleId){
 				appliedRules.put(rule.getRuleTypeKey(), rule.isEnabled());

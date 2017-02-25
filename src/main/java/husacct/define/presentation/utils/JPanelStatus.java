@@ -47,7 +47,7 @@ public class JPanelStatus extends JPanel {
 
     private JProgressBar jProgressBar;
 
-    private Stack<String> messages = new Stack<String>();
+    private Stack<String> messages = new Stack<>();
 
     private JPanelStatus() {
 	super();

@@ -24,7 +24,7 @@ public class ViolationRepository {
     
 
 	public ViolationRepository() {
-		this.violationsList = new ArrayList<Violation>();
+		this.violationsList = new ArrayList<>();
 		this.setRepositoryCalendar(Calendar.getInstance());
 	}
 
@@ -38,7 +38,7 @@ public class ViolationRepository {
 	
 	// returns a List of Violations; it is empty if no Violation is registered for the specific combination of from-to
 	public List<Violation> getViolationsFromTo(String physicalPathFrom, String physicalPathTo) {
-		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
+		ArrayList<Violation> foundViolations = new ArrayList<>();
 		String violationFromToKey = physicalPathFrom + "::" + physicalPathTo;
 		violationFromToKey.toLowerCase();
 		HashMap<String, Violation> violationDetailsHashMap;
@@ -55,10 +55,10 @@ public class ViolationRepository {
 	// Objectives: 1) create and fill violationFromToHashMap, 2) remove duplicates.
 	public void filterAndSortAllViolations(){
 		int beforeNrOfViolations = violationsList.size();
-		ArrayList<Violation> filteredViolationsList = new ArrayList<Violation>();
+		ArrayList<Violation> filteredViolationsList = new ArrayList<>();
 		String violationFromToKey;
 		String violationDetailsKey;
-		violationFromToHashMap = new HashMap<String, HashMap<String, Violation>>();
+		violationFromToHashMap = new HashMap<>();
 		HashMap<String, Violation> violationDetailsHashMap;
 		for(Violation violation : violationsList){
 			try{
@@ -79,7 +79,7 @@ public class ViolationRepository {
 					}
 				}
 				else{
-					violationDetailsHashMap = new HashMap<String, Violation>();
+					violationDetailsHashMap = new HashMap<>();
 					violationDetailsHashMap.put(violationDetailsKey, violation);
 					violationFromToHashMap.put(violationFromToKey, violationDetailsHashMap);
 					filteredViolationsList.add(violation);
@@ -96,7 +96,7 @@ public class ViolationRepository {
 	
 	// Objectives: 1) create and fill violationsPerRuleTreeMap.
 	private void sortViolationsPerRule() {
-		violationsPerRuleTreeMap = new TreeMap<String, List<Violation>>();
+		violationsPerRuleTreeMap = new TreeMap<>();
 		List<Violation> violationsPerRuleList;
 		String moduleFrom;
 		String moduleTo;
@@ -111,7 +111,7 @@ public class ViolationRepository {
 				violationsPerRuleList.add(violation);
 				violationsPerRuleTreeMap.put(searchKey, violationsPerRuleList);
 			} else {
-				violationsPerRuleList = new ArrayList<Violation>();
+				violationsPerRuleList = new ArrayList<>();
 				violationsPerRuleList.add(violation);
 				violationsPerRuleTreeMap.put(searchKey, violationsPerRuleList);
 			}
@@ -128,12 +128,12 @@ public class ViolationRepository {
 		if (violationsPerRuleTreeMap != null) {
 			return violationsPerRuleTreeMap.keySet();
 		} else {
-			return new HashSet<String>();
+			return new HashSet<>();
 		}
 	}
 	
 	public List<Violation> getViolationsByRule(String moduleFrom, String moduleTo, String ruleTypeKey) {
-		ArrayList<Violation> foundViolations = new ArrayList<Violation>();
+		ArrayList<Violation> foundViolations = new ArrayList<>();
 		String searchKey = moduleFrom + "::" + moduleTo + "::" + ruleTypeKey;
 		if(violationsPerRuleTreeMap.containsKey(searchKey)) {
 			foundViolations.addAll(violationsPerRuleTreeMap.get(searchKey));
@@ -142,11 +142,11 @@ public class ViolationRepository {
 	}
 
 	SimpleEntry<Calendar, List<Violation>> getAllViolations() {
-		return new SimpleEntry<Calendar, List<Violation>>(getCurrentCalendar(), violationsList);
+		return new SimpleEntry<>(getCurrentCalendar(), violationsList);
 	}
 	
 	void clear() {
-		this.violationsList = new ArrayList<Violation>();
+		this.violationsList = new ArrayList<>();
 	}
 
 	Calendar getCurrentCalendar() {

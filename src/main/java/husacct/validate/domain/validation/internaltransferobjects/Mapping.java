@@ -41,7 +41,7 @@ public class Mapping {
 	}
 
 	public void removeViolationType(String violationType) {
-		ArrayList<String> violationTypeList = new ArrayList<String>();
+		ArrayList<String> violationTypeList = new ArrayList<>();
 		violationTypeList.addAll(Arrays.asList(violationTypes));
 		for (int i = 0; i < violationTypeList.size(); i++) {
 			if (violationTypeList.get(i).toLowerCase().equals(violationType.toLowerCase())) {

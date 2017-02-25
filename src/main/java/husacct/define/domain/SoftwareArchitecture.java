@@ -28,20 +28,20 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 
 	private static SoftwareArchitecture instance = null;
 	private ArrayList<AppliedRuleStrategy> appliedRules;
-	private ArrayList<ModuleStrategy> modules = new ArrayList<ModuleStrategy>();
+	private ArrayList<ModuleStrategy> modules = new ArrayList<>();
 	private ModuleStrategy rootModule;
 	
 	private Logger logger = Logger.getLogger(SoftwareArchitecture.class);
 
 	public SoftwareArchitecture() {
 		this("SoftwareArchitecture", "This is the root of the architecture",
-				new ArrayList<ModuleStrategy>(),
-				new ArrayList<AppliedRuleStrategy>());
+				new ArrayList<>(),
+				new ArrayList<>());
 	}
 
 	public SoftwareArchitecture(String name, String description) {
-		this(name, description, new ArrayList<ModuleStrategy>(),
-				new ArrayList<AppliedRuleStrategy>());
+		this(name, description, new ArrayList<>(),
+				new ArrayList<>());
 	}
 
 	public SoftwareArchitecture(String name, String description, ArrayList<ModuleStrategy> modules, ArrayList<AppliedRuleStrategy> rules) {
@@ -129,7 +129,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
-		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
+		ArrayList<Long> appliedRuleIds = new ArrayList<>();
 		for (AppliedRuleStrategy rule : appliedRules) {
 			if ((rule.getModuleFrom().getId() == moduleId) && (!rule.isException())) {
 				appliedRuleIds.add(rule.getId());
@@ -139,7 +139,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
-		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
+		ArrayList<Long> appliedRuleIds = new ArrayList<>();
 		for (AppliedRuleStrategy rule : appliedRules) {
 			if ((rule.getModuleTo().getId() == moduleId) && (!rule.isException())) {
 				appliedRuleIds.add(rule.getId());
@@ -283,7 +283,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		} else {
 			ModuleStrategy wantedModule = getModuleById(moduleId);
 			if (wantedModule != null) {
-				ArrayList<String> list = new ArrayList<String>();
+				ArrayList<String> list = new ArrayList<>();
 				list.add(wantedModule.getName());
 				wantedModule = wantedModule.getparent();
 				while(wantedModule.getType() != "Root"){
@@ -426,8 +426,8 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public void removeAllModules() {
-		rootModule.setSubModules(new ArrayList<ModuleStrategy>());
-		modules = new ArrayList<ModuleStrategy>();
+		rootModule.setSubModules(new ArrayList<>());
+		modules = new ArrayList<>();
 	}
 
 	public void removeAppliedRule(long appliedRuleId) {
@@ -446,15 +446,15 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 	}
 
 	public void removeAppliedRules() {
-		appliedRules = new ArrayList<AppliedRuleStrategy>();
+		appliedRules = new ArrayList<>();
 	}
 
 	public void removeModule(ModuleStrategy moduleToRemove) {
 		if (moduleToRemove.equals(rootModule)) {
 			return;
 		}
-		ArrayList<ModuleStrategy> toBeRemoved = new ArrayList<ModuleStrategy>();
-		ArrayList<Object[]> toBeSaved = new ArrayList<Object[]>();
+		ArrayList<ModuleStrategy> toBeRemoved = new ArrayList<>();
+		ArrayList<Object[]> toBeSaved = new ArrayList<>();
 		removeRecursively(moduleToRemove, toBeRemoved);
 		Collections.reverse(toBeRemoved);
 		JtreeController.instance().restoreTreeItems(moduleToRemove);
@@ -517,7 +517,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 			ModuleStrategy module) {
 		// Copy all currentValues into another list to prevent
 		// ConcurrentModificationExceptions
-		ArrayList<AppliedRuleStrategy> returnList = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> returnList = new ArrayList<>();
 		@SuppressWarnings("unchecked")
 		ArrayList<AppliedRuleStrategy> tmpList = (ArrayList<AppliedRuleStrategy>) appliedRules
 				.clone();

@@ -9,7 +9,7 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 public abstract class AbstractAnalyser {
 	private String sourceFilePath = ""; // Needed for debugging of grammar with ErrorDebugListener
 	private int numberOfSyntaxErrors = 0;
-	private Set<String> filesWithSyntaxErrorsStack = new HashSet<String>();
+	private Set<String> filesWithSyntaxErrorsStack = new HashSet<>();
 
     private IModelCreationService modelCreationService;
     private String projectPath = "";

@@ -19,9 +19,9 @@ public class Layer extends ModuleStrategy {
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
-		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
-		this.subModules = new ArrayList<ModuleStrategy>();
+		this.mappedSUunits = new ArrayList<>();
+		this.mappedRegExSUunits = new ArrayList<>();
+		this.subModules = new ArrayList<>();
 		
 		this.type = "Layer";
 		setNewHierarchicalLevel();

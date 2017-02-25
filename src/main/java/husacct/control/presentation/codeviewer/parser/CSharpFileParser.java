@@ -40,7 +40,7 @@ public class CSharpFileParser implements AbstractFileParser {
 			"typeof", "uint", "ulong", "unchecked", "unsafe", "ushort",
 			"using", "virtual", "volatile", "void", "while" };
 	
-	private ArrayList<String> keys = new ArrayList<String>(Arrays.asList(keywords));
+	private ArrayList<String> keys = new ArrayList<>(Arrays.asList(keywords));
 	
 	private boolean commentLine = false;
 	private boolean commentBlock = false;

@@ -19,13 +19,13 @@ class ViolationtypeGenerator {
 	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
 
 	List<CategoryKeySeverityDTO> getAllViolationTypes(List<IViolationType> violationtypes) {
-		return new ArrayList<CategoryKeySeverityDTO>(getClasses(violationtypes));
+		return new ArrayList<>(getClasses(violationtypes));
 	}
 
 	private Set<CategoryKeySeverityDTO> getClasses(List<IViolationType> violationtypes) {
-		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
+		Set<CategoryKeySeverityDTO> keyList = new HashSet<>();
 
-		Set<Class<?>> scannedClasses = new HashSet<Class<?>>();
+		Set<Class<?>> scannedClasses = new HashSet<>();
 		for (IViolationType type : violationtypes) {
 			Class<?> scannedClass = type.getClass();
 			if (scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)) {
@@ -47,7 +47,7 @@ class ViolationtypeGenerator {
 	}
 
 	private Set<CategoryKeySeverityDTO> generateViolationTypes(Set<Class<?>> scannedClasses) {
-		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
+		Set<CategoryKeySeverityDTO> keyList = new HashSet<>();
 
 		Iterator<Class<?>> it = scannedClasses.iterator();
 		while (it.hasNext()) {

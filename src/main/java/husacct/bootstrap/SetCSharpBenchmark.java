@@ -17,8 +17,8 @@ public class SetCSharpBenchmark extends AbstractBootstrap{
 	
 	@Override
 	public void execute() {
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<String> paths = new ArrayList<String>();
+		ArrayList<ProjectDTO> projects = new ArrayList<>();
+		ArrayList<String> paths = new ArrayList<>();
 		
 		for(String pathToCustomTestProject : pathsToCustomTestProject){
 			if(new File(pathToCustomTestProject).exists() && new File(pathToCustomTestProject).isDirectory()){
@@ -30,7 +30,7 @@ public class SetCSharpBenchmark extends AbstractBootstrap{
 			paths.add(PATH);
 		}
 		
-		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<>();
 		ProjectDTO project = new ProjectDTO("CSharp", paths, "C#", "1.0", "Benchmark Project", analysedModules);
 		projects.add(project);
 		getDefineService().createApplication("CSharp", projects, "1.0");

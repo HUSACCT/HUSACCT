@@ -20,8 +20,8 @@ public abstract class Algorithm_SuperClass {
 	protected IDefineSarService defineSarService = defineService.getSarService();
 	protected final String xLibrariesRootPackage = "xLibraries";
 
-	private ArrayList<ModuleDTO> reverseReconstructionList = new ArrayList<ModuleDTO>();
-	private HashMap<String, String> reverseEditModuleTypeList = new HashMap<String, String>(); // logicatPath (of the module), moduleTypeToBeReversedTo
+	private ArrayList<ModuleDTO> reverseReconstructionList = new ArrayList<>();
+	private HashMap<String, String> reverseEditModuleTypeList = new HashMap<>(); // logicatPath (of the module), moduleTypeToBeReversedTo
 
 	protected Algorithm_SuperClass(IModelQueryService queryService) {
 		this.queryService = queryService;
@@ -71,7 +71,7 @@ public abstract class Algorithm_SuperClass {
 	}
 
 	protected ArrayList<DependencyDTO> getRelationsBetweenSoftwareUnits(String softwareUnitFrom, String softwareUnitTo, String relationType){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<>();
 		DependencyDTO[] dependencies = null;
 		switch (relationType) {
 			case RelationTypes.umlLinks:

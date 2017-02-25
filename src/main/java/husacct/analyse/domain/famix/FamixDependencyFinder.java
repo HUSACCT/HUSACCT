@@ -59,7 +59,7 @@ class FamixDependencyFinder extends FamixFinder {
 	// If classPathTFrom = "", then all dependencies to classPathTo are returned, which refer to existing classPathFrom's.
 	// If classPathTo = "", then all dependencies from classPathFrom are returned, which refer to existing classPathTo's.
 	public ArrayList<DependencyDTO> getDependenciesFromTo(String classPathFrom, String classPathTo){
-		ArrayList<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> foundDependencies = new ArrayList<>();
 		if((classPathFrom == null || classPathFrom == "") && (classPathTo == null || classPathTo == "")){
 			this.logger.warn(" Incomplete calls: ClassPathFrom = "  + classPathFrom + ", ClassPathTo = " + classPathTo);
 			return foundDependencies;
@@ -126,8 +126,8 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	// Returns a list of filtered  and sorted DependencyDTOs.
 	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter){
-		List<DependencyDTO> foundDependenciesReturnList = new ArrayList<DependencyDTO>();
-	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<String, DependencyDTO>();
+		List<DependencyDTO> foundDependenciesReturnList = new ArrayList<>();
+	    TreeMap<String, DependencyDTO> foundDependenciesTreeMap = new TreeMap<>();
 		numberOfDuplicateAssociations = 0;
 		try {
 			for(FamixAssociation association : theModel.associations){
@@ -179,7 +179,7 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 
 	private List<DependencyDTO> queryCache(FinderFunction findFunction, String from, String to, String[] applyFilter){
-		List<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
+		List<DependencyDTO> foundDependencies = new ArrayList<>();
 		for(DependencyDTO dependency : dependencyCache){
 			switch(findFunction){
 			case FROM:
@@ -259,8 +259,8 @@ class FamixDependencyFinder extends FamixFinder {
 	
     // Fill the HashMaps dependenciesMapFromTo and dependenciesMapTo
 	public void initializeDependencyHashMap(){
-		this.dependenciesMapFromTo = new HashMap<String, HashMap<String, ArrayList<DependencyDTO>>>();
-		this.dependenciesMapTo = new HashMap<String, ArrayList<DependencyDTO>>();
+		this.dependenciesMapFromTo = new HashMap<>();
+		this.dependenciesMapTo = new HashMap<>();
 		HashMap<String, ArrayList<DependencyDTO>> toMap;
 		try{
 	        for(DependencyDTO dependency : getAllDependencies()) {
@@ -275,16 +275,16 @@ class FamixDependencyFinder extends FamixFinder {
         			}
             		else{
             			// No toMap exists for the to-key, so create it.
-            			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
+            			ArrayList<DependencyDTO> newList = new ArrayList<>();
             			newList.add(dependency);
             			toMap.put(uniqueNameTo, newList);
             		}
             	}
             	else{
             		// No map exists for the from-key, so add it.
-        			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
+        			ArrayList<DependencyDTO> newList = new ArrayList<>();
         			newList.add(dependency);
-            		toMap = new HashMap<String, ArrayList<DependencyDTO>>();
+            		toMap = new HashMap<>();
             		toMap.put(uniqueNameTo, newList);            		
 	            	dependenciesMapFromTo.put(uniqueNameFrom, toMap);
             	}
@@ -295,7 +295,7 @@ class FamixDependencyFinder extends FamixFinder {
             	}
             	else{
             		// No list exists for uniqueNameTo, so add it.
-        			ArrayList<DependencyDTO> newList = new ArrayList<DependencyDTO>();
+        			ArrayList<DependencyDTO> newList = new ArrayList<>();
         			newList.add(dependency);
             		dependenciesMapTo.put(uniqueNameTo, newList);
             	}

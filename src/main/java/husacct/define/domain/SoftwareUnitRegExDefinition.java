@@ -11,7 +11,7 @@ public class SoftwareUnitRegExDefinition {
 
 	public SoftwareUnitRegExDefinition(String name) {
 		setName(name);
-		softwareUnitDefinitions = new ArrayList<SoftwareUnitDefinition>();
+		softwareUnitDefinitions = new ArrayList<>();
 	}
 
 	public void addSoftwareUnitDefinition(

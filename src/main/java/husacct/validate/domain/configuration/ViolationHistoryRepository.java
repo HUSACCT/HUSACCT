@@ -13,7 +13,7 @@ class ViolationHistoryRepository extends Observable {
 	private List<ViolationHistory> violationHistories;
 
 	ViolationHistoryRepository() {
-		this.violationHistories = new ArrayList<ViolationHistory>();
+		this.violationHistories = new ArrayList<>();
 	}
 
 	List<ViolationHistory> getViolationHistory() {

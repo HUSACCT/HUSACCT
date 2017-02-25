@@ -12,7 +12,7 @@ public class NodeList implements Collection<Node>, Iterable<Node> {
 	protected ArrayList<Node>	nodes;
 	
 	public NodeList() {
-		nodes = new ArrayList<Node>();
+		nodes = new ArrayList<>();
 	}
 	
 	@Override

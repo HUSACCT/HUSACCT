@@ -11,11 +11,11 @@ import javax.swing.JComboBox;
 public class KeyValueComboBox extends JComboBox {
     private static final long serialVersionUID = -2870095258058479405L;
 
-    private HashMap<String, String> keyValuePair = new HashMap<String, String>();
+    private HashMap<String, String> keyValuePair = new HashMap<>();
 
     public KeyValueComboBox() {
 	super();
-	keyValuePair = new HashMap<String, String>();
+	keyValuePair = new HashMap<>();
     }
 
     @SuppressWarnings("rawtypes")
@@ -49,7 +49,7 @@ public class KeyValueComboBox extends JComboBox {
     }
 
     private void setHashMap(String[] keys, String[] values) {
-	HashMap<String, String> keyValuePair = new HashMap<String, String>();
+	HashMap<String, String> keyValuePair = new HashMap<>();
 	for (int i = 0; i < keys.length; i++) {
 	    keyValuePair.put(keys[i], values[i]);
 	}

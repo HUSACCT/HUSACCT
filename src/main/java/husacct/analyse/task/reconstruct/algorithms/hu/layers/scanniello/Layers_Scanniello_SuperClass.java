@@ -25,7 +25,7 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	}
 	
 	protected ArrayList<SoftwareUnitDTO> getSoftwareUnitDTOs(ModuleDTO selectedModule){
-		ArrayList<SoftwareUnitDTO> softwareUnitsSelectedModule = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> softwareUnitsSelectedModule = new ArrayList<>();
 		
 		for (ModuleDTO subModule : selectedModule.subModules){
 			HashSet<String> softwareUnitNames = defineService.getAssignedSoftwareUnitsOfModule(subModule.logicalPath);
@@ -39,10 +39,10 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	
 	
 	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> identifyLayersOriginal(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, boolean firstIdentification){
-		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<SoftwareUnitDTO>();
-		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<SoftwareUnitDTO>();
-		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<SoftwareUnitDTO>();
-		 ArrayList<SoftwareUnitDTO> discLayer = new ArrayList<SoftwareUnitDTO>();
+		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<>();
+		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<>();
+		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<>();
+		 ArrayList<SoftwareUnitDTO> discLayer = new ArrayList<>();
 		 
 		for(SoftwareUnitDTO softwareUnitDTO : sofwareUnitDTOs){
 			
@@ -84,7 +84,7 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 			}
 		}
 		
-		 HashMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new HashMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		 HashMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new HashMap<>();
 		 layers.put(topLayerKey, topLayer);
 		 layers.put(middleLayerKey, middleLayer);
 		 layers.put(bottomLayerKey, bottomLayer);
@@ -95,10 +95,10 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	
 	
 	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> IdentifyLayersImproved(ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, ReconstructArchitectureDTO dto, boolean firstIdentification){
-		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<SoftwareUnitDTO>();
-		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<SoftwareUnitDTO>();
-		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<SoftwareUnitDTO>();
-		 ArrayList<SoftwareUnitDTO> discLayer = new ArrayList<SoftwareUnitDTO>();
+		 ArrayList<SoftwareUnitDTO> topLayer = new ArrayList<>();
+		 ArrayList<SoftwareUnitDTO> middleLayer = new ArrayList<>();
+		 ArrayList<SoftwareUnitDTO> bottomLayer = new ArrayList<>();
+		 ArrayList<SoftwareUnitDTO> discLayer = new ArrayList<>();
 		 
 		for(SoftwareUnitDTO softwareUnitDTO : sofwareUnitDTOs){
 			
@@ -140,7 +140,7 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 			}
 		}
 		
-		 HashMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new HashMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		 HashMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new HashMap<>();
 		 layers.put(topLayerKey, topLayer);
 		 layers.put(middleLayerKey, middleLayer);
 		 layers.put(bottomLayerKey, bottomLayer);
@@ -151,7 +151,7 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	
 	
 	private ArrayList<DependencyDTO> getDependencies_From_SoftwareUnit(SoftwareUnitDTO softwareUnitFrom, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<>();
 		for (SoftwareUnitDTO softwareUnitTo : sofwareUnitDTOs){
 			if (!softwareUnitTo.equals(softwareUnitFrom)) {
 				dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
@@ -161,7 +161,7 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	}
 	
 	private ArrayList<DependencyDTO> getDependencies_Towards_SoftwareUnit(SoftwareUnitDTO softwareUnitTo, ArrayList<SoftwareUnitDTO> sofwareUnitDTOs, String relationType){
-		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> dependecyDTOs = new ArrayList<>();
 		for (SoftwareUnitDTO softwareUnitFrom : sofwareUnitDTOs){
 			if (!softwareUnitTo.equals(softwareUnitFrom)) {
 				dependecyDTOs.addAll(getRelationsBetweenSoftwareUnits(softwareUnitFrom.uniqueName, softwareUnitTo.uniqueName, relationType));
@@ -174,7 +174,7 @@ public abstract class Layers_Scanniello_SuperClass extends Algorithm_SuperClass{
 	
 	
 	protected HashMap<Integer, ArrayList<SoftwareUnitDTO>> RestructureLayers(ArrayList<ArrayList<SoftwareUnitDTO>> topLayers, ArrayList<ArrayList<SoftwareUnitDTO>> bottomLayers, ArrayList<SoftwareUnitDTO> middleLayer){
-		HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers = new HashMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		HashMap<Integer, ArrayList<SoftwareUnitDTO>> structuredLayers = new HashMap<>();
 		
 		int LayerKeyCount = 1;
 		for(ArrayList<SoftwareUnitDTO> topLayer : topLayers){

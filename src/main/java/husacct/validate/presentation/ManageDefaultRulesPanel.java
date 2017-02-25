@@ -38,8 +38,8 @@ public class ManageDefaultRulesPanel extends JPanel {
 	public ManageDefaultRulesPanel(){
 		// ===== Component selector =====
 		componentScrollpane = new JScrollPane();
-		components = new JList<DataLanguageHelper>();
-		rtsComponentModel = new DefaultListModel<DataLanguageHelper>();
+		components = new JList<>();
+		rtsComponentModel = new DefaultListModel<>();
 		for(ModuleTypes modules : ModuleTypes.values())
 			rtsComponentModel.addElement(new DataLanguageHelper(modules.toString()));
 		
@@ -109,7 +109,7 @@ public class ManageDefaultRulesPanel extends JPanel {
 		tableModel.setRowCount(0);
 		allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(componentList[listItem]);
 		currentDefaultRules = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(componentList[listItem]);
-		allowedRulesMap = new HashMap<Integer, String>();
+		allowedRulesMap = new HashMap<>();
 		int count = 0;
 		
 		for(RuleTypeDTO allowedRule : allowedRules){

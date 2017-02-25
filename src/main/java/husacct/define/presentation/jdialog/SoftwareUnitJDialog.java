@@ -350,7 +350,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 		 */
 		// else {
 		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
-		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
+		ArrayList<AnalyzedModuleComponent> units = new ArrayList<>();
 		for (TreePath path : paths.getSelectionPaths()) {
 			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
 			units.add(selectedComponent);

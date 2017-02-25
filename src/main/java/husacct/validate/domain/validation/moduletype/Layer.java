@@ -13,7 +13,7 @@ public class Layer extends AbstractModule {
 
 	@Override
 	public List<RuleType> initDefaultModuleRuleTypes() {
-		List<RuleType> defaultRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> defaultRuleTypes = new ArrayList<>();
 
 		for (RuleType ruleType : ruleTypes) {
 			if (ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)
@@ -26,7 +26,7 @@ public class Layer extends AbstractModule {
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> allowedRuleTypes = new ArrayList<>();
 
 		for (RuleType ruleType : ruleTypes) {
 			if (!ruleType.equals(RuleTypes.FACADE_CONVENTION)) {

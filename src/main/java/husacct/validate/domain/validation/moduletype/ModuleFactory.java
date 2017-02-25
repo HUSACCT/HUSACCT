@@ -8,7 +8,7 @@ import husacct.validate.domain.exception.ModuleNotFoundException;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 public class ModuleFactory {
-	private HashMap<String, AbstractModule> moduleTypesMap = new HashMap<String, AbstractModule>();
+	private HashMap<String, AbstractModule> moduleTypesMap = new HashMap<>();
 	
 	public ModuleFactory(List<RuleType> rules) {
 		for (ModuleTypes moduleType : ModuleTypes.values()) {

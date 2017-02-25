@@ -34,7 +34,7 @@ public class CheckConformanceController {
 	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory) {
 		this.configuration = configuration;
 		this.configuration.clearViolations();
-		this.ruleCache = new HashMap<String, RuleType>();
+		this.ruleCache = new HashMap<>();
 		this.ruleFactory = ruleFactory;
 	}
 
@@ -47,7 +47,7 @@ public class CheckConformanceController {
 				if (project.programmingLanguage != null && !project.programmingLanguage.isEmpty()) {
 					configuration.clearViolations();
 					ruleCache.clear();
-					List<Violation> violationList = new ArrayList<Violation>();
+					List<Violation> violationList = new ArrayList<>();
 					appliedRulesHandled = 0;
 					for (RuleDTO appliedRule : appliedRules) {
 						// Abort, when state != VALIDATING

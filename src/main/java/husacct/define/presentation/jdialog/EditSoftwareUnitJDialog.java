@@ -131,7 +131,7 @@ public class EditSoftwareUnitJDialog extends HelpableJDialog implements ActionLi
 
     private void save() {
 	TreeSelectionModel paths = resultTree.getSelectionModel();
-	ArrayList<AnalyzedModuleComponent> components = new ArrayList<AnalyzedModuleComponent>();
+	ArrayList<AnalyzedModuleComponent> components = new ArrayList<>();
 
 	for (TreePath path : paths.getSelectionPaths()){
 	    components.add((AnalyzedModuleComponent) path.getLastPathComponent());	

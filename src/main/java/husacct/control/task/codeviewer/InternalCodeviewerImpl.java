@@ -23,7 +23,7 @@ public class InternalCodeviewerImpl implements CodeviewerService {
 	@Override
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
 		codeViewer.reset();
-		ArrayList<Error> errorList = new ArrayList<Error>();
+		ArrayList<Error> errorList = new ArrayList<>();
 		for(Entry<Integer, Severity> entry : errors.entrySet()) {
 			Severity severity = entry.getValue();
 			Error error = new Error(entry.getKey(), severity.getColor());

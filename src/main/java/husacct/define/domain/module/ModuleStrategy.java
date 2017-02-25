@@ -43,9 +43,9 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
-		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
-		this.subModules = new ArrayList<ModuleStrategy>();
+		this.mappedSUunits = new ArrayList<>();
+		this.mappedRegExSUunits = new ArrayList<>();
+		this.subModules = new ArrayList<>();
 	}
 	
 
@@ -121,7 +121,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 	
 	public void removeAllSUDefintions(){
-		mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
+		mappedSUunits = new ArrayList<>();
 	}
 
 	public void addSURegExDefinition(SoftwareUnitRegExDefinition unit){
@@ -236,7 +236,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	}
 	
 	public HashMap<String, String> getSoftwareUnitNames(){
-		HashMap<String, String> names = new HashMap<String, String>();
+		HashMap<String, String> names = new HashMap<>();
 		for(SoftwareUnitDefinition softwareUnit : mappedSUunits){
 			names.put(softwareUnit.getName(), softwareUnit.getType().toString());
 		}
@@ -245,7 +245,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	
 	// Returns all the SUs assigned to the module or assigned to one of the subModules, subSubModules, etc.
 	public HashMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsInTree(){
-		HashMap<String, SoftwareUnitDefinition> allSoftwareUnits = new HashMap<String, SoftwareUnitDefinition>();
+		HashMap<String, SoftwareUnitDefinition> allSoftwareUnits = new HashMap<>();
 		for(SoftwareUnitDefinition softwareUnit : mappedSUunits){
 			allSoftwareUnits.put(softwareUnit.getName(), softwareUnit);
 		}
@@ -419,7 +419,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 
 	public ArrayList<SoftwareUnitDefinition> getAndRemoveSoftwareUnits(List<String> names) {
-		ArrayList<SoftwareUnitDefinition> units = new ArrayList<SoftwareUnitDefinition>();
+		ArrayList<SoftwareUnitDefinition> units = new ArrayList<>();
 		Iterator<SoftwareUnitDefinition> loop = getUnits().iterator();
 		while(loop.hasNext())
 		{

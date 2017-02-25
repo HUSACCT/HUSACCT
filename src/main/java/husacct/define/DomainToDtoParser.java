@@ -35,7 +35,7 @@ public class DomainToDtoParser {
 		String name = module.getName();
 		String type = module.getType();
 
-		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
+		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<>();
 		ArrayList<ModuleStrategy> subModulesList = module.getSubModules();
 		for (ModuleStrategy subModule : subModulesList) {
 			ModuleDTO subModuleDTO = parseModule(subModule);
@@ -63,7 +63,7 @@ public class DomainToDtoParser {
 	}
 
 	public ModuleDTO[] parseModules(ModuleStrategy[] modules) {
-		ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<ModuleDTO>();
+		ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<>();
 		for (ModuleStrategy module : modules) {
 			ModuleDTO moduleDTO = parseModule(module);
 			moduleDTOsList.add(moduleDTO);
@@ -85,7 +85,7 @@ public class DomainToDtoParser {
 	 **/
 	public PhysicalPathDTO[] parsePhysicalPathDTOs(
 			ArrayList<SoftwareUnitDefinition> softwareUnits) {
-		ArrayList<PhysicalPathDTO> physicalPathDTOList = new ArrayList<PhysicalPathDTO>();
+		ArrayList<PhysicalPathDTO> physicalPathDTOList = new ArrayList<>();
 		for (SoftwareUnitDefinition su : softwareUnits) {
 			PhysicalPathDTO physicalPathDTO = parsePhysicalPathDTO(su);
 			physicalPathDTOList.add(physicalPathDTO);
@@ -96,7 +96,7 @@ public class DomainToDtoParser {
 	}
 
 	public ArrayList<ProjectDTO> parseProjects(ArrayList<Project> projects) {
-		ArrayList<ProjectDTO> projectDTOs = new ArrayList<ProjectDTO>();
+		ArrayList<ProjectDTO> projectDTOs = new ArrayList<>();
 		for (Project project : projects) {
 			ProjectDTO projectDTO = new ProjectDTO(project.getName(),
 					project.getPaths(), project.getProgrammingLanguage(),
@@ -116,7 +116,7 @@ public class DomainToDtoParser {
 	}
 
 	public ModuleDTO[] parseRootModules(ModuleStrategy[] modules) {
-		ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<ModuleDTO>();
+		ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<>();
 		for (ModuleStrategy module : modules) {
 			ModuleDTO moduleDTO = parseRootModule(module);
 			moduleDTOsList.add(moduleDTO);
@@ -144,7 +144,7 @@ public class DomainToDtoParser {
 			mainRule = parseRule(rule.getParentAppliedRule(), false);
 		}
 
-		ArrayList<RuleDTO> exceptionRuleList = new ArrayList<RuleDTO>();
+		ArrayList<RuleDTO> exceptionRuleList = new ArrayList<>();
 		for (AppliedRuleStrategy exceptionRule : rule.getExceptions()) {
 			RuleDTO exceptionRuleDTO = parseRule(exceptionRule, true);
 			exceptionRuleList.add(exceptionRuleDTO);
@@ -159,7 +159,7 @@ public class DomainToDtoParser {
 	}
 
 	public RuleDTO[] parseRules(ArrayList<AppliedRuleStrategy> rules) {
-		ArrayList<RuleDTO> ruleDTOsList = new ArrayList<RuleDTO>();
+		ArrayList<RuleDTO> ruleDTOsList = new ArrayList<>();
 		for (AppliedRuleStrategy rule : rules) {
 			RuleDTO ruleDTO = parseRule(rule, false);
 			ruleDTOsList.add(ruleDTO);

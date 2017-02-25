@@ -19,10 +19,10 @@ public class ImportViolationsHistory extends XmlImportUtils {
 	private Logger logger = Logger.getLogger(ImportViolationsHistory.class);
 
 	public List<ViolationHistory> importViolationsHistory(Element violationHistoriesElement) {
-		List<ViolationHistory> violationHistories = new ArrayList<ViolationHistory>();
+		List<ViolationHistory> violationHistories = new ArrayList<>();
 		for (Element violationHistoryElement : violationHistoriesElement.getChildren("violationHistory")) {
-			List<Severity> severities = new ArrayList<Severity>();
-			List<Violation> violations = new ArrayList<Violation>();
+			List<Severity> severities = new ArrayList<>();
+			List<Violation> violations = new ArrayList<>();
 			
 			// severities
 			for (Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {

@@ -18,7 +18,7 @@ public abstract class PopUpController extends Observable {
     protected List<Observer> observers;
 
     public PopUpController() {
-	observers = new ArrayList<Observer>();
+	observers = new ArrayList<>();
 	logger = Logger.getLogger(DefinitionController.class);
     }
 

@@ -22,10 +22,10 @@ import husacct.common.enums.ModuleTypes;
 public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClass{
 	private ModuleDTO selectedModule;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
-	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
+	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<>();
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<>();
 	private GraphOfSuClusters graphOfSuClusters; // Each node in the graph represents 1-n SoftwareUnits. If *, it is a cohesive cluster of SUs. 
-	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<Integer, Set<Integer>>();
+	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<>();
 	private int backCallThreshold;
 
 
@@ -108,11 +108,11 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 		if (selectedModule.name.contains("graphics")) {
 			boolean breakpoint = true;
 		} */
-		HashSet<Integer> assignedNodesNewBottomLayer = new HashSet<Integer>();
-		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<Integer>();
+		HashSet<Integer> assignedNodesNewBottomLayer = new HashSet<>();
+		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<>();
 		for (int fromNodeId : layersWithNodesMap.get(bottomLayerId)) {
 			boolean fromNodeUsesAnotherNode = false;
-			HashSet<Integer> clone = new HashSet<Integer>(layersWithNodesMap.get(bottomLayerId)); 
+			HashSet<Integer> clone = new HashSet<>(layersWithNodesMap.get(bottomLayerId));
 			for (int toNodeId : clone) {
 				if (fromNodeId != toNodeId) {
 					int nrOfDependenciesFromTo = graphOfSuClusters.getNumberOfDependencies(fromNodeId, toNodeId);
@@ -151,10 +151,10 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 		// Determine the hierarchicalLevels of the layers. The hierarchicalLevel of a layer within Define 
 		// is as follows: the highest level layer has hierarchicalLevel = 1; the one below 2, etc.
 		int hierarchicalLevel = highestLevelLayer;
-		TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<>();
 		for (int levelInName : layersWithNodesMap.keySet()) {
 			Set<Integer> nodesOfLayer = layersWithNodesMap.get(levelInName);
-			ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
+			ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<>();
 			for (int nodeId : nodesOfLayer) {
 				unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
 			}
@@ -213,7 +213,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 	// Returns the SUs assigned to selectedModule or, if only one SU is assigned, the children of this SU.
 	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
-		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<>();
 		addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
 		
 		int numberOfAssignedSoftwareUnits = defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath).size();
@@ -259,7 +259,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 	 * @return ArrayList<String> with unique names of children, or an empty list, if no child SoftwareUnits are existing.
 	 */
 	private ArrayList<SoftwareUnitDTO> getSetOfChildSoftwareUnits(SoftwareUnitDTO parentSoftwareUnit) {
-		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<>();
 		SoftwareUnitDTO softwareUnit = parentSoftwareUnit;
 		while (childSoftwareUnits.size() < 2) {
 			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName));

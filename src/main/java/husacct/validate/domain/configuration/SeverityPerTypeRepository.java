@@ -32,8 +32,8 @@ public class SeverityPerTypeRepository {
 		this.configuration = configuration;
 		this.ruletypeFactory = ruletypefactory;
 
-		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
-		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+		severitiesPerTypePerProgrammingLanguage = new HashMap<>();
+		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<>();
 	}
 
 	void initializeDefaultSeverities() {
@@ -44,9 +44,9 @@ public class SeverityPerTypeRepository {
 	}
 
 	private HashMap<String, HashMap<String, Severity>> initializeDefaultSeverityForLanguage(String programmingLanguage) {
-		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<>();
 
-		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
+		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<>());
 
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		for (RuleType ruleType : ruletypeFactory.getRuleTypes()) {

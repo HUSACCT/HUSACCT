@@ -15,10 +15,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class WarningMessageService extends Observable implements Observer,IModuleSeperatedInterface {
-	private  ArrayList<WarningMessage> warnings= new ArrayList<WarningMessage>();
-	private ArrayList<Observer> observers = new ArrayList<Observer>();
+	private  ArrayList<WarningMessage> warnings= new ArrayList<>();
+	private ArrayList<Observer> observers = new ArrayList<>();
 	private static WarningMessageService instance=null;
-	private ArrayList<CodeLevelWarning> codelevelWarnings = new ArrayList<CodeLevelWarning>();
+	private ArrayList<CodeLevelWarning> codelevelWarnings = new ArrayList<>();
 
 	public static WarningMessageService getInstance() {
 		if(instance==null) {
@@ -130,7 +130,7 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	}
 
 	public void addCodeLevelWarning(AnalyzedModuleComponent unitTobeRestored) {
-		ArrayList<AbstractCombinedComponent> list =new ArrayList<AbstractCombinedComponent>();
+		ArrayList<AbstractCombinedComponent> list = new ArrayList<>();
 		list.addAll(getnestedValues(unitTobeRestored));
 		if (unitTobeRestored.isMapped()) {
 			codelevelWarnings.add(new CodeLevelWarning(unitTobeRestored));
@@ -141,7 +141,7 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	}
 
 	private ArrayList<AbstractCombinedComponent> getnestedValues(AnalyzedModuleComponent an) {
-		ArrayList<AbstractCombinedComponent> mapped = new ArrayList<AbstractCombinedComponent>();
+		ArrayList<AbstractCombinedComponent> mapped = new ArrayList<>();
 		for (AbstractCombinedComponent  unit : an.getChildren()) {
 			 mapped=(searchWithTailRecursive(unit,mapped));
 		}
@@ -238,11 +238,11 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	}
 
 	public void clearImplementationLevelWarnings() {
-		warnings = new ArrayList<WarningMessage>();
+		warnings = new ArrayList<>();
 	}
 
 	public void resetNotAnalyzed() {
-	codelevelWarnings = new ArrayList<CodeLevelWarning>();
+	codelevelWarnings = new ArrayList<>();
 	}
 	
 }

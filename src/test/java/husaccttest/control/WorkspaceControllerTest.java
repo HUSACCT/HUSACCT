@@ -87,7 +87,7 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testLoadWorkspaceData(){
-		HashMap<String, Object> data = new HashMap<String, Object>();
+		HashMap<String, Object> data = new HashMap<>();
 		data.put("file", validTestFile);
 		XmlResource xmlResource = new XmlResource();
 		Document doc1 = xmlResource.load(data);
@@ -109,8 +109,8 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testSaveWorkspace(){
-		HashMap<String, Object> data = new HashMap<String, Object>();
-		HashMap<String, Object> config = new HashMap<String, Object>();
+		HashMap<String, Object> data = new HashMap<>();
+		HashMap<String, Object> config = new HashMap<>();
 		data.put("file", testFile);
 		config.put("doCompress", false);
 		config.put("doPasswordProtection", false);
@@ -121,7 +121,7 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testLoadWorkspace(){
-		HashMap<String, Object> data = new HashMap<String, Object>();
+		HashMap<String, Object> data = new HashMap<>();
 		data.put("file", validTestFile);
 		workspaceController.loadWorkspace("xml", data);
 		assertNotNull(workspaceController.getCurrentWorkspace());

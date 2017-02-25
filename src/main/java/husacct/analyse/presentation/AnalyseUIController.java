@@ -25,7 +25,7 @@ public class AnalyseUIController {
     }
 
     public List<SoftwareUnitDTO> getRootModules() {
-        List<SoftwareUnitDTO> rootModules = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> rootModules = new ArrayList<>();
 
         for (SoftwareUnitDTO analysedModule : analyseTaskControl.getSoftwareUnitsInRoot()) {
             rootModules.add(analysedModule);
@@ -34,7 +34,7 @@ public class AnalyseUIController {
     }
 
     public List<SoftwareUnitDTO> getModulesInModules(String currentModule) {
-        List<SoftwareUnitDTO> childModules = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> childModules = new ArrayList<>();
         for (SoftwareUnitDTO child : analyseTaskControl.getChildUnitsOfSoftwareUnit(currentModule)) {
             childModules.add(child);
         }
@@ -42,7 +42,7 @@ public class AnalyseUIController {
     }
 
     public List<SoftwareUnitDTO> listAllModules() {
-        List<SoftwareUnitDTO> allModules = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> allModules = new ArrayList<>();
         List<SoftwareUnitDTO> rootModules = getRootModules();
         allModules.addAll(rootModules);
         for (SoftwareUnitDTO rootModule : rootModules) {
@@ -52,7 +52,7 @@ public class AnalyseUIController {
     }
 
     public List<SoftwareUnitDTO> listAllModulesInModule(String uniqueModuleName) {
-        List<SoftwareUnitDTO> allModulesInModule = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> allModulesInModule = new ArrayList<>();
         if (uniqueModuleName != null && !uniqueModuleName.equals("")) {
             List<SoftwareUnitDTO> innerModules = getModulesInModules(uniqueModuleName);
             allModulesInModule.addAll(innerModules);
@@ -64,7 +64,7 @@ public class AnalyseUIController {
     }
     
     public List<DependencyDTO> listDependencies(List<SoftwareUnitDTO> from, List<SoftwareUnitDTO> to) {
-        List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+        List<DependencyDTO> dependencies = new ArrayList<>();
         for (SoftwareUnitDTO fromModule : from) {
             for (SoftwareUnitDTO toModule : to) {
                 for (DependencyDTO dependency : analyseTaskControl.getDependenciesFromSoftwareUnitToSoftwareUnit(fromModule.uniqueName, toModule.uniqueName)) {

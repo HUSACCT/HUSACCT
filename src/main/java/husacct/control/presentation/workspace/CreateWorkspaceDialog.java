@@ -115,7 +115,7 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 						String name = workspaceNameText.getText();
 						String language = "Java";
 						String version = "1.0";
-						ArrayList<String> paths = new ArrayList<String>(); 
+						ArrayList<String> paths = new ArrayList<>();
 						ApplicationDTO applicationData = mainController.getApplicationController().createApplicationData(name, language, version, paths);
 						mainController.getApplicationController().setApplicationData(applicationData);
 						dispose();	

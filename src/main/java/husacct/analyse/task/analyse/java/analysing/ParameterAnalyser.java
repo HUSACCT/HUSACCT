@@ -27,7 +27,7 @@ public class ParameterAnalyser extends JavaGenerator {
     private Logger logger = Logger.getLogger(ParameterAnalyser.class);
     
     public String generateParameterObjects(FormalParameterListContext parametersList, String belongsToMethod, String belongsToClass) {
-        this.parameterQueue = new ArrayList<ArrayList<Object>>();
+        this.parameterQueue = new ArrayList<>();
         this.belongsToMethod = belongsToMethod;
         this.belongsToClass = belongsToClass;
         /* Test helper
@@ -112,7 +112,7 @@ public class ParameterAnalyser extends JavaGenerator {
     }
     
     private void addToQueue() {
-        ArrayList<Object> myParam = new ArrayList<Object>();
+        ArrayList<Object> myParam = new ArrayList<>();
         myParam.add(this.declareType);
         myParam.add(this.declareName);
         myParam.add(this.lineNumber);

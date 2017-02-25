@@ -13,7 +13,7 @@ public class ImportViolations {
     private Element violationsElement;
 
     public List<ViolationImExportDTO> importViolations(Element importElement) {
-    	List<ViolationImExportDTO> imExportViolationDtoList = new ArrayList<ViolationImExportDTO>();
+    	List<ViolationImExportDTO> imExportViolationDtoList = new ArrayList<>();
     	violationsElement = new Element("violations");
 		for (Element rootElement : importElement.getChildren()) {
 			String name = rootElement.getName();

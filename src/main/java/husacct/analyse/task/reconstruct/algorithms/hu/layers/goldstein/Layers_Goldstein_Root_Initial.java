@@ -17,7 +17,7 @@ import husacct.common.dto.SoftwareUnitDTO;
 public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 		private int layerThreshold;
 		private ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses;
-		private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+		private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<>();
 		private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
 		
 		public Layers_Goldstein_Root_Initial (IModelQueryService queryService) {
@@ -33,7 +33,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 		}
 		
 		private void determineInternalRootPackagesWithClasses() { 
-			internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+			internalRootPackagesWithClasses = new ArrayList<>();
 			SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
 			for (SoftwareUnitDTO rootModule : allRootUnits) {
 				if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
@@ -45,7 +45,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 			if (internalRootPackagesWithClasses.size() == 1) {
 				// Temporal solution useful for HUSACCT20 test. To be improved! E.g., classes in root are excluded from the process. 
 				String newRoot = internalRootPackagesWithClasses. get(0).uniqueName;
-				internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+				internalRootPackagesWithClasses = new ArrayList<>();
 				for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
 					if (child.type.equalsIgnoreCase("package")) {
 						internalRootPackagesWithClasses.add(child);
@@ -57,7 +57,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 	// Code below is not used in version 28/03/2016	
 		
 		public ArrayList<SoftwareUnitDTO> getClasses(String library) {
-			internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+			internalRootPackagesWithClasses = new ArrayList<>();
 			SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
 			for (SoftwareUnitDTO rootModule : allRootUnits) {
 				if (!rootModule.uniqueName.equals(library)) {
@@ -71,7 +71,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 				// Temporal solution useful for HUSACCT20 test. To be improved!
 				// E.g., classes in root are excluded from the process.
 				String newRoot = internalRootPackagesWithClasses.get(0).uniqueName;
-				internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+				internalRootPackagesWithClasses = new ArrayList<>();
 				for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
 					if (child.type.equalsIgnoreCase("package")) {
 						internalRootPackagesWithClasses.add(child);
@@ -100,7 +100,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 		private void identifyLayers(ArrayList<SoftwareUnitDTO> units, String depedencyType) {
 			// 1) Assign all internalRootPackages to bottom layer
 			int layerId = 1;
-			ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<SoftwareUnitDTO>();
+			ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<>();
 			assignedUnits.addAll(units);
 			layers.put(layerId, assignedUnits);
 
@@ -123,7 +123,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 				// hierarchcalLevel = 1
 				int lowestLevelLayer = 1;
 				int raise = highestLevelLayer - lowestLevelLayer;
-				TreeMap<Integer, ArrayList<SoftwareUnitDTO>> tempLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+				TreeMap<Integer, ArrayList<SoftwareUnitDTO>> tempLayers = new TreeMap<>();
 				for (int i = lowestLevelLayer; i <= highestLevelLayer; i++) {
 					ArrayList<SoftwareUnitDTO> unitsOfLayer = layers.get(i);
 					int level = lowestLevelLayer + raise;
@@ -140,8 +140,8 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 			@SuppressWarnings("unchecked")
 			ArrayList<SoftwareUnitDTO> assignedUnitsBottomLayerClone = (ArrayList<SoftwareUnitDTO>) assignedUnitsOriginalBottomLayer
 					.clone();
-			ArrayList<SoftwareUnitDTO> assignedUnitsNewBottomLayer = new ArrayList<SoftwareUnitDTO>();
-			ArrayList<SoftwareUnitDTO> assignedUnitsTopLayer = new ArrayList<SoftwareUnitDTO>();
+			ArrayList<SoftwareUnitDTO> assignedUnitsNewBottomLayer = new ArrayList<>();
+			ArrayList<SoftwareUnitDTO> assignedUnitsTopLayer = new ArrayList<>();
 			
 			for (SoftwareUnitDTO softwareUnit : assignedUnitsOriginalBottomLayer) {
 				boolean rootPackageDoesNotUseOtherPackage = true;

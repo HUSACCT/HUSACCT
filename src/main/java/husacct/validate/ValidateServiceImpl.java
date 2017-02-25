@@ -106,7 +106,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		RuleDTO[] allEnabledAppliedRules = defineService.getDefinedRules();
 
 		// Filter out disabled rules
-		ArrayList<RuleDTO> intermediate = new ArrayList<RuleDTO>();
+		ArrayList<RuleDTO> intermediate = new ArrayList<>();
 		for(RuleDTO appliedRule : allEnabledAppliedRules){
 			if (appliedRule != null){
 				intermediate.add(appliedRule);
@@ -245,7 +245,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 
 	@Override
 	public HashMap<String, ConfigPanel> getSubItems() {
-		HashMap<String, ConfigPanel> subItems = new HashMap<String, ConfigPanel>();
+		HashMap<String, ConfigPanel> subItems = new HashMap<>();
 		return subItems;
 	}
 

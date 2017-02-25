@@ -135,7 +135,7 @@ public class AddProjectPanel extends JPanel{
 		String name = projectNameText.getText();
 		String version = versionText.getText();
 		String description = descriptionText.getText();
-		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
+		ArrayList<String> paths = new ArrayList<>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
 		
 		return new ProjectDTO(name, paths, "", version, description, null);
 	}

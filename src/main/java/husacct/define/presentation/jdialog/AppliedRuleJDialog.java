@@ -243,7 +243,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
 		JTableTableModel tableModel = (JTableTableModel) jTableException.getModel();
 		tableModel.getDataVector().removeAllElements();
-		jTableExceptionIds = new HashMap<Long, Long>();
+		jTableExceptionIds = new HashMap<>();
 		long row = 0;
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {	
 			String description = (String) exceptionRule.get("description");

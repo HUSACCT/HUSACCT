@@ -11,8 +11,8 @@ public class SetJavaBenchmark extends AbstractBootstrap{
 
 	@Override
 	public void execute() {
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<String> paths = new ArrayList<String>();
+		ArrayList<ProjectDTO> projects = new ArrayList<>();
+		ArrayList<String> paths = new ArrayList<>();
 
 		for(String pathToCustomTestProject : pathsToCustomTestProject){
 			if(new File(pathToCustomTestProject).exists() && new File(pathToCustomTestProject).isDirectory()){
@@ -24,7 +24,7 @@ public class SetJavaBenchmark extends AbstractBootstrap{
 			paths.add(new File("").getAbsolutePath() + "/" + "testprojects" + "/" + "java" + "/" + "benchmark");
 		}
 
-		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<>();
 		ProjectDTO project = new ProjectDTO("Java Benchmark", paths, "Java", "1.0", "Benchmark Project", analysedModules);
 		projects.add(project);
 		getDefineService().createApplication("Java Benchmark", projects, "1.0");

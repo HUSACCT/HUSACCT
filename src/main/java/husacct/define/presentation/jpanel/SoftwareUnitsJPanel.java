@@ -266,8 +266,8 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 
 	private void removeSoftwareUnits() {
 		if (getSelectedRow() != -1) {
-			List<String> selectedModules = new ArrayList<String>();
-			List<String> types = new ArrayList<String>();
+			List<String> selectedModules = new ArrayList<>();
+			List<String> types = new ArrayList<>();
 			for (int selectedRow : softwareUnitsTable.getSelectedRows()) {
 				String softwareUnitName = (String) softwareUnitsTable.getValueAt(selectedRow, 0);
 				String type = (String) softwareUnitsTable.getValueAt(selectedRow, 1);

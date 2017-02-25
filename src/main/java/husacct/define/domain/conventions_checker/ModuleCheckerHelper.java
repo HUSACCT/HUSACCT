@@ -139,9 +139,9 @@ public class ModuleCheckerHelper {
     private ArrayList<AppliedRuleStrategy> getFromModuleAppliedRules(ModuleStrategy fromModule) {
 	
     	
-    ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
+    ArrayList<Long> appliedRuleIds = new ArrayList<>();
     	appliedRuleIds=	appliedRuleService.getAppliedRulesIdsByModuleFromId(fromModule.getId());
-	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<AppliedRuleStrategy>();
+	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<>();
 	
 	for (Long appliedRuleId : appliedRuleIds) {
 	    appliedRules.add(appliedRuleService
@@ -153,7 +153,7 @@ public class ModuleCheckerHelper {
     private ArrayList<AppliedRuleStrategy> getToModuleAppliedRules(ModuleStrategy toModule) {
 	ArrayList<Long> appliedRuleIds = appliedRuleService
 		.getAppliedRulesIdsByModuleToId(toModule.getId());
-	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<AppliedRuleStrategy>();
+	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<>();
 	for (Long appliedRuleId : appliedRuleIds) {
 	    appliedRules.add(appliedRuleService
 		    .getAppliedRuleById(appliedRuleId));

@@ -62,7 +62,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     }
 
     private void writeClassesToXML() {
-        this.classesTreeMap = new TreeMap<String, FamixClass>(theModel.classes);
+        this.classesTreeMap = new TreeMap<>(theModel.classes);
         for (String classKey : classesTreeMap.keySet()) {
         	FamixClass fClass = classesTreeMap.get(classKey);
         	xmlFileExporter.writeClassToXml(fClass.getDTO());
@@ -70,7 +70,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     }
 
     private void writeLibrariesToXML() {
-        this.librarieTreeMap = new TreeMap<String, FamixLibrary>(theModel.libraries);
+        this.librarieTreeMap = new TreeMap<>(theModel.libraries);
         for (String Key : librarieTreeMap.keySet()) {
         	FamixLibrary f = librarieTreeMap.get(Key);
         	xmlFileExporter.writeLibraryToXml(f.getDTO());
@@ -148,7 +148,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     private HashMap<String, Class<?>> getHashMapWithFields(FamixObject fobj) {	
 	    Class<?> f = fobj.getClass();
 	    List<Field> fobjFields = fobj.getFields(f);
-	    HashMap<String, Class<?>> fobjFieldsMap = new HashMap<String, Class<?>>();
+	    HashMap<String, Class<?>> fobjFieldsMap = new HashMap<>();
 	   	for (Field field : fobjFields) {
 	   		String name = field.getName().toString();
 	   		Class<?> type = field.getType();

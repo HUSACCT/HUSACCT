@@ -46,7 +46,7 @@ public abstract class DrawingController {
 	
 	public ArrayList<ModuleFigure>				contextFigures; 			// List with all the figures with isContext = true, not being a line (public, because of testability)
 	protected HashMap<String, String> 			parentFigureNameAndTypeMap; // Map with key = uniqueName of the parent figure and value = type. 
-	private final HashMap<String, DrawingState>	storedStates	= new HashMap<String, DrawingState>();
+	private final HashMap<String, DrawingState>	storedStates	= new HashMap<>();
 	
 	protected Logger							logger			= Logger.getLogger(DrawingController.class);
 
@@ -69,7 +69,7 @@ public abstract class DrawingController {
 		layoutStrategyOption = ModuleLayoutsEnum.BASIC_LAYOUT;
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
-		parentFigureNameAndTypeMap = new HashMap<String,String>();
+		parentFigureNameAndTypeMap = new HashMap<>();
 		
 		drawing = new Drawing();
 		drawingView = new DrawingView(drawing);
@@ -85,7 +85,7 @@ public abstract class DrawingController {
 	// Method to create the top-level diagram.
 	public DrawingView drawArchitectureTopLevel() {
 		try {
-			ArrayList<ModuleFigure> includedModuleFiguresInRoot = new ArrayList<ModuleFigure>();
+			ArrayList<ModuleFigure> includedModuleFiguresInRoot = new ArrayList<>();
 			ArrayList<ModuleFigure> allModuleFiguresInRoot = getModuleFiguresInRoot();
 			if (drawingSettingsHolder.areExternalLibrariesShown()) {
 				// Select all modules in root
@@ -209,7 +209,7 @@ public abstract class DrawingController {
 		} else {
 			/* 1) find the children of the selected module(s) (in parentNames) and store them in parentChildrenMap
 				  Map parentChildrenMap: key = parentName; value = ArrayList<knownChildrenOfParent> */
-			HashMap<String, ArrayList<ModuleFigure>> parentChildrenMap = new HashMap<String, ArrayList<ModuleFigure>>(); 
+			HashMap<String, ArrayList<ModuleFigure>> parentChildrenMap = new HashMap<>();
 			for (String parentName : parentNames) {
 				if (!parentName.equals("") && !parentName.equals("**")) {
 					ArrayList<ModuleFigure> knownChildren = getChildModuleFiguresOfParent(parentName);
@@ -223,7 +223,7 @@ public abstract class DrawingController {
 			// 2) If there are contextFigures, put an entry in parentChildrenMap for each combo of parent-child contextFigure(s)   
 			if (contextFigures.size() > 0) {
 				// a) Filter out context figures that are children of one of the parents.
-				HashSet<ModuleFigure> filteredContextFigures = new HashSet<ModuleFigure>();
+				HashSet<ModuleFigure> filteredContextFigures = new HashSet<>();
 				for (String parentName : parentNames) {
 					HashSet<String> children = getChildenOfParent(parentName);
 					for (ModuleFigure contextFigure : contextFigures) {
@@ -233,7 +233,7 @@ public abstract class DrawingController {
 					}
 				}
 				// b) Add the filteredContextFigures with their parents to parentChildrenMap
-				ArrayList<ModuleFigure> contextFiguresInRoot = new ArrayList<ModuleFigure>();
+				ArrayList<ModuleFigure> contextFiguresInRoot = new ArrayList<>();
 				for (ModuleFigure figure : filteredContextFigures) {
 					String parentOfContextFigure = getUniqueNameOfParentModule(figure.getUniqueName());
 					if (parentOfContextFigure.equals("")) {
@@ -245,7 +245,7 @@ public abstract class DrawingController {
 								children.add(figure.clone());
 							}
 						} else {
-							ArrayList<ModuleFigure> children = new ArrayList<ModuleFigure>();
+							ArrayList<ModuleFigure> children = new ArrayList<>();
 							children.add(figure.clone());
 							parentChildrenMap.put(parentOfContextFigure, children);
 						}
@@ -256,7 +256,7 @@ public abstract class DrawingController {
 			}
 			// 3) Hand-over to drawing services 
 			Set<String> parentNamesKeySet = parentChildrenMap.keySet();
-			Set<String> currentPaths = new HashSet<String>();
+			Set<String> currentPaths = new HashSet<>();
 			for (String parentName : parentNamesKeySet) {
 				if (!parentName.equals("")) {
 					currentPaths.add(parentName);
@@ -364,7 +364,7 @@ public abstract class DrawingController {
 	}
 	
 	public void resetContextFigures() { // Public, because of testability.
-		contextFigures = new ArrayList<ModuleFigure>();
+		contextFigures = new ArrayList<>();
 	}
 
 	public void setCurrentPaths(String[] paths) {
@@ -400,8 +400,8 @@ public abstract class DrawingController {
 			Set<Figure> selection = drawingView.getSelectedFigures();
 			if (selection.size() > 0) {
 				// 1) Create a list of ModuleFigures in the current drawing as base to create a zoomed-in drawing.  
-				ArrayList<ModuleFigure> selectedModules = new ArrayList<ModuleFigure>();
-				ArrayList<ModuleFigure> moduleFiguresForNewDrawing = new ArrayList<ModuleFigure>();
+				ArrayList<ModuleFigure> selectedModules = new ArrayList<>();
+				ArrayList<ModuleFigure> moduleFiguresForNewDrawing = new ArrayList<>();
 				// 1a) Add the selected figures (property isContext = false)
 				for (Figure s : selection) {
 					if(s instanceof ModuleFigure) { 
@@ -432,7 +432,7 @@ public abstract class DrawingController {
 				}
 				// 2) Create a list with the uniqueNames of the to be zoomed-in modules + reset and set contextFigures.
 				resetContextFigures();
-				ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
+				ArrayList<String> parentNames = new ArrayList<>(); // Parent is a module to-be-zoomed-in
 				for (ModuleFigure moduleFigure : moduleFiguresForNewDrawing){
 					if (!moduleFigure.isContext()) {
 						parentNames.add(moduleFigure.getUniqueName());
@@ -465,7 +465,7 @@ public abstract class DrawingController {
 			resetContextFigures();
 			saveSingleLevelFigurePositions();
 			// Determine the decomposition level.
-			HashMap<String, Integer> pathsWithDecompositionLevel = new HashMap<String, Integer>(); 
+			HashMap<String, Integer> pathsWithDecompositionLevel = new HashMap<>();
 			int highestLevel = 0;
 			for (String currentPath : drawingSettingsHolder.getCurrentPaths()) {
 				if (currentPath != null) {
@@ -479,8 +479,8 @@ public abstract class DrawingController {
 			}
 			// Collapse the parent(s) with the highest decomposition level.
 			boolean drawTopLevel = true;
-			ArrayList<String> parentNames = new ArrayList<String>(); // Parent is a module to-be-zoomed-in 
-			HashSet<String> contextFigureNames = new HashSet<String>(); // Parent is a module to-be-zoomed-in 
+			ArrayList<String> parentNames = new ArrayList<>(); // Parent is a module to-be-zoomed-in
+			HashSet<String> contextFigureNames = new HashSet<>(); // Parent is a module to-be-zoomed-in
 			for (String path : pathsWithDecompositionLevel.keySet()) {
 				String parentName;
 				if (pathsWithDecompositionLevel.get(path) == highestLevel) {

@@ -23,7 +23,7 @@ class FamixModuleFinder extends FamixFinder {
 
     public FamixModuleFinder(FamixModel model) {
         super(model);
-        this.currentResult = new ArrayList<SoftwareUnitDTO>();
+        this.currentResult = new ArrayList<>();
         this.currentArgument = "";
     }
 
@@ -61,7 +61,7 @@ class FamixModuleFinder extends FamixFinder {
 	// Get a list of rootPackagesWithClass: the first packages (starting from the root) that contain one or more classes.
 	// These rootPackagesWithClasses identify the paths to the systems internal classes. 
 	public List<String> getRootPackagesWithClass(String module) {
-    	List<String> rootPackagesWithClassList = new ArrayList<String>();
+    	List<String> rootPackagesWithClassList = new ArrayList<>();
 		List<SoftwareUnitDTO> children = getChildModulesInModule(module);
 		boolean isRootPackageWithClass = false;
 		for (SoftwareUnitDTO child : children) {
@@ -81,7 +81,7 @@ class FamixModuleFinder extends FamixFinder {
 	}
 
 	public List<SoftwareUnitDTO> getChildModulesInModule(String module) {
-    	List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+    	List<SoftwareUnitDTO> result = new ArrayList<>();
     	TreeSet<String> children = getChildModulesNamesInModule(module);
     	SoftwareUnitDTO current;
     	if ((children != null) && (children.size() > 0)){
@@ -127,7 +127,7 @@ class FamixModuleFinder extends FamixFinder {
 
     private void performQuery(FinderArguments function, String argument, int depth) {
     	this.prepare(function, argument);
-        List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> result = new ArrayList<>();
         result.addAll(this.findPackages());
         result.addAll(this.findClasses());
         result.addAll(this.findLibraries());
@@ -146,7 +146,7 @@ class FamixModuleFinder extends FamixFinder {
     }
 
     private List<SoftwareUnitDTO> findPackages() {
-        List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> result = new ArrayList<>();
         Iterator<Entry<String, FamixPackage>> iterator = theModel.packages.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
@@ -162,7 +162,7 @@ class FamixModuleFinder extends FamixFinder {
     }
 
     private List<SoftwareUnitDTO> findClasses() {
-        List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> result = new ArrayList<>();
         Iterator<Entry<String, FamixClass>> iterator = theModel.classes.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
@@ -178,7 +178,7 @@ class FamixModuleFinder extends FamixFinder {
     }
 
     public List<SoftwareUnitDTO> findAllClasses() {
-        List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> result = new ArrayList<>();
         Iterator<Entry<String, FamixClass>> iterator = theModel.classes.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
@@ -192,7 +192,7 @@ class FamixModuleFinder extends FamixFinder {
     
     
     private List<SoftwareUnitDTO> findLibraries() {
-        List<SoftwareUnitDTO> result = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> result = new ArrayList<>();
         Iterator<Entry<String, FamixLibrary>> iterator = theModel.libraries.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
@@ -244,7 +244,7 @@ class FamixModuleFinder extends FamixFinder {
     }
 
     private SoftwareUnitDTO createAnalysedModuleDTO(FamixEntity theEntity) {
-        List<SoftwareUnitDTO> emptyList = new ArrayList<SoftwareUnitDTO>();
+        List<SoftwareUnitDTO> emptyList = new ArrayList<>();
         return createAnalysedModuleDTO(theEntity, emptyList);
     }
     private SoftwareUnitDTO createAnalysedModuleDTO(FamixEntity theEntity, List<SoftwareUnitDTO> childs) {

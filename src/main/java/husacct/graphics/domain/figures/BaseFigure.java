@@ -27,7 +27,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	protected final String				name; 		// Leaf name, not unique; shown as the name of the figure in diagrams 
 	protected final String				uniqueName; //Used in equals() to identify objects uniquely
 	protected final String				type; 		// In lower case. Used to identify the module type, like subsystem, layer, package, class; also in case of a ParentFigure. 
-	private final ArrayList<Decorator>	decorators				= new ArrayList<Decorator>();
+	private final ArrayList<Decorator>	decorators				= new ArrayList<>();
 	private boolean						isSizeable				= false;
 	private boolean						isEnabled				= true;
 	private boolean						isStoredInContainer		= false;
@@ -193,7 +193,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	}
 	
 	public void removeDecoratorByType(Class<?> searchClass) {
-		ArrayList<Decorator> removes = new ArrayList<Decorator>();
+		ArrayList<Decorator> removes = new ArrayList<>();
 		
 		for (Decorator decorator : decorators)
 			if (decorator.getClass().isAssignableFrom(searchClass)) removes

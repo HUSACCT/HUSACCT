@@ -270,7 +270,7 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 
 	private void removeRules() {
 		if (getSelectedRow() != -1) {
-			List<Long> selectedRules = new ArrayList<Long>();
+			List<Long> selectedRules = new ArrayList<>();
 
 			for (int selectedRow : appliedRulesTable.getSelectedRows()) {
 				Object o = appliedRulesTable.getValueAt(selectedRow, 0);

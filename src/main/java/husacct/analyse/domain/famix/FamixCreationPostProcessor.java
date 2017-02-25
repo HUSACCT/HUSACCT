@@ -25,8 +25,8 @@ class FamixCreationPostProcessor {
     private HashMap<String, ArrayList<FamixMethod>> sequencesPerMethod;
     private HashMap<String, String> firstSuperClassPerClass; // get(uniqueClassName) will return the uniqueName of the internal base/super class (no interface, no external class).
     private HashMap<String, HashSet<String>> inheritanceAssociationsPerClass;
-    private List<FamixAssociation> indirectAssociations = new ArrayList<FamixAssociation>();
-    private List<FamixInvocation> waitingDerivedAssociations = new ArrayList<FamixInvocation>();
+    private List<FamixAssociation> indirectAssociations = new ArrayList<>();
+    private List<FamixInvocation> waitingDerivedAssociations = new ArrayList<>();
 
 	//private ILocaleService husacctLocaleService = ServiceProvider.getInstance().getLocaleService();
     private final Logger logger = Logger.getLogger(FamixCreationPostProcessor.class);
@@ -50,7 +50,7 @@ class FamixCreationPostProcessor {
         FamixImport foundImport;
 		ArrayList<FamixImport> foundImportsList;
 		ArrayList<FamixImport>  alreadyIncludedImportsList;
-		importsPerEntity = new HashMap<String, ArrayList<FamixImport>>();
+		importsPerEntity = new HashMap<>();
 	    
 		try{
 	        for (FamixAssociation association : theModel.associations) {
@@ -66,7 +66,7 @@ class FamixCreationPostProcessor {
 	            		importsPerEntity.put(uniqueNameFrom, alreadyIncludedImportsList);
 	            	}
 	            	else{
-			        	foundImportsList = new ArrayList<FamixImport>();
+			        	foundImportsList = new ArrayList<>();
 		            	foundImportsList.add(foundImport);
 		            	importsPerEntity.put(uniqueNameFrom, foundImportsList);
 	            	}
@@ -212,7 +212,7 @@ class FamixCreationPostProcessor {
     }
     
     public void processBehaviouralEntities() {
-    	sequencesPerMethod = new HashMap<String, ArrayList<FamixMethod>>(); 
+    	sequencesPerMethod = new HashMap<>();
     	for (FamixBehaviouralEntity entity : theModel.behaviouralEntities.values()) {
             try {
             	boolean belongsToClassExists = false;
@@ -282,7 +282,7 @@ class FamixCreationPostProcessor {
 	            		sequencesPerMethod.put(methodNameWithoutSignature, alreadyIncludedMethodsList);
 	            	}
 	            	else{
-	            		ArrayList<FamixMethod> newMethodsList = new ArrayList<FamixMethod>();
+	            		ArrayList<FamixMethod> newMethodsList = new ArrayList<>();
 		            	newMethodsList.add(method);
 		            	sequencesPerMethod.put(methodNameWithoutSignature, newMethodsList);
 	            	}
@@ -304,8 +304,8 @@ class FamixCreationPostProcessor {
 		FamixAssociation foundInheritance;
 		HashSet<String> foundInheritanceList;
 		HashSet<String> alreadyIncludedInheritanceList;
-		firstSuperClassPerClass = new HashMap<String, String>(); 
-		inheritanceAssociationsPerClass = new HashMap<String, HashSet<String>>();
+		firstSuperClassPerClass = new HashMap<>();
+		inheritanceAssociationsPerClass = new HashMap<>();
 		
 		try{
 			Iterator<FamixAssociation> iterator = theModel.waitingAssociations.iterator();
@@ -396,7 +396,7 @@ class FamixCreationPostProcessor {
 			            		inheritanceAssociationsPerClass.put(uniqueNameFrom, alreadyIncludedInheritanceList);
 			            	}
 			            	else{
-				            	foundInheritanceList = new HashSet<String>();
+				            	foundInheritanceList = new HashSet<>();
 				            	foundInheritanceList.add(foundInheritance.to);
 				            	inheritanceAssociationsPerClass.put(uniqueNameFrom, foundInheritanceList);
 			            	}
@@ -785,7 +785,7 @@ class FamixCreationPostProcessor {
     
 	// Objective: Identify dependencies to the remaining parts of the chain in a chaining invocation (assignment or call).
     void processWaitingDerivedAssociations() {
-    	List<FamixInvocation> addedInvocations = new ArrayList<FamixInvocation>();
+    	List<FamixInvocation> addedInvocations = new ArrayList<>();
     	for (FamixInvocation invocation : waitingDerivedAssociations) {
         	
         	/* Test helper
@@ -1157,7 +1157,7 @@ class FamixCreationPostProcessor {
     			String[] invocationArguments = contentsInvocationSignature.split(",");
     			int numberOfArguments = invocationArguments.length;
     			// 3a) If there is only one method with the same number of parameters as invocationArguments, then return this method
-    			List<FamixMethod> matchingMethods1 = new ArrayList<FamixMethod>();
+    			List<FamixMethod> matchingMethods1 = new ArrayList<>();
 	    		for (FamixMethod method : methodsList){
 	    			if ((method.signature != null) && (!method.signature.equals(""))) {
 		    			String contentsmethodParameter = method.signature.substring(method.signature.indexOf("(") + 1, method.signature.indexOf(")")); 
@@ -1173,7 +1173,7 @@ class FamixCreationPostProcessor {
 	    			return matchingMethods1.get(0);
     			
     			// 3b) If there is only one method where the first parameter type == the first argument type, then return this method  
-    			List<FamixMethod> matchingMethods2 = new ArrayList<FamixMethod>();
+    			List<FamixMethod> matchingMethods2 = new ArrayList<>();
     			if (numberOfArguments >= 1) {
     				// Replace the argument string by a type, in case of an attribute
     				invocationArguments[0] = getTypeOfAttribute(fromClass, fromMethod, invocationArguments[0]);
@@ -1267,7 +1267,7 @@ class FamixCreationPostProcessor {
     }
 
     private List<String> getClassesInPackage(String packageUniqueName) { // Including the inner classes!
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         if (theModel.packages.containsKey(packageUniqueName)){
         	TreeSet<String> children = theModel.packages.get(packageUniqueName).children;
         	if ((children != null)){
@@ -1299,7 +1299,7 @@ class FamixCreationPostProcessor {
 	// Add indirect inheritance associations. Requires the existence of HashMap inheritanceAccociationsPerClass.
     private void indirectAssociations_DeriveIndirectInheritance() {
         try{
-        	List<FamixAssociation> indirectInheritanceAssociations = new ArrayList<FamixAssociation>();
+        	List<FamixAssociation> indirectInheritanceAssociations = new ArrayList<>();
 	        for (FamixAssociation directAssociation : theModel.associations) {
                 if (directAssociation.to == null || directAssociation.from == null || directAssociation.to.equals("") || directAssociation.from.equals("")){ 
                 	numberOfNotConnectedWaitingAssociations ++;
@@ -1319,7 +1319,7 @@ class FamixCreationPostProcessor {
     }
 
     private List<FamixAssociation> indirectAssociations_AddIndirectInheritanceAssociation(String from, String to, int lineNumber) {
-    	List<FamixAssociation> indirectInheritanceAssociations = new ArrayList<FamixAssociation>();
+    	List<FamixAssociation> indirectInheritanceAssociations = new ArrayList<>();
 		HashSet<String> foundInheritanceList = inheritanceAssociationsPerClass.get(to);
 		if (foundInheritanceList != null) {
 			for (String foundInheritance : foundInheritanceList){

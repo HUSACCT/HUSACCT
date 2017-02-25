@@ -15,7 +15,7 @@ public class CreateLayersInGraphic {
     private String dependencyType = RelationTypes.allDependencies;
     private IAnalyseService queryService = ServiceProvider.getInstance().getAnalyseService();
     private ArrayList<SoftwareUnitDTO> softwareUnitsInDiagram;
-    private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+    private TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layers = new TreeMap<>();
     private final Logger logger = Logger.getLogger(CreateLayersInGraphic.class);
 
     public CreateLayersInGraphic () {
@@ -40,7 +40,7 @@ public class CreateLayersInGraphic {
     private void identifyLayers(List<SoftwareUnitDTO> units, String depedencyType) {
         // 1) Assign all units to bottom layer
         int layerId = 1;
-        ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<SoftwareUnitDTO>();
+        ArrayList<SoftwareUnitDTO> assignedUnits = new ArrayList<>();
         assignedUnits.addAll(units);
         layers.put(layerId, assignedUnits);
 
@@ -61,7 +61,7 @@ public class CreateLayersInGraphic {
             // hierarchcalLevel = 1
             int lowestLevelLayer = 1;
             int raise = highestLevelLayer - lowestLevelLayer;
-            TreeMap<Integer, ArrayList<SoftwareUnitDTO>> tempLayers = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+            TreeMap<Integer, ArrayList<SoftwareUnitDTO>> tempLayers = new TreeMap<>();
             for (int i = lowestLevelLayer; i <= highestLevelLayer; i++) {
                 ArrayList<SoftwareUnitDTO> unitsOfLayer = layers.get(i);
                 int level = lowestLevelLayer + raise;
@@ -78,8 +78,8 @@ public class CreateLayersInGraphic {
         @SuppressWarnings("unchecked")
         ArrayList<SoftwareUnitDTO> assignedUnitsBottomLayerClone = (ArrayList<SoftwareUnitDTO>) assignedUnitsOriginalBottomLayer
                 .clone();
-        ArrayList<SoftwareUnitDTO> assignedUnitsNewBottomLayer = new ArrayList<SoftwareUnitDTO>();
-        ArrayList<SoftwareUnitDTO> assignedUnitsTopLayer = new ArrayList<SoftwareUnitDTO>();
+        ArrayList<SoftwareUnitDTO> assignedUnitsNewBottomLayer = new ArrayList<>();
+        ArrayList<SoftwareUnitDTO> assignedUnitsTopLayer = new ArrayList<>();
 
         for (SoftwareUnitDTO softwareUnit : assignedUnitsOriginalBottomLayer) {
             boolean rootPackageDoesNotUseOtherPackage = true;

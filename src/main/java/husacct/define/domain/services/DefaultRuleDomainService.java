@@ -15,7 +15,7 @@ public class DefaultRuleDomainService {
 
 	private ModuleStrategy _module;
 	private RuleTypeDTO[] defaultRuleTypeDTOs = null;
-	private ArrayList<AppliedRuleStrategy> defaultRules = new ArrayList<AppliedRuleStrategy>();
+	private ArrayList<AppliedRuleStrategy> defaultRules = new ArrayList<>();
 	private AppliedRuleFactory factory = new AppliedRuleFactory();
 	public static DefaultRuleDomainService instance;
     private final Logger logger = Logger.getLogger(DefaultRuleDomainService.class);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ExpressionUnitDefinition extends SoftwareUnitDefinition {
 
-	private ArrayList<SoftwareUnitDefinition> container = new ArrayList<SoftwareUnitDefinition>();
+	private ArrayList<SoftwareUnitDefinition> container = new ArrayList<>();
 
 	public ExpressionUnitDefinition(String name, Type type) {
 		super(name, type);

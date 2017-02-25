@@ -55,7 +55,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends Algorithm
 			algorithm.executeAlgorithm(dto, queryService);
 			// b) If number of layers >= 3, than continue
 			ModuleDTO[] childModules = defineService.getModule_TheChildrenOfTheModule(dto.getSelectedModule().logicalPath);
-			ArrayList<ModuleDTO> layers = new ArrayList<ModuleDTO>();
+			ArrayList<ModuleDTO> layers = new ArrayList<>();
 			for (ModuleDTO childModule : childModules) {
 				if (childModule.type.equals(ModuleTypes.LAYER.toString())) {
 					layers.add(childModule);

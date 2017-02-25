@@ -37,7 +37,7 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	private JButton applyButton, cancelButton;
 	private AnalyseTaskControl analyseTaskControl;
 	private ApproachesJPanel allApproachesJPanel;
-	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<String, ReconstructArchitectureParameterPanel>();
+	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<>();
 
 	
 	public EditApproachFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, ApproachesJPanel allApJp){

@@ -14,7 +14,7 @@ public class Component extends AbstractModule {
 
 	@Override
 	public List<RuleType> initDefaultModuleRuleTypes() {
-		List<RuleType> defaultModuleRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> defaultModuleRuleTypes = new ArrayList<>();
 
 		for (RuleType ruleType : ruleTypes) {
 			if (ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
@@ -26,7 +26,7 @@ public class Component extends AbstractModule {
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> allowedRuleTypes = new ArrayList<>();
 
 		for (RuleType ruleType : ruleTypes) {
 			if (!ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)

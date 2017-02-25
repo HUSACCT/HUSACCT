@@ -33,7 +33,7 @@ import husacct.graphics.task.modulelayout.ModuleLayoutsEnum;
 public class GraphicsOptionsDialog extends HelpableJDialog {
 	private static final long						serialVersionUID	= 4794939901459687332L;
 	protected Logger								logger				= Logger.getLogger(GraphicsOptionsDialog.class);
-	private ArrayList<UserInputListener>			listeners			= new ArrayList<UserInputListener>();
+	private ArrayList<UserInputListener>			listeners			= new ArrayList<>();
 	
 	private JPanel									mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel, dependencyPanel;
 	
@@ -60,7 +60,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	public GraphicsOptionsDialog(boolean showDependencyOptions) {
 		super((GraphicsOptionsDialog) null, true);
 		this.showDependencyOptions = showDependencyOptions;
-		currentSettings = new HashMap<String, Object>();
+		currentSettings = new HashMap<>();
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
 		currentSettings.put("thickLines", false); //proportionalLineWidth
@@ -79,7 +79,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		add(mainPanel);
 		
-		layoutStrategiesTranslations = new HashMap<String, ModuleLayoutsEnum>();
+		layoutStrategiesTranslations = new HashMap<>();
 		int i = 0;
 		layoutStrategyItems = new String[ModuleLayoutsEnum.values().length];
 		for (ModuleLayoutsEnum strategy : ModuleLayoutsEnum.values()) {
@@ -89,7 +89,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			i++;
 		}
 
-		dependencyOptionTypeTranslations = new HashMap<String, DependencyTypeOption>();
+		dependencyOptionTypeTranslations = new HashMap<>();
 		i = 0;
 		dependencyOptionItems = new String[DependencyTypeOption.values().length];
 		for (DependencyTypeOption optionType : DependencyTypeOption.values()) {
@@ -101,7 +101,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		
 		initGUI();
 		
-		interfaceElements = new ArrayList<JComponent>();
+		interfaceElements = new ArrayList<>();
 		interfaceElements.add(zoomInButton);
 		interfaceElements.add(zoomOutButton);
 		interfaceElements.add(refreshButton);
@@ -238,7 +238,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
 		layoutStrategyPanel.add(layoutStrategyLabel);
 		
-		layoutStrategyOptions = new JComboBox<String>(layoutStrategyItems);
+		layoutStrategyOptions = new JComboBox<>(layoutStrategyItems);
 		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
 		layoutStrategyPanel.add(layoutStrategyOptions);
 		settingsPanel.add(layoutStrategyPanel);
@@ -254,7 +254,7 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 
 			dependencyPanel.add(dependencyLabel);
 			
-			toggleDependencyType = new JComboBox<String>(dependencyOptionItems);
+			toggleDependencyType = new JComboBox<>(dependencyOptionItems);
 			toggleDependencyType.setPreferredSize(new Dimension(elementWidth, elementHeight));
 			toggleDependencyType.addActionListener(new ActionListener() {
 				@Override

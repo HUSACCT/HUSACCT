@@ -77,7 +77,7 @@ public abstract class JtreeStateEngine {
 	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
 		AnalyzedModuleComponent analyzeModuleTobeRestored =  allUnitsRegistry.getAnalyzedUnit(unit);
 		//analyzeModuleTobeRestored.detach();
-		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		ArrayList<AnalyzedModuleComponent> data = new ArrayList<>();
 		if(analyzeModuleTobeRestored !=null){
 			data.add(analyzeModuleTobeRestored);
 			StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
@@ -177,13 +177,13 @@ public abstract class JtreeStateEngine {
 	}
 
 	public void addAppliedRule(AppliedRuleStrategy rule) {
-		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> rules = new ArrayList<>();
 		rules.add(rule);
 		stateController.insertCommand(new AppliedRuleAddCommand(rules));
 	}
 
 	public void removeAppliedRule(AppliedRuleStrategy appliedRuleById) {
-		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> rules = new ArrayList<>();
 		stateController.insertCommand(new RemoveAppliedRuleCommand(rules) );
 		
 	}

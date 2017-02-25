@@ -189,7 +189,7 @@ public class FilterPanel extends JPanel {
 	}
 
 	public List<Violation> fillViolationsTable(List<Violation> violations) {
-		List<Violation> selectedViolations = new ArrayList<Violation>();
+		List<Violation> selectedViolations = new ArrayList<>();
 
 		if (radioButtonAll.isSelected()) {
 			return violations;

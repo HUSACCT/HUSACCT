@@ -39,7 +39,7 @@ public class XmlFileImporterAnalysedModel {
     }
 
     public List<PackageDTO> readPackagesfromXml() {
-    	List<PackageDTO> dtoList = new ArrayList<PackageDTO>();
+    	List<PackageDTO> dtoList = new ArrayList<>();
     	for (Element e: packagesElement.getChildren()){
     		if (e.getName().equals("Package")) {
     			PackageDTO dto = new PackageDTO();
@@ -51,7 +51,7 @@ public class XmlFileImporterAnalysedModel {
     }
     
     public List<ClassDTO> readClassesfromXml() {
-    	List<ClassDTO> dtoList = new ArrayList<ClassDTO>();
+    	List<ClassDTO> dtoList = new ArrayList<>();
     	for (Element e: classesElement.getChildren()){
     		if (e.getName().equals("Class")) {
     			ClassDTO dto = new ClassDTO();
@@ -63,7 +63,7 @@ public class XmlFileImporterAnalysedModel {
     }
     
     public List<LibraryDTO> readLibrariesfromXml() {
-    	List<LibraryDTO> dtoList = new ArrayList<LibraryDTO>();
+    	List<LibraryDTO> dtoList = new ArrayList<>();
     	for (Element e: librariesElement.getChildren()){
     		if (e.getName().equals("Library")) {
     			LibraryDTO dto = new LibraryDTO();
@@ -76,7 +76,7 @@ public class XmlFileImporterAnalysedModel {
     }
     
     public List<DependencyDTO> readDependenciesfromXml() {
-    	List<DependencyDTO> dtoList = new ArrayList<DependencyDTO>();
+    	List<DependencyDTO> dtoList = new ArrayList<>();
     	for (Element e: dependenciesElement.getChildren()){
     		if (e.getName().equals("Dependency")) {
     			DependencyDTO dto = new DependencyDTO();
@@ -88,7 +88,7 @@ public class XmlFileImporterAnalysedModel {
     }
 
     public List<UmlLinkDTO> readUmlLinksFromXML() {
-    	List<UmlLinkDTO> dtoList = new ArrayList<UmlLinkDTO>();
+    	List<UmlLinkDTO> dtoList = new ArrayList<>();
     	for (Element e: umlLinksElement.getChildren()){
     		if (e.getName().equals("UmlLink")) {
     			UmlLinkDTO dto = new UmlLinkDTO();

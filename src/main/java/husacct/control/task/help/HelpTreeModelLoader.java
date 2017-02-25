@@ -34,7 +34,7 @@ import org.jdom2.input.SAXBuilder;
 public class HelpTreeModelLoader {
 
 	private Logger logger = Logger.getLogger(MainController.class);
-	List<HelpTreeNode> HelpTreeNodeList = new ArrayList<HelpTreeNode>();
+	List<HelpTreeNode> HelpTreeNodeList = new ArrayList<>();
 
 	public Document getXmlDocument() {
 		String manualXmlPath = Resource.HELP_PATH + "manuals.xml";

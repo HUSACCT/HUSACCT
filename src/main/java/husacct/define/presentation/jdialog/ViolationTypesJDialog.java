@@ -38,7 +38,7 @@ public class ViolationTypesJDialog extends JDialog{
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.appliedRuleController = appliedRuleController;
 		this.selectedRuleTypeKey = selectedRuleTypeKey;
-		violationCheckBoxHashMap = new HashMap<String, JCheckBox>();
+		violationCheckBoxHashMap = new HashMap<>();
 		initDetails();
 	}
 	
@@ -121,7 +121,7 @@ public class ViolationTypesJDialog extends JDialog{
 	}
 
 	public String[] save() {	
-		ArrayList<String> dependencyList = new ArrayList<String>();
+		ArrayList<String> dependencyList = new ArrayList<>();
 		
 	    Set<String> collection = violationCheckBoxHashMap.keySet();
 	    //iterate through HashMap values iterator

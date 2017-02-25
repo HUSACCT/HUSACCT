@@ -10,10 +10,10 @@ import org.jdom2.Element;
 public class ImportSeveritiesPerTypesPerProgrammingLanguages {
 
 	public HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {
-		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages = new HashMap<String, HashMap<String, Severity>>();
+		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages = new HashMap<>();
 		for (Element severityPerTypePerProgrammingLanguageElement : element.getChildren()) {
 			String language = severityPerTypePerProgrammingLanguageElement.getAttributeValue("language");
-			HashMap<String, Severity> severitiesPerTypes = new HashMap<String, Severity>();
+			HashMap<String, Severity> severitiesPerTypes = new HashMap<>();
 			for (Element severityPerTypeElement : severityPerTypePerProgrammingLanguageElement.getChildren("severityPerType")) {
 				for (Severity severity : severities) {
 					if (severity.getId().toString().equals(severityPerTypeElement.getChildText("severityId"))) {

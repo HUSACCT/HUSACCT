@@ -72,7 +72,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 
 
 	private ArrayList<Class<?>> findAllAlgorithmClasses(List<Class<?>> classes) {
-		ArrayList<Class<?>> approachClasses = new ArrayList<Class<?>>();
+		ArrayList<Class<?>> approachClasses = new ArrayList<>();
 		for (Class<?> potentialClass : classes){
 			boolean extendsIAlgorithm = Algorithm_SuperClass.class.isAssignableFrom(potentialClass);
 			boolean isAbstractClass = Modifier.isAbstract(potentialClass.getModifiers());
@@ -105,7 +105,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 	private static final String BAD_PACKAGE_ERROR = "Unable to get resources from path '%s'. Are you sure the package '%s' exists?";
 
 	public List<Class<?>> findAllClassesInPackage(Package pkg) {
-		ArrayList<Class<?>> allClassesInPackage = new ArrayList<Class<?>>();
+		ArrayList<Class<?>> allClassesInPackage = new ArrayList<>();
 		String pkgName = pkg.getName();
 		String packagePath = pkgName.replace('.', '/');
 		URL packageUrl = Thread.currentThread().getContextClassLoader().getResource(packagePath);
@@ -204,7 +204,7 @@ public class ReconstructArchitectureDTOList extends AbstractDTO{
 	}
 
 	private List<Class<?>> findClassesInFile(File file, String pkgName) {
-		List<Class<?>> classes = new ArrayList<Class<?>>();
+		List<Class<?>> classes = new ArrayList<>();
 		String resource = pkgName + "." + file.getName();
 		if (file.isDirectory()) {
 			for (File child : file.listFiles()) {

@@ -16,8 +16,8 @@ public class Node {
 	private Figure			figure;
 	private int				level			= UNINITIALIZED;
 	private boolean			positionUpdated	= false;
-	private ArrayList<Node>	parents			= new ArrayList<Node>();
-	private ArrayList<Node>	connectedTo		= new ArrayList<Node>();
+	private ArrayList<Node>	parents			= new ArrayList<>();
+	private ArrayList<Node>	connectedTo		= new ArrayList<>();
 	
 	public Node(Figure f) {
 		this(f, UNINITIALIZED);
@@ -95,8 +95,8 @@ public class Node {
 	}
 	
 	public boolean isCyclicChain(Node n) {
-		Vector<Node> open = new Vector<Node>();
-		Vector<Node> closed = new Vector<Node>();
+		Vector<Node> open = new Vector<>();
+		Vector<Node> closed = new Vector<>();
 		open.addAll(connectedTo);
 		
 		while (open.size() > 0) {

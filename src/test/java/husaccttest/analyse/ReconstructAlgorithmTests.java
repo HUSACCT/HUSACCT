@@ -204,7 +204,7 @@ public class ReconstructAlgorithmTests {
 		logger.info(String.format("Loading workspace %s", location));
 		File file = new File(location);
 		if(file.exists()){
-			HashMap<String, Object> dataValues = new HashMap<String, Object>();
+			HashMap<String, Object> dataValues = new HashMap<>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
 			if(workspaceController.isOpenWorkspace()){

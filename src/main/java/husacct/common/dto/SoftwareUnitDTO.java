@@ -18,7 +18,7 @@ public class SoftwareUnitDTO extends AbstractDTO{
 		this.name = name;
 		this.type = type;
 		this.visibility = visibility;
-		this.subModules = new ArrayList<SoftwareUnitDTO>();
+		this.subModules = new ArrayList<>();
 	}
 	
 	public SoftwareUnitDTO(String uniqueName, String name, String type, String visibility, List<SoftwareUnitDTO> subModules){

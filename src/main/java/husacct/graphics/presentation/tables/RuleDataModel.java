@@ -24,7 +24,7 @@ public class RuleDataModel extends AbstractTableModel {
 	public RuleDataModel(RuleDTO[] dtos) {
 		localeService = ServiceProvider.getInstance().getLocaleService();
 		columnKeys = new String[] { "From", "To", "Type", "Exceptions", "IsException"};
-		columnNames = new HashMap<String, String>();
+		columnNames = new HashMap<>();
 		for (String key : columnKeys){ 
 			columnNames.put(key, localeService.getTranslatedString(key));
 		}

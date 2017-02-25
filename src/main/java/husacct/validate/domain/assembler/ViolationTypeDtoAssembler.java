@@ -9,7 +9,7 @@ import java.util.List;
 public class ViolationTypeDtoAssembler {
 
 	public ViolationTypeDTO[] createViolationTypeDTO(List<ViolationType> violationtypes) {
-		List<ViolationTypeDTO> violationtypeDTOs = new ArrayList<ViolationTypeDTO>();
+		List<ViolationTypeDTO> violationtypeDTOs = new ArrayList<>();
 
 		for (ViolationType violationtype : violationtypes) {
 			ViolationTypeDTO dto = createViolationTypeDTO(violationtype);

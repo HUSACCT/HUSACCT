@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 public class EditpanelDropListener implements DropTargetListener {
 
 	 private DropTarget target;
-	private ArrayList<DropTarget> dropTargets = new ArrayList<DropTarget>();
+	private ArrayList<DropTarget> dropTargets = new ArrayList<>();
 	
 	
 	

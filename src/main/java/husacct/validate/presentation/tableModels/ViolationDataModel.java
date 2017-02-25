@@ -20,7 +20,7 @@ public class ViolationDataModel extends AbstractTableModel {
 		data = new Violation[0];
 		localeService = ServiceProvider.getInstance().getLocaleService();
 		columnKeys = new String[] { "Source", "Target", "RuleType", "DependencyKind", "Direct", "Linenumber" };
-		columnNames = new HashMap<String, String>();
+		columnNames = new HashMap<>();
 		for (String key : columnKeys){ 
 			columnNames.put(key, localeService.getTranslatedString(key));
 		}

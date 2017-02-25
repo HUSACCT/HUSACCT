@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 
-	private Map<String,AnalyzedModuleComponent> allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
+	private Map<String,AnalyzedModuleComponent> allAnalyzedUnits = new LinkedHashMap<>();
 	//private Map<Long,AbstractDefineComponent> allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
-	private Map<String,String> importedUniqnames  =  new LinkedHashMap<String, String>();
+	private Map<String,String> importedUniqnames  = new LinkedHashMap<>();
 
 	public AnalyzedUnitRegistry()
 	{
@@ -34,9 +34,9 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	}
 
 	public void reset() {
-		allAnalyzedUnits = new LinkedHashMap<String,AnalyzedModuleComponent>();
+		allAnalyzedUnits = new LinkedHashMap<>();
 		//allDefinedUnits = new LinkedHashMap<Long,AbstractDefineComponent>();
-		importedUniqnames  =  new LinkedHashMap<String, String>();
+		importedUniqnames  = new LinkedHashMap<>();
 	}
 
 	public AnalyzedModuleComponent getAnalyzedUnit(SoftwareUnitDefinition unit) {
@@ -172,7 +172,7 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	}
 
 	public ArrayList<AnalyzedModuleComponent> getAnalyzedUnit(List<String> data) {
-		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
+		ArrayList<AnalyzedModuleComponent> units = new ArrayList<>();
 		for (String uniqNames : data) {
 			units.add(allAnalyzedUnits.get(uniqNames));
 		}
@@ -190,12 +190,12 @@ public class AnalyzedUnitRegistry implements ISofwareUnitSeperatedInterface{
 	}
 
 	public List<String> getimportedUnits() {
-		List<String> unignames= new ArrayList<String>();
+		List<String> unignames= new ArrayList<>();
 		for (String name : importedUniqnames.values()) {
 			unignames.add(name);
 		}
              
-		importedUniqnames= new LinkedHashMap<String, String>();
+		importedUniqnames= new LinkedHashMap<>();
 	
          return unignames;
 		}

@@ -13,7 +13,7 @@ class DependencyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private String[] columnNames;
     private String titleFrom, titleVia, titleTo, titleLine, titleType, titleIndirect;
-    private List<DependencyDTO> data = new ArrayList<DependencyDTO>();
+    private List<DependencyDTO> data = new ArrayList<>();
     private AnalyseUIController uiController;
 
     public DependencyTableModel(List<DependencyDTO> data, AnalyseUIController uiController) {

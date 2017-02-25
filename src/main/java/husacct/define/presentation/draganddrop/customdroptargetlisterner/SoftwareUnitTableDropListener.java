@@ -69,7 +69,7 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 		try {
 			
 			AnalyzedModuleTree palo = (AnalyzedModuleTree)arg.getTransferable().getTransferData(ModuleTrasferhandler.moduleFlavours[0]);
-			ArrayList<AnalyzedModuleComponent> tobesaved = new ArrayList<AnalyzedModuleComponent>();
+			ArrayList<AnalyzedModuleComponent> tobesaved = new ArrayList<>();
 			for (TreePath pathe : palo.getSelectionPaths()) {
 				AnalyzedModuleComponent top= (AnalyzedModuleComponent)pathe.getLastPathComponent();
 				//hot fix if have time will be better implemented 

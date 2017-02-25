@@ -127,7 +127,7 @@ public class ExportImportAnalysedModelTest {
 	public void AccessClassVariableConstant(){
 		String fromClass = "domain.direct.violating.AccessClassVariableConstant";
 		String toClass = "technology.direct.dao.UserDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Class Variable Constant", false));
 	}
@@ -136,7 +136,7 @@ public class ExportImportAnalysedModelTest {
 	public void AccessObjectReferenceAsParameter(){
 		String fromClass = "domain.direct.violating.AccessObjectReferenceAsParameter";
 		String toClass = "technology.direct.dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Type of Variable", false));
 	}
@@ -145,7 +145,7 @@ public class ExportImportAnalysedModelTest {
 	public void AnnotationDependency(){
 		String fromClass = "domain.direct.violating.AnnotationDependency";
 		String toClass = "technology.direct.dao.SettingsAnnotation";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Annotation");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "", false));
 	}
@@ -154,7 +154,7 @@ public class ExportImportAnalysedModelTest {
 	public void CallInstanceInnerInterface(){
 		String fromClass = "domain.direct.violating.CallInstanceInnerInterface";
 		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Interface Method", false));
 	}
@@ -163,7 +163,7 @@ public class ExportImportAnalysedModelTest {
 	public void DeclarationOuterClassByStaticNestedClass(){
 		String fromClass = "technology.direct.dao.CallInstanceOuterClassDAO.StaticNestedClass";
 		String toClass = "technology.direct.dao.CallInstanceOuterClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", false));
 	}
@@ -172,7 +172,7 @@ public class ExportImportAnalysedModelTest {
 	public void ImportDependencyStatic(){
 		String fromClass = "domain.direct.violating.ImportDependencyStatic";
 		String toClass = "technology.direct.dao.AccountDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Import");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -181,7 +181,7 @@ public class ExportImportAnalysedModelTest {
 	public void InheritanceExtends(){
 		String fromClass = "domain.direct.violating.InheritanceExtends";
 		String toClass = "technology.direct.dao.HistoryDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, "Extends Class", false));	}
 
@@ -230,7 +230,7 @@ public class ExportImportAnalysedModelTest {
 		logger.info(String.format("Loading workspace %s", location));
 		File file = new File(location);
 		if(file.exists()){
-			HashMap<String, Object> dataValues = new HashMap<String, Object>();
+			HashMap<String, Object> dataValues = new HashMap<>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
 			if(workspaceController.isOpenWorkspace()){
@@ -275,7 +275,7 @@ public class ExportImportAnalysedModelTest {
 
 	private boolean areDependencyTypesDetected(String fromClass, String toClass, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
 		boolean dependencyTypesDetected = false;
-		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
+		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(fromClass, toClass);
 		int numberOfDependencies = foundDependencies.length;

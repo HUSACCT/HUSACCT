@@ -62,7 +62,7 @@ public class SaveWorkspaceDialog extends JDialog{
 	
 	private void addComponents(){
 		
-		saverList = new JList<Object>(saverListData.toArray());
+		saverList = new JList<>(saverListData.toArray());
 		saverList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		saverList.setLayoutOrientation(JList.VERTICAL);
 		saverList.setVisibleRowCount(-1);

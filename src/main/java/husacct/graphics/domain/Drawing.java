@@ -38,7 +38,7 @@ public class Drawing extends QuadTreeDrawing {
 	
 	public Drawing() {
 		super();
-		hiddenFigures = new ArrayList<BaseFigure>();
+		hiddenFigures = new ArrayList<>();
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class Drawing extends QuadTreeDrawing {
 	}
 	
 	public RelationFigure[] getShownRelations() {
-		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
+		ArrayList<BaseFigure> moduleFigures = new ArrayList<>();
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
 			if (figure.isLine()) moduleFigures.add(figure);
@@ -80,7 +80,7 @@ public class Drawing extends QuadTreeDrawing {
 	}
 	
 	public ModuleFigure[] getShownModules() {
-		ArrayList<ModuleFigure> moduleFigures = new ArrayList<ModuleFigure>();
+		ArrayList<ModuleFigure> moduleFigures = new ArrayList<>();
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
 			if (figure.isModule() && (figure instanceof ModuleFigure)) {
@@ -131,7 +131,7 @@ public class Drawing extends QuadTreeDrawing {
 	}
 	
 	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, RelationFigure[] figures) {
-		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
+		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<>();
 
 		for (RelationFigure figure1 : figures) {
 			Figure figure1start = figure1.getStartConnector().getOwner();
@@ -155,7 +155,7 @@ public class Drawing extends QuadTreeDrawing {
 				} else if (overlappingFigureSets.containsKey(figure2)) {
 					addTo = overlappingFigureSets.get(figure2);
 				} else {
-					addTo = new HashSet<RelationFigure>();
+					addTo = new HashSet<>();
 					overlappingFigureSets.put(figure1, addTo);
 				}
 
@@ -165,7 +165,7 @@ public class Drawing extends QuadTreeDrawing {
 		}
 
 		for (RelationFigure keyFigure : overlappingFigureSets.keySet()) {
-			HashSet<RelationFigure> overlappingFigures = new HashSet<RelationFigure>();
+			HashSet<RelationFigure> overlappingFigures = new HashSet<>();
 			overlappingFigures.add(keyFigure);
 			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
 

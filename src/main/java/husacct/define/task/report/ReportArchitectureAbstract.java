@@ -27,7 +27,7 @@ public abstract class ReportArchitectureAbstract {
 	
 	protected List<ModuleStrategy> getRootModules() {
 		ModuleStrategy[] rootModules = moduleService.getRootModules();
-		List<ModuleStrategy> rootModuleList = new ArrayList<ModuleStrategy>();
+		List<ModuleStrategy> rootModuleList = new ArrayList<>();
 		for(int i = 0; i < rootModules.length; i++) {
 			rootModuleList.add(rootModules[i]);
 		}
@@ -36,7 +36,7 @@ public abstract class ReportArchitectureAbstract {
 
 	
 	protected HashMap<String, Boolean> getAppliedRules(long moduleId){
-		HashMap<String, Boolean> appliedRules = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> appliedRules = new HashMap<>();
 		for(AppliedRuleStrategy rule : ruleService.getAllEnabledMainRules()){
 			if(rule.getModuleFrom().getId() == moduleId){
 				appliedRules.put(rule.getRuleTypeKey(), rule.isEnabled());

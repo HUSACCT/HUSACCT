@@ -13,9 +13,9 @@ import org.jdom2.Element;
 public class ImportActiveViolationTypes {
 
 	public Map<String, List<ActiveRuleType>> importActiveViolationTypes(Element activeViolationTypesElement) {
-		Map<String, List<ActiveRuleType>> activeRuleTypesMap = new HashMap<String, List<ActiveRuleType>>();
+		Map<String, List<ActiveRuleType>> activeRuleTypesMap = new HashMap<>();
 		for (Element activeViolationTypeElement : activeViolationTypesElement.getChildren()) {
-			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
+			List<ActiveRuleType> activeRuleTypes = new ArrayList<>();
 			for (Element ruleTypeElement : activeViolationTypeElement.getChildren()) {
 				String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
 				// In version 3.1, InheritanceConvention was introduced instead of SuperClassInheritanceConvention
@@ -23,7 +23,7 @@ public class ImportActiveViolationTypes {
 					ruleTypeKey = "InheritanceConvention";
 				}
 
-				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
+				List<ActiveViolationType> activeViolationTypes = new ArrayList<>();
 				Element violationTypesElement = ruleTypeElement.getChild("violationTypes");
 				if (violationTypesElement != null) {
 					for (Element violationTypeElement : violationTypesElement.getChildren("violationType")) {

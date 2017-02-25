@@ -17,11 +17,11 @@ import javax.swing.table.TableColumn;
 public class ColorTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 2492345975488386436L;
-	private Vector<Object> dataVector = new Vector<Object>();
+	private Vector<Object> dataVector = new Vector<>();
 	private String columnNames[] = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color")};
 	private Class<?>[] types = new Class[] {String.class, JButton.class};
 	private boolean[] canEdit = new boolean[] {false, true};
-	private List<Color> rowColours = new ArrayList<Color>();
+	private List<Color> rowColours = new ArrayList<>();
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
@@ -72,7 +72,7 @@ public class ColorTableModel extends AbstractTableModel {
 		if (anArray == null) {
 			return null;
 		}
-		Vector<Object> v = new Vector<Object>(anArray.length);
+		Vector<Object> v = new Vector<>(anArray.length);
 		for (int i = 0; i < anArray.length; i++) {
 			v.addElement(anArray[i]);
 		}
@@ -84,7 +84,7 @@ public class ColorTableModel extends AbstractTableModel {
 
 		for (int i = from; i < to; i++) {
 			if (dataVector.elementAt(i) == null) {
-				dataVector.setElementAt(new Vector<Object>(), i);
+				dataVector.setElementAt(new Vector<>(), i);
 			}
 			((Vector<?>) dataVector.elementAt(i)).setSize(getColumnCount());
 		}

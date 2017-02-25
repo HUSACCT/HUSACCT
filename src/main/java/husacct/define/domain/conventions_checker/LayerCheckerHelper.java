@@ -40,7 +40,7 @@ public class LayerCheckerHelper {
     }
     
     public ArrayList<ModuleStrategy> getBackCallLayers(Long moduleFromId) {
-    	ArrayList<ModuleStrategy> backCallLayers = new ArrayList<ModuleStrategy>();
+    	ArrayList<ModuleStrategy> backCallLayers = new ArrayList<>();
     	Long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
     	if (firstBackCallLayerId != -1L) {
     	    for (Layer layer : layers) {
@@ -107,7 +107,7 @@ public class LayerCheckerHelper {
     }
 
     public ArrayList<ModuleStrategy> getSkipCallLayers(Long moduleFromId) {
-	ArrayList<ModuleStrategy> skipCallLayers = new ArrayList<ModuleStrategy>();
+	ArrayList<ModuleStrategy> skipCallLayers = new ArrayList<>();
 	Long firstSkipCallLayerId = getFirstSkipCallLayer(moduleFromId);
 	boolean getLayers = false;
 	for (Layer layer : layers) {

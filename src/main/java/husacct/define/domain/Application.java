@@ -10,11 +10,11 @@ public class Application {
 	private String version;
 
 	public Application() {
-		this("", new ArrayList<Project>(), "1.0");
+		this("", new ArrayList<>(), "1.0");
 	}
 
 	public Application(String name) {
-		this(name, new ArrayList<Project>(), "1.0");
+		this(name, new ArrayList<>(), "1.0");
 	}
 
 	public Application(String name, ArrayList<Project> projects, String version) {

@@ -37,7 +37,7 @@ public abstract class ReportWriter {
 	public abstract void createReport() throws IOException, URISyntaxException, DocumentException;
 
 	protected TreeMap<Integer ,RuleWithNrOfViolationsDTO> getViolatedRulesWithNumberOfViolations(TaskServiceImpl taskServiceImpl) {
-		TreeMap<Integer ,RuleWithNrOfViolationsDTO> rulesMap= new TreeMap<Integer, RuleWithNrOfViolationsDTO>();
+		TreeMap<Integer ,RuleWithNrOfViolationsDTO> rulesMap= new TreeMap<>();
 		Set<String> violatedRules = taskServiceImpl.getViolatedRules();
 		int nrOfRule = 1;
 		for (String rule : violatedRules) {
@@ -51,7 +51,7 @@ public abstract class ReportWriter {
 	}
 	
 	protected TreeMap<String ,RuleWithNrOfViolationsDTO> getNonViolatedRulesWithNumberOfViolations(TaskServiceImpl taskServiceImpl) {
-		TreeMap<String ,RuleWithNrOfViolationsDTO> nonViolatedRulesMap= new TreeMap<String, RuleWithNrOfViolationsDTO>();
+		TreeMap<String ,RuleWithNrOfViolationsDTO> nonViolatedRulesMap= new TreeMap<>();
 		Set<String> violatedRules = taskServiceImpl.getViolatedRules();
 		RuleDTO[] allRules = getAllRulesWithExceptions();
 		int nrOfRule = 1;

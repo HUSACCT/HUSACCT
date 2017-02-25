@@ -41,7 +41,7 @@ public class ExcelReportWriter extends ReportWriter {
     private WritableWorkbook workbook;
     private WritableCellFormat timesBold, timesBold_AlignmentRight, timesBold_AlignmentCentre;
     private WritableCellFormat times, times_AlignmentRight, times_AlignmentCentre;
-    private Map<Integer, Integer> dimensions = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> dimensions = new HashMap<>();
     private int totalNumberOfViolations = 0;
     private int sheetNr = 0;
 
@@ -257,7 +257,7 @@ public class ExcelReportWriter extends ReportWriter {
         Label toLabel = new Label(4, row, to, times);
         Label numberVLabel = new Label(5, row, "" + numberV, times_AlignmentRight);
 
-        List<Label> labelArray = new ArrayList<Label>();
+        List<Label> labelArray = new ArrayList<>();
         labelArray.add(idLabel);
         labelArray.add(fromLabel);
         labelArray.add(ruleTypeLabel);
@@ -334,7 +334,7 @@ public class ExcelReportWriter extends ReportWriter {
 		} else {
 			ruleLabel = new Label(8, row, "-", times);
 		}
-        List<Label> labelArray = new ArrayList<Label>();
+        List<Label> labelArray = new ArrayList<>();
         labelArray.add(fromLabel);
         labelArray.add(toLabel);
         labelArray.add(typeLabel);

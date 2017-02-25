@@ -23,8 +23,8 @@ public class GraphOfSuClusters {
 	private final Logger logger = Logger.getLogger(GraphOfSuClusters.class);
 	
 	public GraphOfSuClusters(Algorithm_SuperClass iAlgoritm) {
-		nodes = new HashMap<Integer, HashSet<SoftwareUnitDTO>>();
-		edges = new HashMap<String, Integer>();
+		nodes = new HashMap<>();
+		edges = new HashMap<>();
 		this.iAlgoritm = iAlgoritm;
 	}
 
@@ -71,7 +71,7 @@ public class GraphOfSuClusters {
 	private void createNodesInClusteredGraph(ArrayList<SoftwareUnitDTO> softwareUnitsToInclude) {
 		int nodeIdofNodeWithClassesInRoot = 1;
 		int highestNodeId = 1;
-		ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeClone = new ArrayList<SoftwareUnitDTO> (softwareUnitsToInclude);
+		ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeClone = new ArrayList<>(softwareUnitsToInclude);
 		
 		// 1) If fromSoftwareUnit is not of type "package", while the granularity is set to packages, than add this SU to NodeWithClassesInRoot
 		for (SoftwareUnitDTO fromSoftwareUnit : softwareUnitsToInclude) {
@@ -143,7 +143,7 @@ public class GraphOfSuClusters {
 		}
 		// 4) Iteratively, merge nodes with direct cyclic dependencies above backCallThreshold.
 		try {
-			HashMap<Integer, Integer> nodesToMerge = new HashMap<Integer, Integer>();
+			HashMap<Integer, Integer> nodesToMerge = new HashMap<>();
 			boolean repeatClusteringOverAllNodes = true;
 			while (repeatClusteringOverAllNodes) {
 				setEdges(typesOfDependencies);
@@ -220,7 +220,7 @@ public class GraphOfSuClusters {
 	}
 	
 	private void addNode(int nodeId) {
-		HashSet<SoftwareUnitDTO> softwareUnits = new HashSet<SoftwareUnitDTO>();
+		HashSet<SoftwareUnitDTO> softwareUnits = new HashSet<>();
 		nodes.put(nodeId, softwareUnits);
 	}
 	

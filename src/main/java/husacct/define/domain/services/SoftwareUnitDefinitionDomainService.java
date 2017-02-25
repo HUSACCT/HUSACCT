@@ -66,7 +66,7 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 
 	public ArrayList<String> getSoftwareUnitNames(long moduleId) {
-		ArrayList<String> softwareUnitNames = new ArrayList<String>();
+		ArrayList<String> softwareUnitNames = new ArrayList<>();
 		try {
 			ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 			if (module != null) {
@@ -163,7 +163,7 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 
 	public ArrayList<String> getRegExSoftwareUnitNames(long moduleId) {
-		ArrayList<String> softwareUnitNames = new ArrayList<String>();
+		ArrayList<String> softwareUnitNames = new ArrayList<>();
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		if (module != null){
 			ArrayList<SoftwareUnitRegExDefinition> softwareUnits = module.getRegExUnits();

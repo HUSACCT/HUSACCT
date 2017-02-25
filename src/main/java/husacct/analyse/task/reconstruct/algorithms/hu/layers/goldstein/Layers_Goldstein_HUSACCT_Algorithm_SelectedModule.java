@@ -22,10 +22,10 @@ import husacct.common.enums.ModuleTypes;
 public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClass{
 	private ModuleDTO selectedModule;
 	private final Logger logger = Logger.getLogger(ReconstructArchitecture.class);
-	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<SoftwareUnitDTO>();
-	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<String, SoftwareUnitDTO>();
+	private ArrayList<SoftwareUnitDTO> softwareUnitsToIncludeInAlgorithm = new ArrayList<>();
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExclude = new HashMap<>();
 	private GraphOfSuClusters graphOfSuClusters; // Each node in the graph represents 1-n SoftwareUnits. If *, it is a cohesive cluster of SUs.
-	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<Integer, Set<Integer>>();
+	private TreeMap<Integer, Set<Integer>> layersWithNodesMap = new TreeMap<>();
 	private HashSet<Integer> notAssignedNodes;
 
 	public Layers_Goldstein_HUSACCT_Algorithm_SelectedModule (IModelQueryService queryService) {
@@ -73,7 +73,7 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 	}
 	
 	private void identifyLayers(Set<Integer> allNodes) {
-		notAssignedNodes = new HashSet<Integer>(allNodes);
+		notAssignedNodes = new HashSet<>(allNodes);
 		// 1) Assign to bottom layer all nodes without dependencies on other nodes. 
 		int layerId = 0;
 		assignNodesToBottomLayer(layerId, allNodes);
@@ -88,7 +88,7 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 	}
 
 	private void assignNodesToBottomLayer(int layerId, Set<Integer> allNodes) {
-		HashSet<Integer> assignedNodesToBottomLayer = new HashSet<Integer>();
+		HashSet<Integer> assignedNodesToBottomLayer = new HashSet<>();
 		for (int fromNodeId : allNodes) {
 			boolean fromNodeUsesAnotherNode = false;
 			for (int toNodeId : allNodes) {
@@ -115,7 +115,7 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 	}
 	
 	private void identifyNewTopLayer(int bottomLayerId) {
-		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<Integer>();
+		HashSet<Integer> assignedNodesNewTopLayer = new HashSet<>();
 		for (int fromNodeId : notAssignedNodes) {
 			// Determine if fromNode uses a node in the bottom layer.
 			boolean fromNodeUsesNodeInBottomLayer = false;
@@ -158,7 +158,7 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 	// Returns the SUs assigned to selectedModule or, if only one SU is assigned, the children of this SU.
 	// In case the selectedModule is a Component, the SUs assigned to the interface should not be returned. Prepare. 
 	private ArrayList<SoftwareUnitDTO> getRelevantSoftwareUnits() {
-		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> softwareUnitsToReturn = new ArrayList<>();
 		addSoftwareUnitsAssignedToComponentInterface_To_softwareUnitsToExcludeMap();
 		
 		int numberOfAssignedSoftwareUnits = defineService.getAssignedSoftwareUnitsOfModule(selectedModule.logicalPath).size();
@@ -204,7 +204,7 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 	 * @return ArrayList<String> with unique names of children, or an empty list, if no child SoftwareUnits are existing.
 	 */
 	private ArrayList<SoftwareUnitDTO> getSetOfChildSoftwareUnits(SoftwareUnitDTO parentSoftwareUnit) {
-		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> childSoftwareUnits = new ArrayList<>();
 		SoftwareUnitDTO softwareUnit = parentSoftwareUnit;
 		while (childSoftwareUnits.size() < 2) {
 			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName));
@@ -231,10 +231,10 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 			// intended architecture is different: the highest level layer has hierarchicalLevel = 1
 			int lowestLevelLayer = 1;
 			int raise = highestLevelLayer - lowestLevelLayer;
-			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<Integer, ArrayList<SoftwareUnitDTO>>();
+			TreeMap<Integer, ArrayList<SoftwareUnitDTO>> layersWithSoftwareUnitsMap = new TreeMap<>();
 			for (int i = lowestLevelLayer; i <= highestLevelLayer; i++) {
 				Set<Integer> nodesOfLayer = layersWithNodesMap.get(i);
-				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<SoftwareUnitDTO>();
+				ArrayList<SoftwareUnitDTO> unitsOfLayer = new ArrayList<>();
 				for (int nodeId : nodesOfLayer) {
 					unitsOfLayer.addAll(graphOfSuClusters.getSoftwareUnitsOfNode(nodeId));
 				}

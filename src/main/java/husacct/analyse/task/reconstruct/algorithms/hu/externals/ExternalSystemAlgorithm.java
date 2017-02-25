@@ -12,7 +12,7 @@ import husacct.common.dto.SoftwareUnitDTO;
 
 public class ExternalSystemAlgorithm extends AlgorithmExternal{
 	
-	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<SoftwareUnitDTO>();
+	private ArrayList<SoftwareUnitDTO> xLibrariesMainPackages = new ArrayList<>();
 	private final Logger logger = Logger.getLogger(ExternalSystemAlgorithm.class);
 	int threshold;
 	String relationType;
@@ -29,14 +29,14 @@ public class ExternalSystemAlgorithm extends AlgorithmExternal{
 	}
 	
 	private void identifyExternalSystems() {
-		ArrayList<SoftwareUnitDTO> emptySoftwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> emptySoftwareUnitsArgument = new ArrayList<>();
 		try {
 			createModule_andAddItToReverseList("ExternalSystems", "**", "ExternalLibrary", 0, emptySoftwareUnitsArgument);
 			// Create a module for each childUnit of xLibrariesRootPackage
 			int nrOfExternalLibraries = 0;
 			for (SoftwareUnitDTO mainUnit : queryService.getChildUnitsOfSoftwareUnit(xLibrariesRootPackage)) {
 				xLibrariesMainPackages.add(mainUnit);
-				ArrayList<SoftwareUnitDTO> softwareUnitsArgument = new ArrayList<SoftwareUnitDTO>();
+				ArrayList<SoftwareUnitDTO> softwareUnitsArgument = new ArrayList<>();
 				softwareUnitsArgument.add(mainUnit);
 				ModuleDTO newModule = createModule_andAddItToReverseList(mainUnit.name, "ExternalSystems", "ExternalLibrary", 0, softwareUnitsArgument);
 				if (!newModule.logicalPath.equals("")) {

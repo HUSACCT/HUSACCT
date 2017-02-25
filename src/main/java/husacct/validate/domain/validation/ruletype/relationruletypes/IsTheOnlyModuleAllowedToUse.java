@@ -30,7 +30,7 @@ public class IsTheOnlyModuleAllowedToUse extends RuleType {
 		toMappings = getAllClasspathsOfModule(currentRule.moduleTo, currentRule.violationTypeKeys);
 
 		// Create HashMap with all allowed to-classes (including the from-classes)
-		HashMap<String, Mapping> fromMap = new HashMap<String, Mapping>();
+		HashMap<String, Mapping> fromMap = new HashMap<>();
 		for(Mapping from : fromMappings){
 			fromMap.put(from.getPhysicalPath(), from);
 		}

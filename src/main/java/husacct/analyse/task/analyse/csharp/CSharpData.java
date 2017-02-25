@@ -17,7 +17,7 @@ public class CSharpData {
     private String invocationTo;
     private String inheritanceTo;
     public String inheritanceFrom;
-    private ArrayList<String> moreInherit = new ArrayList<String>();
+    private ArrayList<String> moreInherit = new ArrayList<>();
 
     public CSharpData(String className, int intentLevel, String belongsToPackage) {
         this.className = className;

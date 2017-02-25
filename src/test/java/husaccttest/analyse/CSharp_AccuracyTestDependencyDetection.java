@@ -90,7 +90,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessClassVariable(){
 		String fromClass = "Domain.Direct.Violating.AccessClassVariable";
 		String toClass = "Technology.Direct.Dao.CheckInDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -99,7 +99,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessClassVariableConstant(){
 		String fromClass = "Domain.Direct.Violating.AccessClassVariableConstant";
 		String toClass = "Technology.Direct.Dao.UserDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -108,7 +108,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessClassVariableInterface(){
 		String fromClass = "Domain.Direct.Violating.AccessClassVariableInterface";
 		String toClass = "Technology.Direct.Dao.ISierraDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -117,7 +117,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessEnumeration(){
 		String fromClass = "Domain.Direct.Violating.AccessEnumeration";
 		String toClass = "Technology.Direct.Dao.TipDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -126,7 +126,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessEnumerationInner(){
 		String fromClass = "Domain.Direct.Violating.AccessInnerEnumeration";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.InnerEnumeration";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -135,7 +135,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableRead(){
 		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableRead";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -144,7 +144,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableWrite(){
 		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableWrite";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -153,7 +153,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableConstant(){
 		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableConstant";
 		String toClass = "Technology.Direct.Dao.UserDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -162,7 +162,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableSuperClass(){
 		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableSuperClass";
 		String toClass = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
 		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
@@ -178,7 +178,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableSuperSuperClass(){
 		String fromClass = "Domain.Direct.Violating.AccessInstanceVariableSuperSuperClass";
 		String toClass = "Technology.Direct.Subclass.CallInstanceSubSubClassDOA";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
 		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
@@ -194,7 +194,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessFromInnerClass(){
 		String fromClass = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
 		String toClass = "Domain.Direct.Base";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -203,7 +203,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariable_SetArgumentValue(){
 		String fromClass = "Domain.Direct.Violating.AccessInstanceVariable_SetArgumentValue";
 		String toClass = "Technology.Direct.Dao.CheckInDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -212,7 +212,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceAsParameter(){
 		String fromClass = "Domain.Direct.Violating.AccessObjectReferenceAsParameter";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -221,7 +221,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessLocalVariable_ReadArgumentValue(){
 		String fromClass = "Domain.Direct.Violating.AccessLocalVariable_ReadArgumentValue";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -230,7 +230,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessLocalVariable_SetArgumentValue(){
 		String fromClass = "Domain.Direct.Violating.AccessLocalVariable_SetArgumentValue";
 		String toClass = "Technology.Direct.Dao.CheckInDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -239,7 +239,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceWithinIfStatement(){
 		String fromClass = "Domain.Direct.Violating.AccessObjectReferenceWithinIfStatement";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -249,7 +249,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AnnotationDependency(){ // Asserts False, since annotations are not supported in C#
 		String fromClass = "Domain.Direct.Violating.AnnotationDependency";
 		String toClass = "Technology.Direct.Dao.SettingsAnnotation";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Annotation");
 		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -259,7 +259,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallClassMethod(){
 		String fromClass = "Domain.Direct.Violating.CallClassMethod";
 		String toClass = "Technology.Direct.Dao.BadgesDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -268,7 +268,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallClassMethod_ClassesWithoutNamespace(){
 		String fromClass = "No_Namespace_Domain_Direct_Violating.CallClassMethod_ClassWithoutNamespace1";
 		String toClass = "Technology.Direct.Dao.BadgesDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 		fromClass = "No_Namespace_Domain_Direct_Violating.CallClassMethod_ClassWithoutNamespace2";
@@ -279,7 +279,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallClassMethod_ClassesWithinMultipleNamespaces(){
 		String fromClass = "Domain.Direct.Violating.Namespace1.CallClassMethod_ClassWithNamespace1";
 		String toClass = "Technology.Direct.Dao.BadgesDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 		fromClass = "Domain.Direct.Violating.Namespace2.CallClassMethod_ClassWithNamespace2";
@@ -290,7 +290,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallClassMethod_ClassWithinSubNamespace(){
 		String fromClass = "Domain.Direct.Violating.Namespace2.Namespace2_1.CallClassMethod_ClassWithNamespace2_1";
 		String toClass = "Technology.Direct.Dao.BadgesDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 		toClass = "Domain.Direct.Violating.Namespace1.IClassWithNamespace1";
@@ -312,7 +312,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructor(){
 		String fromClass = "Domain.Direct.Violating.CallConstructor";
 		String toClass = "Technology.Direct.Dao.AccountDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -320,7 +320,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void CallConstructor_GenericType_MultipleTypeParameters(){
 		String fromClass = "Domain.Direct.Violating.CallConstructor_GenericType_MultipleTypeParameters";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.UserDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
@@ -330,7 +330,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructorInnerClass(){
 		String fromClass = "Domain.Direct.Violating.CallConstructorInnerClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -339,7 +339,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructorLibraryClass(){ // Asserts False, since HUSACCT is not able to detect invocations on library classes.
 		String fromClass = "Domain.Direct.Violating.CallConstructorLibraryClass";
 		String toClass = "FI.Foyt.Foursquare.Api.FoursquareApi";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -348,7 +348,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructorSuper(){
 		String fromClass = "Domain.Direct.Violating.CallConstructorSuper";
 		String toClass = "Technology.Direct.Dao.HistoryDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
@@ -356,7 +356,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallFromInnerClass(){
 		String fromClass = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -365,7 +365,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstance(){
 		String fromClass = "Domain.Direct.Violating.CallInstance";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -374,7 +374,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceGeneric(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceGeneric";
 		String toClass = "Technology.Direct.Dao.ProfileDAO<p1, p2>";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -383,7 +383,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceInnerClass(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceInnerClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -392,7 +392,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructorInnerClassDefault(){
 		String fromClass = "Domain.Direct.Violating.CallConstructorInnerClassDefault";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -401,7 +401,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallConstructorInnerClassFromOtherInnerClass(){
 		String fromClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.TestConstructorCallOfInnerClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -410,7 +410,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceInnerInterface(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceInnerInterface";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerInterfaceDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -419,7 +419,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceInterface(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceInterface";
 		String toClass = "Technology.Direct.Dao.CallInstanceInterfaceDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -428,7 +428,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceInterfaceGenericInterface(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceInterfaceGenericInterface";
 		String toClass = "Technology.Direct.Dao.CallInstanceInterfaceDAO<p1>";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -437,7 +437,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceLibraryClass(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceLibraryClass";
 		String toClass = "xLibraries.FI.Foyt.Foursquare.Api.FoursquareApi";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertFalse(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 		typesToFind.clear();
@@ -453,7 +453,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceOfSuperOverridden(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceOfSuperOverridden";
 		String toClass = "Technology.Direct.Dao.HistoryDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
@@ -461,7 +461,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceSuperClass(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceSuperClass";
 		String toClass = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
 		toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
@@ -477,7 +477,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceSuperSuperClass(){
 		String fromClass = "Domain.Direct.Violating.CallInstanceSuperSuperClass";
 		String toClass = "Technology.Direct.Subclass.CallInstanceSubSubClassDOA";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		boolean outcome1 = areDependencyTypesDetected(fromClass, toClass, typesToFind, false); 
 		toClass = "Technology.Direct.Subclass.CallInstanceSubClassDOA";
@@ -496,7 +496,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationExceptionThrows(){
 		String fromClass = "Domain.Direct.Violating.DeclarationExceptionThrows";
 		String toClass = "Technology.Direct.Dao.StaticsException";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -505,7 +505,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationInnerClass(){
 		String fromClass = "Domain.Direct.Base";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -514,7 +514,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationOuterClassByInnerClass(){
 		String fromClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.StaticNestedClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -523,7 +523,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationParameter(){
 		String fromClass = "Domain.Direct.Violating.DeclarationParameter";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -531,7 +531,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void DeclarationParameter_GenericType_OneTypeParameter(){
 		String fromClass = "Domain.Direct.Violating.DeclarationParameter_GenericType_OneTypeParameter";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
@@ -540,7 +540,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationReturnType(){
 		String fromClass = "Domain.Direct.Violating.DeclarationReturnType";
 		String toClass = "Technology.Direct.Dao.VenueDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -548,7 +548,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void DeclarationReturnType_GenericType_OneTypeParameter(){
 		String fromClass = "Domain.Direct.Violating.DeclarationReturnType_GenericType_OneTypeParameter";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 	}
@@ -557,7 +557,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationTypeCast(){
 		String fromClass = "Domain.Direct.Violating.DeclarationTypeCast";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -566,7 +566,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationTypeCastToInnerClass(){
 		String fromClass = "Domain.Direct.Violating.DeclarationTypeCastToInnerClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceOuterClassDAO.CallInstanceInnerClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -575,7 +575,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationTypeCastOfArgument(){
 		String fromClass = "Domain.Direct.Violating.DeclarationTypeCastOfArgument";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -584,7 +584,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationVariableInstance(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -592,7 +592,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void DeclarationVariableInstance_GenericType_OneTypeParameter(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_OneTypeParameter";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.AccountDAO", typesToFind, DependencySubTypes.DECL_INSTANCE_VAR.toString(), false));
 		typesToFind.clear();
@@ -604,7 +604,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void DeclarationVariableInstance_GenericType_MultipleTypeParameters(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
@@ -613,7 +613,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	@Test
 	public void DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableInstance_GenericType_MultipleTypeParameters_Complex";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.ProfileDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, "Technology.Direct.Dao.FriendsDAO", typesToFind, DependencySubTypes.REF_TYPE.toString(), false));
@@ -623,7 +623,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationVariableStatic(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableStatic";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -632,7 +632,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationVariableLocal(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableLocal";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -641,7 +641,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationVariableLocal_Initialized(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableLocal_Initialized";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -650,7 +650,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void DeclarationVariableWithinForStatement(){
 		String fromClass = "Domain.Direct.Violating.DeclarationVariableWithinForStatement";
 		String toClass = "Technology.Direct.Dao.ProfileDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Declaration");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -660,7 +660,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void ImportDependencyUnused(){
 		String fromClass = "Domain.Direct.Violating.ImportDependencyUnused";
 		String toClass = "Technology.Direct.Dao.AccountDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Import");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -670,7 +670,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceExtends(){
 		String fromClass = "Domain.Direct.Violating.InheritanceExtends";
 		String toClass = "Technology.Direct.Dao.HistoryDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	
 		toClass = "Technology.Direct.Dao.IMapDAO";
@@ -681,7 +681,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceExtendsAbstractClass(){
 		String fromClass = "Domain.Direct.Violating.InheritanceExtendsAbstractClass";
 		String toClass = "Technology.Direct.Dao.FriendsDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -690,7 +690,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceExtendsFullPath(){
 		String fromClass = "Domain.Direct.Violating.InheritanceExtendsFullPath";
 		String toClass = "Technology.Direct.Dao.HistoryDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));	}
 
@@ -698,7 +698,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceImplementsInterface(){
 		String fromClass = "Domain.Direct.Violating.InheritanceImplementsInterface";
 		String toClass = "Technology.Direct.Dao.IMapDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -710,7 +710,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirect_MethodVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_MethodVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -719,7 +719,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirect_VarVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_VarVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -728,7 +728,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirect_VarVarToString(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_VarVarToString";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -737,7 +737,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirectIndirect_MethodVarVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirectIndirect_MethodVarVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -746,7 +746,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirectIndirect_VarVarVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirectIndirect_VarVarVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -755,7 +755,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirect_SuperClass(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_SuperClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -764,7 +764,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessInstanceVariableIndirect_SuperSuperClass(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessInstanceVariableIndirect_SuperSuperClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -773,7 +773,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_AsParameter_POI(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter_POI";
 		String toClass = "Domain.Indirect.IndirectTo.POI";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -782,7 +782,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValueOfSuperClassMethod_FromSide";
 		String toClass = "Domain.Indirect.IndirectTo.POI";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -791,7 +791,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaArgumentType";
 		String toClass = "Domain.Indirect.IndirectTo.POI";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -800,7 +800,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic";
 		String toClass = "Domain.Indirect.IndirectTo.POI";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -809,7 +809,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_AsParameter(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_AsParameter";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -818,7 +818,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_WithinIfStament_POI(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament_POI";
 		String toClass = "Domain.Indirect.IndirectTo.POI";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -827,7 +827,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessObjectReferenceIndirect_WithinIfStament(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessObjectReferenceIndirect_WithinIfStament";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Reference");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -836,7 +836,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessStaticVariableIndirect_MethodVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_MethodVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -845,7 +845,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessStaticVariableIndirect_VarVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_VarVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -854,7 +854,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessStaticVariableIndirect_VarVarToString(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirect_VarVarToString";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -863,7 +863,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessStaticVariableIndirectIndirect_MethodVarVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirectIndirect_MethodVarVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -872,7 +872,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void AccessStaticVariableIndirectIndirect_VarVarVar(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.AccessStaticVariableIndirectIndirect_VarVarVar";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Access");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -882,7 +882,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_MethodMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -891,7 +891,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_MethodMethodToString(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethodToString";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -900,7 +900,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_MethodMethod_ViaConstructor(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -909,7 +909,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_StaticMethodInstanceMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_StaticMethodInstanceMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -918,7 +918,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_SuperClass(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_SuperClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -927,7 +927,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_SuperSuperClass(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_SuperSuperClass";
 		String toClass = "Technology.Direct.Dao.CallInstanceSuperClassDAO";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -936,7 +936,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirect_VarMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirect_VarMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -945,7 +945,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirectIndirect_MethodVarMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirectIndirect_MethodVarMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -954,7 +954,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallInstanceMethodIndirectIndirect_VarVarMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallInstanceMethodIndirectIndirect_VarVarMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -963,7 +963,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallStaticMethodIndirect_MethodStaticMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallStaticMethodIndirect_MethodStaticMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -972,7 +972,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void CallStaticMethodIndirect_VarStaticMethod(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.CallStaticMethodIndirect_VarStaticMethod";
 		String toClass = "Domain.Indirect.IndirectTo.ServiceOne";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Call");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -982,7 +982,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceExtendsExtendsIndirect(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.InheritanceExtendsExtendsIndirect";
 		String toClass = "Domain.Indirect.IndirectTo.POI";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -991,7 +991,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceExtendsImplementsIndirect(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.InheritanceExtendsImplementsIndirect";
 		String toClass = "Domain.Indirect.IndirectTo.IPreferences";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -1000,7 +1000,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceFromInnerClass(){
 		String fromClass = "Domain.Direct.Violating.CallFromInnerClass.CallingInnerClass";
 		String toClass = "Domain.Direct.Base";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, false));
 	}
@@ -1009,7 +1009,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 	public void InheritanceImplementsExtendsIndirect(){
 		String fromClass = "Domain.Indirect.ViolatingFrom.InheritanceImplementsExtendsIndirect";
 		String toClass = "Domain.Indirect.IndirectTo.IPreferences";
-		ArrayList<String> typesToFind = new ArrayList<String>();
+		ArrayList<String> typesToFind = new ArrayList<>();
 		typesToFind.add("Inheritance");
 		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
 	}
@@ -1194,10 +1194,10 @@ public class CSharp_AccuracyTestDependencyDetection {
 	}
 	
 	private static ArrayList<ProjectDTO> createProjectDTOs(){
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<String> paths = new ArrayList<String>();
+		ArrayList<ProjectDTO> projects = new ArrayList<>();
+		ArrayList<String> paths = new ArrayList<>();
 		paths.add(path);
-		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<>();
 		ProjectDTO project = new ProjectDTO("C# Accuracy Test", paths, language, "version0", "for testing purposes", analysedModules);
 		projects.add(project);
 		return projects;
@@ -1214,7 +1214,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 		logger.info(String.format("Loading workspace %s", location));
 		File file = new File(location);
 		if(file.exists()){
-			HashMap<String, Object> dataValues = new HashMap<String, Object>();
+			HashMap<String, Object> dataValues = new HashMap<>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
 			if(workspaceController.isOpenWorkspace()){
@@ -1245,7 +1245,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	private boolean areDependencyTypesDetected(String fromClass, String toClass, ArrayList<String> dependencyTypes, boolean isIndirect) {
 		boolean dependencyTypesDetected = false;
-		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
+		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(fromClass, toClass);
 		int numberOfDependencies = foundDependencies.length;
@@ -1266,7 +1266,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	private boolean areDependencyTypesDetected(String classFrom, String classTo, ArrayList<String> dependencyTypes, String subType, boolean isIndirect) {
 		boolean dependencyTypesDetected = false;
-		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<String, Boolean>();
+		TreeMap<String, Boolean> foundDependencyTypes = new TreeMap<>();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		DependencyDTO[] foundDependencies = analyseService.getDependenciesFromClassToClass(classFrom, classTo);
 		int numberOfDependencies = foundDependencies.length;

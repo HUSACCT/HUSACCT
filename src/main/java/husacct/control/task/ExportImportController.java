@@ -67,7 +67,7 @@ public class ExportImportController {
 	}
 	
 	public void exportAnalysisModel(File file){
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");
 		try {
@@ -82,7 +82,7 @@ public class ExportImportController {
 	}
 
 	public void exportArchitecture(File file){
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");
 		try {
@@ -140,7 +140,7 @@ public class ExportImportController {
 	}
 	
 	public void importArchitecture(File file){
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");
 		try {
@@ -154,7 +154,7 @@ public class ExportImportController {
 
 	public ViolationImExportDTO[] identifyNewViolations(File previousViolationsFile) {
 		ViolationImExportDTO[] newViolations = null;
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", previousViolationsFile);
 		IResource xmlResource = ResourceFactory.get("xml");
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
@@ -169,7 +169,7 @@ public class ExportImportController {
 	}
 	
 	public void importAnalysisModel(File file){
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");
 		try {
@@ -181,7 +181,7 @@ public class ExportImportController {
 				ProjectDTO currentProject = applicationDTO.projects.get(i);
 				if (currentProject.paths.size() > 0) {
 					// Add analysed root modules to project
-					currentProject.analysedModules = new ArrayList<SoftwareUnitDTO>();
+					currentProject.analysedModules = new ArrayList<>();
 					SoftwareUnitDTO[] analysedRootModules = ServiceProvider.getInstance().getAnalyseService().getSoftwareUnitsInRoot();
 					for (SoftwareUnitDTO analysedModule : analysedRootModules) {
 						currentProject.analysedModules.add(analysedModule);

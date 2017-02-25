@@ -114,7 +114,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	@Override
 	public HashMap<String, Object> getData() {
-		HashMap<String, Object> data = new HashMap<String, Object>();
+		HashMap<String, Object> data = new HashMap<>();
 		data.put("file", selectedFile);
 		return data;
 	}

@@ -35,7 +35,7 @@ public abstract class AppliedRuleStrategy {
 		this.regex = regex;
 		this.moduleTo = moduleTo;
 		this.moduleFrom = moduleFrom;
-		this.exceptions = new ArrayList<AppliedRuleStrategy>();
+		this.exceptions = new ArrayList<>();
 		this.enabled = enabled;
 		this.isException = isException;
 		this.parentAppliedRule = parentRule;
@@ -74,7 +74,7 @@ public abstract class AppliedRuleStrategy {
 	}
 
 	public void removeAllExceptions() {
-		exceptions = new ArrayList<AppliedRuleStrategy>();
+		exceptions = new ArrayList<>();
 	}
 
 	public boolean usesModule(long moduleId) {

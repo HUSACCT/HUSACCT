@@ -15,7 +15,7 @@ class SeverityConfigRepository {
 	private final List<Severity> defaultSeverities;
 
 	public SeverityConfigRepository() {
-		this.currentSeverities = new ArrayList<Severity>();
+		this.currentSeverities = new ArrayList<>();
 		this.defaultSeverities = generateDefaultSeverities();
 
 		initializeCurrentSeverities();
@@ -26,7 +26,7 @@ class SeverityConfigRepository {
 	}
 
 	private void initializeCurrentSeverities() {
-		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
+		this.currentSeverities = new ArrayList<>(defaultSeverities.size());
 		for (Severity severity : defaultSeverities) {
 			currentSeverities.add(severity);
 		}
@@ -71,7 +71,7 @@ class SeverityConfigRepository {
 	}
 
 	private List<Severity> generateDefaultSeverities() {
-		List<Severity> newDefaultSeverities = new ArrayList<Severity>();
+		List<Severity> newDefaultSeverities = new ArrayList<>();
 		for (DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)) {
 			Severity severity = new Severity(defaultSeverity.toString(), defaultSeverity.getColor());
 			newDefaultSeverities.add(severity);

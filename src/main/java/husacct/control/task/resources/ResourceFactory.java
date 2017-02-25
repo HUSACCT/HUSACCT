@@ -27,7 +27,7 @@ public class ResourceFactory {
 	}
 	
 	public static List<String> getAvailableResources(){
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		list.add("Xml");
 		return list;
 	}

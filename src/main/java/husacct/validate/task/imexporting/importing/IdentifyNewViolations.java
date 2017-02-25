@@ -65,7 +65,7 @@ public class IdentifyNewViolations {
 	
 	// Add each current violation that is not found in the previousViolationRepository to the newViolationsList 
 	private void filterNewViolations() {
-    	newViolationsList = new ArrayList<ViolationImExportDTO>();
+    	newViolationsList = new ArrayList<>();
 		List<Violation> currentViolations = task.getAllViolations().getValue();
 		for (Violation currenViolation : currentViolations) {
 			boolean isViolationNew = true;

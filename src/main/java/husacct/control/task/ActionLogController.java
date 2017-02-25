@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class ActionLogController implements IConfigListener {
-	private ArrayList<HashMap<String, String>> loggedActions = new ArrayList<HashMap<String, String>>();
+	private ArrayList<HashMap<String, String>> loggedActions = new ArrayList<>();
 	private int maxActions = 10;
 	private MainController mainController;
 	
@@ -35,7 +35,7 @@ public class ActionLogController implements IConfigListener {
 		String calledMethodName = elements[0].getMethodName(); 
 		message = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + message;
 		
-		HashMap<String, String> loggedMethodInfo = new HashMap<String, String>();
+		HashMap<String, String> loggedMethodInfo = new HashMap<>();
 		loggedMethodInfo.put("classPath", classPath);
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);

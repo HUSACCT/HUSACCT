@@ -42,8 +42,8 @@ public class ApplicationController {
 	}
 	
 	public ApplicationDTO createApplicationData(String name, String language, String version, ArrayList<String> paths){
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<ProjectDTO> projects = new ArrayList<>();
+		ArrayList<SoftwareUnitDTO> analysedModules = new ArrayList<>();
 		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
 		projects.add(project);
 		

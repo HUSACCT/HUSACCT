@@ -48,10 +48,10 @@ public class ValidateTest {
 			logger.info(String.format(" Start: ValidateTest"));
 			define = ServiceProvider.getInstance().getDefineService();
 			
-			ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+			ArrayList<ProjectDTO> projects = new ArrayList<>();
 			for(int counter = 0; counter < 3; counter ++) {
-				projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "Java", "1.0", 
-						"DESCRIPTION PROJECT " + counter, new ArrayList<SoftwareUnitDTO>()));
+				projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<>(), "Java", "1.0",
+						"DESCRIPTION PROJECT " + counter, new ArrayList<>()));
 			}
 			define.createApplication("TEST_APPLICATION", projects, "1.0");
 			validate = ServiceProvider.getInstance().getValidateService();
@@ -231,7 +231,7 @@ public class ValidateTest {
 */
 	
 	private String[] getCategoryStringArray(CategoryDTO[] dtos) {
-		ArrayList<String> categoryList = new ArrayList<String>();
+		ArrayList<String> categoryList = new ArrayList<>();
 
 		for (CategoryDTO dto : dtos) {
 			categoryList.add(dto.getKey());
@@ -240,7 +240,7 @@ public class ValidateTest {
 	}
 
 	private String[] getRuleTypesStringArray(CategoryDTO[] dtos) {
-		ArrayList<String> ruletypeList = new ArrayList<String>();
+		ArrayList<String> ruletypeList = new ArrayList<>();
 
 		for (CategoryDTO cDTO : dtos) {
 			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
@@ -251,7 +251,7 @@ public class ValidateTest {
 	}
 
 	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, RuleTypes ruleTypeKey) {
-		ArrayList<String> violationtypeList = new ArrayList<String>();
+		ArrayList<String> violationtypeList = new ArrayList<>();
 
 		for (CategoryDTO cDTO : dtos) {
 			for (RuleTypeDTO ruleTypeDTO : cDTO.getRuleTypes()) {
@@ -270,7 +270,7 @@ public class ValidateTest {
 	}
 
 	private String[] getViolationTypesStringArray(RuleTypeDTO rule) {
-		ArrayList<String> violationTypeList = new ArrayList<String>();
+		ArrayList<String> violationTypeList = new ArrayList<>();
 		for (ViolationTypeDTO vDTO : rule.getViolationTypes()) {
 			violationTypeList.add(vDTO.getKey());
 		}

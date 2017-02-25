@@ -38,7 +38,7 @@ public class JavaFileParser implements AbstractFileParser {
 			"protected", "public", "return", "short", "static", "super",
 			"switch", "synchronized", "this", "throw", "throws", "transient",
 			"true", "try", "void", "volatile", "while" };
-	private ArrayList<String> keys = new ArrayList<String>(Arrays.asList(keywords));
+	private ArrayList<String> keys = new ArrayList<>(Arrays.asList(keywords));
 	
 	public JavaFileParser(CodeViewInternalFrame view) {
 		this.view = view;

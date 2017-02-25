@@ -23,7 +23,7 @@ public abstract class AbstractCombinedComponent extends Component implements
 
     public AbstractCombinedComponent() {
 		super();
-		children = new ArrayList<AbstractCombinedComponent>();
+		children = new ArrayList<>();
     }
 
     public abstract void addChild(AbstractCombinedComponent child);

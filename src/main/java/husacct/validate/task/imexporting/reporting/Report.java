@@ -37,7 +37,7 @@ public class Report {
 	}
 
 	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
-		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
+		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<>();
 		for (Severity severity : severities) {
 			int violationsCount = 0;
 			for (Violation violation : violations.getValue()) {

@@ -20,7 +20,7 @@ public class DependencyDataModel extends AbstractTableModel {
 	public DependencyDataModel(DependencyDTO[] dtos) {
 		localeService = ServiceProvider.getInstance().getLocaleService();
 		columnKeys = new String[] { "From", "To", "Type", "Linenumber", "Direct/Indirect" };
-		columnNames = new HashMap<String, String>();
+		columnNames = new HashMap<>();
 		columnNames.put(columnKeys[0], localeService.getTranslatedString(columnKeys[0]));
 		columnNames.put(columnKeys[1], localeService.getTranslatedString(columnKeys[1]));
 		columnNames.put(columnKeys[2], localeService.getTranslatedString(columnKeys[2]));

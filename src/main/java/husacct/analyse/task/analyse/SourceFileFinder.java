@@ -21,7 +21,7 @@ class SourceFileFinder {
         if (listFiles == null) {
             listFiles = new File[]{root};
         }
-        List<MetaFile> filePaths = new ArrayList<MetaFile>();
+        List<MetaFile> filePaths = new ArrayList<>();
         for (File file : listFiles) {
             checkIfFileOrDirectory(file, filePaths);
         }

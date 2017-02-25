@@ -39,9 +39,9 @@ public final class FilterViolations extends HelpableJDialog {
 	private JScrollPane pathFilterScrollPane, ruletypePanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
 	private FilterViolationsObserver filterViolationsObserver;
-	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
-	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
-	private ArrayList<String> pathsfilter = new ArrayList<String>();
+	private ArrayList<String> ruletypesfilter = new ArrayList<>();
+	private ArrayList<String> violationtypesfilter = new ArrayList<>();
+	private ArrayList<String> pathsfilter = new ArrayList<>();
 	private Calendar violationDate = Calendar.getInstance();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
@@ -341,7 +341,7 @@ public final class FilterViolations extends HelpableJDialog {
 	}
 
 	private ArrayList<String> getRuletypesFilter() {
-		ArrayList<String> Ruletypes = new ArrayList<String>();
+		ArrayList<String> Ruletypes = new ArrayList<>();
 		for (int i = 0; i < ruletypeModelFilter.getRowCount(); i++) {
 			if ((Boolean) ruletypeModelFilter.getValueAt(i, 0)) {
 				Ruletypes.add((String) ruletypeModelFilter.getValueAt(i, 1));
@@ -352,7 +352,7 @@ public final class FilterViolations extends HelpableJDialog {
 	}
 
 	private ArrayList<String> getViolationtypesFilter() {
-		ArrayList<String> violationtypes = new ArrayList<String>();
+		ArrayList<String> violationtypes = new ArrayList<>();
 
 		for (int i = 0; i < violationtypeModelFilter.getRowCount(); i++) {
 			if ((Boolean) violationtypeModelFilter.getValueAt(i, 0)) {
@@ -364,7 +364,7 @@ public final class FilterViolations extends HelpableJDialog {
 	}
 
 	private ArrayList<String> getPathFilter() {
-		ArrayList<String> paths = new ArrayList<String>();
+		ArrayList<String> paths = new ArrayList<>();
 
 		for (int i = 0; i < pathFilterModel.getRowCount(); i++) {
 			if ((Boolean) pathFilterModel.getValueAt(i, 0)) {

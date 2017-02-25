@@ -6,5 +6,5 @@ abstract class FamixDecompositionEntity extends FamixEntity {
 
     public boolean external = false;
     public String belongsToPackage;
-    public TreeSet<String> children = new TreeSet<String>();
+    public TreeSet<String> children = new TreeSet<>();
 }

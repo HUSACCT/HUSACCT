@@ -25,7 +25,7 @@ public class ViolationsPerRuleDataModel extends AbstractTableModel {
 		this.taskServiceImpl = taskServiceImpl;
 		localeService = ServiceProvider.getInstance().getLocaleService();
 		columnKeys = new String[] { "Id", "LogicalModuleFrom", "RuleType", "LogicalModuleTo", "NrOfViolations" };
-		columnNames = new HashMap<String, String>();
+		columnNames = new HashMap<>();
 		for (String key : columnKeys){ 
 			columnNames.put(key, localeService.getTranslatedString(key));
 		}

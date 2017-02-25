@@ -39,7 +39,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected List<ViolationType> generateViolationTypes(String ruleTypeKey, EnumSet<ViolationTypes> enums) {
-		List<ViolationType> violationtypes = new ArrayList<ViolationType>();
+		List<ViolationType> violationtypes = new ArrayList<>();
 		for (Enum<?> enumValue : enums) {
 			ViolationType violationtype = generateViolationType(ruleTypeKey, enumValue);
 			violationtypes.add(violationtype);
@@ -52,14 +52,14 @@ public abstract class AbstractViolationType {
 	}
 
 	protected HashMap<String, List<ViolationType>> getAllViolationTypes(List<CategoryKeySeverityDTO> keyList) {
-		HashMap<String, List<ViolationType>> categoryViolations = new HashMap<String, List<ViolationType>>();
+		HashMap<String, List<ViolationType>> categoryViolations = new HashMap<>();
 		for (CategoryKeySeverityDTO dto : keyList) {
 			if (categoryViolations.containsKey(dto.getCategory())) {
 				List<ViolationType> violationtypes = categoryViolations.get(dto.getCategory());
 				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);
 			} else {
-				List<ViolationType> violationtypes = new ArrayList<ViolationType>();
+				List<ViolationType> violationtypes = new ArrayList<>();
 				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);
 				categoryViolations.put(dto.getCategory(), violationtypes);
@@ -69,7 +69,7 @@ public abstract class AbstractViolationType {
 	}
 
 	private ViolationType createViolationType(String violationTypeKey) {
-		List<String> violationKeysToLower = new ArrayList<String>();
+		List<String> violationKeysToLower = new ArrayList<>();
 		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
 		}
@@ -84,7 +84,7 @@ public abstract class AbstractViolationType {
 	}
 
 	public ViolationType createViolationType(String ruleTypeKey, String violationTypeKey) {
-		List<String> violationKeysToLower = new ArrayList<String>();
+		List<String> violationKeysToLower = new ArrayList<>();
 		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
 			//System.err.println("ADD key: " + violationtype.getKey() + " - category: " + violationtype.getCategory());
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());

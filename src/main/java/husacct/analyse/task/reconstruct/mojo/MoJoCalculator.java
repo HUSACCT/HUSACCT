@@ -17,25 +17,25 @@ public class MoJoCalculator {
     }
 
     /* The mapping between objects and clusters in B */
-    private Map<String, String> mapObjectClusterInB = new Hashtable<String, String>();
+    private Map<String, String> mapObjectClusterInB = new Hashtable<>();
 
     /* The mappings of clusters to tags in both A and B */
-    private Map<String, Integer> mapClusterTagA = new Hashtable<String, Integer>();
+    private Map<String, Integer> mapClusterTagA = new Hashtable<>();
 
-    private Map<String, Integer> mapClusterTagB = new Hashtable<String, Integer>();
+    private Map<String, Integer> mapClusterTagB = new Hashtable<>();
 
     /* Mapping between edges and their edgecost */
-    private Hashtable<String, Double> tableR = new Hashtable<String, Double>();
+    private Hashtable<String, Double> tableR = new Hashtable<>();
 
     /* use for store the name of each items */
-    private Vector<String> clusterNamesInA = new Vector<String>();
+    private Vector<String> clusterNamesInA = new Vector<>();
 
     // Stores the number of objects in each cluster in partition B
     // Used in calculating the max distance from partition B
-    private Vector<Integer> cardinalitiesInB = new Vector<Integer>();
+    private Vector<Integer> cardinalitiesInB = new Vector<>();
 
     /* This vector contains a vector for each cluster in A */
-    private Vector<Vector<String>> partitionA = new Vector<Vector<String>>();
+    private Vector<Vector<String>> partitionA = new Vector<>();
 
     private int l = 0; /* number of clusters in A */
 
@@ -398,7 +398,7 @@ public class MoJoCalculator {
                 int index = mapClusterTagA.size();
                 clusterNamesInA.addElement(strClusterA);
                 mapClusterTagA.put(strClusterA, new Integer(index));
-                partitionA.addElement(new Vector<String>());
+                partitionA.addElement(new Vector<>());
                 for (int i = 0; i < objNumber; i++)
                 {
                     String obj = st.nextToken().trim();
@@ -456,7 +456,7 @@ public class MoJoCalculator {
                         index = mapClusterTagA.size();
                         clusterNamesInA.addElement(clusterName);
                         mapClusterTagA.put(clusterName, new Integer(index));
-                        partitionA.addElement(new Vector<String>());
+                        partitionA.addElement(new Vector<>());
                     }
                     else
                     {

@@ -23,7 +23,7 @@ public class ActiveRuleType implements Cloneable {
 
 	public List<ActiveViolationType> getViolationTypes() {
 		if (violationTypes == null) {
-			violationTypes = new ArrayList<ActiveViolationType>();
+			violationTypes = new ArrayList<>();
 		}
 		return violationTypes;
 	}

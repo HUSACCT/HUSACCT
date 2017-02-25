@@ -35,7 +35,7 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 	private StyledDocument fileDocument, codeDocument;
 	private TextLineNumber codeLineNumber;
 
-	private ArrayList<Error> errors = new ArrayList<Error>();
+	private ArrayList<Error> errors = new ArrayList<>();
 	private int firstErrorPosition = 0;
 	
 	public CodeViewInternalFrame() {
@@ -65,7 +65,7 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 		codeDocument.putProperty(PlainDocument.tabSizeAttribute, 4);
 		this.add(codeScrollPane, BorderLayout.CENTER);
 
-		errors = new ArrayList<Error>();
+		errors = new ArrayList<>();
 	}
 	
 	public void setErrorLines(ArrayList<Integer> errorLines) {

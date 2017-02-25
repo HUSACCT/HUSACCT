@@ -21,7 +21,7 @@ public class Layers_Scanniello_Root_Initial extends Layers_Scanniello_SuperClass
 		this.threshold = dto.getThreshold();
 		
 		List<SoftwareUnitDTO> classes = queryService.getAllClasses();
-		ArrayList<SoftwareUnitDTO> classesArray = new ArrayList<SoftwareUnitDTO>(classes);
+		ArrayList<SoftwareUnitDTO> classesArray = new ArrayList<>(classes);
 		boolean firstIdentification = true;
 		HashMap<Integer, ArrayList<SoftwareUnitDTO>> firstIdentifiedLayers = identifyLayersOriginal(classesArray, firstIdentification);
 		

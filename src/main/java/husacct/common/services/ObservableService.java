@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ObservableService {
 	
-	private ArrayList<IServiceListener> listeners = new ArrayList<IServiceListener>();
+	private ArrayList<IServiceListener> listeners = new ArrayList<>();
 	
 	public void addServiceListener(IServiceListener listener){
 		listeners.add(listener);

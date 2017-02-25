@@ -25,7 +25,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	public String generateParameterObjects(CommonTree allParametersTree, String belongsToMethod, String belongsToClass) { // allParametersTree = FORMAL_PARAMETER_LIST
 		String returnvalue = "";
-        this.parameterQueue = new ArrayList<ArrayList<Object>>();
+        this.parameterQueue = new ArrayList<>();
 		this.belongsToClass = belongsToClass;
 		this.belongsToMethod = belongsToMethod;
         /* Test helper
@@ -90,7 +90,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
     }
     
     private void addToQueue() {
-        ArrayList<Object> myParam = new ArrayList<Object>();
+        ArrayList<Object> myParam = new ArrayList<>();
         myParam.add(this.declareType);
         myParam.add(this.declareName);
         myParam.add(this.lineNumber);

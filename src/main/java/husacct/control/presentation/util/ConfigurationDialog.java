@@ -33,12 +33,12 @@ public class ConfigurationDialog extends JDialog {
 	private String subItem = " - ";
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-	private ArrayList<IConfigurable> configurableServices = new ArrayList<IConfigurable>();
+	private ArrayList<IConfigurable> configurableServices = new ArrayList<>();
 	
 	private JButton save = new JButton(), reset = new JButton(), cancel = new JButton();
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
 	private JList<String> list;
-	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<String, ConfigPanel>();
+	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<>();
 	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
@@ -77,14 +77,14 @@ public class ConfigurationDialog extends JDialog {
 	public void loadSidePanel() {
 		sidebarPanel.removeAll();
 		
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		DefaultListModel<String> listModel = new DefaultListModel<>();
 		for(final IConfigurable config : configurableServices) {
 			listModel.addElement(config.getConfigurationName());
 			for(Entry<String, ConfigPanel> entry : config.getSubItems().entrySet()) {
 				listModel.addElement(subItem + entry.getKey());
 			}
 		}
-		list = new JList<String>(listModel);
+		list = new JList<>(listModel);
 		list.setSelectedIndex(0);
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override

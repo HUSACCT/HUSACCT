@@ -107,7 +107,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	}
 
 	private void addModuleTypeComboBox() {
-		moduleTypeComboBox = new JComboBox<String>(moduleTypes_Translated);
+		moduleTypeComboBox = new JComboBox<>(moduleTypes_Translated);
 		moduleTypeLabel = new JLabel();
 		this.add(moduleTypeLabel, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -205,12 +205,12 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 					_type= moduleType_Translated;
 					// Fill moduleTypeComboBox.
 					if (moduleType.equals("Facade")) {
-						DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<String>(facadeType);
+						DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<>(facadeType);
 						moduleTypeComboBox.setModel(facadeModel);
 						moduleTypeComboBox.setSelectedIndex(0);
 						moduleTypeComboBox.setEnabled(false);
 					} else {
-						DefaultComboBoxModel<String> defaultModel = new DefaultComboBoxModel<String>(moduleTypes_Translated);
+						DefaultComboBoxModel<String> defaultModel = new DefaultComboBoxModel<>(moduleTypes_Translated);
 						moduleTypeComboBox.setModel(defaultModel);
 						for (int i = 0; i < moduleTypes_Translated.length; i++) {
 							if (moduleType_Translated.equalsIgnoreCase(moduleTypes_Translated[i])) {

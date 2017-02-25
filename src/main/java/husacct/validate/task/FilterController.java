@@ -28,9 +28,9 @@ public class FilterController {
 	private final TaskServiceImpl taskServiceImpl;
 	private final RuleTypesFactory ruletypesfactory;
 	private final ConfigurationServiceImpl configuration;
-	private ArrayList<String> ruletypes = new ArrayList<String>();
-	private ArrayList<String> violationtypes = new ArrayList<String>();
-	private ArrayList<String> paths = new ArrayList<String>();
+	private ArrayList<String> ruletypes = new ArrayList<>();
+	private ArrayList<String> violationtypes = new ArrayList<>();
+	private ArrayList<String> paths = new ArrayList<>();
 	private boolean hidefilter = true;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
@@ -41,7 +41,7 @@ public class FilterController {
 	}
 
 	public void setFilterValues(FilterSettingsDTO dto, boolean hideFilter, List<Violation> violations) {
-		ArrayList<String> modulesFilter = new ArrayList<String>();
+		ArrayList<String> modulesFilter = new ArrayList<>();
 		for (Violation violation : violations) {
 			for (String path : dto.getPaths()) {
 				if (!modulesFilter.contains(violation.getClassPathFrom()) && Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())) {
@@ -56,7 +56,7 @@ public class FilterController {
 	}
 
 	public ArrayList<Violation> filterViolations(List<Violation> violations) {
-		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
+		ArrayList<Violation> filteredViolations = new ArrayList<>();
 		for (Violation violation : violations) {
 			if (hidefilter && (!ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey())) && !paths.contains(violation.getClassPathFrom()))) {
 				filteredViolations.add(violation);
@@ -68,7 +68,7 @@ public class FilterController {
 	}
 
 	public ArrayList<String> loadRuletypes(List<Violation> violations) {
-		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
+		ArrayList<String> AppliedRuletypes = new ArrayList<>();
 
 		for (Violation violation : violations) {
 			if (!AppliedRuletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey()))) {
@@ -80,7 +80,7 @@ public class FilterController {
 	}
 
 	public ArrayList<String> loadViolationtypes(List<Violation> violations) {
-		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
+		ArrayList<String> appliedViolationtypes = new ArrayList<>();
 
 		for (Violation violation : violations) {
 			String violationTypeKey = violation.getViolationTypeKey();
@@ -95,9 +95,9 @@ public class FilterController {
 
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-		List<String> physicalPathsFrom = new ArrayList<String>();
+		List<String> physicalPathsFrom = new ArrayList<>();
 		physicalPathsFrom.addAll(defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathFrom));
-		List<String> physicalPathsTo = new ArrayList<String>();
+		List<String> physicalPathsTo = new ArrayList<>();
 		physicalPathsTo.addAll(defineService.getModule_AllPhysicalClassPathsOfModule(logicalpathTo));
 		ViolationDTO[] returnValue = getViolationsByPhysicalPathLists(physicalPathsFrom, physicalPathsTo);
 		return returnValue;
@@ -112,7 +112,7 @@ public class FilterController {
 	}
 
 	private ViolationDTO[] getViolationsByPhysicalPathLists(List<String> physicalPathsFrom, List<String> physicalPathsTo){
-		List<Violation> violations = new  ArrayList<Violation>();
+		List<Violation> violations = new ArrayList<>();
 		for (String pathFrom : physicalPathsFrom){
 			for (String pathTo : physicalPathsTo){
 				violations.addAll(configuration.getViolationsFromTo(pathFrom, pathTo));
@@ -133,7 +133,7 @@ public class FilterController {
 	}
 
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
-		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
+		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<>();
 
 		for (Severity severity : severities) {
 			violationsPerSeverity.put(severity, 0);

@@ -114,7 +114,7 @@ public class AppliedRuleDomainService {
 	// Returns a flat list of main rules and exception rules
 	public ArrayList<AppliedRuleStrategy> getAllEnabledAppliedRules() {
 		ArrayList<AppliedRuleStrategy> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
-		ArrayList<AppliedRuleStrategy> enabledRuleList = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> enabledRuleList = new ArrayList<>();
 		for (AppliedRuleStrategy ar : ruleList) {
 			if (ar.isEnabled()) {
 				enabledRuleList.add(ar);
@@ -126,7 +126,7 @@ public class AppliedRuleDomainService {
 	// Returns all main rules, enabled or disabled (so no exception rules)
 	public AppliedRuleStrategy[] getAllMainRules() {
 		ArrayList<AppliedRuleStrategy> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
-		ArrayList<AppliedRuleStrategy> mainRuleList = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> mainRuleList = new ArrayList<>();
 		for (AppliedRuleStrategy ar : ruleList) {
 			if (!ar.isException()) {
 				mainRuleList.add(ar);
@@ -140,7 +140,7 @@ public class AppliedRuleDomainService {
 	// Returns all enabled main rules (so no disabled rules or exception rules)
 	public AppliedRuleStrategy[] getAllEnabledMainRules() {
 		ArrayList<AppliedRuleStrategy> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
-		ArrayList<AppliedRuleStrategy> enabledMainRuleList = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> enabledMainRuleList = new ArrayList<>();
 		for (AppliedRuleStrategy ar : ruleList) {
 			if ((ar.isEnabled()) && (!ar.isException())) {
 				enabledMainRuleList.add(ar);
@@ -154,7 +154,7 @@ public class AppliedRuleDomainService {
 	// Returns a flat list of exception rules (so no main rules)
 	public ArrayList<AppliedRuleStrategy> getAllExceptionRules() {
 		ArrayList<AppliedRuleStrategy> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
-		ArrayList<AppliedRuleStrategy> exceptionRuleList = new ArrayList<AppliedRuleStrategy>();
+		ArrayList<AppliedRuleStrategy> exceptionRuleList = new ArrayList<>();
 		for (AppliedRuleStrategy ar : ruleList) {
 			if (ar.isException()) {
 				exceptionRuleList.add(ar);
@@ -282,7 +282,7 @@ public class AppliedRuleDomainService {
 	    			AppliedRuleStrategy exceptionRule = getAppliedRuleById(exceptionRuleId);
 
 	    	        // Add exception rule to Parent rule
-	        		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+	        		ArrayList<AppliedRuleStrategy> rules = new ArrayList<>();
 	        		rules.add(exceptionRule);
 	        		StateService.instance().addExceptionRule(parentRule, rules);
 	        		parentRule.addException(exceptionRule);

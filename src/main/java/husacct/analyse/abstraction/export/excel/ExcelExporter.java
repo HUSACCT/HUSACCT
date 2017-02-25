@@ -39,7 +39,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
     private WritableCellFormat timesBold;
     private WritableCellFormat timesBold_AlignmentRight;
     private WritableCellFormat times;
-    private Map<Integer, Integer> dimensions = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> dimensions = new HashMap<>();
 
     // Variables for statistics: dependency.type
     private int numberOfAllDependencies_Total = 0;
@@ -215,7 +215,7 @@ public class ExcelExporter extends AbstractReportFileExporter {
         Label innerClassLabel = new Label(7, row, "" + dependency.isInnerClassRelated, times);
         Label usedEntityLabel = new Label(8, row, "" + dependency.usedEntity, times);
         
-        List<Label> labelArray = new ArrayList<Label>();
+        List<Label> labelArray = new ArrayList<>();
         labelArray.add(fromLabel);
         labelArray.add(toLabel);
         labelArray.add(typeLabel);

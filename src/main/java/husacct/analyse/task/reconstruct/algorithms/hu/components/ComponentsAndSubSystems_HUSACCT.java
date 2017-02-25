@@ -21,11 +21,11 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	private String relationType;
 	private ModuleDTO selectedModule;
 	private ArrayList<String> softwareUnitsInSelectedModuleList;
-	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithInterfaces = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithImplementingClasses = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-	private HashMap<String,ArrayList<SoftwareUnitDTO>> exceptionsPerSoftwareUnit = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-	private HashMap<String,ArrayList<SoftwareUnitDTO>> enumsPerSoftwareUnit = new HashMap<String, ArrayList<SoftwareUnitDTO>>();
-	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExcludeMap = new HashMap<String, SoftwareUnitDTO>();
+	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithInterfaces = new HashMap<>();
+	private HashMap<String,ArrayList<SoftwareUnitDTO>> componentsWithImplementingClasses = new HashMap<>();
+	private HashMap<String,ArrayList<SoftwareUnitDTO>> exceptionsPerSoftwareUnit = new HashMap<>();
+	private HashMap<String,ArrayList<SoftwareUnitDTO>> enumsPerSoftwareUnit = new HashMap<>();
+	private HashMap<String, SoftwareUnitDTO> softwareUnitsToExcludeMap = new HashMap<>();
 	
 	public ComponentsAndSubSystems_HUSACCT (IModelQueryService queryService) {
 		super(queryService);
@@ -39,7 +39,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 			selectedModule.logicalPath = "**"; // Root of intended software architecture
 			selectedModule.type = "Root"; // Root of intended software architecture
 		}
-		softwareUnitsInSelectedModuleList = new ArrayList<String>();
+		softwareUnitsInSelectedModuleList = new ArrayList<>();
 
 		// If the selectedModule is of type Facade or ExternalLibrary, nothing is done.
 		if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
@@ -97,7 +97,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 				for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
 					if (softwareUnit.type.equals("class")) {
 						// 2) Get all dependencies on softwareUnit
-						ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
+						ArrayList<DependencyDTO> dependenciesList = new ArrayList<>();
 						dependenciesList.addAll(getRelationsBetweenSoftwareUnits(softwareUnit.uniqueName, "", relationType));
 						// 3) Determine if the software unit implements an interface	
 						for(DependencyDTO dependency : dependenciesList){		
@@ -142,15 +142,15 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 		try {
 			for (String softwareUnitWithinSelectedModule : filteredListOfSoftwareUnitsInSelected) {
 				SoftwareUnitDTO parentUnit = queryService.getSoftwareUnitByUniqueName(softwareUnitWithinSelectedModule);
-				HashSet<SoftwareUnitDTO> parentUnitsList = new HashSet<SoftwareUnitDTO>();
+				HashSet<SoftwareUnitDTO> parentUnitsList = new HashSet<>();
 				parentUnitsList.add(parentUnit);
 				if(componentsWithInterfaces.containsKey(softwareUnitWithinSelectedModule)){ 
 					// Create a Component and an Interface
 					// First, check if all child units of the parenUnit are needed to provide the implemented service of the interfaces
 					boolean allChildUnitsAreNeededToImplementTheInterfaceServices = false;
 					HashSet<SoftwareUnitDTO> allChildUnitsNeededToImplementTheInterfaceServices = getAllChildUnitsNeededToImplementTheInterfaceServices(softwareUnitWithinSelectedModule);
-					HashSet<SoftwareUnitDTO> softwareUnitsToAssignToComponent = new HashSet<SoftwareUnitDTO>();
-					HashSet<SoftwareUnitDTO> softwareUnitsToAssignToSubSystem = new HashSet<SoftwareUnitDTO>();
+					HashSet<SoftwareUnitDTO> softwareUnitsToAssignToComponent = new HashSet<>();
+					HashSet<SoftwareUnitDTO> softwareUnitsToAssignToSubSystem = new HashSet<>();
 					int size_allChildUnitsNeededToImplementTheInterfaceServices = allChildUnitsNeededToImplementTheInterfaceServices.size();
 					SoftwareUnitDTO[] allChildUnitsOfSoftwareUnitInSelectedModule = queryService.getChildUnitsOfSoftwareUnit(softwareUnitWithinSelectedModule);
 					int size_softwareUnitsInSelectedModuleList = allChildUnitsOfSoftwareUnitInSelectedModule.length;
@@ -185,7 +185,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 						boolean tryMove = true;
 						while (tryMove) {
 							tryMove = false;
-							ArrayList<SoftwareUnitDTO> softwareUnitsToMove = new ArrayList<SoftwareUnitDTO>();
+							ArrayList<SoftwareUnitDTO> softwareUnitsToMove = new ArrayList<>();
 							for (SoftwareUnitDTO suSubsystem : softwareUnitsToAssignToSubSystem) {
 								boolean moveToComponent = false;
 								for (SoftwareUnitDTO suComponent : softwareUnitsToAssignToComponent) {
@@ -239,7 +239,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 
 		if (!replaceSelectedModuleByComponent || hasSiblingSubSystem) {
 			// Create a new module as a child of the SelectedModule
-			newModule = createModule_andAddItToReverseList(parentUnit.name, selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), 0, new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToComponent));
+			newModule = createModule_andAddItToReverseList(parentUnit.name, selectedModule.logicalPath, ModuleTypes.COMPONENT.toString(), 0, new ArrayList<>(softwareUnitsToAssignToComponent));
 			if (!newModule.logicalPath.equals("")) {
 				// Create the Interface of the Component.
 				createModule_andAddItToReverseList(parentUnit.name + "Interface", newModule.logicalPath, ModuleTypes.FACADE.toString(), 0, interfaceUnits);
@@ -259,7 +259,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	
 	private void createSubSystem(SoftwareUnitDTO parentUnit, HashSet<SoftwareUnitDTO> softwareUnitsToAssignToSubSystem) {
 		if (parentUnit.type.equals("package")) {
-			ArrayList<SoftwareUnitDTO> softwareUnits = new ArrayList<SoftwareUnitDTO>(softwareUnitsToAssignToSubSystem);
+			ArrayList<SoftwareUnitDTO> softwareUnits = new ArrayList<>(softwareUnitsToAssignToSubSystem);
 			String type = ModuleTypes.SUBSYSTEM.toString();
 			createModule_andAddItToReverseList(parentUnit.name, selectedModule.logicalPath, type, 0, softwareUnits);
 		}
@@ -267,7 +267,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	
 	private HashMap<String,ArrayList<SoftwareUnitDTO>> addSoftwareUnitToHashMap(SoftwareUnitDTO softwareUnit, String keyOfHashMap, HashMap<String,ArrayList<SoftwareUnitDTO>> hashMap) {
 		if(!hashMap.containsKey(keyOfHashMap)){
-			ArrayList<SoftwareUnitDTO> softwareUnitsOfClass = new ArrayList<SoftwareUnitDTO>();
+			ArrayList<SoftwareUnitDTO> softwareUnitsOfClass = new ArrayList<>();
 			softwareUnitsOfClass.add(softwareUnit);
 			hashMap.put(keyOfHashMap, softwareUnitsOfClass);
 		}
@@ -307,7 +307,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 			interfaceIsSpecificForUnit = false;
 		} else {
 			// 2) Check that the interface is not also implemented by other units (excluding stubs and test classes).
-			ArrayList<DependencyDTO> dependenciesList = new ArrayList<DependencyDTO>();
+			ArrayList<DependencyDTO> dependenciesList = new ArrayList<>();
 			dependenciesList.addAll(getRelationsBetweenSoftwareUnits("",interfaceClass.uniqueName, relationType));
 			for(DependencyDTO dependencyOnInterface : dependenciesList){		
 				if(dependencyOnInterface.subType.equals(DependencySubTypes.INH_IMPLEMENTS_INTERFACE.toString())){
@@ -348,7 +348,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	 * @return ArrayList<String> with unique names of children, or an empty list, if no child SoftwareUnits are existing.
 	 */
 	private ArrayList<String> getSetOfChildSoftwareUnits(String parentUniqueName) {
-		ArrayList<String> childSoftwareUnits = new ArrayList<String>();
+		ArrayList<String> childSoftwareUnits = new ArrayList<>();
 		String softwareUnit = parentUniqueName;
 		while (childSoftwareUnits.size() < 2) {
 			SoftwareUnitDTO[] childUnits = (queryService.getChildUnitsOfSoftwareUnit(softwareUnit));
@@ -372,11 +372,11 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	private boolean shouldTheComponentReplaceTheSelectedModule(String softwareUnitInSelectedModule) {
 		boolean replaceSelectedModuleByComponent = false;
 		if (selectedModule.type.equals(ModuleTypes.SUBSYSTEM.toString())) {
-			HashSet<String> allClassesAssignedToSelectedModule = new HashSet<String>();
+			HashSet<String> allClassesAssignedToSelectedModule = new HashSet<>();
 			for (String selectedModuleUniqueName : softwareUnitsInSelectedModuleList) {
 				allClassesAssignedToSelectedModule.addAll(queryService.getAllPhysicalClassPathsOfSoftwareUnit(selectedModuleUniqueName));
 			}
-			HashSet<String> allClassesAssignedToComponent = new HashSet<String>();
+			HashSet<String> allClassesAssignedToComponent = new HashSet<>();
 			allClassesAssignedToComponent.addAll(queryService.getAllPhysicalClassPathsOfSoftwareUnit(softwareUnitInSelectedModule));
 			for (SoftwareUnitDTO interfaceUnit : componentsWithInterfaces.get(softwareUnitInSelectedModule)) {
 				allClassesAssignedToComponent.add(interfaceUnit.uniqueName);
@@ -389,7 +389,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	}
 
 	private HashSet<SoftwareUnitDTO> getAllChildUnitsNeededToImplementTheInterfaceServices(String softwareUnitInSelectedModule) {
-		HashSet<SoftwareUnitDTO> neededSoftwareUnits = new HashSet<SoftwareUnitDTO>();
+		HashSet<SoftwareUnitDTO> neededSoftwareUnits = new HashSet<>();
 		neededSoftwareUnits.addAll(componentsWithImplementingClasses.get(softwareUnitInSelectedModule));
 		// If there is a dependency from an interface-implementing software unit, add softwareUnit to neededSoftwareUnits	
 		for (SoftwareUnitDTO softwareUnit : queryService.getChildUnitsOfSoftwareUnit(softwareUnitInSelectedModule)) {
@@ -420,7 +420,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 	}
 	
 	private ArrayList<String> filterSoftwareUnitsInSelectedModuleList() {
-		ArrayList<String> newSoftwareUnitsInSelectedModuleList =  new ArrayList<String>();
+		ArrayList<String> newSoftwareUnitsInSelectedModuleList = new ArrayList<>();
 		for (String su : softwareUnitsInSelectedModuleList) {
 			if (!softwareUnitsToExcludeMap.containsKey(su)) {
 				newSoftwareUnitsInSelectedModuleList.add(su);

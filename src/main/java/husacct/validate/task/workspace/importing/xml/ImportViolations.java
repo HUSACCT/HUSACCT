@@ -14,7 +14,7 @@ import org.jdom2.Element;
 
 public class ImportViolations extends XmlImportUtils {
 	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
-		List<Violation> violations = new ArrayList<Violation>();
+		List<Violation> violations = new ArrayList<>();
 		for (Element violationElement : violationsElement.getChildren()) {
 			Severity violationSeverity = null;
 

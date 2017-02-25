@@ -56,7 +56,7 @@ public class resourceGatherer implements Runnable {
 
 
 	private List<ISaveable> getSaveableServices() {
-		List<ISaveable> saveableServices = new ArrayList<ISaveable>();
+		List<ISaveable> saveableServices = new ArrayList<>();
 
 		if(ServiceProvider.getInstance().getControlService() instanceof ISaveable){
 			saveableServices.add((ISaveable) ServiceProvider.getInstance().getControlService());

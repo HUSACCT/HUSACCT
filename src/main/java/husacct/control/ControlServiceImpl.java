@@ -39,7 +39,7 @@ import org.jdom2.Element;
 public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
-	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
+	ArrayList<ILocaleChangeListener> listeners = new ArrayList<>();
 	
 	private MainController mainController; 
 	private WorkspaceController workspaceController;
@@ -182,7 +182,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public void displayErrorInFile(String fileName, int lineNumber, Severity severity) {
-		HashMap<Integer, Severity> errors = new HashMap<Integer, Severity>();
+		HashMap<Integer, Severity> errors = new HashMap<>();
 		if ((lineNumber > 0) && (severity != null)) {
 			errors.put(lineNumber, severity);
 		}
@@ -203,7 +203,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public HashMap<String, ConfigPanel> getSubItems() {
-		HashMap<String, ConfigPanel> subitems = new HashMap<String, ConfigPanel>();
+		HashMap<String, ConfigPanel> subitems = new HashMap<>();
 		return subitems;
 	}
 	

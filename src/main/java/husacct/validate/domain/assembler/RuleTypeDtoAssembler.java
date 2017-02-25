@@ -17,7 +17,7 @@ public class RuleTypeDtoAssembler {
 	}
 
 	public RuleTypeDTO[] createRuleTypeDTO(List<RuleType> rules) {
-		List<RuleTypeDTO> ruletypes = new ArrayList<RuleTypeDTO>();
+		List<RuleTypeDTO> ruletypes = new ArrayList<>();
 
 		for (RuleType rule : rules) {
 			RuleTypeDTO dto = createRuleTypeDTOWithViolationtypes(rule);
@@ -49,7 +49,7 @@ public class RuleTypeDtoAssembler {
 	}
 
 	private RuleTypeDTO[] createExceptionRuleTypeDTO(RuleType rule) {
-		List<RuleTypeDTO> exceptionRuleTypes = new ArrayList<RuleTypeDTO>();
+		List<RuleTypeDTO> exceptionRuleTypes = new ArrayList<>();
 		if (rule.getExceptionRules() != null) {
 			for (RuleType ruletype : rule.getExceptionRules()) {
 				final RuleTypeDTO exceptionRuleType = createRootRuleTypeDTOWithViolationtypes(ruletype);

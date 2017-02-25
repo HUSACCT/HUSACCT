@@ -19,8 +19,8 @@ public class DragAndDropHelper {
 	
 	private static Object[] filterUnigName(String result) {
 		String[] vars = result.split("\\s+");
-		ArrayList<String> names = new ArrayList<String>();
-		ArrayList<String> types = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<>();
+		ArrayList<String> types = new ArrayList<>();
 		
 		for (int i =0;i<vars.length;i++) {
 			if (i%2==0) {

@@ -23,13 +23,13 @@ public class GraphicsLocationBar extends HelpableJPanel {
 	
 	private int										menuItemMaxHeight	= 45;
 	
-	private ArrayList<JButton>						buttons = new ArrayList<JButton>();;
-	private HashMap<JButton, String[]>				buttonPaths	= new HashMap<JButton, String[]>();
+	private ArrayList<JButton>						buttons = new ArrayList<>();;
+	private HashMap<JButton, String[]>				buttonPaths	= new HashMap<>();
 	private ArrayList<LocationButtonActionListener>	locationButtonPressListener;
 	
 	public GraphicsLocationBar() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
-		locationButtonPressListener = new ArrayList<LocationButtonActionListener>();
+		locationButtonPressListener = new ArrayList<>();
 	}
 	
 	public void addLocationButtonPressListener(
@@ -91,16 +91,16 @@ public class GraphicsLocationBar extends HelpableJPanel {
 	
 	public void updateLocationBar(String[] currentPaths) {
 		removeAll();
-		buttons = new ArrayList<JButton>();
+		buttons = new ArrayList<>();
 		createAndAddRootLocationButton();
 		
-		HashMap<Integer, HashMap<Integer, String>> multiLevelPath = new HashMap<Integer, HashMap<Integer, String>>();
+		HashMap<Integer, HashMap<Integer, String>> multiLevelPath = new HashMap<>();
 		if (currentPaths.length > 0) for (int pathID = 0; pathID < currentPaths.length; pathID++) {
 			String selectedPath = currentPaths[pathID];
 			String[] pathParts = selectedPath.split("\\" + LOCATION_SEPERATOR);
 			for (int pathLevel = 0; pathLevel < pathParts.length; pathLevel++) {
 				if (null == multiLevelPath.get(pathLevel)) 
-					multiLevelPath.put(pathLevel, new HashMap<Integer, String>());
+					multiLevelPath.put(pathLevel, new HashMap<>());
 				HashMap<Integer, String> tmpAdderHashMap = multiLevelPath.get(pathLevel);
 				tmpAdderHashMap.put(pathID, pathParts[pathLevel]);
 				multiLevelPath.put(pathLevel, tmpAdderHashMap);
@@ -110,12 +110,12 @@ public class GraphicsLocationBar extends HelpableJPanel {
 		if (multiLevelPath.size() > 0) {
 			addLocationSeperator();
 			Integer[] levelKeySet = multiLevelPath.keySet().toArray(new Integer[] {});
-			HashMap<Integer, String> currentPath = new HashMap<Integer, String>();
+			HashMap<Integer, String> currentPath = new HashMap<>();
 			for (Integer level : levelKeySet) {
 				String visiblePath = "";
 				HashMap<Integer, String> levelPath = multiLevelPath.get(level);
 				Set<Integer> keySet = levelPath.keySet();
-				ArrayList<String> capturedLevels = new ArrayList<String>();
+				ArrayList<String> capturedLevels = new ArrayList<>();
 				for (Integer pathID : keySet) {
 					if (!capturedLevels.contains(levelPath.get(pathID))) 
 						visiblePath += " " + LOCATION_COMBINER + " " + levelPath.get(pathID);
@@ -128,7 +128,7 @@ public class GraphicsLocationBar extends HelpableJPanel {
 					currentPath.put(pathID, currentValuePath + levelPath.get(pathID));
 					capturedLevels.add(levelPath.get(pathID));
 				}
-				ArrayList<String> entrySetTranformToArray = new ArrayList<String>();
+				ArrayList<String> entrySetTranformToArray = new ArrayList<>();
 				for (Entry<Integer, String> p : currentPath.entrySet())
 					entrySetTranformToArray.add(p.getValue());
 				createAndAddLocationButton(

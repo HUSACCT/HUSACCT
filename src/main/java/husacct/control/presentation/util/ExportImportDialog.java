@@ -129,7 +129,7 @@ public class ExportImportDialog extends JDialog {
 
 	private void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "XML", "xml");
-		List<FileNameExtensionFilter> filters = new ArrayList<FileNameExtensionFilter>();
+		List<FileNameExtensionFilter> filters = new ArrayList<>();
 		if (typeOfFunction.startsWith("Report")) {
 			if (typeOfFunction.equals("ReportViolations")) {
 				String[] fileExtensions = mainController.getExportImportController().getExportExtensionsValidate();

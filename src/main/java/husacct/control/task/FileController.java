@@ -35,8 +35,8 @@ public class FileController {
 	public FileController(MainController mainController) {
 		try {
 			watcher = FileSystems.getDefault().newWatchService();
-			keys = new HashMap<WatchKey,Path>();
-			listeners = new ArrayList<IFileChangeListener>();
+			keys = new HashMap<>();
+			listeners = new ArrayList<>();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

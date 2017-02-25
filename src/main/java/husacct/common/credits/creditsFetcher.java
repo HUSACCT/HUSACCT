@@ -19,7 +19,7 @@ public class creditsFetcher {
 	
 	public List<String> fetchDeveloperNames() {
 		
-		List<String> developers = new ArrayList<String>();
+		List<String> developers = new ArrayList<>();
 		try {
 			InputStream stream = Resource.getStream((Resource.CREDITS_PATH) +"credits_developers.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(stream));

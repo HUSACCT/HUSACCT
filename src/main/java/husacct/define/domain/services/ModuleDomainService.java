@@ -196,7 +196,7 @@ public class ModuleDomainService {
 
 	public ArrayList<Long> getRootModulesIds() {
 		ArrayList<ModuleStrategy> moduleList = SoftwareArchitecture.getInstance().getModules();
-		ArrayList<Long> moduleIdList = new ArrayList<Long>();
+		ArrayList<Long> moduleIdList = new ArrayList<>();
 		for (ModuleStrategy module : moduleList) {
 			moduleIdList.add(module.getId());
 		}
@@ -204,7 +204,7 @@ public class ModuleDomainService {
 	}
 
 	public ArrayList<Long> getSiblingModuleIds(long moduleId) {
-		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
+		ArrayList<Long> childModuleIdList = new ArrayList<>();
 		if (moduleId != -1) {
 			ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 			if (module != null) {
@@ -226,7 +226,7 @@ public class ModuleDomainService {
 	}
 
 	public ArrayList<Long> getSubModuleIds(Long parentModuleId) {
-		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
+		ArrayList<Long> childModuleIdList = new ArrayList<>();
 		if (parentModuleId != -1) {
 			ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 			if (parentModule != null) {

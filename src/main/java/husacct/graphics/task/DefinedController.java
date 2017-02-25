@@ -42,7 +42,7 @@ public class DefinedController extends DrawingController {
 	@Override
 	protected ArrayList<ModuleFigure> getModuleFiguresInRoot() {
 		ModuleDTO[] rootModules = defineService.getModule_AllRootModules();
-		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<ModuleFigure>();
+		ArrayList<ModuleFigure> rootModuleFigures = new ArrayList<>();
 		for (AbstractDTO rootModule : rootModules) {
 			ModuleFigure rootModuleFigure = figureFactory.createModuleFigure(rootModule);
 			rootModuleFigures.add(rootModuleFigure);
@@ -56,7 +56,7 @@ public class DefinedController extends DrawingController {
 			parentName = "**"; // Root within Define.
 		}
 		ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
-		HashSet<String> knownChildren = new HashSet<String>();
+		HashSet<String> knownChildren = new HashSet<>();
 		for (ModuleDTO child : children) {
 			knownChildren.add(child.logicalPath);
 		}
@@ -69,7 +69,7 @@ public class DefinedController extends DrawingController {
 			parentName = "**"; // Root within Define.
 		}
 		ModuleDTO[] children = defineService.getModule_TheChildrenOfTheModule(parentName);
-		ArrayList<ModuleFigure> knownChildren = new ArrayList<ModuleFigure>();
+		ArrayList<ModuleFigure> knownChildren = new ArrayList<>();
 		for (AbstractDTO child : children) {
 			ModuleFigure moduleFigure = figureFactory.createModuleFigure(child);
 			knownChildren.add(moduleFigure);
@@ -81,7 +81,7 @@ public class DefinedController extends DrawingController {
 	protected RelationFigure getRelationFigureBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
-			ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+			ArrayList<DependencyDTO> dependencies = new ArrayList<>();
 			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
 			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
 			for (String physicalClassPathFrom : physicalClassPathsFrom){
@@ -104,7 +104,7 @@ public class DefinedController extends DrawingController {
 	
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(ModuleFigure figureFrom, ModuleFigure figureTo) {
-		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+		ArrayList<DependencyDTO> dependencies = new ArrayList<>();
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
 			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());
@@ -121,7 +121,7 @@ public class DefinedController extends DrawingController {
 	
 	@Override 
 	protected UmlLinkDTO[] getUmlLinksBetween(ModuleFigure figureFrom, ModuleFigure figureTo){
-		ArrayList<UmlLinkDTO> umlLinks = new ArrayList<UmlLinkDTO>();
+		ArrayList<UmlLinkDTO> umlLinks = new ArrayList<>();
 		if ((figureFrom != null) && (figureTo != null) && !figureFrom.getUniqueName().equals(figureTo.getUniqueName())){ 
 			HashSet<String> physicalClassPathsFrom = defineService.getModule_AllPhysicalClassPathsOfModule(figureFrom.getUniqueName());
 			HashSet<String> physicalClassPathsTo = defineService.getModule_AllPhysicalClassPathsOfModule(figureTo.getUniqueName());

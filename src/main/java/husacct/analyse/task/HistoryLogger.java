@@ -96,7 +96,7 @@ public class HistoryLogger {
 			NodeList workspaces = root.getChildNodes();
 			
 			
-			ArrayList<String> workspaceList = new ArrayList<String>();
+			ArrayList<String> workspaceList = new ArrayList<>();
 			for(int i = 0; i < workspaces.getLength(); i++) {
 				workspaceList.add(workspaces.item(i).getAttributes().getNamedItem("name").getNodeValue());
 			}
@@ -180,7 +180,7 @@ public class HistoryLogger {
 
 	private ArrayList<Element> getProjectElement(ApplicationDTO adto) {
 		projects = adto.projects;
-		ArrayList <Element> projectList = new ArrayList<Element>();
+		ArrayList <Element> projectList = new ArrayList<>();
 		
 		for(ProjectDTO pdto : projects) {
 			Element project = null;

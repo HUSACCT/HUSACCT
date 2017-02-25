@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class StateDefineController {
 
-	private ArrayList<Istate> states = new ArrayList<Istate>();
+	private ArrayList<Istate> states = new ArrayList<>();
 	private StateKeeper keeper = new StateKeeper(states);
 
 	public boolean undo() {

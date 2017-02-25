@@ -38,9 +38,9 @@ public class ApplicationAnalysisHistoryLogController{
 	}
 	
 	public HashMap<String, HashMap<String, String>> getApplicationHistoryFromFile(String workspace, String application, ArrayList<ProjectDTO> projects){
-		HashMap<String, HashMap<String, String>> output = new HashMap<String, HashMap<String, String>>();
+		HashMap<String, HashMap<String, String>> output = new HashMap<>();
 		
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", logFile);
 		IResource xmlResource = ResourceFactory.get("xml");
 		
@@ -68,7 +68,7 @@ public class ApplicationAnalysisHistoryLogController{
 										for(Element analysisElement : projectElement.getChildren()){
 											
 											//Analysis info
-											HashMap<String, String> analysisInfo = new HashMap<String, String>();
+											HashMap<String, String> analysisInfo = new HashMap<>();
 											analysisInfo.put("application", applicationElement.getAttributeValue("name"));
 											analysisInfo.put("project", projectElement.getAttributeValue("name"));
 											for(Element analysisInfoElement : analysisElement.getChildren()){
@@ -93,7 +93,7 @@ public class ApplicationAnalysisHistoryLogController{
 	}
 	
 	public int getNumberOfAnalyses(String workspace, String application, ArrayList<ProjectDTO> projects){
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
+		HashMap<String, Object> resourceData = new HashMap<>();
 		resourceData.put("file", logFile);
 		IResource xmlResource = ResourceFactory.get("xml");
 		
@@ -138,7 +138,7 @@ public class ApplicationAnalysisHistoryLogController{
 		if(logFileExists()){
 			String workspace = "";
 			String application = "";
-			ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+			ArrayList<ProjectDTO> projects = new ArrayList<>();
 			
 			try{
 				workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();

@@ -21,7 +21,7 @@ public class DrawingState {
 	
 	public DrawingState(Drawing theDrawing) {
 		drawing = theDrawing;
-		savedPositions = new HashMap<String, FigureState>();
+		savedPositions = new HashMap<>();
 	}
 	
 	public void clear() {

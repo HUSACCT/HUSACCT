@@ -59,7 +59,7 @@ public class XMLDomain {
 	}
 
 	private ArrayList<Project> getProjectsFromElement(Element XMLElement) {
-		ArrayList<Project> projects = new ArrayList<Project>();
+		ArrayList<Project> projects = new ArrayList<>();
 		for (Element project : XMLElement.getChildren("Project")) {
 			projects.add(getProjectFromElement(project));
 		}
@@ -73,7 +73,7 @@ public class XMLDomain {
 		project.setVersion(XMLElement.getChild("version").getText());
 		project.setDescription(XMLElement.getChild("description").getText());
 
-		ArrayList<String> projectPaths = new ArrayList<String>();
+		ArrayList<String> projectPaths = new ArrayList<>();
 		List<Element> pathElements = XMLElement.getChild("paths").getChildren("path");
 		for (Element path : pathElements) {
 			projectPaths.add(path.getText());
@@ -252,7 +252,7 @@ public class XMLDomain {
 	}
 
 	private String[] getDependencyTypesFromXML(Element XMLElement) {
-		ArrayList<String> dependencies = new ArrayList<String>();
+		ArrayList<String> dependencies = new ArrayList<>();
 		for (Element dependency : XMLElement.getChildren("dependency")) {
 			dependencies.add(dependency.getValue());
 		}

@@ -40,7 +40,7 @@ public class SetApplicationPanel extends JPanel{
 	private JComboBox<String> languageSelect;
 	private JButton addButton, removeButton;
 	private String[] languages;
-	private DefaultListModel<String> pathListModel = new DefaultListModel<String>();
+	private DefaultListModel<String> pathListModel = new DefaultListModel<>();
 	private JDialog dialogOwner;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private MainController mainController;
@@ -68,10 +68,10 @@ public class SetApplicationPanel extends JPanel{
 		removeButton = new JButton(localeService.getTranslatedString("RemoveButton"));
 
 		applicationNameText = new JTextField("myApplication", 20);
-		languageSelect = new JComboBox<String>(languages);
+		languageSelect = new JComboBox<>(languages);
 		versionText = new JTextField(10);
 
-		pathList = new JList<String>(pathListModel);
+		pathList = new JList<>(pathListModel);
 		pathList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		pathList.setLayoutOrientation(JList.VERTICAL);
 		pathList.setVisibleRowCount(-1);
@@ -152,7 +152,7 @@ public class SetApplicationPanel extends JPanel{
 		versionText.setText(applicationData.version);
 		
 		boolean applicationHasProject = applicationData.projects.size() > 0;
-		ArrayList<String> items = new ArrayList<String>();
+		ArrayList<String> items = new ArrayList<>();
 		if(applicationHasProject){
 			for(int i=0; i<languages.length; i++){
 				if(applicationData.projects.get(0).programmingLanguage.equals(languages[i])){
@@ -171,7 +171,7 @@ public class SetApplicationPanel extends JPanel{
 		String name = applicationNameText.getText();
 		String language = languages[languageSelect.getSelectedIndex()];
 		String version = versionText.getText();
-		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
+		ArrayList<String> paths = new ArrayList<>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
 		
 		ApplicationDTO applicationData = mainController.getApplicationController().createApplicationData(name, language, version, paths);
 		return applicationData;

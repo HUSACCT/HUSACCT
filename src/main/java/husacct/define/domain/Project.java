@@ -10,7 +10,7 @@ public class Project {
 	private String version;
 
 	public Project() {
-		this("", new ArrayList<String>(), "", "1.0", "");
+		this("", new ArrayList<>(), "", "1.0", "");
 	}
 
 	public Project(String name, ArrayList<String> paths, String lang) {

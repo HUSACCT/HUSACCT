@@ -51,7 +51,7 @@ public class RuleTypesFactory {
 	private List<RuleType> generateRuleTypes(String language) {
 		setViolationTypeFactory(language);
 
-		List<RuleType> rules = new ArrayList<RuleType>();
+		List<RuleType> rules = new ArrayList<>();
 
 		for (Entry<String, CategoryKeyClassDTO> set : allRuleTypes.entrySet()) {
 			try {
@@ -74,7 +74,7 @@ public class RuleTypesFactory {
 	}
 
 	private HashMap<String, List<RuleType>> extractCategoriesFromRuleType(List<RuleType> ruletypes) {
-		HashMap<String, List<RuleType>> returnMap = new HashMap<String, List<RuleType>>();
+		HashMap<String, List<RuleType>> returnMap = new HashMap<>();
 
 		for (RuleType ruletype : ruletypes) {
 			final String categoryKey = ruletype.getCategoryKey();
@@ -82,7 +82,7 @@ public class RuleTypesFactory {
 			if (categoryRules != null) {
 				categoryRules.add(ruletype);
 			} else {
-				List<RuleType> ruleList = new ArrayList<RuleType>();
+				List<RuleType> ruleList = new ArrayList<>();
 				ruleList.add(ruletype);
 				returnMap.put(categoryKey, ruleList);
 			}
@@ -110,14 +110,14 @@ public class RuleTypesFactory {
 	 * @return all the default instances of Rule
 	 */
 	private List<RuleType> generateDefaultRuleTypes() {
-		List<RuleType> rules = new ArrayList<RuleType>();
+		List<RuleType> rules = new ArrayList<>();
 		setViolationTypeFactory();
 		for (Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()) {
 			try {
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();
 				if (ruletypeClass != null) {
-					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<ViolationType>());
+					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<>());
 					rules.add(rule);
 				}
 			} catch (RuleInstantionException e) {
@@ -138,7 +138,7 @@ public class RuleTypesFactory {
 	private List<RuleType> generateDefaultRuleTypes(String language) {
 		setViolationTypeFactory(language);
 
-		List<RuleType> rules = new ArrayList<RuleType>();
+		List<RuleType> rules = new ArrayList<>();
 
 		for (Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()) {
 			try {
@@ -197,7 +197,7 @@ public class RuleTypesFactory {
 	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException {
 		try {
 			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
-			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
+			List<RuleType> exceptionRuletypes = new ArrayList<>();
 			if (rootRule.getExceptionRuleTypeKeys() != null) {
 				for (RuleTypes ruletype : rootRule.getExceptionRuleTypeKeys()) {
 					final RuleType generatedRuleType = generateRuleTypeWithoutExceptionRules(ruletype.toString());

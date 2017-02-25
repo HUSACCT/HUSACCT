@@ -10,7 +10,7 @@ public class SoftwareArchitectureDomainService {
     private Application app;
 
     public void createApplication(String name, ArrayList<ProjectDTO> projects, String version) {
-		ArrayList<Project> moduleProjects = new ArrayList<Project>();
+		ArrayList<Project> moduleProjects = new ArrayList<>();
 		for (ProjectDTO project : projects) {
 		    moduleProjects.add(new Project(project.name, project.paths, project.programmingLanguage, project.version, project.description));
 		}

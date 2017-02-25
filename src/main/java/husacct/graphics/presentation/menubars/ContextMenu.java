@@ -18,7 +18,7 @@ public class ContextMenu extends JPopupMenu {
 	private static final long serialVersionUID = -6033808567664371902L;
 	protected ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
-	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
+	private ArrayList<UserInputListener> listeners = new ArrayList<>();
 
 	private JMenuItem zoomIn;
 	private JMenuItem zoomOut;

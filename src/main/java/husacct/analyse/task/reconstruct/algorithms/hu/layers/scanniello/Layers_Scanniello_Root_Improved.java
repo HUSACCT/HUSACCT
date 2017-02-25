@@ -55,7 +55,7 @@ public class Layers_Scanniello_Root_Improved extends Layers_Scanniello_SuperClas
 
 	
 	private ArrayList<SoftwareUnitDTO> determineInternalRootPackagesWithClasses() {
-		ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+		ArrayList<SoftwareUnitDTO> internalRootPackagesWithClasses = new ArrayList<>();
 		SoftwareUnitDTO[] allRootUnits = queryService.getSoftwareUnitsInRoot();
 		for (SoftwareUnitDTO rootModule : allRootUnits) {
 			if (!rootModule.uniqueName.equals(xLibrariesRootPackage)) {
@@ -66,7 +66,7 @@ public class Layers_Scanniello_Root_Improved extends Layers_Scanniello_SuperClas
 		}
 		if (internalRootPackagesWithClasses.size() == 1) {
 			String newRoot = internalRootPackagesWithClasses.get(0).uniqueName;
-			internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
+			internalRootPackagesWithClasses = new ArrayList<>();
 			for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
 				// if (child.type.equalsIgnoreCase("class")) {
 				internalRootPackagesWithClasses.add(child);

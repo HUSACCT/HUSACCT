@@ -41,7 +41,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	private JTable ruletypeTable;
 
 	RuleTypeSeverityPanel(TaskServiceImpl taskServiceImpl, ConfigurationRuleTypeDTO configurationSubPanelDTO) {
-		rtsCategoryModel = new DefaultListModel<DataLanguageHelper>();
+		rtsCategoryModel = new DefaultListModel<>();
 
 		this.taskServiceImpl = taskServiceImpl;
 		this.severities = configurationSubPanelDTO.getSeverities();
@@ -56,7 +56,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	private void initComponents() {
 
 		categoryScrollpane = new JScrollPane();
-		category = new JList<DataLanguageHelper>();
+		category = new JList<>();
 		ruletypeScrollpane = new JScrollPane();
 		ruletypeTable = new JTable();
 		apply = new JButton();
@@ -235,7 +235,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	}
 
 	private void updateRuletypeSeverities() {
-		HashMap<String, Severity> map = new HashMap<String, Severity>();
+		HashMap<String, Severity> map = new HashMap<>();
 
 		for (int i = 0; i < ruletypeModel.getRowCount(); i++) {
 			String key = ((DataLanguageHelper) ruletypeModel.getValueAt(i, 0)).key;

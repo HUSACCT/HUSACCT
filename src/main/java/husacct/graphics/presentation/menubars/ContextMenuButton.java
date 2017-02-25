@@ -26,7 +26,7 @@ public class ContextMenuButton extends JPopupMenu {
 																		.getLocaleService();
 	protected Logger						logger				= Logger.getLogger(GraphicsMenuBar.class);
 	
-	private ArrayList<UserInputListener>	listeners			= new ArrayList<UserInputListener>();
+	private ArrayList<UserInputListener>	listeners			= new ArrayList<>();
 	
 	private HashMap<String, String>			icons;
 	
@@ -38,7 +38,7 @@ public class ContextMenuButton extends JPopupMenu {
 		
 		ImageIcon icon;
 		
-		icons = new HashMap<String, String>();
+		icons = new HashMap<>();
 		icons.put("zoomIn", Resource.ICON_ZOOM);
 		icons.put("zoomInContext", Resource.ICON_ZOOMCONTEXT);
 		

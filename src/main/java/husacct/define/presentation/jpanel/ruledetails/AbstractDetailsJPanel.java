@@ -119,7 +119,7 @@ ActionListener {
 	}
 
 	private HashMap<String, Object> saveDefaultDataToHashMap() {
-		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
+		HashMap<String, Object> ruleDetails = new HashMap<>();
 		long moduleFromId = -1;
 		long moduleToId = -1;
 		boolean enabled = true;

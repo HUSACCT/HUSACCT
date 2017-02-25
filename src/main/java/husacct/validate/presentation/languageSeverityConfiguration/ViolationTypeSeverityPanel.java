@@ -45,7 +45,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private List<Severity> severities;
 
 	ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, ConfigurationViolationTypeDTO configurationViolationTypeDTO) {
-		categoryModel = new DefaultListModel<DataLanguageHelper>();
+		categoryModel = new DefaultListModel<>();
 		this.taskServiceImpl = taskServiceImpl;
 		this.language = configurationViolationTypeDTO.getLanguage();
 		this.violationTypes = configurationViolationTypeDTO.getViolationtypes();
@@ -59,7 +59,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 
 	private void initComponents() {
 		categoryScrollpane = new JScrollPane();
-		category = new JList<DataLanguageHelper>();
+		category = new JList<>();
 		violationtypeScrollpane = new JScrollPane();
 		violationtypeTable = new JTable();
 		restore = new JButton();
@@ -210,7 +210,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	private void updateViolationtypeSeverities() {
-		HashMap<String, Severity> map = new HashMap<String, Severity>();
+		HashMap<String, Severity> map = new HashMap<>();
 
 		for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 			String key = ((DataLanguageHelper) violationtypeModel.getValueAt(i, 0)).key;

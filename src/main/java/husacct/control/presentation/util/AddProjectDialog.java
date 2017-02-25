@@ -40,7 +40,7 @@ public class AddProjectDialog extends JDialog{
 	private JPanel panel;
 	private JTextField projectNameText, versionText;
 	private JButton addButton, cancelButton, removeButton, confirmButton;
-	private DefaultListModel<String> pathListModel = new DefaultListModel<String>();
+	private DefaultListModel<String> pathListModel = new DefaultListModel<>();
 	private GridBagConstraints constraint = new GridBagConstraints();
 	private boolean CancelFlag = true;
 	
@@ -87,7 +87,7 @@ public class AddProjectDialog extends JDialog{
 		versionText = new JTextField(10);
 		descriptionText = new JTextArea(localeService.getTranslatedString("ProjectTextSpace"), 5, 5);
 		
-		pathList = new JList<String>(pathListModel);
+		pathList = new JList<>(pathListModel);
 		pathList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		pathList.setLayoutOrientation(JList.VERTICAL);
 		pathList.setVisibleRowCount(-1);
@@ -187,7 +187,7 @@ public class AddProjectDialog extends JDialog{
 		String name = projectNameText.getText();
 		String version = versionText.getText();
 		String description = descriptionText.getText();
-		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
+		ArrayList<String> paths = new ArrayList<>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
 		
 		return new ProjectDTO(name, paths, "", version, description, null);
 	}

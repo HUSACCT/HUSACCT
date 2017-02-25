@@ -45,7 +45,7 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 	private List<LanguageSeverityConfigurationPanel> tabs;
 
 	public ValidateConfigurationPanel(TaskServiceImpl ts) {
-		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
+		tabs = new ArrayList<>();
 
 		taskServiceImpl = ts;
 

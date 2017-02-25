@@ -12,7 +12,7 @@ import java.util.Properties;
 public class ConfigurationManager {
 
 	private final static Properties properties = loadProperties();
-	private final static ArrayList<IConfigListener> listeners = new ArrayList<IConfigListener>();
+	private final static ArrayList<IConfigListener> listeners = new ArrayList<>();
 	
 	public static String getProperty(String key) {
 		if(properties.containsKey(key))

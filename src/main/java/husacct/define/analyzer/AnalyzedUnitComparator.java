@@ -26,8 +26,8 @@ public class AnalyzedUnitComparator {
 
 
 	public AnalyzedModuleComponent calucalteChanges(AbstractCombinedComponent left, AbstractCombinedComponent right) {
-		ArrayList<AbstractCombinedComponent> toBeDeleted = new ArrayList<AbstractCombinedComponent>();
-		ArrayList<AbstractCombinedComponent> toBeAdded = new ArrayList<AbstractCombinedComponent>();
+		ArrayList<AbstractCombinedComponent> toBeDeleted = new ArrayList<>();
+		ArrayList<AbstractCombinedComponent> toBeAdded = new ArrayList<>();
 		int leftsize = left.getChildren().size();
 		int rightsize = right.getChildren().size();
 		Collections.sort(left.getChildren());

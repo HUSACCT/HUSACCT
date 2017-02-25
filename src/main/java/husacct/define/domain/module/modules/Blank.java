@@ -9,8 +9,8 @@ import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 public class Blank extends ModuleStrategy{
 
 	public void set(){
-		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
-		this.subModules = new ArrayList<ModuleStrategy>();
+		this.mappedSUunits = new ArrayList<>();
+		this.mappedRegExSUunits = new ArrayList<>();
+		this.subModules = new ArrayList<>();
 	}
 }
