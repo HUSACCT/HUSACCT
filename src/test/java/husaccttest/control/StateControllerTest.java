@@ -36,16 +36,14 @@ public class StateControllerTest {
 	
 	@Test
 	public void testStateChangeListener(){
-		stateController.addStateChangeListener(new IStateChangeListener() {
-			public void changeState(List<States> states) {
-				assertTrue(states.contains(States.NONE));
-				assertFalse(states.contains(States.OPENED));
-				assertTrue(states.contains(States.DEFINED));
-				assertFalse(states.contains(States.ANALYSED));
-				assertTrue(states.contains(States.MAPPED));
-				assertFalse(states.contains(States.VALIDATED));
-			}
-		});
+		stateController.addStateChangeListener(states -> {
+            assertTrue(states.contains(States.NONE));
+            assertFalse(states.contains(States.OPENED));
+            assertTrue(states.contains(States.DEFINED));
+            assertFalse(states.contains(States.ANALYSED));
+            assertTrue(states.contains(States.MAPPED));
+            assertFalse(states.contains(States.VALIDATED));
+        });
 		
 		List<States> states = new ArrayList<>();
 		states.add(States.NONE);

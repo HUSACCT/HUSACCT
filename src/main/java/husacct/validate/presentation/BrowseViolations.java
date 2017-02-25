@@ -131,12 +131,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	private void addListeneners() {
-		violationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				violationInformationPanel.update(arg0, violationTable, shownViolationsInAllViolationsPanel);
-			}
-		});
+		violationTable.getSelectionModel().addListSelectionListener(arg0 -> violationInformationPanel.update(arg0, violationTable, shownViolationsInAllViolationsPanel));
 	}
 
 	@Override

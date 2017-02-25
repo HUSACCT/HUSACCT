@@ -94,47 +94,17 @@ public final class FilterViolations extends HelpableJDialog {
 		pathFilterTable.getTableHeader().setReorderingAllowed(false);
 		pathFilterScrollPane.setViewportView(pathFilterTable);
 
-		addPath.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				addPathActionPerformed();
-			}
-		});
+		addPath.addActionListener(evt -> addPathActionPerformed());
 
-		removePath.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				removePathActionPerformed();
-			}
-		});
+		removePath.addActionListener(evt -> removePathActionPerformed());
 
-		save.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				saveActionPerformed();
-			}
-		});
+		save.addActionListener(evt -> saveActionPerformed());
 
-		cancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				cancelActionPerformed();
-			}
-		});
+		cancel.addActionListener(evt -> cancelActionPerformed());
 		
-		hideFilteredValues.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				setSelectedFilterValues(false);
-			}
-		});
+		hideFilteredValues.addActionListener(evt -> setSelectedFilterValues(false));
 		
-		showFilteredValues.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				setSelectedFilterValues(true);
-			}
-		});
+		showFilteredValues.addActionListener(evt -> setSelectedFilterValues(true));
 
 		filtergroup.add(showFilteredValues);
 

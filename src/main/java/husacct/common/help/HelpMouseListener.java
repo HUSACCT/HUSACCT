@@ -28,13 +28,7 @@ public class HelpMouseListener implements MouseListener{
 		if(e.getButton() == MouseEvent.BUTTON3) {
 			JPopupMenu popup = new JPopupMenu();
 			JMenuItem menu = new JMenuItem("Help");
-			menu.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					ServiceProvider.getInstance().getControlService().showHelpDialog(component);					
-				}
-				
-			});
+			menu.addActionListener(e1 -> ServiceProvider.getInstance().getControlService().showHelpDialog(component));
 			popup.add(menu);
 			popup.show(component, e.getX(), e.getY());
 		}

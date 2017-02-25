@@ -51,15 +51,12 @@ abstract public class InternalFrameController {
 	}
 	
 	public void setLocaleListener(){
-		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				if(internalFrame != null){
-					internalFrame.setTitle(getTitle());
-					toggleButton.setText(internalFrame.getTitle());
-				}
-			}
-		});
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(() -> {
+            if(internalFrame != null){
+                internalFrame.setTitle(getTitle());
+                toggleButton.setText(internalFrame.getTitle());
+            }
+        });
 	}
 	
 	public void showView(){
@@ -311,12 +308,7 @@ abstract public class InternalFrameController {
 		// Add listeners to toggleButton
 		toggleButtonContextClickListener = new ToolBarButtonListener(this);
 		toggleButton.addMouseListener(toggleButtonContextClickListener);
-		toggleButtonActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				activateInternalFrame();
-			}
-		};
+		toggleButtonActionListener = event -> activateInternalFrame();
 		toggleButton.addActionListener(toggleButtonActionListener);
 	}
 

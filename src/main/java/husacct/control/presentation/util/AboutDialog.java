@@ -134,16 +134,8 @@ public class AboutDialog extends JDialog{
 	}
 
 	private void setListeners(){
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		creditsButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new CreditsDialog(mainController);
-			}
-		});
+		okButton.addActionListener(e -> dispose());
+		creditsButton.addActionListener(e -> new CreditsDialog(mainController));
 		forkLabelPanel.addMouseListener(new MouseListener() {
 
 			@Override

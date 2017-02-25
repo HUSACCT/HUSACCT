@@ -85,11 +85,7 @@ public class HelpDialog extends JDialog {
 	}
 	
 	private void setListeners(){
-		closeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		closeButton.addActionListener(e -> dispose());
 	}
 	
 	private void initiateLabel(JLabel label, String name){

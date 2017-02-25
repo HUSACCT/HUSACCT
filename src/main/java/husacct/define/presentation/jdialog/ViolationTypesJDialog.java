@@ -137,11 +137,7 @@ public class ViolationTypesJDialog extends JDialog{
 	}
 	
 	private void setListeners(){
-		closeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		closeButton.addActionListener(e -> dispose());
 	}
 
 }

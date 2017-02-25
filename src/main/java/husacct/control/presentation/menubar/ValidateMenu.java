@@ -50,53 +50,37 @@ public class ValidateMenu extends JMenu{
 	}
 	
 	private void setListeners() {
-		validateItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showValidateGui();
-			}
-		});
+		validateItem.addActionListener(e -> mainController.getViewController().showValidateGui());
 		
-		exportViolationsItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showExportViolationsGui();
-			}
-		});
+		exportViolationsItem.addActionListener(e -> mainController.getExportImportController().showExportViolationsGui());
 		
-		reportViolationsItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showReportViolationsGui();
-			}
-		});
+		reportViolationsItem.addActionListener(e -> mainController.getExportImportController().showReportViolationsGui());
 		
-		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-			public void changeState(List<States> states) {
-				validateItem.setEnabled(false);
-				exportViolationsItem.setEnabled(false);
-				reportViolationsItem.setEnabled(false);
-				
-				if(states.contains(States.VALIDATED)){
-					exportViolationsItem.setEnabled(true);
-					reportViolationsItem.setEnabled(true);
-				}
-				
-				if(states.contains(States.MAPPED) && states.contains(States.ANALYSED)){
-					validateItem.setEnabled(true);
-				}
-			}
-		});
+		mainController.getStateController().addStateChangeListener(states -> {
+            validateItem.setEnabled(false);
+            exportViolationsItem.setEnabled(false);
+            reportViolationsItem.setEnabled(false);
+
+            if(states.contains(States.VALIDATED)){
+                exportViolationsItem.setEnabled(true);
+                reportViolationsItem.setEnabled(true);
+            }
+
+            if(states.contains(States.MAPPED) && states.contains(States.ANALYSED)){
+                validateItem.setEnabled(true);
+            }
+        });
 		
 		final ValidateMenu validateMenu = this;
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				validateMenu.setText(localeService.getTranslatedString("Validate"));
-				validateItem.setText(localeService.getTranslatedString("ValidateNow"));
-				validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
-				exportViolationsItem.setText(localeService.getTranslatedString("ValidateExport"));
-				exportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateExportMnemonic"));
-				reportViolationsItem.setText(localeService.getTranslatedString("ValidateReport"));
-				reportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateReportMnemonic"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            validateMenu.setText(localeService.getTranslatedString("Validate"));
+            validateItem.setText(localeService.getTranslatedString("ValidateNow"));
+            validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
+            exportViolationsItem.setText(localeService.getTranslatedString("ValidateExport"));
+            exportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateExportMnemonic"));
+            reportViolationsItem.setText(localeService.getTranslatedString("ValidateReport"));
+            reportViolationsItem.setMnemonic(getMnemonicKeycode("ValidateReportMnemonic"));
+        });
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {

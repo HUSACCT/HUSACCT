@@ -22,13 +22,10 @@ public class GuiController {
 	}
 
 	private void subscribeToLocalChangeListener() {
-		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				initializeAllScreens();
-				reloadGUIText();
-			}
-		});
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(() -> {
+            initializeAllScreens();
+            reloadGUIText();
+        });
 	}
 
 	private void reloadGUIText() {

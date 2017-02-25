@@ -75,19 +75,9 @@ public class DefineMenu extends JMenu{
 	}
 	
 	private void setListeners() {
-		defineArchitectureItem.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showDefineArchitecture();
-			}
-		});
+		defineArchitectureItem.addActionListener(e -> mainController.getViewController().showDefineArchitecture());
 		
-		definedArchitectureDiagramItem.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showDefinedArchitectureDiagram();
-			}
-		});
+		definedArchitectureDiagramItem.addActionListener(e -> mainController.getViewController().showDefinedArchitectureDiagram());
 		
 		/*
 		moduleAndRuleDiagramItem.addActionListener(new ActionListener(){
@@ -98,71 +88,52 @@ public class DefineMenu extends JMenu{
 		});
 		*/
 		
-		exportArchitectureItem.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showExportArchitectureGui();
-			}
-		});
+		exportArchitectureItem.addActionListener(e -> mainController.getExportImportController().showExportArchitectureGui());
 		
-		importArchitectureItem.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showImportArchitectureGui();
-				mainController.getViewController().showDefineArchitecture();
-			}
-		});
+		importArchitectureItem.addActionListener(e -> {
+            mainController.getExportImportController().showImportArchitectureGui();
+            mainController.getViewController().showDefineArchitecture();
+        });
 		
-		reportArchitectureItem.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showReportArchitectureGui();
-			}
-		});
+		reportArchitectureItem.addActionListener(e -> mainController.getExportImportController().showReportArchitectureGui());
 		
-		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-			@Override
-			public void changeState(List<States> states) {
-				defineArchitectureItem.setEnabled(false);
-				definedArchitectureDiagramItem.setEnabled(false);
-				//moduleAndRuleDiagramItem.setEnabled(false);
-				importArchitectureItem.setEnabled(false);
-				exportArchitectureItem.setEnabled(false);
-				reportArchitectureItem.setEnabled(false);
-				
-				if(states.contains(States.OPENED)){
-					defineArchitectureItem.setEnabled(true);
-					importArchitectureItem.setEnabled(true);
-				}
-				
-				if(states.contains(States.DEFINED) || states.contains(States.MAPPED)){
-					exportArchitectureItem.setEnabled(true);
-					definedArchitectureDiagramItem.setEnabled(true);
-					//moduleAndRuleDiagramItem.setEnabled(true);
-					reportArchitectureItem.setEnabled(true);
-				}
-			}
-		});
+		mainController.getStateController().addStateChangeListener(states -> {
+            defineArchitectureItem.setEnabled(false);
+            definedArchitectureDiagramItem.setEnabled(false);
+            //moduleAndRuleDiagramItem.setEnabled(false);
+            importArchitectureItem.setEnabled(false);
+            exportArchitectureItem.setEnabled(false);
+            reportArchitectureItem.setEnabled(false);
+
+            if(states.contains(States.OPENED)){
+                defineArchitectureItem.setEnabled(true);
+                importArchitectureItem.setEnabled(true);
+            }
+
+            if(states.contains(States.DEFINED) || states.contains(States.MAPPED)){
+                exportArchitectureItem.setEnabled(true);
+                definedArchitectureDiagramItem.setEnabled(true);
+                //moduleAndRuleDiagramItem.setEnabled(true);
+                reportArchitectureItem.setEnabled(true);
+            }
+        });
 		
 		final DefineMenu defineMenu = this;
-		localeService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				defineMenu.setText(localeService.getTranslatedString("Define"));
-				defineArchitectureItem.setText(localeService.getTranslatedString("DefineArchitecture"));
-				definedArchitectureDiagramItem.setText(localeService.getTranslatedString("DefinedArchitectureDiagram"));
-				//moduleAndRuleDiagramItem.setText(localeService.getTranslatedString("ModuleAndRuleDiagram"));
-				exportArchitectureItem.setText(localeService.getTranslatedString("ExportArchitecture"));
-				importArchitectureItem.setText(localeService.getTranslatedString("ImportArchitecture"));
-				reportArchitectureItem.setText(localeService.getTranslatedString("ReportArchitecture"));
-				defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
-				definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
-				//moduleAndRuleDiagramItem.setMnemonic(getMnemonicKeycode("ModuleAndRuleDiagramMnemonic"));
-				exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));	
-				importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
-				reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            defineMenu.setText(localeService.getTranslatedString("Define"));
+            defineArchitectureItem.setText(localeService.getTranslatedString("DefineArchitecture"));
+            definedArchitectureDiagramItem.setText(localeService.getTranslatedString("DefinedArchitectureDiagram"));
+            //moduleAndRuleDiagramItem.setText(localeService.getTranslatedString("ModuleAndRuleDiagram"));
+            exportArchitectureItem.setText(localeService.getTranslatedString("ExportArchitecture"));
+            importArchitectureItem.setText(localeService.getTranslatedString("ImportArchitecture"));
+            reportArchitectureItem.setText(localeService.getTranslatedString("ReportArchitecture"));
+            defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
+            definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
+            //moduleAndRuleDiagramItem.setMnemonic(getMnemonicKeycode("ModuleAndRuleDiagramMnemonic"));
+            exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));
+            importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
+            reportArchitectureItem.setMnemonic(getMnemonicKeycode("ReportArchitectureMnemonic"));
+        });
 	}
 	
 	public JMenuItem getDefineArchitectureItem(){

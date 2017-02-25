@@ -121,11 +121,7 @@ public class CreditsDialog extends JDialog {
 	}
 
 	private void setListeners(){
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		okButton.addActionListener(e -> dispose());
 	}
 
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight){

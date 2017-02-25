@@ -82,11 +82,7 @@ public class HusacctSavePanel extends SaverPanel{
 	}
 	
 	private void setListeners(){
-		browseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				showFileDialog();
-			}
-		});
+		browseButton.addActionListener(arg0 -> showFileDialog());
 	}
 	
 	protected void showFileDialog() {

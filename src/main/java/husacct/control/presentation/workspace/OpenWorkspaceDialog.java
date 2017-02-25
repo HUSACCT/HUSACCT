@@ -72,20 +72,14 @@ public class OpenWorkspaceDialog extends JDialog{
 	}
 	
 	private void setListeners(){
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		cancelButton.addActionListener(e -> dispose());
 		
-		openButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(selectedLoaderPanel.validateData() && loadWorkspace()){
-					dispose();
-					mainController.getViewController().showDefineArchitecture();
-				}
-			}
-		});
+		openButton.addActionListener(e -> {
+            if(selectedLoaderPanel.validateData() && loadWorkspace()){
+                dispose();
+                mainController.getViewController().showDefineArchitecture();
+            }
+        });
 	}
 	
 	private boolean loadWorkspace(){

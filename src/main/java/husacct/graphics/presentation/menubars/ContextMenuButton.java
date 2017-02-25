@@ -68,27 +68,21 @@ public class ContextMenuButton extends JPopupMenu {
 	}
 	
 	private void hookupEventHandlers() {
-		zoomModuleContext.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setButtonIcon(parentZoomButton, "zoomInContext");
-				zoomModuleContext.setEnabled(false);
-				zoomModule.setEnabled(true);
-				for (UserInputListener listener : listeners)
-					listener.zoomTypeChange("context");
-			}
-		});
+		zoomModuleContext.addActionListener(e -> {
+            setButtonIcon(parentZoomButton, "zoomInContext");
+            zoomModuleContext.setEnabled(false);
+            zoomModule.setEnabled(true);
+            for (UserInputListener listener : listeners)
+                listener.zoomTypeChange("context");
+        });
 		
-		zoomModule.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setButtonIcon(parentZoomButton, "zoomIn");
-				zoomModuleContext.setEnabled(true);
-				zoomModule.setEnabled(false);
-				for (UserInputListener listener : listeners)
-					listener.zoomTypeChange("zoom");
-			}
-		});
+		zoomModule.addActionListener(e -> {
+            setButtonIcon(parentZoomButton, "zoomIn");
+            zoomModuleContext.setEnabled(true);
+            zoomModule.setEnabled(false);
+            for (UserInputListener listener : listeners)
+                listener.zoomTypeChange("zoom");
+        });
 	}
 	
 	public void removeListener(UserInputListener listener) {

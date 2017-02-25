@@ -69,26 +69,11 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 		tabPanel.addTab(localeService.getTranslatedString("SeverityConfiguration"), severityNamePanel);
 		tabPanel.addTab(localeService.getTranslatedString("DefaultRules"), new ManageDefaultRulesPanel());
 
-		applySeverity.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				applySeverityActionPerformed();
-			}
-		});
+		applySeverity.addActionListener(evt -> applySeverityActionPerformed());
 
-		restore.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				restore();
-			}
-		});
+		restore.addActionListener(evt -> restore());
 
-		localeService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				loadAfterChange();
-			}
-		});
+		localeService.addServiceListener(() -> loadAfterChange());
 
 		createSeverityPanelLayout();
 		createRootLayout();

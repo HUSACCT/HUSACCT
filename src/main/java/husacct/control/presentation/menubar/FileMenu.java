@@ -69,71 +69,47 @@ public class FileMenu extends JMenu {
 	}
 	
 	private void setListeners(){
-		createWorkspaceItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				workspaceController.showCreateWorkspaceGui();
-			}
-		});
+		createWorkspaceItem.addActionListener(e -> workspaceController.showCreateWorkspaceGui());
 		
-		openWorkspaceItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				workspaceController.showOpenWorkspaceGui();
-			}
-		});
+		openWorkspaceItem.addActionListener(e -> workspaceController.showOpenWorkspaceGui());
 		
-		saveWorkspaceItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				workspaceController.showSaveWorkspaceGui();
-			}
-		});
+		saveWorkspaceItem.addActionListener(e -> workspaceController.showSaveWorkspaceGui());
 		
-		closeWorkspaceItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				workspaceController.closeWorkspace();
-			}
-		});	
+		closeWorkspaceItem.addActionListener(e -> workspaceController.closeWorkspace());
 		
-		exitItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.exit();
-			}
-		});
+		exitItem.addActionListener(e -> mainController.exit());
 		
-		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-			public void changeState(List<States> states) {
-				createWorkspaceItem.setEnabled(false);
-				openWorkspaceItem.setEnabled(false);
-				saveWorkspaceItem.setEnabled(false);
-				closeWorkspaceItem.setEnabled(false);
-				
-				if(states.contains(States.OPENED)){
-					closeWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);					
-				}
-				
-				if(states.contains(States.NONE) || states.contains(States.OPENED)){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-				}
-			}
-		});
+		mainController.getStateController().addStateChangeListener(states -> {
+            createWorkspaceItem.setEnabled(false);
+            openWorkspaceItem.setEnabled(false);
+            saveWorkspaceItem.setEnabled(false);
+            closeWorkspaceItem.setEnabled(false);
+
+            if(states.contains(States.OPENED)){
+                closeWorkspaceItem.setEnabled(true);
+                saveWorkspaceItem.setEnabled(true);
+            }
+
+            if(states.contains(States.NONE) || states.contains(States.OPENED)){
+                createWorkspaceItem.setEnabled(true);
+                openWorkspaceItem.setEnabled(true);
+            }
+        });
 		
 		final FileMenu fileMenu = this;
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				fileMenu.setText(localeService.getTranslatedString("File"));
-				createWorkspaceItem.setText(localeService.getTranslatedString("CreateWorkspace"));
-				openWorkspaceItem.setText(localeService.getTranslatedString("OpenWorkspace"));
-				saveWorkspaceItem.setText(localeService.getTranslatedString("SaveWorkspace"));
-				closeWorkspaceItem.setText(localeService.getTranslatedString("CloseWorkspace"));
-				exitItem.setText(localeService.getTranslatedString("Exit"));
-				createWorkspaceItem.setMnemonic(getMnemonicKeycode("CreateWorkspaceMnemonic"));
-				openWorkspaceItem.setMnemonic(getMnemonicKeycode("OpenWorkspaceMnemonic"));
-				saveWorkspaceItem.setMnemonic(getMnemonicKeycode("SaveWorkspaceMnemonic"));
-				closeWorkspaceItem.setMnemonic(getMnemonicKeycode("CloseWorkspaceMnemonic"));
-				exitItem.setMnemonic(getMnemonicKeycode("ExitMnemonic"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            fileMenu.setText(localeService.getTranslatedString("File"));
+            createWorkspaceItem.setText(localeService.getTranslatedString("CreateWorkspace"));
+            openWorkspaceItem.setText(localeService.getTranslatedString("OpenWorkspace"));
+            saveWorkspaceItem.setText(localeService.getTranslatedString("SaveWorkspace"));
+            closeWorkspaceItem.setText(localeService.getTranslatedString("CloseWorkspace"));
+            exitItem.setText(localeService.getTranslatedString("Exit"));
+            createWorkspaceItem.setMnemonic(getMnemonicKeycode("CreateWorkspaceMnemonic"));
+            openWorkspaceItem.setMnemonic(getMnemonicKeycode("OpenWorkspaceMnemonic"));
+            saveWorkspaceItem.setMnemonic(getMnemonicKeycode("SaveWorkspaceMnemonic"));
+            closeWorkspaceItem.setMnemonic(getMnemonicKeycode("CloseWorkspaceMnemonic"));
+            exitItem.setMnemonic(getMnemonicKeycode("ExitMnemonic"));
+        });
 	}
 	
 	public JMenuItem getCreateWorkspaceItem(){

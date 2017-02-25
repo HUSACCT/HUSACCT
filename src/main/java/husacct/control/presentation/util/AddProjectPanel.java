@@ -83,38 +83,26 @@ public class AddProjectPanel extends JPanel{
 	}
 	
 	private void setListeners(){
-		pathList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if(pathList.getSelectedIndex() >= 0){
-					removeButton.setEnabled(true);
-				} else {
-					removeButton.setEnabled(false);
-				}
-			}
-		});
+		pathList.addListSelectionListener(e -> {
+            if(pathList.getSelectedIndex() >= 0){
+                removeButton.setEnabled(true);
+            } else {
+                removeButton.setEnabled(false);
+            }
+        });
 		
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showAddFileDialog();
-			}
-		});
+		addButton.addActionListener(e -> showAddFileDialog());
 		
-		removeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pathListModel.remove(pathList.getSelectedIndex());
-			}
-		});
+		removeButton.addActionListener(e -> pathListModel.remove(pathList.getSelectedIndex()));
 		
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
-				pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
-				projectNameLabel = new JLabel(localeService.getTranslatedString("ProjectNameLabel"));
-				addButton = new JButton(localeService.getTranslatedString("AddButton"));
-				removeButton = new JButton(localeService.getTranslatedString("RemoveButton"));
-				confirmButton = new JButton(localeService.getTranslatedString("OkButton"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
+            pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
+            projectNameLabel = new JLabel(localeService.getTranslatedString("ProjectNameLabel"));
+            addButton = new JButton(localeService.getTranslatedString("AddButton"));
+            removeButton = new JButton(localeService.getTranslatedString("RemoveButton"));
+            confirmButton = new JButton(localeService.getTranslatedString("OkButton"));
+        });
 	}
 	
 	private void showAddFileDialog() {

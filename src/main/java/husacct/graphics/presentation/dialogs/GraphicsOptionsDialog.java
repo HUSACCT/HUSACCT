@@ -138,65 +138,47 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	public void initGUI() {
 		globalActionsPanel = new JPanel();
 		zoomInButton = new JButton();
-		zoomInButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (UserInputListener listener : listeners)
-					listener.zoomIn();
-			}
-		});
+		zoomInButton.addActionListener(e -> {
+            for (UserInputListener listener : listeners)
+                listener.zoomIn();
+        });
 		globalActionsPanel.add(zoomInButton);
 		
 		zoomOutButton = new JButton();
-		zoomOutButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (UserInputListener listener : listeners)
-					listener.zoomOut();
-			}
-		});
+		zoomOutButton.addActionListener(e -> {
+            for (UserInputListener listener : listeners)
+                listener.zoomOut();
+        });
 		globalActionsPanel.add(zoomOutButton);
 		
 		refreshButton = new JButton();
-		refreshButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (UserInputListener listener : listeners)
-					listener.refreshDrawing();
-			}
-		});
+		refreshButton.addActionListener(e -> {
+            for (UserInputListener listener : listeners)
+                listener.refreshDrawing();
+        });
 		globalActionsPanel.add(refreshButton);
 		
 		exportToImageButton = new JButton();
-		exportToImageButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (UserInputListener listener : listeners)
-					listener.exportImage();
-			}
-		});
+		exportToImageButton.addActionListener(e -> {
+            for (UserInputListener listener : listeners)
+                listener.exportImage();
+        });
 		globalActionsPanel.add(exportToImageButton);
 		mainPanel.add(globalActionsPanel);
 		
 		figuresActionsPanel = new JPanel();
 		hideSelectedModulesButton = new JButton();
-		hideSelectedModulesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (UserInputListener listener : listeners)
-					listener.moduleHide();
-			}
-		});
+		hideSelectedModulesButton.addActionListener(e -> {
+            for (UserInputListener listener : listeners)
+                listener.moduleHide();
+        });
 		figuresActionsPanel.add(hideSelectedModulesButton);
 		
 		restoreHiddenModulesButton = new JButton();
-		restoreHiddenModulesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (UserInputListener listener : listeners)
-					listener.moduleRestoreHiddenModules();
-			}
-		});
+		restoreHiddenModulesButton.addActionListener(e -> {
+            for (UserInputListener listener : listeners)
+                listener.moduleRestoreHiddenModules();
+        });
 		figuresActionsPanel.add(restoreHiddenModulesButton);
 		mainPanel.add(figuresActionsPanel);
 		
@@ -256,18 +238,15 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 			
 			toggleDependencyType = new JComboBox<>(dependencyOptionItems);
 			toggleDependencyType.setPreferredSize(new Dimension(elementWidth, elementHeight));
-			toggleDependencyType.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					for(UserInputListener listener : listeners){
-						if (listener instanceof GraphicsMenuBar){
-							String selection = (String) toggleDependencyType.getSelectedItem();
-							DependencyTypeOption option = dependencyOptionTypeTranslations.get(selection);
-							((GraphicsMenuBar)listener).dependencyTypeChange(option);
-						}
-					}
-				}
-			});
+			toggleDependencyType.addActionListener(arg0 -> {
+                for(UserInputListener listener : listeners){
+                    if (listener instanceof GraphicsMenuBar){
+                        String selection = (String) toggleDependencyType.getSelectedItem();
+                        DependencyTypeOption option = dependencyOptionTypeTranslations.get(selection);
+                        ((GraphicsMenuBar)listener).dependencyTypeChange(option);
+                    }
+                }
+            });
 			dependencyPanel.add(toggleDependencyType);
 			settingsPanel.add(dependencyPanel);
 		}
@@ -283,14 +262,11 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setPreferredSize(new Dimension(elementWidth, elementHeight));
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				int scale = ((JSlider) ce.getSource()).getValue();
-				for (UserInputListener listener : listeners)
-					listener.zoomFactorChanged(scale);
-			}
-		});
+		zoomSlider.addChangeListener(ce -> {
+            int scale = ((JSlider) ce.getSource()).getValue();
+            for (UserInputListener listener : listeners)
+                listener.zoomFactorChanged(scale);
+        });
 		zoomPanel.add(zoomSlider);
 		settingsPanel.add(zoomPanel);
 		
@@ -299,29 +275,23 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		JPanel confirmPanel = new JPanel();
 		confirmPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		okButton = new JButton();
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				notifyListeners();
-				if (refreshDrawingRequired) {
-					for (UserInputListener listener : listeners) {
-						listener.refreshDrawing();
-					}
-					refreshDrawingRequired = false;
-				}
-			}
-		});
+		okButton.addActionListener(e -> {
+            setVisible(false);
+            notifyListeners();
+            if (refreshDrawingRequired) {
+                for (UserInputListener listener : listeners) {
+                    listener.refreshDrawing();
+                }
+                refreshDrawingRequired = false;
+            }
+        });
 		confirmPanel.add(okButton);
 		
 		cancelButton = new JButton();
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				resetUIElementsToCurrentSettings();
-				setVisible(false);
-			}
-		});
+		cancelButton.addActionListener(e -> {
+            resetUIElementsToCurrentSettings();
+            setVisible(false);
+        });
 		confirmPanel.add(cancelButton);
 		mainPanel.add(confirmPanel);
 	}

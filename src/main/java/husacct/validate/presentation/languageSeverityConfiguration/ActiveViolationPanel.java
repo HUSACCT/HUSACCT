@@ -74,14 +74,11 @@ class ActiveViolationPanel extends JPanel {
 		apply = new JButton();
 
 		categoryJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		categoryJList.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent evt) {
-				if (categoryJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()) {
-					categoryValueChanged();
-				}
-			}
-		});
+		categoryJList.addListSelectionListener(evt -> {
+            if (categoryJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()) {
+                categoryValueChanged();
+            }
+        });
 		categoryScrollpane.setViewportView(categoryJList);
 
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
@@ -90,36 +87,18 @@ class ActiveViolationPanel extends JPanel {
 		ruletypeScrollpane.setViewportView(violationtypeTable);
 
 		ruletypeJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		ruletypeJList.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent evt) {
-				if (ruletypeJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()) {
-					ruletypeValueChanged();
-				}
-			}
-		});
+		ruletypeJList.addListSelectionListener(evt -> {
+            if (ruletypeJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()) {
+                ruletypeValueChanged();
+            }
+        });
 		violationtypeScrollpane.setViewportView(ruletypeJList);
 
-		selectAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				SelectAllActionPerformed();
-			}
-		});
+		selectAll.addActionListener(evt -> SelectAllActionPerformed());
 
-		deselectAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				DeselectAllActionPerformed();
-			}
-		});
+		deselectAll.addActionListener(evt -> DeselectAllActionPerformed());
 
-		apply.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				ApplyActionPerformed();
-			}
-		});
+		apply.addActionListener(evt -> ApplyActionPerformed());
 
 		createLayout();
 		apply.setEnabled(false);

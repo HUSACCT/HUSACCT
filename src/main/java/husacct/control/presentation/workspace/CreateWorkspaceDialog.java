@@ -92,44 +92,36 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 		
 		final CreateWorkspaceDialog createWorkspaceDialog = this;
 		
-		analyseApplicationCheckbox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleSetApplicationPanel(analyseApplicationCheckbox.isSelected());
-				DialogUtils.alignCenter(createWorkspaceDialog);
-			}
-		});
+		analyseApplicationCheckbox.addActionListener(e -> {
+            toggleSetApplicationPanel(analyseApplicationCheckbox.isSelected());
+            DialogUtils.alignCenter(createWorkspaceDialog);
+        });
 
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(analyseApplicationCheckbox.isSelected()){
-					if(workspaceNameValidated()&&setApplicationPanel.dataValidated()) {
-						createWorkspace();
-						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-						mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
-						dispose();	
-						mainController.getViewController().showDefineArchitecture();
-					}
-				} else {
-					if(workspaceNameValidated()) {
-						createWorkspace();
-						String name = workspaceNameText.getText();
-						String language = "Java";
-						String version = "1.0";
-						ArrayList<String> paths = new ArrayList<>();
-						ApplicationDTO applicationData = mainController.getApplicationController().createApplicationData(name, language, version, paths);
-						mainController.getApplicationController().setApplicationData(applicationData);
-						dispose();	
-						mainController.getViewController().showDefineArchitecture();		
-					}
-				}	
-			}
-		});
+		okButton.addActionListener(e -> {
+            if(analyseApplicationCheckbox.isSelected()){
+                if(workspaceNameValidated()&&setApplicationPanel.dataValidated()) {
+                    createWorkspace();
+                    ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+                    mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
+                    dispose();
+                    mainController.getViewController().showDefineArchitecture();
+                }
+            } else {
+                if(workspaceNameValidated()) {
+                    createWorkspace();
+                    String name = workspaceNameText.getText();
+                    String language = "Java";
+                    String version = "1.0";
+                    ArrayList<String> paths = new ArrayList<>();
+                    ApplicationDTO applicationData = mainController.getApplicationController().createApplicationData(name, language, version, paths);
+                    mainController.getApplicationController().setApplicationData(applicationData);
+                    dispose();
+                    mainController.getViewController().showDefineArchitecture();
+                }
+            }
+        });
 
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		cancelButton.addActionListener(e -> dispose());
 	}
 
 	private void toggleSetApplicationPanel(boolean checked){

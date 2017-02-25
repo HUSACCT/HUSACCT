@@ -85,25 +85,10 @@ class ToolBarItem extends JButton {
 			}
 		});
 		
-		addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				menuItem.doClick();
-			}
-		});
+		addActionListener(arg0 -> menuItem.doClick());
 		
-		localeService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				setToolTipText(localeService.getTranslatedString(toolTipIdentifier));
-			}
-		});
+		localeService.addServiceListener(() -> setToolTipText(localeService.getTranslatedString(toolTipIdentifier)));
 		
-		stateController.addStateChangeListener(new IStateChangeListener() {
-			@Override
-			public void changeState(List<States> states) {
-				setEnabled(menuItem.isEnabled());
-			}
-		});
+		stateController.addStateChangeListener(states -> setEnabled(menuItem.isEnabled()));
 	}
 }

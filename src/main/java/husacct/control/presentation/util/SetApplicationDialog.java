@@ -60,25 +60,21 @@ public class SetApplicationDialog extends JDialog {
 	}
 
 	private void setListeners(){
-		saveButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (setApplicationPanel.dataValidated()) {
-					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-					mainController.getApplicationController().setApplicationData(applicationData);
-					dispose();
-				}
-			}
-		});
+		saveButton.addActionListener(e -> {
+            if (setApplicationPanel.dataValidated()) {
+                ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+                mainController.getApplicationController().setApplicationData(applicationData);
+                dispose();
+            }
+        });
 		
-		analyseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (setApplicationPanel.dataValidated()) {
-					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-					mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
-					dispose();
-				}
-			}
-		});
+		analyseButton.addActionListener(e -> {
+            if (setApplicationPanel.dataValidated()) {
+                ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+                mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
+                dispose();
+            }
+        });
 	}
 
 }

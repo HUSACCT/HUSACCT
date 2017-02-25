@@ -56,12 +56,7 @@ public class GraphicsLocationBar extends HelpableJPanel {
 		locationStringButton.setMargin(new Insets(0, 0, 0, 0));
 		buttonPaths.put(locationStringButton, fullPath);
 		buttons.add(locationStringButton);
-		locationStringButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				pressLocationButton(event);
-			}
-		});
+		locationStringButton.addActionListener(event -> pressLocationButton(event));
 		return locationStringButton;
 	}
 	

@@ -139,24 +139,21 @@ public class HelpDialog extends JDialog {
 			}
 		});
 
-		tree.addTreeSelectionListener(new TreeSelectionListener() {
-			@Override
-			public void valueChanged(TreeSelectionEvent arg0) {
-				selectedNode = (DefaultMutableTreeNode) tree
-						.getLastSelectedPathComponent();
-				try {
-					if(((HelpTreeNode)selectedNode.getUserObject()).getFileType().equals("html")) {
-						String filename = ((HelpTreeNode)selectedNode.getUserObject()).getFilename();					
-						InputStream stream = Resource.getStream(Resource.HELP_PAGES_PATH + filename);
-						editorpane.setText(hpl.getContent(stream));
-						editorpane.setCaretPosition(0);
-					}
+		tree.addTreeSelectionListener(arg0 -> {
+            selectedNode = (DefaultMutableTreeNode) tree
+                    .getLastSelectedPathComponent();
+            try {
+                if(((HelpTreeNode)selectedNode.getUserObject()).getFileType().equals("html")) {
+                    String filename = ((HelpTreeNode)selectedNode.getUserObject()).getFilename();
+                    InputStream stream = Resource.getStream(Resource.HELP_PAGES_PATH + filename);
+                    editorpane.setText(hpl.getContent(stream));
+                    editorpane.setCaretPosition(0);
+                }
 
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
 		pictureLabel.addMouseListener(new MouseListener() {
 			@Override

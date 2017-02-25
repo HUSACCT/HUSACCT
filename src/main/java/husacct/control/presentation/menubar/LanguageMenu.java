@@ -36,34 +36,22 @@ public class LanguageMenu extends JMenu{
 				languageItem.setSelected(true);
 			}
 			
-			languageItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setLocaleFromString(languageItem.getText());
-				}
-			});
+			languageItem.addActionListener(e -> setLocaleFromString(languageItem.getText()));
 			
-			localeService.addServiceListener(new IServiceListener() {
-				@Override
-				public void update() {
-					if(localeService.getLocale().getLanguage().equals(languageItem.getText())){
-						languageItem.setSelected(true);
-					} else {
-						languageItem.setSelected(false);
-					}
-				}
-			});
+			localeService.addServiceListener(() -> {
+                if(localeService.getLocale().getLanguage().equals(languageItem.getText())){
+                    languageItem.setSelected(true);
+                } else {
+                    languageItem.setSelected(false);
+                }
+            });
 			
 			add(languageItem);
 		}
 	}
 	
 	private void addListeners(){
-		localeService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				setText(localeService.getTranslatedString("Language"));
-			}
-		});
+		localeService.addServiceListener(() -> setText(localeService.getTranslatedString("Language")));
 	}
 	
 	private void setLocaleFromString(String locale){

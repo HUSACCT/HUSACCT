@@ -95,12 +95,7 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 	private void initializeComponents() {
 		zoomInButton = new JButton();
 		zoomInButton.setSize(50, menuItemMaxHeight);
-		zoomInButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-					zoomIn();
-			}
-		});
+		zoomInButton.addActionListener(e -> zoomIn());
 		zoomInButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -129,79 +124,55 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		
 		zoomOutButton = new JButton();
 		zoomOutButton.setSize(50, menuItemMaxHeight);
-		zoomOutButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				zoomOut();
-			}
-		});
+		zoomOutButton.addActionListener(e -> zoomOut());
 		add(zoomOutButton);
 		setButtonIcon(zoomOutButton, "zoomOut");
 		
 		refreshButton = new JButton();
 		refreshButton.setSize(50, menuItemMaxHeight);
-		refreshButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshDrawing();
-			}
-		});
+		refreshButton.addActionListener(e -> refreshDrawing());
 		add(refreshButton);
 		setButtonIcon(refreshButton, "refresh");
 		
 		showDependenciesButton = new JButton();
 		showDependenciesButton.setSize(40, menuItemMaxHeight);
-		showDependenciesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (showDependenciesButton.getToolTipText().equals(menuBarLocale.get("HideDependencies"))) {
-					dependenciesHide();
-					refreshDrawing();
-				} else {
-					dependenciesShow();
-					refreshDrawing();
-				}
-			}
-		});
+		showDependenciesButton.addActionListener(e -> {
+            if (showDependenciesButton.getToolTipText().equals(menuBarLocale.get("HideDependencies"))) {
+                dependenciesHide();
+                refreshDrawing();
+            } else {
+                dependenciesShow();
+                refreshDrawing();
+            }
+        });
 		add(showDependenciesButton);
 		
 		showViolationsButton = new JButton();
 		showViolationsButton.setSize(40, menuItemMaxHeight);
-		showViolationsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (showViolationsButton.getToolTipText().equals(menuBarLocale.get("HideViolations"))) {
-					violationsHide();
-					refreshDrawing();
-				} else {
-					violationsShow();
-					refreshDrawing();
-				}
-			}
-		});
+		showViolationsButton.addActionListener(e -> {
+            if (showViolationsButton.getToolTipText().equals(menuBarLocale.get("HideViolations"))) {
+                violationsHide();
+                refreshDrawing();
+            } else {
+                violationsShow();
+                refreshDrawing();
+            }
+        });
 		add(showViolationsButton);
 		
 		exportToImageButton = new JButton();
 		exportToImageButton.setSize(50, menuItemMaxHeight);
-		exportToImageButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exportImage();
-			}
-		});
+		exportToImageButton.addActionListener(e -> exportImage());
 		add(exportToImageButton);
 		setButtonIcon(exportToImageButton, "save");
 		
 		selectToolButton = new JButton();
 		selectToolButton.setSize(50, menuItemMaxHeight);
-		selectToolButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				useSelectTool();
-				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
-				panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			}
-		});
+		selectToolButton.addActionListener(e -> {
+            useSelectTool();
+            selectToolButton.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+            panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        });
 		add(selectToolButton);
 		selectToolButton.setBorder(BorderFactory
 				.createLineBorder(Color.MAGENTA));
@@ -209,14 +180,11 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		
 		panToolButton = new JButton();
 		panToolButton.setSize(50, menuItemMaxHeight);
-		panToolButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				usePanTool();
-				selectToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-				panToolButton.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
-			}
-		});
+		panToolButton.addActionListener(e -> {
+            usePanTool();
+            selectToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            panToolButton.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+        });
 		add(panToolButton);
 		panToolButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		setButtonIcon(panToolButton, "panTool");
@@ -227,25 +195,17 @@ public class GraphicsMenuBar extends HelpableJPanel implements UserInputListener
 		
 		optionsDialogButton = new JButton();
 		optionsDialogButton.setSize(40, menuItemMaxHeight);
-		optionsDialogButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				graphicsOptionsDialog.showDialog();
-			}
-		});
+		optionsDialogButton.addActionListener(e -> graphicsOptionsDialog.showDialog());
 		add(optionsDialogButton);
 		setButtonIcon(optionsDialogButton, "options");
 		
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				int scale = ((JSlider) ce.getSource()).getValue();
-				graphicsOptionsDialog.setZoomValue(scale);
-				zoomFactorChanged(scale);
-			}
-		});
+		zoomSlider.addChangeListener(ce -> {
+            int scale = ((JSlider) ce.getSource()).getValue();
+            graphicsOptionsDialog.setZoomValue(scale);
+            zoomFactorChanged(scale);
+        });
 		add(zoomSlider);
 		
 		outOfDateButton = new JButton();

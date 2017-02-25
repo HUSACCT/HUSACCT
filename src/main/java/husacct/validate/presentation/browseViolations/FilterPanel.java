@@ -103,89 +103,64 @@ public class FilterPanel extends JPanel {
 	}
 
 	private void addListeners() {
-		applyFilter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				browseViolations.reloadViolationPanelsAfterChange();
-			}
-		});
-		buttonEditFilter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				final Toolkit toolkit = Toolkit.getDefaultToolkit();
-				final Dimension screenSize = toolkit.getScreenSize();
-				final int x = (screenSize.width - filterViolations.getWidth()) / 2;
-				final int y = (screenSize.height - filterViolations.getHeight()) / 2;
-				filterViolations.setLocation(x, y);
+		applyFilter.addActionListener(arg0 -> browseViolations.reloadViolationPanelsAfterChange());
+		buttonEditFilter.addActionListener(e -> {
+            final Toolkit toolkit = Toolkit.getDefaultToolkit();
+            final Dimension screenSize = toolkit.getScreenSize();
+            final int x = (screenSize.width - filterViolations.getWidth()) / 2;
+            final int y = (screenSize.height - filterViolations.getHeight()) / 2;
+            filterViolations.setLocation(x, y);
 
-				filterViolations.setVisible(true);
-			}
-		});
-		radioButtonAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				final Thread filterThread = new Thread() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(1);
-							browseViolations.reloadViolationPanelsAfterChange();
-						} catch (InterruptedException e) {
-							logger.debug(e.getMessage());
-						}
-					}
-				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
-				validateThread.run();
+            filterViolations.setVisible(true);
+        });
+		radioButtonAll.addActionListener(arg0 -> {
+            final Thread filterThread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1);
+                        browseViolations.reloadViolationPanelsAfterChange();
+                    } catch (InterruptedException e) {
+                        logger.debug(e.getMessage());
+                    }
+                }
+            };
+            ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
+            validateThread.run();
 
-			}
-		});
-		radioButtonDirect.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				final Thread filterThread = new Thread() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(1);
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									browseViolations.reloadViolationPanelsAfterChange();
-								}
-							});
-						} catch (InterruptedException e) {
-							logger.debug(e.getMessage());
-						}
-					}
-				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
-				validateThread.run();
+        });
+		radioButtonDirect.addActionListener(arg0 -> {
+            final Thread filterThread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1);
+                        SwingUtilities.invokeLater(() -> browseViolations.reloadViolationPanelsAfterChange());
+                    } catch (InterruptedException e) {
+                        logger.debug(e.getMessage());
+                    }
+                }
+            };
+            ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
+            validateThread.run();
 
-			}
-		});
-		radioButtonIndirect.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				final Thread filterThread = new Thread() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(1);
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									browseViolations.reloadViolationPanelsAfterChange();
-								}
-							});
-						} catch (InterruptedException e) {
-							logger.debug(e.getMessage());
-						}
-					}
-				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
-				validateThread.run();
+        });
+		radioButtonIndirect.addActionListener(arg0 -> {
+            final Thread filterThread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1);
+                        SwingUtilities.invokeLater(() -> browseViolations.reloadViolationPanelsAfterChange());
+                    } catch (InterruptedException e) {
+                        logger.debug(e.getMessage());
+                    }
+                }
+            };
+            ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
+            validateThread.run();
 
-			}
-		});
+        });
 	}
 
 	public List<Violation> fillViolationsTable(List<Violation> violations) {

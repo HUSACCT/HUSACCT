@@ -58,42 +58,30 @@ public class GraphicsPresentationController implements UserInputListener{
 	private void initializeServices() {
 		try {
 			analyseService = ServiceProvider.getInstance().getAnalyseService();
-			analyseService.addServiceListener(new IServiceListener() {
-				@Override
-				public void update() {
-					GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
-					//GraphicsPresentationController.this.drawArchitectureTopLevel();
-				}
-			});
+			analyseService.addServiceListener(() -> {
+                GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
+                //GraphicsPresentationController.this.drawArchitectureTopLevel();
+            });
 	
 			defineService = ServiceProvider.getInstance().getDefineService();
-			defineService.addServiceListener(new IServiceListener() {
-				@Override
-				public void update() {
-					if (GraphicsPresentationController.this.drawingType == DrawingTypesEnum.INTENDED_ARCHITECTURE) {
-						GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
-					}
-				}
-			});
+			defineService.addServiceListener(() -> {
+                if (GraphicsPresentationController.this.drawingType == DrawingTypesEnum.INTENDED_ARCHITECTURE) {
+                    GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
+                }
+            });
 	
 			localeService = ServiceProvider.getInstance().getLocaleService(); 
-			localeService.addServiceListener(new IServiceListener() {
-				@Override
-				public void update() { // In case language is changed in central Options dialogue.
-					GraphicsPresentationController.this.graphicsFrame.refreshFrame();
-				}
-			});
+			localeService.addServiceListener(() -> { // In case language is changed in central Options dialogue.
+                GraphicsPresentationController.this.graphicsFrame.refreshFrame();
+            });
 	
 			this.validateService = ServiceProvider.getInstance().getValidateService();
-			this.validateService.addServiceListener(new IServiceListener() {
-				@Override
-				public void update() {
-					if (GraphicsPresentationController.this.drawingsSettingsHolder.areViolationsShown()) {
-						GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
-						//GraphicsPresentationController.this.refreshDrawing();
-					}
-				}
-			});
+			this.validateService.addServiceListener(() -> {
+                if (GraphicsPresentationController.this.drawingsSettingsHolder.areViolationsShown()) {
+                    GraphicsPresentationController.this.graphicsFrame.showOutOfDateWarning();
+                    //GraphicsPresentationController.this.refreshDrawing();
+                }
+            });
 		} catch(Exception e) {
 			logger.error(" Exception: " + e.getMessage());
 		}

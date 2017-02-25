@@ -22,12 +22,7 @@ public class ConfigurationManagerTest {
 	}
 	
 	public void testConfigurationListener() {
-		ConfigurationManager.addListener(new IConfigListener() {
-			@Override
-			public void onConfigUpdate() {
-				assertEquals(true, true);
-			}
-		});
+		ConfigurationManager.addListener(() -> assertEquals(true, true));
 		ConfigurationManager.notifyListeners();
 	}
 }

@@ -39,25 +39,15 @@ public class HelpMenu extends JMenu {
 	}
 	
 	private void setListeners() {
-		aboutItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getApplicationController().showAboutHusacctGui();
-			}
-		});
-		documentationItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainController.getApplicationController().showDocumentationGUI();
-			}
-		});
+		aboutItem.addActionListener(e -> mainController.getApplicationController().showAboutHusacctGui());
+		documentationItem.addActionListener(e -> mainController.getApplicationController().showDocumentationGUI());
 		
 		final HelpMenu helpMenu = this;
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				helpMenu.setText(localeService.getTranslatedString("Help"));
-				aboutItem.setText(localeService.getTranslatedString("About"));	
-				aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            helpMenu.setText(localeService.getTranslatedString("Help"));
+            aboutItem.setText(localeService.getTranslatedString("About"));
+            aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
+        });
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {
