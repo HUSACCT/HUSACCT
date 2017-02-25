@@ -1216,7 +1216,7 @@ class FamixCreationPostProcessor {
     private String findClassInImports(String importingClass, String typeDeclaration) {
     	if (theModel.classes.containsKey(importingClass)) {
 	    	FamixClass fromClass = theModel.classes.get(importingClass);
-	    	if (fromClass.isInnerClass == true) {
+	    	if (fromClass.isInnerClass) {
 	    		importingClass = fromClass.belongsToClass;
 	    	}
     	}
@@ -1344,7 +1344,7 @@ class FamixCreationPostProcessor {
     		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
     		for (String stringSuper : inheritanceAssociations){
     			FamixClass superClass = theModel.classes.get(stringSuper);
-    			if ((superClass != null) && superClass.isInterface == false) {
+    			if ((superClass != null) && !superClass.isInterface) {
 	    			if (stringSuper.equals(uniqueClassName)) {
 	    				break; // Otherwise, things go wrong with derived C# classes with the same name.
 	    			}

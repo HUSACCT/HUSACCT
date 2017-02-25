@@ -299,65 +299,65 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 	public void notifyListeners() {
 		for (UserInputListener listener : listeners) {
 			if (showDependenciesOptionMenu.isSelected()) {
-				if (((Boolean) currentSettings.get("dependencies")) != true) {
+				if (!((Boolean) currentSettings.get("dependencies"))) {
 					currentSettings.put("dependencies", true);
 					listener.dependenciesShow();
 					refreshDrawingRequired = true;
 				}
 			} else {
-				if (((Boolean) currentSettings.get("dependencies")) != false) {
+				if (((Boolean) currentSettings.get("dependencies"))) {
 					currentSettings.put("dependencies", false);
 					listener.dependenciesHide();
 					refreshDrawingRequired = true;
 				}
 			}
 			if (enableThickLines.isSelected()) {
-				if (((Boolean) currentSettings.get("thickLines")) != true) {
+				if (!((Boolean) currentSettings.get("thickLines"))) {
 					currentSettings.put("thickLines", true);
 					listener.proportionalLinesEnable();
 					refreshDrawingRequired = true;
 				}
 			} else {
-				if (((Boolean) currentSettings.get("thickLines")) != false) {
+				if (((Boolean) currentSettings.get("thickLines"))) {
 					currentSettings.put("thickLines", false);
 					listener.proportionalLinesDisable();
 					refreshDrawingRequired = true;
 				}
 			}
 			if (showViolationsOptionMenu.isSelected()) {
-				if (((Boolean) currentSettings.get("violations")) != true) {
+				if (!((Boolean) currentSettings.get("violations"))) {
 					currentSettings.put("violations", true);
 					listener.violationsShow();
 					refreshDrawingRequired = true;
 				}
 			} else {
-				if (((Boolean) currentSettings.get("violations")) != false) {
+				if (((Boolean) currentSettings.get("violations"))) {
 					currentSettings.put("violations", false);
 					listener.violationsHide();
 					refreshDrawingRequired = true;
 				}
 			}
 			if (smartLinesOptionMenu.isSelected()) {
-				if (((Boolean) currentSettings.get("smartLines")) != true) {
+				if (!((Boolean) currentSettings.get("smartLines"))) {
 					currentSettings.put("smartLines", true);
 					listener.smartLinesEnable();
 					refreshDrawingRequired = true;
 				}
 			} else {
-				if (((Boolean) currentSettings.get("smartLines")) != false) {
+				if (((Boolean) currentSettings.get("smartLines"))) {
 					currentSettings.put("smartLines", false);
 					listener.smartLinesDisable();
 					refreshDrawingRequired = true;
 				}
 			}
 			if (showExternalLibraries.isSelected()) {
-				if (((Boolean) currentSettings.get("libraries")) != true) {
+				if (!((Boolean) currentSettings.get("libraries"))) {
 					currentSettings.put("libraries", true);
 					listener.librariesShow();
 					refreshDrawingRequired = true;
 				}
 			} else {
-				if (((Boolean) currentSettings.get("libraries")) != false) {
+				if (((Boolean) currentSettings.get("libraries"))) {
 					currentSettings.put("libraries", false);
 					listener.librariesHide();
 					refreshDrawingRequired = true;

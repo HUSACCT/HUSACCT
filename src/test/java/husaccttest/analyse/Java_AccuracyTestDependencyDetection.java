@@ -183,7 +183,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", false); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true)) {
+		if ((outcome1) || (outcome2)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -201,7 +201,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome3 = areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true) || (outcome3 == true)) {
+		if ((outcome1) || (outcome2) || (outcome3)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -464,7 +464,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true)) {
+		if ((outcome1) || (outcome2)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -480,7 +480,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome3 = areDependencyTypesDetected(fromClass, toClass, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome3 == true)) {
+		if ((outcome1) || (outcome3)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);

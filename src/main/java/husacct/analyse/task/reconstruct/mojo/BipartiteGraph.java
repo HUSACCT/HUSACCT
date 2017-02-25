@@ -134,7 +134,7 @@ class BipartiteGraph {
          */
         for (int i = 0; i < leftpoints; i++)
         {
-            if (vertex[i].matched == false)
+            if (!vertex[i].matched)
             {
                 if (findPath(i)) return true;
                 else augmentPath.removeAllElements(); /* re init the path */
@@ -161,7 +161,7 @@ class BipartiteGraph {
             /* if the next point was already in the path, discard it */
             if (augmentPath.indexOf(nextPt) > -1) continue;
             /* find a terminal, add it to the path and return true */
-            if (vertex[nextPt].matched == false)
+            if (!vertex[nextPt].matched)
             {
                 augmentPath.addElement(nextPt);
                 return true;
@@ -195,9 +195,9 @@ class BipartiteGraph {
         for (int i = 0; i < points; i++)
         {
             str += "Point ";
-            str += isLeft(i) == true ? "A" + (i + 1) : "G" + (i - leftpoints + 1);
+            str += isLeft(i) ? "A" + (i + 1) : "G" + (i - leftpoints + 1);
             str += " is ";
-            str += vertex[i].matched == true ? "MATCHED\n" : "UNMATCHED\n";
+            str += vertex[i].matched ? "MATCHED\n" : "UNMATCHED\n";
             for (int j = 0; j < adjacentList.elementAt(i).size(); j++)
             {
                 int to = adjacentList.elementAt(i).elementAt(j);

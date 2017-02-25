@@ -63,7 +63,7 @@ abstract public class InternalFrameController {
 		JInternalFrame  newInternalFrame = getInternalFrame();
 		if (newInternalFrame != null) {
 			if ((newInternalFrame == internalFrame)) {
-				if (internalFrame.isClosed() == false) {
+				if (!internalFrame.isClosed()) {
 					setInternalFrameAndButtonVisible();
 				} else {
 					addInternalFrame();
@@ -229,7 +229,7 @@ abstract public class InternalFrameController {
 	private void activateInternalFrame(){
 		try {
 			if ((internalFrame != null) && (internalFrame.getDesktopPane() != null)) {
-				if ( internalFrame.isIcon() == true) {
+				if (internalFrame.isIcon()) {
 					internalFrame.setIcon(false);
 				}
 				internalFrame.toFront();
