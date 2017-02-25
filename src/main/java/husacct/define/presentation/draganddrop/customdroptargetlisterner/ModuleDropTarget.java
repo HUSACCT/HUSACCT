@@ -113,15 +113,12 @@ public class ModuleDropTarget implements DropTargetListener {
 					getSelectedNode(arg).getModuleId());
 			controller.save(tobesaved);
 
-		} catch (UnsupportedFlavorException e) {
-
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (UnsupportedFlavorException | IOException e) {
 
 			e.printStackTrace();
 		}
-		
-	}
+
+    }
 
 	private void changeSoftwareUnitLocation(DropTargetDropEvent arg) {
 		try {

@@ -39,12 +39,10 @@ public class ModuleFactory {
 				ModuleStrategy newModule = (ModuleStrategy)moduleTypeClasses[i].newInstance();
 				newModule.setType(moduleType);
 				return newModule;
-			}catch (InstantiationException ex) {
-				logger.error("Instantiation Error in ModuleFactory: " + ex.toString());
-			} catch (IllegalAccessException ex) {
+			}catch (InstantiationException | IllegalAccessException ex) {
 				logger.error("Instantiation Error in ModuleFactory: " + ex.toString());
 			}
-		}
+        }
 		logger.error("Error in ModuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}
@@ -56,12 +54,10 @@ public class ModuleFactory {
 				dummyModule.setType(choice);
 				dummyModule.setId(-1);
 				return dummyModule;
-			}catch (InstantiationException ex) {
-				logger.error("Instantiation Error in ModuleFactory: " + ex.toString());
-			} catch (IllegalAccessException ex) {
+			}catch (InstantiationException | IllegalAccessException ex) {
 				logger.error("Instantiation Error in ModuleFactory: " + ex.toString());
 			}
-		}
+        }
 		logger.error("Error in ModuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}

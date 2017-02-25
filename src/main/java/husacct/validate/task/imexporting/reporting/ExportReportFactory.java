@@ -48,16 +48,10 @@ public class ExportReportFactory {
 			}
 
 			writer.createReport();
-		} catch (IOException e) {
-			createException(e);
-		} catch (UnknownStorageTypeException e) {
-			createException(e);
-		} catch (URISyntaxException e) {
-			createException(e);
-		} catch (DocumentException e) {
+		} catch (IOException | DocumentException | URISyntaxException | UnknownStorageTypeException e) {
 			createException(e);
 		}
-	}
+    }
 
 	private void createException(Exception exception) {
 		throw new ReportException(exception.getMessage(), exception);

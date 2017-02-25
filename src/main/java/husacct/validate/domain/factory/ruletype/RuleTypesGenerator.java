@@ -102,12 +102,10 @@ class RuleTypesGenerator {
 	private boolean classHasRuleConstructor(Class<?> ruleClass) {
 		try {
 			ruleClass.getConstructor(String.class, String.class, List.class, Severity.class);
-		} catch (SecurityException e) {
-			return exceptionOccured(e);
-		} catch (NoSuchMethodException e) {
+		} catch (SecurityException | NoSuchMethodException e) {
 			return exceptionOccured(e);
 		}
-		return true;
+        return true;
 	}
 
 	private boolean exceptionOccured(Exception e) {

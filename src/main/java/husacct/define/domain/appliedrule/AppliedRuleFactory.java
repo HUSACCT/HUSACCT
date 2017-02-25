@@ -72,12 +72,10 @@ public class AppliedRuleFactory {
 				AppliedRuleStrategy newRule = (AppliedRuleStrategy)ruleClasses[i].newInstance();
 				newRule.setRuleType(choice);
 				return newRule;
-			}catch (InstantiationException ex) {
-				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
-			} catch (IllegalAccessException ex) {
+			}catch (InstantiationException | IllegalAccessException ex) {
 				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
 			}
-		}
+        }
 		logger.error("Error in AppliedRuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}
@@ -96,12 +94,10 @@ public class AppliedRuleFactory {
 				else
 					newRule.setModuleTo(mds.getModuleById((long) ruleDetails.get("moduleFromId")));
 				return newRule;
-			}catch (InstantiationException ex) {
-				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
-			} catch (IllegalAccessException ex) {
+			}catch (InstantiationException | IllegalAccessException ex) {
 				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
 			}
-		}
+        }
 		logger.error("Error in AppliedRuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}

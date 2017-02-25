@@ -176,22 +176,13 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
    			}
    		}
 		theModel.addObject(fobj);
-		} catch (IllegalAccessException e) {
-           husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-           husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
-		} catch (NoSuchFieldException e) {
+		} catch (IllegalAccessException | InvalidAttributesException | NoSuchFieldException | IllegalArgumentException e) {
            husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
 			//e.printStackTrace();
 		} catch (SecurityException e) {
            //e.printStackTrace();
-		} catch (InvalidAttributesException e) {
-           husacctLogger.warn("Analyse - Couldn export package to xls: " + e.getMessage());
-			//e.printStackTrace();
 		}
-       return fobj;
+        return fobj;
    }
 	
     // EXPORT & IMPORT of Workspace Data

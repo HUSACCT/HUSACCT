@@ -208,20 +208,10 @@ public class RuleTypesFactory {
 				rootRule.setExceptionRules(exceptionRuletypes);
 			}
 			return rootRule;
-		} catch (IllegalArgumentException e) {
-			ExceptionOccured(e);
-		} catch (SecurityException e) {
-			ExceptionOccured(e);
-		} catch (InstantiationException e) {
-			ExceptionOccured(e);
-		} catch (IllegalAccessException e) {
-			ExceptionOccured(e);
-		} catch (InvocationTargetException e) {
-			ExceptionOccured(e);
-		} catch (NoSuchMethodException e) {
+		} catch (IllegalArgumentException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException | SecurityException e) {
 			ExceptionOccured(e);
 		}
-		throw new RuleInstantionException(key);
+        throw new RuleInstantionException(key);
 	}
 
 	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey) throws RuleInstantionException {
@@ -245,20 +235,10 @@ public class RuleTypesFactory {
 	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException {
 		try {
 			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
-		} catch (IllegalArgumentException e) {
-			ExceptionOccured(e);
-		} catch (SecurityException e) {
-			ExceptionOccured(e);
-		} catch (InstantiationException e) {
-			ExceptionOccured(e);
-		} catch (IllegalAccessException e) {
-			ExceptionOccured(e);
-		} catch (InvocationTargetException e) {
-			ExceptionOccured(e);
-		} catch (NoSuchMethodException e) {
+		} catch (IllegalArgumentException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException | SecurityException e) {
 			ExceptionOccured(e);
 		}
-		throw new RuleInstantionException(key);
+        throw new RuleInstantionException(key);
 	}
 
 	private void ExceptionOccured(Exception e) {

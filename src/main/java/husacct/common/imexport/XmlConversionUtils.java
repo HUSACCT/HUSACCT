@@ -30,9 +30,6 @@ public class XmlConversionUtils {
 		} catch (IllegalAccessException e) {
 			logger.warn("Could not write to xml for element: " + elementName + " Exception: " + e.getMessage());
 			//e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			logger.warn("Could not write to xml for element: " + elementName + " Exception: " + e.getMessage());
-			//e.printStackTrace();
 		} catch (Exception e) {
 			logger.warn("Could not write to xml for element: " + elementName + " Exception: " + e.getMessage());
 			//e.printStackTrace();
@@ -69,10 +66,7 @@ public class XmlConversionUtils {
 	        		}
     			}
     		}
-		} catch (IllegalAccessException e) {
-            logger.warn("Could not read from xml for class: " + dto.getClass().getName() + " Exception: " + e.getMessage());
-			//e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalAccessException | IllegalArgumentException e) {
             logger.warn("Could not read from xml for class: " + dto.getClass().getName() + " Exception: " + e.getMessage());
 			//e.printStackTrace();
 		}

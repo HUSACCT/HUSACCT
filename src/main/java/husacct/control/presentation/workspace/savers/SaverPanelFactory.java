@@ -10,18 +10,10 @@ public class SaverPanelFactory {
 			Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
             Object instance = myClass.newInstance();
             return (SaverPanel) instance;
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (SecurityException | IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException e) {
             e.printStackTrace();
         }
-        
+
         return new XmlSavePanel();
 	}
 }
