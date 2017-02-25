@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class TestResourceFinder {
 
-	private static final String TESTPROJECT_FOLDER = "testresources";
+	private static final String TESTPROJECT_FOLDER = "src/test/resources";
 	public static final String WORKSPACES_FOLDER = "workspaces";
 	public static final String EXPORT_FOLDER = "export";
 

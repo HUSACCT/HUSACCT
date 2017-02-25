@@ -18,7 +18,7 @@ public class Main {
 	}
 	
 	private void setLog4jConfiguration(){
-		URL propertiesFile = getClass().getResource("/husacct/common/resources/log4j.properties");
+		URL propertiesFile = getClass().getResource("log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 	}//Test Comment for crucible
 	
@@ -26,7 +26,7 @@ public class Main {
 		Logger logger = Logger.getLogger(Main.class);
 		Runtime runtime = Runtime.getRuntime();
 		//RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
-		logger.info("STARTING HUSACCT " + new Date().toString());
+		logger.info("STARTING HUSACCT ");
 		logger.info("Processors: " + runtime.availableProcessors() + " Free memory: " + runtime.freeMemory() + " Max memory: " + runtime.maxMemory() + " Total memory: " + runtime.totalMemory() );
 	}
 	

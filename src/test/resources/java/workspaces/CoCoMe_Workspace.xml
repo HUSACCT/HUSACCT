@@ -11,7 +11,7 @@
         <Project>
           <name>CoCoMe</name>
           <paths>
-            <path>testresources/java/cocome/src</path>
+            <path>src/test/resources/java/cocome/src</path>
           </paths>
           <programmingLanguage>Java</programmingLanguage>
           <version>1.0</version>

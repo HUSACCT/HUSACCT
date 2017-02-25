@@ -32,7 +32,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ArchitectureReconstructionTest_SRMA {
-	private static String workspacePath;
 	private static ControlServiceImpl controlService;
 	private static MainController mainController;
 	private static WorkspaceController workspaceController;
@@ -47,8 +46,8 @@ public class ArchitectureReconstructionTest_SRMA {
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
+			String workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
+			logger.info("Running HUSACCT using workspace: " + workspacePath);
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -61,16 +60,16 @@ public class ArchitectureReconstructionTest_SRMA {
 			mainController = controlService.getMainController();
 			while(isAnalysing){
 				try {
-					Thread.sleep((long)10);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {}
 				isAnalysing = mainController.getStateController().isAnalysing();
 			}
 			
-			logger.info(String.format("Start: Architecture Reconstruction"));
+			logger.info("Start: Architecture Reconstruction");
 			analyseStatisticsBeforeReconstruction = getAnalyseStatistics();
 			reconstructArchitecture();
 			analyseStatisticsAfterReconstruction = getAnalyseStatistics();
-			logger.info(String.format("Finished: Architecture Reconstruction"));
+			logger.info("Finished: Architecture Reconstruction");
 			
 			checkConformance();	//checkConformance() starts a different Thread, and needs some time
 			boolean isValidating = true;
@@ -78,7 +77,7 @@ public class ArchitectureReconstructionTest_SRMA {
 			mainController = controlService.getMainController();
 			while(isValidating){
 				try {
-					Thread.sleep((long)10);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {}
 				isValidating = mainController.getStateController().isValidating();
 			}

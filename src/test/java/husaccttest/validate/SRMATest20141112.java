@@ -46,7 +46,7 @@ public class SRMATest20141112 {
 		try {
 			setLog4jConfiguration();
 			String workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format(" Start: SRMA Test using workspace: " + workspacePath));
+			logger.info("Start: SRMA Test using workspace: " + workspacePath);
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -418,7 +418,7 @@ public class SRMATest20141112 {
 	//private helpers; from Maven plugin
 
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		URL propertiesFile = Class.class.getResource("log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	

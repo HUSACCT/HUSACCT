@@ -69,7 +69,7 @@ public class Resource {
 	public static final String ICON_ZOOM = ICONSET_PATH + "zoom.png";
 	public static final String ICON_ZOOMCONTEXT = ICONSET_PATH + "zoom-context.png";
 	public static final String ICON_SUBSYSTEMJAVA=ICONSET_PATH+"define-subsystem.png";
-	public static final String CONTROL_TEST_WORKSPACE = "control/testworkspace.xml";
+	public static final String CONTROL_TEST_WORKSPACE = "/control/testworkspace.xml";
 	public static final String ICON_ROOT=ICONSET_PATH+"define-root.png";
 	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
 	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";

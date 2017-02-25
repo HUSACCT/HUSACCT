@@ -195,7 +195,7 @@ public class ReconstructAlgorithmTests {
 	
 	
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		URL propertiesFile = Class.class.getResource("log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 		logger = Logger.getLogger(ExportImportAnalysedModelTest.class);
 	}

@@ -13,38 +13,33 @@ import org.apache.log4j.Logger;
 
 public class ApplicationAnalyser {
 
+    private static final Logger logger = Logger.getLogger(ApplicationAnalyser.class);
     private AbstractAnalyser analyser;
-    
-    private final Logger logger = Logger.getLogger(ApplicationAnalyser.class);
-
-    public ApplicationAnalyser() {
-    }
 
     public void analyseApplication(String[] paths, String programmingLanguage) {
-        this.logger.info(new Date().toString() + " Start: Parse sourcefiles");
+        logger.info("Start: Parse sourcefiles");
 
         analyser = createAnalyser(programmingLanguage);
         SourceFileFinder sourceFileFinder = new SourceFileFinder();
         String sourceFileExtension = getExtensionForLanguage(programmingLanguage);
-		int size = paths.length;
-        for (int i = 0; i < size; i ++) {
+        for (String path : paths) {
+            logger.debug("Analysing path " + path);
             try {
-            	String projectPath = paths[i];
-                List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(projectPath, sourceFileExtension);
+                List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(path, sourceFileExtension);
                 for (MetaFile sourceFileInfo : fileData) {
                     if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
                         break;
                     }
-                    analyser.analyseSourceFile(projectPath, sourceFileInfo.getPath());
+                    analyser.analyseSourceFile(path, sourceFileInfo.getPath());
                 }
             } catch (Exception e) {
-                this.logger.warn(" Parse exception in source file: sourceFileInfo.getPath() " + e.getCause().toString());
+                logger.warn(" Parse exception in source file: sourceFileInfo.getPath() " + e.getCause().toString());
             }
         }
 
-        this.logger.info(" Number of syntax errors: " + analyser.getNumberOfSyntaxErrors());
-        this.logger.info(" Number of files with syntax errors: " + analyser.getNrOfFilesWithSyntaxErrors() + "  Of which files with 'test' in path: " + analyser.getNrOfFilesWithSyntaxErrors_WithTestInPath());
-        this.logger.info(new Date().toString() + " Finished: Parse sourcefiles");
+        logger.info("Number of syntax errors: " + analyser.getNumberOfSyntaxErrors());
+        logger.info("Number of files with syntax errors: " + analyser.getNrOfFilesWithSyntaxErrors() + "  Of which files with 'test' in path: " + analyser.getNrOfFilesWithSyntaxErrors_WithTestInPath());
+        logger.info("Finished: Parse sourcefiles");
 
         analyser.connectDependencies();
         //required for clearing the buffers after analysis is finished
@@ -56,20 +51,24 @@ public class ApplicationAnalyser {
     }
 
     public String[] getAvailableLanguages() {
-        String[] availableLanguages = new String[]{"Java", "C#"};
-        return availableLanguages;
+        return new String[]{"Java", "C#"};
     }
 
     private AbstractAnalyser createAnalyser(String language) {
         AbstractAnalyser applicationAnalyser;
-        if (language.equals("Java")) {
-            applicationAnalyser = new JavaAnalyser();
-        } else if (language.equals("C#")) {
-            applicationAnalyser = new CSharpAnalyser();
-        } else if (language.equals("Clojure")) {
-            applicationAnalyser = new ClojureAnalyser();
-        } else {
-            applicationAnalyser = null;
+        switch (language) {
+            case "Java":
+                applicationAnalyser = new JavaAnalyser();
+                break;
+            case "C#":
+                applicationAnalyser = new CSharpAnalyser();
+                break;
+            case "Clojure":
+                applicationAnalyser = new ClojureAnalyser();
+                break;
+            default:
+                applicationAnalyser = null;
+                break;
         }
         return applicationAnalyser;
     }

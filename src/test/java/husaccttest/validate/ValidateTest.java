@@ -1,10 +1,5 @@
 package husaccttest.validate;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ProjectDTO;
@@ -31,6 +26,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ValidateTest {
 	private static IDefineService define;
@@ -121,19 +118,18 @@ public class ValidateTest {
 	@Test
 	public void exportViolations() {
 		String fileExtension = validate.getExportExtentions()[0];
-		String fileRelativePath = "src/husaccttest/validate/exportTestReports." + fileExtension;
-		boolean testResult = false;
+		String fileRelativePath = "exportTestReports." + fileExtension;
 
 		File exportTestFile = new File(fileRelativePath); 
 		validate.exportViolations(exportTestFile, fileExtension);
 
-		File checkExportFile = new File(fileRelativePath); 
+		File checkExportFile = new File(fileRelativePath);
 
 		if (checkExportFile.exists()) {
 			checkExportFile.delete();
-			testResult = true;
+		} else {
+			fail();
 		}
-		assertTrue(testResult);
 	}
 
 	@Test
@@ -311,7 +307,7 @@ public class ValidateTest {
 	}
 
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		URL propertiesFile = Class.class.getResource("log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 	}
 }

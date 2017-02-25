@@ -298,8 +298,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	@Override
 	public ModuleDTO[] getModule_AllRootModules() {
 		ModuleStrategy[] modules = moduleService.getRootModules();
-		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
-		return moduleDTOs;
+		return domainParser.parseRootModules(modules);
 	}
 
 	public SoftwareUnitController getSoftwareUnitController() {
@@ -333,8 +332,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	
 	@Override
 	public Element getWorkspaceData() {
-		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
-		return pd.getWorkspaceData();
+		return new PersistentDomain(defineDomainService, moduleService, appliedRuleService).getWorkspaceData();
 	}
 
 	@Override
@@ -414,8 +412,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	public RuleDTO getMainRuleBy_From_To_RuleTypeKey(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
 		AppliedRuleStrategy mainRule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey(moduleFromLogicalPath, moduleTologicalPath, ruleTypeKey);
 		if (mainRule != null) {
-			RuleDTO mainRuleDTO = domainParser.parseRule(mainRule, false);
-			return mainRuleDTO;
+			return domainParser.parseRule(mainRule, false);
 		} else {
 			return null;
 		}

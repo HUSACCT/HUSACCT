@@ -40,7 +40,7 @@ public class Java_AccuracyTestDependencyDetection {
 		try {
 			setLog4jConfiguration();
 			String workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
+			logger.info("Running HUSACCT using workspace: " + workspacePath);
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -183,7 +183,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", false); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true)) {
+		if ((outcome1) || (outcome2)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -201,7 +201,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome3 = areDependencyTypesDetected(fromClass, toClass, typesToFind, "Instance Variable", true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true) || (outcome3 == true)) {
+		if ((outcome1) || (outcome2) || (outcome3)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -1401,7 +1401,7 @@ public class Java_AccuracyTestDependencyDetection {
 	//private helpers
 	//
 	private static void setLog4jConfiguration() {
-		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
+		URL propertiesFile = Class.class.getResource("log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 		logger = Logger.getLogger(Java_AccuracyTestDependencyDetection.class);
 	}

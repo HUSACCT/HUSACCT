@@ -11,7 +11,7 @@
         <Project>
           <name>AccuracyTest-2013-06-11</name>
           <paths>
-            <path>testresources/java/accuracy</path>
+            <path>src/test/resources/java/accuracy</path>
           </paths>
           <programmingLanguage>Java</programmingLanguage>
           <version>1.0</version>

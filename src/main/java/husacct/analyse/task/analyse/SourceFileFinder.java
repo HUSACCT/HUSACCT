@@ -1,6 +1,8 @@
 package husacct.analyse.task.analyse;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,38 +12,23 @@ class SourceFileFinder {
 
     List<MetaFile> getFileInfoFromProject(String projectPath, String fileExtension) throws Exception {
         requiredFileExtension = fileExtension;
-        List<MetaFile> paths = walk(projectPath);
-        return paths;
+        List<MetaFile> files = new ArrayList<>();
+        try {
+            Files.walkFileTree(Paths.get(projectPath), new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    String fileName = file.toAbsolutePath().toString();
+                    if(fileName.endsWith(requiredFileExtension)) {
+                        files.add(new MetaFile(fileName));
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            } );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return files;
     }
 
-    private List<MetaFile> walk(String path) {
-        path = path.replace('\\','/');
-        File root = new File(path);
-        File[] listFiles = root.listFiles();
-        if (listFiles == null) {
-            listFiles = new File[]{root};
-        }
-        List<MetaFile> filePaths = new ArrayList<>();
-        for (File file : listFiles) {
-            checkIfFileOrDirectory(file, filePaths);
-        }
-        return filePaths;
-    }
-
-    private void checkIfFileOrDirectory(File file, List<MetaFile> filePaths) {
-        if (file.getAbsoluteFile().isDirectory()) {
-            filePaths.addAll(walk(file.getAbsolutePath()));
-        } else if (getSourceFiles(file.getAbsolutePath())) {
-            filePaths.add(new MetaFile(file.getAbsolutePath()));
-        }
-    }
-
-    private boolean getSourceFiles(String filepath) {
-        int extensionIndex = filepath.lastIndexOf(".");
-        if (extensionIndex == -1) {
-            return false;
-        }
-        String extension = filepath.substring(extensionIndex, filepath.length());
-        return extension.equals(requiredFileExtension);
-    }
 }
