@@ -198,7 +198,7 @@ public class CSharpTreeConvertController {
 
 	private void delegateAttribute(CommonTree attributeTree) {
 		if (attributeTree.toStringTree().contains("= >")) {
-			csLamdaGenerator.delegateLambdaToBuffer((CommonTree) attributeTree, createPackageAndClassName(classNameStack), "");
+			csLamdaGenerator.delegateLambdaToBuffer(attributeTree, createPackageAndClassName(classNameStack), "");
 		} else {
 			csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(classNameStack));
 		}

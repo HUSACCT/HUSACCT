@@ -196,7 +196,7 @@ public class RuleTypesFactory {
 
 	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException {
 		try {
-			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
+			RuleType rootRule = ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
 			List<RuleType> exceptionRuletypes = new ArrayList<>();
 			if (rootRule.getExceptionRuleTypeKeys() != null) {
 				for (RuleTypes ruletype : rootRule.getExceptionRuleTypeKeys()) {
@@ -234,7 +234,7 @@ public class RuleTypesFactory {
 
 	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException {
 		try {
-			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
+			return ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
 		} catch (IllegalArgumentException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException | SecurityException e) {
 			ExceptionOccured(e);
 		}

@@ -120,7 +120,7 @@ public class ExpressionAnalyser extends JavaGenerator{
     	int nrOfSubExpressions = subExpressions.size();
     	if (nrOfSubExpressions == 0) {
 	    	if (expression.primary() != null) {
-    			PrimaryContext primary = (PrimaryContext) expression.primary();
+    			PrimaryContext primary = expression.primary();
 	    		if (primary.expression() != null) {
 	    			to_string += transformExpressionToString(primary.expression());
 	    		} else if (primary.Identifier() != null) {

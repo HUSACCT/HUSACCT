@@ -314,7 +314,7 @@ class FamixCreationPostProcessor {
 	        	boolean fromExists = false;
             	boolean toExists = false;
             	boolean toHasValue = false;
-	        	FamixAssociation association = (FamixAssociation) i.next();
+	        	FamixAssociation association = i.next();
 		        String uniqueNameFrom = association.from;
 
             	/* //Test helper

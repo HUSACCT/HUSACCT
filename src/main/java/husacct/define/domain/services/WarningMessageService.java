@@ -166,7 +166,7 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	public void removeCodeLevelWarningss(String softwareUnit) {
         for (CodeLevelWarning message : codelevelWarnings) {
             if (message instanceof CodeLevelWarning) {
-                AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
+                AnalyzedModuleComponent analyzedModule = message.getNotCodeLevelModule();
                 String leftUniqName = analyzedModule.getUniqueName().toLowerCase();
                 String rightUniqName = softwareUnit;
                 if (leftUniqName.equals(rightUniqName)) {

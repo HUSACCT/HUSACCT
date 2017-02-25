@@ -150,7 +150,7 @@ class FamixModuleFinder extends FamixFinder {
         Iterator<Entry<String, FamixPackage>> iterator = theModel.packages.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
-            Entry<String, FamixPackage> currentEntry = (Entry<String, FamixPackage>) iterator.next();
+            Entry<String, FamixPackage> currentEntry = iterator.next();
             FamixPackage fPackage = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fPackage.uniqueName);
             if (correctResult) {
@@ -166,7 +166,7 @@ class FamixModuleFinder extends FamixFinder {
         Iterator<Entry<String, FamixClass>> iterator = theModel.classes.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
-            Entry<String, FamixClass> currentEntry = (Entry<String, FamixClass>) iterator.next();
+            Entry<String, FamixClass> currentEntry = iterator.next();
             FamixClass fClass = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fClass.uniqueName);
             if (correctResult) {
@@ -182,7 +182,7 @@ class FamixModuleFinder extends FamixFinder {
         Iterator<Entry<String, FamixClass>> iterator = theModel.classes.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
-            Entry<String, FamixClass> currentEntry = (Entry<String, FamixClass>) iterator.next();
+            Entry<String, FamixClass> currentEntry = iterator.next();
             FamixClass fClass = currentEntry.getValue();
 			current = createAnalysedModuleDTO(fClass);
 			result.add(current);
@@ -196,7 +196,7 @@ class FamixModuleFinder extends FamixFinder {
         Iterator<Entry<String, FamixLibrary>> iterator = theModel.libraries.entrySet().iterator();
         SoftwareUnitDTO current;
         while (iterator.hasNext()) {
-            Entry<String, FamixLibrary> currentEntry = (Entry<String, FamixLibrary>) iterator.next();
+            Entry<String, FamixLibrary> currentEntry = iterator.next();
             FamixLibrary fLibrary = currentEntry.getValue();
             boolean correctResult = this.compliesWithArguments(fLibrary.uniqueName);
             if (correctResult) {

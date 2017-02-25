@@ -72,7 +72,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
         CommonTree typeOfParameterTree = CSharpGeneratorToolkit.getFirstDescendantWithType(tree, CSharpParser.TYPE);
         if (typeOfParameterTree != null) {
         	CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-           	this.declareType = cSharpInvocationGenerator.getCompleteToString((CommonTree) typeOfParameterTree, belongsToClass, DependencySubTypes.DECL_PARAMETER);
+           	this.declareType = cSharpInvocationGenerator.getCompleteToString(typeOfParameterTree, belongsToClass, DependencySubTypes.DECL_PARAMETER);
             this.lineNumber = typeOfParameterTree.getLine();
             if (this.declareType.endsWith(".")) {
             	this.declareType = this.declareType.substring(0, this.declareType.length() - 1); //deleting the last point

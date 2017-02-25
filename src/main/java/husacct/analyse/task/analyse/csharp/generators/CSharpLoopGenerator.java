@@ -60,7 +60,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
    private void delegateLocalVariable(CommonTree child) {
 		if (child.toStringTree().contains("= >")) {
 			CSharpLamdaGenerator csLamdaGenerator = new CSharpLamdaGenerator();
-			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)child, belongsToClass, belongsToMethod);
+			csLamdaGenerator.delegateLambdaToBuffer(child, belongsToClass, belongsToMethod);
 		} else {
 			CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
 			csharpLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
@@ -85,7 +85,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
 			switch (child.getType()) {
 	            case CSharpParser.TYPE:
 	                csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-	            	String foundType = csharpInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, DependencySubTypes.DECL_TYPE_PARAMETER);
+	            	String foundType = csharpInvocationGenerator.getCompleteToString(child, belongsToClass, DependencySubTypes.DECL_TYPE_PARAMETER);
 	                if (foundType != null) {
 	                    this.variableTypeForLoop = foundType;
 	                }
@@ -93,7 +93,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
 	                break;
 	            case CSharpParser.IDENTIFIER:
 	                csharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-	            	String foundName = csharpInvocationGenerator.getCompleteToString((CommonTree) child, belongsToClass, null);
+	            	String foundName = csharpInvocationGenerator.getCompleteToString(child, belongsToClass, null);
 	            	int lineNumber = 0;
 	                if (foundName != null) {
 	                    lineNumber = child.getLine();
