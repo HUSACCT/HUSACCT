@@ -75,7 +75,7 @@ public class CombinedModuleTree extends JTree {
 		    Component component = (Component) getModel().getChild(o, i);
 		    if (component instanceof AbstractDefineComponent) {
 		    	AbstractDefineComponent child = (AbstractDefineComponent) getModel().getChild(o, i);
-		    	Long childModuleId = child.getModuleId();
+		    	long childModuleId = child.getModuleId();
 				if (childModuleId == moduleId) {
 				    pathParts.add(child);
 				    TreePath path = new TreePath(pathParts.toArray());

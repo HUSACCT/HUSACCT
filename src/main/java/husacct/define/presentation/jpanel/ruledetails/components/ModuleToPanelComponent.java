@@ -8,6 +8,7 @@ import husacct.define.task.components.AbstractCombinedComponent;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Objects;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -49,7 +50,7 @@ public class ModuleToPanelComponent extends AbstractPanelComponent implements Tr
     private boolean highlightSelectedToModule(){
     	boolean result = false;
 		String ruleTupeKey = appliedRuleController.getSelectedRuleTypeKey();
-		if (ruleTupeKey.equals("FacadeConvention") && (appliedRuleController.getModuleToId() == appliedRuleController.getCurrentModuleId())) {
+		if (ruleTupeKey.equals("FacadeConvention") && (Objects.equals(appliedRuleController.getModuleToId(), appliedRuleController.getCurrentModuleId()))) {
 			result = true;
 		}
     	return result;

@@ -32,7 +32,6 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 	
 	private ModuleJPanel modulePanel;
 	private JPanel innerPanel;
-	private JLabel parentModuleNameLabel;
 	private JTextField moduleNameField;
 	private JTextField moduleDescriptionField;	
 	private JComboBox<?> moduleTypeComboBox;
@@ -77,7 +76,6 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 		this.addModuleDescriptionTextArea();
 		this.addModuleTypeComboBox();
 		this.addButtons();
-		this.setVisibles();
 	}
 	
 	private void addParentModule() {
@@ -86,8 +84,8 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 		
 		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 		String parentModuleName = DefinitionController.getInstance().getModuleName(selectedModuleId);
-		
-		parentModuleNameLabel = new JLabel(parentModuleName);
+
+		JLabel parentModuleNameLabel = new JLabel(parentModuleName);
 		this.innerPanel.add(parentModuleNameLabel);
 	}
 	
@@ -142,28 +140,10 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 			this.cancelButtonAction();
 		} else if (event.getSource() == this.saveButton) {
 			this.saveButtonAction();
-		} else if (event.getSource() == this.moduleTypeComboBox) {
-			this.moduleTypeComboBoxAction();
 		}
 	}
 	
-	private void moduleTypeComboBoxAction() {
-		this.setVisibles();
-	}
-	
-	private void setVisibles() {
-		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
-		if(Objects.equals(moduleType, "SubSystem")) {
-			
-		} else if(Objects.equals(moduleType, "Layer")) {
-			
-		} else if(Objects.equals(moduleType, "Component")) {
-			
-		} else if(Objects.equals(moduleType, "External Library")) {
-			
-		}
-	}
-	
+
 	/**
 	 * Do nothing
 	 */

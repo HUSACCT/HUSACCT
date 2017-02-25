@@ -82,7 +82,7 @@ public class ModuleTree extends JTree {
 		cc = getModel().getChildCount(o);
 		for (int i = 0; i < cc; i++) {
 		    AbstractDefineComponent child = (AbstractDefineComponent) getModel().getChild(o, i);
-		    Long childModuleId = child.getModuleId();
+		    long childModuleId = child.getModuleId();
 		    if (childModuleId == moduleId) {
 				pathParts.add(child);
 				TreePath path = new TreePath(pathParts.toArray());
@@ -91,8 +91,7 @@ public class ModuleTree extends JTree {
 		    } else {
 				if (!getModel().isLeaf(child)) {
 				    @SuppressWarnings("unchecked")
-				    ArrayList<Object> childPathParts = (ArrayList<Object>) pathParts
-					    .clone();
+				    ArrayList<Object> childPathParts = (ArrayList<Object>) pathParts.clone();
 				    childPathParts.add(child);
 				    walk(child, moduleId, childPathParts);
 				}
