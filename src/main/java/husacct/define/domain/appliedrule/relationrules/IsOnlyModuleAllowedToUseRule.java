@@ -1,12 +1,7 @@
 package husacct.define.domain.appliedrule.relationrules;
 
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.conventions_checker.LayerCheckerHelper;
 import husacct.define.domain.conventions_checker.ModuleCheckerHelper;
-import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.module.modules.Layer;
-
-import java.util.ArrayList;
 
 public class IsOnlyModuleAllowedToUseRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;

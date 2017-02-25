@@ -1,13 +1,9 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
 import husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.common.enums.DependencySubTypes;
 
 import java.util.*;
-
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 public class CSharpParameterGenerator extends CSharpGenerator {
 

@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jhotdraw.draw.Figure;
-
 public class NodeList implements Collection<Node>, Iterable<Node> {
 	protected ArrayList<Node>	nodes;
 	

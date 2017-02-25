@@ -1,8 +1,6 @@
 package husacct.control.domain;
 
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.PhysicalPathDTO;
 
 public class Workspace {
 	

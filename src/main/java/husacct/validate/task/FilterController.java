@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.assembler.ViolationDtoAssembler;
@@ -14,14 +13,10 @@ import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
-import husacct.validate.task.imexporting.importing.IdentifyNewViolations;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.jdom2.Element;
 
 public class FilterController {
 

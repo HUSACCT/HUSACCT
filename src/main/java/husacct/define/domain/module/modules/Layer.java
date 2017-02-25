@@ -1,7 +1,6 @@
 package husacct.define.domain.module.modules;
 
 
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;

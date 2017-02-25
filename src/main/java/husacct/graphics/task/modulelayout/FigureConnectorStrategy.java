@@ -4,11 +4,6 @@ import husacct.graphics.domain.figures.BaseFigure;
 
 import java.awt.geom.Point2D;
 
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.connector.Connector;
-
 public class FigureConnectorStrategy {
 	
 	private ConnectionFigure	prototype;

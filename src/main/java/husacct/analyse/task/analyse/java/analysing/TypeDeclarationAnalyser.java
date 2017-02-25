@@ -11,8 +11,6 @@ import husacct.analyse.task.analyse.java.parsing.JavaParser.InterfaceDeclaration
 import husacct.analyse.task.analyse.java.parsing.JavaParser.ModifierContext;
 import husacct.analyse.task.analyse.java.parsing.JavaParser.TypeDeclarationContext;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-
 class TypeDeclarationAnalyser extends JavaGenerator {
 
     private String name = "";

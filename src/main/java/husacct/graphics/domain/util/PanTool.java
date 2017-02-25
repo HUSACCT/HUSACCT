@@ -8,8 +8,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
 import javax.swing.JViewport;
 
-import org.jhotdraw.draw.tool.AbstractTool;
-
 @SuppressWarnings("serial")
 public class PanTool extends AbstractTool {
 	// private Logger log = Logger.getLogger(PanTool.class);

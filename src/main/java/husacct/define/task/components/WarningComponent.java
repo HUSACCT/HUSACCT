@@ -3,7 +3,6 @@ package husacct.define.task.components;
 import husacct.define.domain.warningmessages.WarningMessage;
 
 
-import java.awt.Component;
 import java.util.ArrayList;
 
 public  class WarningComponent  {

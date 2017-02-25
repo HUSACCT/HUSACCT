@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import org.jhotdraw.draw.Figure;
-
 public class Node {
 	public static final int	UNINITIALIZED	= Integer.MIN_VALUE;
 	

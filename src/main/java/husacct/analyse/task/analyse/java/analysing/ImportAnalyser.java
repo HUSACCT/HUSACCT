@@ -4,8 +4,6 @@ import java.util.List;
 
 import husacct.analyse.task.analyse.java.parsing.JavaParser.ImportDeclarationContext;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-
 class ImportAnalyser extends JavaGenerator {
 
     private String importedType = "";

@@ -4,14 +4,6 @@ import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.liner.Liner;
-import org.jhotdraw.geom.BezierPath;
-import org.jhotdraw.geom.BezierPath.Node;
-
 public class ElbowLiner implements Liner {
 	private double	distance;
 	

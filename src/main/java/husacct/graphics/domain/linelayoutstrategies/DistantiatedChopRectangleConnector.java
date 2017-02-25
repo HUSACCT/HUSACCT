@@ -3,10 +3,6 @@ package husacct.graphics.domain.linelayoutstrategies;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.connector.ChopRectangleConnector;
-
 public class DistantiatedChopRectangleConnector extends ChopRectangleConnector {
 	private static final long serialVersionUID = 809986751164714212L;
 	private double distance;

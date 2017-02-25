@@ -1,11 +1,6 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
 import java.util.Stack;
-
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 public class CSharpNamespaceGenerator extends CSharpGenerator {
 	private Stack<String> namespaceStack = new Stack<>();

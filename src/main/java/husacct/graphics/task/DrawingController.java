@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Figure;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;

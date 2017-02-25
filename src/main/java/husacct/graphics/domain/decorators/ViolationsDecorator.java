@@ -4,8 +4,6 @@ import husacct.graphics.domain.figures.BaseFigure;
 
 import java.awt.Color;
 
-import org.jhotdraw.draw.AttributeKeys;
-
 public class ViolationsDecorator implements Decorator {
 	private Color	oldStrokeColor;
 	private Color	severityColor;

@@ -13,7 +13,6 @@ import husacct.analyse.task.analyse.java.parsing.JavaParser.QualifiedNameContext
 import husacct.analyse.task.analyse.java.parsing.JavaParser.QualifiedNameListContext;
 import husacct.analyse.task.analyse.java.parsing.JavaParser.TypeTypeContext;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.log4j.Logger;
 
 class MethodAnalyser extends JavaGenerator {

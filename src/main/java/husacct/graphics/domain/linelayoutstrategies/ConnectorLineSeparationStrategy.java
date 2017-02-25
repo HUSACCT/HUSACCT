@@ -4,8 +4,6 @@ import husacct.graphics.domain.figures.RelationFigure;
 
 import java.util.HashSet;
 
-import org.jhotdraw.draw.connector.Connector;
-
 public class ConnectorLineSeparationStrategy implements ILineSeparationStrategy {
 	public final int RELATIONS_DISTANCE = 270;
 

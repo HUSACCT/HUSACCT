@@ -5,7 +5,6 @@ package husacct.analyse.task.analyse;
 import java.util.Collections;
 import java.util.List;
 
-import org.antlr.v4.runtime.*;
 import org.apache.log4j.Logger;
 
 public class ParserExceptionHandler extends BaseErrorListener {

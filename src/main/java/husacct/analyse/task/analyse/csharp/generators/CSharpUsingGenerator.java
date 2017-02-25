@@ -1,9 +1,6 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import java.util.ArrayList;
-import org.antlr.runtime.tree.CommonErrorNode;
-import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpUsingGenerator extends CSharpGenerator {
 

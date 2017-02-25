@@ -1,10 +1,6 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.*;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 public class CSharpPropertyGenerator extends CSharpGenerator {
 	private String belongsToClass = "";

@@ -30,8 +30,6 @@ import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Figure;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

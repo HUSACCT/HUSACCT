@@ -1,7 +1,6 @@
 package husacct.control.presentation.toolbar;
 
 import javax.swing.ImageIcon;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 

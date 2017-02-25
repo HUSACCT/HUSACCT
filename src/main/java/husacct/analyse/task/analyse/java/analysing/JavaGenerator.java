@@ -2,8 +2,6 @@ package husacct.analyse.task.analyse.java.analysing;
 
 import java.util.List;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.task.analyse.VisibilitySet;

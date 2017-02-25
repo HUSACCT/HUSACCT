@@ -1,17 +1,11 @@
 package husacct.analyse.task.analyse.csharp;
 
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.*;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
+
 import husacct.analyse.task.analyse.csharp.generators.*;
 
-import java.io.File;
 import java.util.Stack;
-import java.util.regex.Matcher;
 
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 public class CSharpTreeConvertController {

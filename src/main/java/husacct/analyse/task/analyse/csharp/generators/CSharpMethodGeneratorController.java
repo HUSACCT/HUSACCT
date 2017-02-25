@@ -1,11 +1,8 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.*;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.common.enums.DependencySubTypes;
 
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
+import husacct.common.enums.DependencySubTypes;
 
 public class CSharpMethodGeneratorController extends CSharpGenerator {
 

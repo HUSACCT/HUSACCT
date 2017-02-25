@@ -2,7 +2,6 @@ package husacct.analyse.task.analyse.csharp.generators.buffers;
 
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyse.csharp.generators.CSharpBlockScopeGenerator;
 import husacct.analyse.task.analyse.csharp.generators.SkippableTypes;
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.*;
@@ -10,8 +9,6 @@ import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorTool
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.antlr.runtime.tree.CommonTree;
 
 public class BufferService {
 	protected IModelCreationService modelService = new FamixCreationServiceImpl();

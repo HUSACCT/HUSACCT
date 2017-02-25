@@ -2,8 +2,6 @@ package husacct.analyse.task.analyse.csharp.generators;
 
 import husacct.analyse.task.analyse.csharp.generators.buffers.BufferService;
 
-import org.antlr.runtime.tree.CommonTree;
-
 public class CSharpLamdaGenerator {
 	
 	public void delegateDelegateToBuffer(CommonTree delegateTree, String packageAndClassName) {

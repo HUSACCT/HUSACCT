@@ -8,7 +8,6 @@ import husacct.analyse.task.analyse.java.parsing.JavaParser.VariableModifierCont
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.log4j.Logger;
 
 public class ParameterAnalyser extends JavaGenerator {

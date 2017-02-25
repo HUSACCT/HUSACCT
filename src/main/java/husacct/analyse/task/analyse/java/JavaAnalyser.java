@@ -3,14 +3,6 @@ package husacct.analyse.task.analyse.java;
 
 import java.io.IOException;
 
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.BailErrorStrategy;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.log4j.Logger;
 
 import husacct.analyse.task.analyse.AbstractAnalyser;

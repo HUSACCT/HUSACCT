@@ -1,10 +1,6 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.common.enums.DependencySubTypes;
-
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 public class CSharpLoopGenerator extends CSharpGenerator {
 

@@ -12,7 +12,6 @@ import husacct.graphics.domain.linelayoutstrategies.ILineSeparationStrategy;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,10 +22,6 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.QuadTreeDrawing;
-import org.jhotdraw.draw.io.ImageOutputFormat;
 
 public class Drawing extends QuadTreeDrawing {
 	private static final long			serialVersionUID		= 3212318618672284266L;

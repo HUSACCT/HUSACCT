@@ -1,18 +1,9 @@
 package husacct.define.domain.services.stateservice.state.module;
 
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.services.DefaultRuleDomainService;
-import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.UndoRedoService;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
-import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
-import husacct.define.task.AppliedRuleController;
-import husacct.define.task.DefinitionController;
-import husacct.define.task.SoftwareUnitController;
-import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 

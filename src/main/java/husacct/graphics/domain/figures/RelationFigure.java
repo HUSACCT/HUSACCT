@@ -8,21 +8,6 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.TextFigure;
-import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.decoration.ArrowTip;
-import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.draw.event.FigureListener;
-import org.jhotdraw.draw.handle.BezierNodeHandle;
-import org.jhotdraw.draw.handle.BezierOutlineHandle;
-import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.liner.Liner;
-import org.jhotdraw.geom.BezierPath.Node;
-
 public class RelationFigure extends BaseFigure implements ConnectionFigure,
 		FigureListener {
 	private static final long		serialVersionUID	= 1805821357919823648L;

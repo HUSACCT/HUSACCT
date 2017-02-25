@@ -1,7 +1,5 @@
 package husacct.define.task.components;
 
-import husacct.common.dto.SoftwareUnitDTO;
-
 import java.util.ArrayList;
 
 public class AnalyzedModuleComponent extends AbstractCombinedComponent {
