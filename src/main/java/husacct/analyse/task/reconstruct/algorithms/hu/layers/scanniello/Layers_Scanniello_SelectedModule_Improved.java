@@ -2,6 +2,7 @@ package husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -41,7 +42,7 @@ public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello
 			}
 	
 			// Select the set of SUs to be used, and activate the component-identifying algorithm  
-			if (selectedModule.logicalPath == "**") {
+			if (Objects.equals(selectedModule.logicalPath, "**")) {
 				for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
 					if (!rootUnit.uniqueName.equals("xLibraries")) {
 						softwareUnitsToIncludeInAlgorithm.add(rootUnit);

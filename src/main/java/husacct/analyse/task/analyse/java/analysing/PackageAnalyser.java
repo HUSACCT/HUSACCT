@@ -2,6 +2,8 @@ package husacct.analyse.task.analyse.java.analysing;
 
 import husacct.analyse.task.analyse.java.parsing.JavaParser.PackageDeclarationContext;
 
+import java.util.Objects;
+
 class PackageAnalyser extends JavaGenerator {
 
 	private String uniqueName = "";
@@ -32,7 +34,7 @@ class PackageAnalyser extends JavaGenerator {
         String[] allPackages = splitPackages(uniqueName);
         String parentPackage = "";
         for (int i = 0; i < allPackages.length - 1; i++) {
-            if (parentPackage == "") {
+            if (Objects.equals(parentPackage, "")) {
                 parentPackage += allPackages[i];
             } else {
                 parentPackage += "." + allPackages[i];

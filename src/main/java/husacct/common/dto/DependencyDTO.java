@@ -3,6 +3,8 @@ package husacct.common.dto;
 
 //Owner: Analyse
 
+import java.util.Objects;
+
 public class DependencyDTO extends AbstractDTO{
 	//from FamixAssociation
 	public String from = "";	//unique name of the from-class 
@@ -35,11 +37,11 @@ public class DependencyDTO extends AbstractDTO{
 	
 	public boolean equals(DependencyDTO other){
 		boolean result = true;
-		result = result && (this.from == other.from);
-		result = result && (this.to == other.to);
+		result = result && (Objects.equals(this.from, other.from));
+		result = result && (Objects.equals(this.to, other.to));
 		result = result && (this.lineNumber == other.lineNumber);
-		result = result && (this.type == other.type);
-		result = result && (this.subType == other.subType);
+		result = result && (Objects.equals(this.type, other.type));
+		result = result && (Objects.equals(this.subType, other.subType));
 		result = result && (this.isIndirect == other.isIndirect);
 		return result;
 	}

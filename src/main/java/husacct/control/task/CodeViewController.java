@@ -14,6 +14,7 @@ import husacct.validate.domain.validation.Severity;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -42,7 +43,7 @@ public class CodeViewController {
 	public void displayErrorsInFile(String classPath, HashMap<Integer, Severity> errors) {
 		String path = findFilePath(classPath);
 		// Check if the path was converted
-		if(path != ""){
+		if(!Objects.equals(path, "")){
 			setCurrentCodeviewer();
 			currentCodeviewer.displayErrorsInFile(path, errors);
 		}
@@ -126,7 +127,7 @@ public class CodeViewController {
 		}
 		
 		// Check if the folder names contain dots
-		if(filePath == ""){
+		if(Objects.equals(filePath, "")){
 			String[] classParts = classPath.split(".");
 			String winPath = rootPath;
 			

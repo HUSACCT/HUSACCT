@@ -6,6 +6,7 @@ import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ModuleCheckerHelper {
 
@@ -162,7 +163,7 @@ public class ModuleCheckerHelper {
     }
 
     public void setErrorMessage(String message) {
-	if (message != "") {
+	if (!Objects.equals(message, "")) {
 	    errorMessage = ServiceProvider.getInstance().getLocaleService()
 		    .getTranslatedString("NotAllowedBecauseDefined")
 		    + ":\n\n " + message;

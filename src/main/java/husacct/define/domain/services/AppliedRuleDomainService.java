@@ -10,6 +10,7 @@ import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -296,7 +297,7 @@ public class AppliedRuleDomainService {
 	            boolean exceptionModuleToIsChildOfParentModuleTo = false;
 	        	String pathToParent = SoftwareArchitecture.getInstance().getModulesLogicalPath(parentModule.getId());
 	        	String pathToException = SoftwareArchitecture.getInstance().getModulesLogicalPath(exceptionModule.getId());
-	            if (pathToParent.equals(pathToException) || (pathToParent == "**")) {
+	            if (pathToParent.equals(pathToException) || (Objects.equals(pathToParent, "**"))) {
 	        		exceptionModuleToIsChildOfParentModuleTo = true;
 	            } else {
 	            	String currentParent = pathToException;

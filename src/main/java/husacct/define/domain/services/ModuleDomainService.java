@@ -14,6 +14,7 @@ import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -296,7 +297,7 @@ public class ModuleDomainService {
 	public void updateModuleType(long moduleId, String newType) {
 		ModuleStrategy oldModule = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		if((oldModule != null) && (oldModule.getId() > 0)){
-			if (oldModule.getType() != newType){
+			if (!Objects.equals(oldModule.getType(), newType)){
 				DefaultRuleDomainService service = new DefaultRuleDomainService();
 				service.removeDefaultRules(oldModule);
 				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(oldModule, newType);

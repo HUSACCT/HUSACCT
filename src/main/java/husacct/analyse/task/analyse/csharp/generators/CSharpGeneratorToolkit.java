@@ -3,6 +3,7 @@ package husacct.analyse.task.analyse.csharp.generators;
 import husacct.analyse.task.analyse.VisibilitySet;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -252,7 +253,7 @@ public class CSharpGeneratorToolkit {
 	        case CSharpParser.DOT: // "."
 	        	String left = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(0));
 	        	String right = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(1));
-	        	if ((left == "") || (right == "")) {
+	        	if ((Objects.equals(left, "")) || (Objects.equals(right, ""))) {
 	        		returnValue += left + right;
 	        	} else {
 		    		returnValue += left + "." + right;

@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -152,13 +153,13 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 	
 	private void setVisibles() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
-		if(moduleType == "SubSystem") {
+		if(Objects.equals(moduleType, "SubSystem")) {
 			
-		} else if(moduleType =="Layer") {
+		} else if(Objects.equals(moduleType, "Layer")) {
 			
-		} else if(moduleType =="Component") {
+		} else if(Objects.equals(moduleType, "Component")) {
 			
-		} else if(moduleType =="External Library") {
+		} else if(Objects.equals(moduleType, "External Library")) {
 			
 		}
 	}

@@ -17,6 +17,7 @@ import husacct.validate.domain.validation.internaltransferobjects.FilterSettings
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class FilterController {
 
@@ -79,7 +80,7 @@ public class FilterController {
 
 		for (Violation violation : violations) {
 			String violationTypeKey = violation.getViolationTypeKey();
-			if ((violationTypeKey != null) && (violationTypeKey != "")){
+			if ((violationTypeKey != null) && (!Objects.equals(violationTypeKey, ""))){
 				if (!appliedViolationtypes.contains(localeService.getTranslatedString(violationTypeKey))) {
 					appliedViolationtypes.add(localeService.getTranslatedString(violationTypeKey));
 				}

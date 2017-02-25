@@ -2,11 +2,7 @@ package husacct.analyse.domain.famix;
 
 import husacct.common.dto.SoftwareUnitDTO;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -65,7 +61,7 @@ class FamixModuleFinder extends FamixFinder {
 		List<SoftwareUnitDTO> children = getChildModulesInModule(module);
 		boolean isRootPackageWithClass = false;
 		for (SoftwareUnitDTO child : children) {
-			if (child.type != "package") {
+			if (!Objects.equals(child.type, "package")) {
 				isRootPackageWithClass = true;
 				break;
 			}

@@ -6,13 +6,7 @@ import husacct.common.enums.DependencyTypes;
 import husacct.common.enums.UmlLinkTypes;
 import husacct.control.task.States;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -996,7 +990,7 @@ class FamixCreationPostProcessor {
     private void determineDependencyTypeAndOrSubType(FamixAssociation association) {
     	FamixClass theClass;
     	// Inheritance
-    	if (association.type == DependencyTypes.INHERITANCE.toString()) {
+    	if (Objects.equals(association.type, DependencyTypes.INHERITANCE.toString())) {
             theClass = theModel.classes.get(association.to);
             if (theClass != null) {
             	if (theClass.isInterface){

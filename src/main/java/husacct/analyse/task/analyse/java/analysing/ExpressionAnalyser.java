@@ -2,6 +2,7 @@ package husacct.analyse.task.analyse.java.analysing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -285,7 +286,7 @@ public class ExpressionAnalyser extends JavaGenerator{
     	String typeCastTo = "";
     	if (typeType != null) {
     		typeCastTo = determineTypeOfTypeType(typeType, belongsToClass);
-            if ((typeCastTo != null) && (typeCastTo != "") && !SkippedJavaTypes.isSkippable(typeCastTo)) {
+            if ((typeCastTo != null) && (!Objects.equals(typeCastTo, "")) && !SkippedJavaTypes.isSkippable(typeCastTo)) {
                 modelService.createDeclarationTypeCast(belongsToClass, typeCastTo, typeType.start.getLine());
             }
     	}

@@ -6,6 +6,7 @@ import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.ModuleDomainService;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class LayerCheckerHelper {
@@ -20,7 +21,7 @@ public class LayerCheckerHelper {
     }
 
     public boolean checkTypeIsLayer(ModuleStrategy module) {
-	if (module.getType() == "Layer") {
+	if (Objects.equals(module.getType(), "Layer")) {
 	    return true;
 	} else {
 	    setErrorMessage(ServiceProvider.getInstance().getLocaleService()
