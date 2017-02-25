@@ -3,6 +3,8 @@ package husacct.graphics.domain.figures;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import org.jhotdraw.draw.Figure;
+
 public class AbsoluteLocator implements org.jhotdraw.draw.locator.Locator {
 	
 	private Point2D.Double getFigureCenter(Figure figure) {

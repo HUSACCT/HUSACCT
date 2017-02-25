@@ -15,6 +15,13 @@ import javax.swing.JComponent;
 import javax.swing.JViewport;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.event.FigureSelectionEvent;
+import org.jhotdraw.draw.event.FigureSelectionListener;
+import org.jhotdraw.draw.tool.AbstractTool;
+import org.jhotdraw.draw.tool.SelectionTool;
 
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.RelationFigure;

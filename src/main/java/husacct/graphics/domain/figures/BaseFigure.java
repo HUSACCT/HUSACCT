@@ -10,6 +10,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+import org.jhotdraw.draw.handle.Handle;
+
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long			serialVersionUID		= 971276235252293165L;
 	public static final Color			defaultBackgroundColor	= new Color(252,255,182);

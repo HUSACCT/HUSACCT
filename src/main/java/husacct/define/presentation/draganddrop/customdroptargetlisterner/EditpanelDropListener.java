@@ -10,6 +10,8 @@ import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class EditpanelDropListener implements DropTargetListener {
 

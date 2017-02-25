@@ -1,5 +1,9 @@
 package husacct.graphics.domain.figures;
 
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.decoration.ArrowTip;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;

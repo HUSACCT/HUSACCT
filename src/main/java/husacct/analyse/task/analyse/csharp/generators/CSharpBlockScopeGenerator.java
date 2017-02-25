@@ -1,5 +1,9 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+
 public class CSharpBlockScopeGenerator extends CSharpGenerator {
 
 	private String packageAndClassName;

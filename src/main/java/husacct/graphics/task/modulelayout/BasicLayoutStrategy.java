@@ -9,6 +9,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jhotdraw.draw.AbstractCompositeFigure;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Figure;
+
 public class BasicLayoutStrategy implements LayoutStrategy {
 	
 	private static final double		VERT_SPACE_FIRST_LINE	= 50.0;

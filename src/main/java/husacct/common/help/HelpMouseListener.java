@@ -1,8 +1,11 @@
 package husacct.common.help;
 
 import husacct.ServiceProvider;
+import husacct.control.presentation.util.HelpDialog;
 
 import java.awt.Component;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;

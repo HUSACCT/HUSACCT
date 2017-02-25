@@ -1,5 +1,7 @@
 package husacct.define.domain.warningmessages;
 
+import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.Observable;

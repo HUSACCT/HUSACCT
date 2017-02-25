@@ -5,6 +5,7 @@ import husacct.control.ILocaleChangeListener;
 
 import java.util.Locale;
 
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 public class JTableAppliedRule extends AbstractJTable implements

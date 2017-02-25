@@ -2,7 +2,12 @@ package husacct.define.task.components;
 
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.tree.TreePath;
 
 public abstract class AbstractCombinedComponent extends Component implements
 	Comparable<AbstractCombinedComponent>{

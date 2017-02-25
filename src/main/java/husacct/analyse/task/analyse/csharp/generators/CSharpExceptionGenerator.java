@@ -1,6 +1,9 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.*;
+
+import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpExceptionGenerator extends CSharpGenerator {
 

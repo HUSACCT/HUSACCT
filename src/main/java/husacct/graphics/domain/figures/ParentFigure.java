@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.ImageFigure;
+import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.event.FigureListener;
 
 public class ParentFigure extends BaseFigure {
 	private static final long	serialVersionUID		= 101138923385231941L;

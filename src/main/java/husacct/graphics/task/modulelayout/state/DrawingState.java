@@ -4,10 +4,15 @@ import husacct.graphics.domain.Drawing;
 import husacct.graphics.domain.figures.BaseFigure;
 import husacct.graphics.domain.figures.ModuleFigure;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Figure;
 
 public class DrawingState {
 	private Drawing							drawing;

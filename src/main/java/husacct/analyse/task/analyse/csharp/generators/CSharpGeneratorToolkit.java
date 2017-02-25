@@ -1,10 +1,14 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyse.VisibilitySet;
 
 import java.util.LinkedList;
 import java.util.Stack;
 
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 public class CSharpGeneratorToolkit {

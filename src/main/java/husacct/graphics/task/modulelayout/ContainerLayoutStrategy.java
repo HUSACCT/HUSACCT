@@ -8,6 +8,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import org.jhotdraw.draw.Figure;
+
 public class ContainerLayoutStrategy implements LayoutStrategy {
 	private static final int	MIN_FIGURES_PER_ROW	= 3;
 	private int					HORZ_SPACING = 30;

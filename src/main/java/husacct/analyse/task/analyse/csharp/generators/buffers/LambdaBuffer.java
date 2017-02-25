@@ -1,5 +1,9 @@
 package husacct.analyse.task.analyse.csharp.generators.buffers;
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
+import org.antlr.runtime.tree.CommonTree;
+
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.*;
 
 public class LambdaBuffer {

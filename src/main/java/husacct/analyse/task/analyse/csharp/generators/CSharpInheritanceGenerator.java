@@ -2,6 +2,8 @@ package husacct.analyse.task.analyse.csharp.generators;
 
 import static husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit.getTypeNameAndParts;
 
+import org.antlr.runtime.tree.CommonTree;
+
 public class CSharpInheritanceGenerator extends CSharpGenerator {
 
     public void generateToDomain(CommonTree inheritanceTree, String currentUniqueClassName) {

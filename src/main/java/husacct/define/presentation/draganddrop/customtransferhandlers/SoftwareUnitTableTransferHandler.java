@@ -5,6 +5,9 @@ import husacct.define.task.components.AbstractCombinedComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
 import java.io.IOException;
 
 import javax.swing.AbstractButton;

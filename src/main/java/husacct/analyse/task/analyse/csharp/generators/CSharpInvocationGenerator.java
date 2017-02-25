@@ -1,7 +1,9 @@
 package husacct.analyse.task.analyse.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.common.enums.DependencySubTypes;
 
+import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
 public class CSharpInvocationGenerator extends CSharpGenerator {

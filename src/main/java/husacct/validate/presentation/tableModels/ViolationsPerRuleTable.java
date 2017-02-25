@@ -2,10 +2,14 @@ package husacct.validate.presentation.tableModels;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
+import husacct.ServiceProvider;
+import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.browseViolations.ViolationPerRulePanel;
 
 import javax.swing.JTable;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.TableColumn;
 
 public class ViolationsPerRuleTable extends JTable {
