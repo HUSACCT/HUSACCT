@@ -250,7 +250,7 @@ public class ReportArchitectureToExcel extends ReportArchitectureAbstract {
 					mName = moduleName;
 				}
 				if (rowNrForModule < suArraySize) {
-					suName = (String) suArray[rowNrForModule] + " (" + softwareUnits.get(suArray[rowNrForModule]).toLowerCase() + ")";
+					suName = suArray[rowNrForModule] + " (" + softwareUnits.get(suArray[rowNrForModule]).toLowerCase() + ")";
 				}
 				if ((rowNrForModule < arArraySize) && appliedRules.get(arArray[rowNrForModule])) {
 					rtName = (String) arArray[rowNrForModule];

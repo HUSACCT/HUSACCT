@@ -2,6 +2,7 @@ package husacct.common.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //Owner: Analyse
 
@@ -31,10 +32,10 @@ public class SoftwareUnitDTO extends AbstractDTO{
 	
 	public boolean equals(SoftwareUnitDTO other){
 		boolean result = true;
-		result = result && (this.uniqueName == other.uniqueName);
-		result = result && (this.name == other.name);
-		result = result && (this.type == other.type);
-		result = result && (this.visibility == other.visibility);
+		result = result && (Objects.equals(this.uniqueName, other.uniqueName));
+		result = result && (Objects.equals(this.name, other.name));
+		result = result && (Objects.equals(this.type, other.type));
+		result = result && (Objects.equals(this.visibility, other.visibility));
 		return result;
 	}
 	

@@ -33,13 +33,7 @@ public class StateController {
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		IGraphicsService graphicsService = ServiceProvider.getInstance().getGraphicsService();
 
-		IServiceListener serviceListener = new IServiceListener() {
-			@Override
-			public void update() {
-				checkState();
-
-			}
-		};
+		IServiceListener serviceListener = () -> checkState();
 
 		defineService.addServiceListener(serviceListener);
 		analyseService.addServiceListener(serviceListener);

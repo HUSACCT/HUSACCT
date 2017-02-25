@@ -54,7 +54,7 @@ class BipartiteGraph {
     /* add edge, add an edge to the graph */
     public void addedge(int startPoint, int endPoint) {
         /* insert the edge to the adjacentList of startPoint */
-        adjacentList.elementAt(startPoint).add(new Integer(endPoint));
+        adjacentList.elementAt(startPoint).add(endPoint);
         /* increase the outdegree of startPoint, indegree of endPoint */
         vertex[startPoint].outdegree += 1;
         vertex[endPoint].indegree += 1;
@@ -72,7 +72,7 @@ class BipartiteGraph {
 
     public void removeEdge(int startPoint, int endPoint) {
         /* find the index of edge in the adjacentList of startPoint */
-        int index = adjacentList.elementAt(startPoint).indexOf(new Integer(endPoint));
+        int index = adjacentList.elementAt(startPoint).indexOf(endPoint);
         /* remove the edge from adjacentList of startPoint */
         if (index > -1) adjacentList.elementAt(startPoint).removeElementAt(index);
         /* decrease the outdegree of startPoint and indegree of endPoint */
@@ -104,11 +104,11 @@ class BipartiteGraph {
         int start, end;
         String str = "";
         /* the first point of augmenting path */
-        start = augmentPath.elementAt(0).intValue();
+        start = augmentPath.elementAt(0);
 
         for (int i = 1; i < augmentPath.size(); i++)
         {
-            end = augmentPath.elementAt(i).intValue();
+            end = augmentPath.elementAt(i);
             reverseEdge(start, end);
             start = end;
         }
@@ -134,7 +134,7 @@ class BipartiteGraph {
          */
         for (int i = 0; i < leftpoints; i++)
         {
-            if (vertex[i].matched == false)
+            if (!vertex[i].matched)
             {
                 if (findPath(i)) return true;
                 else augmentPath.removeAllElements(); /* re init the path */
@@ -149,7 +149,7 @@ class BipartiteGraph {
         /* if the current vertex has no out edge, return false */
         if (vertex[start].outdegree == 0) return false;
         /* insert the current point to the path */
-        augmentPath.addElement(new Integer(start));
+        augmentPath.addElement(start);
 
         /*
          * use the pts that the current point is linked to as next point,
@@ -157,13 +157,13 @@ class BipartiteGraph {
          */
         for (int i = 0; i < adjacentList.elementAt(start).size(); i++)
         {
-            nextPt = adjacentList.elementAt(start).elementAt(i).intValue();
+            nextPt = adjacentList.elementAt(start).elementAt(i);
             /* if the next point was already in the path, discard it */
-            if (augmentPath.indexOf(new Integer(nextPt)) > -1) continue;
+            if (augmentPath.indexOf(nextPt) > -1) continue;
             /* find a terminal, add it to the path and return true */
-            if (vertex[nextPt].matched == false)
+            if (!vertex[nextPt].matched)
             {
-                augmentPath.addElement(new Integer(nextPt));
+                augmentPath.addElement(nextPt);
                 return true;
             }
             /* otherwise recursive call using depth first search */
@@ -171,7 +171,7 @@ class BipartiteGraph {
 
         }
         /* if failed, delete the current pt from path and return false */
-        index = augmentPath.indexOf(new Integer(start));
+        index = augmentPath.indexOf(start);
         augmentPath.removeElementAt(index);
         return false;
 
@@ -195,12 +195,12 @@ class BipartiteGraph {
         for (int i = 0; i < points; i++)
         {
             str += "Point ";
-            str += isLeft(i) == true ? "A" + (i + 1) : "G" + (i - leftpoints + 1);
+            str += isLeft(i) ? "A" + (i + 1) : "G" + (i - leftpoints + 1);
             str += " is ";
-            str += vertex[i].matched == true ? "MATCHED\n" : "UNMATCHED\n";
+            str += vertex[i].matched ? "MATCHED\n" : "UNMATCHED\n";
             for (int j = 0; j < adjacentList.elementAt(i).size(); j++)
             {
-                int to = adjacentList.elementAt(i).elementAt(j).intValue();
+                int to = adjacentList.elementAt(i).elementAt(j);
                 str += " and is connected to points ";
                 str += isLeft(to) ? "A" + (to + 1) : "G" + (to - leftpoints + 1);
                 str += "\n";

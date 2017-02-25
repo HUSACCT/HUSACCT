@@ -59,7 +59,7 @@ public class ArrowTipFix extends ArrowTip {
 
     private java.awt.geom.Path2D.Double getTransformedDecoratorPath(Figure f, Point2D.Double p1, Point2D.Double p2) {
         java.awt.geom.Path2D.Double path = this.getDecoratorPath(f);
-        double strokeWidth = ((java.lang.Double)f.get(AttributeKeys.STROKE_WIDTH)).doubleValue();
+        double strokeWidth = (Double) f.get(AttributeKeys.STROKE_WIDTH);
         AffineTransform transform = new AffineTransform();
         transform.translate(p1.x, p1.y);
         transform.rotate(Math.atan2(p1.x - p2.x, p2.y - p1.y));

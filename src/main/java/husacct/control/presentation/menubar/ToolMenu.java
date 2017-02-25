@@ -30,18 +30,9 @@ public class ToolMenu extends JMenu {
 	}
 	
 	public void setListeners() {
-		options.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				mainController.getApplicationController().showConfigurationGUI();
-			}
-		});
+		options.addActionListener(arg0 -> mainController.getApplicationController().showConfigurationGUI());
 		
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				setComponentText();
-			}
-		});
+		localeService.addServiceListener(() -> setComponentText());
 	}
 	
 	private void setComponentText() {

@@ -131,12 +131,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	private void addListeneners() {
-		violationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				violationInformationPanel.update(arg0, violationTable, shownViolationsInAllViolationsPanel);
-			}
-		});
+		violationTable.getSelectionModel().addListSelectionListener(arg0 -> violationInformationPanel.update(arg0, violationTable, shownViolationsInAllViolationsPanel));
 	}
 
 	@Override
@@ -219,18 +214,15 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	public void applyFilterChanged(ActionEvent e) {
-		final Thread updateThread = new Thread() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(1);
-					fillViolationsTable(shownViolationsInAllViolationsPanel);
-					loadViolationDetailsPanel();
-				} catch (InterruptedException e) {
-					logger.debug(e.getMessage());
-				}
-			}
-		};
+		final Thread updateThread = new Thread(() -> {
+            try {
+                Thread.sleep(1);
+                fillViolationsTable(shownViolationsInAllViolationsPanel);
+                loadViolationDetailsPanel();
+            } catch (InterruptedException e1) {
+                logger.debug(e1.getMessage());
+            }
+        });
 		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("FilteringLoading"), updateThread);
 		loadingThread.run();
 	}

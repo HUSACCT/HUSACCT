@@ -142,35 +142,25 @@ public class XmlSavePanel extends SaverPanel{
 	}
 	
 	private void setListeners(){
-		browseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				showFileDialog();
-			}
-		});
+		browseButton.addActionListener(arg0 -> showFileDialog());
 		
-		doCompress.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				calculateAvailableSpaces();
-			}
-		});
-		doPasswordProtect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				if(doPasswordProtect.isSelected()) {
-					passwordInputLabel.setVisible(true);
-					passwordInput.setVisible(true);
-					passwordConfirmLabel.setVisible(true);
-					passwordConfirm.setVisible(true);
-				}
-				else {
-					passwordInputLabel.setVisible(false);
-					passwordInput.setVisible(false);
-					passwordConfirmLabel.setVisible(false);
-					passwordConfirm.setVisible(false);
-				}
-				updateUI();
-			}
-		});
+		doCompress.addActionListener(arg0 -> calculateAvailableSpaces());
+		doPasswordProtect.addActionListener(arg0 -> {
+
+            if(doPasswordProtect.isSelected()) {
+                passwordInputLabel.setVisible(true);
+                passwordInput.setVisible(true);
+                passwordConfirmLabel.setVisible(true);
+                passwordConfirm.setVisible(true);
+            }
+            else {
+                passwordInputLabel.setVisible(false);
+                passwordInput.setVisible(false);
+                passwordConfirmLabel.setVisible(false);
+                passwordConfirm.setVisible(false);
+            }
+            updateUI();
+        });
 	}
 	
 	protected void showFileDialog() {

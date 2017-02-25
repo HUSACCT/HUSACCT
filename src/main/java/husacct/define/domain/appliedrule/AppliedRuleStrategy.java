@@ -3,6 +3,7 @@ package husacct.define.domain.appliedrule;
 import husacct.ServiceProvider;
 import husacct.define.domain.module.ModuleStrategy;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class AppliedRuleStrategy {
 	protected static long STATIC_ID = 1;
@@ -192,7 +193,7 @@ public abstract class AppliedRuleStrategy {
 
 	public boolean equals(AppliedRuleStrategy doppelganger){
 		boolean result = false;
-		if((this.id == doppelganger.getId()) || (this.ruleTypeKey==doppelganger.ruleTypeKey && 
+		if((this.id == doppelganger.getId()) || (Objects.equals(this.ruleTypeKey, doppelganger.ruleTypeKey) &&
 				this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom)){
 			result = true;
 		}

@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 import org.jdom2.Element;
 
@@ -84,7 +85,7 @@ public class FilterController {
 
 		for (Violation violation : violations) {
 			String violationTypeKey = violation.getViolationTypeKey();
-			if ((violationTypeKey != null) && (violationTypeKey != "")){
+			if ((violationTypeKey != null) && (!Objects.equals(violationTypeKey, ""))){
 				if (!appliedViolationtypes.contains(localeService.getTranslatedString(violationTypeKey))) {
 					appliedViolationtypes.add(localeService.getTranslatedString(violationTypeKey));
 				}

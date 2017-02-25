@@ -101,7 +101,7 @@ class Cluster {
                 groupNo += 1;
                 tags[t] = 1;
                 totaltags += 1;
-                groupList.addElement(new Integer(t));
+                groupList.addElement(t);
                 objectList.elementAt(t).add(object);
                 maxtag = 1;
             }
@@ -124,13 +124,13 @@ class Cluster {
                 group = t;
                 groupNo = 1;
                 groupList.removeAllElements();
-                groupList.addElement(new Integer(t));
+                groupList.addElement(t);
             }
             /* if tags is max but not nuique,then add it to the grouplist */
             else if (tags[t] == maxtag)
             {
                 groupNo += 1;
-                groupList.addElement(new Integer(t));
+                groupList.addElement(t);
             }
         }
         return group;
@@ -212,7 +212,7 @@ class Cluster {
                     /* search omnipresent objects in objectList[j], T_j in A_i */
                     for (int i = 0; i < objectList.elementAt(j).size(); i++)
                     {
-                        String obj = (String) objectList.elementAt(j).elementAt(i);
+                        String obj = objectList.elementAt(j).elementAt(i);
                         if (isOmniPresent(obj, omniVector)) misplacedOmnipresentObjects++;
                         else cost++;
                     }
@@ -221,7 +221,7 @@ class Cluster {
                 {
                     for (int i = 0; i < objectList.elementAt(j).size(); i++)
                     {
-                        String obj = (String) objectList.elementAt(j).elementAt(i);
+                        String obj = objectList.elementAt(j).elementAt(i);
                         if (isOmniPresent(obj, omniVector)) misplacedOmnipresentObjects++;
                         else
                         {
@@ -233,15 +233,15 @@ class Cluster {
                              */
                             for (int k = 0; k < objectList.elementAt(group).size(); k++)
                             {
-                                String obj2 = (String) objectList.elementAt(group).elementAt(k);
+                                String obj2 = objectList.elementAt(group).elementAt(k);
                                 /*
                                  * we consider both the connection from obj to
                                  * obj2 and obj2 to obj as same, so we plus them
                                  * together as the total connection strength
                                  * between obj and obj2
                                  */
-                                value1 = tableR.get((String) (obj + "%@$" + obj2)) == null ? 0 : ((Double) tableR.get(obj + "%@$" + obj2)).doubleValue();
-                                value2 = tableR.get((String) (obj2 + "%@$" + obj)) == null ? 0 : ((Double) tableR.get(obj2 + "%@$" + obj)).doubleValue();
+                                value1 = tableR.get(obj + "%@$" + obj2) == null ? 0 : (Double) tableR.get(obj + "%@$" + obj2);
+                                value2 = tableR.get(obj2 + "%@$" + obj) == null ? 0 : (Double) tableR.get(obj2 + "%@$" + obj);
                                 edges_source += value1 + value2;
                             }
                             /*
@@ -251,9 +251,9 @@ class Cluster {
                              */
                             for (int l = 0; l < grouptags[j].objectList.elementAt(j).size(); l++)
                             {
-                                String obj3 = (String) grouptags[j].objectList.elementAt(j).elementAt(l);
-                                value1 = tableR.get((String) (obj + "%@$" + obj3)) == null ? 0 : ((Double) tableR.get(obj + "%@$" + obj3)).doubleValue();
-                                value2 = tableR.get((String) (obj3 + "%@$" + obj)) == null ? 0 : ((Double) tableR.get(obj3 + "%@$" + obj)).doubleValue();
+                                String obj3 = grouptags[j].objectList.elementAt(j).elementAt(l);
+                                value1 = tableR.get(obj + "%@$" + obj3) == null ? 0 : (Double) tableR.get(obj + "%@$" + obj3);
+                                value2 = tableR.get(obj3 + "%@$" + obj) == null ? 0 : (Double) tableR.get(obj3 + "%@$" + obj);
                                 edges_target += value1 + value2;
                             }
                             if (edges_target != edges_source) cost += Math.abs(edges_source - edges_target) / (edges_source + edges_target);

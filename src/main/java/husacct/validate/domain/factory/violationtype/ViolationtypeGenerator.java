@@ -66,18 +66,10 @@ class ViolationtypeGenerator {
 					} else {
 						logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
 					}
-				} catch (SecurityException e) {
-					logger.error(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
-					logger.error(e.getMessage(), e);
-				} catch (IllegalArgumentException e) {
-					logger.error(e.getMessage(), e);
-				} catch (IllegalAccessException e) {
-					logger.error(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
+				} catch (SecurityException | InvocationTargetException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException e) {
 					logger.error(e.getMessage(), e);
 				}
-			}
+            }
 		}
 		return keyList;
 	}

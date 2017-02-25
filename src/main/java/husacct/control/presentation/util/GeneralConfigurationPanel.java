@@ -71,22 +71,15 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 				languageItem.setSelected(true);
 			}
 			
-			languageItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setLanguage(locale.getLanguage());					
-				}
-			});
+			languageItem.addActionListener(e -> setLanguage(locale.getLanguage()));
 			
-			localeService.addServiceListener(new IServiceListener() {
-				@Override
-				public void update() {
-					if(localeService.getLocale().getDisplayLanguage().equals(languageItem.getText())){
-						languageItem.setSelected(true);
-					} else {
-						languageItem.setSelected(false);
-					}
-				}
-			});
+			localeService.addServiceListener(() -> {
+                if(localeService.getLocale().getDisplayLanguage().equals(languageItem.getText())){
+                    languageItem.setSelected(true);
+                } else {
+                    languageItem.setSelected(false);
+                }
+            });
 			languageGroup.add(languageItem);
 			languagePanel.add(languageItem);
 		}
@@ -96,18 +89,15 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	private void initialiseCodeviewer() {
 		codeviewerPanel = new JPanel(new GridBagLayout());
 		enableExternalCodeviewer = new JCheckBox();
-		enableExternalCodeviewer.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-				if(event.getStateChange() == ItemEvent.SELECTED) {
-					location.setEnabled(true);
-					selectFile.setEnabled(true);
-				} else {
-					location.setEnabled(false);
-					selectFile.setEnabled(false);
-				}
-			}
-		});
+		enableExternalCodeviewer.addItemListener(event -> {
+            if(event.getStateChange() == ItemEvent.SELECTED) {
+                location.setEnabled(true);
+                selectFile.setEnabled(true);
+            } else {
+                location.setEnabled(false);
+                selectFile.setEnabled(false);
+            }
+        });
 		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -134,21 +124,14 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	}
 	
 	private void setListeners() {
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				setComponentText();
-			}
-		});
+		localeService.addServiceListener(() -> setComponentText());
 		
-		selectFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int result = fileChooser.showOpenDialog(GeneralConfigurationPanel.this);
-				if(result == JFileChooser.APPROVE_OPTION) {
-					location.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
+		selectFile.addActionListener(arg0 -> {
+            int result = fileChooser.showOpenDialog(GeneralConfigurationPanel.this);
+            if(result == JFileChooser.APPROVE_OPTION) {
+                location.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            }
+        });
 	}
 	
 	private void setLocaleFromString(String locale){

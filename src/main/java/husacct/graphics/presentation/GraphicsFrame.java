@@ -93,12 +93,7 @@ public class GraphicsFrame extends HelpableJInternalFrame {
 		menuBar = new GraphicsMenuBar(presentationController.getDrawingType());
 		menuBar.addListener(presentationController);
 		menuBar.setSize(frameTotalWidth, menuBarHeight);
-		menuBar.setOutOfDateAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				presentationController.refreshDrawing();
-			}
-		});
+		menuBar.setOutOfDateAction(e -> presentationController.refreshDrawing());
 	}
 	
 	public void attachDrawingViewAndShowDrawing(DrawingView updatedDrawingView) {

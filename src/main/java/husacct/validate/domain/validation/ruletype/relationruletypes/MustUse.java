@@ -29,7 +29,7 @@ public class MustUse extends RuleType {
 		boolean isUsingModule = false;
 		for (Mapping classPathFrom : fromMappings) {
 			for (Mapping classPathTo : toMappings) {
-				if(isUsingModule == true){
+				if(isUsingModule){
 					break;
 				}
 				DependencyDTO[] dependencies = analyseService.getDependenciesFromClassToClass(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());

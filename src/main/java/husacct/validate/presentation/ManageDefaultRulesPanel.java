@@ -43,12 +43,9 @@ public class ManageDefaultRulesPanel extends JPanel {
 		for(ModuleTypes modules : ModuleTypes.values())
 			rtsComponentModel.addElement(new DataLanguageHelper(modules.toString()));
 		
-		ListSelectionListener listSelectionListener = new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent listSelectionEvent) {
-				if(listSelectionEvent.getValueIsAdjusting()) loadTable(components.getSelectedIndex());
-	    	}
-		};
+		ListSelectionListener listSelectionListener = listSelectionEvent -> {
+            if(listSelectionEvent.getValueIsAdjusting()) loadTable(components.getSelectedIndex());
+        };
 	    components.addListSelectionListener(listSelectionListener);
 	    
 		components.setModel(rtsComponentModel);
@@ -59,21 +56,18 @@ public class ManageDefaultRulesPanel extends JPanel {
 		tableModel = new DefaultTableModel();
 		tableModel.addColumn(localeService.getTranslatedString("Rule"));
 		tableModel.addColumn(localeService.getTranslatedString("RuleIsDefault"));
-		tableModel.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				int gc = e.getColumn();
-				if(e.getColumn() == 1){
-					String moduleType = componentList[components.getSelectedIndex()];
-					String ruleTypeKey = allowedRulesMap.get(e.getFirstRow());
-					Object stringValue = tableModel.getValueAt(e.getFirstRow(), 1);
-					int row = e.getFirstRow();
-					boolean value = Boolean.parseBoolean(stringValue.toString());
-					System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
-					ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(moduleType, ruleTypeKey, value);
-				}
-			}
-		});
+		tableModel.addTableModelListener(e -> {
+            int gc = e.getColumn();
+            if(e.getColumn() == 1){
+                String moduleType = componentList[components.getSelectedIndex()];
+                String ruleTypeKey = allowedRulesMap.get(e.getFirstRow());
+                Object stringValue = tableModel.getValueAt(e.getFirstRow(), 1);
+                int row = e.getFirstRow();
+                boolean value = Boolean.parseBoolean(stringValue.toString());
+                System.out.println("ValidateService -> SetDefaultRule(" + componentList[components.getSelectedIndex()] + ", " + allowedRulesMap.get(e.getFirstRow()) + ", " + tableModel.getValueAt(e.getFirstRow(), 1) + ")");
+                ServiceProvider.getInstance().getValidateService().setDefaultRuleTypeOfModule(moduleType, ruleTypeKey, value);
+            }
+        });
 
 		ruleTable = new JTable(tableModel){
 			private static final long serialVersionUID = 1L;

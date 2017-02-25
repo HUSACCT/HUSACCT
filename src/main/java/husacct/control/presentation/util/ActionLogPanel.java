@@ -45,11 +45,7 @@ public class ActionLogPanel extends JPanel{
 		
 		refreshActionLogPanel();
 		
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				refreshActionLogPanel();
-			}
-		});
+		localeService.addServiceListener(() -> refreshActionLogPanel());
 	}
 	
 	@SuppressWarnings("serial")

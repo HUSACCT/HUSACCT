@@ -95,36 +95,30 @@ public class ExportImportDialog extends JDialog {
 	}
 
 	private void setListeners(){
-		browseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				showFileDialog();				
-			}
-		});
-		exportImportButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(validateData()) {
-					if (typeOfFunction.equals("ExportArchitecture")) {
-						mainController.getExportImportController().exportArchitecture(selectedFile);
-					} else if (typeOfFunction.equals("ImportArchitecture")) {
-						mainController.getExportImportController().importArchitecture(selectedFile);
-					} else if (typeOfFunction.equals("ReportArchitecture")) {
-						mainController.getExportImportController().reportArchitecture(selectedFile);
-					} else if (typeOfFunction.equals("ExportAnalysisModel")) {
-						mainController.getExportImportController().exportAnalysisModel(selectedFile);
-					} else if (typeOfFunction.equals("ImportAnalysisModel")) {
-						mainController.getExportImportController().importAnalysisModel(selectedFile);
-					} else if (typeOfFunction.equals("ReportDependencies")) {
-						mainController.getExportImportController().reportDependencies(selectedFile);
-					} else if (typeOfFunction.equals("ExportViolations")) {
-						mainController.getExportImportController().exportViolations(selectedFile);
-					} else if (typeOfFunction.equals("ReportViolations")) {
-						mainController.getExportImportController().exportViolations(selectedFile);
-					}
+		browseButton.addActionListener(arg0 -> showFileDialog());
+		exportImportButton.addActionListener(arg0 -> {
+            if(validateData()) {
+                if (typeOfFunction.equals("ExportArchitecture")) {
+                    mainController.getExportImportController().exportArchitecture(selectedFile);
+                } else if (typeOfFunction.equals("ImportArchitecture")) {
+                    mainController.getExportImportController().importArchitecture(selectedFile);
+                } else if (typeOfFunction.equals("ReportArchitecture")) {
+                    mainController.getExportImportController().reportArchitecture(selectedFile);
+                } else if (typeOfFunction.equals("ExportAnalysisModel")) {
+                    mainController.getExportImportController().exportAnalysisModel(selectedFile);
+                } else if (typeOfFunction.equals("ImportAnalysisModel")) {
+                    mainController.getExportImportController().importAnalysisModel(selectedFile);
+                } else if (typeOfFunction.equals("ReportDependencies")) {
+                    mainController.getExportImportController().reportDependencies(selectedFile);
+                } else if (typeOfFunction.equals("ExportViolations")) {
+                    mainController.getExportImportController().exportViolations(selectedFile);
+                } else if (typeOfFunction.equals("ReportViolations")) {
+                    mainController.getExportImportController().exportViolations(selectedFile);
+                }
 
-				dispose();
-				}
-			}
-		});
+            dispose();
+            }
+        });
 	}
 
 	private void showFileDialog() {

@@ -51,15 +51,13 @@ public class MenuBar extends JMenuBar{
 	}
 
 	private void addListeners(){
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
-				defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
-				analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
-				validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
-				helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
+            defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
+            analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
+            validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
+            helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
+        });
 	}
 
 	private int getMnemonicKeycode(String translatedString) {

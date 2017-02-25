@@ -20,7 +20,7 @@ public class GraphicsServiceTest {
 	public void setUp() {
 		setLog4jConfiguration();
 		logger.info(String.format("Start: GraphicsServiceTest"));
-		service = (IGraphicsService) new GraphicsServiceImpl();
+		service = new GraphicsServiceImpl();
 	}
 
 	@Test

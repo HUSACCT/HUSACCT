@@ -51,7 +51,7 @@ abstract class AbstractModule {
 			defaultRuleTypes.add(ruleType);
 		} 
 		else {
-			if (value == false) {
+			if (!value) {
 			defaultRuleTypes.remove(ruleType);
 			}
 		}

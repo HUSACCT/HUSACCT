@@ -59,33 +59,13 @@ public class ContextMenu extends JPopupMenu {
 	}
 
 	private void hookupEventHandlers() {
-		zoomIn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				triggerZoomIn();
-			}
-		});
+		zoomIn.addActionListener(e -> triggerZoomIn());
 
-		zoomOut.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				triggerZoomOut();
-			}
-		});
+		zoomOut.addActionListener(e -> triggerZoomOut());
 
-		hide.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				triggerHideModules();
-			}
-		});
+		hide.addActionListener(e -> triggerHideModules());
 
-		restore.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				triggerRestoreModules();
-			}
-		});
+		restore.addActionListener(e -> triggerRestoreModules());
 	}
 
 	public void removeListener() {

@@ -56,7 +56,7 @@ class DependencyTableModel extends AbstractTableModel {
         } else if (column.equals(titleTo)) {
             return data.get(row).to;
         } else if (column.equals(titleLine)) {
-            return new Integer(data.get(row).lineNumber);
+            return data.get(row).lineNumber;
         } else if (column.equals(titleType)) {
             return uiController.translate(data.get(row).type);
         } else if (column.equals(titleIndirect)) {

@@ -66,12 +66,10 @@ public class ConfigurationDialog extends JDialog {
 		this.add(mainPanel, BorderLayout.CENTER);
 		DialogUtils.alignCenter(this);	
 		
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				setComponentText();
-				loadSidePanel();
-			}
-		});
+		localeService.addServiceListener(() -> {
+            setComponentText();
+            loadSidePanel();
+        });
 	}
 	
 	public void loadSidePanel() {
@@ -86,19 +84,16 @@ public class ConfigurationDialog extends JDialog {
 		}
 		list = new JList<>(listModel);
 		list.setSelectedIndex(0);
-		list.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent event) {
-				if(event.getValueIsAdjusting()) {
-					String selected = list.getSelectedValue();
-					if(selected.startsWith(subItem))
-						selected = selected.substring(subItem.length());
-					mainPanel.removeAll();
-					mainPanel.add(configPanelMap.get(selected), BorderLayout.CENTER);
-					mainPanel.updateUI();
-				}
-			}
-		});
+		list.addListSelectionListener(event -> {
+            if(event.getValueIsAdjusting()) {
+                String selected = list.getSelectedValue();
+                if(selected.startsWith(subItem))
+                    selected = selected.substring(subItem.length());
+                mainPanel.removeAll();
+                mainPanel.add(configPanelMap.get(selected), BorderLayout.CENTER);
+                mainPanel.updateUI();
+            }
+        });
 		
 		JScrollPane itemScroll = new JScrollPane(list);
 		sidebarPanel.add(itemScroll, BorderLayout.CENTER);
@@ -108,36 +103,25 @@ public class ConfigurationDialog extends JDialog {
 		final ConfigurationDialog configDialog = this;
 		
 		buttonPanel.add(save);
-		save.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				for(ConfigPanel configPanel : configPanelMap.values()) {
-					configPanel.SaveSettings();
-				}
-				ConfigurationManager.storeProperties();
-				ConfigurationManager.notifyListeners();
-				configDialog.setVisible(false);
-			}
-		});
+		save.addActionListener(event -> {
+            for(ConfigPanel configPanel : configPanelMap.values()) {
+                configPanel.SaveSettings();
+            }
+            ConfigurationManager.storeProperties();
+            ConfigurationManager.notifyListeners();
+            configDialog.setVisible(false);
+        });
 		
 		buttonPanel.add(reset);
-		reset.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				for(ConfigPanel configPanel : configPanelMap.values()) {
-					configPanel.ResetSettings();
-				}
-			}	
-		});
+		reset.addActionListener(event -> {
+            for(ConfigPanel configPanel : configPanelMap.values()) {
+                configPanel.ResetSettings();
+            }
+        });
 		
 		final ConfigurationDialog configurationDialog = this;
 		buttonPanel.add(cancel);
-		cancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				configurationDialog.setVisible(false);
-			}	
-		});
+		cancel.addActionListener(event -> configurationDialog.setVisible(false));
 		
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}

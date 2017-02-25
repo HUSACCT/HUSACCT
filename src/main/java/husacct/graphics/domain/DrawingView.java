@@ -140,13 +140,7 @@ public class DrawingView extends DefaultDrawingView {
 			}
 		});
 		
-		addMouseWheelListener(new MouseWheelListener() {
-			
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				DrawingView.this.onMouseScrolled(e);
-			}
-		});
+		addMouseWheelListener((MouseWheelListener) e -> DrawingView.this.onMouseScrolled(e));
 	}
 	
 	public void initializePanTool(JViewport viewport, JComponent comp) {

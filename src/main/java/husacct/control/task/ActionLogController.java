@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ActionLogController implements IConfigListener {
 	private ArrayList<HashMap<String, String>> loggedActions = new ArrayList<>();
@@ -20,7 +21,7 @@ public class ActionLogController implements IConfigListener {
 	}
 	
 	public void addAction(String message){
-		if(message==""){
+		if(Objects.equals(message, "")){
 			return;
 		}
 		

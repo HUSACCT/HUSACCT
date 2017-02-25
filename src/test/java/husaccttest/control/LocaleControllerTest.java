@@ -36,12 +36,7 @@ public class LocaleControllerTest {
 
 	@Test
 	public void testLocaleObserver(){
-		localeService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				assertEquals(true, true);
-			}
-		});
+		localeService.addServiceListener(() -> assertEquals(true, true));
 		localeService.notifyServiceListeners();
 	}
 	
@@ -86,18 +81,12 @@ public class LocaleControllerTest {
 
 	@Test
 	public void testConcurrentModification(){
-		localeService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				
-				// Adding another listener while being notified should not raise a ConcurrentModificatinException
-				localeService.addServiceListener(new IServiceListener() {
-					@Override
-					public void update() {
-					}
-				});
-			}
-		});
+		localeService.addServiceListener(() -> {
+
+            // Adding another listener while being notified should not raise a ConcurrentModificatinException
+            localeService.addServiceListener(() -> {
+});
+        });
 		localeService.notifyServiceListeners();
 	}
 }

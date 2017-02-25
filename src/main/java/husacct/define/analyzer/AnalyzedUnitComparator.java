@@ -53,7 +53,7 @@ public class AnalyzedUnitComparator {
 		
 		for (AbstractCombinedComponent remove : toBeDeleted) {
 			AnalyzedModuleComponent unittoberemoved = ((AnalyzedModuleComponent) remove);
-			WarningMessageService.getInstance().addCodeLevelWarning((AnalyzedModuleComponent)unittoberemoved);
+			WarningMessageService.getInstance().addCodeLevelWarning(unittoberemoved);
 			AbstractCombinedComponent parent = remove.getParentofChild();
 			int index = parent.getChildren().indexOf(remove);
 			parent.getChildren().remove(index);	
@@ -149,11 +149,10 @@ public class AnalyzedUnitComparator {
 		SoftwareUnitDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildUnitsOfSoftwareUnit(module.uniqueName);
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
-		for (int i = 0 ; i < children.length; i++) {
-			if (children[i] != null){
-				this.addChildComponents(childComponent, children[i]);
-			}
-			else{
+		for (SoftwareUnitDTO aChildren : children) {
+			if (aChildren != null) {
+				this.addChildComponents(childComponent, aChildren);
+			} else {
 				this.logger.warn(new Date().toString() + " Null-child in parent: " + module.uniqueName);
 			}
 		}

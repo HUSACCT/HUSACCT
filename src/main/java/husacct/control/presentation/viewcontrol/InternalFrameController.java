@@ -51,22 +51,19 @@ abstract public class InternalFrameController {
 	}
 	
 	public void setLocaleListener(){
-		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				if(internalFrame != null){
-					internalFrame.setTitle(getTitle());
-					toggleButton.setText(internalFrame.getTitle());
-				}
-			}
-		});
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(() -> {
+            if(internalFrame != null){
+                internalFrame.setTitle(getTitle());
+                toggleButton.setText(internalFrame.getTitle());
+            }
+        });
 	}
 	
 	public void showView(){
 		JInternalFrame  newInternalFrame = getInternalFrame();
 		if (newInternalFrame != null) {
 			if ((newInternalFrame == internalFrame)) {
-				if (internalFrame.isClosed() == false) {
+				if (!internalFrame.isClosed()) {
 					setInternalFrameAndButtonVisible();
 				} else {
 					addInternalFrame();
@@ -232,7 +229,7 @@ abstract public class InternalFrameController {
 	private void activateInternalFrame(){
 		try {
 			if ((internalFrame != null) && (internalFrame.getDesktopPane() != null)) {
-				if ( internalFrame.isIcon() == true) {
+				if (internalFrame.isIcon()) {
 					internalFrame.setIcon(false);
 				}
 				internalFrame.toFront();
@@ -311,12 +308,7 @@ abstract public class InternalFrameController {
 		// Add listeners to toggleButton
 		toggleButtonContextClickListener = new ToolBarButtonListener(this);
 		toggleButton.addMouseListener(toggleButtonContextClickListener);
-		toggleButtonActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				activateInternalFrame();
-			}
-		};
+		toggleButtonActionListener = event -> activateInternalFrame();
 		toggleButton.addActionListener(toggleButtonActionListener);
 	}
 

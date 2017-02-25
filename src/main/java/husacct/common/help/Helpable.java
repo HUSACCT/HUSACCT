@@ -30,13 +30,7 @@ public  class Helpable{
 	
 	public JMenuItem getHelpItem() {
 		JMenuItem menu = new JMenuItem("Help");
-		menu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ServiceProvider.getInstance().getControlService().showHelpDialog(component);					
-			}
-			
-		});
+		menu.addActionListener(e -> ServiceProvider.getInstance().getControlService().showHelpDialog(component));
 		return menu;
 	}
 

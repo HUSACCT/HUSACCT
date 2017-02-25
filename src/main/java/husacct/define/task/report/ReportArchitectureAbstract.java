@@ -28,9 +28,9 @@ public abstract class ReportArchitectureAbstract {
 	protected List<ModuleStrategy> getRootModules() {
 		ModuleStrategy[] rootModules = moduleService.getRootModules();
 		List<ModuleStrategy> rootModuleList = new ArrayList<>();
-		for(int i = 0; i < rootModules.length; i++) {
-			rootModuleList.add(rootModules[i]);
-		}
+        for (ModuleStrategy rootModule : rootModules) {
+            rootModuleList.add(rootModule);
+        }
 		return rootModuleList;
 	}
 

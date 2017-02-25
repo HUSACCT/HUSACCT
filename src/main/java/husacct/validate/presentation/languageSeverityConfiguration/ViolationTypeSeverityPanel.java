@@ -68,57 +68,38 @@ class ViolationTypeSeverityPanel extends JPanel {
 
 		category.setModel(categoryModel);
 		category.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		category.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent evt) {
-				if (!evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
-					categoryValueChanged();
-				}
-			}
-		});
+		category.addListSelectionListener(evt -> {
+            if (!evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
+                categoryValueChanged();
+            }
+        });
 		categoryScrollpane.setViewportView(category);
 
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
 		violationtypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		violationtypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
-				checkRestoreButtonEnabled();
-			}
-		});
+		violationtypeTable.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            checkRestoreButtonEnabled();
+        });
 
 		violationtypeScrollpane.setViewportView(violationtypeTable);
 
 		restore.setEnabled(false);
-		restore.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				if (violationtypeTable.getSelectedRow() > -1) {
-					restoreActionPerformed();
-				} else {
-					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
-				}
-			}
-		});
+		restore.addActionListener(evt -> {
+            if (violationtypeTable.getSelectedRow() > -1) {
+                restoreActionPerformed();
+            } else {
+                ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
+            }
+        });
 
-		restoreAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				restoreAllActionPerformed();
-			}
-		});
+		restoreAll.addActionListener(evt -> restoreAllActionPerformed());
 
-		apply.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				applyActionPerformed();
-			}
-		});
+		apply.addActionListener(evt -> applyActionPerformed());
 
 		createLayout();
 	}
@@ -206,7 +187,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 
 	private void categoryValueChanged() {
 		checkRestoreButtonEnabled();
-		loadViolationType(((DataLanguageHelper) category.getSelectedValue()).key);
+		loadViolationType(category.getSelectedValue().key);
 	}
 
 	private void updateViolationtypeSeverities() {

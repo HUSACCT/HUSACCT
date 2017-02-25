@@ -2,13 +2,15 @@ package husacct.analyse.domain.famix;
 
 import husacct.analyse.abstraction.dto.LibraryDTO;
 
+import java.util.Objects;
+
 public class FamixLibrary extends FamixDecompositionEntity {
 
     public boolean isPackage = true;
 	public String physicalPath;
 
     public boolean equals(FamixLibrary other) {
-        return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 
+        return ((Objects.equals(other.belongsToPackage, this.belongsToPackage) && Objects.equals(other.uniqueName, this.uniqueName)));
     }
 
     public LibraryDTO getDTO() {

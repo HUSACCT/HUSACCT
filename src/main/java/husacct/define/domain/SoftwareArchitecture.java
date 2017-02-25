@@ -20,6 +20,7 @@ import husacct.define.task.JtreeController;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -286,7 +287,7 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 				ArrayList<String> list = new ArrayList<>();
 				list.add(wantedModule.getName());
 				wantedModule = wantedModule.getparent();
-				while(wantedModule.getType() != "Root"){
+				while(!Objects.equals(wantedModule.getType(), "Root")){
 					list.add(wantedModule.getName());
 					wantedModule = wantedModule.getparent();
 				}

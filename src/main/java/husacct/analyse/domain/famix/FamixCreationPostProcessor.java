@@ -6,13 +6,7 @@ import husacct.common.enums.DependencyTypes;
 import husacct.common.enums.UmlLinkTypes;
 import husacct.control.task.States;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -314,7 +308,7 @@ class FamixCreationPostProcessor {
 	        	boolean fromExists = false;
             	boolean toExists = false;
             	boolean toHasValue = false;
-	        	FamixAssociation association = (FamixAssociation) i.next();
+	        	FamixAssociation association = i.next();
 		        String uniqueNameFrom = association.from;
 
             	/* //Test helper
@@ -996,7 +990,7 @@ class FamixCreationPostProcessor {
     private void determineDependencyTypeAndOrSubType(FamixAssociation association) {
     	FamixClass theClass;
     	// Inheritance
-    	if (association.type == DependencyTypes.INHERITANCE.toString()) {
+    	if (Objects.equals(association.type, DependencyTypes.INHERITANCE.toString())) {
             theClass = theModel.classes.get(association.to);
             if (theClass != null) {
             	if (theClass.isInterface){
@@ -1222,7 +1216,7 @@ class FamixCreationPostProcessor {
     private String findClassInImports(String importingClass, String typeDeclaration) {
     	if (theModel.classes.containsKey(importingClass)) {
 	    	FamixClass fromClass = theModel.classes.get(importingClass);
-	    	if (fromClass.isInnerClass == true) {
+	    	if (fromClass.isInnerClass) {
 	    		importingClass = fromClass.belongsToClass;
 	    	}
     	}
@@ -1350,7 +1344,7 @@ class FamixCreationPostProcessor {
     		HashSet<String> inheritanceAssociations = inheritanceAssociationsPerClass.get(uniqueClassName);
     		for (String stringSuper : inheritanceAssociations){
     			FamixClass superClass = theModel.classes.get(stringSuper);
-    			if ((superClass != null) && superClass.isInterface == false) {
+    			if ((superClass != null) && !superClass.isInterface) {
 	    			if (stringSuper.equals(uniqueClassName)) {
 	    				break; // Otherwise, things go wrong with derived C# classes with the same name.
 	    			}

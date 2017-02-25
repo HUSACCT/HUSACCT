@@ -50,9 +50,9 @@ public class CreditsDialog extends JDialog {
 		List<String> developers = cf.fetchDeveloperNames();
 		Collections.sort(developers, new LastNameComperator());
 		String developerCreditsString = "";
-		for(int i = 0; i < developers.size() ; i++) {
-			developerCreditsString += developers.get(i) + ", ";
-		}
+        for (String developer : developers) {
+            developerCreditsString += developer + ", ";
+        }
 		return developerCreditsString.substring(0, developerCreditsString.length() - 2) ;
 	}
 
@@ -121,11 +121,7 @@ public class CreditsDialog extends JDialog {
 	}
 
 	private void setListeners(){
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		okButton.addActionListener(e -> dispose());
 	}
 
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight){

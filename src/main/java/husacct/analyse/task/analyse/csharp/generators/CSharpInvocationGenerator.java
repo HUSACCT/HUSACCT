@@ -6,6 +6,8 @@ import husacct.common.enums.DependencySubTypes;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
+import java.util.Objects;
+
 public class CSharpInvocationGenerator extends CSharpGenerator {
 
     private String from;
@@ -156,7 +158,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	        case CSharpParser.DOT: // "."
 	        	String left = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
-	        	if ((left == "") || (right == "")) {
+	        	if ((Objects.equals(left, "")) || (Objects.equals(right, ""))) {
 	        		returnValue += left + right;
 	        	} else {
 		    		returnValue += left + "." + right;

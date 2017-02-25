@@ -1,9 +1,6 @@
 package husacct.analyse.domain.famix;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -47,7 +44,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         	// Determine parentPackageName
             String[] allPackages = uniquePackageName.split("\\.");
             for (int i = 0; i < allPackages.length - 1; i++) {
-                if (belongsToPackage == "") {
+                if (Objects.equals(belongsToPackage, "")) {
                     belongsToPackage += allPackages[i];
                 } else {
                     belongsToPackage += "." + allPackages[i];

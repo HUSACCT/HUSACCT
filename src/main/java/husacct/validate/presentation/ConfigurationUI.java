@@ -76,26 +76,11 @@ public final class ConfigurationUI extends HelpableJInternalFrame implements Obs
 
 		tabPanel.addTab(localeService.getTranslatedString("SeverityConfiguration"), severityNamePanel);
 
-		applySeverity.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				applySeverityActionPerformed();
-			}
-		});
+		applySeverity.addActionListener(evt -> applySeverityActionPerformed());
 
-		restore.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				restore();
-			}
-		});
+		restore.addActionListener(evt -> restore());
 
-		cancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				cancelActionPerformed();
-			}
-		});
+		cancel.addActionListener(evt -> cancelActionPerformed());
 
 		createSeverityPanelLayout();
 		createRootLayout();

@@ -74,50 +74,31 @@ class RuleTypeSeverityPanel extends JPanel {
 
 		restore.setEnabled(false);
 
-		category.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent evt) {
-				if (evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
-					return;
-				}
-				categoryValueChanged();
-			}
-		});
+		category.addListSelectionListener(evt -> {
+            if (evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
+                return;
+            }
+            categoryValueChanged();
+        });
 
-		ruletypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
-				checkRestoreButtonEnabled();
-			}
-		});
+		ruletypeTable.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            checkRestoreButtonEnabled();
+        });
 
-		apply.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				if (ruletypeTable.getSelectedRow() > -1) {
-					applyActionPerformed();
-				} else {
-					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
-				}
-			}
-		});
+		apply.addActionListener(evt -> {
+            if (ruletypeTable.getSelectedRow() > -1) {
+                applyActionPerformed();
+            } else {
+                ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
+            }
+        });
 
-		restore.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				restoreActionPerformed();
-			}
-		});
+		restore.addActionListener(evt -> restoreActionPerformed());
 
-		restoreAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				restoreAllActionPerformed();
-			}
-		});
+		restoreAll.addActionListener(evt -> restoreAllActionPerformed());
 
 		createLayout();
 	}
@@ -203,7 +184,7 @@ class RuleTypeSeverityPanel extends JPanel {
 
 	private void categoryValueChanged() {
 		if (category.getSelectedValue() != null) {
-			loadRuleTypes(((DataLanguageHelper) category.getSelectedValue()).key);
+			loadRuleTypes(category.getSelectedValue().key);
 		}
 	}
 

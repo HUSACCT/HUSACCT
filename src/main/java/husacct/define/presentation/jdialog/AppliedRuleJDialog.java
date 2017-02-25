@@ -231,7 +231,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 
 	private void setSelectedRuleTypeKey(String ruleTypeKey){
 		for (int i = 0;i < appliedRuleKeyValueComboBox.getItemCount();i++){
-			String iteratingItemKey = (String) appliedRuleKeyValueComboBox.getItemKeyAt(i);
+			String iteratingItemKey = appliedRuleKeyValueComboBox.getItemKeyAt(i);
 			if (iteratingItemKey.equals(ruleTypeKey)){
 				appliedRuleKeyValueComboBox.setSelectedIndex(i);
 				break;

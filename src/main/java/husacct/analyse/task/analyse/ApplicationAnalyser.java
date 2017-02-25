@@ -6,7 +6,6 @@ import husacct.analyse.task.analyse.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyse.java.JavaAnalyser;
 import husacct.control.task.States;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;

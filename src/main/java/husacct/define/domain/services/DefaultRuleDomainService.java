@@ -8,6 +8,7 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -85,7 +86,7 @@ public class DefaultRuleDomainService {
 	public boolean isMandatoryRule(String ruleTypeKey, ModuleStrategy moduleFrom) {
 		if (ruleTypeKey.equals("IsNotAllowedToMakeSkipCall")
 				|| ruleTypeKey.equals("IsNotAllowedToMakeBackCall")) {
-			if (moduleFrom.getType() == "Layer") {
+			if (Objects.equals(moduleFrom.getType(), "Layer")) {
 				return true;
 			}
 		} else if (ruleTypeKey.equals("VisibilityConvention")) {

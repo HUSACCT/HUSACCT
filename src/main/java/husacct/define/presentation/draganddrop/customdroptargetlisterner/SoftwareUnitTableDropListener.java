@@ -53,16 +53,13 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 			}
 			
 			
-		} catch (UnsupportedFlavorException e) {
-			arg.rejectDrag();
-			
-		} catch (IOException e) {
+		} catch (UnsupportedFlavorException | IOException e) {
 			arg.rejectDrag();
 			
 		}
-		
 
-	}
+
+    }
 
 	@Override
 	public void drop(DropTargetDropEvent arg) {
@@ -90,15 +87,12 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 			long selectedModuleID =DefinitionController.getInstance().getSelectedModuleId();
 		    SoftwareUnitController controller = new SoftwareUnitController(selectedModuleID);
 			controller.save(tobesaved);
-		} catch (UnsupportedFlavorException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (UnsupportedFlavorException | IOException e) {
 			
 			e.printStackTrace();
 		}
 
-	}
+    }
 
 	@Override
 	public void dropActionChanged(DropTargetDragEvent dtde) {

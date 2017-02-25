@@ -464,7 +464,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome2 = areDependencyTypesDetected(fromClass, toClass, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome2 == true)) {
+		if ((outcome1) || (outcome2)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -480,7 +480,7 @@ public class Java_AccuracyTestDependencyDetection {
 		toClass = "technology.direct.dao.CallInstanceSuperClassDAO";
 		boolean outcome3 = areDependencyTypesDetected(fromClass, toClass, typesToFind, true); 
 		boolean totalOutcome = false;
-		if ((outcome1 == true) || (outcome3 == true)) {
+		if ((outcome1) || (outcome3)) {
 			totalOutcome = true;
 		}
 		Assert.assertTrue(totalOutcome);
@@ -1451,17 +1451,17 @@ public class Java_AccuracyTestDependencyDetection {
 		int numberOfDependencies = foundDependencies.length;
 		for (String dependencyType : dependencyTypes) {
 			boolean found = false;
-			for (int i=0 ; i < numberOfDependencies; i++){
-				if (foundDependencies[i].type.equals(dependencyType) && (foundDependencies[i].isIndirect) == isIndirect) {
-					if (!subType.equals("")) {
-						if (foundDependencies[i].subType.equals(subType)) {
-							found = true;	
-						}
-					} else {
-						found = true;
-					}
-				}
-			}
+            for (DependencyDTO foundDependency : foundDependencies) {
+                if (foundDependency.type.equals(dependencyType) && (foundDependency.isIndirect) == isIndirect) {
+                    if (!subType.equals("")) {
+                        if (foundDependency.subType.equals(subType)) {
+                            found = true;
+                        }
+                    } else {
+                        found = true;
+                    }
+                }
+            }
 			foundDependencyTypes.put(dependencyType,found);
 		}
 		if (!foundDependencyTypes.containsValue(false)){

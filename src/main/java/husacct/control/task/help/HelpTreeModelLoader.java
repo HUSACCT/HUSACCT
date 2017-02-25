@@ -80,11 +80,11 @@ public class HelpTreeModelLoader {
 	
 	private DefaultMutableTreeNode findNode(DefaultMutableTreeNode root, HelpTreeNode node) {
 		List<DefaultMutableTreeNode> Children = Collections.list(root.children());
-		for(int i = 0; i < Children.size(); i++) {
-			if(((HelpTreeNode)Children.get(i).getUserObject()).getFilename().equals(node.getFilename())) {
-				return Children.get(i);
-			}
-		}
+        for (DefaultMutableTreeNode aChildren : Children) {
+            if (((HelpTreeNode) aChildren.getUserObject()).getFilename().equals(node.getFilename())) {
+                return aChildren;
+            }
+        }
 		return new DefaultMutableTreeNode(node);
 		
 	}

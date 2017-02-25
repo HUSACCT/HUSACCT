@@ -80,20 +80,11 @@ public class MainGui extends HelpableJFrame{
 	private void setSystemLookAndFeel(){
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException event) {
+		} catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException event) {
 			logger.warn("Unable to set System look and feel" + event.getMessage());
 			setPgsLookAndFeel();
-		} catch (ClassNotFoundException e) {
-			logger.warn("Unable to set System look and feel" + e.getMessage());
-			setPgsLookAndFeel();
-		} catch (InstantiationException e) {
-			logger.warn("Unable to set System look and feel" + e.getMessage());
-			setPgsLookAndFeel();
-		} catch (IllegalAccessException e) {
-			logger.warn("Unable to set System look and feel" + e.getMessage());
-			setPgsLookAndFeel();
 		}
-	}
+    }
 	
 	private void addComponents(){
 		// Create and add contentPane

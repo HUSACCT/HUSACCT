@@ -58,19 +58,13 @@ class ExportDependenciesDialog extends JDialog {
     }
 
     private void setListeners() {
-        browseButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                showFileDialog();
-            }
-        });
-        exportButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                if (validateSelectedFile()) {
-                    dispose();
-                    ThreadedDependencyExport dependencyExport = new ThreadedDependencyExport(uiController, selectedFile.getAbsolutePath());
-                    ThreadWithLoader analyseExportThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExportingDependencies"), dependencyExport);
-                    analyseExportThread.run();
-                }
+        browseButton.addActionListener(arg0 -> showFileDialog());
+        exportButton.addActionListener(arg0 -> {
+            if (validateSelectedFile()) {
+                dispose();
+                ThreadedDependencyExport dependencyExport = new ThreadedDependencyExport(uiController, selectedFile.getAbsolutePath());
+                ThreadWithLoader analyseExportThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExportingDependencies"), dependencyExport);
+                analyseExportThread.run();
             }
         });
     }

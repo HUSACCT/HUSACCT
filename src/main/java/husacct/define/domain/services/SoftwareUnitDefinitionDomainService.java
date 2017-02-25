@@ -198,7 +198,7 @@ public class SoftwareUnitDefinitionDomainService {
 			try {
 				if (softwareunit instanceof RegexComponent) {
 					ExpressionUnitDefinition ex = new ExpressionUnitDefinition(softwareunit.getUniqueName(), SoftwareUnitDefinition.Type.REGEX);
-					for (AbstractCombinedComponent ir : ((RegexComponent) softwareunit).getChildren()) {
+					for (AbstractCombinedComponent ir : softwareunit.getChildren()) {
 						Type typet = Type.valueOf(ir.getType());
 						SoftwareUnitDefinition unitt = new SoftwareUnitDefinition(ir.getUniqueName(), typet);
 						ex.addSoftwareUnit(unitt);

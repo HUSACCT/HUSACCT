@@ -94,38 +94,26 @@ public class SetApplicationPanel extends JPanel{
 	}
 
 	private void setListeners(){
-		pathList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if(pathList.getSelectedIndex() >= 0){
-					removeButton.setEnabled(true);
-				} else {
-					removeButton.setEnabled(false);
-				}
-			}
-		});
+		pathList.addListSelectionListener(e -> {
+            if(pathList.getSelectedIndex() >= 0){
+                removeButton.setEnabled(true);
+            } else {
+                removeButton.setEnabled(false);
+            }
+        });
 
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showAddFileDialog();
-			}
-		});
+		addButton.addActionListener(e -> showAddFileDialog());
 
-		removeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pathListModel.remove(pathList.getSelectedIndex());
-			}
-		});
+		removeButton.addActionListener(e -> pathListModel.remove(pathList.getSelectedIndex()));
 
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				applicationNameLabel.setText(localeService.getTranslatedString("ApplicationNameLabel"));
-				languageSelectLabel.setText(localeService.getTranslatedString("LanguageSelectLabel"));
-				versionLabel.setText(localeService.getTranslatedString("VersionLabel"));
-				pathLabel.setText(localeService.getTranslatedString("PathLabel"));
-				addButton.setText(localeService.getTranslatedString("AddButton"));
-				removeButton.setText(localeService.getTranslatedString("RemoveButton"));
-			}
-		});
+		localeService.addServiceListener(() -> {
+            applicationNameLabel.setText(localeService.getTranslatedString("ApplicationNameLabel"));
+            languageSelectLabel.setText(localeService.getTranslatedString("LanguageSelectLabel"));
+            versionLabel.setText(localeService.getTranslatedString("VersionLabel"));
+            pathLabel.setText(localeService.getTranslatedString("PathLabel"));
+            addButton.setText(localeService.getTranslatedString("AddButton"));
+            removeButton.setText(localeService.getTranslatedString("RemoveButton"));
+        });
 	}
 
 	private void showAddFileDialog() {

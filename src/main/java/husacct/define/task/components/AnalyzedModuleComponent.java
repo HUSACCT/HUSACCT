@@ -118,7 +118,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		boolean result = false;
 		AnalyzedModuleComponent buffer =null;
 		String type = this.getType().toLowerCase();
-		buffer = (AnalyzedModuleComponent) this.getParentofChild();
+		buffer = this.getParentofChild();
 		while (!type.equals("application")) {
 			if (buffer.isMapped()) {
 				result =true;

@@ -41,7 +41,7 @@ public class InheritanceConvention extends RuleType {
 							}
 						}	
 					}
-					if(classInherits == false){
+					if(!classInherits){
 						Violation violation = createViolation(currentRule, classPathFrom, classPathTo, configuration);
 	                    violations.add(violation);
 					}

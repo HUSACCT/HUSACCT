@@ -113,16 +113,13 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 		JButton reportButton = new JButton(localeService.getTranslatedString("ReportTitle"));
 		reportButton.setIcon(browserIcon);
 		reportButton.setToolTipText(localeService.getTranslatedString("?Report"));
-		reportButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					report.createReport();
-				} catch (URISyntaxException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
+		reportButton.addActionListener(e -> {
+            try {
+                report.createReport();
+            } catch (URISyntaxException e1) {
+                e1.printStackTrace();
+            }
+        });
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(warningButton);

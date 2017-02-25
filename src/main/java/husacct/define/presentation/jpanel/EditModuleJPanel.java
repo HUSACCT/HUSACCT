@@ -197,7 +197,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 			Long moduleId = Long.parseLong(arg.toString());
 			if (moduleId != -1) {
 				HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
-				if (!((String) moduleDetails.get("name")).equals("")) {
+				if (!moduleDetails.get("name").equals("")) {
 					nameTextfield.setText((String) moduleDetails.get("name"));
 					descriptionTextArea.setText((String) moduleDetails.get("description"));
 					String moduleType = (String) moduleDetails.get("type");

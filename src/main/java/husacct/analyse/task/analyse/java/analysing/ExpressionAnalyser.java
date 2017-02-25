@@ -2,6 +2,7 @@ package husacct.analyse.task.analyse.java.analysing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.log4j.Logger;
@@ -121,7 +122,7 @@ public class ExpressionAnalyser extends JavaGenerator{
     	int nrOfSubExpressions = subExpressions.size();
     	if (nrOfSubExpressions == 0) {
 	    	if (expression.primary() != null) {
-    			PrimaryContext primary = (PrimaryContext) expression.primary();
+    			PrimaryContext primary = expression.primary();
 	    		if (primary.expression() != null) {
 	    			to_string += transformExpressionToString(primary.expression());
 	    		} else if (primary.Identifier() != null) {
@@ -286,7 +287,7 @@ public class ExpressionAnalyser extends JavaGenerator{
     	String typeCastTo = "";
     	if (typeType != null) {
     		typeCastTo = determineTypeOfTypeType(typeType, belongsToClass);
-            if ((typeCastTo != null) && (typeCastTo != "") && !SkippedJavaTypes.isSkippable(typeCastTo)) {
+            if ((typeCastTo != null) && (!Objects.equals(typeCastTo, "")) && !SkippedJavaTypes.isSkippable(typeCastTo)) {
                 modelService.createDeclarationTypeCast(belongsToClass, typeCastTo, typeType.start.getLine());
             }
     	}

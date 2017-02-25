@@ -18,18 +18,12 @@ public class ObservableServiceTest {
 	
 	@Test
 	public void testConcurrentModification(){
-		service.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				
-				// Adding another listener while being notified should not raise a ConcurrentModificatinException
-				service.addServiceListener(new IServiceListener() {
-					@Override
-					public void update() {
-					}
-				});
-			}
-		});
+		service.addServiceListener(() -> {
+
+            // Adding another listener while being notified should not raise a ConcurrentModificatinException
+            service.addServiceListener(() -> {
+});
+        });
 		service.notifyServiceListeners();
 	}
 }

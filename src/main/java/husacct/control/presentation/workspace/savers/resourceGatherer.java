@@ -63,11 +63,11 @@ public class resourceGatherer implements Runnable {
 		}
 
 		if(ServiceProvider.getInstance().getDefineService() instanceof ISaveable){
-			saveableServices.add((ISaveable) ServiceProvider.getInstance().getDefineService());
+			saveableServices.add(ServiceProvider.getInstance().getDefineService());
 		}
 
 		if(ServiceProvider.getInstance().getAnalyseService() instanceof ISaveable){
-			saveableServices.add((ISaveable) ServiceProvider.getInstance().getAnalyseService());
+			saveableServices.add(ServiceProvider.getInstance().getAnalyseService());
 		}
 
 		if(ServiceProvider.getInstance().getValidateService() instanceof ISaveable){

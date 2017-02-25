@@ -1,10 +1,6 @@
 package husacct.analyse.task.reconstruct.algorithms.hu.layers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
@@ -54,7 +50,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 			} */
 
 			// Select the set of SUs to be used, and activate the component-identifying algorithm  
-			if (selectedModule.logicalPath == "**") {
+			if (Objects.equals(selectedModule.logicalPath, "**")) {
 				for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
 					if (!rootUnit.uniqueName.equals("xLibraries")) {
 						softwareUnitsToIncludeInAlgorithm.add(rootUnit);

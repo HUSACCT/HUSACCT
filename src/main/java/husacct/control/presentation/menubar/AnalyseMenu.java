@@ -80,115 +80,75 @@ public class AnalyseMenu extends JMenu{
 	}
 	
 	private void setListeners() {
-		setApplicationPropertiesItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getApplicationController().showApplicationDetailsGui();
-			}
-		});
+		setApplicationPropertiesItem.addActionListener(e -> mainController.getApplicationController().showApplicationDetailsGui());
 		
-		analyseNowItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getApplicationController().analyseApplication();
-			}
-		});
+		analyseNowItem.addActionListener(e -> mainController.getApplicationController().analyseApplication());
 		
-		analysedApplicationOverviewItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showApplicationOverviewGui();
-			}
-		});
+		analysedApplicationOverviewItem.addActionListener(e -> mainController.getViewController().showApplicationOverviewGui());
 		
-		analysedArchitectureDiagramItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showAnalysedArchitectureDiagram();
-			}
-		});
+		analysedArchitectureDiagramItem.addActionListener(e -> mainController.getViewController().showAnalysedArchitectureDiagram());
 		
-		analysisHistoryItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getApplicationAnalysisHistoryLogController().showApplicationAnalysisHistoryOverview();
-			}
-		});
+		analysisHistoryItem.addActionListener(e -> mainController.getApplicationAnalysisHistoryLogController().showApplicationAnalysisHistoryOverview());
 		
-		reportDependenciesItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showReportDependenciesGui();
-			}
-		});
+		reportDependenciesItem.addActionListener(e -> mainController.getExportImportController().showReportDependenciesGui());
 		
-		reconstructArchitectureItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showAnalyseSarGui();
-			}
-		});
+		reconstructArchitectureItem.addActionListener(e -> mainController.getViewController().showAnalyseSarGui());
 		
-		exportAnalysisModelItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showExportAnalysisModelGui();
-			}
-		});
+		exportAnalysisModelItem.addActionListener(e -> mainController.getExportImportController().showExportAnalysisModelGui());
 		
-		importAnalysisModelItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getExportImportController().showImportAnalyseModelGui();
-			}
-		});
+		importAnalysisModelItem.addActionListener(e -> mainController.getExportImportController().showImportAnalyseModelGui());
 
-		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-			public void changeState(List<States> states) {
-				setApplicationPropertiesItem.setEnabled(false);
-				analyseNowItem.setEnabled(false);
-				analysedArchitectureDiagramItem.setEnabled(false);
-				analysedApplicationOverviewItem.setEnabled(false);
-				analysisHistoryItem.setEnabled(false);
-				reportDependenciesItem.setEnabled(false);
-				reconstructArchitectureItem.setEnabled(false);
-				exportAnalysisModelItem.setEnabled(false);
-				importAnalysisModelItem.setEnabled(false);
-				
-				if(states.contains(States.OPENED)){
-					setApplicationPropertiesItem.setEnabled(true);
-					analysisHistoryItem.setEnabled(true);
-				}
-				if(states.contains(States.APPSET) && (!states.contains(States.VALIDATING))){
-					analyseNowItem.setEnabled(true);
-					importAnalysisModelItem.setEnabled(true);
-				}
-				if(states.contains(States.ANALYSED)){
-					analysedArchitectureDiagramItem.setEnabled(true);
-					analysedApplicationOverviewItem.setEnabled(true);
-					reportDependenciesItem.setEnabled(true);
-					analysisHistoryItem.setEnabled(true);
-					reconstructArchitectureItem.setEnabled(true);
-					exportAnalysisModelItem.setEnabled(true);
-				}
-			}
-		});
+		mainController.getStateController().addStateChangeListener(states -> {
+            setApplicationPropertiesItem.setEnabled(false);
+            analyseNowItem.setEnabled(false);
+            analysedArchitectureDiagramItem.setEnabled(false);
+            analysedApplicationOverviewItem.setEnabled(false);
+            analysisHistoryItem.setEnabled(false);
+            reportDependenciesItem.setEnabled(false);
+            reconstructArchitectureItem.setEnabled(false);
+            exportAnalysisModelItem.setEnabled(false);
+            importAnalysisModelItem.setEnabled(false);
+
+            if(states.contains(States.OPENED)){
+                setApplicationPropertiesItem.setEnabled(true);
+                analysisHistoryItem.setEnabled(true);
+            }
+            if(states.contains(States.APPSET) && (!states.contains(States.VALIDATING))){
+                analyseNowItem.setEnabled(true);
+                importAnalysisModelItem.setEnabled(true);
+            }
+            if(states.contains(States.ANALYSED)){
+                analysedArchitectureDiagramItem.setEnabled(true);
+                analysedApplicationOverviewItem.setEnabled(true);
+                reportDependenciesItem.setEnabled(true);
+                analysisHistoryItem.setEnabled(true);
+                reconstructArchitectureItem.setEnabled(true);
+                exportAnalysisModelItem.setEnabled(true);
+            }
+        });
 		
 		final AnalyseMenu analyseMenu = this;
-		localeService.addServiceListener(new IServiceListener() {
-			public void update() {
-				analyseMenu.setText(localeService.getTranslatedString("Analyse"));
-				setApplicationPropertiesItem.setText(localeService.getTranslatedString("ApplicationProperties"));
-				analyseNowItem.setText(localeService.getTranslatedString("AnalyseNow"));
-				analysedApplicationOverviewItem.setText(localeService.getTranslatedString("AnalysedApplicationOverview"));
-				analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
-				analysisHistoryItem.setText(localeService.getTranslatedString("AnalysisHistory"));
-				importAnalysisModelItem.setText(localeService.getTranslatedString("ImportAnalysisModel"));
-				exportAnalysisModelItem.setText(localeService.getTranslatedString("ExportAnalysisModel"));
-				reportDependenciesItem.setText(localeService.getTranslatedString("ExportDependencies"));
-				reconstructArchitectureItem.setText(localeService.getTranslatedString("ReconstructArchitecture"));
-				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
-				analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
-				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
-				analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
-				analysisHistoryItem.setMnemonic(getMnemonicKeycode("AnalyseHistoryMnemonic"));
-				importAnalysisModelItem.setMnemonic(getMnemonicKeycode("ImportAnalysisModelMnemonic"));
-				exportAnalysisModelItem.setMnemonic(getMnemonicKeycode("ExportAnalysisModelMnemonic"));
-				reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
-				reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
-			}	
-		});
+		localeService.addServiceListener(() -> {
+            analyseMenu.setText(localeService.getTranslatedString("Analyse"));
+            setApplicationPropertiesItem.setText(localeService.getTranslatedString("ApplicationProperties"));
+            analyseNowItem.setText(localeService.getTranslatedString("AnalyseNow"));
+            analysedApplicationOverviewItem.setText(localeService.getTranslatedString("AnalysedApplicationOverview"));
+            analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
+            analysisHistoryItem.setText(localeService.getTranslatedString("AnalysisHistory"));
+            importAnalysisModelItem.setText(localeService.getTranslatedString("ImportAnalysisModel"));
+            exportAnalysisModelItem.setText(localeService.getTranslatedString("ExportAnalysisModel"));
+            reportDependenciesItem.setText(localeService.getTranslatedString("ExportDependencies"));
+            reconstructArchitectureItem.setText(localeService.getTranslatedString("ReconstructArchitecture"));
+            setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
+            analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
+            analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
+            analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
+            analysisHistoryItem.setMnemonic(getMnemonicKeycode("AnalyseHistoryMnemonic"));
+            importAnalysisModelItem.setMnemonic(getMnemonicKeycode("ImportAnalysisModelMnemonic"));
+            exportAnalysisModelItem.setMnemonic(getMnemonicKeycode("ExportAnalysisModelMnemonic"));
+            reportDependenciesItem.setMnemonic(getMnemonicKeycode("ReportDependenciesMnemonic"));
+            reconstructArchitectureItem.setMnemonic(getMnemonicKeycode("ReconstructArchitectureNowMnemonic"));
+        });
 	}
 	
 	public JMenuItem getSetApplicationPropertiesItem(){

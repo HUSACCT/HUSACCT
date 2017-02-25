@@ -4,6 +4,7 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyse.VisibilitySet;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Stack;
 
 import org.antlr.runtime.CharStream;
@@ -120,11 +121,11 @@ public class CSharpGeneratorToolkit {
      */
     public static CommonTree findHierarchicalSequenceOfTypes(CommonTree ancestor, int... types) {
         CommonTree currentParent = ancestor;
-        for (int i = 0; i < types.length; i++) {
+        for (int type : types) {
             if (currentParent == null) {
                 return null;
             }
-            currentParent = (CommonTree) currentParent.getFirstChildWithType(types[i]);
+            currentParent = (CommonTree) currentParent.getFirstChildWithType(type);
         }
         return currentParent;
     }
@@ -256,7 +257,7 @@ public class CSharpGeneratorToolkit {
 	        case CSharpParser.DOT: // "."
 	        	String left = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(0));
 	        	String right = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(1));
-	        	if ((left == "") || (right == "")) {
+	        	if ((Objects.equals(left, "")) || (Objects.equals(right, ""))) {
 	        		returnValue += left + right;
 	        	} else {
 		    		returnValue += left + "." + right;

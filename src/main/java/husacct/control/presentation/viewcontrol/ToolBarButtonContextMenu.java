@@ -40,32 +40,12 @@ public class ToolBarButtonContextMenu extends JPopupMenu{
 	}
 	
 	private void setListeners() {
-		maximize.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				internalFrameController.maximizeInternalFrame();
-			}
-		});
+		maximize.addActionListener(event -> internalFrameController.maximizeInternalFrame());
 		
-		restore.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				internalFrameController.restoreInternalFrame();
-			}
-		});
+		restore.addActionListener(event -> internalFrameController.restoreInternalFrame());
 		
-		minimize.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				internalFrameController.iconifyInternalFrame();
-			}
-		});
+		minimize.addActionListener(event -> internalFrameController.iconifyInternalFrame());
 		
-		close.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				internalFrameController.setInternalFrameAndButtonInvisible();
-			}
-		});
+		close.addActionListener(event -> internalFrameController.setInternalFrameAndButtonInvisible());
 	}
 }
