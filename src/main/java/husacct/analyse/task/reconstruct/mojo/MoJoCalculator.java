@@ -314,15 +314,14 @@ public class MoJoCalculator {
         /* sort the array in ascending order */
         java.util.Arrays.sort(B);
 
-        for (int i = 0; i < B.length; i++)
-        {
+        for (int aB : B) {
             /* calculate the minimum maximum possible groups for partition B */
             /*
              * after sort the B_i in ascending order B_i: 1, 2, 3, 4, 5, 6, 7,
              * 8, 10, 10, 10, 15 we can calculate g in this way g: 1, 2, 3, 4,
              * 5, 6, 7, 8, 9, 10, 10, 11
              */
-            if (group_number < B[i]) group_number++;
+            if (group_number < aB) group_number++;
         }
         /* return n - l + l - g = n - g */
         return obj_number - group_number;

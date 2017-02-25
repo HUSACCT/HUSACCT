@@ -224,15 +224,13 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		eventHandlerThread = new Thread() {
-			public void run() {
-				try {
-					fileController.processEvents();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		eventHandlerThread = new Thread(() -> {
+            try {
+                fileController.processEvents();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 		eventHandlerThread.start();
 	}
 

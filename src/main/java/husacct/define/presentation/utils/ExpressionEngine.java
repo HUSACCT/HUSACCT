@@ -90,106 +90,97 @@ public class ExpressionEngine {
 
 		Pattern regExPattern = null;
 
-		for (Iterator<AbstractCombinedComponent> it = JtreeController
-				.instance().getRootprojectsModules().iterator(); it.hasNext();) {
-			AnalyzedModuleComponent module = (AnalyzedModuleComponent) it
-					.next();
+        for (AbstractCombinedComponent abstractCombinedComponent : JtreeController
+                .instance().getRootprojectsModules()) {
+            AnalyzedModuleComponent module = (AnalyzedModuleComponent) abstractCombinedComponent;
 
-			if (!packagesOnly && !innerClass) {
-				regExPattern = Pattern.compile(translatedRegEx);
-				Matcher matcher = regExPattern.matcher(module.getName());
-				if (packageClass.equals("P")) {
-					if (module.getType().equals("PACKAGE")) {
-						while (matcher.find()) {
-							logger.info("Adding software unit to module with id "
-									+ DefinitionController.getInstance().getSelectedModuleId());
-							try {
-								JtreeController.instance()
-										.additemgetResultTree(module);
-							} catch (Exception e) {
-								logger.error(e.getMessage());
-								UiDialogs.errorDialog(softwareUnitFrame,
-										e.getMessage());
-							}
-						}
-					}
-				}
+            if (!packagesOnly && !innerClass) {
+                regExPattern = Pattern.compile(translatedRegEx);
+                Matcher matcher = regExPattern.matcher(module.getName());
+                if (packageClass.equals("P")) {
+                    if (module.getType().equals("PACKAGE")) {
+                        while (matcher.find()) {
+                            logger.info("Adding software unit to module with id "
+                                    + DefinitionController.getInstance().getSelectedModuleId());
+                            try {
+                                JtreeController.instance()
+                                        .additemgetResultTree(module);
+                            } catch (Exception e) {
+                                logger.error(e.getMessage());
+                                UiDialogs.errorDialog(softwareUnitFrame,
+                                        e.getMessage());
+                            }
+                        }
+                    }
+                } else if (packageClass.equals("C")) {
+                    System.out.println();
+                    if (module.getType().equals("CLASS")
+                            || module.getType().equals("INTERFACE")) {
+                        while (matcher.find()) {
+                            logger.info("Adding software unit to module with id "
+                                    + DefinitionController.getInstance().getSelectedModuleId());
+                            try {
+                                JtreeController.instance()
+                                        .additemgetResultTree(module);
+                            } catch (Exception e) {
 
-				else if (packageClass.equals("C")) {
-					System.out.println();
-					if (module.getType().equals("CLASS")
-							|| module.getType().equals("INTERFACE")) {
-						while (matcher.find()) {
-							logger.info("Adding software unit to module with id "
-									+ DefinitionController.getInstance().getSelectedModuleId());
-							try {
-								JtreeController.instance()
-										.additemgetResultTree(module);
-							} catch (Exception e) {
+                                logger.error(e.getStackTrace());
+                                UiDialogs.errorDialog(softwareUnitFrame,
+                                        e.getMessage());
+                            }
+                        }
+                    }
+                } else if (packageClass.equals("PC")) {
+                    while (matcher.find()) {
+                        // logger.info("Adding software unit to module with id "
+                        // + this.getModuleId());
+                        try {
 
-								logger.error(e.getStackTrace());
-								UiDialogs.errorDialog(softwareUnitFrame,
-										e.getMessage());
-							}
-						}
-					}
-				}
-
-				else if (packageClass.equals("PC")) {
-					while (matcher.find()) {
-						// logger.info("Adding software unit to module with id "
-						// + this.getModuleId());
-						try {
-
-							JtreeController.instance().additemgetResultTree(
-									module);
-						} catch (Exception e) {
-							// this.logger.error(e.getMessage());
-							UiDialogs.errorDialog(softwareUnitFrame,
-									e.getMessage());
-						}
-					}
-				}
-				checkChildRegEx(module, regExPattern, packageClass,
-						packagesOnly, false);
-			}
-
-			else if (packagesOnly && !innerClass) {
-				regExPattern = Pattern.compile(translatedRegEx);
-				Matcher matcher = regExPattern.matcher(module.getName());
-				if (module.getType().equals("PACKAGE")) {
-					while (matcher.find()) {
-						logger.info("Adding software unit to module with id "
-								+ DefinitionController.getInstance().getSelectedModuleId());
-						try {
-							JtreeController.instance().additemgetResultTree(
-									module);
-						} catch (Exception e) {
-							logger.error(e.getMessage());
-							UiDialogs.errorDialog(softwareUnitFrame,
-									e.getMessage());
-						}
-					}
-				}
-				checkChildRegEx(module, regExPattern, packageClass,
-						packagesOnly, false);
-			}
-
-			else if (innerClass) {
-				StringTokenizer stringTokenizer = new StringTokenizer(
-						translatedRegEx, ".");
-				String firstPackage = stringTokenizer.nextToken();
-				regExPattern = Pattern.compile(firstPackage);
-				Matcher matcher = regExPattern.matcher(module.getName());
-				if (matcher.find()) {
-					translatedRegEx = translatedRegEx.replace(firstPackage
-							+ ".", "");
-					regExPattern = Pattern.compile(translatedRegEx);
-					checkChildRegEx(module, regExPattern, packageClass,
-							packagesOnly, true);
-				}
-			}
-		}
+                            JtreeController.instance().additemgetResultTree(
+                                    module);
+                        } catch (Exception e) {
+                            // this.logger.error(e.getMessage());
+                            UiDialogs.errorDialog(softwareUnitFrame,
+                                    e.getMessage());
+                        }
+                    }
+                }
+                checkChildRegEx(module, regExPattern, packageClass,
+                        packagesOnly, false);
+            } else if (packagesOnly && !innerClass) {
+                regExPattern = Pattern.compile(translatedRegEx);
+                Matcher matcher = regExPattern.matcher(module.getName());
+                if (module.getType().equals("PACKAGE")) {
+                    while (matcher.find()) {
+                        logger.info("Adding software unit to module with id "
+                                + DefinitionController.getInstance().getSelectedModuleId());
+                        try {
+                            JtreeController.instance().additemgetResultTree(
+                                    module);
+                        } catch (Exception e) {
+                            logger.error(e.getMessage());
+                            UiDialogs.errorDialog(softwareUnitFrame,
+                                    e.getMessage());
+                        }
+                    }
+                }
+                checkChildRegEx(module, regExPattern, packageClass,
+                        packagesOnly, false);
+            } else if (innerClass) {
+                StringTokenizer stringTokenizer = new StringTokenizer(
+                        translatedRegEx, ".");
+                String firstPackage = stringTokenizer.nextToken();
+                regExPattern = Pattern.compile(firstPackage);
+                Matcher matcher = regExPattern.matcher(module.getName());
+                if (matcher.find()) {
+                    translatedRegEx = translatedRegEx.replace(firstPackage
+                            + ".", "");
+                    regExPattern = Pattern.compile(translatedRegEx);
+                    checkChildRegEx(module, regExPattern, packageClass,
+                            packagesOnly, true);
+                }
+            }
+        }
 
 		return null;
 

@@ -116,11 +116,11 @@ public class CSharpGeneratorToolkit {
      */
     public static CommonTree findHierarchicalSequenceOfTypes(CommonTree ancestor, int... types) {
         CommonTree currentParent = ancestor;
-        for (int i = 0; i < types.length; i++) {
+        for (int type : types) {
             if (currentParent == null) {
                 return null;
             }
-            currentParent = (CommonTree) currentParent.getFirstChildWithType(types[i]);
+            currentParent = (CommonTree) currentParent.getFirstChildWithType(type);
         }
         return currentParent;
     }

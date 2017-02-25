@@ -73,9 +73,9 @@ public class ColorTableModel extends AbstractTableModel {
 			return null;
 		}
 		Vector<Object> v = new Vector<>(anArray.length);
-		for (int i = 0; i < anArray.length; i++) {
-			v.addElement(anArray[i]);
-		}
+        for (Object anAnArray : anArray) {
+            v.addElement(anAnArray);
+        }
 		return v;
 	}
 

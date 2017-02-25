@@ -69,9 +69,9 @@ public class ReportToHTML {
 	// These are all the root modules.
 	private int countModules(ModuleStrategy[] modules){
 		int counter = 0;
-		for(int i = 0; i < modules.length; i++){
-			counter += countModules(modules[i]);
-		}
+        for (ModuleStrategy module : modules) {
+            counter += countModules(module);
+        }
 		return counter;
 	}
 	// Recursively search all modules
@@ -101,17 +101,17 @@ public class ReportToHTML {
 	 */
 	private String getContent(ModuleStrategy[] rootModules){
 		StringBuilder content = new StringBuilder();
-		for(int i = 0; i < rootModules.length; i++){
-			String moduleName = rootModules[i].getName();
-			HashMap<String, String> softwareUnits = getSoftwareUnits(rootModules[i]);
-			HashMap<String, Boolean> appliedRules = getAppliedRules(rootModules[i].getId());
-			content.append(makeTableRow(moduleName, softwareUnits, appliedRules));
-			int parentId = ID;
-			ID++;
-			if(rootModules[i].hasSubModules()){
-				content.append(makeChildRow(parentId, rootModules[i].getSubModules()));
-			}
-		}
+        for (ModuleStrategy rootModule : rootModules) {
+            String moduleName = rootModule.getName();
+            HashMap<String, String> softwareUnits = getSoftwareUnits(rootModule);
+            HashMap<String, Boolean> appliedRules = getAppliedRules(rootModule.getId());
+            content.append(makeTableRow(moduleName, softwareUnits, appliedRules));
+            int parentId = ID;
+            ID++;
+            if (rootModule.hasSubModules()) {
+                content.append(makeChildRow(parentId, rootModule.getSubModules()));
+            }
+        }
 		return content.toString();
 	}
 	private HashMap<String, String> getSoftwareUnits(ModuleStrategy module){ 

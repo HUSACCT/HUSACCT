@@ -87,11 +87,11 @@ public class ComboBoxTableModel extends AbstractTableModel {
 	protected boolean isValidValue(Object value) {
 		Object sValue = value;
 
-		for (int i = 0; i < comboboxValues.size(); i++) {
-			if (sValue.equals(comboboxValues.get(i))) {
-				return true;
-			}
-		}
+        for (Severity comboboxValue : comboboxValues) {
+            if (sValue.equals(comboboxValue)) {
+                return true;
+            }
+        }
 
 		return false;
 	}
@@ -101,9 +101,9 @@ public class ComboBoxTableModel extends AbstractTableModel {
 			return null;
 		}
 		Vector v = new Vector(anArray.length);
-		for (int i = 0; i < anArray.length; i++) {
-			v.addElement(anArray[i]);
-		}
+        for (Object anAnArray : anArray) {
+            v.addElement(anAnArray);
+        }
 		return v;
 	}
 

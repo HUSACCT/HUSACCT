@@ -27,9 +27,9 @@ public class ApplicationAnalyser {
         SourceFileFinder sourceFileFinder = new SourceFileFinder();
         String sourceFileExtension = getExtensionForLanguage(programmingLanguage);
 		int size = paths.length;
-        for (int i = 0; i < size; i ++) {
+        for (String path : paths) {
             try {
-            	String projectPath = paths[i];
+                String projectPath = path;
                 List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(projectPath, sourceFileExtension);
                 for (MetaFile sourceFileInfo : fileData) {
                     if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
