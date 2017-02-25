@@ -1,0 +1,29 @@
+group 'asdf'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    compile "commons-io:commons-io:2.4"
+    compile "com.itextpdf:itextpdf:5.2.0"
+    compile "log4j:log4j:1.2.16"
+    compile "org.jdom:jdom:2.0.0"
+    compile "org.jfree:jfreechart:1.0.14"
+    compile "net.sourceforge.jexcelapi:jxl:2.6.12"
+    compile "com.martiansoftware:jsap:2.1"
+    compile "org.swinglabs.swingx:swingx-all:1.6.4"
+    compile "org.jfree:jcommon:1.0.17"
+    compile "com.github.arnabk:pgslookandfeel:1.1.2"
+    compile name: "jhotdraw"
+    compile name: "antlr-4.6-complete"
+    testCompile "junit:junit:4.10"
+}
