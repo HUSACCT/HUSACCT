@@ -257,7 +257,7 @@ public class MoJoCalculator {
         {
             for (int j = 0; j < A[i].groupList.size(); j++)
             {
-                bgraph.addedge(i, l + A[i].groupList.elementAt(j).intValue());
+                bgraph.addedge(i, l + A[i].groupList.elementAt(j));
             }
         }
 
@@ -272,7 +272,7 @@ public class MoJoCalculator {
         {
             if (bgraph.vertex[i].matched)
             {
-                int index = bgraph.adjacentList.elementAt(i).elementAt(0).intValue();
+                int index = bgraph.adjacentList.elementAt(i).elementAt(0);
                 A[index].setGroup(i - l);
             }
         }
@@ -309,7 +309,7 @@ public class MoJoCalculator {
 
         for (int i = 0; i < B.length; i++)
         {
-            B[i] = ((Integer) number_of_B.elementAt(i)).intValue();
+            B[i] = (Integer) number_of_B.elementAt(i);
         }
         /* sort the array in ascending order */
         java.util.Arrays.sort(B);
@@ -369,7 +369,7 @@ public class MoJoCalculator {
             {
                 String objName = partitionA.elementAt(i).elementAt(j);
                 clusterName = mapObjectClusterInB.get(objName);
-                tag = mapClusterTagB.get(clusterName).intValue();
+                tag = mapClusterTagB.get(clusterName);
                 A[i].addobject(tag, objName, mode);
             }
         }
@@ -396,7 +396,7 @@ public class MoJoCalculator {
                 numberOfObjectsInA += objNumber;
                 int index = mapClusterTagA.size();
                 clusterNamesInA.addElement(strClusterA);
-                mapClusterTagA.put(strClusterA, new Integer(index));
+                mapClusterTagA.put(strClusterA, index);
                 partitionA.addElement(new Vector<>());
                 for (int i = 0; i < objNumber; i++)
                 {
@@ -454,12 +454,12 @@ public class MoJoCalculator {
                     {
                         index = mapClusterTagA.size();
                         clusterNamesInA.addElement(clusterName);
-                        mapClusterTagA.put(clusterName, new Integer(index));
+                        mapClusterTagA.put(clusterName, index);
                         partitionA.addElement(new Vector<>());
                     }
                     else
                     {
-                        index = objectIndex.intValue();
+                        index = objectIndex;
                     }
                     partitionA.elementAt(index).addElement(objectName);
                 }
@@ -516,11 +516,11 @@ public class MoJoCalculator {
                  * obj1+"%@$"+obj2 with value 1, next time we see a ref obj1
                  * obj2, we store obj1+"%@$"+obj2 with value 2
                  */
-                if (tableR.get(obj1 + "%@$" + obj2) == null) tableR.put(obj1 + "%@$" + obj2, new Double(1));
+                if (tableR.get(obj1 + "%@$" + obj2) == null) tableR.put(obj1 + "%@$" + obj2, 1d);
                 else
                 {
-                    double previous_value = ((Double) (tableR.get(obj1 + "%@$" + obj2))).doubleValue();
-                    tableR.put(obj1 + "%@$" + obj2, new Double(previous_value + 1));
+                    double previous_value = (Double) (tableR.get(obj1 + "%@$" + obj2));
+                    tableR.put(obj1 + "%@$" + obj2, previous_value + 1);
                 }
             }
         }
@@ -558,8 +558,8 @@ public class MoJoCalculator {
                 int objNumber = st.countTokens();
 
                 int index = mapClusterTagB.size();
-                cardinalitiesInB.addElement(new Integer(objNumber));
-                mapClusterTagB.put(strClusterB, new Integer(index));
+                cardinalitiesInB.addElement(objNumber);
+                mapClusterTagB.put(strClusterB, index);
 
                 for (int i = 0; i < objNumber; i++)
                 {
@@ -621,16 +621,16 @@ public class MoJoCalculator {
                     // This cluster is not in mapClusterTagB yet
                     index = mapClusterTagB.size();
                     // Since it is a new cluster, it currently contains 1 object
-                    cardinalitiesInB.addElement(new Integer(1));
-                    mapClusterTagB.put(clusterName, new Integer(index));
+                    cardinalitiesInB.addElement(1);
+                    mapClusterTagB.put(clusterName, index);
                 }
                 else
                 {
-                    index = objectIndex.intValue();
+                    index = objectIndex;
                     // Increase the cluster's cardinality in vector
                     // cardinalitiesInB
-                    int newCardinality = 1 + cardinalitiesInB.elementAt(index).intValue();
-                    cardinalitiesInB.setElementAt(new Integer(newCardinality), index);
+                    int newCardinality = 1 + cardinalitiesInB.elementAt(index);
+                    cardinalitiesInB.setElementAt(newCardinality, index);
                 }
                 mapObjectClusterInB.put(objectName, clusterName);
             }
