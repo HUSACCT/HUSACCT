@@ -1,4 +1,4 @@
-group 'asdf'
+group 'nl.hu'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
