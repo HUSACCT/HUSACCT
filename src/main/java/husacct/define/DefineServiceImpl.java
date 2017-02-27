@@ -1,0 +1,420 @@
+package husacct.define;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.swing.JInternalFrame;
+
+import org.apache.log4j.Logger;
+import org.jdom2.Element;
+
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
+import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.RuleDTO;
+import husacct.common.services.ObservableService;
+import husacct.define.domain.Application;
+import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.domain.services.SoftwareArchitectureDomainService;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
+import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
+import husacct.define.task.AppliedRuleController;
+import husacct.define.task.DefinitionController;
+import husacct.define.task.SoftwareUnitController;
+import husacct.define.task.persistency.PersistentDomain;
+import husacct.define.task.persistency.PersistentDomain.DomainElement;
+import husacct.define.task.report.ReportArchitectureAbstract;
+import husacct.define.task.report.ReportArchitectureToExcel;
+
+public class DefineServiceImpl extends ObservableService implements IDefineService {
+	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
+	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
+	private DomainToDtoParser domainParser = new DomainToDtoParser();
+	private ModuleDomainService moduleService = new ModuleDomainService();
+	private boolean isMapped;
+	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+	private DefineSarServiceImpl defineSarService;
+	private Logger logger = Logger.getLogger(DefineServiceImpl.class);
+
+
+	public DefineServiceImpl() {
+		super();
+		reset();
+		isMapped = false;
+	}
+
+	@Override
+	public void analyze() {
+		StateService.instance().analyze();
+	}
+
+	@Override
+	public void createApplication(String name, ArrayList<ProjectDTO> projects, String version) {
+		defineDomainService.createApplication(name, projects, version);
+	}
+
+	@Override
+	public ApplicationDTO getApplicationDetails() {
+		Application app = defineDomainService.getApplicationDetails();
+		ApplicationDTO appDTO = domainParser.parseApplication(app);
+		return appDTO;
+	}
+
+	public AppliedRuleController getAppliedRuleController() {
+		return new AppliedRuleController(0, -1);
+	}
+
+	@Override
+	public ModuleDTO getModule_ByUniqueName(String uniqueName) {
+		ModuleDTO moduleDTO = null;
+		try{
+			if ((uniqueName != null) && !uniqueName.equals("") && !uniqueName.equals("**")) {
+				ModuleStrategy module = moduleService.getModuleByLogicalPath(uniqueName);
+				moduleDTO = domainParser.parseModule(module);
+				// Remove nested children
+				moduleDTO.subModules = new ModuleDTO[] {};
+			}
+        } catch (Exception e) {
+	        logger.error("Unable to load module", e);
+        }
+		return moduleDTO;
+	}
+
+	@Override
+	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath) {
+		ModuleDTO[] childModuleDTOs;
+		if (logicalPath.equals("**")) {
+			childModuleDTOs = getModule_AllRootModules();
+		} else {
+			ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
+			ModuleDTO moduleDTO = domainParser.parseModule(module);
+			childModuleDTOs = moduleDTO.subModules;
+		}
+		// Remove nested children
+		for (ModuleDTO modDTO : childModuleDTOs) {
+			modDTO.subModules = new ModuleDTO[] {};
+		}
+
+		return childModuleDTOs;
+	}
+
+	@Override
+	public HashSet<String> getModule_AllPhysicalClassPathsOfModule(String logicalPath) {
+		HashSet<String> resultClasses = new HashSet<>();
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
+		// Get the physical classPaths of all classes represented by the SUs
+		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
+		for (String suName : allAssignedSoftwareUnitNames){
+			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
+			String suType = softwareUnit.getType().toString();
+			if (suType.toLowerCase().equals("class") || suType.toLowerCase().equals("interface") || suType.toLowerCase().equals("library")){
+				resultClasses.add(suName);
+			}
+			// Get all underlying classes (also inner classes) from AnalyseService and add them to resultClasses
+			List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalClassPathsOfSoftwareUnit(suName); 
+			resultClasses.addAll(AllPhysicalClassPaths); 
+		}
+		return resultClasses;
+	}
+
+	@Override // Returns all paths of subpackages (and subsub, etc) within the assigned software units, but not the paths of these assigned software units
+	public HashSet<String> getModule_AllPhysicalPackagePathsOfModule(String logicalPath){
+		HashSet<String> resultPackages = new HashSet<>();
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = getAllAssignedSoftwareUnitsOfModule(logicalPath);
+		// Get the physical classPaths of all classes represented by the SUs
+		Set<String> allAssignedSoftwareUnitNames = allAssignedSoftwareUnits.keySet();
+		for (String suName : allAssignedSoftwareUnitNames){
+			SoftwareUnitDefinition softwareUnit = allAssignedSoftwareUnits.get(suName);
+			String suType = softwareUnit.getType().toString();
+			if (suType.toLowerCase().equals("package")){
+				// Get all underlying packages from AnalyseService and add them to resultPackages
+				List<String> AllPhysicalClassPaths = analyseService.getAllPhysicalPackagePathsOfSoftwareUnit(suName); 
+				resultPackages.addAll(AllPhysicalClassPaths); 
+			}
+		}
+		return resultPackages;
+	}
+
+	@Override
+	public HashSet<String> getAssignedSoftwareUnitsOfModule(String logicalPath){
+		HashSet<String> resultSetOfSoftwareUnits = new HashSet<>();
+		try {
+			if ((logicalPath != null) && !logicalPath.equals("**")) {
+				// 1 Get the module
+				ModuleStrategy module =(moduleService.getModuleByLogicalPath(logicalPath));
+				// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+				if (module != null){
+					SoftwareUnitDefinitionDomainService sudSomainService = new SoftwareUnitDefinitionDomainService();
+					resultSetOfSoftwareUnits.addAll(sudSomainService.getSoftwareUnitNames(module.getId()));
+					/* To get all assigned SoftwareUnits of the module(s) and all its child modules:
+					Set<String> softwareUnits = module.getAllAssignedSoftwareUnitsInTree().keySet();
+					if(softwareUnits != null)
+						resultSetOfSoftwareUnits.addAll(softwareUnits);
+					*/
+				}
+			}
+        } catch (Exception e) {
+	        this.logger.error(new Date().toString() + " Exception: "  + e );
+	        //e.printStackTrace();
+        }
+		return resultSetOfSoftwareUnits;
+	}
+
+	/**
+	 * Gets all the SUs assigned to the module or assigned to one of the subModules, subSubModules, etc.
+	 * In case of logicalPath = "**" (root), this is done for all modules in the root.
+	 * @param logicalPath of a module in the intended architecture
+	 * @return TreeMap<String, SoftwareUnitDefinition>
+	 */
+	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
+		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<>();
+		try {
+			ModuleStrategy[] modules = null;
+			// 1 Get the module(s)
+			if (logicalPath.equals("**")) {
+				modules = moduleService.getRootModules();
+			} else {
+				modules = new ModuleStrategy[1];
+				modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
+			}
+			// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
+			for (ModuleStrategy module : modules){
+				HashMap<String, SoftwareUnitDefinition> softwareUnits = module.getAllAssignedSoftwareUnitsInTree();
+				if(softwareUnits != null)
+					allAssignedSoftwareUnits.putAll(softwareUnits);
+			}
+        } catch (Exception e) {
+	        this.logger.warn(new Date().toString() + " Exception: "  + e );
+	        //e.printStackTrace();
+        }
+		return allAssignedSoftwareUnits;
+	}
+	
+	@Override
+	// Gets the hierarchical level of a module. Throws RuntimeException when the module is not found.
+	public int getHierarchicalLevelOfLayer(String logicalPath){
+		int hierarchicalLevel = 0;
+		ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
+		if(module != null){
+			if(module.getType().equals("Layer")){
+				Layer layer = (Layer) module;
+				hierarchicalLevel = layer.getHierarchicalLevel();
+			}
+		}
+		return hierarchicalLevel;
+	}
+
+	
+	@Override
+	public JInternalFrame getDefinedGUI() {
+		return getDefinitionController().getNewDefineInternalFrame();
+	}
+
+	@Override
+	public RuleDTO[] getDefinedRules() {
+		ArrayList<AppliedRuleStrategy> rules = appliedRuleService.getAllEnabledAppliedRules();
+		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
+		return ruleDTOs;
+	}
+
+	public DefinitionController getDefinitionController() {
+		return DefinitionController.getInstance();
+	}
+
+	@Override
+	public IDefineSarService getSarService() {
+		defineSarService = new DefineSarServiceImpl(this);
+		return defineSarService;
+	}
+	
+	@Override
+	public Element exportIntendedArchitecture() {
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
+		pd.setParseData(DomainElement.LOGICAL);
+		return pd.getWorkspaceData();
+	}
+
+	@Override
+	public ModuleDTO getModule_BasedOnSoftwareUnitName(String physicalPath) {
+		ModuleDTO returnValue = null;
+        String[] splitted = physicalPath.split("\\.");
+        int lenght = splitted.length;
+        for(int i = lenght; i > 0; i--){
+	        ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(physicalPath);
+			if (module != null){
+				returnValue = domainParser.parseModule(module);
+				return returnValue;
+			} 
+			else{
+				// Split the last part of physicalPath, if possible, and retry 
+		        if(i >= 2){
+			        physicalPath = splitted[0];
+			        for (int j = 1; j < i-1; j++) {
+			        	physicalPath = physicalPath + "."  + splitted[j];
+			        }
+		        }
+		        else{
+		        	// Do nothing; logical module not found; physical path may not be assigned to a logical module; return null
+		        }
+			}
+        }
+		return returnValue;
+	}
+
+	@Override
+	public String getModule_TheParentOfTheModule(String logicalPath) {
+		String parentLogicalPath = "";
+		try {
+			if (logicalPath.contains(".")) {
+				String[] moduleNames = logicalPath.split("\\.");
+				parentLogicalPath += moduleNames[0];
+				for (int i = 1; i < moduleNames.length - 1; i++) {
+					parentLogicalPath += "." + moduleNames[i];
+				}
+				// Check if exists, an exception will automaticly be thrown
+				SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath);
+			} else {
+				parentLogicalPath = "**";
+			}
+        } catch (Exception e) {
+	        this.logger.warn(" Exception: "  + e );
+        }
+		return parentLogicalPath;
+	}
+
+	@Override
+	public ModuleDTO[] getModule_AllRootModules() {
+		ModuleStrategy[] modules = moduleService.getRootModules();
+		return domainParser.parseRootModules(modules);
+	}
+
+	public SoftwareUnitController getSoftwareUnitController() {
+		return new SoftwareUnitController(0);
+	}
+
+	@Override
+	public ModuleDTO[] getAllModules(){
+		allModules = new ArrayList<>();
+		ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
+		for(ModuleStrategy module : modules){
+			allModules.add(module);
+			if(!module.getSubModules().isEmpty()){
+				getSubModulesFromModuleStrategy(module);
+			}
+		}
+		return domainParser.parseRootModules(allModules.toArray(new ModuleStrategy[allModules.size()]));
+		 
+	}
+	
+	private ArrayList<ModuleStrategy> allModules;
+	
+	private void getSubModulesFromModuleStrategy(ModuleStrategy module){
+		for(ModuleStrategy subModule : module.getSubModules()){
+			allModules.add(subModule);
+			if(!subModule.getSubModules().isEmpty()){
+				getSubModulesFromModuleStrategy(subModule);
+			}
+		}
+	}
+	
+	@Override
+	public Element getWorkspaceData() {
+		return new PersistentDomain(defineDomainService, moduleService, appliedRuleService).getWorkspaceData();
+	}
+
+	@Override
+	public boolean isDefined() {
+		boolean isDefined = false;
+		if (SoftwareArchitecture.getInstance().getModules().size() > 0) {
+			isDefined = true;
+		}
+		return isDefined;
+	}
+
+	@Override
+	public boolean isMapped() {
+		if(!isMapped) {
+			ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance().getModules();
+			for (ModuleStrategy module : modules) {
+				if (module.isMapped()) {
+					isMapped = true;
+				}
+			}
+		}
+		return isMapped;
+	}
+
+	@Override
+	public void importIntendedArchitecture(Element e) {
+		reset();
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
+		pd.setParseData(DomainElement.LOGICAL);
+		pd.loadWorkspaceData(e);
+		getDefinitionController().notifyObservers();
+		getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
+		getDefinitionController().clearObserversWithinDefine();
+	}
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		PersistentDomain pd = new PersistentDomain(defineDomainService, moduleService, appliedRuleService);
+		pd.loadWorkspaceData(workspaceData);
+	}
+
+	private void reset() {
+		//StateService.instance().reset();
+		defineDomainService = new SoftwareArchitectureDomainService();
+		moduleService = new ModuleDomainService();
+		appliedRuleService = new AppliedRuleDomainService();
+		domainParser = new DomainToDtoParser();
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
+		DefinitionController.setInstance(new DefinitionController());
+		if (defineSarService != null) {
+			defineSarService.reset();
+		}
+	}
+
+	@Override
+	public void reportArchitecture(String fullFilePath) {
+		ReportArchitectureAbstract reporter = new ReportArchitectureToExcel();
+		reporter.write(fullFilePath);
+	}
+
+	@Override
+	public RuleDTO[] getRulesByLogicalPath(String logicalPathFrom, String logicalPathTo) {
+		ArrayList<RuleDTO> matchingRules = new ArrayList<>();
+		for (RuleDTO rule : getDefinedRules()){
+			String pathFrom = rule.moduleFrom.logicalPath;
+			String pathTo = rule.moduleTo.logicalPath;
+	
+			if(logicalPathFrom.equals(pathFrom) && logicalPathTo.equals(pathTo)){
+				matchingRules.add(rule);
+				
+			}
+		}
+		return matchingRules.toArray(new RuleDTO[matchingRules.size()]);
+	}
+	
+	@Override
+	public RuleDTO getMainRuleBy_From_To_RuleTypeKey(String moduleFromLogicalPath, String moduleTologicalPath, String ruleTypeKey) {
+		AppliedRuleStrategy mainRule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey(moduleFromLogicalPath, moduleTologicalPath, ruleTypeKey);
+		if (mainRule != null) {
+			return domainParser.parseRule(mainRule, false);
+		} else {
+			return null;
+		}
+	}
+}
