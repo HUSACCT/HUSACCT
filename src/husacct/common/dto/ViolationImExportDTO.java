@@ -10,8 +10,9 @@ public class ViolationImExportDTO extends AbstractDTO {
 	public String depSubType = "";		// DependencySubType for dependency-related rule types)
 	public boolean indirect = false;	// Direct/indirect dependency (for dependency-related rule types)
 	public String severity = "";		// Key of the severity
+	public String message = "";			// Short explanation of the violated rule
 	// The following three identify the violated rule: ruleTypeKey + logicalModuleFrom + logicalModuleTo
-	public String ruleType = "";		// Identifier of RuleType; the type of rule
+	public String ruleType = "";		// Identifier of RuleType; the type of violated rule
 	public String fromMod = "";			// ModuleFrom of the violated rule; not of the from-to software units
 	public String toMod = "";			// ModuleTo of the violated rule; not of the from-to software units
 
@@ -73,6 +74,14 @@ public class ViolationImExportDTO extends AbstractDTO {
 
 	public void setSeverity(String severity) {
 		this.severity = severity;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public String getRuleType() {

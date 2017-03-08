@@ -17,8 +17,6 @@ import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -68,7 +66,7 @@ public class ApplicationController {
 		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(mainController,applicationDTO));
 		currentLoader = analyseThread.getLoader();
 		analyseThread.getThread();
-		logger.info(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
+		//logger.info(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
 		currentLoader.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {		

@@ -22,6 +22,7 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JInternalFrame;
 
@@ -45,7 +46,7 @@ public class ValidateTest {
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			logger.info(String.format(" Start: ValidateTest"));
+			logger.info(String.format(new Date().toString() + " Start: ValidateTest"));
 			define = ServiceProvider.getInstance().getDefineService();
 			
 			ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
@@ -64,7 +65,7 @@ public class ValidateTest {
 
 	@AfterClass
 	public static void tearDown(){
-		logger.info(String.format(" Finished: ValidateTest"));
+		logger.info(String.format(new Date().toString() + " Finished: ValidateTest"));
 	}
 	
 	@Test

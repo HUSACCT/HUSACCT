@@ -11,7 +11,6 @@ import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.task.imexporting.importing.ImportViolations;
 import husacct.control.ControlServiceImpl;
-import husacct.control.IControlService;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.resources.IResource;
@@ -46,7 +45,7 @@ public class SRMATest20141112 {
 		try {
 			setLog4jConfiguration();
 			String workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format(" Start: SRMA Test using workspace: " + workspacePath));
+			logger.info(String.format(new Date().toString() + " Start: SRMA Test using workspace: " + workspacePath));
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -86,7 +85,7 @@ public class SRMATest20141112 {
 	@AfterClass
 	public static void tearDown(){
 		workspaceController.closeWorkspace();
-		logger.info(String.format(" Finished: SRMA Test"));
+		logger.info(String.format(new Date().toString() + " Finished: SRMA Test"));
 	}
 	
 	@Test
@@ -378,8 +377,10 @@ public class SRMATest20141112 {
 
 	@Test
 	public void isNumberOfExportedViolationsCorrect() {
+		// Tests if the service "exportViolations(exportFile)" works correctly
 		IValidateService validate = ServiceProvider.getInstance().getValidateService();
-		boolean isValidatedCorrectly = false;
+		boolean isProcessedCompletely = false;
+		boolean	numberOfExportedViolationsIsCorrect = false;
 		int numberOfViolationsInModel = 0;
 		int numberOfViolationsInXML = 0;
 		String exportFilePath = TestResourceFinder.getExportFolderForTest("java") + "ExportImportViolationsTest" + "." + "xml";
@@ -391,10 +392,15 @@ public class SRMATest20141112 {
 			mainController.getExportImportController().exportViolations(exportFile);
 			numberOfViolationsInXML = countNumberOfViolationsInExportFile(exportFile);
 			exportFile.delete();
-		} catch (ProgrammingLanguageNotFoundException e) {
-			assertTrue(isValidatedCorrectly);
+			if (numberOfViolationsInModel == numberOfViolationsInXML) {
+				numberOfExportedViolationsIsCorrect = true;
+			}
+			isProcessedCompletely = true;
+		} catch (Exception exception) {
+			logger.warn(String.format(" Exception: " + exception.getCause().toString()));
 		}
-		assertTrue(numberOfViolationsInModel == numberOfViolationsInXML);
+		assertTrue(isProcessedCompletely);
+		assertTrue(numberOfExportedViolationsIsCorrect);
 	}
 
 	private int countNumberOfViolationsInExportFile(File exportile) {
@@ -409,10 +415,32 @@ public class SRMATest20141112 {
 			List<ViolationImExportDTO> previousViolationsDtoList = importer.importViolations(logicalData);
 			numberOfViolations = previousViolationsDtoList.size();
 		} catch (Exception exception){
-			IControlService controlService = ServiceProvider.getInstance().getControlService();
-			controlService.showErrorMessage(exception.getMessage());
+			logger.warn(String.format(" Exception: " + exception.getCause().toString()));
 		}
 		return numberOfViolations;
+	}
+	
+	@Test
+	public void isIdentifiedNumberOfNewViolationsCorrect() {
+		// Tests if the service "identifyNewViolations(previousViolationsFile)" works correctly
+		boolean isProcessedCompletely = false;
+		boolean	numberOfNewViolationsIsCorrect = false;
+		int numberOfMissingViolationsInImportFile = 5; // The import file contains 56 violations of 61 in total. Five violations are removed with WordPad from the exportAllViolations file.
+		int numberOfIdentifiedNewViolations = 0;
+		String importFilePath = TestResourceFinder.getSaccFolder("java") + "ArchitectureViolations_SrmaTest_All-5_ImportFile" + "." + "xml";
+		try {
+			File previousViolationsFile = new File(importFilePath);
+			ViolationImExportDTO[] newViolations = mainController.getExportImportController().identifyNewViolations(previousViolationsFile);
+			numberOfIdentifiedNewViolations = newViolations.length;
+			if (numberOfMissingViolationsInImportFile == numberOfIdentifiedNewViolations) {
+				numberOfNewViolationsIsCorrect = true;
+			}
+			isProcessedCompletely = true;
+		} catch (Exception exception) {
+			logger.warn(String.format(" Exception: " + exception.getCause().toString()));
+		}
+		assertTrue(isProcessedCompletely);
+		assertTrue(numberOfNewViolationsIsCorrect);
 	}
 
 	//private helpers; from Maven plugin
@@ -429,7 +457,7 @@ public class SRMATest20141112 {
 			HashMap<String, Object> dataValues = new HashMap<String, Object>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
-			if(workspaceController.isOpenWorkspace()){
+			if(workspaceController.isAWorkspaceOpened()){
 				logger.info(String.format(new Date().toString() + " Workspace %s loaded", location));
 			} else {
 				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));
@@ -447,21 +475,12 @@ public class SRMATest20141112 {
 	}
 
 	private static void checkConformance() {
-		ServiceProvider.getInstance().getControlService().setValidate(true);
+		ServiceProvider.getInstance().getControlService().setValidating(true);
 		logger.info(new Date().toString() + " CheckConformanceTask is Starting: IValidateService.checkConformance()" );
 		ServiceProvider.getInstance().getValidateService().getCategories();
 		ServiceProvider.getInstance().getValidateService().checkConformance();
-		ServiceProvider.getInstance().getControlService().setValidate(false);
-		logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
+		ServiceProvider.getInstance().getControlService().setValidating(false);
+		//logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
 	}
 
-/*
-
-	private void exportViolations(String location, String extension) {
-		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
-		File file = new File(location);
-		logger.debug(String.format("Export violations to %s", file.getAbsolutePath()));
-		validateService.exportViolations(new File(location), extension);
-	}
-*/
 }

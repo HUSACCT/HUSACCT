@@ -54,7 +54,7 @@ public class ViolationRepository {
 
 	// Objectives: 1) create and fill violationFromToHashMap, 2) remove duplicates.
 	public void filterAndSortAllViolations(){
-		int beforeNrOfViolations = violationsList.size();
+		// int beforeNrOfViolations = violationsList.size();
 		ArrayList<Violation> filteredViolationsList = new ArrayList<Violation>();
 		String violationFromToKey;
 		String violationDetailsKey;
@@ -91,7 +91,8 @@ public class ViolationRepository {
 		
         violationsList = filteredViolationsList;
         sortViolationsPerRule(); // Do this after filtering, to prevent duplicate violations.
-        this.logger.info(new Date().toString() + " Before/After filterAndSortAllViolations:  " + beforeNrOfViolations + "/" + violationsList.size());
+        this.logger.info(new Date().toString() + " Detected number of violations:  " + violationsList.size());
+        //this.logger.info(new Date().toString() + " Before/After filterAndSortAllViolations:  " + beforeNrOfViolations + "/" + violationsList.size());
 	}
 	
 	// Objectives: 1) create and fill violationsPerRuleTreeMap.

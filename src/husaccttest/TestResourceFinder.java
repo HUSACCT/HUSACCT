@@ -14,6 +14,7 @@ public class TestResourceFinder {
 	private static final String TESTPROJECT_FOLDER = "testresources";
 	public static final String WORKSPACES_FOLDER = "workspaces";
 	public static final String EXPORT_FOLDER = "export";
+	public static final String SACC_FOLDER = "sacc";
 
 	/**Function to find the current source path, holding in account if the build or the normal JUnit tests is requesting the path. 
 	 * Build tests will run from a different location, thus the path will be different. */
@@ -34,6 +35,11 @@ public class TestResourceFinder {
 
 	public static String getExportFolderForTest(String languageFolder){
 		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/";
+		return path;
+	}
+
+	public static String getSaccFolder(String languageFolder){
+		String path = getBaseTestResourcesPath(languageFolder) + SACC_FOLDER + "/";
 		return path;
 	}
 

@@ -1,11 +1,11 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
+import husacct.common.enums.States;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
-import husacct.control.task.States;
 import husacct.control.task.WorkspaceController;
 
 import java.awt.event.ActionEvent;

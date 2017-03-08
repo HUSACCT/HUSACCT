@@ -6,7 +6,6 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.ViolationImExportDTO;
-import husacct.control.IControlService;
 import husacct.control.presentation.util.ExportImportDialog;
 import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
@@ -76,8 +75,11 @@ public class ExportImportController {
 			
 			xmlResource.save(doc, resourceData);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.debug("Unable to export analysis model: " + e.getMessage());
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to export analysis model: " + e.getMessage());
+			} else {
+				logger.error("Unable to export analysis model: " + e.getMessage());
+			}
 		}
 	}
 
@@ -91,8 +93,11 @@ public class ExportImportController {
 			
 			xmlResource.save(doc, resourceData);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.debug("Unable to export logical architecture: " + e.getMessage());
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to export intended architecture: " + e.getMessage());
+			} else {
+				logger.error("Unable to export intended architecture: " + e.getMessage());
+			}
 		}
 	}
 	
@@ -101,18 +106,24 @@ public class ExportImportController {
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		try {
 			validateService.exportViolations(file, filename.getExtension());
-		} catch (Exception exception){
-			IControlService controlService = ServiceProvider.getInstance().getControlService();
-			controlService.showErrorMessage(exception.getMessage());
+		} catch (Exception e){
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to export violations: " + e.getMessage());
+			} else {
+				logger.error("Unable to export violations: " + e.getMessage());
+			}
 		}
 	}
 	
 	public void reportArchitecture(File file){
 		try {
 			ServiceProvider.getInstance().getDefineService().reportArchitecture(file.getAbsolutePath());
-		} catch (Exception exception){
-			IControlService controlService = ServiceProvider.getInstance().getControlService();
-			controlService.showErrorMessage(exception.getMessage());
+		} catch (Exception e){
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to create report: " + e.getMessage());
+			} else {
+				logger.error("Unable to create report: " + e.getMessage());
+			}
 		}
 	}
 	
@@ -120,9 +131,12 @@ public class ExportImportController {
 		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 		try {
 			analyseService.createDependencyReport(file.getAbsolutePath());
-		} catch (Exception exception){
-			IControlService controlService = ServiceProvider.getInstance().getControlService();
-			controlService.showErrorMessage(exception.getMessage());
+		} catch (Exception e){
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to create report: " + e.getMessage());
+			} else {
+				logger.error("Unable to create report: " + e.getMessage());
+			}
 		}
 	}
 	
@@ -148,7 +162,11 @@ public class ExportImportController {
 			Element logicalData = doc.getRootElement();
 			ServiceProvider.getInstance().getDefineService().importIntendedArchitecture(logicalData);
 		} catch (Exception e) {
-			logger.debug("Unable to import logical architecture: " + e.getMessage());
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to export intended architecture: " + e.getMessage());
+			} else {
+				logger.error("Unable to export intended architecture: " + e.getMessage());
+			}
 		}
 	}
 
@@ -162,8 +180,12 @@ public class ExportImportController {
 			Document doc = xmlResource.load(resourceData);	
 			Element logicalData = doc.getRootElement();
 			newViolations = validateService.identifyNewViolations(logicalData);
-		} catch (Exception exception){
-			logger.error("Unable to import logical architecture: " + exception.getCause().toString());
+		} catch (Exception e){
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to identify new violations: " + e.getMessage());
+			} else {
+				logger.error("Unable to identify new violations: " + e.getMessage());
+			}
 		}
 		return newViolations;
 	}
@@ -195,8 +217,11 @@ public class ExportImportController {
 			ServiceProvider.getInstance().getDefineService().analyze();
 			mainController.getViewController().showApplicationOverviewGui();
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.debug("Unable to export analysis model: " + e.getMessage());
+			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to import analysis model: " + e.getMessage());
+			} else {
+				logger.error("Unable to import analysis model: " + e.getMessage());
+			}
 		}
 	}
 

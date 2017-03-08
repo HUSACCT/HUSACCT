@@ -56,7 +56,9 @@ abstract public class InternalFrameController {
 			public void update() {
 				if(internalFrame != null){
 					internalFrame.setTitle(getTitle());
-					toggleButton.setText(internalFrame.getTitle());
+					if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+						toggleButton.setText(internalFrame.getTitle());
+					}
 				}
 			}
 		});
@@ -98,6 +100,7 @@ abstract public class InternalFrameController {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(" Exception: " + e.getMessage());
 		}
 	}
@@ -147,7 +150,9 @@ abstract public class InternalFrameController {
 				mainController.getMainGui().getDesktopPane().remove(internalFrame);
 				mainController.getMainGui().getDesktopPane().validate();
 			}
-			removeToggleButton();
+			if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				removeToggleButton();
+			}
 			internalFrame = null;
 		}
 	}

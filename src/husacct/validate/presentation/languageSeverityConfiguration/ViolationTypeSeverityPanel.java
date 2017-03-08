@@ -205,8 +205,10 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	private void categoryValueChanged() {
-		checkRestoreButtonEnabled();
-		loadViolationType(((DataLanguageHelper) category.getSelectedValue()).key);
+		if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+			checkRestoreButtonEnabled();
+			loadViolationType(((DataLanguageHelper) category.getSelectedValue()).key);
+		}
 	}
 
 	private void updateViolationtypeSeverities() {

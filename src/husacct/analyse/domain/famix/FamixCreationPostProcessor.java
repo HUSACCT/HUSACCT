@@ -3,8 +3,8 @@ package husacct.analyse.domain.famix;
 import husacct.ServiceProvider;
 import husacct.common.enums.DependencySubTypes;
 import husacct.common.enums.DependencyTypes;
+import husacct.common.enums.States;
 import husacct.common.enums.UmlLinkTypes;
-import husacct.control.task.States;
 
 import java.util.ArrayList;
 import java.util.Date;

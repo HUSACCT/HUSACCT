@@ -1413,7 +1413,7 @@ public class Java_AccuracyTestDependencyDetection {
 			HashMap<String, Object> dataValues = new HashMap<String, Object>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
-			if(workspaceController.isOpenWorkspace()){
+			if(workspaceController.isAWorkspaceOpened()){
 				logger.info(String.format("Workspace %s loaded", location));
 			} else {
 				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));
@@ -1431,11 +1431,11 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	private static void checkConformance() {
-		ServiceProvider.getInstance().getControlService().setValidate(true);
+		ServiceProvider.getInstance().getControlService().setValidating(true);
 		logger.info(new Date().toString() + " CheckConformanceTask is Starting: IValidateService.checkConformance()" );
 		ServiceProvider.getInstance().getValidateService().getCategories();
 		ServiceProvider.getInstance().getValidateService().checkConformance();
-		ServiceProvider.getInstance().getControlService().setValidate(false);
+		ServiceProvider.getInstance().getControlService().setValidating(false);
 		logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
 	}
 

@@ -1,11 +1,11 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.common.enums.States;
 import husacct.common.help.presentation.HelpableJInternalFrame;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ILocaleChangeListener;
 import husacct.control.presentation.util.LoadingDialog;
-import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import org.apache.log4j.Logger;
 
 public class BrowseViolations extends HelpableJInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
@@ -242,7 +243,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 			currentLoader.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent e) {
-					ServiceProvider.getInstance().getControlService().setValidate(false);
+					ServiceProvider.getInstance().getControlService().setValidating(false);
 					logger.info("Stopping Thread");
 				}
 			});

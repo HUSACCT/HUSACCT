@@ -1,9 +1,9 @@
 package husacct.control;
 
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.enums.States;
 import husacct.common.services.IObservableService;
 import husacct.control.task.IFileChangeListener;
-import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Severity;
 
@@ -26,7 +26,7 @@ public interface IControlService extends IObservableService{
 	public List<States> getState();
 	public void updateProgress(int progressPercentage);
 	
-	public void setValidate(boolean validate);
+	public void setValidating(boolean validate);
 	
 	public ApplicationDTO getApplicationDTO();
 	
@@ -39,4 +39,5 @@ public interface IControlService extends IObservableService{
 	public void addFileChangeListener(IFileChangeListener listener);
 	
 	public String showMojoExportImportDialog(boolean isExport);
+	boolean isGuiEnabled();
 }

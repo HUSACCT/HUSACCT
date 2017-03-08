@@ -4,29 +4,20 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.assembler.ViolationDtoAssembler;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
-import husacct.validate.task.imexporting.importing.IdentifyNewViolations;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.jdom2.Element;
-
 public class FilterController {
 
-	private final TaskServiceImpl taskServiceImpl;
-	private final RuleTypesFactory ruletypesfactory;
 	private final ConfigurationServiceImpl configuration;
 	private ArrayList<String> ruletypes = new ArrayList<String>();
 	private ArrayList<String> violationtypes = new ArrayList<String>();
@@ -34,9 +25,7 @@ public class FilterController {
 	private boolean hidefilter = true;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
-	public FilterController(TaskServiceImpl ts, RuleTypesFactory ruletypesfactory, ConfigurationServiceImpl configuration) {
-		this.taskServiceImpl = ts;
-		this.ruletypesfactory = ruletypesfactory;
+	public FilterController(ConfigurationServiceImpl configuration) {
 		this.configuration = configuration;
 	}
 

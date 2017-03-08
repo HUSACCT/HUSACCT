@@ -50,18 +50,17 @@ public class WorkspaceController {
 		workspace.setName(name);
 		currentWorkspace = workspace;
 		
-		if(mainController.guiEnabled){
+		if(ServiceProvider.getInstance().getControlService().isGuiEnabled()){
 			mainController.getMainGui().setTitle(name);
 			mainController.getViewController().closeAll();
 		}
-		
 		ServiceProvider.getInstance().resetServices();
 		mainController.getStateController().checkState();
 	}
 	
 	public void closeWorkspace() {
 		currentWorkspace = null;
-		if(mainController.guiEnabled) {
+		if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
 			mainController.getMainGui().setTitle("");
 			mainController.getViewController().closeAll();
 		}
@@ -83,7 +82,7 @@ public class WorkspaceController {
 	
 	public Document getWorkspaceData(){
 		Element rootElement = new Element("husacct");
-		rootElement.setAttribute("version", "5.2");		
+		rootElement.setAttribute("version", "5.3");		
 		
 		for(ISaveable service : getSaveableServices()){
 			String serviceName = service.getClass().getName();
@@ -119,8 +118,12 @@ public class WorkspaceController {
 			return true;
 		} catch (Exception exception){
 			String message = "Unable to load workspacedata\n" + exception.getMessage();
-			IControlService controlService = ServiceProvider.getInstance().getControlService();
-			controlService.showErrorMessage(message);
+			if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				IControlService controlService = ServiceProvider.getInstance().getControlService();
+				controlService.showErrorMessage(message);
+			} else {
+				logger.error(message);
+			}
 		}
 		return false;
 	}
@@ -151,7 +154,7 @@ public class WorkspaceController {
 		return saveableServices;
 	}
 	
-	public boolean isOpenWorkspace(){
+	public boolean isAWorkspaceOpened(){
 		if(currentWorkspace != null){
 			return true;
 		}
@@ -164,7 +167,7 @@ public class WorkspaceController {
 
 	public void setWorkspace(Workspace workspace) {
 		currentWorkspace = workspace;
-		if(mainController != null && mainController.guiEnabled) {
+		if(mainController != null && ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
 			mainController.getMainGui().setTitle(workspace.getName());
 		}
 	}

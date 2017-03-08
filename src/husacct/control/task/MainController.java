@@ -26,7 +26,6 @@ public class MainController {
 
 	private Logger logger = Logger.getLogger(MainController.class);
 
-	public boolean guiEnabled = false; 
 
 	public MainController(){
 		setControllers();
@@ -34,8 +33,7 @@ public class MainController {
 	}
 
 	public void startGui(){
-		guiEnabled = true;
-		openMainGui();
+		this.mainGUI = new MainGui(this);
 	}
 
 	private void setControllers() {
@@ -56,10 +54,6 @@ public class MainController {
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Husacct");
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("apple.awt.fileDialogForDirectories", "true");
-	}
-
-	private void openMainGui() {
-		this.mainGUI = new MainGui(this);
 	}
 
 	public void parseCommandLineArguments(String[] commandLineArguments){

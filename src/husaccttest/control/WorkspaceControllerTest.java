@@ -61,7 +61,7 @@ public class WorkspaceControllerTest {
 	@Test
 	public void testIsOpenWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
-		assertTrue(workspaceController.isOpenWorkspace());
+		assertTrue(workspaceController.isAWorkspaceOpened());
 	}
 	
 	@Test

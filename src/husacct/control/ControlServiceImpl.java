@@ -3,6 +3,7 @@ package husacct.control;
 import husacct.ServiceProvider;
 import husacct.common.OSDetector;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.enums.States;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
@@ -16,7 +17,6 @@ import husacct.control.task.FileController;
 import husacct.control.task.IFileChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
-import husacct.control.task.States;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.ConfigurationManager;
@@ -40,6 +40,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
+	private boolean isGuiEnabled = false; 
 	
 	private MainController mainController; 
 	private WorkspaceController workspaceController;
@@ -74,6 +75,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		ConfigurationManager.setPropertyIfEmpty("Language", "en");
 	}
 
+
 	@Override
 	public void parseCommandLineArguments(String[] commandLineArguments){
 		mainController.parseCommandLineArguments(commandLineArguments);
@@ -82,10 +84,15 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void startApplication() {
 		mainController.startGui();
-
+		isGuiEnabled = true;
 		if(mainController.getCommandLineController().getResult().contains("bootstrap")){
 			new BootstrapHandler(mainController.getCommandLineController().getResult().getStringArray("bootstrap"));
 		}
+	}
+	
+	@Override
+	public boolean isGuiEnabled() {
+		return isGuiEnabled;
 	}
 	
 	@Override
@@ -152,7 +159,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public List<States> getState() {
-		return this.getMainController().getStateController().getState();
+		return this.getMainController().getStateController().getStates();
 	}
 	
 
@@ -166,8 +173,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public void setValidate(boolean validate) {
-		this.mainController.getStateController().setValidating(validate);
+	public void setValidating(boolean isValidating) {
+		this.mainController.getStateController().setValidating(isValidating);
 	}
 
 	@Override

@@ -2,10 +2,10 @@ package husaccttest.control;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import husacct.common.enums.States;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
-import husacct.control.task.States;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class StateControllerTest {
 	
 	@Test
 	public void testInitialState(){
-		List<States> states = stateController.getState();
+		List<States> states = stateController.getStates();
 		assertTrue(states.contains(States.NONE));
 		assertFalse(states.contains(States.OPENED));
 		assertFalse(states.contains(States.DEFINED));
@@ -52,6 +52,6 @@ public class StateControllerTest {
 		states.add(States.DEFINED);
 		states.add(States.MAPPED);
 		
-		stateController.setState(states);
+		stateController.setStates(states);
 	}
 }

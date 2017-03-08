@@ -15,13 +15,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 
-import org.apache.log4j.Logger;
-
 public class HTMLReportWriter extends ReportWriter {
 
 	private FileWriter writer;
 	private BufferedWriter html;
-	private Logger logger = Logger.getLogger(HTMLReportWriter.class);
 	// Resources
 	private File resourcesDir;
 	private File javascriptDir;

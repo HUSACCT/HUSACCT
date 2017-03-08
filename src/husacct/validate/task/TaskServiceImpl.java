@@ -47,7 +47,7 @@ public class TaskServiceImpl {
 		this.domain = domain;
 		this.exportController = new ExportController();
 		this.importController = new ImportController(configuration);
-		this.filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
+		this.filterController = new FilterController(configuration);
 	}
 
 	public SimpleEntry<Calendar, List<Violation>> getAllViolations() {

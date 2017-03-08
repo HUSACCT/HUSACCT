@@ -6,7 +6,6 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,11 +25,22 @@ public class IdentifyNewViolations {
     }
 
 	public List<ViolationImExportDTO> identifyNewViolations(Element previousViolations) {
-        this.logger.info(new Date().toString() + " Starting: Identify New Violations");
-    	importPreviousViolations(previousViolations);
-    	addPreviousViolationsToRepository();
-    	filterNewViolations();
-        this.logger.info(new Date().toString() + " Finished: Identify New Violations");
+		try {
+	        this.logger.info(new Date().toString() + " Starting: Identify New Violations");
+	    	importPreviousViolations(previousViolations);
+	    	addPreviousViolationsToRepository();
+	    	filterNewViolations();
+	        this.logger.info(new Date().toString() + " Finished: Identify New Violations");
+	        /* Activate when project structure has changed
+	        boolean exportNewViolations = true; // Opnemen als parameter + String exportFilePathNewViolations
+	        if (exportNewViolations && newViolationsList.size() > 0) {
+	        	Calendar saccMoment = task.getAllViolations().getKey();
+	        	String exportFilePathNewViolations = "testresources/java/export/ArchitectureViolations_OnlyNew_ExportFile.xml";
+	        	new ExportNewViolations().createReport(newViolationsList, saccMoment, exportFilePathNewViolations);
+	        } */
+		} catch (Exception e){
+			logger.warn("Exception: " + e.getCause().toString());
+		}
         return newViolationsList;
 	}
 
@@ -95,6 +105,7 @@ public class IdentifyNewViolations {
 				newViolation.setFrom(currenViolation.getClassPathFrom());
 				newViolation.setIndirect(currenViolation.getIsIndirect());
 				newViolation.setSeverity(currenViolation.getSeverity().getSeverityKey());
+				newViolation.setMessage(task.getMessage(currenViolation));
 				newViolation.setRuleType(currenViolation.getRuletypeKey());
 				newViolation.setFromMod(currenViolation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 				newViolation.setToMod(currenViolation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());

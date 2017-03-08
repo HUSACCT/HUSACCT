@@ -14,7 +14,7 @@ import javax.swing.border.TitledBorder;
 
 public class StatisticsPanel extends JPanel {
 	private static final long serialVersionUID = -7741400148880504572L;
-	private JLabel totalViolationLabel, totalViolationNumber, shownViolationsLabel, shownViolationsNumber, violationSeverity, violationSeverityMedium, violationSeverityHigh, violationSeverityTotals, violationSeverityMediumTotal, violationSeverityHighTotal;
+	private JLabel totalViolationLabel, totalViolationNumber, shownViolationsLabel, shownViolationsNumber, violationSeverity, violationSeverityTotals;
 
 	public StatisticsPanel() {
 		createBaseLayout();
@@ -27,11 +27,6 @@ public class StatisticsPanel extends JPanel {
 		shownViolationsNumber = new JLabel("0");
 		violationSeverity = new JLabel("Severity (Low/Medium/High):");
 		violationSeverityTotals = new JLabel("0");
-
-		violationSeverityMedium = new JLabel("Medium:");
-		violationSeverityMediumTotal = new JLabel("0");
-		violationSeverityHigh = new JLabel("High:");
-		violationSeverityHighTotal = new JLabel("0");
 		
 		GroupLayout gl_violationDetailPane = new GroupLayout(this);
 		gl_violationDetailPane.setHorizontalGroup(

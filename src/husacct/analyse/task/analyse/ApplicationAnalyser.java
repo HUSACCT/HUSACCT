@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.task.analyse.clojure.ClojureAnalyser;
 import husacct.analyse.task.analyse.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyse.java.JavaAnalyser;
-import husacct.control.task.States;
+import husacct.common.enums.States;
 
 import java.util.Date;
 import java.util.List;
@@ -44,7 +44,7 @@ public class ApplicationAnalyser {
 
         this.logger.info(" Number of syntax errors: " + analyser.getNumberOfSyntaxErrors());
         this.logger.info(" Number of files with syntax errors: " + analyser.getNrOfFilesWithSyntaxErrors() + "  Of which files with 'test' in path: " + analyser.getNrOfFilesWithSyntaxErrors_WithTestInPath());
-        this.logger.info(new Date().toString() + " Finished: Parse sourcefiles");
+        this.logger.info(new Date().toString() + " Finished: Parse sourcefiles. Start: Post processing");
 
         analyser.connectDependencies();
         //required for clearing the buffers after analysis is finished

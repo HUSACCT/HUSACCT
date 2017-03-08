@@ -233,7 +233,7 @@ public class ExportImportAnalysedModelTest {
 			HashMap<String, Object> dataValues = new HashMap<String, Object>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
-			if(workspaceController.isOpenWorkspace()){
+			if(workspaceController.isAWorkspaceOpened()){
 				logger.info(String.format("Workspace %s loaded", location));
 			} else {
 				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));

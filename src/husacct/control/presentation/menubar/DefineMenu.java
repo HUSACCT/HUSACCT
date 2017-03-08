@@ -10,11 +10,11 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import husacct.ServiceProvider;
+import husacct.common.enums.States;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
-import husacct.control.task.States;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{

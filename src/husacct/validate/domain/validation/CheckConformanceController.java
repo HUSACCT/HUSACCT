@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.control.task.States;
+import husacct.common.enums.States;
 import husacct.define.IDefineService;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;

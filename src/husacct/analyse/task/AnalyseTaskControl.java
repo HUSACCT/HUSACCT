@@ -44,7 +44,7 @@ public class AnalyseTaskControl {
         analyserService.analyseApplication(paths, programmingLanguage);
         queryService.buildCache();
         this.isAnalysed = true;
-        this.logger.info(new Date().toString() + " Finished: Analyse Application; ServiceListeners notified; State isAnalysed = true");
+        // this.logger.info(new Date().toString() + " Finished: Analyse Application; ServiceListeners notified; State isAnalysed = true");
     }
 
     public Element exportAnalysisModel() {

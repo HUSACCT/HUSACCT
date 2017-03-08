@@ -12,24 +12,24 @@ import org.apache.log4j.Logger;
 public class CheckConformanceTask implements Runnable {
 
 	private final FilterPanel filterPanel;
-	private final JButton buttonSaveInHistory;
+	//private final JButton buttonSaveInHistory;
 	private Logger logger = Logger.getLogger(CheckConformanceTask.class);
 
 	public CheckConformanceTask(FilterPanel filterPanel, JButton buttonSaveInHistory) {
 		this.filterPanel = filterPanel;
-		this.buttonSaveInHistory = buttonSaveInHistory;
+		//this.buttonSaveInHistory = buttonSaveInHistory;
 	}
 
 	@Override
 	public void run() {
 		try {
-			ServiceProvider.getInstance().getControlService().setValidate(true);
+			ServiceProvider.getInstance().getControlService().setValidating(true);
 			Thread.sleep(1);
 			this.logger.info(new Date().toString() + " CheckConformanceTask is Starting: IValidateService.checkConformance()" );
 			ServiceProvider.getInstance().getValidateService().checkConformance();
 			filterPanel.loadAfterChange();
 			// buttonSaveInHistory.setEnabled(true);
-			ServiceProvider.getInstance().getControlService().setValidate(false);
+			ServiceProvider.getInstance().getControlService().setValidating(false);
 			this.logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
 		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());

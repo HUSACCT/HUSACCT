@@ -25,6 +25,7 @@ import husaccttest.define.DefineSarServicesTest_SRMA;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -59,7 +60,7 @@ public class DrawingControllerTest {
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			logger.info(String.format("Start: Graphics DrawingControllerTest"));
+			logger.info(String.format(new Date().toString() + "Start: Graphics DrawingControllerTest"));
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
 			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 
@@ -95,7 +96,7 @@ public class DrawingControllerTest {
 	@AfterClass
 	public static void tearDown(){
 		workspaceController.closeWorkspace();
-		logger.info(String.format("Finished: Graphics DrawingControllerTest"));
+		logger.info(String.format(new Date().toString() + "Finished: Graphics DrawingControllerTest"));
 	}
 
 	// TESTS 
@@ -356,7 +357,7 @@ public class DrawingControllerTest {
 			HashMap<String, Object> dataValues = new HashMap<String, Object>();
 			dataValues.put("file", file);
 			workspaceController.loadWorkspace("Xml", dataValues);
-			if(workspaceController.isOpenWorkspace()){
+			if(workspaceController.isAWorkspaceOpened()){
 				logger.info(String.format("Workspace %s loaded", location));
 			} else {
 				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));
