@@ -6,6 +6,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationImExportDTO;
+import husacct.common.dto.ViolationReportDTO;
 import husacct.validate.IValidateService;
 import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
@@ -411,8 +412,8 @@ public class SRMATest20141112 {
 		try {
 			Document doc = xmlResource.load(resourceData);	
 			Element logicalData = doc.getRootElement();
-			ImportViolations importer = new ImportViolations();
-			List<ViolationImExportDTO> previousViolationsDtoList = importer.importViolations(logicalData);
+			ImportViolations importer = new ImportViolations(logicalData);
+			List<ViolationImExportDTO> previousViolationsDtoList = importer.importViolations();
 			numberOfViolations = previousViolationsDtoList.size();
 		} catch (Exception exception){
 			logger.warn(String.format(" Exception: " + exception.getCause().toString()));
@@ -430,8 +431,8 @@ public class SRMATest20141112 {
 		String importFilePath = TestResourceFinder.getSaccFolder("java") + "ArchitectureViolations_SrmaTest_All-5_ImportFile" + "." + "xml";
 		try {
 			File previousViolationsFile = new File(importFilePath);
-			ViolationImExportDTO[] newViolations = mainController.getExportImportController().identifyNewViolations(previousViolationsFile);
-			numberOfIdentifiedNewViolations = newViolations.length;
+			ViolationReportDTO newViolations = mainController.getExportImportController().performSoftwareArchitectureComplianceCheck(previousViolationsFile, null, null);
+			numberOfIdentifiedNewViolations = newViolations.getNrOfNewViolations();
 			if (numberOfMissingViolationsInImportFile == numberOfIdentifiedNewViolations) {
 				numberOfNewViolationsIsCorrect = true;
 			}

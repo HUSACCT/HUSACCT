@@ -143,7 +143,7 @@ class FamixCreationPostProcessor {
             	}
             	calculateProgress();
                 //Needed to check if Thread is allowed to continue
-                if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+                if (!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING)) {
                 	break;
                 }
             } catch (Exception e) {
@@ -289,7 +289,7 @@ class FamixCreationPostProcessor {
             	}
             	
             	//Needed to check if Thread is allowed to continue
-                if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+                if (!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING)) {
                 	break;
                 }
             } catch (Exception e) {
@@ -761,7 +761,7 @@ class FamixCreationPostProcessor {
     			
                 calculateProgress();
                 //Needed to check if Thread is allowed to continue
-            	if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+            	if (!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING)) {
                     break;
             	}
 

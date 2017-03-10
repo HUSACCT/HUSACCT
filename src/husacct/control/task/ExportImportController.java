@@ -5,7 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.ViolationImExportDTO;
+import husacct.common.dto.ViolationReportDTO;
 import husacct.control.presentation.util.ExportImportDialog;
 import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
@@ -106,6 +106,7 @@ public class ExportImportController {
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		try {
 			validateService.exportViolations(file, filename.getExtension());
+			logger.info(String.format("Export violations to %s", file.getAbsolutePath()));
 		} catch (Exception e){
 			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
 				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to export violations: " + e.getMessage());
@@ -170,24 +171,25 @@ public class ExportImportController {
 		}
 	}
 
-	public ViolationImExportDTO[] identifyNewViolations(File previousViolationsFile) {
-		ViolationImExportDTO[] newViolations = null;
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(File previousViolationsFile, String allCurrentViolationsFilePath, String newViolationsFilePath) {
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", previousViolationsFile);
 		IResource xmlResource = ResourceFactory.get("xml");
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		ViolationReportDTO violationReportDTO = new ViolationReportDTO();
 		try {
 			Document doc = xmlResource.load(resourceData);	
 			Element logicalData = doc.getRootElement();
-			newViolations = validateService.identifyNewViolations(logicalData);
+			violationReportDTO = validateService.getViolationReportDTO(logicalData, null, null);
 		} catch (Exception e){
 			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
-				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to identify new violations: " + e.getMessage());
+				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());
 			} else {
-				logger.error("Unable to identify new violations: " + e.getMessage());
+				e.printStackTrace();
+				logger.error("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());
 			}
 		}
-		return newViolations;
+		return violationReportDTO;
 	}
 	
 	public void importAnalysisModel(File file){

@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationImExportDTO;
+import husacct.common.dto.ViolationReportDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -15,7 +15,7 @@ import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.task.imexporting.importing.IdentifyNewViolations;
+import husacct.validate.task.imexporting.importing.ViolationReportDtoFactory;
 import husacct.validate.task.workspace.exporting.ExportController;
 import husacct.validate.task.workspace.importing.ImportController;
 
@@ -134,10 +134,8 @@ public class TaskServiceImpl {
 		return configuration.getSeverityFromKey(language, key);
 	}
 
-	public ViolationImExportDTO[] identifyNewViolations(Element previousViolations) {
-		ViolationImExportDTO[] returnValue = null;
-		List<ViolationImExportDTO> newViolations = new IdentifyNewViolations(this).identifyNewViolations(previousViolations);
-		returnValue = newViolations.toArray(new ViolationImExportDTO[newViolations.size()]);
+	public ViolationReportDTO getViolationReportDTO(Element previousViolations, String exportFilePathAllCurrentViolations, String exportFilePathNewViolations) {
+		ViolationReportDTO returnValue = new ViolationReportDtoFactory(this).getViolationReportDTO(previousViolations, exportFilePathAllCurrentViolations, exportFilePathNewViolations);
 		return returnValue;
 	}
 

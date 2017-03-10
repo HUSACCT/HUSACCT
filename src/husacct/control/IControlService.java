@@ -1,6 +1,7 @@
 package husacct.control;
 
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ViolationReportDTO;
 import husacct.common.enums.States;
 import husacct.common.services.IObservableService;
 import husacct.control.task.IFileChangeListener;
@@ -23,7 +24,7 @@ public interface IControlService extends IObservableService{
 	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask);
 	public void setServiceListeners();
 
-	public List<States> getState();
+	public List<States> getStates();
 	public void updateProgress(int progressPercentage);
 	
 	public void setValidating(boolean validate);
@@ -39,5 +40,8 @@ public interface IControlService extends IObservableService{
 	public void addFileChangeListener(IFileChangeListener listener);
 	
 	public String showMojoExportImportDialog(boolean isExport);
-	boolean isGuiEnabled();
+	public boolean isGuiEnabled();
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(
+			String husacctWorkspaceFile, String importFilePreviousViolations,
+			String exportFileAllCurrentViolations, String exportFileNewViolations);
 }

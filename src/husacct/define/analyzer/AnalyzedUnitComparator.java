@@ -162,7 +162,7 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		if (ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSED)) {
+		if (ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSED)) {
 			JtreeController.instance().setLoadState(true);
 			JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
 		}

@@ -237,7 +237,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	public void validateNow() {
-		if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)){
+		if(!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getStates().contains(States.VALIDATING)){
 			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, new JButton())); // Previous to version 3.2: buttonSaveInHistory i.s.o. new JButton().
 			LoadingDialog currentLoader = validateThread.getLoader();
 			currentLoader.addWindowListener(new WindowAdapter() {

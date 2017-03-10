@@ -51,7 +51,7 @@ public class CheckConformanceController {
 					appliedRulesHandled = 0;
 					for (RuleDTO appliedRule : appliedRules) {
 						// Abort, when state != VALIDATING
-						if (!ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)) {
+						if (!ServiceProvider.getInstance().getControlService().getStates().contains(States.VALIDATING)) {
 							break;
 						}
 						// Update progress

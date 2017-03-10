@@ -3,6 +3,7 @@ package husacct.control;
 import husacct.ServiceProvider;
 import husacct.common.OSDetector;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ViolationReportDTO;
 import husacct.common.enums.States;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
@@ -13,6 +14,7 @@ import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.presentation.viewcontrol.ViewController;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
+import husacct.control.task.ExternalComplianceCheck;
 import husacct.control.task.FileController;
 import husacct.control.task.IFileChangeListener;
 import husacct.control.task.MainController;
@@ -81,6 +83,13 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		mainController.parseCommandLineArguments(commandLineArguments);
 	}
 	
+	@Override
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, String exportFileAllCurrentViolations, String exportFileNewViolations) {
+		ExternalComplianceCheck externalComplianceCheck = new ExternalComplianceCheck();
+		ViolationReportDTO violationReport = externalComplianceCheck.performSoftwareArchitectureComplianceCheck(husacctWorkspaceFile, importFilePreviousViolations, exportFileAllCurrentViolations, exportFileNewViolations);
+		return violationReport;
+	}
+
 	@Override
 	public void startApplication() {
 		mainController.startGui();
@@ -158,7 +167,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public List<States> getState() {
+	public List<States> getStates() {
 		return this.getMainController().getStateController().getStates();
 	}
 	

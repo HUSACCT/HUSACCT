@@ -32,7 +32,7 @@ public class ApplicationAnalyser {
             	String projectPath = paths[i];
                 List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(projectPath, sourceFileExtension);
                 for (MetaFile sourceFileInfo : fileData) {
-                    if (!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+                    if (!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING)) {
                         break;
                     }
                     analyser.analyseSourceFile(projectPath, sourceFileInfo.getPath());
