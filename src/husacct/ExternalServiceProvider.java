@@ -22,8 +22,8 @@ public class ExternalServiceProvider {
 	/**
 	 * Provides the results of a complete Software Architecture Compliance Check (SACC), performed in batch mode.
 	 * Based on the data in a HUSACCT workspace file, the source code of a project is analysed and the architectural rules checked.
-	 * Next a violation report is created with the results of the SACC. Read the comments in ViolationReportDTO.
-	 * Optionally, a specification of the new violations is also included in the violation report.
+	 * Next a violation report is created with the results of the SACC. Read the comments in ViolationReportDTO and ViolationImExportDTO.
+	 * Optionally, a specification of the new violations may be included in the violation report.
 	 * New violations are violations not found in the importFilePreviousViolations. 
 	 * To reduce the number of false positives new violations, a second condition applies: the number of violations for 
 	 * the related rule has to be increased. Namely, not all reported new identified violations have to be really new. 

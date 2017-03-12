@@ -84,8 +84,6 @@ public class ReconstructAlgorithmTests {
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
 		mainController.getWorkspaceController().closeWorkspace();
-		File exportFileAllViolations = new File(exportFilePath);
-		exportFileAllViolations.delete();
 		logger.info(" Finished test: ReconstructAlgorithmTests");
 	}
 	
@@ -93,7 +91,7 @@ public class ReconstructAlgorithmTests {
 	public void TestAlgorithms(){
 		boolean algortithmSucces = false;
 		boolean testResult = false;
-		boolean totalResult =true;
+		boolean totalResult = true;
 		ArrayList<ReconstructArchitectureDTO> reconstructionArchitectureDTOs = createTestReconstructArchitectureDTOs();
 		for (ReconstructArchitectureDTO dto : reconstructionArchitectureDTOs){
 			testResult = false;

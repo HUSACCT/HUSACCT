@@ -380,6 +380,9 @@ public class SACCandSRMAtest {
 		assertTrue(numberOfMissingViolationsInImportFile == numberOfReportedNewViolations);
 		int numberOfNewViolationsInReport = violationReport.getNewViolations().length;
 		assertTrue(numberOfMissingViolationsInImportFile == numberOfNewViolationsInReport);
+		for (ViolationImExportDTO newViolation : violationReport.getNewViolations()) {
+			logger.info(" New violation in class: " + newViolation.getFrom() + " Line: " + newViolation.getLine() + " Message: " + newViolation.getMessage());
+		}
 	}
 
 	@Test
