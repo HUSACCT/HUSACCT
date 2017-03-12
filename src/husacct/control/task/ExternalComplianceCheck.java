@@ -35,11 +35,10 @@ public class ExternalComplianceCheck {
 	
 			checkConformance();
 			
-			violationReport = getViolationReportDTO(importFilePreviousViolations, exportFileAllCurrentViolations, exportFileNewViolations);  
-			
-			exportCurrentViolations(exportFileAllCurrentViolations);
+			violationReport = getViolationReportDTO(importFilePreviousViolations, exportFileNewViolations);  
 
-			workspaceController.closeWorkspace();
+			exportCurrentViolations(exportFileAllCurrentViolations);
+			
 			logger.info(String.format(" Finished: Software Architecture Compliance Check"));
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getCause().toString();
@@ -104,20 +103,20 @@ public class ExternalComplianceCheck {
 		}
 	}
 
-	private ViolationReportDTO getViolationReportDTO(String importFilePreviousViolations, String exportFileAllCurrentViolations, String exportFileNewViolations) {
+	private ViolationReportDTO getViolationReportDTO(String importFilePreviousViolations, String exportFileNewViolations) {
 		ViolationReportDTO violationReport = new ViolationReportDTO();
 		if (importFilePreviousViolations != null) {
 			File previousViolationsFile = new File(importFilePreviousViolations);
 			if(previousViolationsFile.exists()){
 				controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 				mainController = controlService.getMainController();
-				violationReport = mainController.getExportImportController().performSoftwareArchitectureComplianceCheck(previousViolationsFile, exportFileAllCurrentViolations, exportFileNewViolations);
+				violationReport = mainController.getExportImportController().getViolationReportData(previousViolationsFile, exportFileNewViolations);
 			} else {
 				logger.warn(String.format("Unable to locate importFilePreviousViolations: %s", previousViolationsFile.getAbsoluteFile()));
-				violationReport = mainController.getExportImportController().performSoftwareArchitectureComplianceCheck(null, exportFileAllCurrentViolations, null);
+				violationReport = mainController.getExportImportController().getViolationReportData(null, null);
 			}
 		} else {
-			violationReport = mainController.getExportImportController().performSoftwareArchitectureComplianceCheck(null, exportFileAllCurrentViolations, null);
+			violationReport = mainController.getExportImportController().getViolationReportData(null, null);
 		}
 		return violationReport;
 	}

@@ -89,10 +89,12 @@ public class WorkspaceControllerTest {
 	public void testLoadWorkspaceData(){
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("file", validTestFile);
-		XmlResource xmlResource = new XmlResource();
-		Document doc1 = xmlResource.load(data);
 		
 		workspaceController.loadWorkspace("xml", data);
+		assertNotNull(workspaceController.getCurrentWorkspace());
+
+		XmlResource xmlResource = new XmlResource();
+		Document doc1 = xmlResource.load(data);
 		Document doc2 = workspaceController.getWorkspaceData();
 		
 		Element doc1ControlServiceElement = doc1.getRootElement().getChild("husacct.control.ControlServiceImpl");
@@ -119,12 +121,4 @@ public class WorkspaceControllerTest {
 		assertTrue(testFile.exists());
 	}
 	
-	@Test
-	public void testLoadWorkspace(){
-		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("file", validTestFile);
-		workspaceController.loadWorkspace("xml", data);
-		assertNotNull(workspaceController.getCurrentWorkspace());
-		
-	}
 }

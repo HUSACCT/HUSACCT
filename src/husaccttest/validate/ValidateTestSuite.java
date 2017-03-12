@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	ValidateTest.class, 
 	ImportExportWorkspaceTest.class, 
-	SRMATest20141112.class
+	SACCandSRMAtest.class
 })
 public class ValidateTestSuite {
 }

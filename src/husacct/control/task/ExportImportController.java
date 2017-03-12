@@ -171,7 +171,7 @@ public class ExportImportController {
 		}
 	}
 
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(File previousViolationsFile, String allCurrentViolationsFilePath, String newViolationsFilePath) {
+	public ViolationReportDTO getViolationReportData(File previousViolationsFile, String newViolationsFilePath) {
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", previousViolationsFile);
 		IResource xmlResource = ResourceFactory.get("xml");
@@ -180,7 +180,7 @@ public class ExportImportController {
 		try {
 			Document doc = xmlResource.load(resourceData);	
 			Element logicalData = doc.getRootElement();
-			violationReportDTO = validateService.getViolationReportDTO(logicalData, null, null);
+			violationReportDTO = validateService.getViolationReportData(logicalData, newViolationsFilePath);
 		} catch (Exception e){
 			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
 				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());

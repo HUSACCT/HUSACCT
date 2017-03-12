@@ -38,7 +38,19 @@ public class ImportExportWorkspaceTest {
 		validate = new ValidateServiceImpl();
 	}
 
-	public void testImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
+	@Test
+	public void testExportingAndImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
+		testImporting();
+		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration()
+				.getAllSeverities(), validate.getWorkspaceData().getChild("severities"));
+		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(
+				validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(),
+				validate.getWorkspaceData().getChild("severitiesPerTypesPerProgrammingLanguages"));
+		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate
+				.getConfiguration().getActiveViolationTypes(), validate.getWorkspaceData().getChild("activeViolationTypes"));
+	}
+
+	private void testImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
 		ClassLoader.getSystemResource("husaccttest/validate/Testfile_ImportExportTest.xml").toURI();
 		DocumentBuilderFactory domfactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dombuilder = domfactory.newDocumentBuilder();
@@ -169,17 +181,4 @@ public class ImportExportWorkspaceTest {
 		throw new AssertionFailedError("There was an error finding a type by the key: "	+ severityPerType.getKey());
 	}
 
-	@Test
-	public void testExportingAndImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
-		testImporting();
-		
-		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration()
-				.getAllSeverities(), validate.getWorkspaceData().getChild("severities"));
-		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(
-				validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(),
-				validate.getWorkspaceData().getChild("severitiesPerTypesPerProgrammingLanguages"));
-		
-		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate
-				.getConfiguration().getActiveViolationTypes(), validate.getWorkspaceData().getChild("activeViolationTypes"));
-	}
 }

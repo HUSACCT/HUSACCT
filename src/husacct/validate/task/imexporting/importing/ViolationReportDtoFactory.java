@@ -39,7 +39,7 @@ public class ViolationReportDtoFactory {
     	timeCurrentCheck = task.getAllViolations().getKey();
     }
 
-	public ViolationReportDTO getViolationReportDTO(Element previousViolations, String exportFilePathAllCurrentViolations, String exportFilePathNewViolations) {
+	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations) {
 		ViolationReportDTO violationReportDTO = new ViolationReportDTO();
 		try {
 			// Add the results of the current SACC to violationReportDTO
@@ -48,11 +48,6 @@ public class ViolationReportDtoFactory {
 	        violationReportDTO.setAllViolations(allCurrentViolationsImExportList.toArray(new ViolationImExportDTO[nrOfAllCurrentViolations]));
 			violationReportDTO.setNrOfAllCurrentViolations(nrOfAllCurrentViolations);
 
-	        // Create allCurrentViolations exportFile, if needed
-	        if ((exportFilePathAllCurrentViolations != null) && !exportFilePathAllCurrentViolations.equals("")) {
-	        	
-	        }
-	        
 			// Determine if new violations have to be identified
 			if ((previousViolations != null) && !previousViolations.equals("")) {
 		        this.logger.info(new Date().toString() + " Start: Identify New Violations");
@@ -64,7 +59,7 @@ public class ViolationReportDtoFactory {
 			}
 
 	        // Create newViolations exportFile, if needed
-	        if ((newViolationsList.size() > 0) && (exportFilePathNewViolations != null) && !exportFilePathAllCurrentViolations.equals("")) {
+	        if ((newViolationsList.size() > 0) && (exportFilePathNewViolations != null) && !exportFilePathNewViolations.equals("")) {
 	        	new ExportNewViolations().createReport(newViolationsList, timeCurrentCheck, exportFilePathNewViolations);
 	        }
 		} catch (Exception e){

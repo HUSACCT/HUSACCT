@@ -167,8 +167,8 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ViolationReportDTO getViolationReportDTO(Element previousViolations, String exportFilePathAllCurrentViolations, String exportFilePathNewViolations) {
-		return task.getViolationReportDTO(previousViolations, exportFilePathAllCurrentViolations, exportFilePathNewViolations);
+	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations) {
+		return task.getViolationReportData(previousViolations, exportFilePathNewViolations);
 	}
 
 	

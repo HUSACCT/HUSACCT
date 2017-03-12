@@ -74,12 +74,6 @@ public class WorkspaceController {
  		return workspaceResource.save(document, dataValues, config);
 	}
 	
-	public boolean loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
-		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
-		Document doc = workspaceResource.load(dataValues);
-		return loadWorkspace(doc);
-	}
-	
 	public Document getWorkspaceData(){
 		Element rootElement = new Element("husacct");
 		rootElement.setAttribute("version", "5.3");		
@@ -100,7 +94,9 @@ public class WorkspaceController {
 		return doc;
 	}
 
-	public boolean loadWorkspace(Document document){
+	public boolean loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
+		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
+		Document document = workspaceResource.load(dataValues);
 		try {
 			ServiceProvider.getInstance().resetServices();
 			List<ISaveable> savableServices = getSaveableServices();

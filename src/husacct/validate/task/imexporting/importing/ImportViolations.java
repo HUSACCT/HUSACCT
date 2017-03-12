@@ -2,12 +2,12 @@ package husacct.validate.task.imexporting.importing;
 
 import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.imexport.XmlConversionUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
@@ -49,19 +49,20 @@ public class ImportViolations {
 				if (validationDateString != null) {
 					validationDate = getCalendar(validationDateString);
 				}
+				break;
 			}
 		}
     	return validationDate;
     }
 
-	private Calendar getCalendar(String stringCalendar) {
+	private Calendar getCalendar(String stringCalendar){
 		Calendar calendar = Calendar.getInstance();
 		try {
-			calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(stringCalendar).toGregorianCalendar();
-		} catch (IllegalArgumentException e) {
-			logger.error(String.format("%s is not a valid datetime, switching back to current datetime", stringCalendar));
-		} catch (DatatypeConfigurationException e) {
-			logger.error(e.getMessage());
+			stringCalendar.trim();
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
+			calendar.setTime(sdf1.parse(stringCalendar));
+		} catch (IllegalArgumentException | ParseException e) {
+			logger.warn(String.format("%s is not a valid datetime for violationsGeneratedOn; using current datetime", stringCalendar));
 		}
 		return calendar;
 	}

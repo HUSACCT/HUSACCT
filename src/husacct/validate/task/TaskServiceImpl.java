@@ -134,8 +134,8 @@ public class TaskServiceImpl {
 		return configuration.getSeverityFromKey(language, key);
 	}
 
-	public ViolationReportDTO getViolationReportDTO(Element previousViolations, String exportFilePathAllCurrentViolations, String exportFilePathNewViolations) {
-		ViolationReportDTO returnValue = new ViolationReportDtoFactory(this).getViolationReportDTO(previousViolations, exportFilePathAllCurrentViolations, exportFilePathNewViolations);
+	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations) {
+		ViolationReportDTO returnValue = new ViolationReportDtoFactory(this).getViolationReportData(previousViolations, exportFilePathNewViolations);
 		return returnValue;
 	}
 

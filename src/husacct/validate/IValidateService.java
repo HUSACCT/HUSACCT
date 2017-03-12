@@ -119,12 +119,11 @@ public interface IValidateService extends IObservableService {
 
 	/**
 	 * Identifies new violations in comparison to the violations in previousViolationsFile
-	 * @param exportFilePathAllCurrentViolations TODO
 	 * @param exportFilePathNewViolations TODO
 	 * @param previousViolationsFile: an xml-file containing the data of violations detected in the past
 	 * @return Array of identified new violations (only the new ones)
 	 */
-	public ViolationReportDTO getViolationReportDTO(Element previousViolations, String exportFilePathAllCurrentViolations, String exportFilePathNewViolations);
+	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations);
 	
 	/**
 	 * Returns a JInternalFrame where the user can browse the found violations
