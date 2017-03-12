@@ -10,10 +10,10 @@ import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.analyse.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
 import husacct.analyse.task.reconstruct.ReconstructArchitectureDTOList;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 public class AnalyseTaskControl {

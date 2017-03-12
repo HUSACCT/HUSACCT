@@ -10,9 +10,9 @@ import javax.swing.text.NumberFormatter;
 
 import org.apache.log4j.Logger;
 
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureNumberFieldDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 
 public class ReconstructArchitectureNumberFieldPanel extends ReconstructArchitectureParameterPanel{
 	private final Logger logger = Logger.getLogger(ReconstructArchitectureNumberFieldPanel.class);

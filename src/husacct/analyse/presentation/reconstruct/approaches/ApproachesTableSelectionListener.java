@@ -12,8 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
 import husacct.analyse.task.AnalyseTaskControl;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.locale.ILocaleService;
 
 public class ApproachesTableSelectionListener implements ListSelectionListener {

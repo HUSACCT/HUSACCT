@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
@@ -42,7 +43,7 @@ public class ArchitectureReconstructionTest_Husacct20_Without_Antlr {
 		try {
 			setLog4jConfiguration();
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
+			logger.info(String.format("Start test: ArchitectureReconstructionTest_Husacct20_Without_Antlr"));
 
 			//Import analysed model
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
@@ -79,10 +80,15 @@ public class ArchitectureReconstructionTest_Husacct20_Without_Antlr {
 	}
 
 	@AfterClass
-	public static void tearDown(){
-		workspaceController.closeWorkspace();
+	public static void tearDownClass(){
+		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		mainController = controlService.getMainController();
+		mainController.getWorkspaceController().closeWorkspace();
+		File exportFileAllViolations = new File(exportFilePath);
+		exportFileAllViolations.delete();
+		logger.info(" Finished test: ArchitectureReconstructionTest_Husacct20_Without_Antlr");
 	}
-
+	
 	// TESTS 
 
 	// Extend with test cases concerning architecture reconstruction! Below are examples of test cases with functionality that can be useful.

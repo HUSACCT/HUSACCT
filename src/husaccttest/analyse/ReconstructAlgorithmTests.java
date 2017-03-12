@@ -8,15 +8,16 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
@@ -36,12 +37,13 @@ public class ReconstructAlgorithmTests {
 	
 	private static final String exportFile = "CoCoMe-AnalysisModel.xml";
 	private static String exportFilePath;
+
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
+			logger.info(" Start test: ReconstructAlgorithmTests");
 			
 			//Import analysed model
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
@@ -75,6 +77,16 @@ public class ReconstructAlgorithmTests {
 			String errorMessage =  "Exception: " + e.getMessage();
 			logger.warn(errorMessage);
 		}
+	}
+	
+	@AfterClass
+	public static void tearDownClass(){
+		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		mainController = controlService.getMainController();
+		mainController.getWorkspaceController().closeWorkspace();
+		File exportFileAllViolations = new File(exportFilePath);
+		exportFileAllViolations.delete();
+		logger.info(" Finished test: ReconstructAlgorithmTests");
 	}
 	
 	@Test

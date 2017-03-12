@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 
 public class ReconstructArchitectureDTOList extends AbstractDTO{
 	private final Logger logger = Logger.getLogger(ReconstructArchitectureDTOList.class);

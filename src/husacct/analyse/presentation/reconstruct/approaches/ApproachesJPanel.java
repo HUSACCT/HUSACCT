@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,8 +26,8 @@ import org.apache.log4j.Logger;
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.reconstruct.EditApproachFrame;
 import husacct.analyse.task.AnalyseTaskControl;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.locale.ILocaleService;
 

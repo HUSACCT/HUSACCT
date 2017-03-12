@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.IModelQueryService;
-import husacct.common.dto.ReconstructArchitectureDTO;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 public class Layers_Scanniello_Root_Improved extends Layers_Scanniello_SuperClass{

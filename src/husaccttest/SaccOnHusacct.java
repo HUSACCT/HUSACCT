@@ -4,12 +4,19 @@ import static org.junit.Assert.assertTrue;
 import husacct.ExternalServiceProvider;
 import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.dto.ViolationReportDTO;
+import husacct.control.task.resources.IResource;
+import husacct.control.task.resources.ResourceFactory;
 import husaccttest.TestResourceFinder;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.net.URL;
-
+import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.jdom2.Document;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,17 +27,17 @@ public class SaccOnHusacct {
 			TestResourceFinder.getSaccFolder("java") 
 			+ "HUSACCT_Current_Architecture.xml";
 	// Refers to a file containing a set of previous violations. Used to determine new violations.
-	private static final String importFilePathAllViolations =
+	private static final String importFilePathAllPreviousViolations =
 			TestResourceFinder.getSaccFolder("java") 
-			+ "ArchitectureViolations_All_ImportFile" + "." + "xml";
+			+ "HUSACCT_ArchitectureViolations_All_ImportFile.xml";
 	// Path of export file with all current violations. This file can be produced, optionally.
 	private static final String exportFilePathAllViolations = 
 			TestResourceFinder.getExportFolderForTest("java") 
-			+ "ArchitectureViolations_All_ExportFile" + "." + "xml";
+			+ "HUSACCT_ArchitectureViolations_All_ExportFile.xml";
 	// Path of export file with only the new current violations. This file can be produced, optionally.
 	private static final String exportFilePathNewViolations = 
 			TestResourceFinder.getExportFolderForTest("java") 
-			+ "ArchitectureViolations_OnlyNew_ExportFile" + "." + "xml";
+			+ "HUSACCT_ArchitectureViolations_OnlyNew_ExportFile.xml";
 
 	private static ViolationReportDTO violationReport = null;
 	private static Logger logger = Logger.getLogger(SaccOnHusacct.class);
@@ -42,8 +49,8 @@ public class SaccOnHusacct {
 			setLog4jConfiguration();
 			logger.info(String.format(" Test started: SaccOnHusacct_ViaExternalServiceProvider"));
 			ExternalServiceProvider externalServiceProvider = ExternalServiceProvider.getInstance();
-			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, importFilePathAllViolations, exportFilePathAllViolations, exportFilePathNewViolations);
-
+			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, 
+					importFilePathAllPreviousViolations, exportFilePathAllViolations, exportFilePathNewViolations);
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getCause().toString();
 			logger.warn(errorMessage);
@@ -52,16 +59,54 @@ public class SaccOnHusacct {
 
 	@AfterClass
 	public static void tearDown(){
+		// Note: Do not delete the created files if you want to use the exported files after the test.
+		File exportFileAllViolations = new File(exportFilePathAllViolations);
+		exportFileAllViolations.delete();
+		File exportFileNewViolations = new File(exportFilePathNewViolations);
+		exportFileNewViolations.delete();
 		logger.info(String.format(" Test finished: SaccOnHusacct_ViaExternalServiceProvider"));
 	}
 	
 	@Test
 	public void hasNumberOfViolationsIncreased() {
+		boolean numberOfViolationsHasIncreased = false;
+		assertTrue(violationReport != null);
 		if (violationReport != null) {
-			logger.info(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations() + "  At: " + violationReport.getTimePreviousCheck());
+			logger.info(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations() 
+					+ "  At: " + violationReport.getTimePreviousCheck());
 			logger.info(" Current number of violations: " + violationReport.getNrOfAllCurrentViolations());
+			if (violationReport.getNrOfAllCurrentViolations() <= violationReport.getNrOfAllPreviousViolations()) {
+				numberOfViolationsHasIncreased = true;
+			}
+			if (violationReport.getNrOfAllCurrentViolations() < violationReport.getNrOfAllPreviousViolations()) {
+				replaceImportFileAllPreviousViolations();
+			}
 		}
-		assertTrue((violationReport != null) && (violationReport.getNrOfAllCurrentViolations() <= violationReport.getNrOfAllPreviousViolations()));
+		assertTrue(numberOfViolationsHasIncreased);
+	}
+	
+	private void replaceImportFileAllPreviousViolations() {
+		try {
+			File exportFileAllViolations = new File(exportFilePathAllViolations);
+			if (exportFileAllViolations.exists()) {
+				// Get XML document from exportFileAllViolations
+				HashMap<String, Object> resourceData = new HashMap<String, Object>();
+				resourceData.put("file", exportFileAllViolations);
+				IResource xmlResource = ResourceFactory.get("xml");
+				Document document = xmlResource.load(resourceData);
+				// Delete existing importFileAllPreviousViolations
+				File importFileAllPreviousViolations = new File(importFilePathAllPreviousViolations);
+				importFileAllPreviousViolations.delete();
+				// Create new importFileAllPreviousViolations with contents of exportFileAllViolations
+				XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+				FileWriter fileWriter = new FileWriter(importFilePathAllPreviousViolations);
+				outputter.output(document, fileWriter);
+				fileWriter.close();
+				logger.warn(String.format(" Replaced: importFileAllPreviousViolations"));
+			}
+		} catch (Exception exception){
+			logger.warn(String.format(" Unable to replace importFileAllPreviousViolations: " + exception.getCause().toString()));
+		}
 	}
 
 

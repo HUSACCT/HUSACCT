@@ -16,8 +16,8 @@ import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.Layers_Go
 import husacct.analyse.task.reconstruct.algorithms.hu.layers.goldstein.Layers_Goldstein_HUSACCT_Algorithm_SelectedModule;
 import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.Layers_Scanniello_Root_Initial;
 import husacct.analyse.task.reconstruct.algorithms.hu.layers.scanniello.Layers_Scanniello_SelectedModule_Improved;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
 

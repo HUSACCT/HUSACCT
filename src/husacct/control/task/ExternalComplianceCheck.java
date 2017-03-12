@@ -123,6 +123,8 @@ public class ExternalComplianceCheck {
 
 	private void exportCurrentViolations(String exportFilePathAllCurrentViolations) {
 		if ((violationReport.getNrOfAllCurrentViolations() >= 0) && (exportFilePathAllCurrentViolations != null) && !exportFilePathAllCurrentViolations.equals("")) {
+			File oldExportFileAllCurrentViolations = new File(exportFilePathAllCurrentViolations);
+			oldExportFileAllCurrentViolations.delete();
 			File exportFileAllCurrentViolations = new File(exportFilePathAllCurrentViolations);
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();

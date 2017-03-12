@@ -1,7 +1,7 @@
 package husacct.analyse.task.reconstruct.algorithms;
 
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
-import husacct.common.dto.ReconstructArchitectureDTO;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 import java.util.ArrayList;

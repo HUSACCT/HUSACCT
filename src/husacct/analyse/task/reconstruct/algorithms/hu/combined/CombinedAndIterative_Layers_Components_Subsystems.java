@@ -9,9 +9,9 @@ import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
 import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
 import husacct.analyse.task.reconstruct.algorithms.hu.components.ComponentsAndSubSystems_HUSACCT;
 import husacct.analyse.task.reconstruct.algorithms.hu.layers.Layers_HUSACCT_Algorithm_SelectedModule;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.enums.ModuleTypes;
 
 public class CombinedAndIterative_Layers_Components_Subsystems extends Algorithm_SuperClass{

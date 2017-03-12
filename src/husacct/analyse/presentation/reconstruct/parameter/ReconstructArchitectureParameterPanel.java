@@ -4,10 +4,10 @@ import javax.swing.JPanel;
 
 import husacct.ServiceProvider;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureComboBoxDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureNumberFieldDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.locale.ILocaleService;
 
 public abstract class ReconstructArchitectureParameterPanel {

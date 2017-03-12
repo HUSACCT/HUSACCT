@@ -9,10 +9,10 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureComboBoxDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureComboBoxDTO.ComboBoxValue;
-import husacct.common.dto.ReconstructArchitectureDTO;
 
 public class ReconstructArchitectureComboBoxPanel extends ReconstructArchitectureParameterPanel{
 	private final Logger logger = Logger.getLogger(ReconstructArchitectureComboBoxPanel.class);

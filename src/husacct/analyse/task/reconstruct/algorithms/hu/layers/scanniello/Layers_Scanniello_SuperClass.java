@@ -6,9 +6,9 @@ import java.util.HashSet;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.algorithms.Algorithm_SuperClass;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.enums.ModuleTypes;
 

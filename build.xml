@@ -56,8 +56,20 @@
 		</junit>
 	</target>
 	
+	<!-- Run SACC test to compare implemented to intended architecture-->
+	<target name="sacc" depends="test">
+		<junit fork="yes" printsummary="on" haltonfailure="yes">
+			<!-- Project classpath, must include junit.jar -->
+			<classpath>
+				<path refid="classpath" />
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<test name="husaccttest.SaccOnHusacct" haltonfailure="yes"/>
+		</junit>
+	</target>
+
 	<!-- Create runnable Jars -->
-	<target name="jar" depends="test">
+	<target name="jar" depends="sacc">
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" excludes="husaccttest/**">
 			<manifest>
@@ -87,18 +99,5 @@
 			</fileset>
 		</jar>
 	</target>
-	
-	<!-- Run SACC test to compare implemented to intended architecture-->
-	<target name="sacc" depends="addresources">
-		<junit fork="yes" printsummary="on" haltonfailure="yes">
-			<!-- Project classpath, must include junit.jar -->
-			<classpath>
-				<path refid="classpath" />
-			</classpath>
-			<formatter type="brief" usefile="false" />
-			<test name="husaccttest.SaccOnHusacct" haltonfailure="yes"/>
-		</junit>
-	</target>
 
-	
 </project>

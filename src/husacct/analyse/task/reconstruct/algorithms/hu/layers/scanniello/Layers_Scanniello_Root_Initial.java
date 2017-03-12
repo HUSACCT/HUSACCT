@@ -6,8 +6,8 @@ import java.util.List;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
+import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
-import husacct.common.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.SoftwareUnitDTO;
 
 public class Layers_Scanniello_Root_Initial extends Layers_Scanniello_SuperClass{
