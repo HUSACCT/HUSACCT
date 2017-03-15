@@ -8,8 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	Java_AccuracyTestDependencyDetection.class,
 	CSharp_AccuracyTestDependencyDetection.class,
-	ExportImportAnalysedModelTest.class,
-	ReconstructAlgorithmTests.class,
+	//ExportImportAnalysedModelTest.class,
+	//ReconstructAlgorithmTests.class,
 	MojoTest.class
 })
 public class AnalyseTestSuite {

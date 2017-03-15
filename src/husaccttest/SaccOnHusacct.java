@@ -69,7 +69,7 @@ public class SaccOnHusacct {
 			if (violationReport.getNrOfAllCurrentViolations() > violationReport.getNrOfAllPreviousViolations()) {
 				numberOfViolationsHasNotIncreased = false;
 			}
-			if (violationReport.getNrOfAllCurrentViolations() == violationReport.getNrOfAllPreviousViolations()) {
+			if (violationReport.getNrOfAllCurrentViolations() < violationReport.getNrOfAllPreviousViolations()) {
 				replaceImportFileAllPreviousViolations();
 			}
 		}
