@@ -60,7 +60,7 @@ public class SACCandSRMAtest {
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			logger.info(String.format(new Date().toString() + " Start: Validate - SRMA Test"));
+			logger.info(String.format(new Date().toString() + " Start: Validate - SACC and SRMA Test"));
 			ExternalServiceProvider externalServiceProvider = ExternalServiceProvider.getInstance();
 			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, importFilePathAllViolations, true, true);
 		} catch (Exception e){
@@ -78,7 +78,7 @@ public class SACCandSRMAtest {
 		exportFileAllViolations.delete();
 		File exportFileNewViolations = new File(exportFilePathNewViolations);
 		exportFileNewViolations.delete();
-		logger.info(String.format(new Date().toString() + " Finished: SRMA Test"));
+		logger.info(String.format(new Date().toString() + " Finished: Validate - SACC and SRMA Test"));
 	}
 	
 	@Test

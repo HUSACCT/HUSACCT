@@ -33,6 +33,12 @@ public class TestResourceFinder {
 		return path;
 	}
 
+	public static String findHusacctExportFile(String languageFolder, String exportFile){
+		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/" + exportFile;
+		checkFilePath(path);
+		return path;
+	}
+	
 	public static String getExportFolderForTest(String languageFolder){
 		String path = getBaseTestResourcesPath(languageFolder) + EXPORT_FOLDER + "/";
 		return path;

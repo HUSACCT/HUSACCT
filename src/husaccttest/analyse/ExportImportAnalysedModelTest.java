@@ -43,8 +43,8 @@ public class ExportImportAnalysedModelTest {
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
+			logger.info(String.format(" Start: Analyse - ExportImport AnalysedModel Test"));
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
-			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
@@ -64,7 +64,7 @@ public class ExportImportAnalysedModelTest {
 			}
 			
 			analyseStatisticsBeforeExport = getAnalyseStatistics();
-			exportFilePath = TestResourceFinder.getExportFolderForTest("java") + exportFileName;
+			exportFilePath = TestResourceFinder.findHusacctExportFile("java", exportFileName);
 			exportFile = new File(exportFilePath);
 			exportAnalysisModel();
 
@@ -88,6 +88,7 @@ public class ExportImportAnalysedModelTest {
 		try {
 			workspaceController.closeWorkspace();
 			exportFile.delete();
+			logger.info(String.format(" Finished: Analyse - ExportImport AnalysedModel Test"));
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getMessage();
 			logger.warn(errorMessage);
