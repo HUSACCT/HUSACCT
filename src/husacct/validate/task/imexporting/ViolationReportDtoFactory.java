@@ -1,4 +1,4 @@
-package husacct.validate.task.imexporting.importing;
+package husacct.validate.task.imexporting;
 
 import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.dto.ViolationReportDTO;
@@ -8,6 +8,7 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.task.TaskServiceImpl;
 import husacct.validate.task.imexporting.exporting.ExportNewViolations;
+import husacct.validate.task.imexporting.importing.ImportViolations;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jdom2.Element;
+import org.jdom2.Document;
 
 public class ViolationReportDtoFactory {
 	private TaskServiceImpl task;
@@ -37,9 +38,10 @@ public class ViolationReportDtoFactory {
     	allCurrentViolations = task.getAllViolations().getValue();
     	allCurrentViolationsImExportList = createAllCurrentViolationsImExportList(allCurrentViolations);
     	timeCurrentCheck = task.getAllViolations().getKey();
+    	newViolationsList = new ArrayList<ViolationImExportDTO>();
     }
 
-	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations) {
+	public ViolationReportDTO getViolationReportData(Document previousViolations, boolean exportAllViolations, boolean exportNewViolations) {
 		ViolationReportDTO violationReportDTO = new ViolationReportDTO();
 		try {
 			// Add the results of the current SACC to violationReportDTO
@@ -49,7 +51,7 @@ public class ViolationReportDtoFactory {
 			violationReportDTO.setNrOfAllCurrentViolations(nrOfAllCurrentViolations);
 
 			// Determine if new violations have to be identified
-			if ((previousViolations != null) && !previousViolations.equals("")) {
+			if ((previousViolations != null)) {
 		        this.logger.info(new Date().toString() + " Start: Identify New Violations");
 				importPreviousViolations(previousViolations);
 		    	addPreviousViolationsToRepository();
@@ -58,9 +60,21 @@ public class ViolationReportDtoFactory {
 		        this.logger.info(new Date().toString() + " Finished: Identify New Violations");
 			}
 
-	        // Create newViolations exportFile, if needed
-	        if ((newViolationsList.size() > 0) && (exportFilePathNewViolations != null) && !exportFilePathNewViolations.equals("")) {
-	        	new ExportNewViolations().createReport(newViolationsList, timeCurrentCheck, exportFilePathNewViolations);
+	        // Create newViolations export document, if needed
+	        if (exportNewViolations) {
+	        	Document exportDocNewViolations = new ExportNewViolations().createReport(newViolationsList, timeCurrentCheck);
+	        	if (exportDocNewViolations != null) {
+	        		violationReportDTO.setExportDocNewViolations(exportDocNewViolations);
+	        	}
+	        }
+
+	        // Create allViolations export document, if needed
+	        if (exportAllViolations) {
+	        	ReportService reporter = new ReportService(task);
+	        	Document exportDocAllViolations = reporter.createAllViolationsXmlDocument(task.getAllViolations());
+	        	if (exportDocAllViolations != null) {
+	        		violationReportDTO.setExportDocAllViolations(exportDocAllViolations);
+	        	}
 	        }
 		} catch (Exception e){
 			logger.warn("Exception: " + e.getCause().toString());
@@ -68,7 +82,7 @@ public class ViolationReportDtoFactory {
         return violationReportDTO;
 	}
 
-	private void importPreviousViolations(Element previousViolations) {
+	private void importPreviousViolations(Document previousViolations) {
 		ImportViolations importer = new ImportViolations(previousViolations);
     	previousViolationsDtoList = importer.importViolations();
     	previousValidationDate = importer.getValidationDate();
@@ -119,7 +133,7 @@ public class ViolationReportDtoFactory {
 	 * The last check limits the number of false positives in cases where the class-name or lineNumber have changed.
 	 */
 	private ViolationReportDTO filterNewViolations(ViolationReportDTO violationReportDTO) {
-    	newViolationsList = new ArrayList<ViolationImExportDTO>();
+    	newViolationsList.clear();
 		for (Violation currenViolation : allCurrentViolations) {
 			boolean isViolationNew = true;
 			// violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();

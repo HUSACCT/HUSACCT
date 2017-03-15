@@ -2,6 +2,8 @@ package husacct.common.dto;
 
 import java.util.Calendar;
 
+import org.jdom2.Document;
+
 // Used to report the results of a software architecture compliance check (SACC)
 public class ViolationReportDTO extends AbstractDTO {
 	private int nrOfAllCurrentViolations; 			// Total number of violations during the current SACC.
@@ -10,7 +12,9 @@ public class ViolationReportDTO extends AbstractDTO {
 	private Calendar timeCurrentCheck;				// Time of the current SACC.
 	private Calendar timePreviousCheck;				// Time of the previous SACC. Its result are used to determine the new violations.
 	private ViolationImExportDTO[] allViolations; 	// Contains all violations detected during current SACC.
-	private ViolationImExportDTO[] newViolations; 	// Contains all new violations detected during current SACC.
+	private ViolationImExportDTO[] newViolations; 	// Contains only new violations detected during current SACC.
+	private Document exportDocAllViolations;		// XML document containing all new violations detected during current SACC. May be null!
+	private Document exportDocNewViolations;		// XML document containing only new violations detected during current SACC. May be null!
 	
 	public ViolationReportDTO() {
 		nrOfAllCurrentViolations = 0;
@@ -24,43 +28,72 @@ public class ViolationReportDTO extends AbstractDTO {
 	public int getNrOfAllCurrentViolations() {
 		return nrOfAllCurrentViolations;
 	}
+
 	public void setNrOfAllCurrentViolations(int nrOfAllViolations) {
 		this.nrOfAllCurrentViolations = nrOfAllViolations;
 	}
+
 	public int getNrOfAllPreviousViolations() {
 		return nrOfAllPreviousViolations;
 	}
+
 	public void setNrOfAllPreviousViolations(int nrOfAllPreviousViolations) {
 		this.nrOfAllPreviousViolations = nrOfAllPreviousViolations;
 	}
+
 	public int getNrOfNewViolations() {
 		return nrOfNewViolations;
 	}
+
 	public void setNrOfNewViolations(int nrOfNewViolations) {
 		this.nrOfNewViolations = nrOfNewViolations;
 	}
+
 	public Calendar getTimeCurrentCheck() {
 		return timeCurrentCheck;
 	}
+
 	public void setTimeCurrentCheck(Calendar timeCurrentCheck) {
 		this.timeCurrentCheck = timeCurrentCheck;
 	}
+
 	public Calendar getTimePreviousCheck() {
 		return timePreviousCheck;
 	}
+
 	public void setTimePreviousCheck(Calendar timePreviousCheck) {
 		this.timePreviousCheck = timePreviousCheck;
 	}
+
 	public ViolationImExportDTO[] getAllViolations() {
 		return allViolations;
 	}
+
 	public void setAllViolations(ViolationImExportDTO[] allViolations) {
 		this.allViolations = allViolations;
 	}
+
 	public ViolationImExportDTO[] getNewViolations() {
 		return newViolations;
 	}
+
 	public void setNewViolations(ViolationImExportDTO[] newViolations) {
 		this.newViolations = newViolations;
+	}
+
+	public Document getExportDocAllViolations() {
+		return exportDocAllViolations;
+	}
+
+	public void setExportDocAllViolations(Document exportDocAllViolations) {
+		this.exportDocAllViolations = exportDocAllViolations;
+	}
+
+	public Document getExportDocNewViolations() {
+		return exportDocNewViolations;
+	}
+
+	public void setExportDocNewViolations(Document exportDocNewViolations) {
+		this.exportDocNewViolations = exportDocNewViolations;
 	}
 }

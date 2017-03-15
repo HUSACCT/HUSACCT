@@ -15,7 +15,7 @@ import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.internaltransferobjects.FilterSettingsDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.task.imexporting.importing.ViolationReportDtoFactory;
+import husacct.validate.task.imexporting.ViolationReportDtoFactory;
 import husacct.validate.task.workspace.exporting.ExportController;
 import husacct.validate.task.workspace.importing.ImportController;
 
@@ -31,6 +31,7 @@ import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.jdom2.Document;
 import org.jdom2.Element;
 
 public class TaskServiceImpl {
@@ -134,8 +135,8 @@ public class TaskServiceImpl {
 		return configuration.getSeverityFromKey(language, key);
 	}
 
-	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations) {
-		ViolationReportDTO returnValue = new ViolationReportDtoFactory(this).getViolationReportData(previousViolations, exportFilePathNewViolations);
+	public ViolationReportDTO getViolationReportData(Document previousViolations, boolean exportAllViolations, boolean exportNewViolations) {
+		ViolationReportDTO returnValue = new ViolationReportDtoFactory(this).getViolationReportData(previousViolations, exportAllViolations, exportNewViolations);
 		return returnValue;
 	}
 

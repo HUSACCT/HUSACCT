@@ -15,7 +15,7 @@ import java.util.AbstractMap.SimpleEntry;
 
 import javax.swing.JInternalFrame;
 
-import org.jdom2.Element;
+import org.jdom2.Document;
 
 public interface IValidateService extends IObservableService {
 
@@ -119,11 +119,12 @@ public interface IValidateService extends IObservableService {
 
 	/**
 	 * Identifies new violations in comparison to the violations in previousViolationsFile
-	 * @param exportFilePathNewViolations TODO
+	 * @param exportAllViolations TODO
+	 * @param exportNewViolations TODO
 	 * @param previousViolationsFile: an xml-file containing the data of violations detected in the past
 	 * @return Array of identified new violations (only the new ones)
 	 */
-	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations);
+	public ViolationReportDTO getViolationReportData(Document previousViolations, boolean exportAllViolations, boolean exportNewViolations);
 	
 	/**
 	 * Returns a JInternalFrame where the user can browse the found violations

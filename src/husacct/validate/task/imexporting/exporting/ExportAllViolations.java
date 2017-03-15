@@ -12,21 +12,28 @@ import husacct.validate.task.imexporting.reporting.ReportWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.jdom2.Attribute;
 import org.jdom2.Comment;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-public class ExportViolations extends ReportWriter {
+public class ExportAllViolations extends ReportWriter {
 
-	public ExportViolations(Report report, String path, String fileName, TaskServiceImpl taskServiceImpl) {
+	public ExportAllViolations(Report report, String path, String fileName, TaskServiceImpl taskServiceImpl) {
 		super(report, path, fileName, ExtensionTypes.XML, taskServiceImpl);
 	}
 
 	@Override
 	public void createReport() throws IOException {
+		Document document = createReportDocument();
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		FileWriter fileWriter = new FileWriter(getFileName());
+		outputter.output(document, fileWriter);
+		fileWriter.close();
+	}
+
+	public Document createReportDocument() {
 		Document document = new Document();
 
 		Element reportElement = new Element("report");
@@ -48,15 +55,14 @@ public class ExportViolations extends ReportWriter {
 		violationGeneratedOn.setText(report.getFormattedDate());
 		reportElement.addContent(violationGeneratedOn);
 
-		Element violationsSeverities = new Element("violations");
-		violationsSeverities.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
-		
+		Element violationsPerSeverity = new Element("violationsPerSeverity");
+		// violationsPerSeverity.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
 		for (ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
-			Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
-			violationElement.setText("" + violationPerSeverity.getAmount());
-			violationsSeverities.addContent(violationElement);
+			Element violationPerSeverityElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
+			violationPerSeverityElement.setText("" + violationPerSeverity.getAmount());
+			violationsPerSeverity.addContent(violationPerSeverityElement);
 		}
-		reportElement.addContent(violationsSeverities);
+		reportElement.addContent(violationsPerSeverity);
 
 		Element violations = new Element("violations");
 		reportElement.addContent(violations);
@@ -103,9 +109,7 @@ public class ExportViolations extends ReportWriter {
 			Element xmlViolation = XmlConversionUtils.writeDtoToXml("violation", violationImExportDTO);
 			violations.addContent(xmlViolation);
 		}
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		FileWriter fileWriter = new FileWriter(getFileName());
-		outputter.output(document, fileWriter);
-		fileWriter.close();
+		return document;
 	}
+
 }

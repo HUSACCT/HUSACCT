@@ -21,8 +21,10 @@ public class ExternalComplianceCheck {
 
 	/**
 	 * Read service definition in class ExternalServiceProvider.
+	 * @param exportAllViolations TODO
+	 * @param exportNewViolations TODO
 	 */
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, String exportFileAllCurrentViolations, String exportFileNewViolations) {
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
 		violationReport = new ViolationReportDTO();
 		try {
 			logger.info(String.format(" Start: Software Architecture Compliance Check"));
@@ -35,10 +37,8 @@ public class ExternalComplianceCheck {
 	
 			checkConformance();
 			
-			violationReport = getViolationReportDTO(importFilePreviousViolations, exportFileNewViolations);  
+			violationReport = getViolationReportDTO(importFilePreviousViolations, exportAllViolations, exportNewViolations);  
 
-			exportCurrentViolations(exportFileAllCurrentViolations);
-			
 			logger.info(String.format(" Finished: Software Architecture Compliance Check"));
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getCause().toString();
@@ -103,32 +103,21 @@ public class ExternalComplianceCheck {
 		}
 	}
 
-	private ViolationReportDTO getViolationReportDTO(String importFilePreviousViolations, String exportFileNewViolations) {
+	private ViolationReportDTO getViolationReportDTO(String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
 		ViolationReportDTO violationReport = new ViolationReportDTO();
 		if (importFilePreviousViolations != null) {
 			File previousViolationsFile = new File(importFilePreviousViolations);
 			if(previousViolationsFile.exists()){
 				controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 				mainController = controlService.getMainController();
-				violationReport = mainController.getExportImportController().getViolationReportData(previousViolationsFile, exportFileNewViolations);
+				violationReport = mainController.getExportImportController().getViolationReportData(previousViolationsFile, exportAllViolations, exportNewViolations);
 			} else {
 				logger.warn(String.format("Unable to locate importFilePreviousViolations: %s", previousViolationsFile.getAbsoluteFile()));
-				violationReport = mainController.getExportImportController().getViolationReportData(null, null);
+				violationReport = mainController.getExportImportController().getViolationReportData(null, exportAllViolations, exportNewViolations);
 			}
 		} else {
-			violationReport = mainController.getExportImportController().getViolationReportData(null, null);
+			violationReport = mainController.getExportImportController().getViolationReportData(null, exportAllViolations, exportNewViolations);
 		}
 		return violationReport;
-	}
-
-	private void exportCurrentViolations(String exportFilePathAllCurrentViolations) {
-		if ((violationReport.getNrOfAllCurrentViolations() >= 0) && (exportFilePathAllCurrentViolations != null) && !exportFilePathAllCurrentViolations.equals("")) {
-			File oldExportFileAllCurrentViolations = new File(exportFilePathAllCurrentViolations);
-			oldExportFileAllCurrentViolations.delete();
-			File exportFileAllCurrentViolations = new File(exportFilePathAllCurrentViolations);
-			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-			mainController = controlService.getMainController();
-			mainController.getExportImportController().exportViolations(exportFileAllCurrentViolations);
-		}
 	}
 }

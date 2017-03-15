@@ -16,8 +16,8 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.presentation.ValidateConfigurationPanel;
-import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
+import husacct.validate.task.imexporting.ReportService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Document;
 import org.jdom2.Element;
 
 public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable, IConfigurable {
@@ -39,7 +40,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	private final GuiController gui;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
-	private final ReportServiceImpl report;
+	private final ReportService report;
 	private final TaskServiceImpl task;
 	private final ValidateConfigurationPanel validateConfigurationPanel;
 	private boolean validationExecuted;
@@ -48,7 +49,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		this.configuration = new ConfigurationServiceImpl();
 		this.domain = new DomainServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
-		this.report = new ReportServiceImpl(task);
+		this.report = new ReportService(task);
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 		this.validateConfigurationPanel = new ValidateConfigurationPanel(task);
@@ -167,8 +168,8 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ViolationReportDTO getViolationReportData(Element previousViolations, String exportFilePathNewViolations) {
-		return task.getViolationReportData(previousViolations, exportFilePathNewViolations);
+	public ViolationReportDTO getViolationReportData(Document previousViolations, boolean exportAllViolations, boolean exportNewViolations) {
+		return task.getViolationReportData(previousViolations, exportAllViolations, exportNewViolations);
 	}
 
 	

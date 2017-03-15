@@ -43,5 +43,5 @@ public interface IControlService extends IObservableService{
 	public boolean isGuiEnabled();
 	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(
 			String husacctWorkspaceFile, String importFilePreviousViolations,
-			String exportFileAllCurrentViolations, String exportFileNewViolations);
+			boolean exportAllViolations, boolean exportNewViolations);
 }

@@ -2,7 +2,6 @@ package husacct.validate.task.imexporting.exporting;
 
 import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.imexport.XmlConversionUtils;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,8 +10,6 @@ import java.util.List;
 import org.jdom2.Comment;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 public class ExportNewViolations {
 	private final SimpleDateFormat dateFormat;
@@ -21,7 +18,7 @@ public class ExportNewViolations {
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
 	}
 
-	public void createReport(List<ViolationImExportDTO> newViolationsList, Calendar saccMoment, String exportFilePathNewViolations) throws IOException {
+	public Document createReport(List<ViolationImExportDTO> newViolationsList, Calendar saccMoment) throws IOException {
 		Document document = new Document();
 
 		Element reportElement = new Element("report");
@@ -66,11 +63,6 @@ public class ExportNewViolations {
 			Element xmlViolation = XmlConversionUtils.writeDtoToXml("violation", violationImExportDTO);
 			violations.addContent(xmlViolation);
 		}
-		if (exportFilePathNewViolations != null && !exportFilePathNewViolations.equals("")) {
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-			FileWriter fileWriter = new FileWriter(exportFilePathNewViolations);
-			outputter.output(document, fileWriter);
-			fileWriter.close();
-		}
+		return document;
 	}
 }

@@ -10,33 +10,35 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Document;
 import org.jdom2.Element;
 
 public class ImportViolations {
 	
 	private Logger logger = Logger.getLogger(ImportViolations.class);
     private Element importElement;
-	private Element violationsElement;
-	public ImportViolations(Element importElement) {
-    	this.importElement = importElement;
+	public ImportViolations(Document previousViolations) {
+		if (previousViolations != null) {
+	    	this.importElement = previousViolations.getRootElement();
+		}
     }
 
     public List<ViolationImExportDTO> importViolations() {
     	List<ViolationImExportDTO> imExportViolationDtoList = new ArrayList<ViolationImExportDTO>();
-    	violationsElement = new Element("violations");
-		for (Element rootElement : importElement.getChildren()) {
-			String name = rootElement.getName();
-			if (name.equals("violations")) {
-				violationsElement = rootElement;
-		    	for (Element element : violationsElement.getChildren()){
-		    		if (element.getName().equals("violation")) {
-		    			ViolationImExportDTO dto = new ViolationImExportDTO();
-		    			dto = (ViolationImExportDTO) XmlConversionUtils.writeElementToDto(element, dto);
-		    			imExportViolationDtoList.add(dto);
-		    		}
-		    	}
-			} 
-		}
+    	if (importElement != null) {
+			for (Element childOfRootElement : importElement.getChildren()) {
+				String name = childOfRootElement.getName();
+				if (name.equals("violations")) {
+			    	for (Element element : childOfRootElement.getChildren()){
+			    		if (element.getName().equals("violation")) {
+			    			ViolationImExportDTO dto = new ViolationImExportDTO();
+			    			dto = (ViolationImExportDTO) XmlConversionUtils.writeElementToDto(element, dto);
+			    			imExportViolationDtoList.add(dto);
+			    		}
+			    	}
+				} 
+			}
+    	}
     	return imExportViolationDtoList;
     }
     

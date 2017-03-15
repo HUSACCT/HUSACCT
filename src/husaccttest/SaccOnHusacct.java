@@ -8,11 +8,13 @@ import husaccttest.TestResourceFinder;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.jdom2.Document;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.AfterClass;
@@ -28,14 +30,10 @@ public class SaccOnHusacct {
 	private static final String importFilePathAllPreviousViolations =
 			TestResourceFinder.getSaccFolder("java") 
 			+ "HUSACCT_ArchitectureViolations_All_ImportFile.xml";
-	// Path of export file with all current violations. This file can be produced, optionally.
-	private static final String exportFilePathAllViolations = 
-			TestResourceFinder.getExportFolderForTest("java") 
-			+ "HUSACCT_ArchitectureViolations_All_ExportFile.xml";
-	// Path of export file with only the new current violations. This file can be produced, optionally.
-	private static final String exportFilePathNewViolations = 
-			TestResourceFinder.getExportFolderForTest("java") 
-			+ "HUSACCT_ArchitectureViolations_OnlyNew_ExportFile.xml";
+	// Indicates if an XML document with all current violations should be created.
+	private static final boolean exportAllViolations = true;
+	// Indicates if an XML document with only the new current violations should be created.
+	private static final boolean exportNewViolations = false;
 
 	private static ViolationReportDTO violationReport = null;
 	private static Logger logger = Logger.getLogger(SaccOnHusacct.class);
@@ -48,7 +46,7 @@ public class SaccOnHusacct {
 			logger.info(String.format(" Test started: SaccOnHusacct_ViaExternalServiceProvider"));
 			ExternalServiceProvider externalServiceProvider = ExternalServiceProvider.getInstance();
 			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, 
-					importFilePathAllPreviousViolations, exportFilePathAllViolations, exportFilePathNewViolations);
+					importFilePathAllPreviousViolations, exportAllViolations, exportNewViolations);
 		} catch (Exception e){
 			logger.warn("Exception: " + e.getCause().toString());
 		}
@@ -56,52 +54,50 @@ public class SaccOnHusacct {
 
 	@AfterClass
 	public static void tearDown(){
-		// Note: Do not delete the created files if you want to use the exported files after the test.
-		File exportFileAllViolations = new File(exportFilePathAllViolations);
-		exportFileAllViolations.delete();
-		File exportFileNewViolations = new File(exportFilePathNewViolations);
-		exportFileNewViolations.delete();
 		logger.info(String.format(" Test finished: SaccOnHusacct_ViaExternalServiceProvider"));
 	}
 	
 	@Test
 	public void hasNumberOfViolationsIncreased() {
-		boolean numberOfViolationsHasIncreased = false;
+		boolean numberOfViolationsHasNotIncreased = true;
+		// To do: Check if importFilePathAllPreviousViolations can be read?
 		assertTrue(violationReport != null);
 		if (violationReport != null) {
 			logger.info(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations() 
-					+ "  At: " + violationReport.getTimePreviousCheck());
+					+ "  At: " + getFormattedDate(violationReport.getTimePreviousCheck()));
 			logger.info(" Current number of violations: " + violationReport.getNrOfAllCurrentViolations());
-			if (violationReport.getNrOfAllCurrentViolations() <= violationReport.getNrOfAllPreviousViolations()) {
-				numberOfViolationsHasIncreased = true;
+			if (violationReport.getNrOfAllCurrentViolations() > violationReport.getNrOfAllPreviousViolations()) {
+				numberOfViolationsHasNotIncreased = false;
 			}
-			if (violationReport.getNrOfAllCurrentViolations() < violationReport.getNrOfAllPreviousViolations()) {
+			if (violationReport.getNrOfAllCurrentViolations() == violationReport.getNrOfAllPreviousViolations()) {
 				replaceImportFileAllPreviousViolations();
 			}
 		}
-		assertTrue(numberOfViolationsHasIncreased);
+		assertTrue(numberOfViolationsHasNotIncreased);
 	}
 	
 	private void replaceImportFileAllPreviousViolations() {
-		try {
-			File exportFileAllViolations = new File(exportFilePathAllViolations);
-			if (exportFileAllViolations.exists()) {
-				// Get XML document from exportFileAllViolations
-				SAXBuilder sax = new SAXBuilder();
-				Document document = new Document();
-				document = sax.build(exportFileAllViolations);
-				// Delete existing importFileAllPreviousViolations
-				File importFileAllPreviousViolations = new File(importFilePathAllPreviousViolations);
-				importFileAllPreviousViolations.delete();
-				// Create new importFileAllPreviousViolations with contents of exportFileAllViolations
-				XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-				FileWriter fileWriter = new FileWriter(importFilePathAllPreviousViolations);
-				outputter.output(document, fileWriter);
-				fileWriter.close();
-				logger.warn(String.format(" Replaced: importFileAllPreviousViolations"));
+		if (importFilePathAllPreviousViolations != null) {
+			File importFileAllPreviousViolations = new File(importFilePathAllPreviousViolations);
+			if (violationReport.getExportDocAllViolations() != null) {
+				if (importFileAllPreviousViolations.exists()) {
+					try {
+						importFileAllPreviousViolations.delete();
+					} catch (SecurityException exception){
+						logger.warn(String.format(" Cannot delete importFilePathAllPreviousViolations " + exception.getCause().toString()));
+					}
+					// Create new importFileAllPreviousViolations with contents of exportFileAllViolations
+					XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+					try {
+						FileWriter fileWriter = new FileWriter(importFilePathAllPreviousViolations);
+						outputter.output(violationReport.getExportDocAllViolations(), fileWriter);
+						fileWriter.close();
+					} catch (IOException exception){
+						logger.warn(String.format(" Cannot create new importFilePathAllPreviousViolations " + exception.getCause().toString()));
+					}
+					logger.warn(String.format(" Replaced: importFileAllPreviousViolations"));
+				}
 			}
-		} catch (Exception exception){
-			logger.warn(String.format(" Unable to replace importFileAllPreviousViolations: " + exception.getCause().toString()));
 		}
 	}
 
@@ -111,15 +107,13 @@ public class SaccOnHusacct {
 		if (violationReport != null) {
 			if (violationReport.getNrOfNewViolations() > 0) {
 				logger.info(" New architectural violations detected! Number of new violations = " + violationReport.getNrOfNewViolations());
+				for (ViolationImExportDTO newViolation : violationReport.getNewViolations()) {
+					logger.info(" Violation in class: " + newViolation.getFrom() + " Line: " + newViolation.getLine() + " Message: " + newViolation.getMessage());
+				}
 			} else {
 				logger.info(" No new architectural violations detected!");
 			}
-			for (ViolationImExportDTO newViolation : violationReport.getNewViolations()) {
-				logger.info(" Violation in class: " + newViolation.getFrom() + " Line: " + newViolation.getLine() + " Message: " + newViolation.getMessage());
-			}
 		}
-		//assertTrue((violationReport != null) && (violationReport.getNrOfNewViolations() <= 0));
-		
 	}
 	
 	
@@ -128,4 +122,10 @@ public class SaccOnHusacct {
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	
+	private static String getFormattedDate(Calendar calendar) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
+		return dateFormat.format(calendar.getTime());
+	}
+
+
 }

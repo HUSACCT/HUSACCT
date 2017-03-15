@@ -84,9 +84,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, String exportFileAllCurrentViolations, String exportFileNewViolations) {
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
 		ExternalComplianceCheck externalComplianceCheck = new ExternalComplianceCheck();
-		ViolationReportDTO violationReport = externalComplianceCheck.performSoftwareArchitectureComplianceCheck(husacctWorkspaceFile, importFilePreviousViolations, exportFileAllCurrentViolations, exportFileNewViolations);
+		ViolationReportDTO violationReport = externalComplianceCheck.performSoftwareArchitectureComplianceCheck(husacctWorkspaceFile, importFilePreviousViolations, exportAllViolations, exportNewViolations);
 		return violationReport;
 	}
 

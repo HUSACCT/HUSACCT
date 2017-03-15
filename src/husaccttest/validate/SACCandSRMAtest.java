@@ -14,21 +14,17 @@ import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.task.imexporting.importing.ImportViolations;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
-import husacct.control.task.resources.IResource;
-import husacct.control.task.resources.ResourceFactory;
 import husacct.define.IDefineService;
 import husaccttest.TestResourceFinder;
 
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jdom2.Document;
-import org.jdom2.Element;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -66,7 +62,7 @@ public class SACCandSRMAtest {
 			setLog4jConfiguration();
 			logger.info(String.format(new Date().toString() + " Start: Validate - SRMA Test"));
 			ExternalServiceProvider externalServiceProvider = ExternalServiceProvider.getInstance();
-			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, importFilePathAllViolations, exportFilePathAllViolations, exportFilePathNewViolations);
+			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, importFilePathAllViolations, true, true);
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getMessage();
 			logger.warn(errorMessage);
@@ -386,30 +382,24 @@ public class SACCandSRMAtest {
 	}
 
 	@Test
-	public void isNumberOfAllViolationsInExportedXmlFileCorrect() {
+	public void isNumberOfAllViolationsInExportedXmlDocumentCorrect() {
 		int numberOfAllViolationsInReport = violationReport.getNrOfAllCurrentViolations();
-		int numberOfAllViolationsInXML = countNumberOfViolationsInExportFile(exportFilePathAllViolations);
+		int numberOfAllViolationsInXML = countNumberOfViolationsInExportedXmlDocument(violationReport.getExportDocAllViolations());
 		assertTrue(numberOfAllViolationsInXML == numberOfAllViolationsInReport);
 	}
 
 	@Test
-	public void isNumberOfNewViolationsInExportedXmlFileCorrect() {
+	public void isNumberOfNewViolationsInExportedXmlDocumentCorrect() {
 		int numberOfNewViolationsInReport = violationReport.getNrOfNewViolations();
-		int numberOfNewViolationsInXML = countNumberOfViolationsInExportFile(exportFilePathNewViolations);
+		int numberOfNewViolationsInXML = countNumberOfViolationsInExportedXmlDocument(violationReport.getExportDocNewViolations());
 		assertTrue(numberOfNewViolationsInXML == numberOfNewViolationsInReport);
 	}
 
-	private int countNumberOfViolationsInExportFile(String exportFilePath) {
+	private int countNumberOfViolationsInExportedXmlDocument(Document xmlDoc) {
 		int numberOfViolations = 0;
 		try {
-			File exportFile = new File(exportFilePath);
-			if (exportFile.exists()) {
-				HashMap<String, Object> resourceData = new HashMap<String, Object>();
-				resourceData.put("file", exportFile);
-				IResource xmlResource = ResourceFactory.get("xml");
-				Document doc = xmlResource.load(resourceData);	
-				Element logicalData = doc.getRootElement();
-				ImportViolations importer = new ImportViolations(logicalData);
+			if (xmlDoc != null) {
+				ImportViolations importer = new ImportViolations(xmlDoc);
 				List<ViolationImExportDTO> previousViolationsDtoList = importer.importViolations();
 				numberOfViolations = previousViolationsDtoList.size();
 			}
