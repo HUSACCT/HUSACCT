@@ -11,7 +11,7 @@ class PackageAnalyser extends JavaGenerator {
 	public PackageAnalyser(PackageDeclarationContext packageDeclaration) {
 		if (packageDeclaration != null && packageDeclaration.qualifiedName() != null) {
 			String uniquePackageName = packageDeclaration.qualifiedName().getText();
-	        if (uniquePackageName != null) {
+	        if ((uniquePackageName != null) && !uniquePackageName.isEmpty()) {
 	            uniqueName = uniquePackageName;
 	            belongsToPackage = getParentPackageName();
 	            name = getNameOfPackage();
@@ -20,8 +20,12 @@ class PackageAnalyser extends JavaGenerator {
 	            belongsToPackage = "";
 	            name = "No_Package_HUSACCT_Defined";
 	        }
-	        createPackage(name, uniqueName, belongsToPackage);
-		}
+        } else {
+            uniqueName = "No_Package";
+            belongsToPackage = "";
+            name = "No_Package_HUSACCT_Defined";
+        }
+        createPackage(name, uniqueName, belongsToPackage);
 	}
 
 	public String getPackageUniqueName() {
