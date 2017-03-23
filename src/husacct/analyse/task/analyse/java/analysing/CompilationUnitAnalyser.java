@@ -10,7 +10,6 @@ public class CompilationUnitAnalyser {
 	private static String sourceFilePath = "";
     private static String thePackage = "";
 	private CompilationUnitContext compilationUnit;
-    private int numberOfLinesOfCode = 0;
     private String theClass = null;
     private Logger logger = Logger.getLogger(CompilationUnitAnalyser.class);
 
@@ -22,19 +21,18 @@ public class CompilationUnitAnalyser {
     	return sourceFilePath;
     }
     
-    public CompilationUnitAnalyser(CompilationUnitContext compilationUnit, String sourceFileLocation, int nrOfLinesOfCode, JavaParser java7Parser) {
+    public CompilationUnitAnalyser(CompilationUnitContext compilationUnit, String sourceFileLocation, JavaParser java7Parser) {
     	this.compilationUnit = compilationUnit;
     	sourceFilePath = sourceFileLocation;
-    	this.numberOfLinesOfCode = nrOfLinesOfCode;
     	try {
     		/* Test and Debug
-    		if (sourceFilePath.contains("testcases\\taskdefs\\apt\\AptExample.java")) {
+    		if (sourceFilePath.contains("RESTService")) {
     			int i = 1;
     		} */
     		if (compilationUnit != null) {
 	        	analysePackage();
 	        	analyseTypeDeclaration();
-	        	analyseImports();
+	        	// analyseImports() is invoked per TypeDeclaration within analyseTypeDeclaration()
     		}
     	}
     	catch (Exception e) {
@@ -58,12 +56,20 @@ public class CompilationUnitAnalyser {
     private void analyseTypeDeclaration() {
     	if (compilationUnit.typeDeclaration() != null) {
 	    	int size = compilationUnit.typeDeclaration().size();
+    		int numberOfLinesOfCode = 0;
+    		int previousStopLine = 0;
 	    	for (int i = 0; i < size; i++) {
+	    		if (i == 0) {
+	    			numberOfLinesOfCode = compilationUnit.typeDeclaration(i).getStop().getLine();
+	    		} else {
+	    			int stopLine = compilationUnit.typeDeclaration(i).getStop().getLine();
+	    			numberOfLinesOfCode = stopLine - previousStopLine;
+	    		}
 	    		TypeDeclarationAnalyser typeDeclarationAnalyser = new TypeDeclarationAnalyser();
 	        	String className = typeDeclarationAnalyser.analyseTypeDeclaration(compilationUnit.typeDeclaration(i), numberOfLinesOfCode);
-	        	if (i == 0) {
-	                this.theClass = className;
-	        	}
+	        	this.theClass = className;
+	        	analyseImports();
+    			previousStopLine = numberOfLinesOfCode;
 	    	}
     	}
     }

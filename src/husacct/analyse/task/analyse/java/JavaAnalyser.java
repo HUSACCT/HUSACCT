@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.log4j.Logger;
 
@@ -32,8 +31,7 @@ public class JavaAnalyser extends AbstractAnalyser {
             compilationUnit = null;
             charStream = null;
         	JavaParser javaParser = generateJavaParser(sourceFilePath);
-            int nrOfLinesOfCode = determineNumberOfLinesOfCode();
-            new CompilationUnitAnalyser(compilationUnit, sourceFilePath, nrOfLinesOfCode, javaParser);
+            new CompilationUnitAnalyser(compilationUnit, sourceFilePath, javaParser);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,23 +71,6 @@ public class JavaAnalyser extends AbstractAnalyser {
         return javaParser;
     }
 
-    private int determineNumberOfLinesOfCode() throws IOException {
-        int linesOfCode = 0;
-    	if (charStream != null) {
-    		int size = charStream.size();
-    		int position = 0;
-    		linesOfCode = 1;
-    		while (position < size) {
-     			String s = charStream.getText(new Interval(position, position));
-	        	if (s.equals("\n")) {
-	        		linesOfCode ++;
-	            }
-    			position ++;
-    		}
-        }
-    	return linesOfCode;
-    }
-    
     @Override
     public String getFileExtension() {
         return ".java";
