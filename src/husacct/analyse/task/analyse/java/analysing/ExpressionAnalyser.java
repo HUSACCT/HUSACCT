@@ -101,13 +101,13 @@ public class ExpressionAnalyser extends JavaGenerator{
         /* Test helper
 		String expressionText2 = expression.getText();
 		String to_string = this.to;
-    	if (belongsToClass.equals("domain.indirect.violatingfrom.AccessObjectReferenceIndirect_AsReturnValue_MethodDerivedViaHeuristic") &&
-    			(expression.start.getLine() == 11)) {
+    	if (belongsToClass.equals("net.sf.jabref.preferences.CustomImportList") &&
+    			(expression.start.getLine() == 74)) {
 				boolean breakpoint = true;
     	} */
 		
-		this.lineNumber = expression.getStart().getLine();
 		this.to = transformExpressionToString(expression);
+		this.lineNumber = expression.getStart().getLine();
 		addAssociationToModel();
     }
     

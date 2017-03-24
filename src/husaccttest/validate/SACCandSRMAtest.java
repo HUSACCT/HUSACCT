@@ -91,7 +91,7 @@ public class SACCandSRMAtest {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}
-		assertEquals(411, numberOfDependencies);
+		assertEquals(413, numberOfDependencies);
 	}
 
 
