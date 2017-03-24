@@ -11,7 +11,7 @@
         <Project>
           <name>HUSACCT_Current_Architecture</name>
           <paths>
-            <path>C:\Tools\EclipseWorkspace\HUSACCT\src\husacct</path>
+            <path>src/husacct</path>
           </paths>
           <programmingLanguage>Java</programmingLanguage>
           <version>2.5</version>

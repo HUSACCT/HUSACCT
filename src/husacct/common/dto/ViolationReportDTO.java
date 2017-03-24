@@ -25,6 +25,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		newViolations = new ViolationImExportDTO[0];
 	}
 	
+	/**
+	 * @return int nrOfAllCurrentViolations = Total number of violations during the current SACC.
+	 */
 	public int getNrOfAllCurrentViolations() {
 		return nrOfAllCurrentViolations;
 	}
@@ -33,6 +36,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.nrOfAllCurrentViolations = nrOfAllViolations;
 	}
 
+	/**
+	 * @return int nrOfAllPreviousViolations = Total number of violations during the previous SACC.
+	 */
 	public int getNrOfAllPreviousViolations() {
 		return nrOfAllPreviousViolations;
 	}
@@ -41,6 +47,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.nrOfAllPreviousViolations = nrOfAllPreviousViolations;
 	}
 
+	/**
+	 * @return int nrOfNewViolations = Number of new violations during the current SACC.
+	 */
 	public int getNrOfNewViolations() {
 		return nrOfNewViolations;
 	}
@@ -49,6 +58,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.nrOfNewViolations = nrOfNewViolations;
 	}
 
+	/**
+	 * @return Calendar timeCurrentCheck = Time of the current SACC.
+	 */
 	public Calendar getTimeCurrentCheck() {
 		return timeCurrentCheck;
 	}
@@ -57,6 +69,10 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.timeCurrentCheck = timeCurrentCheck;
 	}
 
+	/**
+	 * @return Calendar timePreviousCheck = Time of the previous SACC. 
+	 * Its result are used to determine the new violations.
+	 */
 	public Calendar getTimePreviousCheck() {
 		return timePreviousCheck;
 	}
@@ -65,6 +81,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.timePreviousCheck = timePreviousCheck;
 	}
 
+	/**
+	 * @return ViolationImExportDTO[] allViolations = Contains all violations detected during current SACC.
+	 */
 	public ViolationImExportDTO[] getAllViolations() {
 		return allViolations;
 	}
@@ -73,6 +92,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.allViolations = allViolations;
 	}
 
+	/**
+	 * @return ViolationImExportDTO[] newViolations = Contains only new violations detected during current SACC.
+	 */
 	public ViolationImExportDTO[] getNewViolations() {
 		return newViolations;
 	}
@@ -81,6 +103,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.newViolations = newViolations;
 	}
 
+	/**
+	 * @return org.jdom2.Document exportDocAllViolations = XML document containing all new violations detected during current SACC. May be null!
+	 */
 	public Document getExportDocAllViolations() {
 		return exportDocAllViolations;
 	}
@@ -89,6 +114,9 @@ public class ViolationReportDTO extends AbstractDTO {
 		this.exportDocAllViolations = exportDocAllViolations;
 	}
 
+	/**
+	 * @return org.jdom2.Document exportDocNewViolations = XML document containing only new violations detected during current SACC. May be null!
+	 */
 	public Document getExportDocNewViolations() {
 		return exportDocNewViolations;
 	}

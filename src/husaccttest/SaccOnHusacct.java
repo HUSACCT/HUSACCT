@@ -24,12 +24,10 @@ import org.junit.Test;
 public class SaccOnHusacct {
 	// Refers to a files that contains the definition of the intended architecture (modules, rules, assigned software units, ...).
 	private static final String workspacePath = 
-			TestResourceFinder.getSaccFolder("java") 
-			+ "HUSACCT_Current_Architecture.xml";
+			TestResourceFinder.getSaccFolder("java") + "HUSACCT_Workspace_Current_Architecture.xml";
 	// Refers to a file containing a set of previous violations. Used to determine new violations.
 	private static final String importFilePathAllPreviousViolations =
-			TestResourceFinder.getSaccFolder("java") 
-			+ "HUSACCT_ArchitectureViolations_All_ImportFile.xml";
+			TestResourceFinder.getSaccFolder("java") + "HUSACCT_ArchitectureViolations_All_ImportFile.xml";
 	// Indicates if an XML document with all current violations should be created.
 	private static final boolean exportAllViolations = true;
 	// Indicates if an XML document with only the new current violations should be created.
@@ -60,7 +58,6 @@ public class SaccOnHusacct {
 	@Test
 	public void hasNumberOfViolationsIncreased() {
 		boolean numberOfViolationsHasNotIncreased = true;
-		// To do: Check if importFilePathAllPreviousViolations can be read?
 		assertTrue(violationReport != null);
 		if (violationReport != null) {
 			logger.info(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations() 
@@ -69,13 +66,16 @@ public class SaccOnHusacct {
 			if (violationReport.getNrOfAllCurrentViolations() > violationReport.getNrOfAllPreviousViolations()) {
 				numberOfViolationsHasNotIncreased = false;
 			}
+			/* Activate to renew the previous violations file. Only temporarily by one person, to prevent merging problems.  
 			if (violationReport.getNrOfAllCurrentViolations() < violationReport.getNrOfAllPreviousViolations()) {
 				replaceImportFileAllPreviousViolations();
 			}
+			*/
 		}
 		assertTrue(numberOfViolationsHasNotIncreased);
 	}
 	
+	@SuppressWarnings("unused")
 	private void replaceImportFileAllPreviousViolations() {
 		if (importFilePathAllPreviousViolations != null) {
 			File importFileAllPreviousViolations = new File(importFilePathAllPreviousViolations);
