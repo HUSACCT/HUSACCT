@@ -12,6 +12,7 @@ public class LanguageNotFoundException extends Exception {
 		super(String.format("Programminglanguage %s not configured programmatically in validate component", language));
 	}
 
+	@Override
 	public String getMessage() {
 		return "Programminglanguage not configured programmatically in validate component";
 	}

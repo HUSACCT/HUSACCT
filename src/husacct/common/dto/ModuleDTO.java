@@ -22,7 +22,8 @@ public class ModuleDTO extends AbstractDTO{
 		
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\nLogicalPath: " + logicalPath;
         representation += "\nType: " + type;

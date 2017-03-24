@@ -48,7 +48,7 @@ public class ApproachesTableSelectionListener implements ListSelectionListener {
 			while(iterator.hasNext()){
 				Object[] empty = {"", ""};
 				defaultTableModel.addRow(empty);
-				HashMap.Entry<String, Object> entry = (HashMap.Entry<String, Object>) iterator.next();
+				HashMap.Entry<String, Object> entry = iterator.next();
 				Object[] temp = {entry.getKey(), entry.getValue()};
 				defaultTableModel.setValueAt(temp[0], i, 0);
 				defaultTableModel.setValueAt(temp[1], i, 1);

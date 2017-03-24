@@ -70,7 +70,8 @@ class DependencyTableModel extends AbstractTableModel {
         }
     }
 
-    public String getColumnName(int columnIndex) {
+    @Override
+	public String getColumnName(int columnIndex) {
         return columnNames[columnIndex];
     }
 

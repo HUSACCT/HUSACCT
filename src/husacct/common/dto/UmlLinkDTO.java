@@ -23,6 +23,7 @@ public class UmlLinkDTO extends AbstractDTO{
 		this.type = type;
 	}
 	
+	@Override
 	public String toString() {
         String s = "";
         s += "\nFrom: " + from;

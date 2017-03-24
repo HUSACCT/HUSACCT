@@ -89,7 +89,7 @@ public class StatisticsPanel extends JPanel {
 				high = violationsPerSeverity.getValue();
 			}
 		}
-		violationSeverityTotals.setText((String) (low + " / " + medium + " / " + high));
+		violationSeverityTotals.setText(low + " / " + medium + " / " + high);
 		revalidate();
 		updateUI();
 	}

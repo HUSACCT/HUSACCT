@@ -4,7 +4,8 @@ class FamixAnnotation extends FamixStructuralEntity {
 
     public String annotatedElement; // Currently: "class", "variable", "method".
 
-    public String toString() {
+    @Override
+	public String toString() {
         String importRepresentation = "";
         importRepresentation += "\nname: " + super.name;
         importRepresentation += "\nuniquename: " + super.uniqueName;

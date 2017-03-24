@@ -46,6 +46,7 @@ public class ActionLogPanel extends JPanel{
 		refreshActionLogPanel();
 		
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				refreshActionLogPanel();
 			}
@@ -56,6 +57,7 @@ public class ActionLogPanel extends JPanel{
 	private JScrollPane getActionsDialogScrollPaneContents(){
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
+			@Override
 			public boolean isCellEditable(int rowIndex, int colIndex) {
 				return false;
 			}

@@ -135,11 +135,13 @@ public class AboutDialog extends JDialog{
 
 	private void setListeners(){
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		creditsButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new CreditsDialog(mainController);
 			}

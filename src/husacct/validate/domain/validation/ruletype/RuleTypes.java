@@ -35,6 +35,7 @@ public enum RuleTypes {
 		return defaultSeverity;
 	}
 
+	@Override
 	public String toString() {
 		return key;
 	}

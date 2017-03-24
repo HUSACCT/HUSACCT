@@ -102,6 +102,7 @@ public class WarningMessageService extends Observable implements Observer,IModul
 		notifyAllObservers(this,"createModule");
 	}
 
+	@Override
 	public void addObserver(Observer o)
 	{
 		observers.add(o);
@@ -167,7 +168,7 @@ public class WarningMessageService extends Observable implements Observer,IModul
 		for (Iterator<CodeLevelWarning> warning = codelevelWarnings.iterator(); warning.hasNext();) {
 			CodeLevelWarning message =  warning.next();
 			if (message instanceof CodeLevelWarning) {
-			AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
+			AnalyzedModuleComponent analyzedModule = message.getNotCodeLevelModule();
 			String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
 			String rightUniqName =softwareUnit ;
 			if(leftUniqName.equals(rightUniqName)){

@@ -52,6 +52,7 @@ public class MenuBar extends JMenuBar{
 
 	private void addListeners(){
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
 				defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));

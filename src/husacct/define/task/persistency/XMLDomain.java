@@ -88,7 +88,7 @@ public class XMLDomain {
 		softwareArchitecture.setDescription(XMLElement.getChild("description").getValue());
 		// Check if there are modules in the XML
 		if (XMLElement.getChild("modules").getChildren().size() > 0) {
-			createModulesFromXML((long) 0, XMLElement.getChild("modules"));
+			createModulesFromXML(0, XMLElement.getChild("modules"));
 		}
 		// Check if there are rules in the XML
 		if (XMLElement.getChild("rules").getChildren().size() > 0) {

@@ -35,6 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -90,7 +91,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		violationsPerRulePanel = new ViolationPerRulePanel(taskServiceImpl);
 		
 		// TabbedPanel
-		tabPanel = new JTabbedPane(JTabbedPane.TOP);
+		tabPanel = new JTabbedPane(SwingConstants.TOP);
         tabPanel.setBackground(UIManager.getColor("Panel.background"));
         getContentPane().add(tabPanel, BorderLayout.CENTER);
         tabPanel.addTab(localeService.getTranslatedString("ViolationsPerRuleTabTitle"), null, violationsPerRulePanel, null);

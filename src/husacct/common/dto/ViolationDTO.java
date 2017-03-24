@@ -27,7 +27,8 @@ public class ViolationDTO extends AbstractDTO {
 		this.severityKey = severityKey;
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
     	
         String representation = "";
         representation += "\n fromClasspath: " + fromClasspath;

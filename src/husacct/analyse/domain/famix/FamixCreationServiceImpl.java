@@ -27,7 +27,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         creationPostProcessor = new FamixCreationPostProcessor();
     }
 
-    public void createPackage(String uniqueName, String belongsToPackage, String name) {
+    @Override
+	public void createPackage(String uniqueName, String belongsToPackage, String name) {
         if (!model.packages.containsKey(uniqueName)){
 	        FamixPackage fPackage = new FamixPackage();
 	        fPackage.uniqueName = uniqueName;
@@ -102,7 +103,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         addToModel(fImport);
     }
 
-    public void createMethodOnly(String name, String uniqueName, String visibility,
+    @Override
+	public void createMethodOnly(String name, String uniqueName, String visibility,
             String signature, String declaredReturnType, String belongsToClass,
             boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
 
@@ -122,7 +124,8 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         addToModel(famixMethod);
     }
 
-    public void createMethod(String name, String uniqueName, String visibility,
+    @Override
+	public void createMethod(String name, String uniqueName, String visibility,
             String signature, String declaredReturnType, String belongsToClass,
             boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
 

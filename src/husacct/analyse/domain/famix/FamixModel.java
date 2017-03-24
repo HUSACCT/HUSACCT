@@ -232,7 +232,8 @@ class FamixModel extends FamixObject {
     	return returnValue;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return "\n ------------Packages------------- \n" + packages
                 + "\n ------------Classes------------- \n" + classes
                 + "\n -----------Assocations:-------------- \n" + associations

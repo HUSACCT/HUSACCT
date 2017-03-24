@@ -1,7 +1,6 @@
 package husacct.define.domain.module.modules;
 
 
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -14,6 +13,7 @@ public class Layer extends ModuleStrategy {
 	private static int STATIC_LEVEL = 1;
 	private int hierarchicalLevel;
 	
+	@Override
 	public void set(String name, String description){
 		this.id = STATIC_ID;
 		STATIC_ID++;

@@ -10,6 +10,7 @@ public class ModuleNotFoundException extends RuntimeException {
 		super(String.format("ModuleType %s is not supported by the validator.", moduleType));
 	}
 
+	@Override
 	public String getMessage() {
 		return "Module type is not supported by the validator.";
 	}

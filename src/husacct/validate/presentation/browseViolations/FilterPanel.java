@@ -149,6 +149,7 @@ public class FilterPanel extends JPanel {
 						try {
 							Thread.sleep(1);
 							SwingUtilities.invokeLater(new Runnable() {
+								@Override
 								public void run() {
 									browseViolations.reloadViolationPanelsAfterChange();
 								}
@@ -172,6 +173,7 @@ public class FilterPanel extends JPanel {
 						try {
 							Thread.sleep(1);
 							SwingUtilities.invokeLater(new Runnable() {
+								@Override
 								public void run() {
 									browseViolations.reloadViolationPanelsAfterChange();
 								}

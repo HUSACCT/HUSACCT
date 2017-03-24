@@ -40,11 +40,13 @@ public class HelpMenu extends JMenu {
 	
 	private void setListeners() {
 		aboutItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().showAboutHusacctGui();
 			}
 		});
 		documentationItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainController.getApplicationController().showDocumentationGUI();
 			}
@@ -52,6 +54,7 @@ public class HelpMenu extends JMenu {
 		
 		final HelpMenu helpMenu = this;
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				helpMenu.setText(localeService.getTranslatedString("Help"));
 				aboutItem.setText(localeService.getTranslatedString("About"));	

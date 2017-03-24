@@ -1,7 +1,6 @@
 package husacct.define.domain.conventions_checker;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.ModuleDomainService;

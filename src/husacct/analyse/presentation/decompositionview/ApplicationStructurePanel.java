@@ -143,7 +143,8 @@ public class ApplicationStructurePanel extends HelpableJPanel implements ActionL
         theTree.setBackground(PANELBACKGROUND);
     }
 
-    public void valueChanged(TreeSelectionEvent eventTree) {
+    @Override
+	public void valueChanged(TreeSelectionEvent eventTree) {
     	    DefaultMutableTreeNode selected = (DefaultMutableTreeNode) codeTree.getLastSelectedPathComponent();
             if (selected != null) {
                 SoftwareUnitDTO selectedModule = (SoftwareUnitDTO) selected.getUserObject();

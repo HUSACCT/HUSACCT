@@ -5,9 +5,6 @@ import husacct.define.task.components.AbstractCombinedComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
 import java.io.IOException;
 
 import javax.swing.AbstractButton;
@@ -15,7 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
-import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.tree.TreePath;
 
 public class SoftwareUnitTableTransferHandler extends TransferHandler implements Transferable{
@@ -26,6 +22,7 @@ public class SoftwareUnitTableTransferHandler extends TransferHandler implements
 	
 	
 	
+	@Override
 	public boolean canImport(TransferSupport support) {
 	        if (!support.isDrop()) {
 	            return false;
@@ -34,7 +31,8 @@ public class SoftwareUnitTableTransferHandler extends TransferHandler implements
 	        return support.isDataFlavorSupported(moduleFlavours[0]);
 	    }
 
-	    public boolean importData(TransferSupport support) {
+	    @Override
+		public boolean importData(TransferSupport support) {
 	        if (!canImport(support)) {
 	          return false;
 	        }
@@ -60,12 +58,14 @@ public class SoftwareUnitTableTransferHandler extends TransferHandler implements
 	    
 	    
 	    
-	    public int getSourceActions(JComponent c) {
+	    @Override
+		public int getSourceActions(JComponent c) {
 	    	return TransferHandler.COPY;
 	    	}
 	    	
 	    
-	    public boolean canImport(JComponent comp, DataFlavor flavor[]) {
+	    @Override
+		public boolean canImport(JComponent comp, DataFlavor flavor[]) {
 	    	if (!(comp instanceof JLabel) && !(comp instanceof AbstractButton)) {
 	    
 	    	}	
@@ -88,7 +88,8 @@ public class SoftwareUnitTableTransferHandler extends TransferHandler implements
 	    
 	    
 	    
-	    public Transferable createTransferable(JComponent comp) {
+	    @Override
+		public Transferable createTransferable(JComponent comp) {
 	    	// Clear
 	    
 	   
@@ -102,7 +103,8 @@ public class SoftwareUnitTableTransferHandler extends TransferHandler implements
 	    
 	    
 	    
-	    public boolean importData(JComponent comp, Transferable t) {
+	    @Override
+		public boolean importData(JComponent comp, Transferable t) {
 	    	
 	    	if (comp instanceof JLabel) {
 	    	JLabel label = (JLabel)comp;

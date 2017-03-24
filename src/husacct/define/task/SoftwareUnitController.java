@@ -5,7 +5,6 @@ import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
-import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;

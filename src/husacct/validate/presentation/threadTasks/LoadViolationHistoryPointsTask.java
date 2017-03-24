@@ -1,6 +1,5 @@
 package husacct.validate.presentation.threadTasks;
 
-import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.task.TaskServiceImpl;
 

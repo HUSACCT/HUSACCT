@@ -86,6 +86,7 @@ public class HelpDialog extends JDialog {
 	
 	private void setListeners(){
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

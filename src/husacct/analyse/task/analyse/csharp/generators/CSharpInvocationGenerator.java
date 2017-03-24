@@ -240,7 +240,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
         for (int j = 0; j < numberOfTypeParameters; j++) {
             CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
         	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
-            CommonTree genericTypeRecursive = CSharpGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, CSharpParser.TYPE_ARGUMENT_LIST);
+            CommonTree genericTypeRecursive = CSharpGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, CSharpParser.TYPE_ARGUMENT_LIST);
             if (genericTypeRecursive != null) {
             	addGenericTypeParameters(genericTypeRecursive, belongsToClass, dependencySubType);
             } else {

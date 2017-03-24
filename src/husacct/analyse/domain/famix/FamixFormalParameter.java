@@ -4,7 +4,8 @@ class FamixFormalParameter extends FamixStructuralEntity {
 
     public String belongsToMethod;
 
-    public String toString() {
+    @Override
+	public String toString() {
         String importRepresentation = "";
         importRepresentation += "\nname: " + super.name;
         importRepresentation += "\nuniquename: " + super.uniqueName;

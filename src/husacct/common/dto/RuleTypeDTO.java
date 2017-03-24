@@ -29,6 +29,7 @@ public class RuleTypeDTO extends AbstractDTO {
 		return exceptionRuleTypes;
 	}
 
+	@Override
 	public String toString() {
     	
         String representation = "";

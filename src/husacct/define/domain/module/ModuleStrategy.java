@@ -333,6 +333,7 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return isMapped;
 	}
 
+	@Override
 	public int compareTo(ModuleStrategy compareObject) {
 		int compareResult = 0;
 		if(compareObject instanceof Layer || this.getId() < compareObject.getId()) {
@@ -434,7 +435,8 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return units;
 	}
 
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\nName: " + name + ", ID: " + id;
         representation += "\nType: " + type;

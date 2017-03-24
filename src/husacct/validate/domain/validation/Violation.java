@@ -159,7 +159,8 @@ public class Violation {
 		return severity;
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\nfromClasspath: " + classPathFrom;
         representation += "\ntoClasspath: " + classPathTo;

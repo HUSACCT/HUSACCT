@@ -79,7 +79,7 @@ public class ExternalComplianceCheck {
 		boolean isAnalysing = true;
 		while(isAnalysing){
 			try {
-				Thread.sleep((long)10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {}
 			isAnalysing = mainController.getStateController().isAnalysing();
 		}
@@ -97,7 +97,7 @@ public class ExternalComplianceCheck {
 		mainController = controlService.getMainController();
 		while(isValidating){
 			try {
-				Thread.sleep((long)10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {}
 			isValidating = mainController.getStateController().isValidating();
 		}

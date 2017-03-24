@@ -4,6 +4,7 @@ import husacct.validate.domain.validation.DefaultSeverities;
 
 public interface IViolationType {
 
+	@Override
 	public String toString();
 
 	public String getCategory();

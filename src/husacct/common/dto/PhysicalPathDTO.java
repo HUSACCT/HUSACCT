@@ -10,6 +10,7 @@ public class PhysicalPathDTO extends AbstractDTO {
 		this.type = type;
 	}
 	
+	@Override
 	public String toString(){
 		String result = "";
 		result += "Path: " + path + "\n";

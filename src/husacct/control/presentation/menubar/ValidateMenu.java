@@ -9,7 +9,7 @@ import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import java.util.List;
 
 import javax.swing.JMenu;
@@ -35,7 +35,7 @@ public class ValidateMenu extends JMenu{
 	
 	private void addComponents() {
 		validateItem = new JMenuItem(localeService.getTranslatedString("Validate"));
-		validateItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
+		validateItem.setAccelerator(KeyStroke.getKeyStroke('V', InputEvent.CTRL_DOWN_MASK));
 		validateItem.setMnemonic(getMnemonicKeycode("ValidateMnemonic"));
 				
 		exportViolationsItem = new JMenuItem(localeService.getTranslatedString("ValidateExport"));
@@ -51,24 +51,28 @@ public class ValidateMenu extends JMenu{
 	
 	private void setListeners() {
 		validateItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showValidateGui();
 			}
 		});
 		
 		exportViolationsItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getExportImportController().showExportViolationsGui();
 			}
 		});
 		
 		reportViolationsItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getExportImportController().showReportViolationsGui();
 			}
 		});
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
+			@Override
 			public void changeState(List<States> states) {
 				validateItem.setEnabled(false);
 				exportViolationsItem.setEnabled(false);
@@ -87,6 +91,7 @@ public class ValidateMenu extends JMenu{
 		
 		final ValidateMenu validateMenu = this;
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				validateMenu.setText(localeService.getTranslatedString("Validate"));
 				validateItem.setText(localeService.getTranslatedString("ValidateNow"));

@@ -7,7 +7,8 @@ class FamixImplementationDefinition extends FamixAssociation {
     }
     public int index;
 
-    public String toString() {
+    @Override
+	public String toString() {
         String inheritRepesentation = "";
         inheritRepesentation += "\ntype: " + super.type;
         inheritRepesentation += "\nfrom: " + super.from;

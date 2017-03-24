@@ -222,6 +222,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
 		return domain.getDefaultRuleTypeOfModule(type);
 	}

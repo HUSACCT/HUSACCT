@@ -52,7 +52,8 @@ public class Mapping {
 		violationTypes = violationTypeList.toArray(new String[] {});
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
         String mappingRepresentation = "";
         mappingRepresentation += "\nLogicalPath: " + logicalPath;
         mappingRepresentation += "\nPhysicalPath: " + physicalPath;

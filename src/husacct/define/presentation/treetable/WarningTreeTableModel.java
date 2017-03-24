@@ -80,6 +80,7 @@ public class WarningTreeTableModel  extends AbstractTreeTableModel{
 		return 0;
 	}
 
+	@Override
 	public boolean isLeaf( Object node )
 	{
 		WarningMessageContainer treenode = ( WarningMessageContainer )node;

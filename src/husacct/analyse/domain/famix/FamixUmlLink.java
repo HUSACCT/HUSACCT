@@ -10,7 +10,8 @@ class FamixUmlLink extends FamixObject {
     public String type = "";		// The value should be the same as the value of attributeof "key" of one of the enum values of UmlLinkTypes. 
     									// Because of the persistency mechanism, the type is String and notUmlLinkTypes.
 
-     public String toString() {
+     @Override
+	public String toString() {
         String s = "";
         s += "\nFrom: " + from;
         s += "\nTo: " + to;

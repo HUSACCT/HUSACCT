@@ -48,6 +48,7 @@ public class DependencyDTO extends AbstractDTO{
 		return from;
 	}
 	
+	@Override
 	public String toString(){
 		String result = "";
 		result += "\nFrom: " + from;

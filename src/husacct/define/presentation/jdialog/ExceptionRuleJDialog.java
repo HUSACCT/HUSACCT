@@ -195,10 +195,12 @@ public class ExceptionRuleJDialog  extends HelpableJDialog implements KeyListene
 	/**
 	 * Handling KeyPresses
 	 */
+	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// Ignore
 	}
 
+	@Override
 	public void keyReleased(KeyEvent arg0) {
 		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			this.dispose();
@@ -207,6 +209,7 @@ public class ExceptionRuleJDialog  extends HelpableJDialog implements KeyListene
 		}
 	}
 
+	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// Ignore
 	}

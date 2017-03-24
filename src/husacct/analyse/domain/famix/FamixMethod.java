@@ -6,7 +6,8 @@ class FamixMethod extends FamixBehaviouralEntity {
     public boolean isAbstract;
     public boolean isConstructor;
 
-    public String toString() {
+    @Override
+	public String toString() {
         String importRepresentation = "";
         importRepresentation += "\nname: " + super.name;
         importRepresentation += "\nuniquename: " + super.uniqueName;

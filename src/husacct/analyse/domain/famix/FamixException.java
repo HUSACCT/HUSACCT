@@ -10,7 +10,8 @@ class FamixException extends FamixAssociation {
         super.subType = DependencySubTypes.DECL_EXCEPTION.toString();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\ntype: " + type + ", subType: " + super.subType;
         representation += "From class: " + super.from;

@@ -53,7 +53,7 @@ public class AnalyzedUnitComparator {
 		
 		for (AbstractCombinedComponent remove : toBeDeleted) {
 			AnalyzedModuleComponent unittoberemoved = ((AnalyzedModuleComponent) remove);
-			WarningMessageService.getInstance().addCodeLevelWarning((AnalyzedModuleComponent)unittoberemoved);
+			WarningMessageService.getInstance().addCodeLevelWarning(unittoberemoved);
 			AbstractCombinedComponent parent = remove.getParentofChild();
 			int index = parent.getChildren().indexOf(remove);
 			parent.getChildren().remove(index);	

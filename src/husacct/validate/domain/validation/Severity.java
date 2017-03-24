@@ -72,6 +72,7 @@ public class Severity implements Cloneable {
 		return true;
 	}
 
+	@Override
 	public Severity clone() {
 		try {
 			Severity clone = (Severity) super.clone();

@@ -98,6 +98,7 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	private JTable setupApproachesTable(Object[] columnNames, Object[][] rows) {
 		JTable table = new JTable  (rows, columnNames){
 			private static final long serialVersionUID = -1304690689139412746L;
+			@Override
 			public boolean isCellEditable(int row, int col){
 				return false;
 			}

@@ -37,6 +37,7 @@ public class StateControllerTest {
 	@Test
 	public void testStateChangeListener(){
 		stateController.addStateChangeListener(new IStateChangeListener() {
+			@Override
 			public void changeState(List<States> states) {
 				assertTrue(states.contains(States.NONE));
 				assertFalse(states.contains(States.OPENED));

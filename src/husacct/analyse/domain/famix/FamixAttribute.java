@@ -9,7 +9,8 @@ class FamixAttribute extends FamixStructuralEntity {
     public boolean isComposite; 		// False if the type allows one value only, like Person; True in case of a generic type, or e.g. Person[]. 
 
 
-    public String toString() {
+    @Override
+	public String toString() {
         String importRepresentation = "";
         importRepresentation += "\nname: " + super.name + ", nuniquename: " + super.uniqueName;
         importRepresentation += "\nbelongsToClass: " + super.belongsToClass;

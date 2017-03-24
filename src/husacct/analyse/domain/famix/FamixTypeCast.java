@@ -6,7 +6,8 @@ class FamixTypeCast extends FamixAssociation {
     public String fromType;
     public String toType;
     
-    public String toString() {
+    @Override
+	public String toString() {
         String typeCastRepresentation = "";
         typeCastRepresentation += "\ntype: " + type + ", subType: " + super.subType;
         typeCastRepresentation += "\nfrom: " + super.from;

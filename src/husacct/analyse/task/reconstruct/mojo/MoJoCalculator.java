@@ -520,7 +520,7 @@ public class MoJoCalculator {
                 if (tableR.get(obj1 + "%@$" + obj2) == null) tableR.put(obj1 + "%@$" + obj2, new Double(1));
                 else
                 {
-                    double previous_value = ((Double) (tableR.get(obj1 + "%@$" + obj2))).doubleValue();
+                    double previous_value = (tableR.get(obj1 + "%@$" + obj2)).doubleValue();
                     tableR.put(obj1 + "%@$" + obj2, new Double(previous_value + 1));
                 }
             }

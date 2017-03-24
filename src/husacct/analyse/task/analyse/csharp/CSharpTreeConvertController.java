@@ -5,10 +5,7 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyse.csharp.generators.*;
 
-import java.io.File;
 import java.util.Stack;
-import java.util.regex.Matcher;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -204,7 +201,7 @@ public class CSharpTreeConvertController {
 
 	private void delegateAttribute(CommonTree attributeTree) {
 		if (attributeTree.toStringTree().contains("= >")) {
-			csLamdaGenerator.delegateLambdaToBuffer((CommonTree) attributeTree, createPackageAndClassName(classNameStack), "");
+			csLamdaGenerator.delegateLambdaToBuffer(attributeTree, createPackageAndClassName(classNameStack), "");
 		} else {
 			csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(classNameStack));
 		}

@@ -249,7 +249,8 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		changed();
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\nUniqueName: " + uniqueName;
         representation += "\nType: " + type + ", IsContext: " + isContext;

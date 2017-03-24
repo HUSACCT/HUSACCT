@@ -9,7 +9,7 @@ import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import java.util.List;
 
 import javax.swing.JMenu;
@@ -47,11 +47,11 @@ public class AnalyseMenu extends JMenu{
 		analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 		
 		analysedApplicationOverviewItem = new JMenuItem(localeService.getTranslatedString("AnalysedApplicationOverview"));
-		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
+		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('A', InputEvent.CTRL_DOWN_MASK));
 		analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 		
 		analysedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
-		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
+		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('P', InputEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
 		reconstructArchitectureItem = new JMenuItem(localeService.getTranslatedString("ReconstructArchitecture"));
@@ -82,60 +82,70 @@ public class AnalyseMenu extends JMenu{
 	
 	private void setListeners() {
 		setApplicationPropertiesItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().showApplicationDetailsGui();
 			}
 		});
 		
 		analyseNowItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().analyseApplication();
 			}
 		});
 		
 		analysedApplicationOverviewItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showApplicationOverviewGui();
 			}
 		});
 		
 		analysedArchitectureDiagramItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showAnalysedArchitectureDiagram();
 			}
 		});
 		
 		analysisHistoryItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationAnalysisHistoryLogController().showApplicationAnalysisHistoryOverview();
 			}
 		});
 		
 		reportDependenciesItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getExportImportController().showReportDependenciesGui();
 			}
 		});
 		
 		reconstructArchitectureItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showAnalyseSarGui();
 			}
 		});
 		
 		exportAnalysisModelItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getExportImportController().showExportAnalysisModelGui();
 			}
 		});
 		
 		importAnalysisModelItem.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e){
 				mainController.getExportImportController().showImportAnalyseModelGui();
 			}
 		});
 
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
+			@Override
 			public void changeState(List<States> states) {
 				setApplicationPropertiesItem.setEnabled(false);
 				analyseNowItem.setEnabled(false);
@@ -168,6 +178,7 @@ public class AnalyseMenu extends JMenu{
 		
 		final AnalyseMenu analyseMenu = this;
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				analyseMenu.setText(localeService.getTranslatedString("Analyse"));
 				setApplicationPropertiesItem.setText(localeService.getTranslatedString("ApplicationProperties"));

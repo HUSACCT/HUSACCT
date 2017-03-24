@@ -28,6 +28,7 @@ public class AnalysisStatisticsDTO extends AbstractDTO {
 		this.selectionNrOfLinesOfCode = selectionNrOfLinesOfCode;
 	}
 	
+	@Override
 	public String toString(){
 		String result = "";
 		result += "totalNrOfPackages: " + totalNrOfPackages + "\n";

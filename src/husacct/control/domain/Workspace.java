@@ -1,8 +1,6 @@
 package husacct.control.domain;
 
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.PhysicalPathDTO;
 
 public class Workspace {
 	
@@ -22,7 +20,8 @@ public class Workspace {
 		this.appData = appData;
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\nName: " + name;
         representation += "\n";

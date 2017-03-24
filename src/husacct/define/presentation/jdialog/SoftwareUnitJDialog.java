@@ -371,7 +371,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg instanceof String) {
-			if ("updateSoftwareTree".equals((String) arg)) {
+			if ("updateSoftwareTree".equals(arg)) {
 				getSoftwareDefinationTree();
 				softwareUnitScrollPane.setViewportView(softwareDefinitionTree);
 				SwingUtilities.getWindowAncestor(softwareUnitScrollPane).repaint();

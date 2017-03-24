@@ -95,6 +95,7 @@ public class SetApplicationPanel extends JPanel{
 
 	private void setListeners(){
 		pathList.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(pathList.getSelectedIndex() >= 0){
 					removeButton.setEnabled(true);
@@ -105,18 +106,21 @@ public class SetApplicationPanel extends JPanel{
 		});
 
 		addButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				showAddFileDialog();
 			}
 		});
 
 		removeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				pathListModel.remove(pathList.getSelectedIndex());
 			}
 		});
 
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				applicationNameLabel.setText(localeService.getTranslatedString("ApplicationNameLabel"));
 				languageSelectLabel.setText(localeService.getTranslatedString("LanguageSelectLabel"));

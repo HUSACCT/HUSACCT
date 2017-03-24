@@ -241,6 +241,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 			e.printStackTrace();
 		}
 		eventHandlerThread = new Thread() {
+			@Override
 			public void run() {
 				try {
 					fileController.processEvents();

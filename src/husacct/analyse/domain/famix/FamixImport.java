@@ -11,7 +11,8 @@ class FamixImport extends FamixAssociation {
         super.type = "Import";
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         String importRepresentation = "";
         importRepresentation += "\ntype: " + super.type;
         importRepresentation += "\nfrom: " + super.from;

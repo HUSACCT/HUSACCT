@@ -24,7 +24,8 @@ public class ModuleTrasferhandler  extends  TransferHandler implements Transfera
     private TreePath[] data;
     JTree tree;
 
-    public boolean canImport(TransferSupport support) {
+    @Override
+	public boolean canImport(TransferSupport support) {
         if (!support.isDrop()) {
             return false;
         }
@@ -32,7 +33,8 @@ public class ModuleTrasferhandler  extends  TransferHandler implements Transfera
         return support.isDataFlavorSupported(moduleFlavours[0]);
     }
 
-    public boolean importData(TransferSupport support) {
+    @Override
+	public boolean importData(TransferSupport support) {
         if (!canImport(support)) {
           return false;
         }
@@ -58,12 +60,14 @@ public class ModuleTrasferhandler  extends  TransferHandler implements Transfera
     
     
     
-    public int getSourceActions(JComponent c) {
+    @Override
+	public int getSourceActions(JComponent c) {
     	return TransferHandler.COPY;
     	}
     	
     
-    public boolean canImport(JComponent comp, DataFlavor flavor[]) {
+    @Override
+	public boolean canImport(JComponent comp, DataFlavor flavor[]) {
     	if (!(comp instanceof JLabel) && !(comp instanceof AbstractButton)) {
     
     	}	
@@ -86,7 +90,8 @@ public class ModuleTrasferhandler  extends  TransferHandler implements Transfera
     
     
     
-    public Transferable createTransferable(JComponent comp) {
+    @Override
+	public Transferable createTransferable(JComponent comp) {
     	// Clear
     	data = null;
     	tree=null;
@@ -107,7 +112,8 @@ public class ModuleTrasferhandler  extends  TransferHandler implements Transfera
     
     
     
-    public boolean importData(JComponent comp, Transferable t) {
+    @Override
+	public boolean importData(JComponent comp, Transferable t) {
     	
     	if (comp instanceof JLabel) {
     	JLabel label = (JLabel)comp;

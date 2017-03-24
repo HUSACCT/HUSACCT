@@ -86,6 +86,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private void setListeners(){
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				showFileDialog();
 			}

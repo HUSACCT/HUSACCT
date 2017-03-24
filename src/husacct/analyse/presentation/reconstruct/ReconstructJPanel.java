@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import org.apache.log4j.Logger;
@@ -34,7 +35,7 @@ public class ReconstructJPanel extends HelpableJPanel{
 	
 	public final void initUI() {
 		setLayout(new BorderLayout(0, 10));
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(SwingConstants.TOP);
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		add(tabbedPane);
 		addTabs();

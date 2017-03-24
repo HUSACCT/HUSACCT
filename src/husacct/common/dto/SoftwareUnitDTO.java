@@ -38,6 +38,7 @@ public class SoftwareUnitDTO extends AbstractDTO{
 		return result;
 	}
 	
+	@Override
 	public String toString(){
 		String result = "";
 		result += "Type: " + type + "\n";

@@ -2,7 +2,7 @@ package husacct.control.presentation.menubar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import java.util.List;
 
 import javax.swing.JMenu;
@@ -39,11 +39,11 @@ public class DefineMenu extends JMenu{
 	
 	private void addComponents() {
 		defineArchitectureItem = new JMenuItem(localeService.getTranslatedString("DefineArchitecture"));
-		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
+		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', InputEvent.CTRL_DOWN_MASK));
 		defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				
 		definedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("DefinedArchitectureDiagram"));
-		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
+		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
 		definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 		
 		exportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ExportArchitecture"));

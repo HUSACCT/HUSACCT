@@ -190,7 +190,8 @@ class BipartiteGraph {
     }
 
     /* print out the current status of the graph */
-    public String toString() {
+    @Override
+	public String toString() {
         String str = "";
         for (int i = 0; i < points; i++)
         {

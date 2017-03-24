@@ -11,12 +11,14 @@ class ToolBarButtonListener extends MouseAdapter{
 		this.internalFrameController = internalFrameController;
 	}
 	
+	@Override
 	public void mousePressed(MouseEvent e){
 		if(e.isPopupTrigger()){
 			doPop(e);
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e){
 		if(e.isPopupTrigger()){
 			doPop(e);

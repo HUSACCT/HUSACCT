@@ -14,7 +14,6 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.handle.BezierNodeHandle;

@@ -57,6 +57,7 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		
 		analysisTableModel = new DefaultTableModel();
 		analysisTable = new JTable(analysisTableModel){
+			@Override
 			public boolean isCellEditable(int rowIndex, int colIndex) {
 				return false;
 			}

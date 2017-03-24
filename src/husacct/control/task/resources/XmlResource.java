@@ -16,6 +16,7 @@ public class XmlResource implements IResource{
 	private boolean doCompress = false;
 	private Logger logger = Logger.getLogger(XmlResource.class);
 
+	@Override
 	public Document load(HashMap<String, Object> dataValues) {
 		File file = (File) dataValues.get("file");
 
@@ -35,6 +36,7 @@ public class XmlResource implements IResource{
 		return doc;
 	}
 
+	@Override
 	public boolean save(Document doc, HashMap<String, Object> dataValues, HashMap<String, Object> config) {
 		this.doCompress = (boolean)config.get("doCompress");
 		File file = (File) dataValues.get("file");

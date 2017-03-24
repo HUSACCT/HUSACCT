@@ -5,11 +5,9 @@ package husacct.analyse.task.analyse.java.parsing;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
+
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class JavaParser extends Parser {
@@ -185,7 +183,7 @@ public class JavaParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class CompilationUnitContext extends ParserRuleContext {
-		public TerminalNode EOF() { return getToken(JavaParser.EOF, 0); }
+		public TerminalNode EOF() { return getToken(Recognizer.EOF, 0); }
 		public PackageDeclarationContext packageDeclaration() {
 			return getRuleContext(PackageDeclarationContext.class,0);
 		}
@@ -8416,6 +8414,7 @@ public class JavaParser extends Parser {
 		return _localctx;
 	}
 
+	@Override
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 87:

@@ -19,10 +19,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +57,7 @@ public class MainGui extends HelpableJFrame{
 		setIconImage(icon);
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		setExtendedState(Frame.MAXIMIZED_BOTH);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setBounds(0, 0, 1020, 750);
 		setPgsLookAndFeel();
 		addWindowListener(new WindowAdapter() {
@@ -131,6 +131,7 @@ public class MainGui extends HelpableJFrame{
 		return menuBar;
 	}
 	
+	@Override
 	public void setTitle(String title){
 		if(title.length() > 0){
 			super.setTitle(titlePrefix + " - " + title);

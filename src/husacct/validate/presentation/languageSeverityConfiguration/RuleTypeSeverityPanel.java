@@ -203,7 +203,7 @@ class RuleTypeSeverityPanel extends JPanel {
 
 	private void categoryValueChanged() {
 		if (category.getSelectedValue() != null) {
-			loadRuleTypes(((DataLanguageHelper) category.getSelectedValue()).key);
+			loadRuleTypes(category.getSelectedValue().key);
 		}
 	}
 

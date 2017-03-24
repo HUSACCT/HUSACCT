@@ -7,9 +7,7 @@ import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 
 import java.awt.Component;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -86,6 +84,7 @@ public class AddProjectPanel extends JPanel{
 	
 	private void setListeners(){
 		pathList.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(pathList.getSelectedIndex() >= 0){
 					removeButton.setEnabled(true);
@@ -96,18 +95,21 @@ public class AddProjectPanel extends JPanel{
 		});
 		
 		addButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				showAddFileDialog();
 			}
 		});
 		
 		removeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				pathListModel.remove(pathList.getSelectedIndex());
 			}
 		});
 		
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 				pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));

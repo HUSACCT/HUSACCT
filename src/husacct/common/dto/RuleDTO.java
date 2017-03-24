@@ -25,7 +25,8 @@ public class RuleDTO extends AbstractDTO {
 		this.exceptionRules = exceptionRules;
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
     	String mainRuleKey = "";
     	if ((mainRule != null) && (mainRule.ruleTypeKey != null)) {
     		mainRuleKey = mainRule.ruleTypeKey;

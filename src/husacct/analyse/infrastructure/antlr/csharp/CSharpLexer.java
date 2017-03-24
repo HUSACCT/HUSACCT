@@ -1,8 +1,6 @@
 // $ANTLR 3.4 C:\\Users\\chw\\workspace-cloudmig\\CSharpKDMDiscoverer\\grammars\\CSharpLexer.g 2013-01-09 17:08:25
 package husacct.analyse.infrastructure.antlr.csharp;
 
-import husacct.analyse.task.analyse.csharp.generators.CSharpGeneratorToolkit;
-
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Set;
@@ -18,11 +16,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.Lexer;
 import org.apache.log4j.Logger;
 
-import java.util.Stack;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 
 
@@ -357,7 +351,8 @@ public class CSharpLexer extends Lexer {
         super(input, state);
     }
 
-    public String getGrammarFileName() {
+    @Override
+	public String getGrammarFileName() {
         return "C:\\Users\\chw\\workspace-cloudmig\\CSharpKDMDiscoverer\\grammars\\CSharpLexer.g";
     }
 
@@ -9983,7 +9978,8 @@ public class CSharpLexer extends Lexer {
     }
     // $ANTLR end "Not_number_sign"
 
-    public void mTokens() throws RecognitionException {
+    @Override
+	public void mTokens() throws RecognitionException {
         // C:\\Users\\chw\\workspace-cloudmig\\CSharpKDMDiscoverer\\grammars\\CSharpLexer.g:1:8: ( Pp_directive | SINGLE_LINE_DOC_COMMENT | DELIMITED_DOC_COMMENT | NEW_LINE | SINGLE_LINE_COMMENT | DELIMITED_COMMENT | WHITESPACE | ABSTRACT | AS | BASE | BOOL | BREAK | BYTE | CASE | CATCH | CHAR | CHECKED | CLASS | CONST | CONTINUE | DECIMAL | DEFAULT | DELEGATE | DO | DOUBLE | ELSE | ENUM | EVENT | EXPLICIT | EXTERN | FALSE | FINALLY | FIXED | FLOAT | FOR | FOREACH | GOTO | IF | IMPLICIT | IN | INT | INTERFACE | INTERNAL | IS | LOCK | LONG | NAMESPACE | NEW | NULL | OBJECT | OPERATOR | OUT | OVERRIDE | PARAMS | PRIVATE | PROTECTED | PUBLIC | READONLY | REF | RETURN | SBYTE | SEALED | SHORT | SIZEOF | STACKALLOC | STATIC | STRING | STRUCT | SWITCH | THIS | THROW | TRUE | TRY | TYPEOF | UINT | ULONG | UNCHECKED | UNSAFE | USHORT | USING | VIRTUAL | VOID | VOLATILE | WHILE | IDENTIFIER | INTEGER_LITERAL | LiteralAccess | REAL_LITERAL | CHARACTER_LITERAL | STRING_LITERAL | OPEN_BRACE | CLOSE_BRACE | OPEN_BRACKET | CLOSE_BRACKET | OPEN_PARENS | CLOSE_PARENS | DOT | COMMA | COLON | SEMICOLON | PLUS | MINUS | STAR | DIV | PERCENT | AMP | BITWISE_OR | CARET | BANG | TILDE | ASSIGNMENT | LT | GT | INTERR | DOUBLE_COLON | OP_COALESCING | OP_INC | OP_DEC | OP_AND | OP_OR | OP_PTR | OP_EQ | OP_NE | OP_LE | OP_GE | OP_ADD_ASSIGNMENT | OP_SUB_ASSIGNMENT | OP_MULT_ASSIGNMENT | OP_DIV_ASSIGNMENT | OP_MOD_ASSIGNMENT | OP_AND_ASSIGNMENT | OP_OR_ASSIGNMENT | OP_XOR_ASSIGNMENT | OP_LEFT_SHIFT | OP_LEFT_SHIFT_ASSIGNMENT | QUOTE | DOUBLE_QUOTE | BACK_SLASH | DOUBLE_BACK_SLASH | SHARP )
         int alt100 = 140;
         alt100 = dfa100.predict(input);
@@ -11531,7 +11527,8 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA1_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "114:5: ( Pp_declaration | Pp_conditional | Pp_line | Pp_diagnostic | Pp_region | Pp_pragma )";
         }
     }
@@ -11593,7 +11590,8 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA24_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "154:10: fragment Pp_declaration : ( ( WHITESPACE )? SHARP ( WHITESPACE )? 'define' WHITESPACE Conditional_symbol Pp_new_line | ( WHITESPACE )? SHARP ( WHITESPACE )? 'undef' WHITESPACE Conditional_symbol Pp_new_line );";
         }
     }
@@ -11659,7 +11657,8 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA27_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "164:10: fragment Pp_conditional : ( Pp_if_section | Pp_elif_section | Pp_else_section | Pp_endif );";
         }
     }
@@ -11721,7 +11720,8 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA41_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "197:10: fragment Pp_diagnostic : ( ( WHITESPACE )? SHARP ( WHITESPACE )? 'error' Pp_message | ( WHITESPACE )? SHARP ( WHITESPACE )? 'warning' Pp_message );";
         }
     }
@@ -11783,7 +11783,8 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA44_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "206:10: fragment Pp_region : ( Pp_start_region | Pp_end_region );";
         }
     }
@@ -11835,11 +11836,13 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA62_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "()* loopback of 251:11: ( Delimited_comment_section )*";
         }
 
-        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+        @Override
+		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
             int _s = s;
             switch (s) {
@@ -11934,11 +11937,13 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA66_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "()* loopback of 284:10: ( Delimited_comment_section )*";
         }
 
-        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+        @Override
+		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
             int _s = s;
             switch (s) {
@@ -12036,7 +12041,8 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA86_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "510:1: REAL_LITERAL : ( Decimal_digits DOT Decimal_digits ( Exponent_part )? ( Real_type_suffix )? | DOT Decimal_digits ( Exponent_part )? ( Real_type_suffix )? | Decimal_digits Exponent_part ( Real_type_suffix )? | Decimal_digits Real_type_suffix );";
         }
     }
@@ -12092,11 +12098,13 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA98_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "794:10: fragment SkiPped_section_part : ( ( WHITESPACE )? ( SkiPped_characters )? NEW_LINE | Pp_directive );";
         }
 
-        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+        @Override
+		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
             int _s = s;
             switch (s) {
@@ -13346,11 +13354,13 @@ public class CSharpLexer extends Lexer {
             this.transition = DFA100_transition;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "1:1: Tokens : ( Pp_directive | SINGLE_LINE_DOC_COMMENT | DELIMITED_DOC_COMMENT | NEW_LINE | SINGLE_LINE_COMMENT | DELIMITED_COMMENT | WHITESPACE | ABSTRACT | AS | BASE | BOOL | BREAK | BYTE | CASE | CATCH | CHAR | CHECKED | CLASS | CONST | CONTINUE | DECIMAL | DEFAULT | DELEGATE | DO | DOUBLE | ELSE | ENUM | EVENT | EXPLICIT | EXTERN | FALSE | FINALLY | FIXED | FLOAT | FOR | FOREACH | GOTO | IF | IMPLICIT | IN | INT | INTERFACE | INTERNAL | IS | LOCK | LONG | NAMESPACE | NEW | NULL | OBJECT | OPERATOR | OUT | OVERRIDE | PARAMS | PRIVATE | PROTECTED | PUBLIC | READONLY | REF | RETURN | SBYTE | SEALED | SHORT | SIZEOF | STACKALLOC | STATIC | STRING | STRUCT | SWITCH | THIS | THROW | TRUE | TRY | TYPEOF | UINT | ULONG | UNCHECKED | UNSAFE | USHORT | USING | VIRTUAL | VOID | VOLATILE | WHILE | IDENTIFIER | INTEGER_LITERAL | LiteralAccess | REAL_LITERAL | CHARACTER_LITERAL | STRING_LITERAL | OPEN_BRACE | CLOSE_BRACE | OPEN_BRACKET | CLOSE_BRACKET | OPEN_PARENS | CLOSE_PARENS | DOT | COMMA | COLON | SEMICOLON | PLUS | MINUS | STAR | DIV | PERCENT | AMP | BITWISE_OR | CARET | BANG | TILDE | ASSIGNMENT | LT | GT | INTERR | DOUBLE_COLON | OP_COALESCING | OP_INC | OP_DEC | OP_AND | OP_OR | OP_PTR | OP_EQ | OP_NE | OP_LE | OP_GE | OP_ADD_ASSIGNMENT | OP_SUB_ASSIGNMENT | OP_MULT_ASSIGNMENT | OP_DIV_ASSIGNMENT | OP_MOD_ASSIGNMENT | OP_AND_ASSIGNMENT | OP_OR_ASSIGNMENT | OP_XOR_ASSIGNMENT | OP_LEFT_SHIFT | OP_LEFT_SHIFT_ASSIGNMENT | QUOTE | DOUBLE_QUOTE | BACK_SLASH | DOUBLE_BACK_SLASH | SHARP );";
         }
 
-        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+        @Override
+		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
             int _s = s;
             switch (s) {

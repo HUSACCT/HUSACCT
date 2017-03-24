@@ -243,7 +243,7 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void categoryValueChanged() {
-		loadRuletypes(((DataLanguageHelper) categoryJList.getSelectedValue()).key);
+		loadRuletypes(categoryJList.getSelectedValue().key);
 	}
 
 	private void loadRuletypes(String category) {
@@ -261,7 +261,7 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void ruletypeValueChanged() {
-		loadViolationtypes(((DataLanguageHelper) ruletypeJList.getSelectedValue()).key);
+		loadViolationtypes(ruletypeJList.getSelectedValue().key);
 	}
 
 	private void clearViolationTypesTable() {

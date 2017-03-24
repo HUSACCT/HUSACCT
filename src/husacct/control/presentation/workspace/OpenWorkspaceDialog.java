@@ -73,12 +73,14 @@ public class OpenWorkspaceDialog extends JDialog{
 	
 	private void setListeners(){
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		
 		openButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(selectedLoaderPanel.validateData() && loadWorkspace()){
 					dispose();

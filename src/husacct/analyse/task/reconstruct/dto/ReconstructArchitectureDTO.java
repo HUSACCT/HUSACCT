@@ -77,6 +77,7 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 		relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 	}
 	
+	@Override
 	public String toString() {
         String s = "";
         s += "\nselectedModule: " + selectedModule.logicalPath;

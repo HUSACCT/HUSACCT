@@ -98,12 +98,14 @@ public class SaveWorkspaceDialog extends JDialog{
 	
 	private void setListeners(){
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		
 		saveButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(selectedSaverPanel.validateData() && saveWorkspace()){
 					dispose();

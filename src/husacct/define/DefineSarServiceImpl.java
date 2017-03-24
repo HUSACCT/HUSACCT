@@ -155,6 +155,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 		return selectedModuleDTO;
 	}
 
+	@Override
 	public void updateModulePanel() {
 		defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
 		if (moduleIdOfModuleToSelectInUI > 0) {

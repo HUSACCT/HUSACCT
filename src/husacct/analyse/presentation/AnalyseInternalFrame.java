@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 public class AnalyseInternalFrame extends HelpableJInternalFrame implements ActionListener, IServiceListener {
@@ -33,7 +34,7 @@ public class AnalyseInternalFrame extends HelpableJInternalFrame implements Acti
         this.controller = new AnalyseUIController(analyseTaskControl);
         registerLocaleChangeListener();
         
-        tabPanel = new JTabbedPane(JTabbedPane.TOP);
+        tabPanel = new JTabbedPane(SwingConstants.TOP);
         tabPanel.setBackground(UIManager.getColor("Panel.background"));
         getContentPane().add(tabPanel, BorderLayout.CENTER);
 

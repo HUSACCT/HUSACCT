@@ -93,6 +93,7 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 		final CreateWorkspaceDialog createWorkspaceDialog = this;
 		
 		analyseApplicationCheckbox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleSetApplicationPanel(analyseApplicationCheckbox.isSelected());
 				DialogUtils.alignCenter(createWorkspaceDialog);
@@ -100,6 +101,7 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 		});
 
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(analyseApplicationCheckbox.isSelected()){
 					if(workspaceNameValidated()&&setApplicationPanel.dataValidated()) {
@@ -126,6 +128,7 @@ public class CreateWorkspaceDialog extends HelpableJDialog{
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

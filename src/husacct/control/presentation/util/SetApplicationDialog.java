@@ -61,6 +61,7 @@ public class SetApplicationDialog extends JDialog {
 
 	private void setListeners(){
 		saveButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (setApplicationPanel.dataValidated()) {
 					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
@@ -71,6 +72,7 @@ public class SetApplicationDialog extends JDialog {
 		});
 		
 		analyseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (setApplicationPanel.dataValidated()) {
 					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();

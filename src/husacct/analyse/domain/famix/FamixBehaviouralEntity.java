@@ -7,7 +7,8 @@ class FamixBehaviouralEntity extends FamixEntity {
     public String declareReturnClass;
     public String belongsToClass;
 
-    public String toString() {
+    @Override
+	public String toString() {
         String importRepresentation = "";
         importRepresentation += "\nname: " + super.name;
         importRepresentation += "\nuniquename: " + super.uniqueName;

@@ -37,6 +37,7 @@ public class LanguageMenu extends JMenu{
 			}
 			
 			languageItem.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					setLocaleFromString(languageItem.getText());
 				}

@@ -10,7 +10,8 @@ class FamixAssociation extends FamixObject {
 	public boolean isIndirect = false;
 	public boolean isInheritanceRelated = false; // True, if the invoked method or accessed variable is inherited. Furthermore if type starts with "extends".
 
-    public String toString() {
+    @Override
+	public String toString() {
         String s = "";
         s += "Assocation Type: " + type + ", subType: " + subType + ", Indirect: " + isIndirect;
         s += "\nFrom: " + from;

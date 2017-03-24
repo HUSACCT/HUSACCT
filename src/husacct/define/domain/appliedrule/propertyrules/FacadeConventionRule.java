@@ -6,6 +6,7 @@ import husacct.define.domain.conventions_checker.ModuleCheckerHelper;
 public class FacadeConventionRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;
 
+	@Override
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 

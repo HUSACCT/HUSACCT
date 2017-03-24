@@ -26,6 +26,7 @@ public class CategoryKeySeverityDTO {
 		return key;
 	}
 	
+	@Override
 	public String toString(){
 		String result = "";
 		result += "Key: " + key + "\n";

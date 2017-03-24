@@ -128,7 +128,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		for (int i = 0; i < getRowCount(); i++) {
 			boolean b = false;
 			for (Severity value : comboboxValues) {
-				if (value.equals((Severity) getValueAt(i, 1))) {
+				if (value.equals(getValueAt(i, 1))) {
 					b = true;
 
 				}

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class Component extends ModuleStrategy {
 
+	@Override
 	public void set(String name, String description){
 		this.id = STATIC_ID;
 		STATIC_ID++;
@@ -22,6 +23,7 @@ public class Component extends ModuleStrategy {
 		
 	}
 	
+	@Override
 	public void copyValuestoNewModule(ModuleStrategy newModule){ 
 		newModule.setId(this.getId());
 		newModule.setName(this.getName());

@@ -150,13 +150,13 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
             this.declareType = foundType;
         } 
         // Check if the types is a generic type, e.g.: List<Type1>, Dictionary<Type2, Type3>
-        CommonTree typeArgumentList = CSharpGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, CSharpParser.TYPE_ARGUMENT_LIST);
+        CommonTree typeArgumentList = CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST);
         if (typeArgumentList != null) {
         	this.isComposite = true;
         	addGenericTypeParameters(typeArgumentList);
         }
         // Check if an array is declared.  
-        CommonTree rankSpecifier = CSharpGeneratorToolkit.getFirstDescendantWithType((CommonTree) typeTree, CSharpParser.RANK_SPECIFIER);
+        CommonTree rankSpecifier = CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.RANK_SPECIFIER);
         if (rankSpecifier != null) {
         	this.isComposite = true;
         	this.typeInClassDiagram = declareType;
@@ -170,7 +170,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
         for (int j = 0; j < numberOfTypeParameters; j++) {
             CommonTree parameterTypeOfGenericTree = (CommonTree) genericType.getChild(j);
         	// Check if parameterTypeOfGenericTree contains a generic type arg list. If so, handle it recursively.
-            CommonTree genericTypeRecursive = CSharpGeneratorToolkit.getFirstDescendantWithType((CommonTree) parameterTypeOfGenericTree, CSharpParser.TYPE_ARGUMENT_LIST);
+            CommonTree genericTypeRecursive = CSharpGeneratorToolkit.getFirstDescendantWithType(parameterTypeOfGenericTree, CSharpParser.TYPE_ARGUMENT_LIST);
             if (genericTypeRecursive != null) {
             	levelOfRecursionWithinGenericType ++; // Needed to prevent that this.typeInClassDiagram is set with a type included in a recursive generic type. 
             	addGenericTypeParameters(genericTypeRecursive);

@@ -1,7 +1,5 @@
 package husacct.define.task.components;
 
-import husacct.common.dto.SoftwareUnitDTO;
-
 import java.util.ArrayList;
 
 public class AnalyzedModuleComponent extends AbstractCombinedComponent {
@@ -118,7 +116,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		boolean result = false;
 		AnalyzedModuleComponent buffer =null;
 		String type = this.getType().toLowerCase();
-		buffer = (AnalyzedModuleComponent) this.getParentofChild();
+		buffer = this.getParentofChild();
 		while (!type.equals("application")) {
 			if (buffer.isMapped()) {
 				result =true;
@@ -132,6 +130,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		return result;
 	}
 	
+	@Override
 	public String toString(){
 		String result = "";
 		result += "Type: " + type + "\n";

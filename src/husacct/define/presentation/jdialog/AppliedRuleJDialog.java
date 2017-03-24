@@ -231,7 +231,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 
 	private void setSelectedRuleTypeKey(String ruleTypeKey){
 		for (int i = 0;i < appliedRuleKeyValueComboBox.getItemCount();i++){
-			String iteratingItemKey = (String) appliedRuleKeyValueComboBox.getItemKeyAt(i);
+			String iteratingItemKey = appliedRuleKeyValueComboBox.getItemKeyAt(i);
 			if (iteratingItemKey.equals(ruleTypeKey)){
 				appliedRuleKeyValueComboBox.setSelectedIndex(i);
 				break;
@@ -309,7 +309,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 	}
 
 	private void removeException() {
-		long selectedRow = (long) jTableException.getSelectedRow();
+		long selectedRow = jTableException.getSelectedRow();
 		if (selectedRow > -1){
 			long exceptionId = jTableExceptionIds.get(selectedRow);
 			appliedRuleController.removeException(exceptionId);
@@ -370,10 +370,12 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		}
 	}
 
+	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// Ignore
 	}
 
+	@Override
 	public void keyReleased(KeyEvent arg0) {
 		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			this.dispose();
@@ -382,6 +384,7 @@ public class AppliedRuleJDialog extends HelpableJDialog implements KeyListener, 
 		}
 	}
 
+	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// Ignore
 	}

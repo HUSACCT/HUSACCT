@@ -67,6 +67,7 @@ public class ConfigurationDialog extends JDialog {
 		DialogUtils.alignCenter(this);	
 		
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				setComponentText();
 				loadSidePanel();

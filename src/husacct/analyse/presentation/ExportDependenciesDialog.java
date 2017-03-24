@@ -59,12 +59,14 @@ class ExportDependenciesDialog extends JDialog {
 
     private void setListeners() {
         browseButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            @Override
+			public void actionPerformed(ActionEvent arg0) {
                 showFileDialog();
             }
         });
         exportButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            @Override
+			public void actionPerformed(ActionEvent arg0) {
                 if (validateSelectedFile()) {
                     dispose();
                     ThreadedDependencyExport dependencyExport = new ThreadedDependencyExport(uiController, selectedFile.getAbsolutePath());

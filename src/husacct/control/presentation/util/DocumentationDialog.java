@@ -58,7 +58,8 @@ public class DocumentationDialog extends JDialog{
 		
 		hyperLinkLabel.addMouseListener(new MouseAdapter()  
 		{  
-		    public void mouseReleased(MouseEvent e)  
+		    @Override
+			public void mouseReleased(MouseEvent e)  
 		    {  
 		    	openBrowser(hyperLinkLabel.getText());
 		    	

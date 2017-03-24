@@ -16,6 +16,7 @@ import javax.swing.DesktopManager;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JToggleButton;
+import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
@@ -112,7 +113,7 @@ abstract public class InternalFrameController {
 		internalFrame.setIconifiable(true);
 		internalFrame.setFrameIcon(frameIcon);
 		internalFrame.setClosable(true);
-		internalFrame.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
+		internalFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addListenersToInternalFrame();
 	}
 	
@@ -195,10 +196,12 @@ abstract public class InternalFrameController {
 				deactivateInternalFrame();
 
 			}
+			@Override
 			public void internalFrameClosing(InternalFrameEvent e) {
 				setInternalFrameAndButtonInvisible();
 			}
 
+			@Override
 			public void internalFrameClosed(InternalFrameEvent e) {
 			}
 

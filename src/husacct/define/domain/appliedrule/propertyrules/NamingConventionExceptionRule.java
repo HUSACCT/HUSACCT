@@ -6,6 +6,7 @@ import husacct.define.domain.conventions_checker.ModuleCheckerHelper;
 public class NamingConventionExceptionRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper = new ModuleCheckerHelper();
 
+	@Override
 	public boolean checkConvention() {
 
 		if (!moduleCheckerHelper.rootIsNotIncludedInRule(getModuleFrom(), getModuleTo())){

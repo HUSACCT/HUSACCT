@@ -13,7 +13,8 @@ class FamixInvocation extends FamixAssociation {
 	public String usedEntity = ""; 			// uniqueName of used FamixStructuralEntity, FamixBehaviouralEntity, or "" (not found)
 	
 
-    public String toString() {
+    @Override
+	public String toString() {
         String string = "";
         string += "\n\ntype: " + super.type + ", subType: " + super.subType + "\n";
         string += "from: " + super.from + "\n";

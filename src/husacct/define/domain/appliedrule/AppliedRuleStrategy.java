@@ -204,7 +204,8 @@ public abstract class AppliedRuleStrategy {
 	 */
 	public abstract boolean checkConvention();
 	
-    public String toString() {
+    @Override
+	public String toString() {
         String representation = "";
         representation += "\nId: " + id + ", Type: " + ruleTypeKey;
         representation += "\nEnabled: " + enabled + ", IsException: " + isException;

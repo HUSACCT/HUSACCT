@@ -38,6 +38,7 @@ public class ToolMenu extends JMenu {
 		});
 		
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				setComponentText();
 			}

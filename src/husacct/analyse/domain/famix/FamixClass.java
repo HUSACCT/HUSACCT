@@ -23,7 +23,8 @@ class FamixClass extends FamixDecompositionEntity {
     	return cDTO;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         String classRepresentation = "";
         classRepresentation += "\nName: " + super.name;
         classRepresentation += "\nBelongs to Package: " + belongsToPackage;

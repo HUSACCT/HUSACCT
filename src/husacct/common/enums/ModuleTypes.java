@@ -15,6 +15,7 @@ public enum ModuleTypes {
 		this.key = key;
 	}
 	
+	@Override
 	public String toString() {
 		return key;
 	}

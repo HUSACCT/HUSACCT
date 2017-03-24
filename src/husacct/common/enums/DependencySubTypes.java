@@ -56,6 +56,7 @@ public enum DependencySubTypes {
 		return dependencyType;
 	}
 
+	@Override
 	public String toString() {
 		return key;
 	}

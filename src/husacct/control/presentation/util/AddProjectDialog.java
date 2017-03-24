@@ -112,6 +112,7 @@ public class AddProjectDialog extends JDialog{
 	
 	private void setListeners(){
 		pathList.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(pathList.getSelectedIndex() >= 0){
 					removeButton.setEnabled(true);
@@ -122,18 +123,21 @@ public class AddProjectDialog extends JDialog{
 		});
 		
 		addButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				showAddFileDialog();
 			}
 		});
 		
 		removeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				pathListModel.remove(pathList.getSelectedIndex());
 			}
 		});
 		
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 				pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
@@ -145,6 +149,7 @@ public class AddProjectDialog extends JDialog{
 		});
 		
 		confirmButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				CancelFlag = false;
 				dispose();
@@ -152,6 +157,7 @@ public class AddProjectDialog extends JDialog{
 		});
 		
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				CancelFlag = true;
 				dispose();

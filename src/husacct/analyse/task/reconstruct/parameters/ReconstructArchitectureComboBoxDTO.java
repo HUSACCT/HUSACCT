@@ -22,7 +22,8 @@ public class ReconstructArchitectureComboBoxDTO extends ReconstructArchitectureP
 	    public String getValue() {
 	        return value;
 	    }
-	    public String toString(){
+	    @Override
+		public String toString(){
 	    	return label;
 	    }
 	}

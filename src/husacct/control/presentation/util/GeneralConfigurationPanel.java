@@ -72,6 +72,7 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 			}
 			
 			languageItem.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					setLanguage(locale.getLanguage());					
 				}
@@ -135,6 +136,7 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	private void setListeners() {
 		localeService.addServiceListener(new IServiceListener() {
+			@Override
 			public void update() {
 				setComponentText();
 			}

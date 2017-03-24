@@ -121,7 +121,8 @@ public class ViolationImExportDTO extends AbstractDTO {
 		this.severity = severityKey;
 	}
 	
-    public String toString() {
+    @Override
+	public String toString() {
     	
         String representation = "";
         representation += "\n fromClasspath: " + from;

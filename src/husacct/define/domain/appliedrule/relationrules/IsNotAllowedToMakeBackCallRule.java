@@ -5,14 +5,13 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.conventions_checker.LayerCheckerHelper;
 import husacct.define.domain.conventions_checker.ModuleCheckerHelper;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.module.modules.Layer;
-
 import java.util.ArrayList;
 
 public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 	private ModuleCheckerHelper moduleCheckerHelper;
 	private LayerCheckerHelper layerCheckerHelper;
 
+	@Override
 	public boolean checkConvention() {
 		moduleCheckerHelper = new ModuleCheckerHelper();
 		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());

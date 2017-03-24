@@ -122,6 +122,7 @@ public class CreditsDialog extends JDialog {
 
 	private void setListeners(){
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

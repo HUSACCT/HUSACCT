@@ -1,7 +1,5 @@
 package husacct.common;
 
-import java.io.File;
-
 public class OSDetector {
 	public enum OS {
 		WINDOWS,

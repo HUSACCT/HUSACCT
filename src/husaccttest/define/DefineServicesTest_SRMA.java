@@ -53,7 +53,7 @@ public class DefineServicesTest_SRMA {
 			mainController = controlService.getMainController();
 			while(isAnalysing){
 				try {
-					Thread.sleep((long)10);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {}
 				isAnalysing = mainController.getStateController().isAnalysing();
 			}
