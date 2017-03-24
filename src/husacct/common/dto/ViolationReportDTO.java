@@ -13,8 +13,8 @@ public class ViolationReportDTO extends AbstractDTO {
 	private Calendar timePreviousCheck;				// Time of the previous SACC. Its result are used to determine the new violations.
 	private ViolationImExportDTO[] allViolations; 	// Contains all violations detected during current SACC.
 	private ViolationImExportDTO[] newViolations; 	// Contains only new violations detected during current SACC.
-	private Document exportDocAllViolations;		// XML document containing all new violations detected during current SACC. May be null!
-	private Document exportDocNewViolations;		// XML document containing only new violations detected during current SACC. May be null!
+	private Document exportDocAllViolations;		// XML document containing all new violations detected during current SACC. Option, so may be null!
+	private Document exportDocNewViolations;		// XML document containing only new violations detected during current SACC. Option, so may be null!
 	
 	public ViolationReportDTO() {
 		nrOfAllCurrentViolations = 0;
