@@ -318,10 +318,10 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 			public void mouseClicked(MouseEvent event) {
 				createPopup(event);
 			}
-			@Override
+			/* @Override
 			public void mouseEntered(MouseEvent event) {
 				createPopup(event);
-			}
+			} */
 			@Override
 			public void mousePressed(MouseEvent event) {
 				createPopup(event);

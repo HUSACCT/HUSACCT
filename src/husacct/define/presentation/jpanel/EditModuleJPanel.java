@@ -1,6 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
+import husacct.common.enums.ModuleTypes;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
 import husacct.define.presentation.draganddrop.customdroptargetlisterner.EditpanelDropListener;
@@ -41,10 +42,10 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 	private EditpanelDropListener listener = new EditpanelDropListener(this);
 	private JLabel moduleTypeLabel;
 	private String[] moduleTypes_Translated = {
-			ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"),
-			ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"),
-			ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"),
-			ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary") };
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.SUBSYSTEM.toString()),
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.LAYER.toString()),
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.COMPONENT.toString()),
+			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.EXTERNAL_LIBRARY.toString()) };
 	private JLabel nameLabel;
 	private JTextField nameTextfield;
 	private final Logger logger = Logger.getLogger(EditModuleJPanel.class);
@@ -57,17 +58,14 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String moduleType;
-			if (moduleTypeComboBox.getModel().getSize() == 1) {
-				moduleType = "Facade";
-			} else {
+			if (moduleTypeComboBox.getModel().getSize() > 1) { // Excludes Facade/Interface
 				int location = moduleTypeComboBox.getSelectedIndex();
-				String[] moduleTypes = { "SubSystem", "Layer", "Component", "ExternalLibrary" };
+				String[] moduleTypes = {ModuleTypes.SUBSYSTEM.toString(), ModuleTypes.LAYER.toString(), 
+						ModuleTypes.COMPONENT.toString(), ModuleTypes.EXTERNAL_LIBRARY.toString()};
 				moduleType = moduleTypes[location];
-			}
-			if (!_type.equals(moduleType)) {
-				if (!moduleType.toLowerCase().equals("facade")) {
+				if (!_type.equals(moduleType)) {
 					DefinitionController.getInstance().updateModuleType(moduleType);
-				} 
+				}
 			}
 		}
 	};
@@ -201,8 +199,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 					nameTextfield.setText((String) moduleDetails.get("name"));
 					descriptionTextArea.setText((String) moduleDetails.get("description"));
 					String moduleType = (String) moduleDetails.get("type");
-					String moduleType_Translated = ServiceProvider.getInstance().getLocaleService().getTranslatedString(moduleType);
-					_type= moduleType_Translated;
+					_type= moduleType;
 					// Fill moduleTypeComboBox.
 					if (moduleType.equals("Facade")) {
 						DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<String>(facadeType);
@@ -210,6 +207,7 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 						moduleTypeComboBox.setSelectedIndex(0);
 						moduleTypeComboBox.setEnabled(false);
 					} else {
+						String moduleType_Translated = ServiceProvider.getInstance().getLocaleService().getTranslatedString(moduleType);
 						DefaultComboBoxModel<String> defaultModel = new DefaultComboBoxModel<String>(moduleTypes_Translated);
 						moduleTypeComboBox.setModel(defaultModel);
 						for (int i = 0; i < moduleTypes_Translated.length; i++) {

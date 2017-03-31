@@ -17,13 +17,14 @@ public class RuleTypeDtoAssembler {
 	}
 
 	public RuleTypeDTO[] createRuleTypeDTO(List<RuleType> rules) {
+		RuleTypeDTO[] returnValue;
 		List<RuleTypeDTO> ruletypes = new ArrayList<RuleTypeDTO>();
-
 		for (RuleType rule : rules) {
 			RuleTypeDTO dto = createRuleTypeDTOWithViolationtypes(rule);
 			ruletypes.add(dto);
 		}
-		return ruletypes.toArray(new RuleTypeDTO[ruletypes.size()]);
+		returnValue = ruletypes.toArray(new RuleTypeDTO[ruletypes.size()]);
+		return returnValue;
 	}
 
 	private RuleTypeDTO createRuleTypeDTOWithViolationtypes(RuleType rule) {

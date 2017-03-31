@@ -164,49 +164,23 @@ public class AppliedRuleController extends PopUpController {
 		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 		ArrayList<String> ruleTypeValues = new ArrayList<String>();
 		RuleTypeDTO[] allowedRules = ServiceProvider.getInstance().getValidateService().getAllowedRuleTypesOfModule(selectedModule.getType());
-
-		// Present all allowed rules, not sorted on Category	
-		for (RuleTypeDTO allowedRule : allowedRules) {
-			String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(allowedRule.key);
-			if (currentRuleType.equals("")) {
-				ruleTypeKeys.add(allowedRule.getKey());
-				ruleTypeValues.add(value);
-			} else {
-				ruleTypeKeys.add(currentRuleType);
-				ruleTypeValues.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(currentRuleType));
-			}
-
-		}
 		
-/*		// Present all allowed rules, sorted on Category
-		CategoryDTO[] rulesCategory = ServiceProvider.getInstance().getValidateService().getCategories();
-		for (CategoryDTO category : rulesCategory) {
-			ArrayList<RuleTypeDTO> _temp = new ArrayList<RuleTypeDTO>();
-			for (RuleTypeDTO categoryRule : category.getRuleTypes()) {
-				for (RuleTypeDTO allowedRule : allowedRules) {
-					if (categoryRule.getKey().equals(allowedRule.getKey())) {
-						_temp.add(categoryRule);
-					}
+		if (allowedRules.length > 0) {
+			// Present all allowed rules, not sorted on Category	
+			for (RuleTypeDTO allowedRule : allowedRules) {
+				String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(allowedRule.key);
+				if (currentRuleType.equals("")) {
+					ruleTypeKeys.add(allowedRule.getKey());
+					ruleTypeValues.add(value);
+				} else {
+					ruleTypeKeys.add(currentRuleType);
+					ruleTypeValues.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(currentRuleType));
 				}
+	
 			}
-			if (!_temp.isEmpty()) {
-				ruleTypeKeys.add("setDisabled");
-				ruleTypeValues.add("--- " + ServiceProvider.getInstance().getLocaleService().getTranslatedString(category.getKey()) + " ---");
-				for (RuleTypeDTO rule : _temp) {
-					String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(rule.key);
-					if (currentRuleType.equals("")) {
-						ruleTypeKeys.add(rule.getKey());
-						ruleTypeValues.add(value);
-					} else {
-						ruleTypeKeys.add(currentRuleType);
-						ruleTypeValues.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(currentRuleType));
-					}
-				}
-			}
+			keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
+			keyValueComboBoxAppliedRule.setSelectedIndex(index);
 		}
-*/
-		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
-		keyValueComboBoxAppliedRule.setSelectedIndex(index);
 	}
 
 	public void fillRuleTypeComboBoxWithExceptions(KeyValueComboBox keyValueComboBoxAppliedRule) {

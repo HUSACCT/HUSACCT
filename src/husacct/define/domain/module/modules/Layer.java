@@ -1,6 +1,7 @@
 package husacct.define.domain.module.modules;
 
 
+import husacct.common.enums.ModuleTypes;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -23,7 +24,7 @@ public class Layer extends ModuleStrategy {
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
 		
-		this.type = "Layer";
+		this.type = ModuleTypes.LAYER.toString();
 		setNewHierarchicalLevel();
 	}
 	
