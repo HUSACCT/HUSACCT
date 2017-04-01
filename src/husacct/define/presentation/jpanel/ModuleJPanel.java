@@ -301,7 +301,7 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		//updateModuleTree();
+		//updateModuleTree(); Would
 	}
 
 	public void updateModuleTree() {
@@ -318,10 +318,10 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 			public void mouseClicked(MouseEvent event) {
 				createPopup(event);
 			}
-			/* @Override
+			@Override
 			public void mouseEntered(MouseEvent event) {
-				createPopup(event);
-			} */
+				// Do nothing
+			}
 			@Override
 			public void mousePressed(MouseEvent event) {
 				createPopup(event);

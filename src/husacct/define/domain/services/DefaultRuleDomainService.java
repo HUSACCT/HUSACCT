@@ -126,8 +126,7 @@ public class DefaultRuleDomainService {
 
 	public void updateModuleRules(ModuleStrategy updatedModule) {
 		_module = updatedModule;
-		for (AppliedRuleStrategy appliedRule : SoftwareArchitecture
-				.getInstance().getAppliedRules()) {
+		for (AppliedRuleStrategy appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
 			if (appliedRule.getModuleFrom().getId() == _module.getId()) {
 				appliedRule.setModuleFrom(_module);
 			}

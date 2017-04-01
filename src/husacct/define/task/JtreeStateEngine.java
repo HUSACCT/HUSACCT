@@ -17,7 +17,6 @@ import husacct.define.domain.services.stateservice.state.module.LayerUpCommand;
 import husacct.define.domain.services.stateservice.state.module.ModuleAddCommand;
 import husacct.define.domain.services.stateservice.state.module.ModuleRemoveCommand;
 import husacct.define.domain.services.stateservice.state.module.UpdateModuleCommand;
-import husacct.define.domain.services.stateservice.state.module.UpdateModuleTypeCommand;
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
 import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -28,10 +27,7 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 public abstract class JtreeStateEngine {
-	private Logger logger = Logger.getLogger(JtreeStateEngine.class);
 	private StateDefineController stateController = new StateDefineController();
 	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
@@ -58,10 +54,6 @@ public abstract class JtreeStateEngine {
 
 	public void addUpdateModule(long moduleId, String[] moduleold, String[] modulenew) {
 		stateController.insertCommand(new UpdateModuleCommand(moduleId, modulenew, moduleold));
-	}
-
-	public void addUpdateModule(ModuleStrategy module, ModuleStrategy updatedModule) {
-		stateController.insertCommand(new UpdateModuleTypeCommand(module, updatedModule));
 	}
 
 	public void layerUp(long moduleId) {

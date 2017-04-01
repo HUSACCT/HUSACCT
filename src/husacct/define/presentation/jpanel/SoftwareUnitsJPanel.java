@@ -81,7 +81,7 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(createButtonPanelLayout());
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 4));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 2));
 		buttonPanel.setPreferredSize(new java.awt.Dimension(90, 156));
 
 		addSoftwareUnitButton = new JButton();

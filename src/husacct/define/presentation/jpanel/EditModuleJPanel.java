@@ -8,88 +8,110 @@ import husacct.define.presentation.draganddrop.customdroptargetlisterner.Editpan
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import org.apache.log4j.Logger;
 
-public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Observer,
-		IServiceListener {
+public class EditModuleJPanel extends HelpableJPanel implements Observer,IServiceListener {
 
 	private static final long serialVersionUID = -9020336576931490389L;
-	private String _type;
+	
+	private JLabel nameLabel;
+	private JTextField nameTextfield;
+
 	private JLabel descriptionLabel;
 	private JScrollPane descriptionScrollPane;
 	private JTextArea descriptionTextArea;
-	private String[] facadeType = { "Interface" };
-	private JComboBox<String> moduleTypeComboBox;
-	private EditpanelDropListener listener = new EditpanelDropListener(this);
+	private JButton updateDescriptionButton;
+
 	private JLabel moduleTypeLabel;
+	private JComboBox<String> moduleTypeComboBox;
 	private String[] moduleTypes_Translated = {
 			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.SUBSYSTEM.toString()),
 			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.LAYER.toString()),
 			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.COMPONENT.toString()),
 			ServiceProvider.getInstance().getLocaleService().getTranslatedString(ModuleTypes.EXTERNAL_LIBRARY.toString()) };
-	private JLabel nameLabel;
-	private JTextField nameTextfield;
+
+	private String[] facadeType = { "Interface" };
+	private EditpanelDropListener listener = new EditpanelDropListener(this);
 	private final Logger logger = Logger.getLogger(EditModuleJPanel.class);
 
 	public EditModuleJPanel() {
 		super();
 	}
 
-	ActionListener moduleTypeComboboxOnChangeListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String moduleType;
-			if (moduleTypeComboBox.getModel().getSize() > 1) { // Excludes Facade/Interface
-				int location = moduleTypeComboBox.getSelectedIndex();
-				String[] moduleTypes = {ModuleTypes.SUBSYSTEM.toString(), ModuleTypes.LAYER.toString(), 
-						ModuleTypes.COMPONENT.toString(), ModuleTypes.EXTERNAL_LIBRARY.toString()};
-				moduleType = moduleTypes[location];
-				if (!_type.equals(moduleType)) {
-					DefinitionController.getInstance().updateModuleType(moduleType);
-				}
-			}
-		}
-	};
-
-	private void addModuleDescriptionComponent() {
-		descriptionLabel = new JLabel();
-		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
-		descriptionLabel.setText(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Description"));
-
-		descriptionScrollPane = new JScrollPane();
-		this.add(descriptionScrollPane, new GridBagConstraints(1, 1, 1, 1, 0.0,
-				0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		descriptionScrollPane.setPreferredSize(new java.awt.Dimension(142, 26));
-		descriptionScrollPane
-				.setViewportView(createModuleDescriptionTextArea());
+	public void initGui() {
+		DefinitionController.getInstance().addObserver(this);
+		BorderLayout borderLayout = new BorderLayout();
+		setLayout(borderLayout);
+		setBorder(BorderFactory.createTitledBorder(ServiceProvider
+				.getInstance().getLocaleService()
+				.getTranslatedString("ModulePropertiesTitle")));
+		setPreferredSize(new java.awt.Dimension(542, 120));
+		this.add(addDetailsPanel(), BorderLayout.CENTER);
+		this.add(addUpdatePanel(), BorderLayout.EAST);
+		ServiceProvider.getInstance().getControlService().addServiceListener(this);
 	}
 
-	private void addModuleNameComponent() {
+	private JPanel addDetailsPanel() {
+		JPanel detailsPanel = new JPanel();
+		setDefaultGridLayout(detailsPanel);
+		detailsPanel.setPreferredSize(new java.awt.Dimension(439, 120));
+		addModuleNameComponent(detailsPanel);
+		addModuleDescriptionComponent(detailsPanel);
+		addModuleTypeComboBox(detailsPanel);
+		return detailsPanel;
+	}
+	
+	private JPanel addUpdatePanel() {
+		JPanel upDatePanel = new JPanel();
+		BorderLayout borderLayout = new BorderLayout();
+		upDatePanel.setLayout(borderLayout);
+		upDatePanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 2));
+		upDatePanel.setPreferredSize(new java.awt.Dimension(90, 120));
+		updateDescriptionButton = new JButton();
+		upDatePanel.add(updateDescriptionButton, BorderLayout.PAGE_END);
+		updateDescriptionButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Update"));
+		updateDescriptionButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String moduleName = nameTextfield.getText();
+				String moduleDescription = descriptionTextArea.getText();
+				ModuleTypes moduleType;
+				if (moduleTypeComboBox.getModel().getSize()== 1) { // Excludes Facade/Interface
+					moduleType = ModuleTypes.FACADE;
+				} else {
+					ModuleTypes[] moduleTypes = {ModuleTypes.SUBSYSTEM, ModuleTypes.LAYER, 
+							ModuleTypes.COMPONENT, ModuleTypes.EXTERNAL_LIBRARY};
+					int indexSelectedModule = moduleTypeComboBox. getSelectedIndex();
+					moduleType = moduleTypes[indexSelectedModule];
+				}
+				DefinitionController.getInstance().updateModuleDetails(moduleName, moduleDescription, moduleType);
+			}
+		});
+		return upDatePanel;
+	}
+	
+	private void addModuleNameComponent(JPanel detailsPanel) {
 		nameLabel = new JLabel();
-		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+		detailsPanel.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
 		nameLabel.setText(ServiceProvider.getInstance().getLocaleService()
@@ -98,83 +120,57 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 		nameTextfield = new JTextField();
 		listener.addTarget(nameTextfield);
 		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
-		this.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+		detailsPanel.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		nameTextfield.addKeyListener(this);
 	}
 
-	private void addModuleTypeComboBox() {
-		moduleTypeComboBox = new JComboBox<String>(moduleTypes_Translated);
-		moduleTypeLabel = new JLabel();
-		this.add(moduleTypeLabel, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
-		moduleTypeLabel.setText("Module Type");
-		this.add(moduleTypeComboBox, new GridBagConstraints(1, 2, 1, 1, 0.0,
-				0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		moduleTypeComboBox.addActionListener(moduleTypeComboboxOnChangeListener);
-	}
+	private void addModuleDescriptionComponent(JPanel detailsPanel) {
+		descriptionLabel = new JLabel();
+		GridBagConstraints gbc1 = new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
+		detailsPanel.add(descriptionLabel, gbc1);
+		descriptionLabel.setText(ServiceProvider.getInstance()
+				.getLocaleService().getTranslatedString("Description"));
 
-	private JTextArea createModuleDescriptionTextArea() {
+		descriptionScrollPane = new JScrollPane();
+		GridBagConstraints gbc2 = new GridBagConstraints(1, 1, 1, 1, 0.0,
+				0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
+		detailsPanel.add(descriptionScrollPane, gbc2);
+		descriptionScrollPane.setPreferredSize(new java.awt.Dimension(142, 40));
+
 		descriptionTextArea = new JTextArea();
 		listener.addTarget(descriptionTextArea);
-		descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
-		descriptionTextArea
-				.setToolTipText(DefaultMessages.TIP_MODULEDESCRIPTION);
-		descriptionTextArea.addKeyListener(this);
-		return descriptionTextArea;
+		//descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
+		descriptionTextArea.setToolTipText(DefaultMessages.TIP_MODULEDESCRIPTION);
+		//descriptionTextArea.addKeyListener(this);
+		descriptionScrollPane.setViewportView(descriptionTextArea);
 	}
 
-	public void initGui() {
-		DefinitionController.getInstance().addObserver(this);
-		setDefaultGridLayout();
-		setBorder(BorderFactory.createTitledBorder(ServiceProvider
-				.getInstance().getLocaleService()
-				.getTranslatedString("ModulePropertiesTitle")));
-		setPreferredSize(new java.awt.Dimension(542, 105));
-
-		addModuleNameComponent();
-		addModuleDescriptionComponent();
-		addModuleTypeComboBox();
-		ServiceProvider.getInstance().getControlService()
-				.addServiceListener(this);
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// Ignore, this method is not needed.
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		String moduleName = nameTextfield.getText();
-		String moduleDescription = descriptionTextArea.getText();
-		DefinitionController.getInstance().updateModule(moduleName, moduleDescription);
-		if (moduleTypeComboBox.getSelectedItem().toString().equalsIgnoreCase(moduleTypes_Translated[2])) {
-			DefinitionController.getInstance().updateFacade(moduleName);
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// Ignore, this method is not needed.
+	private void addModuleTypeComboBox(JPanel detailsPanel) {
+		moduleTypeComboBox = new JComboBox<String>(moduleTypes_Translated);
+		moduleTypeLabel = new JLabel();
+		detailsPanel.add(moduleTypeLabel, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(5, 0, 0, 0), 0, 0));
+		moduleTypeLabel.setText("Module Type");
+		detailsPanel.add(moduleTypeComboBox, new GridBagConstraints(1, 2, 1, 1, 0.0,
+				0.0, GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.BOTH, new Insets(5, 0, 0, 0), 0, 0));
 	}
 
 	private void resetGUI() {
 		nameTextfield.setText("");
-		descriptionTextArea.setText("");
+		descriptionTextArea.setText("");		
 	}
 
-	private void setDefaultGridLayout() {
+	private void setDefaultGridLayout(JPanel detailsPanel) {
 		GridBagLayout jPanel4Layout = new GridBagLayout();
 		jPanel4Layout.rowWeights = new double[] { 0.0, 0.1, 0.1 };
 		jPanel4Layout.rowHeights = new int[] { 27, 7, 7 };
 		jPanel4Layout.columnWeights = new double[] { 0.0, 0.1 };
 		jPanel4Layout.columnWidths = new int[] { 118, 7 };
-		setLayout(jPanel4Layout);
+		detailsPanel.setLayout(jPanel4Layout);
 	}
 
 	@Override
@@ -199,7 +195,6 @@ public class EditModuleJPanel extends HelpableJPanel implements KeyListener, Obs
 					nameTextfield.setText((String) moduleDetails.get("name"));
 					descriptionTextArea.setText((String) moduleDetails.get("description"));
 					String moduleType = (String) moduleDetails.get("type");
-					_type= moduleType;
 					// Fill moduleTypeComboBox.
 					if (moduleType.equals("Facade")) {
 						DefaultComboBoxModel<String> facadeModel = new DefaultComboBoxModel<String>(facadeType);

@@ -1,6 +1,7 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
+import husacct.common.enums.ModuleTypes;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
@@ -392,46 +393,17 @@ import org.apache.log4j.Logger;
 			notifyObservers(moduleId);
 		}
 
-		/**
-		 * Function which will save the name and description changes to the module
-		 */
-		public void updateModule(String moduleName, String moduleDescription) {
+		public void updateModuleDetails(String moduleName, String moduleDescription, ModuleTypes moduleType) {
 			try {
 				JPanelStatus.getInstance("Updating module").start();
 				long moduleId = getSelectedModuleId();
 				if (moduleId != -1) {
-					moduleService.updateModule(moduleId, moduleName,
-							moduleDescription);
+					moduleService.updateModuleDetails(moduleId, moduleName, moduleDescription, moduleType.toString());
 				}
 				this.notifyObservers();
 				getDefinitionPanel().modulePanel.updateModuleTree();
 			} catch (Exception e) {
 				logger.error("updateModule() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
-			} finally {
-				JPanelStatus.getInstance().stop();
-			}
-		}
-
-		public void updateModuleType(String type) {
-			moduleService.updateModuleType(getSelectedModuleId(), type);
-			this.notifyObservers();
-			getDefinitionPanel().modulePanel.updateModuleTree();
-		}
-
-		// Changes the name of the facade subsequently after a module with type "Component"	has its name changed. 
-		public void updateFacade(String moduleName){
-			logger.info("Updating facade " + moduleName +"Facade");
-			try {
-				JPanelStatus.getInstance("Updating facade").start();
-				long moduleId = getSelectedModuleId();
-				if (moduleId != -1) {
-					moduleService.updateFacade(moduleId, moduleName);
-				}
-				this.notifyObservers();
-				getDefinitionPanel().modulePanel.updateModuleTree();
-			} catch (Exception e) {
-				logger.error("updateFacade() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 			} finally {
 				JPanelStatus.getInstance().stop();

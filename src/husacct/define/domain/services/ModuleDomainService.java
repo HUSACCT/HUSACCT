@@ -2,6 +2,7 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.enums.ModuleTypes;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.ModuleFactory;
@@ -91,9 +92,9 @@ public class ModuleDomainService {
 			moduleToEdit = getModuleByLogicalPath(logicalPath);
 			if (moduleToEdit != null) {
 				if (newType != null)
-					updateModuleType(moduleToEdit.getId(), newType);
+					updateModuleType(moduleToEdit, newType);
 				if (newName != null)
-					moduleToEdit.setName(newName);
+					updateModuleName(moduleToEdit, newName);
 				if ((newHierarchicalLevel != 0) && (moduleToEdit instanceof Layer))
 					((Layer) moduleToEdit).setHierarchicalLevel(newHierarchicalLevel);
 				if (newSoftwareUnits != null) {
@@ -282,38 +283,48 @@ public class ModuleDomainService {
 		}
 	}
 
-	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
+	/**
+	 * Updates name, description and/or type of a module. Arguments with null value are not processed. 
+	 * @param moduleId
+	 * @param newModuleName
+	 * @param newModuleDescription
+	 * @param newModuleType
+	 */
+	public void updateModuleDetails(long moduleId, String newModuleName, String newModuleDescription, String newModuleType) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		if (module != null) {
-			StateService.instance().addUpdateModule(moduleId, new String[] { module.getName(), moduleDescription },
-					new String[] { moduleName, moduleDescription });
-			module.setName(moduleName);
-			module.setDescription(moduleDescription);
+		if ((module != null) && (module.getId() > 0)) {
+			StateService.instance().addUpdateModule(moduleId, new String[] { module.getName(), newModuleDescription },
+					new String[] { newModuleName, newModuleDescription });
+			if (newModuleName != null) 
+				updateModuleName(module, newModuleName);
+			if (newModuleDescription != null)
+				module.setDescription(newModuleDescription);
+			if ((newModuleType != null) && (newModuleType.toString() != module.getType()))
+				updateModuleType(module, newModuleType);
 			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		}
 	}
 	
-	public void updateModuleType(long moduleId, String newType) {
-		ModuleStrategy oldModule = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		if((oldModule != null) && (oldModule.getId() > 0)){
-			if (oldModule.getType() != newType){
+	private void updateModuleType(ModuleStrategy module, String newType) {
+		if((module != null) && (module.getId() > 0)){
+			if (module.getType() != newType){
 				DefaultRuleDomainService service = new DefaultRuleDomainService();
-				service.removeDefaultRules(oldModule);
-				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(oldModule, newType);
+				service.removeDefaultRules(module);
+				ModuleStrategy updatedModule = SoftwareArchitecture.getInstance().updateModuleType(module, newType);
 				service.addDefaultRules(updatedModule);
 				service.updateModuleRules(updatedModule);
-				StateService.instance().addUpdateModule(oldModule, updatedModule);
 			}
 		}
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
-	public void updateFacade(long moduleId, String moduleName){
-		ModuleStrategy parent = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		if (parent != null) {
-			for(ModuleStrategy subModule : parent.getSubModules()){
-				if(subModule.getType().equals("Facade")){
-					subModule.setName("Interface<"+moduleName+">");
+	private void updateModuleName(ModuleStrategy module, String newModuleName){
+		if (module != null) {
+			module.setName(newModuleName);
+			if (module.getType().equals(ModuleTypes.COMPONENT.toString())) {
+				for(ModuleStrategy subModule : module.getSubModules()){
+					if(subModule.getType().equals(ModuleTypes.FACADE.toString())){
+						subModule.setName("Interface<"+newModuleName+">");
+					}
 				}
 			}
 		}
