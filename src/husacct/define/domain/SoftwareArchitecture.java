@@ -470,8 +470,6 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 
 		boolean moduleFound = true;
-		StateService.instance().removeModule(toBeSaved);
-
 		if (!moduleFound) {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService().getTranslatedString("NoModule"));

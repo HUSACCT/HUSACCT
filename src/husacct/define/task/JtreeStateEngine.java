@@ -2,23 +2,10 @@ package husacct.define.task;
 
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.domain.services.stateservice.state.StateDefineController;
-import husacct.define.domain.services.stateservice.state.appliedrule.AppliedRuleAddCommand;
-import husacct.define.domain.services.stateservice.state.appliedrule.EditAppliedRuleCommand;
-import husacct.define.domain.services.stateservice.state.appliedrule.ExceptionAddRuleCommand;
-import husacct.define.domain.services.stateservice.state.appliedrule.RemoveAppliedRuleCommand;
-import husacct.define.domain.services.stateservice.state.module.LayerDownCommand;
-import husacct.define.domain.services.stateservice.state.module.LayerUpCommand;
-import husacct.define.domain.services.stateservice.state.module.ModuleAddCommand;
-import husacct.define.domain.services.stateservice.state.module.ModuleRemoveCommand;
-import husacct.define.domain.services.stateservice.state.module.UpdateModuleCommand;
-import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
-import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.warningmessages.WarningMessageContainer;
 import husacct.define.presentation.registry.AnalyzedUnitRegistry;
@@ -27,43 +14,12 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class JtreeStateEngine {
-	private StateDefineController stateController = new StateDefineController();
+public class JtreeStateEngine {
 	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
 
 	public JtreeStateEngine() {
 		UndoRedoService.getInstance().registerObserver(SoftwareArchitecture.getInstance());
-	}
-
-	public boolean undo() {
-		boolean res =stateController.undo();
-		DefinitionController.getInstance().notifyObservers();
-		return res;
-	}
-
-	public boolean redo() {
-		boolean res =stateController.redo();;
-		DefinitionController.getInstance().notifyObservers();
-		return res;
-	}
-
-	public void removeModule(ArrayList<Object[]> data) {
-		stateController.insertCommand(new ModuleRemoveCommand(data));
-	}
-
-	public void addUpdateModule(long moduleId, String[] moduleold, String[] modulenew) {
-		stateController.insertCommand(new UpdateModuleCommand(moduleId, modulenew, moduleold));
-	}
-
-	public void layerUp(long moduleId) {
-		stateController.insertCommand(new LayerUpCommand(moduleId));
-		DefinitionController.getInstance().notifyObservers();
-	}
-
-	public void layerDown(long moduleId) {
-		stateController.insertCommand(new LayerDownCommand(moduleId));
-		DefinitionController.getInstance().notifyObservers();
 	}
 
 	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
@@ -77,20 +33,15 @@ public abstract class JtreeStateEngine {
 	}
 
 	public void addSoftwareUnit(ModuleStrategy module, ArrayList<AnalyzedModuleComponent> unitToBeinserted) {
-		stateController.insertCommand(new SoftwareUnitAddCommand(module, unitToBeinserted));
 		for (AnalyzedModuleComponent analyzedModuleComponent : unitToBeinserted) {
 			JtreeController.instance().removeTreeItem(analyzedModuleComponent);
 			WarningMessageService.getInstance().updateWarnings();
 		}
 	}
 
-	public AnalyzedModuleComponent getRootModel() {
-		return analyzerComparator.getRootModel();
-	}
-
 	public void analyze() {
-		reset();
-		getRootModel();
+		allUnitsRegistry.reset();
+		analyzerComparator.getRootModel();
 		DefinitionController.getInstance().notifyAnalyzedObservers();
 	}
 
@@ -102,36 +53,8 @@ public abstract class JtreeStateEngine {
 		return allUnitsRegistry;
 	}
 
-	public void reset() {
-		allUnitsRegistry.reset();
-	}
-
-	public boolean[] getRedoAndUndoStates() {
-		return stateController.getStatesStatus();
-	}
-
-	public void removeRules(ArrayList<AppliedRuleStrategy> selectedRules) {
-		stateController.insertCommand(new RemoveAppliedRuleCommand(selectedRules));
-	}
-
-	public void addRules(ArrayList<AppliedRuleStrategy> rules) {
-		stateController.insertCommand(new AppliedRuleAddCommand(rules));
-	}
-
-	public void addExceptionRule(AppliedRuleStrategy parent, ArrayList<AppliedRuleStrategy> rules) {
-		stateController.insertCommand(new ExceptionAddRuleCommand(parent, rules));
-	}
-
-	public void removeSoftwareUnit(List<String> selectedModules) {
-		stateController.insertCommand(new SoftwareUnitRemoveCommand(DefinitionController.getInstance().getSelectedModuleId(), selectedModules));
-	}
-
 	public AnalyzedModuleComponent getAnalyzedSoftWareUnit(SoftwareUnitDefinition unit) {
 		return allUnitsRegistry.getAnalyzedUnit(unit);
-	}
-
-	public void addModule(ModuleStrategy subModule) {
-		stateController.insertCommand(new ModuleAddCommand(subModule));
 	}
 
 	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
@@ -152,9 +75,6 @@ public abstract class JtreeStateEngine {
 		return allUnitsRegistry.getAnalyzedUnit(data);
 	}
 
-	public void removeRules(List<Long> selectedRules) {
-	}
-
 	public void registerImportedUnit(SoftwareUnitDefinition unit) {
 		allUnitsRegistry.registerImportedUnit(unit);
 	}
@@ -168,23 +88,4 @@ public abstract class JtreeStateEngine {
 		}
 	}
 
-	public void addAppliedRule(AppliedRuleStrategy rule) {
-		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
-		rules.add(rule);
-		stateController.insertCommand(new AppliedRuleAddCommand(rules));
-	}
-
-	public void removeAppliedRule(AppliedRuleStrategy appliedRuleById) {
-		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
-		stateController.insertCommand(new RemoveAppliedRuleCommand(rules) );
-		
-	}
-
-	public void editAppliedRule(AppliedRuleStrategy rule, Object[] objects) {
-		stateController.insertCommand(new EditAppliedRuleCommand(rule,objects) );
-	}
-
-	public void removeAppliedRuleExeption(long parentRuleId, AppliedRuleStrategy exceptionRule) {
-		stateController.insertCommand(new RemoveAppliedRuleExeptionCommand(parentRuleId,exceptionRule));	
-	}
 }

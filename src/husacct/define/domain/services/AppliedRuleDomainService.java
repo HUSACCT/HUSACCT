@@ -6,8 +6,6 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.services.stateservice.StateService;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -54,7 +52,6 @@ public class AppliedRuleDomainService {
 			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
 			return -1;
 		} 		
-		StateService.instance().addAppliedRule(rule);
 		softwareArchitecture.addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return rule.getId();
@@ -197,7 +194,6 @@ public class AppliedRuleDomainService {
 	 }
 
 	 public void removeAppliedRule(long appliedrule_id) {
-		 StateService.instance().removeAppliedRule(softwareArchitecture.getAppliedRuleById(appliedrule_id));
 		 softwareArchitecture.removeAppliedRule(appliedrule_id);
 		 ServiceProvider.getInstance().getDefineService()
 		 .notifyServiceListeners();
@@ -238,10 +234,7 @@ public class AppliedRuleDomainService {
 	 public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,
 			 String description, String[] dependencies, String regex,
 			 ModuleStrategy ModuleStrategyFrom, ModuleStrategy ModuleStrategyTo, boolean enabled) {
-		 AppliedRuleStrategy rule = SoftwareArchitecture.getInstance()
-				 .getAppliedRuleById(appliedRuleId);
-		 StateService.instance().editAppliedRule(rule,new Object[]{ruleTypeKey,description,dependencies,regex,ModuleStrategyFrom,
-				 ModuleStrategyTo,enabled});
+		 AppliedRuleStrategy rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
 		 rule.setRuleType(ruleTypeKey);
 		 rule.setDescription(description);
 		 rule.setDependencyTypes(dependencies);
@@ -284,7 +277,6 @@ public class AppliedRuleDomainService {
 	    	        // Add exception rule to Parent rule
 	        		ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
 	        		rules.add(exceptionRule);
-	        		StateService.instance().addExceptionRule(parentRule, rules);
 	        		parentRule.addException(exceptionRule);
 	    		} catch (RuntimeException rt) {
 	    			String message = "IncorrectToModuleFacadeConvExc";

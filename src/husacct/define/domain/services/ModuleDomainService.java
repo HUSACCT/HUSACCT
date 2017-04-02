@@ -8,7 +8,6 @@ import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition.Type;
 import husacct.define.task.JtreeController;
@@ -130,7 +129,6 @@ public class ModuleDomainService {
 			message = SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId, module);
 		}
 		if (message.equals("")) {
-			StateService.instance().addModule(module);
 			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		}
 		return message;
@@ -246,13 +244,11 @@ public class ModuleDomainService {
 	}
 
 	public void moveLayerDown(long layerId) {
-		StateService.instance().layerDown(layerId);
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void moveLayerUp(long layerId) {
-		StateService.instance().layerUp(layerId);
 		SoftwareArchitecture.getInstance().moveLayerUp(layerId);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
@@ -293,8 +289,6 @@ public class ModuleDomainService {
 	public void updateModuleDetails(long moduleId, String newModuleName, String newModuleDescription, String newModuleType) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		if ((module != null) && (module.getId() > 0)) {
-			StateService.instance().addUpdateModule(moduleId, new String[] { module.getName(), newModuleDescription },
-					new String[] { newModuleName, newModuleDescription });
 			if (newModuleName != null) 
 				updateModuleName(module, newModuleName);
 			if (newModuleDescription != null)
