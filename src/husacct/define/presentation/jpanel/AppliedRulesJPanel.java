@@ -8,7 +8,6 @@ import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.DataHelper;
-import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
@@ -326,7 +325,6 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 			atm.getDataVector().removeAllElements();
 
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
@@ -365,8 +363,6 @@ public class AppliedRulesJPanel extends HelpableJPanel implements ActionListener
 			atm.fireTableDataChanged();
 		} catch (Exception e) {
 			UiDialogs.errorDialog(this, e.getMessage());
-		} finally {
-			JPanelStatus.getInstance().stop();
 		}
 	}
 }

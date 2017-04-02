@@ -12,7 +12,6 @@ import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.presentation.DefineInternalFrame;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
-import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -122,16 +121,12 @@ import org.apache.log4j.Logger;
 		}
 
 		public AbstractDefineComponent getModuleTreeComponents() {
-			JPanelStatus.getInstance("Updating Modules").start();
-
 			SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 			ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
 			for (ModuleStrategy module : modules) {
 
 				addChildComponents(rootComponent, module);
 			}
-
-			JPanelStatus.getInstance().stop();
 			return rootComponent;
 		}
 
@@ -199,34 +194,26 @@ import org.apache.log4j.Logger;
 		}
 
 		public void moveLayerDown(long layerId) {
-			logger.info("Moving layer down");
 			try {
 				if (layerId != -1) {
-					JPanelStatus.getInstance("Moving layer down").start();
 					moduleService.moveLayerDown(layerId);
 					this.notifyObservers();
 				}
 			} catch (Exception e) {
 				logger.error("moveLayerDown() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
-			} finally {
-				JPanelStatus.getInstance().stop();
 			}
 		}
 
 		public void moveLayerUp(long layerId) {
-			logger.info("Moving layer up");
 			try {
 				if (layerId != -1) {
-					JPanelStatus.getInstance("Moving layer up").start();
 					moduleService.moveLayerUp(layerId);
 					this.notifyObservers();
 				}
 			} catch (Exception e) {
 				logger.error("moveLayerUp() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
-			} finally {
-				JPanelStatus.getInstance().stop();
 			}
 		}
 
@@ -269,9 +256,7 @@ import org.apache.log4j.Logger;
 		 * Remove a module by Id
 		 */
 		public void removeModuleById(long moduleId) {
-			logger.info("Removing module with Id: " + moduleId);
 			try {
-				JPanelStatus.getInstance("Removing ModuleStrategy").start();
 				Long parent = moduleService.getParentModuleIdByChildId(moduleId);
 				moduleService.removeModuleById(moduleId);
 				setSelectedModuleId(parent);
@@ -280,8 +265,6 @@ import org.apache.log4j.Logger;
 				logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
 				e.printStackTrace();
-			} finally {
-				JPanelStatus.getInstance().stop();
 			}
 		}
 
@@ -319,8 +302,6 @@ import org.apache.log4j.Logger;
 						if (confirm) {
 							for (long appliedRuleID : appliedRuleIds) {
 								logger.info("Removing rule " + appliedRuleID);
-								JPanelStatus.getInstance("Removing applied rule")
-								.start();
 								appliedRuleService.removeAppliedRule(appliedRuleID);
 							}
 							this.notifyObservers();
@@ -330,8 +311,6 @@ import org.apache.log4j.Logger;
 			} catch (Exception e) {
 				logger.error("removeRule() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
-			} finally {
-				JPanelStatus.getInstance().stop();
 			}
 		}
 
@@ -352,8 +331,6 @@ import org.apache.log4j.Logger;
 					if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 						if (confirm) {
 							JtreeController.instance().restoreTreeItemm(softwareUnitNames, types);
-							JPanelStatus.getInstance("Removing software unit").start();
-							
 							boolean chekHasCodelevelWarning = WarningMessageService.getInstance().isCodeLevelWarning(softwareUnit);
 							if (chekHasCodelevelWarning) {
 								boolean confirm2 = UiDialogs.confirmDialog(getDefinitionPanel(),
@@ -366,7 +343,6 @@ import org.apache.log4j.Logger;
 								softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
 							}
 							this.notifyObservers();
-							JPanelStatus.getInstance().stop();
 						}
 					}
 					location++;
@@ -375,8 +351,6 @@ import org.apache.log4j.Logger;
 				logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
 				e.printStackTrace();
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
-			} finally {
-				JPanelStatus.getInstance().stop();
 			}
 		}
 
@@ -395,7 +369,6 @@ import org.apache.log4j.Logger;
 
 		public void updateModuleDetails(String moduleName, String moduleDescription, ModuleTypes moduleType) {
 			try {
-				JPanelStatus.getInstance("Updating module").start();
 				long moduleId = getSelectedModuleId();
 				if (moduleId != -1) {
 					moduleService.updateModuleDetails(moduleId, moduleName, moduleDescription, moduleType.toString());
@@ -405,8 +378,6 @@ import org.apache.log4j.Logger;
 			} catch (Exception e) {
 				logger.error("updateModule() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(getDefinitionPanel(), e.getMessage());
-			} finally {
-				JPanelStatus.getInstance().stop();
 			}
 		}
 

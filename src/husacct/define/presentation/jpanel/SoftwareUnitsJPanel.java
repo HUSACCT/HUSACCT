@@ -7,7 +7,6 @@ import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
-import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
@@ -325,7 +324,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		try {
 			JTableTableModel suTableModel = (JTableTableModel) softwareUnitsTable.getModel();
 			suTableModel.getDataVector().removeAllElements();
-			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 			long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 
 			if (selectedModuleId != -1) {
@@ -344,8 +342,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 			//e.printStackTrace();
 			logger.error(e.getMessage());
 			UiDialogs.errorDialog(this, e.getMessage());
-		} finally {
-			JPanelStatus.getInstance().stop();
 		}
 	}
 }

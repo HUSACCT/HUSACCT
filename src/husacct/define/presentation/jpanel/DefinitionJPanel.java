@@ -1,7 +1,6 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.common.help.presentation.HelpableJPanel;
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 

@@ -7,10 +7,9 @@ import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.domain.services.WarningMessageService;
-import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
-import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.presentation.utils.MessagePanel;
 import husacct.define.presentation.utils.ReportToHTML;
 import husacct.define.task.DefinitionController;
 
@@ -30,7 +29,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
 public class DefineInternalFrame extends HelpableJInternalFrame implements
@@ -40,9 +38,7 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	private JPanel overviewPanel;
 	private DefinitionJPanel definitionPanel;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-	private JButton warningButton;
-	private JButton undoButton;
-	private JButton redoButton;
+	private JButton warningButton, reportButton;
 	private WarningTableJDialog warnings = new WarningTableJDialog();
 	private ReportToHTML report = new ReportToHTML();
 
@@ -56,13 +52,13 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 			WarningMessageService.getInstance().addObserver(this);
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			ServiceProvider.getInstance().getDefineService().addServiceListener(this);
-			this.overviewPanel = new JPanel();
+			overviewPanel = new JPanel();
 			BorderLayout borderLayout = new BorderLayout();
-			this.overviewPanel.setLayout(borderLayout);
+			overviewPanel.setLayout(borderLayout);
 			definitionPanel = new DefinitionJPanel();
-			this.overviewPanel.add(definitionPanel);
-			this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
-			this.addToolBar();
+			overviewPanel.add(definitionPanel);
+			getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
+			addToolBar();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,14 +79,8 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 	
 	private void addToolBar() {
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setDividerLocation(365);
+		splitPane.setDividerLocation(300);
 		splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
-		JToolBar toolBar = new JToolBar();
-		toolBar.setEnabled(false);
-		toolBar.setBorderPainted(false);
-
-		toolBar.add(JPanelStatus.getInstance(""));
 
 		warningButton = new JButton();
 		warningButton.addActionListener(toolbarActionListener);
@@ -101,16 +91,10 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 		warningButton.setMaximumSize(d);
 		Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 		warningButton.setIcon(icon);
-		// Disabled 2014-06-11, since the shown warnings in the warnings dialogue are not correct
-		warningButton.setEnabled(false);
-		undoButton= new JButton("<");
-		redoButton= new JButton(">");
-		setButtonsVisability(undoButton,redoButton);
-		undoButton.addActionListener(toolbarActionListener);
-		redoButton.addActionListener(toolbarActionListener);
+		warningButton.setEnabled(false); // Disabled 2014-06-11, since the shown warnings in the warnings dialogue are not correct
 
 		ImageIcon browserIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.ICON_BROWSER)));
-		JButton reportButton = new JButton(localeService.getTranslatedString("ReportTitle"));
+		reportButton = new JButton(localeService.getTranslatedString("ReportTitle"));
 		reportButton.setIcon(browserIcon);
 		reportButton.setToolTipText(localeService.getTranslatedString("?Report"));
 		reportButton.addActionListener(new ActionListener() {
@@ -125,21 +109,12 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 		});
 
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(warningButton);
+		buttonPanel.add(warningButton);  
 		buttonPanel.add(reportButton);
-        buttonPanel.add(undoButton);
-        buttonPanel.add(redoButton);
+		
 		splitPane.add(buttonPanel, JSplitPane.LEFT);
-		splitPane.add(toolBar, JSplitPane.RIGHT);
+		splitPane.add(MessagePanel.getInstance(""), JSplitPane.RIGHT);
 		getContentPane().add(splitPane, BorderLayout.SOUTH);
-	}
-
-	private void setButtonsVisability(JButton undo, JButton redo) {
-		
-		boolean[] statuses= StateService.instance().getRedoAndUndoStates();
-		
-		undo.setEnabled(statuses[0]);
-		redo.setEnabled(statuses[1]);
 	}
 
 	private ActionListener toolbarActionListener = new ActionListener() {
@@ -149,23 +124,15 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 				warnings.refresh();
 				warnings.setVisible(true);
 			}
-			if (e.getSource()==redoButton) {
-				StateService.instance().redo();
-			}
-            if (e.getSource()==undoButton) {
-			StateService.instance().undo();
-			}
 		}
 	};
 
-	@Override
+	@Override // From ILocaleChangeListener
 	public void update(Locale newLocale) {
-
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		setButtonsVisability(undoButton,redoButton);
 		if (WarningMessageService.getInstance().hasWarnings()) {
 			Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 			warningButton.setIcon(icon);
@@ -176,6 +143,6 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 
 	@Override
 	public void update() {
-     setButtonsVisability(undoButton,redoButton);
+		// Do nothing
 	}
 }
