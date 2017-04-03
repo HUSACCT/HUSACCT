@@ -1,7 +1,6 @@
 package husacct.define.domain.services;
 
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
@@ -14,7 +13,7 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-public class WarningMessageService extends Observable implements Observer,IModuleSeperatedInterface {
+public class WarningMessageService extends Observable implements Observer {
 	private  ArrayList<WarningMessage> warnings= new ArrayList<WarningMessage>();
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private static WarningMessageService instance=null;
@@ -29,7 +28,6 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	}
 	
 	public WarningMessageService() {
-		UndoRedoService.getInstance().registerObserver(this);
 	}
 	
 	public void removeWarning(WarningMessage warning) {
@@ -213,29 +211,6 @@ public class WarningMessageService extends Observable implements Observer,IModul
 	public String warningsCount() {
 		// TODO Auto-generated method stub
 		return warnings.size()+codelevelWarnings.size()+"";
-	}
-
-	@Override
-	public void addSeperatedModule(ModuleStrategy module) {
-		processModule(module);
-	}
-
-
-	@Override
-	public void removeSeperatedModule(ModuleStrategy module) {
-		removeImplementationWarning(module);
-	}
-
-
-	@Override
-	public void layerUp(long moduleID) {
-		// TODO Auto-generated method stub
-	}
-
-
-	@Override
-	public void layerDown(long moduleID) {
-		// TODO Auto-generated method stub
 	}
 
 	public void clearImplementationLevelWarnings() {

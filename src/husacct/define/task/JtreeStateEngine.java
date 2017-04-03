@@ -1,9 +1,7 @@
 package husacct.define.task;
 
 import husacct.define.analyzer.AnalyzedUnitComparator;
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -19,7 +17,6 @@ public class JtreeStateEngine {
 	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
 
 	public JtreeStateEngine() {
-		UndoRedoService.getInstance().registerObserver(SoftwareArchitecture.getInstance());
 	}
 
 	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
@@ -55,11 +52,6 @@ public class JtreeStateEngine {
 
 	public AnalyzedModuleComponent getAnalyzedSoftWareUnit(SoftwareUnitDefinition unit) {
 		return allUnitsRegistry.getAnalyzedUnit(unit);
-	}
-
-	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
-	public ModuleStrategy getModulebySoftwareUnitUniqName(String uniqueName) {
-		return SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(uniqueName);
 	}
 
 	public WarningMessageContainer getNotMappedUnits() {

@@ -6,25 +6,17 @@ import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
-import husacct.define.domain.seperatedinterfaces.IAppliedRuleSeperatedInterface;
-import husacct.define.domain.seperatedinterfaces.IModuleSeperatedInterface;
-import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
-import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
-public class SoftwareArchitecture implements IModuleSeperatedInterface,
-		IAppliedRuleSeperatedInterface, ISofwareUnitSeperatedInterface {
+public class SoftwareArchitecture {
 
 	private static SoftwareArchitecture instance = null;
 	private ArrayList<AppliedRuleStrategy> appliedRules;
@@ -584,130 +576,11 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 	}
 
-	@Override
-	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleID) {
-		ModuleStrategy module = getModuleById(moduleID);
-		if (module != null) {
-			module.addSUDefinition(units);
-		}
-	}
-
-	@Override
-	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
-		ModuleStrategy module = getModuleById(moduleId);
-		if (module != null) {
-			module.removeSUDefintion(units);
-		}
-	}
-
-	@Override
-	public void addSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
-		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-			addAppliedRule(appliedRuleStrategy);
-		}
-
-	}
-
-	@Override
-	public void removeSeperatedAppliedRule(List<AppliedRuleStrategy> rules) {
-		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-
-			removeAppliedRule(appliedRuleStrategy.getId());
-		}
-
-	}
-
-	@Override
-	public void addSeperatedExeptionRule(long parentRuleID,
-			List<AppliedRuleStrategy> rules) {
-		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
-		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-
-			parent.addException(appliedRuleStrategy);
-		}
-
-	}
-
-	@Override
-	public void removeSeperatedExeptionRule(long parentRuleID,
-			List<AppliedRuleStrategy> rules) {
-		AppliedRuleStrategy parent = getAppliedRuleById(parentRuleID);
-		for (AppliedRuleStrategy appliedRuleStrategy : rules) {
-
-			parent.removeException(appliedRuleStrategy);
-		}
-
-	}
-
-	@Override
-	public void addSeperatedModule(ModuleStrategy module) {
-		System.out.println("Adding : "+module.getName());
-		module.getparent().addSubModule(module);
-
-	}
-
-	@Override
-	public void removeSeperatedModule(ModuleStrategy module) {
-
-		System.out.println("Removing : "+module.getName());
-		int index = module.getparent().getSubModules().indexOf(module);
-		module.getparent().getSubModules().remove(index);
-		new DefaultRuleDomainService().removeDefaultRules(module);
-
-	}
-
-	@Override
-	public void layerUp(long moduleID) {
-		moveLayerUp(moduleID);
-
-	}
-
-	@Override
-	public void layerDown(long moduleID) {
-		moveLayerDown(moduleID);
-
-	}
-
-	@Override
-	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
-		ModuleStrategy module = getModuleById(moduleId);
-		if (module != null) { 
-			module.addSUDefinition(expression);
-		}
-	}
-
-	@Override
-	public void removeExpression(long moduleId, ExpressionUnitDefinition expression) {
-		ModuleStrategy module = getModuleById(moduleId);
-		if (module != null) {
-			module.removeSUDefintion(expression);
-		}
-	}
-
-	@Override
-	public void editExpression(long moduleId, ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
-		ModuleStrategy module = getModuleById(moduleId);
-		if (module != null) {
-			module.removeSUDefintion(oldExpresion);
-			module.addSUDefinition(newExpression);
-		}
-	}
-
 	public void changeSoftwareUnit(long from, long to, ArrayList<String> names) {
 		ModuleStrategy fromModule= getModuleById(from);
 		ModuleStrategy toModule = getModuleById(to);
 		if ((fromModule != null) && (toModule != null)) {
 			ArrayList<SoftwareUnitDefinition> units = fromModule.getAndRemoveSoftwareUnits(names);
-			toModule.addSUDefinition(units);
-		}
-	}
-
-	@Override
-	public void switchSoftwareUnitLocation(long from, long to, List<String> uniqNames) {
-		ModuleStrategy fromModule= getModuleById(from);
-		ModuleStrategy toModule = getModuleById(to);
-		if ((fromModule != null) && (toModule != null)) {
-			ArrayList<SoftwareUnitDefinition> units = fromModule.getAndRemoveSoftwareUnits(uniqNames);
 			toModule.addSUDefinition(units);
 		}
 	}
@@ -722,24 +595,4 @@ public class SoftwareArchitecture implements IModuleSeperatedInterface,
 		}
 	}
 
-	@Override
-	public void editAppliedRule(long ruleid,
-			Object[] newValues) {
-		String ruleTypeKey = (String)newValues[0];
-	    String description=(String)newValues[1];
-	    String[] dependencies =(String[])newValues[2];
-	    String regex=(String)newValues[3];
-	    ModuleStrategy ModuleStrategyFrom = (ModuleStrategy)newValues[4];
-	    ModuleStrategy ModuleStrategyTo =(ModuleStrategy)newValues[5];
-	    boolean enabled = (boolean)newValues[6];
-		
-		AppliedRuleStrategy result= getAppliedRuleById(ruleid);
-		result.setRuleType(ruleTypeKey);
-		result.setDescription(description);
-		result.setDependencyTypes(dependencies);
-		result.setModuleFrom(ModuleStrategyFrom);
-		result.setRegex(regex);
-		result.setModuleTo(ModuleStrategyTo);
-		result.setEnabled(enabled);
-	}
 }

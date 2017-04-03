@@ -1,9 +1,7 @@
 package husacct.define.task;
 
 import husacct.define.domain.module.ModuleStrategy;
-import husacct.define.domain.seperatedinterfaces.ISofwareUnitSeperatedInterface;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
-import husacct.define.domain.services.UndoRedoService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.softwareunit.ExpressionUnitDefinition;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -20,7 +18,7 @@ import java.util.List;
 
 import javax.swing.tree.TreePath;
 
-public class JtreeController implements ISofwareUnitSeperatedInterface{
+public class JtreeController{
 	private  AnalyzedModuleTree tree;
 	private static JtreeController instance;	
 	private AnalyzedModuleTree resultTree;
@@ -29,7 +27,6 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 	private  boolean isLoaded=false;
 
 	public  JtreeController() {
-		UndoRedoService.getInstance().registerObserver(this);
 	}
 
 	public static JtreeController instance() {
@@ -188,22 +185,6 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 		}
 	}
 	
-	@Override
-	public void addSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleID) {
-		for (SoftwareUnitDefinition softwareUnitDefinition : units) {
-			AnalyzedModuleComponent	unitToBeinserted=	StateService.instance().getAnalyzedSoftWareUnit(softwareUnitDefinition);
-			removeTreeItem(unitToBeinserted);
-		}
-	}
-	
-	@Override
-	public void removeSeperatedSoftwareUnit(List<SoftwareUnitDefinition> units, long moduleId) {
-		for (SoftwareUnitDefinition softwareUnitDefinition : units) {
-				AnalyzedModuleComponent	unitToBeinserted=	StateService.instance().getAnalyzedSoftWareUnit(softwareUnitDefinition);
-				restoreTreeItem(unitToBeinserted);
-			}
-	}
-	
 	public List<AbstractCombinedComponent> getRootprojectsModules() {
 		List<AbstractCombinedComponent> returnList = new ArrayList<AbstractCombinedComponent>();
 		for (AbstractCombinedComponent result : getRootOfModel().getChildren()) {
@@ -222,37 +203,10 @@ public class JtreeController implements ISofwareUnitSeperatedInterface{
 		return expresion;
 	}
 	
-	@Override
-	public void addExpression(long moduleId, ExpressionUnitDefinition expression) {
-		for (SoftwareUnitDefinition unit : expression.getExpressionValues()) {
-			AnalyzedModuleComponent result = StateService.instance().getAnalyzedSoftWareUnit(unit);
-			tree.removeTreeItem(result);
-		}
-		tree.repaint();
-	}
-	
-	@Override
-	public void removeExpression(long moduleId, ExpressionUnitDefinition expression) {
-		for (SoftwareUnitDefinition unit : expression.getExpressionValues()) {
-			AnalyzedModuleComponent result = StateService.instance().getAnalyzedSoftWareUnit(unit);
-			tree.restoreTreeItem(result);
-		}	
-		tree.repaint();
-	}
-	
-	@Override
-	public void editExpression(long moduleId, ExpressionUnitDefinition oldExpresion, ExpressionUnitDefinition newExpression) {
-		// TODO Auto-generated method stub
-	}
-	
 	public void removeRegexTreeItem(RegexComponent softwareunit) {
 		for (AbstractCombinedComponent unit : softwareunit.getChildren()) {
 			removeTreeItem((AnalyzedModuleComponent)unit);
 		}
 	}
 	
-	@Override
-	public void switchSoftwareUnitLocation(long fromModule, long toModule, List<String> uniqNames) {
-		// TODO Auto-generated method stub
-	}
 }

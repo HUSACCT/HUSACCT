@@ -139,10 +139,6 @@ import org.apache.log4j.Logger;
 	    	return defineInternalFrame;
 	        }
 
-	    public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule(long selectedModuleId) {
-			return softwareUnitDefinitionDomainService.getRegExSoftwareUnitNames(selectedModuleId);
-		}
-
 		public HashMap<String, Object> getRuleDetailsByAppliedRuleId(
 				long appliedRuleId) {
 			AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
