@@ -13,10 +13,8 @@ import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,12 +25,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -47,10 +43,9 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 
 	private JPanel UIMappingPanel;
 
-	private JButton saveButton;
+	private JButton addButton;
 	private JButton cancelButton;
 	private JScrollPane softwareUnitScrollPane;
-	private JRadioButton UIMapping;
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
 
@@ -71,42 +66,14 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			DefinitionController.getInstance().addObserver(this);
 			DefinitionController.getInstance().addObserverWithinDefineOfAnalyse(this);
-			this.getContentPane().add(this.createTypeSelectionPanel(), BorderLayout.NORTH);
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
-
-			UIMapping.setEnabled(false);
 			this.setResizable(false);
-
 			this.setSize(650, 300);
 			this.pack();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private JPanel createTypeSelectionPanel() {
-		JPanel typeSelectionPanel = new JPanel();
-		typeSelectionPanel.setLayout(new GridLayout(2, 2));
-		typeSelectionPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-
-		JLabel typeSelectionLabel = new JLabel(ServiceProvider.getInstance().getLocaleService()
-				.getTranslatedString("SelectSoftwareDefinitionType"));
-		Font bold = new Font(typeSelectionLabel.getFont().getName(), Font.BOLD, typeSelectionLabel.getFont().getSize());
-		typeSelectionLabel.setFont(bold);
-		typeSelectionPanel.add(typeSelectionLabel);
-		typeSelectionPanel.add(new JLabel(""));
-
-		UIMapping = new JRadioButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UIMapping"));
-		UIMapping.setSelected(true);
-		UIMapping.addActionListener(this);
-
-		ButtonGroup mappingRadioButtonsGroup = new ButtonGroup();
-		mappingRadioButtonsGroup.add(UIMapping);
-
-		typeSelectionPanel.add(UIMapping);
-
-		return typeSelectionPanel;
 	}
 
 	private JPanel createUIMappingPanel() {
@@ -169,7 +136,7 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 				}
 			}
 */			
-			saveButton.setEnabled(isButtonAddEnabled);
+			addButton.setEnabled(isButtonAddEnabled);
 		}
 	};
 
@@ -178,10 +145,10 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 
-		saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
-		buttonPanel.add(saveButton);
-		saveButton.addActionListener(this);
-		saveButton.setEnabled(false);
+		addButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		buttonPanel.add(addButton);
+		addButton.addActionListener(this);
+		addButton.setEnabled(false);
 		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
@@ -191,15 +158,10 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.saveButton) {
+		if (action.getSource() == this.addButton) {
 			this.save();
 		} else if (action.getSource() == this.cancelButton) {
 			this.cancel();
-		} else if (action.getSource() == this.UIMapping) {
-			this.getContentPane().add(this.createUIMappingPanel(),BorderLayout.CENTER);
-			UIMapping.setEnabled(false);
-			saveButton.setEnabled(false);
-			this.pack();
 		}
 	}
 
@@ -236,9 +198,6 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 		if (canclose) {
 			this.dispose();
 		}
-
-		// }
-
 	}
 
 	private void cancel() {
