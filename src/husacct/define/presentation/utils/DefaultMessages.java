@@ -17,9 +17,4 @@ public class DefaultMessages {
     public static final String TIP_MODULEDESCRIPTION = ServiceProvider
 	    .getInstance().getLocaleService()
 	    .getTranslatedString("DescriptionOfTheModule");
-
-    public static final String TIP_REGEXLANGUAGE = ServiceProvider
-	    .getInstance().getLocaleService()
-	    .getTranslatedString("RegExLanguage");
-
 }

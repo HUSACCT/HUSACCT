@@ -112,10 +112,6 @@ package husacct.define.presentation.moduletree;
 
 		} else if (component.getType().equals("ROOT")) {
 		    icon = new ImageIcon(Resource.get(Resource.ICON_ROOT));
-		} else if (component.getType().equals("REGEX")) {
-		    icon = new ImageIcon(Resource.get(Resource.ICON_REGEX));
-		} else if (component.getType().equals("SEARCH")) {
-		    icon = new ImageIcon(Resource.get(Resource.ICON_REGEXSEARCH));
 		} else if (component.getType().toLowerCase().equals("externalpackage")) {
 		    if (component.isMapped()) {
 			icon = new ImageIcon(
@@ -123,9 +119,7 @@ package husacct.define.presentation.moduletree;
 		    } else {
 			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GREEN));
 		    }
-
 		}
-
 		return icon;
 	    }
 

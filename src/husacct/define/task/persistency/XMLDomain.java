@@ -149,7 +149,7 @@ public class XMLDomain {
 	
 				if (SoftwareUnitDefinitions != null) {
 					List<Element> SoftwareUnitDefinitionsList = SoftwareUnitDefinitions.getChildren("SoftwareUnitDefinition");
-					Iterator SUDIterator = SoftwareUnitDefinitionsList.iterator();
+					Iterator<Element> SUDIterator = SoftwareUnitDefinitionsList.iterator();
 					while (SUDIterator.hasNext()) {
 						Object o = SUDIterator.next();
 						if (o instanceof Element) {
@@ -186,7 +186,7 @@ public class XMLDomain {
 		} else if (SUDType.getValue().toUpperCase().equals("SUBSYSTEM")) {
 			softwareUnitDefinitionType = Type.SUBSYSTEM;
 		} else {
-			softwareUnitDefinitionType = Type.REGEX;
+			softwareUnitDefinitionType = Type.PACKAGE;
 		}
 
 		return new SoftwareUnitDefinition(SUDName.getText(), softwareUnitDefinitionType);

@@ -1,7 +1,6 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
@@ -21,7 +20,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	protected String description;
 	protected String type;
 	protected ArrayList<SoftwareUnitDefinition> mappedSUunits;
-	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
 	protected ArrayList<ModuleStrategy> subModules;
 	protected ModuleStrategy parent;
 	// fromStorage == true, if the object is restored from persistence; false, if new
@@ -44,7 +42,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		this.name = name;
 		this.description = description;
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
 	}
 	
@@ -85,14 +82,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		this.mappedSUunits = units;
 	}
 
-	public ArrayList<SoftwareUnitRegExDefinition> getRegExUnits() {
-		return mappedRegExSUunits;
-	}
-
-	public void setRegExUnits(ArrayList<SoftwareUnitRegExDefinition> units) {
-		this.mappedRegExSUunits = units;
-	}
-
 	public ArrayList<ModuleStrategy> getSubModules() {
 		return subModules;
 	}
@@ -122,23 +111,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 	
 	public void removeAllSUDefintions(){
 		mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-	}
-
-	public void addSURegExDefinition(SoftwareUnitRegExDefinition unit){
-		if(!mappedRegExSUunits.contains(unit)) {
-			mappedRegExSUunits.add(unit);
-		}else{
-			logger.info("This regex software unit has already been added!");
-		}
-	}
-
-	public void removeSURegExDefinition(SoftwareUnitRegExDefinition unit){
-		logger.info(unit.getName());
-		if(mappedRegExSUunits.contains(unit)) {
-			mappedRegExSUunits.remove(unit);
-		}else{
-			logger.info("This regex software unit does not exist!");
-		}
 	}
 
 	public String addSubModule(ModuleStrategy subModule){
@@ -213,14 +185,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return hasSoftwareUnit(softwareUnitName, false);
 	}
 
-	public boolean hasRegExSoftwareUnitDirectly(String softwareUnitName){
-		return hasRegExSoftwareUnit(softwareUnitName, true);
-	}
-
-	public boolean hasRegExSoftwareUnit(String softwareUnitName){
-		return hasRegExSoftwareUnit(softwareUnitName, false);
-	}
-	
 	// Gives reliable results only if there are no subsubmodules, subsubsubmodles ...!!!
 	public int countSoftwareUnits(){
 		int counter = 0;
@@ -276,22 +240,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		else{
 			return softwareUnit;
 		}
-	}
-
-	public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(String softwareUnitName){
-		SoftwareUnitRegExDefinition softwareUnit = null;
-		for (SoftwareUnitRegExDefinition unit : mappedRegExSUunits){
-			if (unit.getName().equals(softwareUnitName)){
-				softwareUnit = unit;
-			}
-		}
-		for (ModuleStrategy mod : subModules){
-			if (mod.hasRegExSoftwareUnit(softwareUnitName)){
-				softwareUnit = mod.getRegExSoftwareUnitByName(softwareUnitName);
-			}
-		}
-		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
-		return softwareUnit;
 	}
 
 	@Override
@@ -365,23 +313,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		return hasSoftwareUnit;
 	}
 
-	private boolean hasRegExSoftwareUnit(String softwareUnitName, boolean directly){
-		boolean hasSoftwareUnit = false;
-		for (SoftwareUnitRegExDefinition unit : mappedRegExSUunits){
-			if (unit.getName().equals(softwareUnitName)){
-				hasSoftwareUnit = true;
-			}
-		}
-		if (!directly) {
-			for (ModuleStrategy mod : subModules){
-				if (mod.hasRegExSoftwareUnit(softwareUnitName, directly)){
-					hasSoftwareUnit = true;
-				}
-			}
-		}
-		return hasSoftwareUnit;
-	}
-	
 	public void copyValuestoNewModule(ModuleStrategy newModule) //Overridden if ModuleType == Component.
 	{
 		newModule.setId(this.getId());
@@ -389,7 +320,6 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 		newModule.setDescription(this.getDescription());
 		newModule.parent=this.getparent();
 		newModule.setSubModules(this.getSubModules());
-		newModule.setRegExUnits(this.getRegExUnits());
 		newModule.setUnits(this.getUnits());
 		newModule.fromStorage=(this.getFromStorage());
 		if(newModule.getType().toLowerCase().equals("layer")) {

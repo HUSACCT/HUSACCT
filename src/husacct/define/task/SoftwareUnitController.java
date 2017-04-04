@@ -24,22 +24,6 @@ public class SoftwareUnitController extends PopUpController {
 		softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
 
-	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,
-			String editingRegEx) {
-		softwareUnitDefinitionDomainService.editRegex(DefinitionController.getInstance().getSelectedModuleId(),components,editingRegEx);
-	}
-
-	public void saveRegEx(ArrayList<AnalyzedModuleComponent> selectedComponents, String regExName) {
-		logger.info("Adding software unit to module with id " + getModuleId() + " to regex " + regExName);
-		try {
-			softwareUnitDefinitionDomainService.addRegexToModule(getModuleId(), selectedComponents, regExName);
-			DefinitionController.getInstance().notifyObservers();
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
-		}
-	}
-
 	// Only used by bootstrap
 	public void save(Long moduleId, String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id " + getModuleId());

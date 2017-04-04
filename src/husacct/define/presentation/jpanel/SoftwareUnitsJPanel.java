@@ -3,7 +3,6 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.help.presentation.HelpableJPanel;
 import husacct.common.services.IServiceListener;
-import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -43,8 +42,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 
 	private JButton addSoftwareUnitButton;
 	private JMenuItem addSoftwareUnitItem = new JMenuItem();
-	private JButton editSoftwareUnitButton;
-	private JMenuItem editSoftwareUnitItem = new JMenuItem();
 	private JPopupMenu popupMenu = new JPopupMenu();
 	private JButton removeSoftwareUnitButton;
 	SoftwareUnitJDialog softwareUnitFrame = null;
@@ -71,8 +68,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 				addSoftwareUnit(); 
 			} else if (action.getSource() == removeSoftwareUnitButton || action.getSource() == removeSoftwareUnitItem) {
 				removeSoftwareUnits();
-			} else if (action.getSource() == editSoftwareUnitButton || action.getSource() == editSoftwareUnitItem) {
-				editSoftwareUnit();
 			}
 		}
 	}
@@ -89,14 +84,8 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		addSoftwareUnitButton.addActionListener(this);
 
-		editSoftwareUnitButton = new JButton();
-		buttonPanel.add(editSoftwareUnitButton, new GridBagConstraints(0, 1, 1,
-				1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		editSoftwareUnitButton.addActionListener(this);
-
 		removeSoftwareUnitButton = new JButton();
-		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 2,
+		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 1,
 				1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeSoftwareUnitButton.addActionListener(this);
@@ -169,13 +158,10 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	private void createPopupMenu() {
 		addSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		addSoftwareUnitItem.addActionListener(this);
-		editSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
-		editSoftwareUnitItem.addActionListener(this);
 		removeSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 		removeSoftwareUnitItem.addActionListener(this);
 
 		popupMenu.add(addSoftwareUnitItem);
-		popupMenu.add(editSoftwareUnitItem);
 		popupMenu.add(removeSoftwareUnitItem);
 	}
 
@@ -183,35 +169,13 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		addSoftwareUnitButton.setEnabled(false);
 		addSoftwareUnitItem.setEnabled(false);
 
-		editSoftwareUnitButton.setEnabled(false);
-		editSoftwareUnitItem.setEnabled(false);
-
 		removeSoftwareUnitButton.setEnabled(false);
 		removeSoftwareUnitItem.setEnabled(false);
-	}
-
-	private void editSoftwareUnit() {
-		if (getSelectedRow() != -1) {
-			new EditSoftwareUnitJDialog(DefinitionController.getInstance()
-					.getSelectedModuleId(),
-					(String) softwareUnitsTable.getValueAt(
-							softwareUnitsTable.getSelectedRow(), 0));
-		} else {
-			JOptionPane.showMessageDialog(this,
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("SoftwareunitSelectionError"),
-					ServiceProvider.getInstance().getLocaleService()
-							.getTranslatedString("WrongSelectionTitle"),
-					JOptionPane.ERROR_MESSAGE);
-		}
 	}
 
 	private void enableAddDisableEditRemoveButtons() {
 		addSoftwareUnitButton.setEnabled(true);
 		addSoftwareUnitItem.setEnabled(true);
-
-		editSoftwareUnitButton.setEnabled(false);
-		editSoftwareUnitItem.setEnabled(false);
 
 		removeSoftwareUnitButton.setEnabled(false);
 		removeSoftwareUnitItem.setEnabled(false);
@@ -220,9 +184,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 	private void enableButtons() {
 		addSoftwareUnitButton.setEnabled(true);
 		addSoftwareUnitItem.setEnabled(true);
-
-		editSoftwareUnitButton.setEnabled(true);
-		editSoftwareUnitItem.setEnabled(true);
 
 		removeSoftwareUnitButton.setEnabled(true);
 		removeSoftwareUnitItem.setEnabled(true);
@@ -255,14 +216,6 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 		}
 	}
 
-	private boolean isSelectedRegex() {
-		if (((String) softwareUnitsTable.getValueAt(getSelectedRow(), 1)).toLowerCase().equals("regex")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	private void removeSoftwareUnits() {
 		if (getSelectedRow() != -1) {
 			List<String> selectedModules = new ArrayList<String>();
@@ -290,18 +243,12 @@ public class SoftwareUnitsJPanel extends HelpableJPanel implements ActionListene
 			enableAddDisableEditRemoveButtons();
 		} else {
 			enableButtons();
-			if (!isSelectedRegex()) {
-				editSoftwareUnitButton.setEnabled(false);
-				editSoftwareUnitItem.setEnabled(false);
-			}
 		}
 	}
 
 	private void setButtonTexts() {
 		addSoftwareUnitButton.setText(ServiceProvider.getInstance()
 				.getLocaleService().getTranslatedString("Add"));
-		editSoftwareUnitButton.setText(ServiceProvider.getInstance()
-				.getLocaleService().getTranslatedString("Edit"));
 		removeSoftwareUnitButton.setText(ServiceProvider.getInstance()
 				.getLocaleService().getTranslatedString("Remove"));
 	}

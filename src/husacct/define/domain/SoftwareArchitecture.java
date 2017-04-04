@@ -201,25 +201,6 @@ public class SoftwareArchitecture {
 	}
 
 	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
-	public ModuleStrategy getModuleByRegExSoftwareUnit(String softwareUnitName) {
-		ModuleStrategy currentModule = null;
-		if (rootModule.hasRegExSoftwareUnit(softwareUnitName)) {
-			currentModule = rootModule;
-			while (!currentModule.hasRegExSoftwareUnitDirectly(softwareUnitName)) {
-				for (ModuleStrategy subModule : currentModule.getSubModules()) {
-					if (subModule.hasRegExSoftwareUnit(softwareUnitName)) {
-						currentModule = subModule;
-					}
-				}
-			}
-		}
-		if (currentModule == null) {
-			//throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));
-		}
-		return currentModule;
-	}
-
-	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
 		ModuleStrategy moduleMappedToSU = null;
 

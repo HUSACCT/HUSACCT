@@ -46,19 +46,11 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 	private static final long serialVersionUID = 3093579720278942807L;
 
 	private JPanel UIMappingPanel;
-	// private JPanel regExMappingPanel;
 
 	private JButton saveButton;
 	private JButton cancelButton;
 	private JScrollPane softwareUnitScrollPane;
 	private JRadioButton UIMapping;
-	/*private JRadioButton regExMapping; 
-	 * private JButton testButton; 
-	 * private JTextField regExTextField;
-	 * private JLabel dynamicRegExLabel; 
-	 * private JCheckBox packageCheckBox;
-	 * private JCheckBox classCheckBox;
-	 */
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
 
@@ -109,24 +101,15 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 		UIMapping.setSelected(true);
 		UIMapping.addActionListener(this);
 
-		// regExMapping = new
-		// JRadioButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExMapping"));
-		// regExMapping.addActionListener(this);
-
 		ButtonGroup mappingRadioButtonsGroup = new ButtonGroup();
 		mappingRadioButtonsGroup.add(UIMapping);
-		// mappingRadioButtonsGroup.add(regExMapping);
 
 		typeSelectionPanel.add(UIMapping);
-		// typeSelectionPanel.add(regExMapping);
 
 		return typeSelectionPanel;
 	}
 
 	private JPanel createUIMappingPanel() {
-		// if(regExMappingPanel != null)
-		// this.getContentPane().remove(regExMappingPanel);
-
 		UIMappingPanel = new JPanel();
 		UIMappingPanel.setLayout(this.createUIMappingPanelLayout());
 		UIMappingPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -164,85 +147,12 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 		return softwareUnitScrollPane;
 	}
 
-	/*
-	 * private JPanel createRegExMappingPanel() {
-	 * this.getContentPane().remove(UIMappingPanel);
-	 * 
-	 * regExMappingPanel = new JPanel(); regExMappingPanel.setLayout(new
-	 * GridLayout(7,3));
-	 * regExMappingPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-	 * 
-	 * packageCheckBox = new JCheckBox("Packages"); classCheckBox = new
-	 * JCheckBox("Classes"); packageCheckBox.setSelected(true);
-	 * classCheckBox.setSelected(true);
-	 * 
-	 * JLabel packageClassChoice = new
-	 * JLabel(ServiceProvider.getInstance().getLocaleService
-	 * ().getTranslatedString("ChooseClassOrPackage"));
-	 * regExMappingPanel.add(packageClassChoice); Font bold=new
-	 * Font(packageClassChoice
-	 * .getFont().getName(),Font.BOLD,packageClassChoice.getFont().getSize());
-	 * packageClassChoice.setFont(bold); regExMappingPanel.add(new JLabel(""));
-	 * 
-	 * regExMappingPanel.add(packageCheckBox);
-	 * regExMappingPanel.add(classCheckBox);
-	 * 
-	 * regExMappingPanel.add(new JLabel("")); regExMappingPanel.add(new
-	 * JLabel(""));
-	 * 
-	 * JLabel regExLabel = new JLabel(); regExMappingPanel.add(regExLabel);
-	 * regExMappingPanel.add(new JLabel(""));
-	 * regExLabel.setText(ServiceProvider.
-	 * getInstance().getLocaleService().getTranslatedString
-	 * ("RegularExpression"));
-	 * 
-	 * regExTextField = new JTextField();
-	 * regExTextField.setToolTipText(DefaultMessages.TIP_REGEXLANGUAGE);
-	 * testButton = new JButton(); testButton.setText("add");
-	 * testButton.addActionListener(this);
-	 * regExTextField.getDocument().addDocumentListener(new DocumentListener() {
-	 * public void changedUpdate(DocumentEvent e) { updateDynamicRegExField(); }
-	 * public void removeUpdate(DocumentEvent e) { updateDynamicRegExField(); }
-	 * public void insertUpdate(DocumentEvent e) { updateDynamicRegExField(); }
-	 * });
-	 * 
-	 * regExMappingPanel.add(regExTextField); regExMappingPanel.add(new
-	 * JLabel("")); dynamicRegExLabel = new
-	 * JLabel(ServiceProvider.getInstance().
-	 * getLocaleService().getTranslatedString("EnterRegExLabel"));
-	 * regExMappingPanel.add(dynamicRegExLabel);
-	 * 
-	 * return regExMappingPanel; }
-	 */
-
 	private void getSoftwareDefinationTree() {
 		this.softwareDefinitionTree = new AnalyzedModuleTree(JtreeController.instance().getRootOfModel());
 		this.softwareDefinitionTree.setTransferHandler(new ModuleTrasferhandler());
 		this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
 		this.softwareDefinitionTree.setDragEnabled(true);
-
 	}
-
-	/*
-	 * private void updateDynamicRegExField() { String enteredText =
-	 * regExTextField.getText(); if(enteredText.startsWith("*") &&
-	 * enteredText.endsWith("*")) { enteredText = enteredText.replace("*", "");
-	 * dynamicRegExLabel
-	 * .setText(ServiceProvider.getInstance().getLocaleService()
-	 * .getTranslatedString("RegExContains") + " '" + enteredText + "'"); } else
-	 * if(enteredText.startsWith("*")) { enteredText = enteredText.replace("*",
-	 * "");
-	 * dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService
-	 * ().getTranslatedString("RegExEndsWith") + " '" + enteredText + "'"); }
-	 * else if(enteredText.endsWith("*")) { enteredText =
-	 * enteredText.replace("*", "");
-	 * dynamicRegExLabel.setText(ServiceProvider.getInstance
-	 * ().getLocaleService().getTranslatedString("RegExStartsWith") + " '" +
-	 * enteredText + "'"); } else {
-	 * dynamicRegExLabel.setText(ServiceProvider.getInstance
-	 * ().getLocaleService().getTranslatedString("RegExIsExactly") + " '" +
-	 * enteredText + "'"); } }
-	 */
 
 	private TreeSelectionListener treeselectionListener = new TreeSelectionListener() {
 		@Override
@@ -288,19 +198,9 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 		} else if (action.getSource() == this.UIMapping) {
 			this.getContentPane().add(this.createUIMappingPanel(),BorderLayout.CENTER);
 			UIMapping.setEnabled(false);
-			// regExMapping.setEnabled(true);
-			// regExMappingPanel = null;
 			saveButton.setEnabled(false);
 			this.pack();
 		}
-		/*
-		 * else if (action.getSource() == this.regExMapping) {
-		 * this.getContentPane().add(this.createRegExMappingPanel(),
-		 * BorderLayout.CENTER); UIMapping.setEnabled(true);
-		 * regExMapping.setEnabled(false); saveButton.setEnabled(true);
-		 * this.pack(); }
-		 */
-
 	}
 
 	//Do nothing
@@ -326,29 +226,6 @@ public class SoftwareUnitJDialog extends HelpableJDialog implements ActionListen
 
 	private void save() {
 		boolean canclose = false;
-		/* if(regExMappingPanel != null) { 
-		 * 	ExpressionEngine expressionEngine = new ExpressionEngine(); 
-		 * 	if(!regExTextField.getText().equals("")) {
-		 * 		if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
-		 * 			AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
-		 * 			if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
-		 * 				expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC"); 
-		 * 			} else if(packageCheckBox.isSelected()) {
-		 * 				expressionEngine.saveRegExToResultTree(regExTextField.getText(), "P"); 
-		 * 			} else if(classCheckBox.isSelected()) {
-		 * 				expressionEngine.saveRegExToResultTree(regExTextField.getText(), "C"); 
-		 * 			} 
-		 * 			this.dispose(); 
-		 * 			new SoftwareUnitResultJDialog(_moduleId, resultTree, regExTextField.getText(), this); 
-		 *		} else {
-		 * 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectRegExCheckBoxError"), "Message", JOptionPane.WARNING_MESSAGE); 
-		 * 		} 
-		 * 	} else {
-		 * 		JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("FillInRegExError"), "Message", JOptionPane.WARNING_MESSAGE); 
-		 * 	} 
-		 * }
-		 */
-		// else {
 		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
 		for (TreePath path : paths.getSelectionPaths()) {

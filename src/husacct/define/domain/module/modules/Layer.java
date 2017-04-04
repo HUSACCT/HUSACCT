@@ -2,7 +2,6 @@ package husacct.define.domain.module.modules;
 
 
 import husacct.common.enums.ModuleTypes;
-import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
@@ -21,7 +20,6 @@ public class Layer extends ModuleStrategy {
 		this.name = name;
 		this.description = description;
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
 		
 		this.type = ModuleTypes.LAYER.toString();
@@ -44,26 +42,6 @@ public class Layer extends ModuleStrategy {
 		return hierarchicalLevel;
 	}
 
-	/* Try out
-	private int determineNewHierarchicalLevel() {
-		int highestLevel = STATIC_LEVEL;
-		ModuleStrategy parent = getparent();
-		if (parent == null){
-			parent = SoftwareArchitecture.getInstance().getRootModule();
-		}
-		for (ModuleStrategy subModule : parent.getSubModules()) {
-			if (subModule.getType().toLowerCase().equals("layer")) {
-				Layer layer = (Layer) subModule;
-				if(layer.getHierarchicalLevel() > highestLevel){
-					highestLevel = layer.getHierarchicalLevel();
-					highestLevel++;
-				}
-			}
-		}
-		return highestLevel;
-	}
-	*/
-	
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj)

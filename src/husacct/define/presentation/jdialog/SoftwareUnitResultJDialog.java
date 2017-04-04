@@ -32,7 +32,7 @@ public class SoftwareUnitResultJDialog extends HelpableJDialog implements Action
 	private AnalyzedModuleTree resultTree;
 	private SoftwareUnitJDialog previousSoftwareUnitJDialog;
 	
-	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree resultTree, String enteredRegEx, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
+	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree resultTree, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.resultTree = resultTree;
 		this.previousSoftwareUnitJDialog = previousSoftwareUnitJDialog;
@@ -124,8 +124,6 @@ public class SoftwareUnitResultJDialog extends HelpableJDialog implements Action
 		for (TreePath path : paths.getSelectionPaths()){
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}
-		//SoftwareUnitController unitController = new SoftwareUnitController(DefinitionController.getInstance().getSelectedModuleId());
-		//unitController.saveRegEx(components, enteredRegEx);
 		this.dispose();
 	}
 	

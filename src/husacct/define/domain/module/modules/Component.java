@@ -3,7 +3,6 @@ package husacct.define.domain.module.modules;
 
 import husacct.common.enums.ModuleTypes;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.softwareunit.SoftwareUnitDefinition;
 
@@ -19,7 +18,6 @@ public class Component extends ModuleStrategy {
 		this.description = description;
 		this.type = ModuleTypes.COMPONENT.toString();
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
-		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();
 		
 	}
@@ -35,7 +33,6 @@ public class Component extends ModuleStrategy {
 		//can be bettter implemented :TODO
 		SoftwareArchitecture.getInstance().removeModule(facade);
 		newModule.setSubModules(this.getSubModules());
-		newModule.setRegExUnits(this.getRegExUnits());
 		newModule.setUnits(this.getUnits());		
 	}
 	

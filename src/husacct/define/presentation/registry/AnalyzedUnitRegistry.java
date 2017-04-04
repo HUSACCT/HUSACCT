@@ -54,31 +54,28 @@ public class AnalyzedUnitRegistry {
 		WarningMessageContainer enumroot = new WarningMessageContainer(new CustomWarningMessage("Enum"));
 		
 		for (AnalyzedModuleComponent  unit :  allAnalyzedUnits.values()) {
-			if (unit.getType().equalsIgnoreCase("regex")) {
-			}else{
-				if((!unit.isMapped()&& !unit.isAncestorsMapped())){
-					String type = unit.getType().toLowerCase();
-					switch (type) {
-					case "class":
-						
-						classesroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
-						break;
-		
-					case "package":
-						
-						packagesroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
-						break;
-					case "interface":
-						
-						interfaceroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
-						break;
-					case "enum":
-						enumroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
-						break;
-		
-					default:
-						break;
-					}
+			if((!unit.isMapped()&& !unit.isAncestorsMapped())){
+				String type = unit.getType().toLowerCase();
+				switch (type) {
+				case "class":
+					
+					classesroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
+					break;
+	
+				case "package":
+					
+					packagesroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
+					break;
+				case "interface":
+					
+					interfaceroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
+					break;
+				case "enum":
+					enumroot.addChild(new WarningMessageContainer( new NotmappedWarningMessage(unit)));
+					break;
+	
+				default:
+					break;
 				}
 			}
 		}
