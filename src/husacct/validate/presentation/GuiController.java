@@ -12,7 +12,7 @@ public class GuiController {
 	private final TaskServiceImpl task;
 	private final ConfigurationServiceImpl configuration;
 	private BrowseViolations browseViolations;
-	private FilterViolations filterViolations;
+	private ViolationsFilterDialog filterViolations;
 	private ConfigurationUI configurationUI;
 
 	public GuiController(TaskServiceImpl task, ConfigurationServiceImpl configuration) {
@@ -76,7 +76,7 @@ public class GuiController {
 	private void initializeFilterViolations() {
 		if (filterViolations == null) {
 			initializeBrowseViolations();
-			this.filterViolations = new FilterViolations(task, browseViolations);
+			this.filterViolations = new ViolationsFilterDialog(task, browseViolations);
 		}
 	}
 }

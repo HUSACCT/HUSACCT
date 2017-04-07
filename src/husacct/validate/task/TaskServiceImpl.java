@@ -74,8 +74,8 @@ public class TaskServiceImpl {
 		return filterController.getViolationsPerSeverity(shownViolations, severities);
 	}
 
-	public void setFilterValues(FilterSettingsDTO dto, boolean hideFilter, Calendar date) {
-		filterController.setFilterValues(dto, hideFilter, getHistoryViolations(date));
+	public void setFilterValues(FilterSettingsDTO dto, Calendar date) {
+		filterController.setFilterValues(dto, getHistoryViolations(date));
 	}
 	
 	public ArrayList<String> getEnabledFilterRuleTypes() {

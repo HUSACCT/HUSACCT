@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
-import husacct.validate.presentation.FilterViolations;
+import husacct.validate.presentation.ViolationsFilterDialog;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.Dimension;
@@ -31,7 +31,7 @@ public class FilterPanel extends JPanel {
 
 	private static final long serialVersionUID = 8013809183676306609L;
 	private final BrowseViolations browseViolations;
-	private final FilterViolations filterViolations;
+	private final ViolationsFilterDialog filterViolations;
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private JRadioButton radioButtonIndirect, radioButtonAll, radioButtonDirect;
@@ -39,7 +39,7 @@ public class FilterPanel extends JPanel {
 
 	public FilterPanel(BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl) {
 		this.browseViolations = browseViolations;
-		this.filterViolations = new FilterViolations(taskServiceImpl, browseViolations);
+		this.filterViolations = new ViolationsFilterDialog(taskServiceImpl, browseViolations);
 		initComponents();
 		loadAfterChange();
 	}
@@ -190,7 +190,7 @@ public class FilterPanel extends JPanel {
 		});
 	}
 
-	public List<Violation> fillViolationsTable(List<Violation> violations) {
+	public List<Violation> filterViolationsOnDirectOrIndirect(List<Violation> violations) {
 		List<Violation> selectedViolations = new ArrayList<Violation>();
 
 		if (radioButtonAll.isSelected()) {

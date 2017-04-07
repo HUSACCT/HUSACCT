@@ -62,27 +62,31 @@ public class ViolationRepository {
 		HashMap<String, Violation> violationDetailsHashMap;
 		for(Violation violation : violationsList){
 			try{
-				violationFromToKey = "";
-				violationDetailsKey = "";
-				violationDetailsHashMap = null;
-				violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();
-				violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.getIsIndirect() + "::" + violation.getViolationTypeKey() + "::" + violation.getDependencySubType();
-				violationFromToKey.toLowerCase();
-				violationDetailsKey.toLowerCase();
-				if(violationFromToHashMap.containsKey(violationFromToKey)){
-					violationDetailsHashMap = violationFromToHashMap.get(violationFromToKey);
-					if(violationDetailsHashMap.containsKey(violationDetailsKey)){
-						// Do nothing; violation is already registered
-					} else {
+				if (violation.getClassPathFrom().equals("") || violation.getClassPathTo().equals("")) {
+					filteredViolationsList.add(violation);
+				} else {
+					violationFromToKey = "";
+					violationDetailsKey = "";
+					violationDetailsHashMap = null;
+					violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();
+					violationDetailsKey = violation.getRuletypeKey() + "::" + violation.getLinenumber() + "::" + violation.getIsIndirect() + "::" + violation.getViolationTypeKey() + "::" + violation.getDependencySubType();
+					violationFromToKey.toLowerCase();
+					violationDetailsKey.toLowerCase();
+					if(violationFromToHashMap.containsKey(violationFromToKey)){
+						violationDetailsHashMap = violationFromToHashMap.get(violationFromToKey);
+						if(violationDetailsHashMap.containsKey(violationDetailsKey)){
+							// Do nothing; violation is already registered
+						} else {
+							violationDetailsHashMap.put(violationDetailsKey, violation);
+							filteredViolationsList.add(violation);
+						}
+					}
+					else{
+						violationDetailsHashMap = new HashMap<String, Violation>();
 						violationDetailsHashMap.put(violationDetailsKey, violation);
+						violationFromToHashMap.put(violationFromToKey, violationDetailsHashMap);
 						filteredViolationsList.add(violation);
 					}
-				}
-				else{
-					violationDetailsHashMap = new HashMap<String, Violation>();
-					violationDetailsHashMap.put(violationDetailsKey, violation);
-					violationFromToHashMap.put(violationFromToKey, violationDetailsHashMap);
-					filteredViolationsList.add(violation);
 				}
 			} catch (Exception e) {
 				this.logger.error(new Date().toString() + " Exception:  " + e);

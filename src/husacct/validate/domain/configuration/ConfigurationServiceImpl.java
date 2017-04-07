@@ -77,10 +77,6 @@ public final class ConfigurationServiceImpl extends Observable {
 
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
-		
-		setChanged();
-		notifyObservers();
-		notifyServiceListeners();
 	}
 	
 	public void filterAndSortAllViolations(){

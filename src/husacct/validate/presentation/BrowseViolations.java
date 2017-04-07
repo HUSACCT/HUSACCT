@@ -31,7 +31,6 @@ import java.util.Observer;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -164,11 +163,12 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		reloadViolations();
 		fillViolationsTable(shownViolationsInAllViolationsPanel);
 		loadViolationDetailsPanel();
+		updateFilterValues();
 	}
 
 	public void reloadViolations() {
 		shownViolationsInAllViolationsPanel = taskServiceImpl.getAllViolations().getValue();
-		shownViolationsInAllViolationsPanel = filterPane.fillViolationsTable(shownViolationsInAllViolationsPanel);
+		shownViolationsInAllViolationsPanel = filterPane.filterViolationsOnDirectOrIndirect(shownViolationsInAllViolationsPanel);
 		if (filterPane.getApplyFilter().isSelected()) {
 			shownViolationsInAllViolationsPanel = filterViolations(shownViolationsInAllViolationsPanel);
 		}
@@ -239,7 +239,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 
 	public void validateNow() {
 		if(!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getStates().contains(States.VALIDATING)){
-			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, new JButton())); // Previous to version 3.2: buttonSaveInHistory i.s.o. new JButton().
+			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask()); // Previous to version 3.2: buttonSaveInHistory i.s.o. new JButton().
 			LoadingDialog currentLoader = validateThread.getLoader();
 			currentLoader.addWindowListener(new WindowAdapter() {
 				@Override

@@ -22,35 +22,55 @@ public class FilterController {
 	private ArrayList<String> ruletypes = new ArrayList<String>();
 	private ArrayList<String> violationtypes = new ArrayList<String>();
 	private ArrayList<String> paths = new ArrayList<String>();
-	private boolean hidefilter = true;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterController(ConfigurationServiceImpl configuration) {
 		this.configuration = configuration;
 	}
 
-	public void setFilterValues(FilterSettingsDTO dto, boolean hideFilter, List<Violation> violations) {
-		ArrayList<String> modulesFilter = new ArrayList<String>();
-		for (Violation violation : violations) {
-			for (String path : dto.getPaths()) {
-				if (!modulesFilter.contains(violation.getClassPathFrom()) && Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())) {
-					modulesFilter.add(violation.getClassPathFrom());
-				}
-			}
-		}
+	public void setFilterValues(FilterSettingsDTO dto, List<Violation> violations) {
 		this.ruletypes = dto.getRuletypes();
 		this.violationtypes = dto.getViolationtypes();
-		this.paths = modulesFilter;
-		this.hidefilter = hideFilter;
+		this.paths = dto.getPaths();
 	}
 
 	public ArrayList<Violation> filterViolations(List<Violation> violations) {
 		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
 		for (Violation violation : violations) {
-			if (hidefilter && (!ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey())) && !paths.contains(violation.getClassPathFrom()))) {
-				filteredViolations.add(violation);
-			} else if ((!hidefilter) && (ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey())) || paths.contains(violation.getClassPathFrom()))) {
-				filteredViolations.add(violation);
+			boolean passesRuleTypeFilter = false;
+			boolean passesViolationTypeFilter = false;
+			boolean passesPathFilter = false;
+			if(ruletypes.isEmpty()) {
+				passesRuleTypeFilter = true;
+			} else if(ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey()))) {
+				passesRuleTypeFilter = true;
+			}
+			if (passesRuleTypeFilter) {
+				if(violationtypes.isEmpty()) {
+					passesViolationTypeFilter = true;
+				} else if(violationtypes.contains(localeService.getTranslatedString(violation.getViolationTypeKey()))) {
+					passesViolationTypeFilter = true;
+				}
+				if (passesViolationTypeFilter) {
+					if(paths.isEmpty()) {
+						passesPathFilter = true;
+					} else {
+						if(paths.contains(violation.getClassPathFrom())) {
+							passesPathFilter = true;
+						} else {
+							for (String path : paths) {
+								if (Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())) {
+									passesPathFilter = true;
+								}
+							}
+							
+						}
+							
+					}
+					if (passesPathFilter) {
+						filteredViolations.add(violation);
+					}
+				}
 			}
 		}
 		return filteredViolations;

@@ -1,7 +1,10 @@
 package husacct.validate.domain.validation.moduletype;
 
 import java.util.List;
+
 import husacct.validate.domain.validation.ruletype.RuleType;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
+
 import java.util.ArrayList;
 
 public class Facade extends AbstractModule {
@@ -18,7 +21,15 @@ public class Facade extends AbstractModule {
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
+    	List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
+
+		for (RuleType ruleType : ruleTypes) {
+		    if (!ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)
+			    && !ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)
+			    && !ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
+			allowedRuleTypes.add(ruleType);
+		    }
+		}
 		return allowedRuleTypes;
 	}
 }

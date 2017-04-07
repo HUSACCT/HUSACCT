@@ -17,14 +17,13 @@ import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
-public final class FilterViolations extends HelpableJDialog {
+public final class ViolationsFilterDialog extends HelpableJDialog {
 
 	private static final long serialVersionUID = -6295611607558238501L;
 	@SuppressWarnings("unused")
@@ -34,8 +33,6 @@ public final class FilterViolations extends HelpableJDialog {
 	private JTabbedPane tabbedPane;
 	private JButton addPath, removePath, save, cancel;
 	private JPanel filterViolationPanel, pathFilterPanel;
-	private ButtonGroup filtergroup;
-	private JRadioButton hideFilteredValues, showFilteredValues;
 	private JScrollPane pathFilterScrollPane, ruletypePanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
 	private FilterViolationsObserver filterViolationsObserver;
@@ -45,7 +42,7 @@ public final class FilterViolations extends HelpableJDialog {
 	private Calendar violationDate = Calendar.getInstance();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
-	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
+	public ViolationsFilterDialog(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.filterViolationsObserver = filterViolationsObserver;
 		this.taskServiceImpl = taskServiceImpl;
@@ -54,7 +51,7 @@ public final class FilterViolations extends HelpableJDialog {
 	}
 
 	private void initComponents() {
-		filtergroup = new ButtonGroup();
+		new ButtonGroup();
 		tabbedPane = new JTabbedPane();
 		filterViolationPanel = new JPanel();
 		ruletypePanel = new JScrollPane();
@@ -68,8 +65,6 @@ public final class FilterViolations extends HelpableJDialog {
 		removePath = new JButton();
 		save = new JButton();
 		cancel = new JButton();
-		showFilteredValues = new JRadioButton();
-		hideFilteredValues = new JRadioButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setResizable(false);
@@ -122,35 +117,12 @@ public final class FilterViolations extends HelpableJDialog {
 			}
 		});
 		
-		hideFilteredValues.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				setSelectedFilterValues(false);
-			}
-		});
-		
-		showFilteredValues.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				setSelectedFilterValues(true);
-			}
-		});
-
-		filtergroup.add(showFilteredValues);
-
-		filtergroup.add(hideFilteredValues);
-		hideFilteredValues.setSelected(true);
-
 		createFilterViolationPanelLayout();
 		createPathFilterPanelLayout();
 		createBaseLayout();
 		setSize(800, 600);
 	}
 	
-	private void setSelectedFilterValues(boolean value) {
-		this.selectedFilterValues = value;
-	}
-
 	private void createFilterViolationPanelLayout() {
 		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
 
@@ -202,10 +174,7 @@ public final class FilterViolations extends HelpableJDialog {
 		GroupLayout layout = new GroupLayout(getContentPane());
 
 		GroupLayout.SequentialGroup horizontalButtonGroup = layout.createSequentialGroup();
-		horizontalButtonGroup.addComponent(hideFilteredValues);
-		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
-		horizontalButtonGroup.addComponent(showFilteredValues);
-		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addContainerGap();
 		horizontalButtonGroup.addComponent(save);
 		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
 		horizontalButtonGroup.addComponent(cancel);
@@ -219,8 +188,6 @@ public final class FilterViolations extends HelpableJDialog {
 		layout.setHorizontalGroup(horizontalPaneGroup);
 
 		GroupLayout.ParallelGroup verticalRadioButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
-		verticalRadioButtonGroup.addComponent(hideFilteredValues);
-		verticalRadioButtonGroup.addComponent(showFilteredValues);
 
 		GroupLayout.ParallelGroup verticalButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
 		verticalButtonGroup.addComponent(save);
@@ -229,8 +196,9 @@ public final class FilterViolations extends HelpableJDialog {
 
 		GroupLayout.SequentialGroup verticalPaneGroup = layout.createSequentialGroup();
 		verticalPaneGroup.addComponent(tabbedPane);
-		verticalPaneGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED);
+		verticalPaneGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
+		verticalPaneGroup.addContainerGap();
 
 		layout.setVerticalGroup(verticalPaneGroup);
 	}
@@ -242,13 +210,11 @@ public final class FilterViolations extends HelpableJDialog {
 	public void loadGUIText() {
 		setTitle(localeService.getTranslatedString("TotalViolations"));
 		tabbedPane.addTab(localeService.getTranslatedString("FilterViolations"), filterViolationPanel);
-		addPath.setText(localeService.getTranslatedString("Add"));
-		removePath.setText(localeService.getTranslatedString("Remove"));
-		tabbedPane.addTab(localeService.getTranslatedString("FilterPaths"), pathFilterPanel);
 		save.setText(localeService.getTranslatedString("Save"));
 		cancel.setText(localeService.getTranslatedString("Cancel"));
-		showFilteredValues.setText(localeService.getTranslatedString("ShowSelectedValues"));
-		hideFilteredValues.setText(localeService.getTranslatedString("HideSelectedValues"));
+		tabbedPane.addTab(localeService.getTranslatedString("FilterPaths"), pathFilterPanel); //Disabled 2017-04-07 since it did not function properly
+		addPath.setText(localeService.getTranslatedString("Add"));
+		removePath.setText(localeService.getTranslatedString("Remove"));
 
 		loadModels();
 	}
@@ -325,7 +291,7 @@ public final class FilterViolations extends HelpableJDialog {
 			return;
 		}
 		FilterSettingsDTO dto = new FilterSettingsDTO(ruletypesfilter, violationtypesfilter, pathsfilter);
-		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
+		taskServiceImpl.setFilterValues(dto, violationDate);
 		filterViolationsObserver.updateViolationTables();
 		dispose();
 	}
