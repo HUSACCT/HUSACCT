@@ -2,12 +2,9 @@ package husaccttest.validate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import husacct.ExternalServiceProvider;
 import husacct.ServiceProvider;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationImExportDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.validate.IValidateService;
 import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
@@ -17,8 +14,8 @@ import husacct.control.task.MainController;
 import husacct.define.IDefineService;
 import husaccttest.TestResourceFinder;
 
-import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +26,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import externalinterface.ExternalServiceProvider;
+import externalinterface.SaccCommandDTO;
+import externalinterface.ViolationImExportDTO;
+import externalinterface.ViolationReportDTO;
+
 // Tests the full SACC-cycle using the SRMA test and tests the externally provided SACC via ExternalServiceProvider.
 public class SACCandSRMAtest {
 	private static ControlServiceImpl controlService;
@@ -36,19 +38,14 @@ public class SACCandSRMAtest {
 	// Refers to a files that contains the definition of the intended architecture (modules, rules, assigned software units, ...).
 	private static final String workspacePath = 
 			TestResourceFinder.findHusacctWorkspace("java", "SrmaTest-2014-11-12.xml"); 
+	// Refers to the source code directory.
+	private static final String sourceFilePath = TestResourceFinder.findSourceCodeDirectory("java", "srma20141112");
 	// Refers to a file containing a set of previous violations. Used to determine new violations.
-	private static final String importFilePathAllViolations =
+	private static final String importFilePathAllPreviousViolations =
 			TestResourceFinder.getSaccFolder("java") 
 			+ "ArchitectureViolations_SrmaTest_All-5_ImportFile.xml";
-	// Path of export file with all current violations. This file can be produced, optionally.
-	private static final String exportFilePathAllViolations = 
-			TestResourceFinder.getExportFolderForTest("java") 
-			+ "ArchitectureViolations_SrmaTest_All_ExportFile.xml";
-	// Path of export file with only the new current violations. This file can be produced, optionally.
-	private static final String exportFilePathNewViolations = 
-			TestResourceFinder.getExportFolderForTest("java") 
-			+ "ArchitectureViolations_SrmaTest_New_ExportFile.xml";
 
+	private static SaccCommandDTO saccCommandDTO;
 	private static ViolationReportDTO violationReport = null;
 	private static int numberOfAllViolationsInSrmaSourceCode = 61;
 	private static int numberOfMissingViolationsInImportFile = 5; // The import file contains 56 violations of 61 in total. Five violations have been removed with WordPad from the exportAllViolations file.
@@ -61,8 +58,18 @@ public class SACCandSRMAtest {
 		try {
 			setLog4jConfiguration();
 			logger.info(String.format(new Date().toString() + " Start: Validate - SACC and SRMA Test"));
+
+			saccCommandDTO = new SaccCommandDTO();
+			saccCommandDTO.setHusacctWorkspaceFile(workspacePath);
+			ArrayList<String> paths = new ArrayList<>();
+			paths.add(sourceFilePath);
+			saccCommandDTO.setSourceCodePaths(paths);
+			saccCommandDTO.setImportFilePreviousViolations(importFilePathAllPreviousViolations);
+			saccCommandDTO.setExportAllViolations(true);
+			saccCommandDTO.setExportNewViolations(true);
+
 			ExternalServiceProvider externalServiceProvider = ExternalServiceProvider.getInstance();
-			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(workspacePath, importFilePathAllViolations, true, true);
+			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(saccCommandDTO);
 		} catch (Exception e){
 			String errorMessage =  "Exception: " + e.getMessage();
 			logger.warn(errorMessage);
@@ -74,10 +81,6 @@ public class SACCandSRMAtest {
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
 		mainController.getWorkspaceController().closeWorkspace();
-		File exportFileAllViolations = new File(exportFilePathAllViolations);
-		exportFileAllViolations.delete();
-		File exportFileNewViolations = new File(exportFilePathNewViolations);
-		exportFileNewViolations.delete();
 		logger.info(String.format(new Date().toString() + " Finished: Validate - SACC and SRMA Test"));
 	}
 	

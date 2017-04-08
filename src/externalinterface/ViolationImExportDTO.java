@@ -1,4 +1,6 @@
-package husacct.common.dto;
+package externalinterface;
+
+import husacct.common.dto.AbstractDTO;
 
 
 

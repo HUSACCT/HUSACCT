@@ -17,6 +17,7 @@ import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -25,7 +26,7 @@ public class ApplicationController {
 
 	private MainController mainController;
 	private Logger logger = Logger.getLogger(ApplicationController.class);
-	private LoadingDialog currentLoader;
+	private LoadingDialog loadingDialog;
 	public ApplicationController(MainController mainController) {
 		this.mainController = mainController;
 	}
@@ -59,31 +60,36 @@ public class ApplicationController {
 	}
 	
 	public void analyseApplication(){
+
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 		ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
-		
-		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(mainController,applicationDTO));
-		currentLoader = analyseThread.getLoader();
-		analyseThread.getThread();
-		//logger.info(new Date().toString() + " Initialized: Thread for AnalyseTask, LoadingDialog, and MonitorThread");
-		currentLoader.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {		
-				mainController.getStateController().setAnalysing(false);
-				
-				logger.debug("Stopping Thread");				
-			}			
-		});	
-		analyseThread.run();	
+		try {
+			ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(mainController,applicationDTO));
+			loadingDialog = analyseThread.getLoadingDialog();
+			if (loadingDialog != null) {
+				loadingDialog.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {		
+						mainController.getStateController().setAnalysing(false);
+						logger.debug("Stopping Thread");				
+					}			
+				});	
+			}
+			analyseThread.getThread();
+			analyseThread.run();	
+		} catch (Exception exception){
+			logger.error(exception.getMessage());
+		}
+
 	}
 	
-	public LoadingDialog getCurrentLoader() {
-		return this.currentLoader;
+	public LoadingDialog getCurrentLoadingDialog() {
+		return this.loadingDialog;
 	}
 	
-	public void setCurrentLoader(LoadingDialog ld) {
-		this.currentLoader = ld;
+	public void setCurrentLoadingDialog(LoadingDialog ld) {
+		this.loadingDialog = ld;
 	}
 	
 	public void showAboutHusacctGui(){

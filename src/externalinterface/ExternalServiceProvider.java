@@ -1,6 +1,10 @@
-package husacct;
+package externalinterface;
 
-import husacct.common.dto.ViolationReportDTO;
+import java.net.URL;
+
+import org.apache.log4j.PropertyConfigurator;
+
+import husacct.ServiceProvider;
 import husacct.control.IControlService;
 
 public class ExternalServiceProvider {
@@ -13,6 +17,7 @@ public class ExternalServiceProvider {
 	}
 
 	public static ExternalServiceProvider getInstance() {
+		setLog4jConfiguration();
 		if (ExternalServiceProvider._instance == null) {
 			new ExternalServiceProvider();
 		}
@@ -34,20 +39,19 @@ public class ExternalServiceProvider {
 	 * Finally, XML documents of all violations or only the new violations will be created if the related parameter argument are 
 	 * provided. The XML documents can be used for export purposes. These documents can easily be stored as files or passed to other tools.  
 	 * 
-	 * @param husacctWorkspaceFile: Refers to a file that contains the definition of the intended architecture (modules, rules, assigned software units, ...) of the project.
-	 * @param importFilePreviousViolations: (Optional) Path of a previous exportFileAllCurrentViolations. 
-	 * 		  Based on this input, new violations can be determined.
-	 * @param exportAllViolations: (Optional) Indicates if an XML document with all current violations should be created.
 	 * @param exportNewViolations: (Optional) Indicates if an XML document with only the new current violations should be created.
-	 * @return ViolationReportDTO
+	 * @return ViolationReportDTO: Read the Javadoc of this class. 
 	 */
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, 
-			String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(SaccCommandDTO saccCommandDTO) {
 		ViolationReportDTO violationReport = new ViolationReportDTO();
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
-		violationReport = controlService.performSoftwareArchitectureComplianceCheck(husacctWorkspaceFile, 
-				importFilePreviousViolations, exportAllViolations, exportNewViolations);
+		violationReport = controlService.performSoftwareArchitectureComplianceCheck(saccCommandDTO);
 		return violationReport;
 	}
 
+	private static void setLog4jConfiguration() {
+		URL propertiesFile = ClassLoader.getSystemResource("husacct/common/resources/log4j.properties");
+		PropertyConfigurator.configure(propertiesFile);
+	}
+	
 }

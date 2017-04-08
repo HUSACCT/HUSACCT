@@ -1,7 +1,6 @@
 package husacct.validate.task.imexporting;
 
-import husacct.common.dto.ViolationImExportDTO;
-import husacct.common.dto.ViolationReportDTO;
+import husacct.ServiceProvider;
 import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
@@ -19,6 +18,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
+
+import externalinterface.ViolationImExportDTO;
+import externalinterface.ViolationReportDTO;
 
 public class ViolationReportDtoFactory {
 	private TaskServiceImpl task;
@@ -46,6 +48,8 @@ public class ViolationReportDtoFactory {
 		try {
 			// Add the results of the current SACC to violationReportDTO
 	        violationReportDTO.setTimeCurrentCheck(timeCurrentCheck);
+	        int nrOfDependencies = ServiceProvider.getInstance().getAnalyseService().getAnalysisStatistics(null).totalNrOfDependencies;
+	        violationReportDTO.setNrOfAllCurrentDependencies(nrOfDependencies);
 	        int nrOfAllCurrentViolations = allCurrentViolationsImExportList.size();
 	        violationReportDTO.setAllViolations(allCurrentViolationsImExportList.toArray(new ViolationImExportDTO[nrOfAllCurrentViolations]));
 			violationReportDTO.setNrOfAllCurrentViolations(nrOfAllCurrentViolations);
@@ -157,8 +161,13 @@ public class ViolationReportDtoFactory {
 				String searchKey = currenViolation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath() 
 						+ "::" + currenViolation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath() 
 						+ "::" + currenViolation.getRuletypeKey();
-				if (hasNumberOfViolationsPerRuleIncreased.containsKey(searchKey) && hasNumberOfViolationsPerRuleIncreased.get(searchKey)) {
-					// If so, add the violation to the newViolationsList
+				if (hasNumberOfViolationsPerRuleIncreased.containsKey(searchKey)) {
+					if (hasNumberOfViolationsPerRuleIncreased.get(searchKey)) {
+						// The number of violations has increased for the rule, so add the violation to the newViolationsList
+						newViolationsList.add(createViolationImportExportDTO(currenViolation));
+					}
+				} else {
+					// The rule and the violation to the rule is new, so add the violation to the newViolationsList
 					newViolationsList.add(createViolationImportExportDTO(currenViolation));
 				}
 			}

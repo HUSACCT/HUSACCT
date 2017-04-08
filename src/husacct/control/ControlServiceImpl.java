@@ -3,7 +3,6 @@ package husacct.control;
 import husacct.ServiceProvider;
 import husacct.common.OSDetector;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.common.enums.States;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
@@ -11,6 +10,7 @@ import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.control.presentation.util.GeneralConfigurationPanel;
+import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.viewcontrol.ViewController;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
@@ -36,6 +36,9 @@ import javax.swing.JDialog;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
+
+import externalinterface.SaccCommandDTO;
+import externalinterface.ViolationReportDTO;
 
 
 public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {
@@ -84,9 +87,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(SaccCommandDTO saccCommandDTO) {
 		ExternalComplianceCheck externalComplianceCheck = new ExternalComplianceCheck();
-		ViolationReportDTO violationReport = externalComplianceCheck.performSoftwareArchitectureComplianceCheck(husacctWorkspaceFile, importFilePreviousViolations, exportAllViolations, exportNewViolations);
+		ViolationReportDTO violationReport = externalComplianceCheck.performSoftwareArchitectureComplianceCheck(saccCommandDTO);
 		return violationReport;
 	}
 
@@ -151,7 +154,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask) {
 		ThreadWithLoader loader = new ThreadWithLoader(mainController, progressInfoText, threadTask);
 		
-		mainController.getApplicationController().setCurrentLoader(loader.getLoader());
+		mainController.getApplicationController().setCurrentLoadingDialog(loader.getLoadingDialog());
 		
 		return loader;
 	}
@@ -175,9 +178,12 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void updateProgress(int progressPercentage) {
 		try{
-		mainController.getApplicationController().getCurrentLoader().setProgressText(progressPercentage);
+			LoadingDialog loadingDialog = mainController.getApplicationController().getCurrentLoadingDialog();
+			if (loadingDialog != null) {
+				loadingDialog.setProgressText(progressPercentage);
+			}
 		}catch(Exception e){
-			
+			logger.warn(" Error while updating progress in thread loader dialog.");
 		}
 	}
 	

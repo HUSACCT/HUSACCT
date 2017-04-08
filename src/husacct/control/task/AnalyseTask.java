@@ -5,6 +5,7 @@ import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.SoftwareUnitDTO;
+import husacct.control.presentation.util.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,12 +30,16 @@ public class AnalyseTask implements Runnable {
 			if ((this.applicationDTO.projects.size() > 0) && (this.applicationDTO.projects.get(0).paths.size() > 0)) {
 				this.mainController.getStateController().setAnalysing(true);
 				Thread.sleep(1);
-				this.mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(this.applicationDTO.projects.size());
-				
+				LoadingDialog loadingDialog = mainController.getApplicationController().getCurrentLoadingDialog();
+				if (loadingDialog != null) {
+					loadingDialog.setAmountOfProcesses(this.applicationDTO.projects.size());
+				}
 				for (int i = 0; i < this.applicationDTO.projects.size(); i++) {
 					ProjectDTO currentProject = this.applicationDTO.projects.get(i);
 					if (currentProject.paths.size() > 0) {
-						this.mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
+						if (loadingDialog != null) {
+							loadingDialog.setCurrentProcess(i);
+						}
 						this.logger.info(new Date().toString() + " Control-AnalyseTask is Starting: Analyse project " + currentProject);
 						mainController.getActionLogController().addAction("Analysing project " + currentProject);
 						

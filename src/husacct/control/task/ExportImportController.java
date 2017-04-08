@@ -5,7 +5,6 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.SoftwareUnitDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.control.presentation.util.ExportImportDialog;
 import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
@@ -19,6 +18,8 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+
+import externalinterface.ViolationReportDTO;
 
 public class ExportImportController {
 

@@ -1,6 +1,5 @@
 package husacct.validate.task.imexporting.importing;
 
-import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.imexport.XmlConversionUtils;
 
 import java.text.ParseException;
@@ -12,6 +11,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+
+import externalinterface.ViolationImExportDTO;
 
 public class ImportViolations {
 	

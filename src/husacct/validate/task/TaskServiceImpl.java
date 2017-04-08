@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -33,6 +32,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+
+import externalinterface.ViolationReportDTO;
 
 public class TaskServiceImpl {
 

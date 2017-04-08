@@ -1,7 +1,7 @@
 package husacct.validate.task.imexporting.exporting;
 
-import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.imexport.XmlConversionUtils;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -10,6 +10,8 @@ import java.util.List;
 import org.jdom2.Comment;
 import org.jdom2.Document;
 import org.jdom2.Element;
+
+import externalinterface.ViolationImExportDTO;
 
 public class ExportNewViolations {
 	private final SimpleDateFormat dateFormat;

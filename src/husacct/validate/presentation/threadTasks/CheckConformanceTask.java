@@ -19,8 +19,9 @@ public class CheckConformanceTask implements Runnable {
 			Thread.sleep(1);
 			this.logger.info(new Date().toString() + " CheckConformanceTask is Starting: IValidateService.checkConformance()" );
 			ServiceProvider.getInstance().getValidateService().checkConformance();
-			ServiceProvider.getInstance().getControlService().setValidating(false);
 			this.logger.info(new Date().toString() + " CheckConformanceTask sets state Validating to false" );
+			Thread.sleep(10);
+			ServiceProvider.getInstance().getControlService().setValidating(false);
 		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());
 		}

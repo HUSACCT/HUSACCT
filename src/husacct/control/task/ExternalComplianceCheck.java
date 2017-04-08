@@ -1,15 +1,20 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.ViolationReportDTO;
+import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+
+import externalinterface.SaccCommandDTO;
+import externalinterface.ViolationReportDTO;
 
 public class ExternalComplianceCheck {
 	private ControlServiceImpl controlService;
@@ -21,23 +26,24 @@ public class ExternalComplianceCheck {
 
 	/**
 	 * Read service definition in class ExternalServiceProvider.
-	 * @param exportAllViolations TODO
-	 * @param exportNewViolations TODO
+	 * @param saccCommandDTO: Read Javadoc of class SaccCommandDTO.
 	 */
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(String husacctWorkspaceFile, String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(SaccCommandDTO saccCommandDTO) {
 		violationReport = new ViolationReportDTO();
 		try {
 			logger.info(String.format(" Start: Software Architecture Compliance Check"));
 
 			setControllers();
 			
-			loadWorkspace(husacctWorkspaceFile);
-	
+			loadWorkspace(saccCommandDTO.getHusacctWorkspaceFile());
+			
+			setSourceCodePaths(saccCommandDTO);
+			
 			analyseApplication();
 	
 			checkConformance();
 			
-			violationReport = getViolationReportDTO(importFilePreviousViolations, exportAllViolations, exportNewViolations);  
+			violationReport = getViolationReportDTO(saccCommandDTO.getImportFilePreviousViolations(), saccCommandDTO.getExportAllViolations(), saccCommandDTO.getExportNewViolations());  
 
 			logger.info(String.format(" Finished: Software Architecture Compliance Check"));
 		} catch (Exception e){
@@ -70,12 +76,21 @@ public class ExternalComplianceCheck {
 		}
 	}
 
+	private void setSourceCodePaths(SaccCommandDTO saccCommandDTO) {
+		if ((saccCommandDTO.getSourceCodePaths() != null) && (saccCommandDTO.getSourceCodePaths().size() >= 1)) {
+			ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
+			for (ProjectDTO project : applicationDTO.projects) {
+				project.paths = saccCommandDTO.getSourceCodePaths();
+			}
+			ServiceProvider.getInstance().getDefineService().createApplication(applicationDTO.name, applicationDTO.projects, applicationDTO.version);
+		}
+	}
 
 	private void analyseApplication() {
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
 		mainController.getApplicationController().analyseApplication();
-		//analyseApplication() starts a different Thread, and needs some time finish
+		//analyseApplication() starts a different Thread, and needs some time to finish
 		boolean isAnalysing = true;
 		while(isAnalysing){
 			try {

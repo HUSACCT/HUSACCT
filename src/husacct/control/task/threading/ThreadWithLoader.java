@@ -1,5 +1,6 @@
 package husacct.control.task.threading;
 
+import husacct.ServiceProvider;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.task.MainController;
 
@@ -12,15 +13,19 @@ public class ThreadWithLoader implements Runnable {
 	private Thread monitorThread;
 	
 	public ThreadWithLoader(MainController mainController, String progressInfoText, Runnable threadTask){
-		int taskCounter = ThreadWithLoader.taskcounter++;		
-		loadingDialog = new LoadingDialog(mainController, progressInfoText);
+		int taskCounter = ThreadWithLoader.taskcounter++;
+		if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+			loadingDialog = new LoadingDialog(mainController, progressInfoText);
+		} else {
+			loadingDialog = null;
+		}
 		taskThread = new Thread(threadTask);		
 		monitorThread = new MonitorThread(taskThread, loadingDialog);	
 		taskThread.setName(String.format("thread-%s", taskCounter));
 		monitorThread.setName(String.format("monitor-%s", taskCounter));
 	}
 	
-	public LoadingDialog getLoader() {
+	public LoadingDialog getLoadingDialog() {
 		return this.loadingDialog;
 	}
 	
@@ -32,6 +37,8 @@ public class ThreadWithLoader implements Runnable {
 	public void run() {
 		taskThread.start();
 		monitorThread.start();
-		loadingDialog.run();
+		if (loadingDialog != null) {
+			loadingDialog.run();
+		}
 	}
 }

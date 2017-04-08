@@ -1,6 +1,5 @@
 package husacct.validate.task.imexporting.exporting;
 
-import husacct.common.dto.ViolationImExportDTO;
 import husacct.common.enums.ExtensionTypes;
 import husacct.common.imexport.XmlConversionUtils;
 import husacct.validate.domain.validation.Violation;
@@ -17,6 +16,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+
+import externalinterface.ViolationImExportDTO;
 
 public class ExportAllViolations extends ReportWriter {
 

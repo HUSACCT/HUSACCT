@@ -1,7 +1,6 @@
 package husacct.control;
 
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.common.enums.States;
 import husacct.common.services.IObservableService;
 import husacct.control.task.IFileChangeListener;
@@ -13,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JDialog;
+
+import externalinterface.SaccCommandDTO;
+import externalinterface.ViolationReportDTO;
 
 public interface IControlService extends IObservableService{
 
@@ -41,7 +43,5 @@ public interface IControlService extends IObservableService{
 	
 	public String showMojoExportImportDialog(boolean isExport);
 	public boolean isGuiEnabled();
-	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(
-			String husacctWorkspaceFile, String importFilePreviousViolations,
-			boolean exportAllViolations, boolean exportNewViolations);
+	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(SaccCommandDTO saccCommandDTO);
 }

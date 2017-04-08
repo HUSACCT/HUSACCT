@@ -22,9 +22,11 @@ public class MonitorThread extends Thread implements Runnable {
 	public void run() {
 		try {
 			taskThread.join();
-			loadingDialog.dispose();
+			if (loadingDialog != null) {
+				loadingDialog.dispose();
+			}
 			logger.info(new Date().toString() + String.format(" Finished: thread [%s], removed loader ", taskThread.getName()));
-		} catch (InterruptedException exception){
+		} catch (Exception exception){
 			taskThread.interrupt();
 			logger.error(String.format("thread [%s] interupted", taskThread.getName()));
 		}

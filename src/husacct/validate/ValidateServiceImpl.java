@@ -5,7 +5,6 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
@@ -32,6 +31,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+
+import externalinterface.ViolationReportDTO;
 
 public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable, IConfigurable {
 

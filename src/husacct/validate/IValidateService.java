@@ -4,7 +4,6 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationReportDTO;
 import husacct.common.services.IObservableService;
 import husacct.validate.domain.validation.Violation;
 
@@ -16,6 +15,8 @@ import java.util.AbstractMap.SimpleEntry;
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Document;
+
+import externalinterface.ViolationReportDTO;
 
 public interface IValidateService extends IObservableService {
 

@@ -238,21 +238,30 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 	}
 
 	public void validateNow() {
-		if(!ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getStates().contains(States.VALIDATING)){
+		boolean isAnalysing = ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING);
+		boolean isValidating = ServiceProvider.getInstance().getControlService().getStates().contains(States.VALIDATING);
+		if(!isAnalysing && !isValidating){
 			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask()); // Previous to version 3.2: buttonSaveInHistory i.s.o. new JButton().
-			LoadingDialog currentLoader = validateThread.getLoader();
-			currentLoader.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosing(WindowEvent e) {
-					ServiceProvider.getInstance().getControlService().setValidating(false);
-					logger.info("Stopping Thread");
-				}
-			});
-
+			LoadingDialog loadingDialog = validateThread.getLoadingDialog();
+			if (loadingDialog != null) {
+				loadingDialog.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						ServiceProvider.getInstance().getControlService().setValidating(false);
+						logger.info("Stopping Thread");
+					}
+				});
+			}
 			validateThread.run();
 		}
 		else {
 			//TODO make an error frame that validating or analysing is already running
+			if (isAnalysing) {
+				logger.warn(" Validate not started since state is: " + States.ANALYSING.toString());
+			}
+			if (isValidating) {
+				logger.warn(" Validate not started since state is: " + States.VALIDATING.toString());
+			}
 		}
 	}
 

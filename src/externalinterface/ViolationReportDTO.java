@@ -1,4 +1,6 @@
-package husacct.common.dto;
+package externalinterface;
+
+import husacct.common.dto.AbstractDTO;
 
 import java.util.Calendar;
 
@@ -6,6 +8,7 @@ import org.jdom2.Document;
 
 // Used to report the results of a software architecture compliance check (SACC)
 public class ViolationReportDTO extends AbstractDTO {
+	private int nrOfAllCurrentDependencies; 		// Total number of dependencies during the current SACC.
 	private int nrOfAllCurrentViolations; 			// Total number of violations during the current SACC.
 	private int nrOfAllPreviousViolations; 			// Total number of violations during the previous SACC.
 	private int nrOfNewViolations; 					// Number of new violations during the current SACC.
@@ -25,6 +28,17 @@ public class ViolationReportDTO extends AbstractDTO {
 		newViolations = new ViolationImExportDTO[0];
 	}
 	
+	/**
+	 * @return int nrOfAllCurrentDependencies = Total number of dependencies during the current SACC.
+	 */
+	public int getNrOfAllCurrentDependencies() {
+		return nrOfAllCurrentDependencies;
+	}
+
+	public void setNrOfAllCurrentDependencies(int nrOfAllDependencies) {
+		this.nrOfAllCurrentDependencies = nrOfAllDependencies;
+	}
+
 	/**
 	 * @return int nrOfAllCurrentViolations = Total number of violations during the current SACC.
 	 */
