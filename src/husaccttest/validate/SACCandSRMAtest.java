@@ -12,6 +12,10 @@ import husacct.validate.task.imexporting.importing.ImportViolations;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.define.IDefineService;
+import husacct.externalinterface.ExternalServiceProvider;
+import husacct.externalinterface.SaccCommandDTO;
+import husacct.externalinterface.ViolationImExportDTO;
+import husacct.externalinterface.ViolationReportDTO;
 import husaccttest.TestResourceFinder;
 
 import java.net.URL;
@@ -25,11 +29,6 @@ import org.jdom2.Document;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import externalinterface.ExternalServiceProvider;
-import externalinterface.SaccCommandDTO;
-import externalinterface.ViolationImExportDTO;
-import externalinterface.ViolationReportDTO;
 
 // Tests the full SACC-cycle using the SRMA test and tests the externally provided SACC via ExternalServiceProvider.
 public class SACCandSRMAtest {

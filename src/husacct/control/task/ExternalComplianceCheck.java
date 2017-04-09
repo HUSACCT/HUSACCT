@@ -6,15 +6,14 @@ import husacct.common.dto.ProjectDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.externalinterface.SaccCommandDTO;
+import husacct.externalinterface.ViolationReportDTO;
 
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-
-import externalinterface.SaccCommandDTO;
-import externalinterface.ViolationReportDTO;
 
 public class ExternalComplianceCheck {
 	private ControlServiceImpl controlService;

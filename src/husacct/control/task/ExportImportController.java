@@ -9,6 +9,7 @@ import husacct.control.presentation.util.ExportImportDialog;
 import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
+import husacct.externalinterface.ViolationReportDTO;
 import husacct.validate.IValidateService;
 
 import java.io.File;
@@ -18,8 +19,6 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-
-import externalinterface.ViolationReportDTO;
 
 public class ExportImportController {
 

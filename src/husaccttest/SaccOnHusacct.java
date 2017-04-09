@@ -1,6 +1,10 @@
 package husaccttest;
 
 import static org.junit.Assert.assertTrue;
+import husacct.externalinterface.ExternalServiceProvider;
+import husacct.externalinterface.SaccCommandDTO;
+import husacct.externalinterface.ViolationImExportDTO;
+import husacct.externalinterface.ViolationReportDTO;
 import husaccttest.TestResourceFinder;
 
 import java.io.File;
@@ -10,6 +14,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -18,11 +23,6 @@ import org.jdom2.output.XMLOutputter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import externalinterface.ExternalServiceProvider;
-import externalinterface.SaccCommandDTO;
-import externalinterface.ViolationImExportDTO;
-import externalinterface.ViolationReportDTO;
 
 public class SaccOnHusacct {
 	// Refers to a files that contains the definition of the intended architecture (modules, rules, assigned software units, ...).
@@ -65,7 +65,7 @@ public class SaccOnHusacct {
 	}
 	
 	@Test
-	public void isSourceCodeAnalysedSuccessfully() {
+	public void T1_isSourceCodeAnalysedSuccessfully() {
 		boolean numberOfDependenciesNotZero = false;
 		assertTrue(violationReport != null);
 		if (violationReport != null) {
@@ -77,13 +77,14 @@ public class SaccOnHusacct {
 	}
 	
 	@Test
-	public void hasNumberOfViolationsIncreased() {
+	public void T2_hasNumberOfViolationsIncreased() {
 		boolean numberOfViolationsHasNotIncreased = true;
 		assertTrue(violationReport != null);
 		if (violationReport != null) {
-			logger.info(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations() 
+			System.out.println(" SACC results:");
+			System.out.println(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations() 
 					+ "  At: " + getFormattedDate(violationReport.getTimePreviousCheck()));
-			logger.info(" Current number of violations: " + violationReport.getNrOfAllCurrentViolations());
+			System.out.println(" Current number of violations: " + violationReport.getNrOfAllCurrentViolations());
 			if (violationReport.getNrOfAllCurrentViolations() > violationReport.getNrOfAllPreviousViolations()) {
 				numberOfViolationsHasNotIncreased = false;
 			}
@@ -93,21 +94,31 @@ public class SaccOnHusacct {
 			}
 			*/
 		}
-		assertTrue(numberOfViolationsHasNotIncreased);
-	}
-	
-	@Test
-	public void areNewArchitecturalViolationsDetected() {
+		// Report on new architecture violations 
 		if (violationReport != null) {
 			if (violationReport.getNrOfNewViolations() > 0) {
-				logger.info(" New architectural violations detected! Number of new violations = " + violationReport.getNrOfNewViolations());
-				for (ViolationImExportDTO newViolation : violationReport.getNewViolations()) {
-					logger.info(" Violation in class: " + newViolation.getFrom() + " Line: " + newViolation.getLine() + "; Message: " + newViolation.getMessage());
+				System.out.println(" New architectural violations detected! Number of new violations = " + violationReport.getNrOfNewViolations());
+				TreeSet<String> messageAndFromClassSet = new TreeSet<>();
+				int numberOfPrintLines = 0;
+				ViolationImExportDTO[] newViolations = violationReport.getNewViolations();
+				for (ViolationImExportDTO newViolation : newViolations) {
+					String key = newViolation.getMessage() + newViolation.getFrom();
+					if (!messageAndFromClassSet.contains(key)) {
+						messageAndFromClassSet.add(key);
+						if (numberOfPrintLines <= 25) {
+							System.out.println(" Violated rule: " + newViolation.getMessage() + "; Violating class: " + newViolation.getFrom());
+							numberOfPrintLines ++;
+						} else {
+							System.out.println(" More violations detected; study ViolationReportDTO.newViolations");
+							break;
+						}
+					}
 				}
 			} else {
-				logger.info(" No new architectural violations detected!");
+				System.out.println(" No new architectural violations detected!");
 			}
 		}
+		assertTrue(numberOfViolationsHasNotIncreased);
 	}
 	
 	@SuppressWarnings("unused")

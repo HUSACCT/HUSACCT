@@ -1,4 +1,4 @@
-package externalinterface;
+package husacct.externalinterface;
 
 import husacct.common.dto.AbstractDTO;
 

@@ -10,6 +10,7 @@ import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
 import husacct.control.task.configuration.ConfigPanel;
 import husacct.define.IDefineService;
+import husacct.externalinterface.ViolationReportDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Violation;
@@ -31,8 +32,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-
-import externalinterface.ViolationReportDTO;
 
 public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable, IConfigurable {
 

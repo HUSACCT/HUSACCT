@@ -5,6 +5,8 @@ import husacct.common.enums.States;
 import husacct.common.services.IObservableService;
 import husacct.control.task.IFileChangeListener;
 import husacct.control.task.threading.ThreadWithLoader;
+import husacct.externalinterface.SaccCommandDTO;
+import husacct.externalinterface.ViolationReportDTO;
 import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
@@ -12,9 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JDialog;
-
-import externalinterface.SaccCommandDTO;
-import externalinterface.ViolationReportDTO;
 
 public interface IControlService extends IObservableService{
 

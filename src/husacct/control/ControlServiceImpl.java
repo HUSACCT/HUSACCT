@@ -23,6 +23,8 @@ import husacct.control.task.WorkspaceController;
 import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.threading.ThreadWithLoader;
+import husacct.externalinterface.SaccCommandDTO;
+import husacct.externalinterface.ViolationReportDTO;
 import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
@@ -36,9 +38,6 @@ import javax.swing.JDialog;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
-
-import externalinterface.SaccCommandDTO;
-import externalinterface.ViolationReportDTO;
 
 
 public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {

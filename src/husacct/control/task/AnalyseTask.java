@@ -76,7 +76,7 @@ public class AnalyseTask implements Runnable {
 				logger.info(new Date().toString() + " No project specified, or no project path specified");
 			}
 		} catch (InterruptedException exception) {
-			this.logger.debug("RESETTING ANALYSE SERVICE");
+			this.logger.debug(" Exception: " + exception.getMessage());
 			ServiceProvider.getInstance().resetAnalyseService();
 			this.mainController.getStateController().setAnalysing(false);
 		}

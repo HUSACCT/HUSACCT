@@ -1,10 +1,11 @@
-package externalinterface;
+package husacct.externalinterface;
 
 import husacct.common.dto.AbstractDTO;
 
 
 
 public class ViolationImExportDTO extends AbstractDTO {
+	// Attributes need to be public to allow auto generation of DTO instances.
 	public String from = "";			// Path of the software unit with the violation
 	public String to = "";				// Path of the software unit that is depended-upon
 	public int line = 0;				// Line in the source of the fromClass that contains the violating code construct
@@ -132,8 +133,9 @@ public class ViolationImExportDTO extends AbstractDTO {
         representation += "\n logicalModuleFrom: " + fromMod;
         representation += "\n logicalModuleTo: " + toMod;
         representation += "\n ruleTypeKey: " + ruleType;
-        representation += "linenumber: " + line + ", dependencySubType: " + depSubType;
+        representation += ", linenumber: " + line + ", dependencySubType: " + depSubType;
         representation += ", indirect: " + indirect;
+        representation += "\n message: " + message;
         representation += "\n";
         return representation;
     }

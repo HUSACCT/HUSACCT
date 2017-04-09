@@ -1,6 +1,8 @@
 package husacct.validate.task.imexporting;
 
 import husacct.ServiceProvider;
+import husacct.externalinterface.ViolationImExportDTO;
+import husacct.externalinterface.ViolationReportDTO;
 import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
@@ -18,9 +20,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
-
-import externalinterface.ViolationImExportDTO;
-import externalinterface.ViolationReportDTO;
 
 public class ViolationReportDtoFactory {
 	private TaskServiceImpl task;
