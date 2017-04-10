@@ -18,3 +18,5 @@ nbproject/
 /config.properties
 /log/
 *.iml
+
+target/
