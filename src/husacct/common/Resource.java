@@ -1,9 +1,10 @@
 package husacct.common;
 
+import org.apache.log4j.Logger;
+
 import java.io.InputStream;
 import java.net.URL;
 
-import common.Logger;
 
 public class Resource {
 	private static Logger logger = Logger.getLogger(Resource.class);

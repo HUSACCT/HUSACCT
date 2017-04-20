@@ -24,6 +24,14 @@ public class ExternalServiceProvider {
 		}
 		return ExternalServiceProvider._instance;
 	}
+
+	public static ExternalServiceProvider getInstance(Properties log4jProperties) {
+		setLog4jConfiguration(log4jProperties);
+		if (ExternalServiceProvider._instance == null) {
+			new ExternalServiceProvider();
+		}
+		return ExternalServiceProvider._instance;
+	}
 	
 	/**
 	 * Provides the results of a complete Software Architecture Compliance Check (SACC), performed in batch mode.
@@ -50,8 +58,13 @@ public class ExternalServiceProvider {
 		return violationReport;
 	}
 
+	private static void setLog4jConfiguration(Properties log4jProperties) {
+		PropertyConfigurator.configure(log4jProperties);
+	}
+
 	private static void setLog4jConfiguration() {
 		Properties props = new Properties();
+		System.out.println(props);
 		try {
 			props.load(Class.class.getResourceAsStream("/husacct/common/resources/log4j.properties"));
 		} catch (IOException e) {
