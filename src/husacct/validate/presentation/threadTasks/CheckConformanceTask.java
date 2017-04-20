@@ -2,14 +2,19 @@ package husacct.validate.presentation.threadTasks;
 
 import java.util.Date;
 
+import javax.swing.SwingUtilities;
+
 import husacct.ServiceProvider;
+import husacct.validate.presentation.BrowseViolations;
+
 import org.apache.log4j.Logger;
 
 public class CheckConformanceTask implements Runnable {
-
+	private BrowseViolations gui;
 	private Logger logger = Logger.getLogger(CheckConformanceTask.class);
 
-	public CheckConformanceTask() {
+	public CheckConformanceTask(BrowseViolations gui) {
+		this.gui = gui;
 	}
 
 	@Override
@@ -25,5 +30,12 @@ public class CheckConformanceTask implements Runnable {
 		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());
 		}
+		// Update the GUI afterwards
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				gui.reloadViolationPanelsAfterChange();
+			}
+		});
 	}
 }

@@ -124,7 +124,6 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		domain.checkConformance(rulesToBeChecked);
 		this.validationExecuted = true;
 		notifyServiceListeners();
-		gui.violationChanged();
 	}
 
 	/**

@@ -21,9 +21,13 @@ import husacct.validate.presentation.threadTasks.CheckConformanceTask;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
@@ -164,6 +168,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		fillViolationsTable(shownViolationsInAllViolationsPanel);
 		loadViolationDetailsPanel();
 		updateFilterValues();
+		enableAllSubComponents();
 	}
 
 	public void reloadViolations() {
@@ -241,7 +246,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 		boolean isAnalysing = ServiceProvider.getInstance().getControlService().getStates().contains(States.ANALYSING);
 		boolean isValidating = ServiceProvider.getInstance().getControlService().getStates().contains(States.VALIDATING);
 		if(!isAnalysing && !isValidating){
-			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask()); // Previous to version 3.2: buttonSaveInHistory i.s.o. new JButton().
+			ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(this)); // Previous to version 3.2: buttonSaveInHistory i.s.o. new JButton().
 			LoadingDialog loadingDialog = validateThread.getLoadingDialog();
 			if (loadingDialog != null) {
 				loadingDialog.addWindowListener(new WindowAdapter() {
@@ -252,6 +257,7 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 					}
 				});
 			}
+			disableAllSubComponents();
 			validateThread.run();
 		}
 		else {
@@ -264,5 +270,32 @@ public class BrowseViolations extends HelpableJInternalFrame implements ILocaleC
 			}
 		}
 	}
+	
+	public void enableAllSubComponents() {
+		for(Component component : getComponents(this)) {
+		    component.setEnabled(true);
+		}		
+	}
 
+	private void disableAllSubComponents() {
+		for(Component component : getComponents(this)) {
+		    component.setEnabled(false);
+		}		
+	}
+
+    private Component[] getComponents(Component container) {
+        ArrayList<Component> list = null;
+        try {
+            list = new ArrayList<Component>(Arrays.asList(
+                  ((Container) container).getComponents()));
+            for (int index = 0; index < list.size(); index++) {
+                for (Component currentComponent : getComponents(list.get(index))) {
+                    list.add(currentComponent);
+                }
+            }
+        } catch (ClassCastException e) {
+            list = new ArrayList<Component>();
+        }
+        return list.toArray(new Component[list.size()]);
+    }
 }

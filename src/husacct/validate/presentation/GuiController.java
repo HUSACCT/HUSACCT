@@ -48,12 +48,6 @@ public class GuiController {
 		return configurationUI;
 	}
 
-	public void violationChanged() {
-		if (browseViolations != null) {
-			browseViolations.reloadViolationPanelsAfterChange();
-		}
-	}
-
 	private void initializeAllScreens() {
 		initializeBrowseViolations();
 		initializeConfigurationUI();
