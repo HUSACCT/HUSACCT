@@ -21,7 +21,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 	protected AnalyseTaskControl analyseTaskControl;
 	private JPanel overviewPanel;
 	private ReconstructJPanel reconstructJPanel;
-	private boolean boundsSetInitially = false;
+	private int boundsSetInitially = 0;
 
     public AnalyseInternalSARFrame(AnalyseTaskControl atc) {
     	analyseTaskControl = atc;
@@ -55,7 +55,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
     
     @Override
     public void setBounds(int x, int y, int width, int height) {
-    	if (!boundsSetInitially) {
+    	if (boundsSetInitially < 2) {
 	    	Dimension sarSize = getMinimumSize();
 	    	Container c = getParent();
 	    	if (c != null) {
@@ -65,7 +65,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 	    	} else {
 	        	super.setBounds(0, 0, sarSize.width, sarSize.height);
 	    	}
-	    	boundsSetInitially = true;
+	    	boundsSetInitially ++;
     	} else {
     		super.setBounds(x, y, width, height);
     	}
