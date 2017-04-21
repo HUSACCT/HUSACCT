@@ -20,7 +20,7 @@ public class LayerCheckerHelper {
     }
 
     public boolean checkTypeIsLayer(ModuleStrategy module) {
-	if (module.getType() == "Layer") {
+	if (module.getType().equals("Layer")) {
 	    return true;
 	} else {
 	    setErrorMessage(ServiceProvider.getInstance().getLocaleService()
@@ -38,9 +38,9 @@ public class LayerCheckerHelper {
 	}
     }
     
-    public ArrayList<ModuleStrategy> getBackCallLayers(Long moduleFromId) {
+    public ArrayList<ModuleStrategy> getBackCallLayers(long moduleFromId) {
     	ArrayList<ModuleStrategy> backCallLayers = new ArrayList<ModuleStrategy>();
-    	Long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
+    	long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
     	if (firstBackCallLayerId != -1L) {
     	    for (Layer layer : layers) {
     		backCallLayers.add(layer);
@@ -65,13 +65,13 @@ public class LayerCheckerHelper {
 	return errorMessage;
     }
 
-    public Long getFirstSkipCallLayer(Long moduleFromId) {
-	Long nextLayerId = getNextLayerId(moduleFromId);
-	Long layerSkipperToId = getNextLayerId(nextLayerId);
+    public long getFirstSkipCallLayer(long moduleFromId) {
+	long nextLayerId = getNextLayerId(moduleFromId);
+	long layerSkipperToId = getNextLayerId(nextLayerId);
 	return layerSkipperToId;
     }
 
-    public ModuleStrategy getLayerById(Long layerId) {
+    public ModuleStrategy getLayerById(long layerId) {
 	Layer returnLayer = new Layer();
 	for (Layer layer : layers) {
 	    if (layer.getId() == layerId) {
@@ -81,7 +81,7 @@ public class LayerCheckerHelper {
 	return returnLayer;
     }
 
-    public Long getNextLayerId(Long currentLayerId) {
+    public long getNextLayerId(long currentLayerId) {
 	int index = 0;
 	while (index != layers.size()) {
 	    Layer layer = layers.get(index);
@@ -93,7 +93,7 @@ public class LayerCheckerHelper {
 	return -1L;
     }
 
-    public Long getPreviousLayerId(Long currentLayerId) {
+    public long getPreviousLayerId(long currentLayerId) {
 	int index = 0;
 	while (index != layers.size()) {
 	    Layer layer = layers.get(index);
@@ -105,9 +105,9 @@ public class LayerCheckerHelper {
 	return -1L;
     }
 
-    public ArrayList<ModuleStrategy> getSkipCallLayers(Long moduleFromId) {
+    public ArrayList<ModuleStrategy> getSkipCallLayers(long moduleFromId) {
 	ArrayList<ModuleStrategy> skipCallLayers = new ArrayList<ModuleStrategy>();
-	Long firstSkipCallLayerId = getFirstSkipCallLayer(moduleFromId);
+	long firstSkipCallLayerId = getFirstSkipCallLayer(moduleFromId);
 	boolean getLayers = false;
 	for (Layer layer : layers) {
 	    if (layer.getId() == firstSkipCallLayerId) {

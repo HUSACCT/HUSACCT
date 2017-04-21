@@ -58,6 +58,16 @@ public class AppliedRuleFactory {
 		FacadeConventionRule.class
 	};
 	
+	public static boolean isRuleTypeExisting(String ruleTypeToBeChecked) {
+		boolean ruleTypeExists = false;
+		for (String ruletype : ruleTypes) {
+			if (ruleTypeToBeChecked.equals(ruletype)) {
+				ruleTypeExists = true;
+			}
+		}
+		return ruleTypeExists;
+	}
+
 	public CategoryDTO[] getCategories(){
 		return ServiceProvider.getInstance().getValidateService().getCategories();
 	}
@@ -65,7 +75,7 @@ public class AppliedRuleFactory {
 	public String[] getRuletypeOptions(){
 		return ruleTypes;
 	}
-
+	
 	public AppliedRuleStrategy createRule(String choice){
 		for(int i = 0; i < ruleTypes.length; i++){
 			if(ruleTypes[i].equals(choice)) try{

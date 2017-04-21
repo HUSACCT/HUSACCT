@@ -55,6 +55,8 @@ public class ModuleFactory {
 				ModuleStrategy dummyModule = (ModuleStrategy)moduleTypeClasses[i].newInstance();
 				dummyModule.setType(choice);
 				dummyModule.setId(-1);
+				dummyModule.setName("");
+				dummyModule.setDescription("");
 				return dummyModule;
 			}catch (InstantiationException ex) {
 				logger.error("Instantiation Error in ModuleFactory: " + ex.toString());

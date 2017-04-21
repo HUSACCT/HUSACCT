@@ -45,7 +45,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 			if (newModule != null) {
 				newModuleDTO = domainParser.parseModule(newModule);
 				moduleIdOfModuleToSelectInUI = newModule.getparent().getId();
-				defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
+				//defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 			} 
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -64,7 +64,7 @@ public class DefineSarServiceImpl implements IDefineSarService {
 				if (newSelectedModuleId > 0) {
 					newSelectedModuleId = editedModule.getparent().getId();
 					moduleIdOfModuleToSelectInUI = newSelectedModuleId;
-					defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
+					//defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 				}
 			} 
         } catch (Exception e) {
@@ -76,11 +76,11 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	@Override
 	public void removeModule(String logicalPath) {
 		try {
-			ModuleStrategy moduleToBeRemoved = moduleService.getModuleByLogicalPath_NoException(logicalPath);
+			ModuleStrategy moduleToBeRemoved = moduleService.getModuleByLogicalPath(logicalPath);
 			if ((moduleToBeRemoved != null) && (moduleToBeRemoved.getId() >= 0)) {
 				moduleIdOfModuleToSelectInUI = moduleToBeRemoved.getparent().getId();
 				moduleService.removeModuleById(moduleToBeRemoved.getId());
-				defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
+				//defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 			}
         } catch (Exception e) {
 	        this.logger.warn(" Exception: "  + e );
@@ -156,8 +156,20 @@ public class DefineSarServiceImpl implements IDefineSarService {
 	}
 
 	@Override
-	public void updateModulePanel() {
-		defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
+	public void updateModulePanel(String selectedModuleLogicalPath) {
+		ModuleStrategy module;
+		try {
+			if ((selectedModuleLogicalPath != null) ) { // && !selectedModuleLogicalPath.equals("")
+				module = moduleService.getModuleByLogicalPath(selectedModuleLogicalPath);
+				if (module.getId() >= 0) {
+					defineService.getDefinitionController().setSelectedModuleId(module.getId());
+				}
+			}
+			defineService.getDefinitionController().getDefineInternalFrame().addNewDefinitionPanel();
+        } catch (Exception e) {
+	        this.logger.info(" Exception: "  + e );
+        }
+
 		if (moduleIdOfModuleToSelectInUI > 0) {
 			defineService.getDefinitionController().setSelectedModuleId(moduleIdOfModuleToSelectInUI);
 		}

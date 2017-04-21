@@ -21,6 +21,10 @@ public class ModuleDomainService {
 
 	private ModuleFactory factory = new ModuleFactory();
 	private final Logger logger = Logger.getLogger(ModuleDomainService.class);
+	
+	public ModuleDomainService() {
+		// Many instances are created by clients.
+	}
 
 	/**  
 	 * Adds module based on the arguments
@@ -74,7 +78,7 @@ public class ModuleDomainService {
 		}
 
 		// 3) Add module to parent
-		long parentModuleId = SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath).getId();
+		long parentModuleId = getModuleByLogicalPath(parentLogicalPath).getId();
 		message = addModuleToParent(parentModuleId, newModule);
 		if (message.equals("")) {
 			logger.info(" Module added with name: " + newModule.getName() + ", Type: " + newModule.getType() + ", Assigned units: " + newModule.countSoftwareUnits());
@@ -85,11 +89,16 @@ public class ModuleDomainService {
 		}
 	}
 	
+	/**  
+	 * Edits module based on the arguments
+	 * Note: This method is called in the course of SAR, so no error messages will be displayed in the GUI if an error occurs.
+	 * @return Null, if the he module could not be found and edited with success, else a ModuleStrategy is returned.
+	 */
 	public ModuleStrategy editModule(String logicalPath, String newType, String newName, int newHierarchicalLevel, ArrayList<SoftwareUnitDTO> newSoftwareUnits) {
 		ModuleStrategy moduleToEdit = null;
 		try{
 			moduleToEdit = getModuleByLogicalPath(logicalPath);
-			if (moduleToEdit != null) {
+			if ((moduleToEdit != null) && (moduleToEdit.getId() >= 0)) {
 				if (newType != null)
 					updateModuleType(moduleToEdit, newType);
 				if (newName != null)
@@ -128,9 +137,6 @@ public class ModuleDomainService {
 		} else {
 			message = SoftwareArchitecture.getInstance().addModuleToParent(parentModuleId, module);
 		}
-		if (message.equals("")) {
-			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		}
 		return message;
 	}
 
@@ -143,20 +149,48 @@ public class ModuleDomainService {
 		return SoftwareArchitecture.getInstance().getModuleById(moduleId);
 	}
 
-	// Returns the ModuleStrategy of the found module, or throws an exception if no module is found.
+	/** 
+	 * Finds the ModuleStrategy with the given logicalPath.
+	 * @param logicalPath
+	 * @return ModuleStrategy of the found module, or a dummy-module with moduleId = -1 and type = "blank".
+	 */
 	public ModuleStrategy getModuleByLogicalPath(String logicalPath) {
-		return SoftwareArchitecture.getInstance().getModuleByLogicalPath(logicalPath);
-	}
+		SoftwareArchitecture softwareArchitecture = SoftwareArchitecture.getInstance();
+		ModuleStrategy foundModule = new ModuleFactory().createDummy("blank");
+		ModuleStrategy currentModule = null;
+		if ((logicalPath == null) || (logicalPath.equals(""))){
+		} else {
+			if (logicalPath.equals("**")) {
+				currentModule = softwareArchitecture.getRootModule();
+			} else {
+				String[] moduleNames = logicalPath.split("\\.");
+				int i = 0;
+				for (ModuleStrategy module : softwareArchitecture.getRootModule().getSubModules()) {
+					if (module.getName().equals(moduleNames[i])) {
+						currentModule = module;
+						if (moduleNames.length > 1) {
+							for (int j = 1; j < moduleNames.length; j++) {
+								for (ModuleStrategy subModule : currentModule.getSubModules()) {
+									if (subModule.getName().equals(moduleNames[j])) {
+										currentModule = subModule;
+									}
+								}
+							}
+						}
+					}
+				}
+				String moduleName_notUnique =  moduleNames[moduleNames.length - 1];
+				if (currentModule != null && currentModule.getName().equals(moduleName_notUnique)) {
+					foundModule = currentModule;
+				}
+			}
+		}
+		return foundModule;
 
-	// Returns the ModuleStrategy of the found module, or null if no module is found.
-	public ModuleStrategy getModuleByLogicalPath_NoException(String logicalPath) {
-		ModuleStrategy foundModule;
-		try {
-			foundModule = SoftwareArchitecture.getInstance().getModuleByLogicalPath(logicalPath);
-	    } catch (Exception e) {
-	    	foundModule = null;
-	    }
-	    return foundModule;
+		/*		ModuleStrategy module;
+		module = SoftwareArchitecture.getInstance().getModuleByLogicalPath(logicalPath);
+		return module;
+*/
 	}
 
 	public ModuleStrategy getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {

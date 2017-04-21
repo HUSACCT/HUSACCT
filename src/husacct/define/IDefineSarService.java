@@ -47,6 +47,6 @@ public interface IDefineSarService {
 	 * Updates the GUI by refreshing the module tree within DefinitionInternalFrame. 
 	 * Note: Call only after all reconstruction work is done. 
 	 */
-	public void updateModulePanel();
+	public void updateModulePanel(String selectedModuleLogicalPath);
 
 }

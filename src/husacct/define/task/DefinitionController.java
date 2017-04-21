@@ -89,12 +89,11 @@ import org.apache.log4j.Logger;
 		}
 
 		/**
-		 * This function will return a hash map with the details of the requested
-		 * module.
+		 * This function will return a HashMap with the details of the requested
+		 * module, or an empty HashMap if the module is not found.
 		 */
 		public HashMap<String, Object> getModuleDetails(long moduleId) {
 			HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
-
 			if (moduleId != -1) {
 				try {
 					ModuleStrategy module = moduleService.getModuleById(moduleId);
@@ -351,9 +350,10 @@ import org.apache.log4j.Logger;
 		}
 
 		public void setSelectedModuleId(long moduleId) {
-			selectedModuleId = moduleId;
-			//logger.info(" Selected module id: " + selectedModuleId);
-			notifyObservers(moduleId);
+			if (moduleId != selectedModuleId) {
+				selectedModuleId = moduleId;
+				notifyObservers(moduleId);
+			}
 		}
 
 		@Override
@@ -392,6 +392,7 @@ import org.apache.log4j.Logger;
 			long id = DefinitionController.getInstance().getSelectedModuleId();
 			SoftwareUnitController softwareUnitController = new SoftwareUnitController(id);
 			softwareUnitController.save(units);
+			notifyObservers();
 			return true;
 		}
 

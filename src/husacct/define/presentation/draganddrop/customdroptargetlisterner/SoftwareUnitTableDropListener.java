@@ -90,6 +90,7 @@ public class SoftwareUnitTableDropListener implements DropTargetListener {
 			long selectedModuleID =DefinitionController.getInstance().getSelectedModuleId();
 		    SoftwareUnitController controller = new SoftwareUnitController(selectedModuleID);
 			controller.save(tobesaved);
+			DefinitionController.getInstance().notifyObservers();
 		} catch (UnsupportedFlavorException e) {
 			
 			e.printStackTrace();

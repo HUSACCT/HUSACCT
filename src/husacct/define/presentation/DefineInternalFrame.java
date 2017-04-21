@@ -66,8 +66,8 @@ public class DefineInternalFrame extends HelpableJInternalFrame implements
 
 	public void addNewDefinitionPanel() {
 		DefinitionController.getInstance().clearObserversWithinDefine();
-		definitionPanel = new DefinitionJPanel();
 		this.overviewPanel.removeAll();
+		definitionPanel = new DefinitionJPanel();
 		this.overviewPanel.add(definitionPanel);
 		this.revalidate();
 	    DefinitionController.getInstance().notifyObservers();

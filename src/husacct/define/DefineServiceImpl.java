@@ -95,19 +95,20 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public ModuleDTO[] getModule_TheChildrenOfTheModule(String logicalPath) {
-		ModuleDTO[] childModuleDTOs;
+		ModuleDTO[] childModuleDTOs = new ModuleDTO[0];
 		if (logicalPath.equals("**")) {
 			childModuleDTOs = getModule_AllRootModules();
 		} else {
 			ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
-			ModuleDTO moduleDTO = domainParser.parseModule(module);
-			childModuleDTOs = moduleDTO.subModules;
+			if (module.getId() >= 0) {
+				ModuleDTO moduleDTO = domainParser.parseModule(module);
+				childModuleDTOs = moduleDTO.subModules;
+			}
 		}
 		// Remove nested children
 		for (ModuleDTO modDTO : childModuleDTOs) {
 			modDTO.subModules = new ModuleDTO[] {};
 		}
-
 		return childModuleDTOs;
 	}
 
@@ -182,13 +183,16 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private TreeMap<String, SoftwareUnitDefinition> getAllAssignedSoftwareUnitsOfModule(String logicalPath){
 		TreeMap<String, SoftwareUnitDefinition> allAssignedSoftwareUnits = new TreeMap<String, SoftwareUnitDefinition>();
 		try {
-			ModuleStrategy[] modules = null;
+			ModuleStrategy[] modules = new ModuleStrategy[0];
 			// 1 Get the module(s)
 			if (logicalPath.equals("**")) {
 				modules = moduleService.getRootModules();
 			} else {
-				modules = new ModuleStrategy[1];
-				modules[0] =(moduleService.getModuleByLogicalPath(logicalPath));
+				ModuleStrategy foundModule = moduleService.getModuleByLogicalPath(logicalPath);
+				if (foundModule.getId() >= 0) {
+					modules = new ModuleStrategy[1];
+					modules[0] = foundModule;
+				}
 			}
 			// 2 Get the assigned SoftwareUnits of the module(s) and all its child modules 
 			for (ModuleStrategy module : modules){
@@ -208,7 +212,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	public int getHierarchicalLevelOfLayer(String logicalPath){
 		int hierarchicalLevel = 0;
 		ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
-		if(module != null){
+		if((module != null) && (module.getId() >= 0)){
 			if(module.getType().equals("Layer")){
 				Layer layer = (Layer) module;
 				hierarchicalLevel = layer.getHierarchicalLevel();
@@ -277,21 +281,20 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	@Override
 	public String getModule_TheParentOfTheModule(String logicalPath) {
 		String parentLogicalPath = "";
-		try {
-			if (logicalPath.contains(".")) {
-				String[] moduleNames = logicalPath.split("\\.");
-				parentLogicalPath += moduleNames[0];
-				for (int i = 1; i < moduleNames.length - 1; i++) {
-					parentLogicalPath += "." + moduleNames[i];
-				}
-				// Check if exists, an exception will automaticly be thrown
-				SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath);
-			} else {
-				parentLogicalPath = "**";
+		if (logicalPath.contains(".")) {
+			String derivedParentPath = "";
+			String[] moduleNames = logicalPath.split("\\.");
+			derivedParentPath += moduleNames[0];
+			for (int i = 1; i < moduleNames.length - 1; i++) {
+				derivedParentPath += "." + moduleNames[i];
 			}
-        } catch (Exception e) {
-	        this.logger.warn(" Exception: "  + e );
-        }
+			ModuleStrategy parentModule = moduleService.getModuleByLogicalPath(derivedParentPath);
+			if ((parentModule != null) && (parentModule.getId() >= 0)) {
+				parentLogicalPath = derivedParentPath;
+			}
+		} else {
+			parentLogicalPath = "**";
+		}
 		return parentLogicalPath;
 	}
 

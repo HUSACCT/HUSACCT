@@ -45,16 +45,31 @@ public class AppliedRuleDomainService {
 
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies, String regex, ModuleStrategy moduleStrategyFrom, 
 			ModuleStrategy moduleStrategyTo, boolean isEnabled, boolean isException, AppliedRuleStrategy parentRule) {
-
+		// Check references
+		boolean ruleTypeKeyExists = AppliedRuleFactory.isRuleTypeExisting(ruleTypeKey);
+		boolean moduleFromExists = false;
+		boolean moduleToExists = false;
+		if (moduleStrategyFrom.getId() > 0) {
+			moduleFromExists = true;
+		}
+		if (moduleStrategyTo.getId() > 0) {
+			moduleToExists = true;
+		}
+		// Add rule if references are ok
 		AppliedRuleStrategy rule = ruleFactory.createRule(ruleTypeKey);
 		rule.setAppliedRule(description, dependencies, regex, moduleStrategyFrom, moduleStrategyTo, isEnabled, isException, parentRule); 
-		if (isDuplicate(rule)) {
-			logger.warn(String.format(" Rule already added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
+		if (ruleTypeKeyExists && moduleFromExists && moduleToExists && !isDuplicate(rule)) {
+			softwareArchitecture.addAppliedRule(rule);
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+			return rule.getId();
+		} else {
+			if (isDuplicate(rule)) {
+				logger.warn(String.format(" Rule not added (duplicate): " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
+			} else {
+				logger.warn(String.format(" Rule not added: " + ruleTypeKey + ", " + moduleStrategyFrom.getName() + ", " + moduleStrategyTo.getName()));
+			}
 			return -1;
-		} 		
-		softwareArchitecture.addAppliedRule(rule);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		return rule.getId();
+		}
 	}
 
 	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
@@ -72,13 +87,13 @@ public class AppliedRuleDomainService {
 		ModuleDomainService moduleService = new ModuleDomainService();
 		if (moduleFromLogicalPath != null && !moduleFromLogicalPath.equals("")) {
 			ModuleStrategy moduleFrom = moduleService.getModuleByLogicalPath(moduleFromLogicalPath);
-			if (moduleFrom != null) {
+			if ((moduleFrom != null) && (moduleFrom.getId() >= 0)) {
 				fromId = moduleFrom.getId();
 			}
 		}
 		if (moduleTologicalPath != null && !moduleTologicalPath.equals("")) {
 			ModuleStrategy moduleTo = moduleService.getModuleByLogicalPath(moduleTologicalPath);
-			if (moduleTo != null) {
+			if ((moduleTo != null) && (moduleTo.getId() >= 0)) {
 				toId = moduleTo.getId();
 			}
 		}
@@ -288,7 +303,7 @@ public class AppliedRuleDomainService {
 	            boolean exceptionModuleToIsChildOfParentModuleTo = false;
 	        	String pathToParent = SoftwareArchitecture.getInstance().getModulesLogicalPath(parentModule.getId());
 	        	String pathToException = SoftwareArchitecture.getInstance().getModulesLogicalPath(exceptionModule.getId());
-	            if (pathToParent.equals(pathToException) || (pathToParent == "**")) {
+	            if (pathToParent.equals(pathToException) || (pathToParent.equals("**"))) {
 	        		exceptionModuleToIsChildOfParentModuleTo = true;
 	            } else {
 	            	String currentParent = pathToException;

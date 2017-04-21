@@ -56,7 +56,18 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 
 	public ModuleJPanel() {
 		super();
+		initGui();
+	}
 
+	private void initGui() {
+		DefinitionController.getInstance().addObserver(this);
+		BorderLayout modulePanelLayout = new BorderLayout();
+		setLayout(modulePanelLayout);
+		setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		this.add(createInnerModulePanel(), BorderLayout.CENTER);
+		updateModuleTree();
+		ServiceProvider.getInstance().getControlService().addServiceListener(this);
+		createPopupMenu();
 	}
 
 	@Override
@@ -196,17 +207,6 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 		return moduleId;
 	}
 
-	public void initGui() {
-		DefinitionController.getInstance().addObserver(this);
-		BorderLayout modulePanelLayout = new BorderLayout();
-		setLayout(modulePanelLayout);
-		setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		this.add(createInnerModulePanel(), BorderLayout.CENTER);
-		updateModuleTree();
-		ServiceProvider.getInstance().getControlService().addServiceListener(this);
-		createPopupMenu();
-	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -301,7 +301,7 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		//updateModuleTree(); Would
+		//updateModuleTree();
 	}
 
 	public void updateModuleTree() {
@@ -327,8 +327,8 @@ public class ModuleJPanel extends HelpableJPanel implements ActionListener,
 				createPopup(event);
 			}
 		});
-
-		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
+		long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
+		moduleTree.setSelectedRow(selectedModuleId);
 		moduleTree.expandPath(moduleTree.getSelectionPath());
 	}
 

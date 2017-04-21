@@ -164,42 +164,6 @@ public class SoftwareArchitecture {
 		return currentModule;
 	}
 
-	/** 
-	 * Finds the ModuleStrategy with the given logicalPath.
-	 * @param logicalPath
-	 * @return ModuleStrategy of the found module, or it throws a RuntimeException if no module is found.
-	 */
-	public ModuleStrategy getModuleByLogicalPath(String logicalPath) {
-		ModuleStrategy currentModule = null;
-		if ((logicalPath == null) || (logicalPath.equals(""))){
-			return currentModule;
-		}
-		if (logicalPath.equals("**")) {
-			currentModule = rootModule;
-		} else {
-			String[] moduleNames = logicalPath.split("\\.");
-			int i = 0;
-			for (ModuleStrategy module : rootModule.getSubModules()) {
-				if (module.getName().equals(moduleNames[i])) {
-					currentModule = module;
-					if (moduleNames.length > 1) {
-						for (int j = 1; j < moduleNames.length; j++) {
-							for (ModuleStrategy subModule : currentModule.getSubModules()) {
-								if (subModule.getName().equals(moduleNames[j])) {
-									currentModule = subModule;
-								}
-							}
-						}
-					}
-				}
-			}
-			if (currentModule == null || !currentModule.getName().equals(moduleNames[moduleNames.length - 1])) {
-				throw new RuntimeException(" Module not found; logical path: " + logicalPath);
-			}
-		}
-		return currentModule;
-	}
-
 	// Returns null, if no SoftwareUnit with softwareUnitName is mapped to a ModuleStrategy	
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
 		ModuleStrategy moduleMappedToSU = null;
@@ -210,9 +174,6 @@ public class SoftwareArchitecture {
 				break;
 			}
 		}
-//		if (moduleMappedToSU == null) {
-//			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));
-//		}
 		return moduleMappedToSU;
 	}
 

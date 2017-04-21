@@ -109,7 +109,6 @@ public class SoftwareUnitDefinitionDomainService {
 
 	public void changeSoftwareUnit(long from, long to, ArrayList<String> names) {
 		SoftwareArchitecture.getInstance().changeSoftwareUnit(from,to,names);
-		DefinitionController.getInstance().notifyObservers();
 	}
 	
 }

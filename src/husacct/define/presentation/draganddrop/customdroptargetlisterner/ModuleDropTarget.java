@@ -5,6 +5,7 @@ import husacct.define.presentation.draganddrop.customtransferhandlers.ModuleTras
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.DragAndDropHelper;
+import husacct.define.task.DefinitionController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -112,7 +113,7 @@ public class ModuleDropTarget implements DropTargetListener {
 			SoftwareUnitController controller = new SoftwareUnitController(
 					getSelectedNode(arg).getModuleId());
 			controller.save(tobesaved);
-
+			DefinitionController.getInstance().notifyObservers();
 		} catch (UnsupportedFlavorException e) {
 
 			e.printStackTrace();

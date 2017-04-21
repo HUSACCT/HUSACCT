@@ -11,10 +11,10 @@ import javax.swing.JSplitPane;
 public class DefinitionJPanel extends HelpableJPanel {
 
 	private static final long serialVersionUID = 7442552399461704491L;
-	public AppliedRulesJPanel appliedRulesPanel;
-	private JPanel mappingPanel;
-	public EditModuleJPanel moduleEditPanel;
 	public ModuleJPanel modulePanel;
+	public EditModuleJPanel moduleEditPanel;
+	private JPanel mappingPanel;
+	public AppliedRulesJPanel appliedRulesPanel;
 
 	public SoftwareUnitsJPanel sofwareUnitsPanel;
 
@@ -54,7 +54,6 @@ public class DefinitionJPanel extends HelpableJPanel {
 
 	private JPanel createModulePanel() {
 		modulePanel = new ModuleJPanel();
-		modulePanel.initGui();
 		return modulePanel;
 	}
 
@@ -76,7 +75,6 @@ public class DefinitionJPanel extends HelpableJPanel {
 
 	public final void initUI() {
 		try {
-
 			BorderLayout thisLayout = new BorderLayout();
 			setLayout(thisLayout);
 

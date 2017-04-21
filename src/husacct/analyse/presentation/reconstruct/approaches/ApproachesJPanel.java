@@ -40,6 +40,7 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	protected AnalyseTaskControl analyseTaskControl;
 	private TableColumnModel tableApproachesColumnModel;
 	private JButton applyButton, reverseButton, clearAllButton, editApproachButton;
+	private String selectedModuleLogicalPath = ""; // Module selected by the user during the last (not reversed) executeApproch().
 	
 	public JTable approachesTable;
 	public JTable parameterTable;
@@ -187,12 +188,14 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 		if (action.getSource() == reverseButton) {
 			approachesTable.clearSelection();
 			analyseTaskControl.reconstructArchitecture_Reverse();
-			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel(selectedModuleLogicalPath);
+			selectedModuleLogicalPath = "";
 		}
 		if (action.getSource() == clearAllButton) {
 			approachesTable.clearSelection();
 			analyseTaskControl.reconstructArchitecture_ClearAll();
-			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+			ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel("");
+			selectedModuleLogicalPath = "";
 		}
 		if (action.getSource() == editApproachButton){
 			int selectedRow = approachesTable.getSelectedRow();
@@ -215,11 +218,14 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	private void executeApproach(JTable approachesTable, int selectedRow){
 		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
 		ModuleDTO selectedModule = getSelectedModule();
+		if ((selectedModule != null) && (selectedModule.logicalPath != null)) {
+			selectedModuleLogicalPath = selectedModule.logicalPath;
+		}
 		String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
 		reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
 		reconstructArchitectureDTO.setSelectedModule(selectedModule);
 		analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
-		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel();
+		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel(selectedModuleLogicalPath);
 	}
 	
 	private ModuleDTO getSelectedModule(){

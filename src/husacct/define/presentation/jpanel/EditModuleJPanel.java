@@ -188,10 +188,10 @@ public class EditModuleJPanel extends HelpableJPanel implements Observer,IServic
 	public void update(Observable o, Object arg) {
 		resetGUI();
 		try{
-			Long moduleId = Long.parseLong(arg.toString());
+			long moduleId = Long.parseLong(arg.toString());
 			if (moduleId != -1) {
 				HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
-				if (!((String) moduleDetails.get("name")).equals("")) {
+				if (!moduleDetails.isEmpty() && !((String) moduleDetails.get("name")).equals("")) {
 					nameTextfield.setText((String) moduleDetails.get("name"));
 					descriptionTextArea.setText((String) moduleDetails.get("description"));
 					String moduleType = (String) moduleDetails.get("type");
