@@ -46,7 +46,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private boolean isMapped;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
-	private DefineSarServiceImpl defineSarService;
+	private DefineSarServiceImpl defineSarService = null;
 	private Logger logger = Logger.getLogger(DefineServiceImpl.class);
 
 
@@ -240,7 +240,9 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public IDefineSarService getSarService() {
-		defineSarService = new DefineSarServiceImpl(this);
+		if (defineSarService == null) {
+			defineSarService = new DefineSarServiceImpl(this);
+		}
 		return defineSarService;
 	}
 	

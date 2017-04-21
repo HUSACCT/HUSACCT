@@ -238,7 +238,6 @@ import org.apache.log4j.Logger;
 			String exceptionMessage = "";
 			exceptionMessage = moduleService.addModuleToParent(selectedModuleId, module);
 			this.notifyObservers();
-
 			if (!exceptionMessage.isEmpty()) {
 				UiDialogs.errorDialog(getDefinitionPanel(), exceptionMessage);
 			}
@@ -386,6 +385,7 @@ import org.apache.log4j.Logger;
 				module.addSubModule(facade);
 			}
 			this.passModuleToService(getSelectedModuleId(), module);
+			setSelectedModuleId(module.getId());
 		}
 		
 		public boolean saveAnalzedModule(ArrayList<AnalyzedModuleComponent> units) {

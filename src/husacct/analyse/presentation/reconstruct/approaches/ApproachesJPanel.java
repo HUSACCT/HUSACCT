@@ -178,7 +178,7 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 					executeApproach(approachesTable, selectedRow);
 				}
 				else{
-					logger.warn("No Approache selected");
+					//logger.warn("No Approach selected");
 				}
 			}
 			catch(Exception e){
