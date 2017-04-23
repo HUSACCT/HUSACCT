@@ -3,11 +3,17 @@ package husaccttest.define;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.SoftwareUnitDTO;
+import husacct.common.enums.ModuleTypes;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.define.IDefineSarService;
 import husacct.define.IDefineService;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.services.AppliedRuleDomainService;
 import husaccttest.TestResourceFinder;
 
 import java.io.File;
@@ -33,12 +39,13 @@ public class DefineServicesTest_SRMA {
 	private static Logger logger;
 	private static IAnalyseService analyseService = null;
 	private static IDefineService defineService = null;
+	private static IDefineSarService defineSarService = null;
 
 	@BeforeClass
 	public static void beforeClass() {
 		try {
 			setLog4jConfiguration();
-			logger.info(String.format("Start: Define Services Test"));
+			logger.info(String.format("Start: Define SarServices Test"));
 			workspacePath = TestResourceFinder.findHusacctWorkspace("java", workspace);
 			logger.info(String.format("Running HUSACCT using workspace: " + workspacePath));
 
@@ -66,11 +73,12 @@ public class DefineServicesTest_SRMA {
 	@AfterClass
 	public static void tearDown(){
 		workspaceController.closeWorkspace();
-		logger.info(String.format("Finished: Define Services Test"));
+		logger.info(String.format("Finished: Define SarServices Test"));
 	}
 
 	// TESTS 
-
+	// Tests DefineService
+	
 	@Test
 	public void getAssignedSoftwareUnitsOfModuleTest() {
 		defineService = ServiceProvider.getInstance().getDefineService();
@@ -121,6 +129,156 @@ public class DefineServicesTest_SRMA {
 			}
 		}
 		Assert.assertTrue(su1A && su11A && su111A && noOtherSUs);
+	}
+	
+	
+	// Tests DefineSarService
+
+	@Test
+	public void SAR_addModuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.softwareunit1", "softwareunit1", "Package", "public");
+		newSoftwareUnits.add(newUnit);
+		defineSarService.addModule("TestModule1", "Presentation", "Layer", 1, newSoftwareUnits);
+		ModuleDTO retrievedModule = defineService.getModule_BasedOnSoftwareUnitName("presentation.softwareunit1");
+		Assert.assertTrue(retrievedModule.logicalPath.equals("Presentation.TestModule1"));
+	}
+	
+	@Test
+	public void SAR_editModuleTest_Name() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		String logicalPathOld = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
+		defineSarService.editModule(logicalPathOld, null, "NothingIsAllowed", 0, null);
+		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
+		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NothingIsAllowed"));
+		defineSarService.editModule(logicalPathNew, null, "NotAllowed", 0, null);
+		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
+		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
+	}
+	
+	@Test
+	public void SAR_editModuleTest_Type() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		ModuleDTO module = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed");
+		String logicalPathOfModule = module.logicalPath;
+		String typeOfModule_Original = module.type;
+		defineSarService.editModule(logicalPathOfModule, ModuleTypes.COMPONENT.toString(), null, 0, null);
+		String typeOfModule_New = defineService.getModule_ByUniqueName(logicalPathOfModule).type;
+		Assert.assertTrue(typeOfModule_New.equals(ModuleTypes.COMPONENT.toString()));
+		defineSarService.editModule(logicalPathOfModule, ModuleTypes.LAYER.toString(), null, 0, null);
+		typeOfModule_New = defineService.getModule_ByUniqueName(logicalPathOfModule).type;
+		Assert.assertTrue(typeOfModule_New.equals(ModuleTypes.LAYER.toString()));
+		defineSarService.editModule(logicalPathOfModule, typeOfModule_Original, null, 0, null);
+		typeOfModule_New = defineService.getModule_ByUniqueName(logicalPathOfModule).type;
+		Assert.assertTrue(typeOfModule_New.equals(typeOfModule_Original));
+	}
+	
+	@Test
+	public void SAR_editModuleTest_HierarchicalLevel() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		int levelOld = defineService.getHierarchicalLevelOfLayer("Presentation");
+		defineSarService.editModule("Presentation", null, null, levelOld + 3, null);
+		int levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
+		Assert.assertTrue(levelNew == levelOld + 3);
+		defineSarService.editModule("Presentation", null, null, levelOld, null);
+		levelNew = defineService.getHierarchicalLevelOfLayer("Presentation");
+		Assert.assertTrue(levelNew == levelOld);
+	}
+	
+	@Test
+	public void SAR_editModuleTest_SoftwareUnits() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		ArrayList<SoftwareUnitDTO> newSoftwareUnits = new ArrayList<SoftwareUnitDTO>();
+		SoftwareUnitDTO newUnit = new SoftwareUnitDTO("presentation.relationrules.newsoftwareunit", "newsoftwareunit", "Package", "public");
+		newSoftwareUnits.add(newUnit);
+		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, null, 0, newSoftwareUnits);
+		String logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.newsoftwareunit").logicalPath;
+		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
+		newUnit.uniqueName = "presentation.relationrules.notallowed";
+		newUnit.name = "allowed";
+		defineSarService.editModule("Presentation.RelationRules.NotAllowed", null, null, 0, newSoftwareUnits);
+		logicalPathNew = defineService.getModule_BasedOnSoftwareUnitName("presentation.relationrules.notallowed").logicalPath;
+		Assert.assertTrue(logicalPathNew.equals("Presentation.RelationRules.NotAllowed"));
+	}
+	
+	@Test
+	public void SAR_removeModuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		defineSarService.removeModule("Presentation.TestModule1");
+		ModuleDTO retrievedModule = defineService.getModule_BasedOnSoftwareUnitName("presentation.softwareunit1");
+		Assert.assertFalse(retrievedModule.logicalPath.equals("Presentation.TestModule1"));
+	}
+	
+	// Test case that checks if a main rule is added correctly.
+	@Test
+	public void SAR_addMainRuleTest() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		defineSarService.addMainRule("Presentation", "Domain", "IsNotAllowedToUse");
+		Assert.assertTrue(isRuleExisting("Presentation", "Domain", "IsNotAllowedToUse"));
+	}
+	
+	// Test case that checks if a  main rule is not added if the ruleTypeKey is not correct.
+	@Test
+	public void SAR_addMainRuleTest_IncorrectRuleTypeKey() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		defineSarService.addMainRule("Domain", "Presentation", "IsNotAllowedTotUse"); // Tot instead of To
+		Assert.assertFalse(isRuleExisting("IsNotAllowedToUse", "Presentation", "Domain"));
+	}
+	
+	// Test case that checks if a duplicate main rule is not added.
+	@Test
+	public void SAR_addMainRuleTest_DuplicateRuleTypeKey() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		boolean rule1Added = defineSarService.addMainRule("Presentation", "Technology", "IsNotAllowedToUse");
+		boolean rule2Added = defineSarService.addMainRule("Presentation", "Technology", "IsNotAllowedToUse");
+		AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
+		AppliedRuleStrategy rule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey("Presentation", "Technology", "IsNotAllowedToUse");
+		boolean ruleFound = false;
+		if (rule != null) ruleFound = true;
+		Assert.assertTrue(rule1Added);
+		Assert.assertFalse(rule2Added);
+		Assert.assertTrue(ruleFound);
+	}
+	
+	// Test case that checks if a rule is disabled.
+	@Test
+	public void SAR_editRuleTest_IsEnabled() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineSarService = defineService.getSarService();
+		boolean ruleAdded = defineSarService.addMainRule("Technology.PropertyRules", "Technology.RelationRules", "IsNotAllowedToUse");
+		boolean ruleEdited = defineSarService.editRule_IsEnabled("Technology.PropertyRules", "Technology.RelationRules", "IsNotAllowedToUse", false);
+		AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
+		AppliedRuleStrategy rule = appliedRuleService.getAppliedMainRuleBy_From_To_RuleTypeKey("Technology.PropertyRules", "Technology.RelationRules", "IsNotAllowedToUse");
+		boolean ruleFound = false;
+		boolean isEnabled = true;
+		if (rule != null) { 
+			ruleFound = true;
+			isEnabled = rule.isEnabled();
+		}
+		Assert.assertTrue(ruleAdded);
+		Assert.assertTrue(ruleEdited);
+		Assert.assertTrue(ruleFound);
+		Assert.assertFalse(isEnabled);
+
+	}
+	
+	// Tests case that checks the number of found dependencies between modules in the intended architecture. 
+	@Test
+	public void SAR_CompareNumberOfDependenciesBetweenModules_Domain_Presentation(){
+		String fromModule = "Domain";
+		String toModule = "Presentation";
+		int numberOfDependencies = getNumberofDependenciesBetweenModulesInIntendedArchitecture(fromModule, toModule);
+		Assert.assertEquals("Incorrect number of dependencies", 16, numberOfDependencies);
 	}
 	
 	//

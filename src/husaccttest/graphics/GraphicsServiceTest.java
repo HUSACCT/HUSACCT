@@ -10,7 +10,6 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 import husacct.graphics.*;
-import husaccttest.define.DefineSarServicesTest_SRMA;
 
 public class GraphicsServiceTest {
 	IGraphicsService service;
@@ -50,7 +49,7 @@ public class GraphicsServiceTest {
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
-		logger = Logger.getLogger(DefineSarServicesTest_SRMA.class);
+		logger = Logger.getLogger(GraphicsServiceTest.class);
 	}
 	
 }

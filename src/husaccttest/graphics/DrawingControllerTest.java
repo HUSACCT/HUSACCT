@@ -20,7 +20,6 @@ import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.ModuleAndRuleController;
 import husaccttest.TestResourceFinder;
-import husaccttest.define.DefineSarServicesTest_SRMA;
 
 import java.io.File;
 import java.net.URL;
@@ -347,7 +346,7 @@ public class DrawingControllerTest {
 	private static void setLog4jConfiguration() {
 		URL propertiesFile = Class.class.getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
-		logger = Logger.getLogger(DefineSarServicesTest_SRMA.class);
+		logger = Logger.getLogger(DrawingControllerTest.class);
 	}
 	
 	private static void loadWorkspace(String location) {
