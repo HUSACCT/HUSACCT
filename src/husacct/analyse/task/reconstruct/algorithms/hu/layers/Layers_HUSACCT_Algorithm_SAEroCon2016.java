@@ -47,14 +47,16 @@ public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 			}
 	
 			// Select the set of SUs to be used, and activate the component-identifying algorithm  
-			if (selectedModule.logicalPath == "**") {
-				for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
+			if (selectedModule.logicalPath.equals("**")) {
+				SoftwareUnitDTO[] softwareUnitsInRoot = queryService.getSoftwareUnitsInRoot();
+				for (SoftwareUnitDTO rootUnit : softwareUnitsInRoot) {
 					if (!rootUnit.uniqueName.equals("xLibraries")) {
 						softwareUnitsToIncludeInAlgorithm.add(rootUnit);
-						if (softwareUnitsToIncludeInAlgorithm.size() == 1) {
-							softwareUnitsToIncludeInAlgorithm = getSetOfChildSoftwareUnits(rootUnit);
-						}
 					}
+				}
+				if (softwareUnitsToIncludeInAlgorithm.size() == 1) {
+					SoftwareUnitDTO selectedSU = softwareUnitsToIncludeInAlgorithm.get(0);
+					softwareUnitsToIncludeInAlgorithm = getSetOfChildSoftwareUnits(selectedSU);
 				}
 			} else {
 				softwareUnitsToIncludeInAlgorithm = getRelevantSoftwareUnits();

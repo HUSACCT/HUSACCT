@@ -219,7 +219,7 @@ public class SoftwareArchitecture {
 				ArrayList<String> list = new ArrayList<String>();
 				list.add(wantedModule.getName());
 				wantedModule = wantedModule.getparent();
-				while(wantedModule.getType() != "Root"){
+				while(!wantedModule.getType().equals("Root")){
 					list.add(wantedModule.getName());
 					wantedModule = wantedModule.getparent();
 				}
@@ -274,13 +274,12 @@ public class SoftwareArchitecture {
 		return softwareUnit;
 	}
 
-	private Layer getTheFirstLayerAbove(int currentHierarchicalLevel,
-			long parentModuleId) {
+	private Layer getTheFirstLayerAbove(int currentHierarchicalLevel, long parentModuleId) {
 		Layer layer = null;
 		for (ModuleStrategy mod : getModulesForLayerSorting(parentModuleId)) {
 			if (mod instanceof Layer) {
 				Layer l = (Layer) mod;
-				if (l.getHierarchicalLevel() < currentHierarchicalLevel
+				if ((l.getHierarchicalLevel() < currentHierarchicalLevel)
 						&& (layer == null || l.getHierarchicalLevel() > layer
 								.getHierarchicalLevel())) {
 					layer = l;

@@ -44,7 +44,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 			if ((selectedModule == null) || selectedModule.type.equals(ModuleTypes.EXTERNAL_LIBRARY.toString()) || selectedModule.type.equals(ModuleTypes.FACADE.toString())) {
 				return;
 			} else if (selectedModule.logicalPath.equals("")) {
-				selectedModule.logicalPath = "**"; // Root of intended software architecture
+				selectedModule.logicalPath= "**"; // Root of intended software architecture
 				selectedModule.type = "Root"; // Root of intended software architecture
 			}
 	
@@ -54,14 +54,16 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 			} */
 
 			// Select the set of SUs to be used, and activate the component-identifying algorithm  
-			if (selectedModule.logicalPath == "**") {
-				for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
+			if (selectedModule.logicalPath.equals("**")) {
+				SoftwareUnitDTO[] softwareUnitsInRoot = queryService.getSoftwareUnitsInRoot();
+				for (SoftwareUnitDTO rootUnit : softwareUnitsInRoot) {
 					if (!rootUnit.uniqueName.equals("xLibraries")) {
 						softwareUnitsToIncludeInAlgorithm.add(rootUnit);
-						if (softwareUnitsToIncludeInAlgorithm.size() == 1) {
-							softwareUnitsToIncludeInAlgorithm = getSetOfChildSoftwareUnits(rootUnit);
-						}
 					}
+				}
+				if (softwareUnitsToIncludeInAlgorithm.size() == 1) {
+					SoftwareUnitDTO selectedSU = softwareUnitsToIncludeInAlgorithm.get(0);
+					softwareUnitsToIncludeInAlgorithm = getSetOfChildSoftwareUnits(selectedSU);
 				}
 			} else {
 				softwareUnitsToIncludeInAlgorithm = getRelevantSoftwareUnits();

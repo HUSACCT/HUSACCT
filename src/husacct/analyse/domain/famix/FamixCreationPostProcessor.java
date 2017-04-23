@@ -996,7 +996,7 @@ class FamixCreationPostProcessor {
     private void determineDependencyTypeAndOrSubType(FamixAssociation association) {
     	FamixClass theClass;
     	// Inheritance
-    	if (association.type == DependencyTypes.INHERITANCE.toString()) {
+    	if (association.type.equals(DependencyTypes.INHERITANCE.toString())) {
             theClass = theModel.classes.get(association.to);
             if (theClass != null) {
             	if (theClass.isInterface){

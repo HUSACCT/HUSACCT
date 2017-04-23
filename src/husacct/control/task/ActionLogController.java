@@ -20,7 +20,7 @@ public class ActionLogController implements IConfigListener {
 	}
 	
 	public void addAction(String message){
-		if(message==""){
+		if(message.equals("")){
 			return;
 		}
 		

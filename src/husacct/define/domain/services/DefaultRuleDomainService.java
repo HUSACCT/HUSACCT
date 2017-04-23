@@ -85,7 +85,7 @@ public class DefaultRuleDomainService {
 	public boolean isMandatoryRule(String ruleTypeKey, ModuleStrategy moduleFrom) {
 		if (ruleTypeKey.equals("IsNotAllowedToMakeSkipCall")
 				|| ruleTypeKey.equals("IsNotAllowedToMakeBackCall")) {
-			if (moduleFrom.getType() == "Layer") {
+			if (moduleFrom.getType().equals("Layer")) {
 				return true;
 			}
 		} else if (ruleTypeKey.equals("VisibilityConvention")) {

@@ -8,7 +8,7 @@ public class FamixLibrary extends FamixDecompositionEntity {
 	public String physicalPath;
 
     public boolean equals(FamixLibrary other) {
-        return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 
+        return ((other.belongsToPackage.equals(this.belongsToPackage) && other.uniqueName.equals(this.uniqueName))); 
     }
 
     public LibraryDTO getDTO() {

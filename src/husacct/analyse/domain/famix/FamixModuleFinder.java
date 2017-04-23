@@ -65,7 +65,7 @@ class FamixModuleFinder extends FamixFinder {
 		List<SoftwareUnitDTO> children = getChildModulesInModule(module);
 		boolean isRootPackageWithClass = false;
 		for (SoftwareUnitDTO child : children) {
-			if (child.type != "package") {
+			if (!child.type.equals("package")) {
 				isRootPackageWithClass = true;
 				break;
 			}

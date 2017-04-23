@@ -256,7 +256,7 @@ public class CSharpGeneratorToolkit {
 	        case CSharpParser.DOT: // "."
 	        	String left = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(0));
 	        	String right = getComplete_NAMESPACE_OR_TYPE_NAME_String((CommonTree) tree.getChild(1));
-	        	if ((left == "") || (right == "")) {
+	        	if ((left.equals("")) || (right.equals(""))) {
 	        		returnValue += left + right;
 	        	} else {
 		    		returnValue += left + "." + right;

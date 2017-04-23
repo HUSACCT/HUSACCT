@@ -327,7 +327,7 @@ public class ModuleDomainService {
 				updateModuleName(module, newModuleName);
 			if (newModuleDescription != null)
 				module.setDescription(newModuleDescription);
-			if ((newModuleType != null) && (newModuleType.toString() != module.getType()))
+			if ((newModuleType != null) && (!newModuleType.equals(module.getType())))
 				updateModuleType(module, newModuleType);
 			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		}

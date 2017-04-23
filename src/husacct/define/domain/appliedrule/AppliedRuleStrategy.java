@@ -193,7 +193,7 @@ public abstract class AppliedRuleStrategy {
 	public boolean equals(AppliedRuleStrategy doppelganger){
 		boolean result = false;
 		if((this.id == doppelganger.getId()) || (this.ruleTypeKey.equals(doppelganger.ruleTypeKey) && 
-				this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom)){
+				this.moduleTo.equals(doppelganger.moduleTo) && this.moduleFrom.equals(doppelganger.moduleFrom))){
 			result = true;
 		}
 			return result;

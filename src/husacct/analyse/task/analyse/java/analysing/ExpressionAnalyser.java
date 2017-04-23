@@ -286,7 +286,7 @@ public class ExpressionAnalyser extends JavaGenerator{
     	String typeCastTo = "";
     	if (typeType != null) {
     		typeCastTo = determineTypeOfTypeType(typeType, belongsToClass);
-            if ((typeCastTo != null) && (typeCastTo != "") && !SkippedJavaTypes.isSkippable(typeCastTo)) {
+            if ((typeCastTo != null) && !typeCastTo.equals("") && !SkippedJavaTypes.isSkippable(typeCastTo)) {
                 modelService.createDeclarationTypeCast(belongsToClass, typeCastTo, typeType.start.getLine());
             }
     	}

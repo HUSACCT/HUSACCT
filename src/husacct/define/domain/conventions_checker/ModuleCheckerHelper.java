@@ -162,10 +162,9 @@ public class ModuleCheckerHelper {
     }
 
     public void setErrorMessage(String message) {
-	if (message != "") {
+	if (!message.equals("")) {
 	    errorMessage = ServiceProvider.getInstance().getLocaleService()
-		    .getTranslatedString("NotAllowedBecauseDefined")
-		    + ":\n\n " + message;
+		    .getTranslatedString("NotAllowedBecauseDefined") + ":\n\n " + message;
 	} else {
 	    errorMessage = "";
 	}

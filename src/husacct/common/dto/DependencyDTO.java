@@ -35,11 +35,11 @@ public class DependencyDTO extends AbstractDTO{
 	
 	public boolean equals(DependencyDTO other){
 		boolean result = true;
-		result = result && (this.from == other.from);
-		result = result && (this.to == other.to);
+		result = result && (this.from.equals(other.from));
+		result = result && (this.to.equals(other.to));
 		result = result && (this.lineNumber == other.lineNumber);
-		result = result && (this.type == other.type);
-		result = result && (this.subType == other.subType);
+		result = result && (this.type.equals(other.type));
+		result = result && (this.subType.equals(other.subType));
 		result = result && (this.isIndirect == other.isIndirect);
 		return result;
 	}

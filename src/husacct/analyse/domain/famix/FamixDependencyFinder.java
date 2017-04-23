@@ -60,18 +60,18 @@ class FamixDependencyFinder extends FamixFinder {
 	// If classPathTo = "", then all dependencies from classPathFrom are returned, which refer to existing classPathTo's.
 	public ArrayList<DependencyDTO> getDependenciesFromTo(String classPathFrom, String classPathTo){
 		ArrayList<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
-		if((classPathFrom == null || classPathFrom == "") && (classPathTo == null || classPathTo == "")){
+		if((classPathFrom == null || classPathFrom.equals("")) && (classPathTo == null || classPathTo.equals(""))){
 			this.logger.warn(" Incomplete calls: ClassPathFrom = "  + classPathFrom + ", ClassPathTo = " + classPathTo);
 			return foundDependencies;
 		}
 		try{
 			if ((dependenciesMapFromTo != null) && (dependenciesMapTo != null)){
-				if(classPathFrom != ""){
+				if(!classPathFrom.equals("")){
 					// Select all dependencies within dependenciesMapFromTo whose pathFrom equals classPathFrom
 					HashMap<String, ArrayList<DependencyDTO>> fromMap = dependenciesMapFromTo.get(classPathFrom);
 					// Select all dependencies within fromMap whose pathTo starts with classPathTo
 					if(fromMap != null ){
-						if(classPathTo != ""){
+						if(!classPathTo.equals("")){
 							ArrayList<DependencyDTO> dependencyList = fromMap.get(classPathTo);
 							if(dependencyList != null){
 								foundDependencies.addAll(dependencyList);

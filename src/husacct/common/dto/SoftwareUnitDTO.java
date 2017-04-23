@@ -31,10 +31,10 @@ public class SoftwareUnitDTO extends AbstractDTO{
 	
 	public boolean equals(SoftwareUnitDTO other){
 		boolean result = true;
-		result = result && (this.uniqueName == other.uniqueName);
-		result = result && (this.name == other.name);
-		result = result && (this.type == other.type);
-		result = result && (this.visibility == other.visibility);
+		result = result && (this.uniqueName.equals(other.uniqueName));
+		result = result && (this.name.equals(other.name));
+		result = result && (this.type.equals(other.type));
+		result = result && (this.equals(other.visibility));
 		return result;
 	}
 	

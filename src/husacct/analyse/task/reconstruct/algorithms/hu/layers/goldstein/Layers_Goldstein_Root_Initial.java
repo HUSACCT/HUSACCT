@@ -44,7 +44,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 			}
 			if (internalRootPackagesWithClasses.size() == 1) {
 				// Temporal solution useful for HUSACCT20 test. To be improved! E.g., classes in root are excluded from the process. 
-				String newRoot = internalRootPackagesWithClasses. get(0).uniqueName;
+				String newRoot = internalRootPackagesWithClasses.get(0).uniqueName;
 				internalRootPackagesWithClasses = new ArrayList<SoftwareUnitDTO>();
 				for (SoftwareUnitDTO child : queryService.getChildUnitsOfSoftwareUnit(newRoot)) {
 					if (child.type.equalsIgnoreCase("package")) {

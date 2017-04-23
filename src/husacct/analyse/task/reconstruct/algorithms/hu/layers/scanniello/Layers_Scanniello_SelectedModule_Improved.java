@@ -41,7 +41,7 @@ public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello
 			}
 	
 			// Select the set of SUs to be used, and activate the component-identifying algorithm  
-			if (selectedModule.logicalPath == "**") {
+			if (selectedModule.logicalPath.equals("**")) {
 				for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
 					if (!rootUnit.uniqueName.equals("xLibraries")) {
 						softwareUnitsToIncludeInAlgorithm.add(rootUnit);

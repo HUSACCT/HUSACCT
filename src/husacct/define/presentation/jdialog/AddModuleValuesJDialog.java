@@ -2,6 +2,7 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.enums.ModuleTypes;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
@@ -152,13 +153,13 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 	
 	private void setVisibles() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
-		if(moduleType == "SubSystem") {
+		if(moduleType.equals(ModuleTypes.SUBSYSTEM.toString())) {
 			
-		} else if(moduleType =="Layer") {
+		} else if(moduleType.equals(ModuleTypes.LAYER.toString())) {
 			
-		} else if(moduleType =="Component") {
+		} else if(moduleType.equals(ModuleTypes.COMPONENT.toString())) {
 			
-		} else if(moduleType =="External Library") {
+		} else if(moduleType.equals(ModuleTypes.EXTERNAL_LIBRARY.toString())) {
 			
 		}
 	}

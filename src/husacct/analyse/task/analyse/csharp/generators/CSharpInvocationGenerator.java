@@ -156,7 +156,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	        case CSharpParser.DOT: // "."
 	        	String left = getCompleteToString((CommonTree) tree.getChild(0), belongsToClass, dependencySubType);
 	        	String right = getCompleteToString((CommonTree) tree.getChild(1), belongsToClass, dependencySubType);
-	        	if ((left == "") || (right == "")) {
+	        	if ((left.equals("")) || (right.equals(""))) {
 	        		returnValue += left + right;
 	        	} else {
 		    		returnValue += left + "." + right;

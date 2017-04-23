@@ -48,7 +48,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         	// Determine parentPackageName
             String[] allPackages = uniquePackageName.split("\\.");
             for (int i = 0; i < allPackages.length - 1; i++) {
-                if (belongsToPackage == "") {
+                if (belongsToPackage.equals("")) {
                     belongsToPackage += allPackages[i];
                 } else {
                     belongsToPackage += "." + allPackages[i];

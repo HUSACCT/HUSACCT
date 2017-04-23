@@ -55,10 +55,10 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		ArrayList<SoftwareUnitDTO> listOfClassesFound = new ArrayList<SoftwareUnitDTO>();
 		ArrayList<SoftwareUnitDTO> originalUnit = new ArrayList<SoftwareUnitDTO>();
 		originalUnit.add(softwareUnit);
-		if(softwareUnit.type == "package"){
+		if(softwareUnit.type.equals("package")){
 			SoftwareUnitDTO[] list = queryService.getChildUnitsOfSoftwareUnit(softwareUnit.uniqueName);
 			for(SoftwareUnitDTO unit: list){
-				if(unit.type == "package"){
+				if(unit.type.equals("package")){
 					for(SoftwareUnitDTO childUnit : queryService.getChildUnitsOfSoftwareUnit(unit.uniqueName)){
 						listOfClassesFound.add(childUnit);
 					}
@@ -155,7 +155,7 @@ public class GatewayHUSACCT_Root extends AlgorithmHUSACCT{
 		for(HashMap.Entry<SoftwareUnitDTO, ArrayList<SoftwareUnitDTO>> gateway : gateways.entrySet()){
 			if(!"".equals(gateway.getKey())){
 				gatewayModule = defineSarService.addModule(gateway.getKey().name + " Gateway", selectedModule.logicalPath, ModuleTypes.SUBSYSTEM.toString(), 0, gateway.getValue());	
-				if(gatewayModule.logicalPath != ""){
+				if(!gatewayModule.logicalPath.equals("")){
 					createRuleType(gatewayModule,selectedModule);
 				}
 			}

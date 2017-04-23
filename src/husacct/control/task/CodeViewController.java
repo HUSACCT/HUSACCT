@@ -42,7 +42,7 @@ public class CodeViewController {
 	public void displayErrorsInFile(String classPath, HashMap<Integer, Severity> errors) {
 		String path = findFilePath(classPath);
 		// Check if the path was converted
-		if(path != ""){
+		if(!path.equals("")){
 			setCurrentCodeviewer();
 			currentCodeviewer.displayErrorsInFile(path, errors);
 		}
@@ -126,7 +126,7 @@ public class CodeViewController {
 		}
 		
 		// Check if the folder names contain dots
-		if(filePath == ""){
+		if(filePath.equals("")){
 			String[] classParts = classPath.split(".");
 			String winPath = rootPath;
 			

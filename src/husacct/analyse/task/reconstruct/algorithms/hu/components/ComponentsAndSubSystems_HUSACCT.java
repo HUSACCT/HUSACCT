@@ -47,7 +47,7 @@ public class ComponentsAndSubSystems_HUSACCT extends AlgorithmComponentsAndSubSy
 		}
 
 		// Select the set of SUs to be used, and activate the component-identifying algorithm  
-		if (selectedModule.logicalPath == "**") {
+		if (selectedModule.logicalPath.equals("**")) {
 			for (SoftwareUnitDTO rootUnit : queryService.getSoftwareUnitsInRoot()) {
 				if (!rootUnit.uniqueName.equals("xLibraries")) {
 					softwareUnitsInSelectedModuleList.add(rootUnit.uniqueName);

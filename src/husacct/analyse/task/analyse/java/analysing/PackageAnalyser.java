@@ -36,7 +36,7 @@ class PackageAnalyser extends JavaGenerator {
         String[] allPackages = splitPackages(uniqueName);
         String parentPackage = "";
         for (int i = 0; i < allPackages.length - 1; i++) {
-            if (parentPackage == "") {
+            if (parentPackage.equals("")) {
                 parentPackage += allPackages[i];
             } else {
                 parentPackage += "." + allPackages[i];
