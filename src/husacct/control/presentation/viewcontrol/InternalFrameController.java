@@ -66,25 +66,25 @@ abstract public class InternalFrameController {
 	}
 	
 	public void showView(){
-		JInternalFrame  newInternalFrame = getInternalFrame();
+		JInternalFrame  newInternalFrame = getNewInternalFrame();
 		if (newInternalFrame != null) {
 			if ((newInternalFrame == internalFrame)) {
 				if (internalFrame.isClosed() == false) {
 					setInternalFrameAndButtonVisible();
 				} else {
-					addInternalFrame();
+					addInternalFrame(newInternalFrame);
 				}
 			} else {
 				calculateNewStartPosition();
-				addInternalFrame();
+				addInternalFrame(newInternalFrame);
 			}
 		}
 	}
 
-	private void addInternalFrame(){
+	private void addInternalFrame(JInternalFrame  newInternalFrame){
 		try {
 			closeInternalFrame(); // To clean-up
-			internalFrame = getInternalFrame();
+			internalFrame = newInternalFrame;
 			if (internalFrame != null) {
 				if ((mainController.getMainGui() != null) && (mainController.getMainGui().getDesktopPane() != null) && (mainController.getMainGui().getTaskBar() != null)) {
 					internalFrame.setVisible(true);
@@ -164,8 +164,12 @@ abstract public class InternalFrameController {
 		}
 	}
 
+	public JInternalFrame getInternalFrame() {
+		return internalFrame;
+	}
+	
 	// Abstract method, overridden by ViewController with a call to the specific method.
-	abstract public JInternalFrame getInternalFrame();
+	abstract public JInternalFrame getNewInternalFrame();
 	
 	private String getTitle(){
 		return ServiceProvider.getInstance().getLocaleService().getTranslatedString(stringIdentifier);

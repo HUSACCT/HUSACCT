@@ -26,14 +26,14 @@ public class ViewController {
 	public ViewController(MainController mainController){
 		defineContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getDefineService().getDefinedGUI();
 			}
 		};
 		
 		definedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM)), "DefinedArchitectureDiagram"){
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getDefinedArchitectureGUI();
 			}
 		};
@@ -48,42 +48,42 @@ public class ViewController {
 		
 		analysedApplicationOverviewContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "AnalysedArchitectureOverview") {
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getAnalyseService().getJInternalFrame();
 			}
 		};
 		
 		analyseSARController = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "SoftwareArchitectureReconstruction") {
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getAnalyseService().getJInternalSARFrame();
 			}
 		};
 		
 		analysedArchitectureDiagramContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_ANALYSED_ARCHITECTURE_DIAGRAM)), "AnalysedArchitectureDiagram") {
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getGraphicsService().getAnalysedArchitectureGUI();
 			}
 		};
 		
 		validateContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_VALIDATE)), "Validate") {
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getValidateService().getBrowseViolationsGUI();
 			}
 		};
 		
 		validateConfigurationContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_VALIDATE)), "Configuration") {
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return ServiceProvider.getInstance().getValidateService().getConfigurationGUI();
 			}
 		};
 		
 		codeViewerContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_SOURCE)), "ConfigGeneralCodeviewer") {
 			@Override
-			public JInternalFrame getInternalFrame() {
+			public JInternalFrame getNewInternalFrame() {
 				return mainController.getCodeViewerController().getCodeViewInternalFrame();
 			}
 		};
@@ -122,14 +122,14 @@ public class ViewController {
 		// Iconify all shown InternalFrames
 		for (InternalFrameController ifController : viewContainers) {
 			JInternalFrame internalFrame = ifController.getInternalFrame();
-			if (internalFrame.isShowing()) {
+			if ((internalFrame != null) && internalFrame.isShowing()) {
 				if (!internalFrame.isIcon()) {
 					ifController.iconifyInternalFrame();
 				}
 			}
 		}
 		// Show the Define frame in its restored size
-		if (!defineContainer.getInternalFrame().isShowing()) {
+		if (!defineContainer.getNewInternalFrame().isShowing()) {
 			defineContainer.showView();
 		}
 		defineContainer.restoreInternalFrame();

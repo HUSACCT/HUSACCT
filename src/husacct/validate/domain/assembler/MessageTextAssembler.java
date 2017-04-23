@@ -88,7 +88,7 @@ public class MessageTextAssembler {
 		if ((rule.ruleTypeKey.toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) ||
 				(rule.ruleTypeKey.toLowerCase().equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString().toLowerCase())) ||
 				(rule.ruleTypeKey.toLowerCase().equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString().toLowerCase()))) {
-			return appendStrings("", "");
+			return "";
 		} else
 		if (rule.ruleTypeKey.toLowerCase().equals(RuleTypes.NAMING_CONVENTION.toString().toLowerCase())) {
 			return generateNamingConventionMessage(rule);
