@@ -82,6 +82,7 @@ public class ModuleDomainService {
 		message = addModuleToParent(parentModuleId, newModule);
 		if (message.equals("")) {
 			logger.info(" Module added with name: " + newModule.getName() + ", Type: " + newModule.getType() + ", Assigned units: " + newModule.countSoftwareUnits());
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 			return newModule;
 		} else {
 			logger.info(" Module not added with name: " + name + ", Type: " + moduleType);
