@@ -46,13 +46,18 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	private boolean validationExecuted;
 
 	public ValidateServiceImpl() {
+		this.validationExecuted = false;
 		this.configuration = new ConfigurationServiceImpl();
 		this.domain = new DomainServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
 		this.report = new ReportService(task);
-		this.gui = new GuiController(task, configuration);
-		this.validationExecuted = false;
-		this.validateConfigurationPanel = new ValidateConfigurationPanel(task);
+		if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+			this.gui = new GuiController(task, configuration);
+			this.validateConfigurationPanel = new ValidateConfigurationPanel(task);
+		} else {
+			this.gui = null;
+			this.validateConfigurationPanel = null;
+		}
 	}
 
 	/**

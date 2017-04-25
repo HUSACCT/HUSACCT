@@ -80,7 +80,7 @@ public class ViolationReportDtoFactory {
 	        	}
 	        }
 		} catch (Exception e){
-			logger.warn("Exception: " + e.getCause().toString());
+			logger.warn("Exception: " + e.getMessage());
 		}
         return violationReportDTO;
 	}

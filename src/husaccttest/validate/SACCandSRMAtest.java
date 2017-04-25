@@ -406,7 +406,7 @@ public class SACCandSRMAtest {
 				numberOfViolations = previousViolationsDtoList.size();
 			}
 		} catch (Exception exception){
-			logger.warn(String.format(" Exception: " + exception.getCause().toString()));
+			logger.warn(String.format(" Exception: " + exception.getMessage()));
 		}
 		return numberOfViolations;
 	}

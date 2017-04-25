@@ -24,8 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.JInternalFrame;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
@@ -91,22 +89,6 @@ public class ValidateTest {
 		assertEquals("Java", language);
 	}
 	
-/*	@Test
-	public void getBrowseViolationsGUI() {
-		Object screen = validate.getBrowseViolationsGUI();
-		assertNotNull(screen);
-		assertTrue(screen instanceof JInternalFrame);
-		assertFalse(((JInternalFrame) screen).isVisible());
-	} */
-
-	@Test
-	public void getConfigurationGUI() {
-		Object screen = validate.getConfigurationGUI();
-		assertNotNull(screen);
-		assertTrue(screen instanceof JInternalFrame);
-		assertFalse(((JInternalFrame) screen).isVisible());
-	}
-
 	@Test
 	public void getExportExtentions() {
 		String[] exportExtensions = new String[] { 

@@ -13,22 +13,33 @@ public class ExternalServiceProvider {
 	private static ExternalServiceProvider _instance;
 
 	private ExternalServiceProvider() {
+		System.setProperty("java.awt.headless", "true");
 		ServiceProvider.getInstance();
 		_instance = this;
 	}
 
 	public static ExternalServiceProvider getInstance() {
-		setLog4jConfiguration();
-		if (ExternalServiceProvider._instance == null) {
-			new ExternalServiceProvider();
+		try {
+			setLog4jConfiguration();
+			if (ExternalServiceProvider._instance == null) {
+				new ExternalServiceProvider();
+			}
+		} catch (Exception e){
+			System.out.println("Exception in HUSACCT ExternalServiceProvider.getInstance(): " + e.getMessage());
+			//e.printStackTrace();
 		}
 		return ExternalServiceProvider._instance;
 	}
 
 	public static ExternalServiceProvider getInstance(Properties log4jProperties) {
-		setLog4jConfiguration(log4jProperties);
-		if (ExternalServiceProvider._instance == null) {
-			new ExternalServiceProvider();
+		try {
+			setLog4jConfiguration(log4jProperties);
+			if (ExternalServiceProvider._instance == null) {
+				new ExternalServiceProvider();
+			}
+		} catch (Exception e){
+			System.out.println("Exception in HUSACCT ExternalServiceProvider.getInstance(): " + e.getMessage());
+			//e.printStackTrace();
 		}
 		return ExternalServiceProvider._instance;
 	}
@@ -53,8 +64,13 @@ public class ExternalServiceProvider {
 	 */
 	public ViolationReportDTO performSoftwareArchitectureComplianceCheck(SaccCommandDTO saccCommandDTO) {
 		ViolationReportDTO violationReport = new ViolationReportDTO();
-		IControlService controlService = ServiceProvider.getInstance().getControlService();
-		violationReport = controlService.performSoftwareArchitectureComplianceCheck(saccCommandDTO);
+		try {
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			violationReport = controlService.performSoftwareArchitectureComplianceCheck(saccCommandDTO);
+		} catch (Exception e){
+			System.out.println("Exception in HUSACCT ExternalServiceProvider.performSoftwareArchitectureComplianceCheck(): " + e.getMessage());
+			//e.printStackTrace();
+		}
 		return violationReport;
 	}
 
@@ -67,10 +83,9 @@ public class ExternalServiceProvider {
 		try {
 			props.load(Class.class.getResourceAsStream("/husacct/common/resources/log4j.properties"));
 		} catch (IOException e) {
-			System.out.println("Exception in ExternalServiceProvider line 59: Loading Log4J properties file.");
+			System.out.println("IOException in HUSACCT ExternalServiceProvider.setLog4jConfiguration()");
 			//e.printStackTrace();
 		}
 		PropertyConfigurator.configure(props);
 	}
-	
 }

@@ -46,8 +46,7 @@ public class ExternalComplianceCheck {
 
 			logger.info(String.format(" Finished: Software Architecture Compliance Check"));
 		} catch (Exception e){
-			String errorMessage =  "Exception: " + e.getCause().toString();
-			logger.warn(errorMessage);
+			logger.warn(" Exception: " + e.getMessage());
 		}
 		return violationReport;
 	}

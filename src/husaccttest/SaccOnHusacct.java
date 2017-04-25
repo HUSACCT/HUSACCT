@@ -55,7 +55,8 @@ public class SaccOnHusacct {
 			ExternalServiceProvider externalServiceProvider = ExternalServiceProvider.getInstance();
 			violationReport = externalServiceProvider.performSoftwareArchitectureComplianceCheck(saccCommandDTO);
 		} catch (Exception e){
-			logger.warn("Exception: " + e.getCause().toString());
+			logger.error("Exception: " + e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 
@@ -130,7 +131,7 @@ public class SaccOnHusacct {
 					try {
 						importFileAllPreviousViolations.delete();
 					} catch (SecurityException exception){
-						logger.warn(String.format(" Cannot delete importFilePathAllPreviousViolations " + exception.getCause().toString()));
+						logger.warn(String.format(" Cannot delete importFilePathAllPreviousViolations " + exception.getMessage()));
 					}
 					// Create new importFileAllPreviousViolations with contents of exportFileAllViolations
 					XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
@@ -139,7 +140,7 @@ public class SaccOnHusacct {
 						outputter.output(violationReport.getExportDocAllViolations(), fileWriter);
 						fileWriter.close();
 					} catch (IOException exception){
-						logger.warn(String.format(" Cannot create new importFilePathAllPreviousViolations " + exception.getCause().toString()));
+						logger.warn(String.format(" Cannot create new importFilePathAllPreviousViolations " + exception.getMessage()));
 					}
 					logger.warn(String.format(" Replaced: importFileAllPreviousViolations"));
 				}

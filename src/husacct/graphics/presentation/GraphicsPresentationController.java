@@ -46,12 +46,17 @@ public class GraphicsPresentationController implements UserInputListener{
 				drawingsSettingsHolder = drawingController.getDrawingSettingsHolder();
 				drawingView = drawingController.getDrawingView();
 				drawingView.addListener(this);
-				graphicsFrame = new GraphicsFrame(this);
-				loadDefaultSettings();
+				if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+					graphicsFrame = new GraphicsFrame(this);
+					loadDefaultSettings();
+				}
 			}
-			initializeServices();
+			if (ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+				initializeServices();
+			}
 		} catch(Exception e) {
 			logger.error(" Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

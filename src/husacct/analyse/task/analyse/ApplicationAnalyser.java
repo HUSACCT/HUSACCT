@@ -47,7 +47,7 @@ public class ApplicationAnalyser {
 	                }
                 }
             } catch (Exception e) {
-                this.logger.warn(" Parse exception in source file: sourceFileInfo.getPath() " + e.getCause().toString());
+                this.logger.warn(" Parse exception in source file: sourceFileInfo.getPath() " + e.getMessage());
             }
         }
         this.logger.info(" Number of syntax errors: " + analyser.getNumberOfSyntaxErrors());
