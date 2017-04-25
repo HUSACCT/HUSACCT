@@ -172,20 +172,24 @@ public class ExportImportController {
 	}
 
 	public ViolationReportDTO getViolationReportData(File previousViolationsFile, boolean exportAllViolations, boolean exportNewViolations) {
-		HashMap<String, Object> resourceData = new HashMap<String, Object>();
-		resourceData.put("file", previousViolationsFile);
-		IResource xmlResource = ResourceFactory.get("xml");
-		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		ViolationReportDTO violationReportDTO = new ViolationReportDTO();
-		try {
-			Document doc = xmlResource.load(resourceData);	
-			violationReportDTO = validateService.getViolationReportData(doc, exportAllViolations, exportNewViolations);
-		} catch (Exception e){
-			if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
-				ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());
-			} else {
-				e.printStackTrace();
-				logger.error("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		if (previousViolationsFile == null) {
+			violationReportDTO = validateService.getViolationReportData(null, exportAllViolations, exportNewViolations);
+		} else {
+			HashMap<String, Object> resourceData = new HashMap<String, Object>();
+			resourceData.put("file", previousViolationsFile);
+			IResource xmlResource = ResourceFactory.get("xml");
+			try {
+				Document doc = xmlResource.load(resourceData);	
+				violationReportDTO = validateService.getViolationReportData(doc, exportAllViolations, exportNewViolations);
+			} catch (Exception e){
+				if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());
+				} else {
+					//e.printStackTrace();
+					logger.error("Unable to identify new violations based on previousViolationsFile: " + e.getMessage());
+				}
 			}
 		}
 		return violationReportDTO;

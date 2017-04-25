@@ -32,18 +32,16 @@ public class ExternalComplianceCheck {
 		try {
 			logger.info(String.format(" Start: Software Architecture Compliance Check"));
 
-			setControllers();
-			
-			loadWorkspace(saccCommandDTO.getHusacctWorkspaceFile());
-			
-			setSourceCodePaths(saccCommandDTO);
-			
-			analyseApplication();
-	
-			checkConformance();
-			
-			violationReport = getViolationReportDTO(saccCommandDTO.getImportFilePreviousViolations(), saccCommandDTO.getExportAllViolations(), saccCommandDTO.getExportNewViolations());  
-
+			if ((saccCommandDTO.getHusacctWorkspaceFile() == null) || saccCommandDTO.getHusacctWorkspaceFile().equals("")) {
+				logger.warn(" Parameter not set: husacctWorkspaceFile");
+			} else {			
+				setControllers();
+				loadWorkspace(saccCommandDTO.getHusacctWorkspaceFile());
+				setSourceCodePaths(saccCommandDTO);
+				analyseApplication();
+				checkConformance();
+				violationReport = getViolationReportDTO(saccCommandDTO.getImportFilePreviousViolations(), saccCommandDTO.getExportAllViolations(), saccCommandDTO.getExportNewViolations());  
+			}
 			logger.info(String.format(" Finished: Software Architecture Compliance Check"));
 		} catch (Exception e){
 			logger.warn(" Exception: " + e.getMessage());
@@ -67,10 +65,10 @@ public class ExternalComplianceCheck {
 			if(workspaceController.isAWorkspaceOpened()){
 				logger.info(String.format(new Date().toString() + " Workspace %s loaded", location));
 			} else {
-				logger.warn(String.format("Unable to open workspace %s", file.getAbsoluteFile()));
+				logger.warn(String.format("Unable to open workspace: %s", file.getAbsoluteFile()));
 			}
 		} else {
-			logger.warn(String.format("Unable to locate %s", file.getAbsoluteFile()));
+			logger.warn(String.format("Unable to locate: %s", file.getAbsoluteFile()));
 		}
 	}
 
@@ -118,7 +116,7 @@ public class ExternalComplianceCheck {
 
 	private ViolationReportDTO getViolationReportDTO(String importFilePreviousViolations, boolean exportAllViolations, boolean exportNewViolations) {
 		ViolationReportDTO violationReport = new ViolationReportDTO();
-		if (importFilePreviousViolations != null) {
+		if (importFilePreviousViolations != null && !importFilePreviousViolations.equals("")) {
 			File previousViolationsFile = new File(importFilePreviousViolations);
 			if(previousViolationsFile.exists()){
 				controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
