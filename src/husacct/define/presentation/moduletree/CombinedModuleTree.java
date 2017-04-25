@@ -58,7 +58,7 @@ public class CombinedModuleTree extends JTree {
     	this.selectedModuleId = selectedModuleId;
     }
 
-    public void setSelectedRow(Long moduleId) {
+    public void setSelectedRow(long moduleId) {
 		ArrayList<Object> pathParts = new ArrayList<Object>();
 		TreeModel model = getModel();
 		if (model != null) {
@@ -68,14 +68,14 @@ public class CombinedModuleTree extends JTree {
 		}
     }
 
-    private void walk(Object o, Long moduleId, ArrayList<Object> pathParts) {
+    private void walk(Object o, long moduleId, ArrayList<Object> pathParts) {
 		int childCount;
 		childCount = getModel().getChildCount(o);
 		for (int i = 0; i < childCount; i++) {
 		    Component component = (Component) getModel().getChild(o, i);
 		    if (component instanceof AbstractDefineComponent) {
 		    	AbstractDefineComponent child = (AbstractDefineComponent) getModel().getChild(o, i);
-		    	Long childModuleId = child.getModuleId();
+		    	long childModuleId = child.getModuleId();
 				if (childModuleId == moduleId) {
 				    pathParts.add(child);
 				    TreePath path = new TreePath(pathParts.toArray());

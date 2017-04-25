@@ -213,7 +213,7 @@ public class ModuleDomainService {
 		return module.getparent();
 	}
 
-	public Long getParentModuleIdByChildId(Long moduleId) {
+	public long getParentModuleIdByChildId(long moduleId) {
 		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
 	}
 
@@ -259,7 +259,7 @@ public class ModuleDomainService {
 		return modules;
 	}
 
-	public ArrayList<Long> getSubModuleIds(Long parentModuleId) {
+	public ArrayList<Long> getSubModuleIds(long parentModuleId) {
 		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
 		if (parentModuleId != -1) {
 			ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
@@ -267,8 +267,8 @@ public class ModuleDomainService {
 				for (ModuleStrategy module : parentModule.getSubModules()) {
 					childModuleIdList.add(module.getId());
 					ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
-					for (Long l : subModuleIdList) {
-						childModuleIdList.add(l);
+					for (long subModuleId : subModuleIdList) {
+						childModuleIdList.add(subModuleId);
 					}
 				}
 			}

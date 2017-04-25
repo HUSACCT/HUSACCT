@@ -6,10 +6,10 @@ import java.util.Observable;
 
 public class CodeLevelWarning extends WarningMessage {
 
-	private Long moduldeId;
+	private long moduldeId;
 	private AnalyzedModuleComponent notCodeLevelModule;
 
-	public CodeLevelWarning(Long id, AnalyzedModuleComponent notcodelevelmodule) {
+	public CodeLevelWarning(long id, AnalyzedModuleComponent notcodelevelmodule) {
 		this.moduldeId = id;
 		this.notCodeLevelModule = notcodelevelmodule;
 		generateMessage();
@@ -32,7 +32,7 @@ public class CodeLevelWarning extends WarningMessage {
 
 	}
 
-	public Long getModuldeId() {
+	public long getModuldeId() {
 		return moduldeId;
 	}
 

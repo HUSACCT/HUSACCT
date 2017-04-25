@@ -66,7 +66,7 @@ public class ModuleTree extends JTree {
     	getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     }
 
-    public void setSelectedRow(Long moduleId) {
+    public void setSelectedRow(long moduleId) {
 		ArrayList<Object> pathParts = new ArrayList<Object>();
 	
 		TreeModel model = getModel();
@@ -77,13 +77,13 @@ public class ModuleTree extends JTree {
 		}
     }
 
-    private void walk(Object o, Long moduleId, ArrayList<Object> pathParts) {
+    private void walk(Object o, long moduleId, ArrayList<Object> pathParts) {
 		int cc;
 		cc = getModel().getChildCount(o);
 		for (int i = 0; i < cc; i++) {
 		    AbstractDefineComponent child = (AbstractDefineComponent) getModel().getChild(o, i);
-		    Long childModuleId = child.getModuleId();
-		    if (childModuleId.longValue() == moduleId.longValue()) {
+		    long childModuleId = child.getModuleId();
+		    if (childModuleId == moduleId) {
 				pathParts.add(child);
 				TreePath path = new TreePath(pathParts.toArray());
 				setSelectionPath(path);

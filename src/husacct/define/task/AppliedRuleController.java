@@ -34,7 +34,7 @@ public class AppliedRuleController extends PopUpController {
 	private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
 	private long currentAppliedRuleId;
 	private ModuleDomainService moduleService;
-	private Long moduleToId;
+	private long moduleToId;
 	private Logger logger = Logger.getLogger(AppliedRuleController.class);
 
 	public AppliedRuleController(long moduleId, long appliedRuleId) {
@@ -250,7 +250,7 @@ public class AppliedRuleController extends PopUpController {
 		return currentAppliedRuleId;
 	}
 
-	public Long getCurrentModuleId() {
+	public long getCurrentModuleId() {
 		long currentModuleId = getModuleId();
 		return currentModuleId;
 	}
@@ -283,11 +283,11 @@ public class AppliedRuleController extends PopUpController {
 		return exceptionRules;
 	}
 
-	public String getModuleName(Long moduleIdFrom) {
+	public String getModuleName(long moduleIdFrom) {
 		return moduleService.getModuleNameById(moduleIdFrom);
 	}
 
-	public Long getModuleToId() {
+	public long getModuleToId() {
 		return moduleToId;
 	}
 
@@ -358,7 +358,7 @@ public class AppliedRuleController extends PopUpController {
 
 	public ArrayList<DataHelper> getSiblingModules(long moduleId) {
 		ArrayList<Long> moduleIds = new ArrayList<Long>();
-		for (Long modId : moduleService.getSiblingModuleIds(moduleId)) {
+		for (long modId : moduleService.getSiblingModuleIds(moduleId)) {
 			moduleIds.addAll(moduleService.getSubModuleIds(modId));
 		}
 
@@ -509,7 +509,7 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 
-	public void setModuleToId(Long moduleToId) {
+	public void setModuleToId(long moduleToId) {
 		this.moduleToId = moduleToId;
 	}
 

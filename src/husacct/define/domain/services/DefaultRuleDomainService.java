@@ -118,7 +118,7 @@ public class DefaultRuleDomainService {
 					}
 				}
 			}
-			for (Long appliedRuleid : appliedRuleIds) {
+			for (long appliedRuleid : appliedRuleIds) {
 				SoftwareArchitecture.getInstance().removeAppliedRule(appliedRuleid);
 			}
 		}

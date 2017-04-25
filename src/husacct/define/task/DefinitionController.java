@@ -251,9 +251,9 @@ import org.apache.log4j.Logger;
 		 */
 		public void removeModuleById(long moduleId) {
 			try {
-				Long parent = moduleService.getParentModuleIdByChildId(moduleId);
+				long parentId = moduleService.getParentModuleIdByChildId(moduleId);
 				moduleService.removeModuleById(moduleId);
-				setSelectedModuleId(parent);
+				setSelectedModuleId(parentId);
 				this.notifyObservers();
 			} catch (Exception e) {
 				logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());

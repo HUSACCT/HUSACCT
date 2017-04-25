@@ -78,7 +78,7 @@ public class WarningMessageService extends Observable implements Observer {
 			
 			if(warning instanceof ImplementationLevelWarning)
 			{
-				Long idOfWarningModule = ((ImplementationLevelWarning)warning).getModule().getId();
+				long idOfWarningModule = ((ImplementationLevelWarning)warning).getModule().getId();
 				if(module.getId()==idOfWarningModule)
 				{
 					int index= warnings.indexOf(warning);

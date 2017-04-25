@@ -84,7 +84,7 @@ public class AddModuleValuesJDialog extends HelpableJDialog implements KeyListen
 		JLabel parentModuleLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ParentModule"));
 		this.innerPanel.add(parentModuleLabel);
 		
-		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
+		long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 		String parentModuleName = DefinitionController.getInstance().getModuleName(selectedModuleId);
 		
 		parentModuleNameLabel = new JLabel(parentModuleName);
