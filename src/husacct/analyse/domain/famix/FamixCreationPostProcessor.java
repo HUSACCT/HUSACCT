@@ -537,7 +537,7 @@ class FamixCreationPostProcessor {
                 /* 3) Select and process FamixInvocations with a composed to-name
                  * If FamixAssociation.to is composed of substrings (a chaining assignment or call), a dependency to the type of the first substring is a direct dependency.
                  * Dependencies to types of the following substrings are determined afterwards. The next one is indirect, if the first substring is a method or variable of a super class, otherwise it is direct.
-                 * Algorithm: Split the string and try to identify the type of the first substring. Create a separate association to identify dependencies to following substring (variables or methods). 
+                 * Algorithms: Split the string and try to identify the type of the first substring. Create a separate association to identify dependencies to following substring (variables or methods). 
                  * If the type of the first substring is identified, replace the substring by the type in the next association, and store this association to be processed later on.   
                  * */
                 if (fromExists && !toExists && toHasValue){

@@ -9,7 +9,6 @@ import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.task.analyse.ApplicationAnalyser;
 import husacct.analyse.task.reconstruct.ReconstructArchitecture;
-import husacct.analyse.task.reconstruct.ReconstructArchitectureDTOList;
 import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.common.dto.AnalysisStatisticsDTO;
 import husacct.common.dto.ApplicationDTO;
@@ -25,7 +24,6 @@ public class AnalyseTaskControl {
     private DependencyReportController reportController;
     private HistoryLogger historyLogger;
     private ReconstructArchitecture reconstructArchitecture;
-    private ReconstructArchitectureDTOList reconstructArchitectureDTOList;
     
     private final Logger logger = Logger.getLogger(AnalyseTaskControl.class);
 
@@ -118,15 +116,8 @@ public class AnalyseTaskControl {
 		return queryService.getAnalysisStatistics(selectedModule);
 	}
 	
-	public ReconstructArchitectureDTOList createReconstructArchitectureList(){
-		reconstructArchitectureDTOList = new ReconstructArchitectureDTOList(queryService);
-		return reconstructArchitectureDTOList;
-	}
-	
-	public ReconstructArchitectureDTOList getReconstructArchitectureDTOList(){
-		return reconstructArchitectureDTOList;
-	}
-	public void setReconstructArchitectureDTOList(ReconstructArchitectureDTOList reconArchiDTOList){
-		reconstructArchitectureDTOList = reconArchiDTOList;
+	public ReconstructArchitectureDTO getReconstructArchitectureDTO(String approachId){
+		ReconstructArchitecture reconstructor = new ReconstructArchitecture(queryService);
+		return reconstructor.getReconstructArchitectureDTO(approachId);
 	}
 }

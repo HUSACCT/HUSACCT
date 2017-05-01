@@ -21,7 +21,6 @@ import javax.swing.border.TitledBorder;
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.reconstruct.approaches.ApproachesJPanel;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
-import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.help.presentation.HelpableJDialog;
@@ -35,16 +34,14 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	private ReconstructArchitectureDTO dto;
 	private JPanel mainPanel;
 	private JButton applyButton, cancelButton;
-	private AnalyseTaskControl analyseTaskControl;
-	private ApproachesJPanel allApproachesJPanel;
+	private ApproachesJPanel approachesJPanel;
 	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<String, ReconstructArchitectureParameterPanel>();
 
 	
-	public EditApproachFrame(AnalyseTaskControl atc, ReconstructArchitectureDTO dto, ApproachesJPanel allApJp){
+	public EditApproachFrame(ReconstructArchitectureDTO dto, ApproachesJPanel allApJp){
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.dto = dto;
-		this.analyseTaskControl = atc;
-		this.allApproachesJPanel = allApJp;
+		this.approachesJPanel = allApJp;
 		initUI();
 	}
 	
@@ -78,7 +75,7 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	private JPanel buildApproachPanel(){
 		JPanel approachLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		approachLabelPanel.setBorder(new TitledBorder(localService.getTranslatedString("Approach")));
-		JLabel approachLabelLabel = new JLabel(getTranslation(dto.approachConstant));
+		JLabel approachLabelLabel = new JLabel(getTranslation(dto.approachId));
 		approachLabelPanel.add(approachLabelLabel);
 		return approachLabelPanel;
 	}
@@ -135,10 +132,10 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	}
 
 	private void resetParameterTable() {
-		int selectedRow = allApproachesJPanel.approachesTable.getSelectedRow();
+		int selectedRow = approachesJPanel.approachesTable.getSelectedRow();
 		int differentRow = selectedRow > 1 ? selectedRow -1 : selectedRow +1;
-		allApproachesJPanel.approachesTable.setRowSelectionInterval(differentRow, differentRow);
-		allApproachesJPanel.approachesTable.setRowSelectionInterval(selectedRow, selectedRow);
+		approachesJPanel.approachesTable.setRowSelectionInterval(differentRow, differentRow);
+		approachesJPanel.approachesTable.setRowSelectionInterval(selectedRow, selectedRow);
 	}
 
 	private void setParameterValues() {
@@ -146,7 +143,7 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 			Object value = getParameterPanelValue(parameterDTO.parameterConstant);
 			dto = ReconstructArchitectureParameterPanel.setValueOfReconstructArchitectureDTO(parameterDTO.parameterConstant, dto, value);
 		}
-		analyseTaskControl.getReconstructArchitectureDTOList().updateReconstructArchitectureDTO(dto);
+		approachesJPanel.updateReconstructArchitectureDTO(dto);
 	}
 	
 	private Object getParameterPanelValue(String parameterConstant){

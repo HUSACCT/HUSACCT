@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -38,16 +39,16 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	
 	private String approachesConstants = "ApproachesConstants";
 	protected AnalyseTaskControl analyseTaskControl;
-	private TableColumnModel tableApproachesColumnModel;
-	private JButton applyButton, reverseButton, clearAllButton, editApproachButton;
+	protected ArrayList<ReconstructArchitectureDTO> reconstructArchitectureDTOList;
 	private String selectedModuleLogicalPath = ""; // Module selected by the user during the last (not reversed) executeApproch().
 	
 	public JTable approachesTable;
+	private TableColumnModel tableApproachesColumnModel;
 	public JTable parameterTable;
+	private JButton applyButton, reverseButton, clearAllButton, editApproachButton;
 	
 	public ApproachesJPanel(AnalyseTaskControl analyseTaskControl) throws IOException {
 		this.analyseTaskControl = analyseTaskControl;
-		this.analyseTaskControl.createReconstructArchitectureList();
 		initUI();
 	}
 	
@@ -62,6 +63,7 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 		Object columnNames[] = getColumnNames();
 		Object rows[][] = getApproachesRows();
 		approachesTable = setupApproachesTable(columnNames, rows);
+		initializeReconstructArchitectureDTOList();
 						
 		Dimension approachestableSize = approachesTable.getPreferredSize();
 		JScrollPane approachesTableScrollPane = setupScrollPane(approachestableSize, approachesTable);
@@ -76,7 +78,7 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 		JScrollPane parameterScrollPane = setupScrollPane(parameterTableSize, parameterTable);
 		parameterScrollPane.setBorder(new TitledBorder(localService.getTranslatedString("Parameters")));
 		
-		ListSelectionListener approachesSelectionListener = new ApproachesTableSelectionListener(approachesTable, analyseTaskControl, parameterTable);
+		ListSelectionListener approachesSelectionListener = new ApproachesTableSelectionListener(approachesTable, this, parameterTable);
 		approachesTable.getSelectionModel().addListSelectionListener(approachesSelectionListener);
 		
 		//Add table scrollPanes to the higher-level containers
@@ -122,6 +124,35 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	
 	protected abstract Object[][] getApproachesRows();
 	
+	private void initializeReconstructArchitectureDTOList(){
+		reconstructArchitectureDTOList = new ArrayList<>();
+		for (int rowId = 0 ; rowId < approachesTable.getRowCount() ; rowId++ ) {
+			String approachId = (String) approachesTable.getModel().getValueAt(rowId, 0);
+			ReconstructArchitectureDTO raDTO = analyseTaskControl.getReconstructArchitectureDTO(approachId);
+			reconstructArchitectureDTOList.add(raDTO);
+		}
+	}
+
+	public ReconstructArchitectureDTO getReconstructArchitectureDTO(String approachId) {
+		ReconstructArchitectureDTO foundRaDTO = null;
+		for (ReconstructArchitectureDTO raDTO : reconstructArchitectureDTOList) {
+			if (raDTO.approachId.equals(approachId)) {
+				foundRaDTO = raDTO;
+				break;
+			}
+		}
+		return foundRaDTO;
+	}
+	
+	public void updateReconstructArchitectureDTO(ReconstructArchitectureDTO newDTO){
+		for(ReconstructArchitectureDTO oldDTO : reconstructArchitectureDTOList){
+			if (oldDTO.approachId.equals(newDTO.approachId)){
+				oldDTO = newDTO;
+				break;
+			}
+		}
+	}
+
 	private void hideColumn(String columnName, TableColumnModel tableColumnModel) {
 		int index = tableColumnModel.getColumnIndex(columnName);
 		TableColumn column = tableColumnModel.getColumn(index);
@@ -200,10 +231,10 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 		if (action.getSource() == editApproachButton){
 			int selectedRow = approachesTable.getSelectedRow();
 			if (selectedRow >= 0){
-				String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-				ReconstructArchitectureDTO reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
-				if (!reconstructArchitectureDTO.parameterDTOs.isEmpty()){
-					new EditApproachFrame(analyseTaskControl, reconstructArchitectureDTO, this);
+				String approachId = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
+				ReconstructArchitectureDTO reconstructArchitectureDTO = getReconstructArchitectureDTO(approachId);
+				if ((reconstructArchitectureDTO != null) && !reconstructArchitectureDTO.parameterDTOs.isEmpty()){
+					new EditApproachFrame(reconstructArchitectureDTO, this);
 				}
 				else{
 					JOptionPane.showMessageDialog(this, localService.getTranslatedString("ApproachWithoutParametersWarning"));
@@ -216,15 +247,16 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	}
 	
 	private void executeApproach(JTable approachesTable, int selectedRow){
-		ReconstructArchitectureDTO reconstructArchitectureDTO = new ReconstructArchitectureDTO();
 		ModuleDTO selectedModule = getSelectedModule();
 		if ((selectedModule != null) && (selectedModule.logicalPath != null)) {
 			selectedModuleLogicalPath = selectedModule.logicalPath;
 		}
-		String approachConstant = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
-		reconstructArchitectureDTO = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
-		reconstructArchitectureDTO.setSelectedModule(selectedModule);
-		analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
+		String approachId = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
+		ReconstructArchitectureDTO reconstructArchitectureDTO = getReconstructArchitectureDTO(approachId);
+		if (reconstructArchitectureDTO != null) {
+			reconstructArchitectureDTO.setSelectedModule(selectedModule);
+			analyseTaskControl.reconstructArchitecture_Execute(reconstructArchitectureDTO);
+		}
 		ServiceProvider.getInstance().getDefineService().getSarService().updateModulePanel(selectedModuleLogicalPath);
 	}
 	

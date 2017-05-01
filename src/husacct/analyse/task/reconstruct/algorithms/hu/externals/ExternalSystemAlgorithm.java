@@ -52,7 +52,7 @@ public class ExternalSystemAlgorithm extends AlgorithmExternal{
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Externals_Recognition;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Externals_Recognition;
 		reconstructArchitecture.threshold = 10;
 		return reconstructArchitecture;
 	}

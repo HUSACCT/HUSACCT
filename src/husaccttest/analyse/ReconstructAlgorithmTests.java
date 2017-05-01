@@ -96,16 +96,16 @@ public class ReconstructAlgorithmTests {
 		for (ReconstructArchitectureDTO dto : reconstructionArchitectureDTOs){
 			testResult = false;
 			try{
-				logger.info("Algorithm: '" + dto.getName() + "' started");
+				logger.info("Algorithms: '" + dto.getName() + "' started");
 				
 				algortithmSucces = analyseService.reconstructArchitecture_Execute(dto);
 				
 				if (algortithmSucces){
-					logger.info("Algorithm: '" + dto.getName() + "' " + "Tested succesfully");
+					logger.info("Algorithms: '" + dto.getName() + "' " + "Tested succesfully");
 					IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 					
-					switch (dto.approachConstant) {
-					case AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved:
+					switch (dto.approachId) {
+					case AnalyseReconstructConstants.Algorithms.Layers_Scanniello_Improved:
 						ArrayList<String> shouldBeList = new ArrayList<>();
 						shouldBeList.add("Layer1");
 						shouldBeList.add("Layer2");
@@ -119,7 +119,7 @@ public class ReconstructAlgorithmTests {
 							testResult = true;
 						}
 						break;
-					case AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original:
+					case AnalyseReconstructConstants.Algorithms.Layers_Goldstein_Root_Original:
 						shouldBeList = new ArrayList<>();
 						shouldBeList.add("Layer1");
 						shouldBeList.add("Layer2");
@@ -133,7 +133,7 @@ public class ReconstructAlgorithmTests {
 						}
 						
 						break;
-					case AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule:
+					case AnalyseReconstructConstants.Algorithms.Component_HUSACCT_SelectedModule:
 						shouldBeList = new ArrayList<>();
 						shouldBeList.add("org");
 						
@@ -152,7 +152,7 @@ public class ReconstructAlgorithmTests {
 					
 					
 				}else{
-					logger.error("Algorithm: '" + dto.getName() + "' " + "Failed");
+					logger.error("Algorithms: '" + dto.getName() + "' " + "Failed");
 				}
 				
 			}catch(Exception e){
@@ -164,7 +164,7 @@ public class ReconstructAlgorithmTests {
 			}
 			analyseService.reconstructArchitecture_ClearAll();
 			String result = testResult ? " ran succesfully" : " FAILED";
-			logger.info(dto.approachConstant + result);
+			logger.info(dto.approachId + result);
 			
 		}
 		Assert.assertTrue(totalResult);
@@ -175,7 +175,7 @@ public class ReconstructAlgorithmTests {
 		
 		//Scanniello - Improved
 		ReconstructArchitectureDTO scannielloImproved = new ReconstructArchitectureDTO();
-		scannielloImproved.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved;
+		scannielloImproved.approachId = AnalyseReconstructConstants.Algorithms.Layers_Scanniello_Improved;
 		scannielloImproved.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		scannielloImproved.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		scannielloImproved.setSelectedModule(new ModuleDTO("**", "**", "package", new ModuleDTO[]{}));
@@ -184,7 +184,7 @@ public class ReconstructAlgorithmTests {
 		
 		//Goldstein - Original
 		ReconstructArchitectureDTO goldsteinOriginal = new ReconstructArchitectureDTO();
-		goldsteinOriginal.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original;
+		goldsteinOriginal.approachId = AnalyseReconstructConstants.Algorithms.Layers_Goldstein_Root_Original;
 		goldsteinOriginal.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;
 		goldsteinOriginal.relationType = AnalyseReconstructConstants.RelationTypes.accessCallReferenceDependencies;
 		goldsteinOriginal.threshold = 10;
@@ -192,7 +192,7 @@ public class ReconstructAlgorithmTests {
 		
 		//Component
 		ReconstructArchitectureDTO component = new ReconstructArchitectureDTO();
-		component.approachConstant = AnalyseReconstructConstants.Algorithm.Component_HUSACCT_SelectedModule;
+		component.approachId = AnalyseReconstructConstants.Algorithms.Component_HUSACCT_SelectedModule;
 		component.granularity = AnalyseReconstructConstants.Granularities.Classes;
 		component.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		component.setSelectedModule(new ModuleDTO("**", "**", "package", new ModuleDTO[]{}));

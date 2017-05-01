@@ -232,7 +232,7 @@ public class Layers_HUSACCT_Algorithm_SAEroCon2016 extends Algorithm_SuperClass{
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_HUSACCT_SAEroCon2016;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Layers_HUSACCT_SAEroCon2016;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;

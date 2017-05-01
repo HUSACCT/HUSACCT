@@ -58,7 +58,7 @@ public class Layers_Scanniello_Root_Initial extends Layers_Scanniello_SuperClass
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Original;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Layers_Scanniello_Original;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.Classes;

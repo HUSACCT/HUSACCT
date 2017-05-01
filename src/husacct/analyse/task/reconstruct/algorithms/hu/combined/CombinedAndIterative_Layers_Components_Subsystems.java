@@ -104,7 +104,7 @@ public class CombinedAndIterative_Layers_Components_Subsystems extends Algorithm
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.CombinedAndIterative_HUSACCT_SelectedModule;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.CombinedAndIterative_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 5;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.Packages;

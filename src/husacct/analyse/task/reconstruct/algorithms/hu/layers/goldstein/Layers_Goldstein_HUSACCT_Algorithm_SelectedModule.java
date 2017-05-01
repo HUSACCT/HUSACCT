@@ -259,7 +259,7 @@ public class Layers_Goldstein_HUSACCT_Algorithm_SelectedModule extends Algorithm
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_HUSACCT_SelectedModule;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Layers_Goldstein_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;

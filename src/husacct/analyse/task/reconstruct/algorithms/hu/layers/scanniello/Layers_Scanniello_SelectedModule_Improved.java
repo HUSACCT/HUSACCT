@@ -167,7 +167,7 @@ public class Layers_Scanniello_SelectedModule_Improved extends Layers_Scanniello
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Scanniello_Improved;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Layers_Scanniello_Improved;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;

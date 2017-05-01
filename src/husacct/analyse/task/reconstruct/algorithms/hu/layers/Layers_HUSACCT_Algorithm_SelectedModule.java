@@ -284,7 +284,7 @@ public class Layers_HUSACCT_Algorithm_SelectedModule extends Algorithm_SuperClas
 	@Override
 	public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 		ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-		reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_HUSACCT_SelectedModule;
+		reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Layers_HUSACCT_SelectedModule;
 		reconstructArchitecture.threshold = 10;
 		reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 		reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.PackagesAndClasses;

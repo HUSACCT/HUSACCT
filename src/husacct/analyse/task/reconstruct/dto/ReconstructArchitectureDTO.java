@@ -17,7 +17,7 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 	public int threshold = 0;
 	public String relationType = ""; 
 	private String name = "";
-	public String approachConstant = "";
+	public String approachId = "";
 	public ArrayList<ReconstructArchitectureParameterDTO> parameterDTOs;
 	public String granularity;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -67,7 +67,7 @@ public class ReconstructArchitectureDTO extends AbstractDTO{
 	}
 	
 	public String getTranslation(){
-		return localeService.getTranslatedString(approachConstant);
+		return localeService.getTranslatedString(approachId);
 	}
 	
 	private void setAbsoluteDefaults(){

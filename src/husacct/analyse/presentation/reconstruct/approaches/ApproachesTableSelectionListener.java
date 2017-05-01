@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 
 import husacct.ServiceProvider;
 import husacct.analyse.presentation.reconstruct.parameter.ReconstructArchitectureParameterPanel;
-import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.locale.ILocaleService;
@@ -19,12 +18,12 @@ import husacct.common.locale.ILocaleService;
 public class ApproachesTableSelectionListener implements ListSelectionListener {
 	private final ILocaleService localService = ServiceProvider.getInstance().getLocaleService();
 	private JTable tableApproaches;
-	private AnalyseTaskControl analyseTaskControl;
+	private ApproachesJPanel approachesJPanel;
 	private JTable allParameterTable;
 	
-	public ApproachesTableSelectionListener (JTable tableApproaches, AnalyseTaskControl analyseTaskControl, JTable allParameterTable){
+	public ApproachesTableSelectionListener (JTable tableApproaches, ApproachesJPanel approachesJPanel, JTable allParameterTable){
 		this.tableApproaches = tableApproaches;
-		this.analyseTaskControl = analyseTaskControl;
+		this.approachesJPanel = approachesJPanel;
 		this.allParameterTable = allParameterTable;
 	}
 	
@@ -35,8 +34,8 @@ public class ApproachesTableSelectionListener implements ListSelectionListener {
 			
 			
 			ReconstructArchitectureDTO dto = new ReconstructArchitectureDTO();
-			String approachConstant = (String) tableApproaches.getModel().getValueAt(selectedRow, 0);
-			dto = analyseTaskControl.getReconstructArchitectureDTOList().getReconstructArchitectureDTO(approachConstant);
+			String algorithmId = (String) tableApproaches.getModel().getValueAt(selectedRow, 0);
+			dto = approachesJPanel.getReconstructArchitectureDTO(algorithmId);
 			
 			HashMap<String, Object> rowData = getParameters(dto);
 			DefaultTableModel defaultTableModel = new DefaultTableModel();

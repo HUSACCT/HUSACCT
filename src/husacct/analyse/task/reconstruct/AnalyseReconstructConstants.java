@@ -2,7 +2,7 @@ package husacct.analyse.task.reconstruct;
 
 public class AnalyseReconstructConstants {
 	
-	public static class Algorithm{
+	public static class Algorithms{
 		//TKey = Translation Key. Form common/resources/local/...
 		// Practical approaches
 		public static final String Layers_HUSACCT_SelectedModule = "Layers_HUSACCT_SelectedModule";

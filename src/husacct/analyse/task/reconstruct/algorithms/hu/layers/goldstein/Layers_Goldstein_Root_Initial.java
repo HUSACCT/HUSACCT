@@ -192,7 +192,7 @@ public class Layers_Goldstein_Root_Initial extends Algorithm_SuperClass{
 		@Override
 		public ReconstructArchitectureDTO getAlgorithmParameterSettings() {
 			ReconstructArchitectureDTO reconstructArchitecture = new ReconstructArchitectureDTO();
-			reconstructArchitecture.approachConstant = AnalyseReconstructConstants.Algorithm.Layers_Goldstein_Root_Original;
+			reconstructArchitecture.approachId = AnalyseReconstructConstants.Algorithms.Layers_Goldstein_Root_Original;
 			reconstructArchitecture.threshold = 10;
 			reconstructArchitecture.relationType = AnalyseReconstructConstants.RelationTypes.allDependencies;
 			reconstructArchitecture.granularity = AnalyseReconstructConstants.Granularities.Packages;
