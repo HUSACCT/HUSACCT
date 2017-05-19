@@ -24,10 +24,12 @@ public class InternalCodeviewerImpl implements CodeviewerService {
 	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
 		codeViewer.reset();
 		ArrayList<Error> errorList = new ArrayList<Error>();
-		for(Entry<Integer, Severity> entry : errors.entrySet()) {
-			Severity severity = entry.getValue();
-			Error error = new Error(entry.getKey(), severity.getColor());
-			errorList.add(error);
+		if (errors != null) {
+			for(Entry<Integer, Severity> entry : errors.entrySet()) {
+				Severity severity = entry.getValue();
+				Error error = new Error(entry.getKey(), severity.getColor());
+				errorList.add(error);
+			}
 		}
 		codeViewer.setErrors(errorList);
 		codeViewer.parseFile(fileName);

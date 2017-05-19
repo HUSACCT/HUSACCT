@@ -81,34 +81,44 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 	
 	public void parseFile(String fileName) {
 		firstErrorPosition = 0;
+		// Define style
+		StyleContext context = new StyleContext();
+		Style keyStyle = context.addStyle("default", null);
+		StyleConstants.setForeground(keyStyle, new Color(0, 0, 0));
+		StyleConstants.setBold(keyStyle, false);
 		// Parse file into fileTextPane
-		try {
-			// Define style
-			StyleContext context = new StyleContext();
-			Style keyStyle = context.addStyle("default", null);
-			StyleConstants.setForeground(keyStyle, new Color(0, 0, 0));
-			StyleConstants.setBold(keyStyle, false);
+		if (fileName != null) {
 			// Insert file path
 			String pathText = ServiceProvider.getInstance().getLocaleService().getTranslatedString("PathLabelShort");
 			String fullText = pathText + ":	" + fileName;
-			fileDocument.insertString(codeDocument.getLength(), fullText, keyStyle);
-			fileDocument.insertString(codeDocument.getLength(), "\n", null);
+			try {
+				fileDocument.insertString(codeDocument.getLength(), fullText, keyStyle);
+				fileDocument.insertString(codeDocument.getLength(), "\n", null);
+			} catch (BadLocationException e) {
+				logger.warn(" Exception: " + e.getMessage());
+			}
 			// Insert file name
 			String fileNameText = fileName.substring(fileName.lastIndexOf("\\") + 1);
 			String fileNameLabel = ServiceProvider.getInstance().getLocaleService().getTranslatedString("File");
 			String fullfileNameText = fileNameLabel + ":	" + fileNameText;
 			StyleConstants.setBold(keyStyle, true);
-			fileDocument.insertString(codeDocument.getLength(), fullfileNameText, keyStyle);
-		} catch (BadLocationException e) {
-			logger.warn(" Exception: " + e.getMessage());
+			try {
+				fileDocument.insertString(codeDocument.getLength(), fullfileNameText, keyStyle);
+			} catch (BadLocationException e) {
+				logger.warn(" Exception: " + e.getMessage());
+			}
+			// Parse code into codeTextPane
+			File file = new File(fileName);
+			String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+			parser = getParser(extension);
+			parser.parseFile(file);
+			// Set the Carat at the line of the first error.
+			codeTextPane.setSelectionStart(firstErrorPosition);
+			codeTextPane.setSelectionEnd(firstErrorPosition);
+		} else {
+			addWord("File not found!", keyStyle, firstErrorPosition);
+			logger.error(" File name == null");
 		}
-		// Parse code into codeTextPane
-		File file = new File(fileName);
-		parser = getParser(fileName.substring(fileName.lastIndexOf(".") + 1));
-		parser.parseFile(file);
-		// Set the Carat at the line of the first error.
-		codeTextPane.setSelectionStart(firstErrorPosition);
-		codeTextPane.setSelectionEnd(firstErrorPosition);
 	}
 	
 	public void addWord(String word, Style style, int lineNumber) {
@@ -155,38 +165,5 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 				return new JavaFileParser(this);
 		}
 	}
-	
-	// Old code (version 2.0) that caused problems
-	/*
-	public void setErrorLine(int lineNumber) {
-		Element map = codeDocument.getDefaultRootElement();
-	    if (lineNumber >= 0 && lineNumber < map.getElementCount()) {
-	        Element element = map.getElement(lineNumber);
-	        codeDocument.setParagraphAttributes(element.getStartOffset(), element.getEndOffset() - element.getStartOffset(), error, false);
-	    }
-	}
-	
-	public int getLineOfOffset(int offset) throws BadLocationException {
-	    if (offset < 0) {
-	        throw new BadLocationException("Can't translate offset to line", -1);
-	    } else if (offset > codeDocument.getLength()) {
-	        throw new BadLocationException("Can't translate offset to line", codeDocument.getLength() + 1);
-	    } else {
-	        Element map = codeDocument.getDefaultRootElement();
-	        return map.getElementIndex(offset);
-	    }
-	}
 
-	public int getLineStartOffset(int line) throws BadLocationException {
-	    Element map = codeDocument.getDefaultRootElement();
-	    if (line < 0) {
-	        throw new BadLocationException("Negative line", -1);
-	    } else if (line >= map.getElementCount()) {
-	        throw new BadLocationException("No such line", codeDocument.getLength() + 1);
-	    } else {
-	        Element lineElem = map.getElement(line);
-	        return lineElem.getStartOffset();
-	    }
-	}
-	*/
 }
