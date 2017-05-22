@@ -151,7 +151,7 @@ public class CodeViewInternalFrame extends HelpableJInternalFrame  {
 		try {
 			codeDocument.insertString(codeDocument.getLength(), "\n", null);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			logger.warn(" Exception: " + e.getMessage());
 		}
 	}
 	

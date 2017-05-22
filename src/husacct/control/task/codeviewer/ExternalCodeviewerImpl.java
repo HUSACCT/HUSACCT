@@ -1,5 +1,6 @@
 package husacct.control.task.codeviewer;
 
+import husacct.ServiceProvider;
 import husacct.common.OSDetector;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.validate.domain.validation.Severity;
@@ -24,7 +25,9 @@ public class ExternalCodeviewerImpl implements CodeviewerService {
 			try {
 				Runtime.getRuntime().exec(location + " --launcher.openFile \"" + fileName + "\"");
 			} catch (IOException e) {
-				e.printStackTrace();
+				String errorMessage = "Unable to open external code viewer at path: " + location;
+				ServiceProvider.getInstance().getControlService().showErrorMessage(errorMessage);
+				//e.printStackTrace();
 			}
 			break;
 		}
