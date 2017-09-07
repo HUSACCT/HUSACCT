@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -37,17 +38,47 @@ public abstract class ReportWriter {
 	public abstract void createReport() throws IOException, URISyntaxException, DocumentException;
 
 	protected TreeMap<Integer ,RuleWithNrOfViolationsDTO> getViolatedRulesWithNumberOfViolations(TaskServiceImpl taskServiceImpl) {
-		TreeMap<Integer ,RuleWithNrOfViolationsDTO> rulesMap= new TreeMap<Integer, RuleWithNrOfViolationsDTO>();
+		TreeMap<Integer ,RuleWithNrOfViolationsDTO> violatedRulesMap= new TreeMap<Integer, RuleWithNrOfViolationsDTO>();
 		Set<String> violatedRules = taskServiceImpl.getViolatedRules();
 		int nrOfRule = 1;
 		for (String rule : violatedRules) {
 			String[] ruleString = rule.split("::");
 			List<Violation> violationsPerRule = taskServiceImpl.getViolationsByRule(ruleString[0], ruleString[1], ruleString[2]);
-			RuleWithNrOfViolationsDTO ruleDTO = new RuleWithNrOfViolationsDTO(nrOfRule, ruleString[0], ruleString[2], ruleString[1], violationsPerRule.size());
-			rulesMap.put(nrOfRule, ruleDTO);
+			List<NrOfViolationsPerFromClassToClassDTO> violatingFromToClasses = getNrOfViolationsPerFromClassToClass(violationsPerRule);
+			RuleWithNrOfViolationsDTO ruleDTO = new RuleWithNrOfViolationsDTO(nrOfRule, ruleString[0], ruleString[2], ruleString[1], violationsPerRule.size(), violatingFromToClasses);
+			violatedRulesMap.put(nrOfRule, ruleDTO);
 			nrOfRule ++;
 		}
-		return rulesMap;
+		return violatedRulesMap;
+	}
+	
+	private List<NrOfViolationsPerFromClassToClassDTO> getNrOfViolationsPerFromClassToClass(List<Violation> violationsPerRule){
+		ArrayList<NrOfViolationsPerFromClassToClassDTO> violatingFromToClasses = new ArrayList<>();
+		// Count number of violations per fromClas-toClass combination.
+		TreeMap<String, Integer> violationsPerFromToClassMap = new TreeMap<>();
+		for(Violation violation : violationsPerRule){
+			String violationFromToKey = "";
+			violationFromToKey = violation.getClassPathFrom() + "::" + violation.getClassPathTo();
+			violationFromToKey.toLowerCase();
+			int nrOfViolations = 1;
+			if(violationsPerFromToClassMap.containsKey(violationFromToKey)){
+				nrOfViolations = violationsPerFromToClassMap.get(violationFromToKey);
+				nrOfViolations ++;
+				violationsPerFromToClassMap.put(violationFromToKey, nrOfViolations);
+			} else {
+				violationsPerFromToClassMap.put(violationFromToKey, nrOfViolations);
+			}
+		}
+		// Create a DTO for each fromClas-toClass combination.
+		for (String violationFromToKey : violationsPerFromToClassMap.keySet()) {
+			String[] subStrings = violationFromToKey.split("::");
+			String fromClass = subStrings[0];
+			String toClass = subStrings[1];
+			int nrOfViolations = violationsPerFromToClassMap.get(violationFromToKey); 
+			NrOfViolationsPerFromClassToClassDTO fromToClassDTO = new NrOfViolationsPerFromClassToClassDTO(fromClass, toClass, nrOfViolations);
+			violatingFromToClasses.add(fromToClassDTO);
+		}
+		return violatingFromToClasses;
 	}
 	
 	protected TreeMap<String ,RuleWithNrOfViolationsDTO> getNonViolatedRulesWithNumberOfViolations(TaskServiceImpl taskServiceImpl) {
@@ -59,7 +90,8 @@ public abstract class ReportWriter {
 			if (!rule.isException) {
 				String searchKey =  rule.moduleFrom.logicalPath + "::" + rule.moduleTo.logicalPath + "::" + rule.ruleTypeKey;
 				if (!violatedRules.contains(searchKey)) {
-					RuleWithNrOfViolationsDTO ruleDTO = new RuleWithNrOfViolationsDTO(nrOfRule, rule.moduleFrom.logicalPath, rule.ruleTypeKey, rule.moduleTo.logicalPath, 0);
+					ArrayList<NrOfViolationsPerFromClassToClassDTO> violatingFromToClasses = new ArrayList<>();
+					RuleWithNrOfViolationsDTO ruleDTO = new RuleWithNrOfViolationsDTO(nrOfRule, rule.moduleFrom.logicalPath, rule.ruleTypeKey, rule.moduleTo.logicalPath, 0, violatingFromToClasses);
 					nonViolatedRulesMap.put(searchKey, ruleDTO);
 					nrOfRule ++;
 				}
