@@ -76,7 +76,7 @@ public class WorkspaceController {
 	
 	public Document getWorkspaceData(){
 		Element rootElement = new Element("husacct");
-		rootElement.setAttribute("version", "5.3.2");		
+		rootElement.setAttribute("version", "5.4");		
 		
 		for(ISaveable service : getSaveableServices()){
 			String serviceName = service.getClass().getName();
