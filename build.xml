@@ -41,6 +41,7 @@
 				<include name="**/*.jar"/>
 				<exclude name="**/flickrapi*"/>
 				<exclude name="**/foursquare*"/>
+				<exclude name="**/junit*"/>
 				<exclude name="**/twitter4j*"/>
 			</fileset>
 		</unzip>
