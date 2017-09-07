@@ -40,7 +40,7 @@ public class LoadingDialog extends JDialog implements Runnable {
 	private final Logger logger = Logger.getLogger(LoadingDialog.class);
 	
 	public LoadingDialog(MainController mainController, String processInfoText) {
-		super();
+		super(mainController.getMainGui(), false);
 		setTitle(localeService.getTranslatedString("Prepare"));
 		this.processInfoText = processInfoText;
 		setup();
@@ -136,7 +136,7 @@ public class LoadingDialog extends JDialog implements Runnable {
 	public void run() {
 		try{
 			super.setVisible(true);
-			super.setAlwaysOnTop(false);
+			super.setAlwaysOnTop(true);
 		} catch (Exception exception) {
 			this.logger.warn("Exception: " + exception.getClass() + exception.getMessage());
 		}
