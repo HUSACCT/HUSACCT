@@ -2,7 +2,10 @@
 Michiel Borkent
 Christian Köppe
 Leo Pruijt
-@Students 2013
+@Students 2017
+Auke Bakker
+Nigel van Hattum
+@Students 2016
 Sven van Alem
 Rick van Alem
 Menno Burkhard
