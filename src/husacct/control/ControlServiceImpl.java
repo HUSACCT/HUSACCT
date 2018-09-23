@@ -12,32 +12,23 @@ import husacct.control.presentation.util.DialogUtils;
 import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.viewcontrol.ViewController;
-import husacct.control.task.ApplicationController;
-import husacct.control.task.BootstrapHandler;
-import husacct.control.task.ExternalComplianceCheck;
-import husacct.control.task.FileController;
-import husacct.control.task.IFileChangeListener;
-import husacct.control.task.MainController;
-import husacct.control.task.StateController;
-import husacct.control.task.WorkspaceController;
+import husacct.control.task.*;
 import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.externalinterface.SaccCommandDTO;
 import husacct.externalinterface.ViolationReportDTO;
 import husacct.validate.domain.validation.Severity;
+import org.apache.log4j.Logger;
+import org.jdom2.Element;
 
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import javax.swing.JDialog;
-
-import org.apache.log4j.Logger;
-import org.jdom2.Element;
 
 
 public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {
@@ -111,7 +102,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		Element data = new Element("workspace");
 		Workspace workspace = workspaceController.getCurrentWorkspace();
 		if (workspace != null) {
-			data.setAttribute("name", workspace.getName());
+			data.setAttribute("name", (workspace.getName() == null) ? "" : workspace.getName());
 			data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
 		}
 		return data;
