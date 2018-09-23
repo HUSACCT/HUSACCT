@@ -9,15 +9,14 @@ import husacct.control.presentation.workspace.OpenWorkspaceDialog;
 import husacct.control.presentation.workspace.SaveWorkspaceDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
+import org.apache.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
 
 public class WorkspaceController {
 
@@ -33,17 +32,19 @@ public class WorkspaceController {
 	}
 
 	public void showCreateWorkspaceGui() {
+		showSaveWorkspaceGuiIfUnSaved();
 		new CreateWorkspaceDialog(mainController);
 	}
 	
 	public void showOpenWorkspaceGui() {
+		showSaveWorkspaceGuiIfUnSaved();
 		new OpenWorkspaceDialog(mainController);
 	}
 	
 	public SaveWorkspaceDialog showSaveWorkspaceGui() {
 		return new SaveWorkspaceDialog(mainController);
 	}
-	
+
 	public void createWorkspace(String name){
 		logger.info( new Date().toString() + " New workspace: " + name);
 		Workspace workspace = new Workspace();
@@ -59,6 +60,7 @@ public class WorkspaceController {
 	}
 	
 	public void closeWorkspace() {
+		showSaveWorkspaceGuiIfUnSaved();
 		currentWorkspace = null;
 		if(ServiceProvider.getInstance().getControlService().isGuiEnabled()) {
 			mainController.getMainGui().setTitle("");
@@ -168,6 +170,9 @@ public class WorkspaceController {
 		}
 	}
 	
-
-
+	private void showSaveWorkspaceGuiIfUnSaved() {
+		if (isAWorkspaceOpened() && getCurrentWorkspace().isDirty()) {
+			showSaveWorkspaceGui();
+		}
+	}
 }
