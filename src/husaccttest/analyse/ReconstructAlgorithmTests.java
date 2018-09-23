@@ -1,17 +1,5 @@
 package husaccttest.analyse;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants;
@@ -23,8 +11,20 @@ import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.define.IDefineService;
 import husaccttest.TestResourceFinder;
-
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
+import static husaccttest.TestUtils.closeWorkspace;
 
 public class ReconstructAlgorithmTests {
 	private static String workspacePath;
@@ -49,7 +49,7 @@ public class ReconstructAlgorithmTests {
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
 			workspaceController = mainController.getWorkspaceController();
-			workspaceController.closeWorkspace();
+			closeWorkspace(workspaceController);
 			loadWorkspace(workspacePath);
 			getAnalyseStatistics();
 			exportFilePath = TestResourceFinder.getExportFolderForTest("java") + exportFile;
@@ -83,7 +83,7 @@ public class ReconstructAlgorithmTests {
 	public static void tearDownClass(){
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
-		mainController.getWorkspaceController().closeWorkspace();
+		closeWorkspace(workspaceController);
 		logger.info(" Finished test: ReconstructAlgorithmTests");
 	}
 	

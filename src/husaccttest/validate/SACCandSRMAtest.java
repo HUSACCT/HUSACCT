@@ -1,14 +1,9 @@
 package husaccttest.validate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.IValidateService;
-import husacct.analyse.IAnalyseService;
-import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
-import husacct.validate.task.imexporting.importing.ImportViolations;
 import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.define.IDefineService;
@@ -16,19 +11,25 @@ import husacct.externalinterface.ExternalServiceProvider;
 import husacct.externalinterface.SaccCommandDTO;
 import husacct.externalinterface.ViolationImExportDTO;
 import husacct.externalinterface.ViolationReportDTO;
+import husacct.validate.IValidateService;
+import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.task.imexporting.importing.ImportViolations;
 import husaccttest.TestResourceFinder;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jdom2.Document;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static husaccttest.TestUtils.closeWorkspace;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 // Tests the full SACC-cycle using the SRMA test and tests the externally provided SACC via ExternalServiceProvider.
 public class SACCandSRMAtest {
@@ -79,7 +80,7 @@ public class SACCandSRMAtest {
 	public static void tearDownClass(){
 		controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 		mainController = controlService.getMainController();
-		mainController.getWorkspaceController().closeWorkspace();
+		closeWorkspace(mainController.getWorkspaceController());
 		logger.info(String.format(new Date().toString() + " Finished: Validate - SACC and SRMA Test"));
 	}
 	

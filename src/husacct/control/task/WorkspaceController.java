@@ -69,7 +69,7 @@ public class WorkspaceController {
 		ServiceProvider.getInstance().resetServices();
 		mainController.getStateController().checkState();
 	}
-	
+
 	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues, HashMap<String, Object> config) {
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();

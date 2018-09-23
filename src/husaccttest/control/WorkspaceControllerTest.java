@@ -1,10 +1,5 @@
 package husaccttest.control;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
@@ -12,12 +7,6 @@ import husacct.control.domain.Workspace;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.resources.XmlResource;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.HashMap;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
@@ -25,6 +14,14 @@ import org.jdom2.output.XMLOutputter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.HashMap;
+
+import static husaccttest.TestUtils.closeWorkspace;
+import static org.junit.Assert.*;
 
 public class WorkspaceControllerTest {
 
@@ -67,7 +64,7 @@ public class WorkspaceControllerTest {
 	@Test
 	public void testCloseWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
-		workspaceController.closeWorkspace();
+		closeWorkspace(workspaceController);
 		assertNull(workspaceController.getCurrentWorkspace());
 	}
 	

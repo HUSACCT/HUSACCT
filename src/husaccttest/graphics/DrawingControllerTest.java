@@ -1,8 +1,5 @@
 package husaccttest.graphics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
@@ -20,14 +17,6 @@ import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.ModuleAndRuleController;
 import husaccttest.TestResourceFinder;
-
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jhotdraw.draw.ConnectionFigure;
@@ -36,6 +25,16 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import static husaccttest.TestUtils.closeWorkspace;
+import static org.junit.Assert.*;
 
 public class DrawingControllerTest {
 	private static String workspacePath;
@@ -94,7 +93,7 @@ public class DrawingControllerTest {
 
 	@AfterClass
 	public static void tearDown(){
-		workspaceController.closeWorkspace();
+		closeWorkspace(workspaceController);
 		logger.info(String.format(new Date().toString() + "Finished: Graphics DrawingControllerTest"));
 	}
 

@@ -12,6 +12,12 @@ import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.validate.IValidateService;
 import husaccttest.TestResourceFinder;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -20,12 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static husaccttest.TestUtils.closeWorkspace;
 
 public class CSharp_AccuracyTestDependencyDetection {
 	private static ControlServiceImpl controlService;
@@ -79,7 +80,7 @@ public class CSharp_AccuracyTestDependencyDetection {
 
 	@AfterClass
 	public static void tearDown(){
-		workspaceController.closeWorkspace();
+		closeWorkspace(workspaceController);
 	}
 
 	// TESTS

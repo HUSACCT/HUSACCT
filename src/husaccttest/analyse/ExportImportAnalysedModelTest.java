@@ -9,6 +9,12 @@ import husacct.control.ControlServiceImpl;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husaccttest.TestResourceFinder;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -16,12 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static husaccttest.TestUtils.closeWorkspace;
 
 public class ExportImportAnalysedModelTest {
 	private static String workspacePath;
@@ -71,7 +72,7 @@ public class ExportImportAnalysedModelTest {
 			controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			mainController = controlService.getMainController();
 			workspaceController = mainController.getWorkspaceController();
-			workspaceController.closeWorkspace();
+			closeWorkspace(workspaceController);
 			loadWorkspace(workspacePath);
 			getAnalyseStatistics(); //Needed to show statistics data in console
 			importAnalysisModel();
@@ -86,7 +87,7 @@ public class ExportImportAnalysedModelTest {
 	@AfterClass
 	public static void tearDown(){
 		try {
-			workspaceController.closeWorkspace();
+			closeWorkspace(workspaceController);
 			exportFile.delete();
 			logger.info(String.format(" Finished: Analyse - ExportImport AnalysedModel Test"));
 		} catch (Exception e){

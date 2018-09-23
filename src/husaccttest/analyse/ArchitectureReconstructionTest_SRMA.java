@@ -1,7 +1,5 @@
 package husaccttest.analyse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AnalysisStatisticsDTO;
@@ -15,6 +13,12 @@ import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husaccttest.TestResourceFinder;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -22,12 +26,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import static husaccttest.TestUtils.closeWorkspace;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ArchitectureReconstructionTest_SRMA {
 	private static String workspacePath;
@@ -89,7 +91,7 @@ public class ArchitectureReconstructionTest_SRMA {
 
 	@AfterClass
 	public static void tearDown(){
-		workspaceController.closeWorkspace();
+		closeWorkspace(workspaceController);
 	}
 
 	// TESTS 

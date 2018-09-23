@@ -25,6 +25,10 @@ public class Workspace {
 		this.appData = appData;
 	}
 
+	public void clearDirty() {
+		dirty = false;
+	}
+
 	public boolean isDirty() {
 		return dirty;
 	}

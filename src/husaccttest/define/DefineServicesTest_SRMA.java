@@ -15,6 +15,12 @@ import husacct.define.IDefineService;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husaccttest.TestResourceFinder;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -23,12 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static husaccttest.TestUtils.closeWorkspace;
 
 public class DefineServicesTest_SRMA {
 	private static String workspacePath;
@@ -72,7 +73,7 @@ public class DefineServicesTest_SRMA {
 
 	@AfterClass
 	public static void tearDown(){
-		workspaceController.closeWorkspace();
+		closeWorkspace(workspaceController);
 		logger.info(String.format("Finished: Define SarServices Test"));
 	}
 
