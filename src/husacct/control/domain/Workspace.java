@@ -4,14 +4,16 @@ import husacct.common.dto.ApplicationDTO;
 
 public class Workspace {
 	
-	private String name;
+	private String name = "Workspace";
 	private ApplicationDTO appData;
 
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		if (name != null && (name.trim().length() >= 1)) {
+			this.name = name;
+		}
 	}
 	public ApplicationDTO getApplicationData() {
 		return appData;

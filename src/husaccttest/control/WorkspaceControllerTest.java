@@ -59,6 +59,15 @@ public class WorkspaceControllerTest {
 	}
 	
 	@Test
+	public void testNewWorkspaceNameNotNullOrEmpty(){
+		workspaceController.createWorkspace(null);
+		assertNotNull(workspaceController.getCurrentWorkspace().getName());
+		workspaceController.createWorkspace("");
+		assertNotNull(workspaceController.getCurrentWorkspace().getName());
+		
+	}
+
+	@Test
 	public void testIsOpenWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
 		assertTrue(workspaceController.isAWorkspaceOpened());
