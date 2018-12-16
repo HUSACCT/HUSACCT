@@ -21,6 +21,10 @@ public class XmlResource implements IResource{
 		File file = (File) dataValues.get("file");
 
 		SAXBuilder sax = new SAXBuilder();
+		sax.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
+		sax.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		sax.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
 		Document doc = new Document();
 		try {
 
