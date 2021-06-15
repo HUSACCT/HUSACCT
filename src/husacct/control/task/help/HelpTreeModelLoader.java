@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -67,10 +70,11 @@ public class HelpTreeModelLoader {
 	}
 	
 	private DefaultMutableTreeNode findNode(DefaultMutableTreeNode root, HelpTreeNode node) {
-		List<DefaultMutableTreeNode> Children = Collections.list(root.children());
-		for(int i = 0; i < Children.size(); i++) {
-			if(((HelpTreeNode)Children.get(i).getUserObject()).getFilename().equals(node.getFilename())) {
-				return Children.get(i);
+		List<TreeNode> children = Collections.list(root.children());
+		for(int i = 0; i < children.size(); i++) {
+			DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) children.get(i);
+			if(((HelpTreeNode)childNode.getUserObject()).getFilename().equals(node.getFilename())) {
+				return childNode;
 			}
 		}
 		return new DefaultMutableTreeNode(node);
