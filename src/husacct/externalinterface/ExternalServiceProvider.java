@@ -81,7 +81,7 @@ public class ExternalServiceProvider {
 	private static void setLog4jConfiguration() {
 		Properties props = new Properties();
 		try {
-			props.load(Class.class.getResourceAsStream("/husacct/common/resources/log4j.properties"));
+			props.load(husacct.Main.class.getResourceAsStream("/husacct/common/resources/log4j.properties"));
 		} catch (IOException e) {
 			System.out.println("IOException in HUSACCT ExternalServiceProvider.setLog4jConfiguration()");
 			//e.printStackTrace();
