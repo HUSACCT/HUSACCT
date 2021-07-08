@@ -148,6 +148,7 @@
 
     <build>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/husaccttest</testSourceDirectory>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/</directory>
@@ -198,6 +199,15 @@
                             <mainClass>husacct.Main</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+
                 </configuration>
             </plugin>
         </plugins>
