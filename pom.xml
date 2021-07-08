@@ -15,6 +15,18 @@
 
     <name>HUSACCT</name>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-imaging -->
+        <!-- dit is een transitieve dependency van com.itextpdf.itextpdf
+             in die versie wordt echter een SNAPSHOT gevraagd die soms niet downloadbaar is
+             alpha is ook niet prettig, maar er is gewoon geen 1.0 versie van deze library,
+             en alpha is op z'n minst iets stabieler dan SNAPSHOT.
+             Alternetief is een geresolvede versie jar-en-al inchecken in local-maven-repo -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-imaging</artifactId>
+            <version>1.0-alpha2</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.antlr/antlr4 -->
         <dependency>
             <groupId>org.antlr</groupId>
