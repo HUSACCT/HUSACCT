@@ -80,47 +80,44 @@ public class SaccOnHusacct {
 
     @Test
     public void T2_hasNumberOfViolationsIncreased() {
-        boolean numberOfViolationsHasNotIncreased = true;
+
         assertTrue(violationReport != null);
-        if (violationReport != null) {
-            System.out.println(" SACC results:");
-            System.out.println(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations()
-                    + "  At: " + getFormattedDate(violationReport.getTimePreviousCheck()));
-            System.out.println(" Current number of violations: " + violationReport.getNrOfAllCurrentViolations());
-            if (violationReport.getNrOfAllCurrentViolations() > violationReport.getNrOfAllPreviousViolations()) {
-                numberOfViolationsHasNotIncreased = false;
-            }
-			/* Activate to renew the previous violations file. Only temporarily by one person, to prevent merging problems.  
-			if (violationReport.getNrOfAllCurrentViolations() < violationReport.getNrOfAllPreviousViolations()) {
-				replaceImportFileAllPreviousViolations();
-			}
-			*/
+
+
+        System.out.println(" SACC results:");
+        System.out.println(" Previous number of violations: " + violationReport.getNrOfAllPreviousViolations()
+                + "  At: " + getFormattedDate(violationReport.getTimePreviousCheck()));
+        System.out.println(" Current number of violations: " + violationReport.getNrOfAllCurrentViolations());
+
+        /* Activate to renew the previous violations file. Only temporarily by one person, to prevent merging problems.
+        if (violationReport.getNrOfAllCurrentViolations() < violationReport.getNrOfAllPreviousViolations()) {
+            replaceImportFileAllPreviousViolations();
         }
+        */
+
         // Report on new architecture violations
-        if (violationReport != null) {
-            if (violationReport.getNrOfNewViolations() > 0) {
-                System.out.println(" New architectural violations detected! Number of new violations = " + violationReport.getNrOfNewViolations());
-                TreeSet<String> messageAndFromClassSet = new TreeSet<>();
-                int numberOfPrintLines = 0;
-                ViolationImExportDTO[] newViolations = violationReport.getNewViolations();
-                for (ViolationImExportDTO newViolation : newViolations) {
-                    String key = newViolation.getMessage() + newViolation.getFrom();
-                    if (!messageAndFromClassSet.contains(key)) {
-                        messageAndFromClassSet.add(key);
-                        if (numberOfPrintLines <= 25) {
-                            System.out.println(" Violated rule: " + newViolation.getMessage() + "; Violating class: " + newViolation.getFrom());
-                            numberOfPrintLines++;
-                        } else {
-                            System.out.println(" More violations detected; study ViolationReportDTO.newViolations");
-                            break;
-                        }
-                    }
+
+        if (violationReport.getNrOfNewViolations() > 0) {
+            System.out.println(" New architectural violations detected! Number of new violations = " + violationReport.getNrOfNewViolations());
+            int numberOfPrintLines = 0;
+            ViolationImExportDTO[] newViolations = violationReport.getNewViolations();
+            for (ViolationImExportDTO newViolation : newViolations) {
+                if (numberOfPrintLines <= 25) {
+                    System.out.printf(" Violated rule: %s; Violating class: %s; Line %d%n",
+                            newViolation.getMessage(),
+                            newViolation.getFrom(),
+                            newViolation.getLine());
+                    numberOfPrintLines++;
+                } else {
+                    System.out.println(" More violations detected; study ViolationReportDTO.newViolations");
+                    break;
                 }
-            } else {
-                System.out.println(" No new architectural violations detected!");
             }
+        } else {
+            System.out.println(" No new architectural violations detected!");
         }
-        assertTrue(numberOfViolationsHasNotIncreased);
+
+        assertTrue(violationReport.getNrOfAllCurrentViolations() <= violationReport.getNrOfAllPreviousViolations());
     }
 
     @SuppressWarnings("unused")
