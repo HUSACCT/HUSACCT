@@ -3,7 +3,7 @@ package husacct.analyse;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.swing.JInternalFrame;
+import javax.swing.*;
 
 import org.jdom2.Element;
 
@@ -25,9 +25,9 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public boolean isAnalysed();
 
-    public JInternalFrame getJInternalFrame();
+    public JInternalFrame getAnalyseFrame();
 
-    public JInternalFrame getJInternalSARFrame();
+    public JInternalFrame getSARDialog(JFrame parentFrame);
 
     /** Returns unique names of all types (classes, interfaces, inner classes) of SoftwareUnit with uniqueName */  
     public List<String> getAllPhysicalClassPathsOfSoftwareUnit(String uniqueName);

@@ -3,10 +3,8 @@ package husacct.analyse.presentation.reconstruct;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
-
 import org.apache.log4j.Logger;
 
 import husacct.ServiceProvider;
@@ -22,13 +20,15 @@ public class ReconstructJPanel extends HelpableJPanel{
 	private final Logger logger = Logger.getLogger(ReconstructJPanel.class);
 	private static final long serialVersionUID = 1L;
 	private AnalyseTaskControl analyseTaskControl;
+	private JFrame mainFrame;
 	public JTabbedPane tabbedPane;
 	
 	/**
 	 * Create the panel.
 	 */
-	public ReconstructJPanel(AnalyseTaskControl atc) {
+	public ReconstructJPanel(JFrame mainFrame, AnalyseTaskControl atc) {
 		super();
+		this.mainFrame = mainFrame;
 		analyseTaskControl = atc;
 		initUI();
 	}
@@ -45,10 +45,10 @@ public class ReconstructJPanel extends HelpableJPanel{
 		tabbedPane.removeAll();
 		try{
 			String allApprTranslation = getTranslation("PracticalApproaches");
-			tabbedPane.addTab(allApprTranslation, null, new PracticalApproachesJPanel(analyseTaskControl), null);
+			tabbedPane.addTab(allApprTranslation, null, new PracticalApproachesJPanel(this.mainFrame, analyseTaskControl), null);
 			
 			String distinctApprTranslation = getTranslation("ResearchApproachesHU");
-			tabbedPane.addTab(distinctApprTranslation, null, new ResearchApproachesHUPanel(analyseTaskControl), null);
+			tabbedPane.addTab(distinctApprTranslation, null, new ResearchApproachesHUPanel(this.mainFrame, analyseTaskControl), null);
 		
 			MojoJPanel mojoPanel = new MojoJPanel();
 			tabbedPane.addTab("MoJo",null, mojoPanel.createMojoPanel(),null);

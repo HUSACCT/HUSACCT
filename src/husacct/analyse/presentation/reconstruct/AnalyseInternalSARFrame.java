@@ -12,7 +12,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements ActionListener, IServiceListener {
 
@@ -22,9 +22,11 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 	private JPanel overviewPanel;
 	private ReconstructJPanel reconstructJPanel;
 	private int boundsSetInitially = 0;
+	private JFrame mainFrame;
 
-    public AnalyseInternalSARFrame(AnalyseTaskControl atc) {
+    public AnalyseInternalSARFrame(JFrame mainFrame, AnalyseTaskControl atc) {
     	analyseTaskControl = atc;
+    	this.mainFrame = mainFrame;
         registerLocaleChangeListener();
         initUI();
     }
@@ -43,7 +45,7 @@ public class AnalyseInternalSARFrame extends HelpableJInternalFrame implements A
 		this.overviewPanel = new JPanel();
 		BorderLayout borderLayout = new BorderLayout();
 		this.overviewPanel.setLayout(borderLayout);
-		reconstructJPanel = new ReconstructJPanel(analyseTaskControl);
+		reconstructJPanel = new ReconstructJPanel(this.mainFrame, analyseTaskControl);
 		this.overviewPanel.add(reconstructJPanel);
 		this.overviewPanel.setSize(20, 20);
 		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
