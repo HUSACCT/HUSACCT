@@ -18,12 +18,10 @@ public class ViewController {
 	private InternalFrameController validateConfigurationContainer;
 	private InternalFrameController codeViewerContainer;
 	private InternalFrameController analyseSARController;
-	private JFrame mainFrame;
 	
 	private List<InternalFrameController> viewContainers = new ArrayList<>();
 
 	public ViewController(MainController mainController){
-		this.mainFrame = mainController.getMainGui();
 
 		defineContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
 			@Override
@@ -57,7 +55,7 @@ public class ViewController {
 		analyseSARController = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "SoftwareArchitectureReconstruction") {
 			@Override
 			public JInternalFrame getNewInternalFrame() {
-				return ServiceProvider.getInstance().getAnalyseService().getSARDialog(ViewController.this.mainFrame);
+				return ServiceProvider.getInstance().getAnalyseService().getSARDialog(mainController.getMainGui());
 			}
 		};
 		
