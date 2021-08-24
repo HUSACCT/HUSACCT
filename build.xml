@@ -73,7 +73,9 @@
 	</target>
 
 	<!-- Create runnable Jars -->
-	<target name="jar" depends="sacc">
+	<target name="jar" depends="sacc,jar-only" />
+		
+	<target name="jar-only" depends="compile">
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" excludes="husaccttest/**">
 			<manifest>

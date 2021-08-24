@@ -9,13 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 import husacct.ServiceProvider;
@@ -25,7 +19,6 @@ import husacct.analyse.task.reconstruct.dto.ReconstructArchitectureDTO;
 import husacct.analyse.task.reconstruct.parameters.ReconstructArchitectureParameterDTO;
 import husacct.common.help.presentation.HelpableJDialog;
 import husacct.common.locale.ILocaleService;
-import husacct.control.ControlServiceImpl;
 
 public class EditApproachFrame extends HelpableJDialog implements ActionListener{
 	//private final Logger logger = Logger.getLogger(ApproachesSettingsFrame.class);
@@ -38,8 +31,9 @@ public class EditApproachFrame extends HelpableJDialog implements ActionListener
 	private HashMap<String, ReconstructArchitectureParameterPanel> parameterDTOPanels = new HashMap<String, ReconstructArchitectureParameterPanel>();
 
 	
-	public EditApproachFrame(ReconstructArchitectureDTO dto, ApproachesJPanel allApJp){
-		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+	public EditApproachFrame(JFrame mainFrame, ReconstructArchitectureDTO dto, ApproachesJPanel allApJp){
+		super(mainFrame, true);
+
 		this.dto = dto;
 		this.approachesJPanel = allApJp;
 		initUI();

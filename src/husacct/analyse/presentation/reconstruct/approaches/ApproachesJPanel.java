@@ -11,12 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
@@ -46,8 +41,10 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 	private TableColumnModel tableApproachesColumnModel;
 	public JTable parameterTable;
 	private JButton applyButton, reverseButton, clearAllButton, editApproachButton;
-	
-	public ApproachesJPanel(AnalyseTaskControl analyseTaskControl) throws IOException {
+	private JFrame mainFrame;
+
+	public ApproachesJPanel(JFrame mainFrame, AnalyseTaskControl analyseTaskControl) throws IOException {
+		this.mainFrame = mainFrame;
 		this.analyseTaskControl = analyseTaskControl;
 		initUI();
 	}
@@ -234,7 +231,7 @@ public abstract class ApproachesJPanel extends HelpableJPanel implements ActionL
 				String approachId = (String) approachesTable.getModel().getValueAt(selectedRow, 0);
 				ReconstructArchitectureDTO reconstructArchitectureDTO = getReconstructArchitectureDTO(approachId);
 				if ((reconstructArchitectureDTO != null) && !reconstructArchitectureDTO.parameterDTOs.isEmpty()){
-					new EditApproachFrame(reconstructArchitectureDTO, this);
+					new EditApproachFrame(this.mainFrame, reconstructArchitectureDTO, this);
 				}
 				else{
 					JOptionPane.showMessageDialog(this, localService.getTranslatedString("ApproachWithoutParametersWarning"));

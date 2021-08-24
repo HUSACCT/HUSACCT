@@ -3,9 +3,7 @@ package husacct.control.presentation.viewcontrol;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
-
+import javax.swing.*;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.task.MainController;
@@ -20,10 +18,13 @@ public class ViewController {
 	private InternalFrameController validateConfigurationContainer;
 	private InternalFrameController codeViewerContainer;
 	private InternalFrameController analyseSARController;
+	private JFrame mainFrame;
 	
 	private List<InternalFrameController> viewContainers = new ArrayList<>();
-	
+
 	public ViewController(MainController mainController){
+		this.mainFrame = mainController.getMainGui();
+
 		defineContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
 			@Override
 			public JInternalFrame getNewInternalFrame() {
@@ -49,14 +50,14 @@ public class ViewController {
 		analysedApplicationOverviewContainer = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "AnalysedArchitectureOverview") {
 			@Override
 			public JInternalFrame getNewInternalFrame() {
-				return ServiceProvider.getInstance().getAnalyseService().getJInternalFrame();
+				return ServiceProvider.getInstance().getAnalyseService().getAnalyseFrame();
 			}
 		};
 		
 		analyseSARController = new InternalFrameController(mainController, new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW)), "SoftwareArchitectureReconstruction") {
 			@Override
 			public JInternalFrame getNewInternalFrame() {
-				return ServiceProvider.getInstance().getAnalyseService().getJInternalSARFrame();
+				return ServiceProvider.getInstance().getAnalyseService().getSARDialog(ViewController.this.mainFrame);
 			}
 		};
 		

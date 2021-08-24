@@ -9,30 +9,13 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 public class HelpableJPanel extends JPanel{
-
-	
 	public HelpableJPanel() {
 		Helpable help = new Helpable(this);
 		addMouseListener(help.getListener());		
-	}
-	
-	public HelpableJPanel(MainGui mainGui, boolean b) {
-		
-		Helpable help = new Helpable(this);
-		addMouseListener(help.getListener());
-	}
-
-	public HelpableJPanel(JDialog dialogOwner, boolean b) {
-	
-		Helpable help = new Helpable(this);
-		addMouseListener(help.getListener());
 	}
 	
 	public void doListener(MouseEvent e) {
 		Helpable help = new Helpable(this);
 		help.doListener(e);
 	}
-	
-	
-	
 }

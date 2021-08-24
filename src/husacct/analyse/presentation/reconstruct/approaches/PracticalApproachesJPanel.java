@@ -6,11 +6,13 @@ import java.io.IOException;
 import husacct.analyse.task.AnalyseTaskControl;
 import husacct.analyse.task.reconstruct.AnalyseReconstructConstants.Algorithms;
 
+import javax.swing.*;
+
 public class PracticalApproachesJPanel extends ApproachesJPanel implements ActionListener {
 	private static final long serialVersionUID = 8208626960034851199L;
 	
-	public PracticalApproachesJPanel(AnalyseTaskControl analyseTaskControl) throws IOException {
-		super(analyseTaskControl);
+	public PracticalApproachesJPanel(JFrame mainFrame, AnalyseTaskControl analyseTaskControl) throws IOException {
+		super(mainFrame, analyseTaskControl);
 	}
 	
 	@Override

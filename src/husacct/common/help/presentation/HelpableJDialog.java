@@ -5,17 +5,16 @@ import java.awt.event.MouseEvent;
 import husacct.common.help.Helpable;
 import husacct.control.presentation.MainGui;
 
-import javax.swing.JDialog;
+import javax.swing.*;
 
 public class HelpableJDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
 
-	public HelpableJDialog(MainGui mainGui, boolean b) {
+	public HelpableJDialog(JFrame mainGui, boolean b) {
 		super(mainGui, b);
 		Helpable help = new Helpable(this);
 		addMouseListener(help.getListener());
-		
 	}
 
 	public HelpableJDialog(JDialog dialogOwner, boolean b) {

@@ -19,10 +19,9 @@ import husacct.common.dto.SoftwareUnitDTO;
 import husacct.common.dto.UmlLinkDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
-
-import javax.swing.JInternalFrame;
-
 import org.jdom2.Element;
+
+import javax.swing.*;
 
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable {
 
@@ -36,8 +35,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
         this.queryService = new FamixQueryServiceImpl(); //Must be created as first, since it clears the model (needed in case of reloading workspaces). 
         this.persistencyService = new FamixPersistencyServiceImpl(queryService);
         this.analyseTaskControl = new AnalyseTaskControl(persistencyService, queryService);
-        this.analyseInternalFrame = null;
-        this.analyseInternalSARFrame = null;
+
     }
 
     @Override
@@ -48,8 +46,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
     public void analyseApplication(ProjectDTO project) {
         this.analyseTaskControl.analyseApplication(project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
-        this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
-        this.analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
+
         super.notifyServiceListeners();
     }
 
@@ -59,7 +56,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
 
     @Override
-    public JInternalFrame getJInternalFrame() {
+    public JInternalFrame getAnalyseFrame() {
         if (analyseInternalFrame == null) {
             analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
         }
@@ -67,9 +64,9 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
 
     @Override
-    public JInternalFrame getJInternalSARFrame() {
+    public JInternalFrame getSARDialog(JFrame parentFrame) {
     	reconstructArchitecture_Initiate();
-    	analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
+    	analyseInternalSARFrame = new AnalyseInternalSARFrame(parentFrame, analyseTaskControl);
         return analyseInternalSARFrame;
     }
     
@@ -141,8 +138,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
     public void importAnalysisModel(Element analyseElement) {
     	analyseTaskControl.importAnalysisModel(analyseElement);
-        this.analyseInternalFrame = new AnalyseInternalFrame(analyseTaskControl);
-        this.analyseInternalSARFrame = new AnalyseInternalSARFrame(analyseTaskControl);
         super.notifyServiceListeners();
     }
 
