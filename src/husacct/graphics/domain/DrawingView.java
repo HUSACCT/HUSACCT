@@ -110,7 +110,12 @@ public class DrawingView extends DefaultDrawingView {
 	private boolean hasSelection() {
 		return getSelectedFigures().size() > 0;
 	}
-	
+
+	@Override
+	public void delete() {
+		hideSelectedFigures();
+	}
+
 	public void hideSelectedFigures() {
 		Set<Figure> selection = getSelectedFigures();
 		drawing.hideSelectedFigures(selection);
