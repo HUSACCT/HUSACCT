@@ -318,8 +318,8 @@ class FamixCreationPostProcessor {
 		        String uniqueNameFrom = association.from;
 
             	/* //Test helper
-            	if (association.from.contains("CSharpTreeConvertController")){
-            		if(association.lineNumber == 26) {
+            	if (association.from.contains("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass2")){
+            		if(association.lineNumber == 11) {
             			boolean breakpoint = true; }
             	} */
 
@@ -444,9 +444,9 @@ class FamixCreationPostProcessor {
                 	}
                 }
 
-                /* Test helper
-            	if (fromExists && association.from.contains("CSharpTreeConvertController")) {
-            		if (association.lineNumber == 26) {
+                /* Test helper 
+            	if (fromExists && association.from.contains("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass2")) {
+            		if (association.lineNumber == 11) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -606,39 +606,39 @@ class FamixCreationPostProcessor {
                 if (fromExists && !toExists && toHasValue && !association.to.endsWith(")")){
 	                if ((association instanceof FamixInvocation)) {
 	                	FamixStructuralEntity entity = null;
-	    	        	// 5.1 Determine if association.to refers to an attribute (or class annotation)
-	                	String classOfAttribute = findAttribute(association.from, association.to);
-	    	            if (!classOfAttribute.equals("")) {
-	    	        		entity = theModel.structuralEntities.get(classOfAttribute + "." + association.to);
-    	                	theInvocation.usedEntity = entity.uniqueName;
-		    	        	// 5.2 Determine if association.to refers to an inherited attribute
-		        			if (!classOfAttribute.equals(association.from)) { // classOfAttribute refers to a super class  
-		        				association.isInheritanceRelated = true;
-		        				association.isIndirect = true;
-			                	// Create an access dependency on the superclass.
-			    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation(theInvocation, association.type, classOfAttribute, theInvocation.usedEntity, "", true);
-			    				newInvocation.isInheritanceRelated = true;
-				        		newInvocation.type = determineDependencyTypeBasedOnFoundAttribute(entity);
-			            		determineDependencyTypeAndOrSubType(newInvocation);
-			    				addToModel(newInvocation);  
-				    			numberOfDerivedAssociations ++;
-		                    }
-	    	        		if (entity.declareType != null && !entity.declareType.equals("")){
-	    	        			association.to = entity.declareType;
-	        	            	numberOfConnectedViaAttribute++;
+	    	        	// 5.1 Find out or association.to refers to a local variable or parameter: Get StructuralEntity on key ClassName.MethodName.VariableName
+		            	String searchKey = association.from + "." + theInvocation.belongsToMethod + "." + theInvocation.to;
+	                	if (theModel.structuralEntities.containsKey(searchKey)) {
+	                		entity = theModel.structuralEntities.get(searchKey);
+	                		theInvocation.usedEntity = entity.uniqueName;
+	                		if (entity.declareType != null && !entity.declareType.equals("")){
+	                			association.to = entity.declareType;
+		            			numberOfConnectedViaLocalVariable ++;
+	                		}
+	                	} else { 
+		    	        	// 5.2 Determine if association.to refers to an attribute (or class annotation)
+		                	String classOfAttribute = findAttribute(association.from, association.to);
+		    	            if (!classOfAttribute.equals("")) {
+		    	        		entity = theModel.structuralEntities.get(classOfAttribute + "." + association.to);
+	    	                	theInvocation.usedEntity = entity.uniqueName;
+			    	        	// 5.3 Determine if association.to refers to an inherited attribute
+			        			if (!classOfAttribute.equals(association.from)) { // classOfAttribute refers to a super class  
+			        				association.isInheritanceRelated = true;
+			        				association.isIndirect = true;
+				                	// Create an access dependency on the superclass.
+				    				FamixInvocation newInvocation = indirectAssociations_AddIndirectInvocation(theInvocation, association.type, classOfAttribute, theInvocation.usedEntity, "", true);
+				    				newInvocation.isInheritanceRelated = true;
+					        		newInvocation.type = determineDependencyTypeBasedOnFoundAttribute(entity);
+				            		determineDependencyTypeAndOrSubType(newInvocation);
+				    				addToModel(newInvocation);  
+					    			numberOfDerivedAssociations ++;
+			                    }
+		    	        		if (entity.declareType != null && !entity.declareType.equals("")){
+		    	        			association.to = entity.declareType;
+		        	            	numberOfConnectedViaAttribute++;
+		    	        		}
 	    	        		}
-	    	        	// 5.3 Find out or association.to refers to a local variable or parameter: Get StructuralEntity on key ClassName.MethodName.VariableName
-	    	            } else { 
-    		            	String searchKey = association.from + "." + theInvocation.belongsToMethod + "." + theInvocation.to;
-    	                	if (theModel.structuralEntities.containsKey(searchKey)) {
-    	                		entity = theModel.structuralEntities.get(searchKey);
-    	                		theInvocation.usedEntity = entity.uniqueName;
-    	                		if (entity.declareType != null && !entity.declareType.equals("")){
-    	                			association.to = entity.declareType;
-    		            			numberOfConnectedViaLocalVariable ++;
-    	                		}
-    	                	}
-    	        		}
+	                	}
 	    	            // 5.4 Finalize (for all types of attributes)
 	    	            if (entity != null && (entity.declareType != null) && !entity.declareType.equals("")){
     	        			if (chainingInvocation) { 
@@ -1440,14 +1440,6 @@ class FamixCreationPostProcessor {
 	
 	private String getTypeOfAttribute(String className, String fromMethod, String attributeName) {
     	String returnValue = attributeName;
-    	// Find out if attributeName is a class or instance variable
-    	String classOfAttribute = findAttribute(className, attributeName);
-        if (!classOfAttribute.equals("")) {
-    		FamixStructuralEntity entity = theModel.structuralEntities.get(classOfAttribute + "." + attributeName);
-    		if (entity.declareType != null && !entity.declareType.equals("")){
-    			return entity.declareType;
-    		}
-        }
     	// Find out if attributeName is a local variable
     	String searchKey = className + "." + fromMethod + "." + attributeName;
     	if (theModel.structuralEntities.containsKey(searchKey)) {
@@ -1456,6 +1448,14 @@ class FamixCreationPostProcessor {
     			return entity.declareType;
     		}
     	}
+    	// Find out if attributeName is a class or instance variable
+    	String classOfAttribute = findAttribute(className, attributeName);
+        if (!classOfAttribute.equals("")) {
+    		FamixStructuralEntity entity = theModel.structuralEntities.get(classOfAttribute + "." + attributeName);
+    		if (entity.declareType != null && !entity.declareType.equals("")){
+    			return entity.declareType;
+    		}
+        }
        	return returnValue;
 	}
 	
