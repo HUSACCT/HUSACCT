@@ -818,6 +818,15 @@ public class Java_AccuracyTestDependencyDetection {
 	}
 
 	@Test
+	public void AccessInstanceVariableIndirect_SuperClass_This_True(){
+		String fromClass = "domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass3";
+		String toClass = "domain.indirect.BaseIndirect";
+		ArrayList<String> typesToFind = new ArrayList<String>();
+		typesToFind.add("Access");
+		Assert.assertTrue(areDependencyTypesDetected(fromClass, toClass, typesToFind, true));
+	}
+
+	@Test
 	public void AccessInstanceVariableIndirect_SuperClass_DependencyToBaseIndirect(){
 		String fromClass = "domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass";
 		String toClass = "domain.indirect.BaseIndirect";

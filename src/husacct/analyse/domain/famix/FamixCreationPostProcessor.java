@@ -317,7 +317,7 @@ class FamixCreationPostProcessor {
 	        	FamixAssociation association = i.next();
 		        String uniqueNameFrom = association.from;
 
-            	/* //Test helper
+            	/* Test helper
             	if (association.from.contains("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass2")){
             		if(association.lineNumber == 11) {
             			boolean breakpoint = true; }
@@ -445,8 +445,8 @@ class FamixCreationPostProcessor {
                 }
 
                 /* Test helper 
-            	if (fromExists && association.from.contains("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass2")) {
-            		if (association.lineNumber == 11) {
+            	if (fromExists && association.from.contains("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass3")) {
+            		if (association.lineNumber == 8) {
     	    				boolean breakpoint = true;
         			}
             	} */
@@ -617,7 +617,12 @@ class FamixCreationPostProcessor {
 	                		}
 	                	} else { 
 		    	        	// 5.2 Determine if association.to refers to an attribute (or class annotation)
-		                	String classOfAttribute = findAttribute(association.from, association.to);
+		                	if (association.to.equals("this") && !theInvocation.remainingToString.equals("")) {
+		                		association.to = theInvocation.remainingToString;
+		                		theInvocation.remainingToString = "";
+		                		chainingInvocation = false;
+		                	}
+	                		String classOfAttribute = findAttribute(association.from, association.to);
 		    	            if (!classOfAttribute.equals("")) {
 		    	        		entity = theModel.structuralEntities.get(classOfAttribute + "." + association.to);
 	    	                	theInvocation.usedEntity = entity.uniqueName;

@@ -46,6 +46,13 @@ public class ExpressionAnalyser extends JavaGenerator{
     public ExpressionAnalyser(String uniqueClassName, String belongsToMethod, ExpressionContext mainExpression) {
     	this.belongsToClass = uniqueClassName;
     	this.belongsToMethod = belongsToMethod;
+        /* Test helper
+		String to_string = this.to;
+    	if (belongsToClass.equals("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass3")) {
+    		String expressionText1 = mainExpression.getText();
+			boolean breakpoint = true;
+    	} */
+
     	analyseExpression(mainExpression);
     }
     
@@ -99,11 +106,11 @@ public class ExpressionAnalyser extends JavaGenerator{
     
     private void analyseElementaryExpression(ExpressionContext expression) {
         /* Test helper
-		String expressionText2 = expression.getText();
-		String to_string = this.to;
-    	if (belongsToClass.equals("net.sf.jabref.preferences.CustomImportList") &&
-    			(expression.start.getLine() == 74)) {
-				boolean breakpoint = true;
+    	if (belongsToClass.equals("domain.indirect.violatingfrom.AccessInstanceVariableIndirect_SuperClass3") &&
+    		(expression.start.getLine() == 8)) {
+    		String expressionText2 = expression.getText();
+    		String to_string = this.to;
+			boolean breakpoint = true;
     	} */
 		
 		this.to = transformExpressionToString(expression);
@@ -172,7 +179,9 @@ public class ExpressionAnalyser extends JavaGenerator{
      * 3) an argument that includes "." or ",".
      */
     private String transformSingularExpressionToString(ExpressionContext expression) {
-    	// String testString = expression.getText();
+    	//String testString1 = expression.getText();
+    	//String testString2Identifier = expression.Identifier().getText();
+    	//String testString3SubExpression = expression.expression(0).getText();
     	String to_string = "";
     	int childCount = expression.getChildCount();
 		ExpressionContext subExpression = expression.expression(0);
@@ -186,6 +195,8 @@ public class ExpressionAnalyser extends JavaGenerator{
 				analyseTypeCast(expression.typeType(), DependencySubTypes.REF_TYPE);
 			}
 			to_string += transformExpressionToString(subExpression);
+		} else if ((childCount == 3) && subExpression.getText().equals("this")) { 
+			to_string = expression.getText();
 		} else if ((childCount >= 3) && expression.getChild(childCount - 1).getText().equals(")")) { // Call
 			if ((expression.expressionList() != null)) { // List of arguments
 				String expressionListText = analyseExpressionList(expression.expressionList());
