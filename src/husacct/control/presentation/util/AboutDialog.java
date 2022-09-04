@@ -49,7 +49,7 @@ public class AboutDialog extends JDialog{
 
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(420, 380));
+		this.setSize(new Dimension(430, 390));
 		this.setLayout(new FlowLayout(0,0,0));
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
