@@ -46,8 +46,8 @@ public class SACCandSRMAtest {
 
 	private static SaccCommandDTO saccCommandDTO;
 	private static ViolationReportDTO violationReport = null;
-	private static int numberOfAllViolationsInSrmaSourceCode = 61;
-	private static int numberOfMissingViolationsInImportFile = 5; // The import file contains 56 violations of 61 in total. Five violations have been removed with WordPad from the exportAllViolations file.
+	private static int numberOfAllViolationsInSrmaSourceCode = 62;
+	private static int numberOfMissingViolationsInImportFile = 5; // The import file contains 57 violations of 62 in total. Five violations have been removed with WordPad from the exportAllViolations file.
 
 	private static Logger logger = Logger.getLogger(SACCandSRMAtest.class);
 
@@ -93,7 +93,7 @@ public class SACCandSRMAtest {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isAnalysedCorrectly);
 		}
-		assertEquals(413, numberOfDependencies);
+		assertEquals(419, numberOfDependencies);
 	}
 
 
@@ -246,7 +246,7 @@ public class SACCandSRMAtest {
 		} catch (ProgrammingLanguageNotFoundException e) {
 			assertTrue(isValidatedCorrectly);	
 		}
-		assertEquals(5, violations.length);
+		assertEquals(6, violations.length);
 	}
 
 	@Test

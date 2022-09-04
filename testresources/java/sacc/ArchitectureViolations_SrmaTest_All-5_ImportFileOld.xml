@@ -2,13 +2,13 @@
 <report>
   <projectName>SrmaTest2014-11-12 with Exceptions</projectName>
   <version>1.0</version>
-  <totalViolations>62</totalViolations>
-  <violationsGeneratedOn>04-09-2022 12:40:43</violationsGeneratedOn>
-  <violationsPerSeverity>
+  <totalViolations>61</totalViolations>
+  <violationsGeneratedOn>08-03-2017 10:44:46</violationsGeneratedOn>
+  <violations totalViolations="61">
     <Low>6</Low>
     <Medium>7</Medium>
-    <High>49</High>
-  </violationsPerSeverity>
+    <High>48</High>
+  </violations>
   <violations>
     <!--from = path of from-class-->
     <!--to = path of to-class-->
@@ -54,71 +54,6 @@
       <line>8</line>
       <depType>Access</depType>
       <depSubType>Instance Variable</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Layer Presentation is not allowed to skip a layer (skip call)</message>
-      <ruleType>IsNotAllowedToMakeSkipCall</ruleType>
-      <fromMod>Presentation</fromMod>
-      <toMod>Presentation</toMod>
-    </violation>
-    <violation>
-      <from>presentation.relationrules.skip_call_ban.ViolatingExtend_2_2</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>3</line>
-      <depType>Import</depType>
-      <depSubType />
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Layer Presentation is not allowed to skip a layer (skip call)</message>
-      <ruleType>IsNotAllowedToMakeSkipCall</ruleType>
-      <fromMod>Presentation</fromMod>
-      <toMod>Presentation</toMod>
-    </violation>
-    <violation>
-      <from>presentation.relationrules.skip_call_ban.ViolatingExtend_2_2</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>6</line>
-      <depType>Inheritance</depType>
-      <depSubType>Extends Class</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Layer Presentation is not allowed to skip a layer (skip call)</message>
-      <ruleType>IsNotAllowedToMakeSkipCall</ruleType>
-      <fromMod>Presentation</fromMod>
-      <toMod>Presentation</toMod>
-    </violation>
-    <violation>
-      <from>presentation.relationrules.skip_call_ban.ViolatingCall_2_2</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>3</line>
-      <depType>Import</depType>
-      <depSubType />
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Layer Presentation is not allowed to skip a layer (skip call)</message>
-      <ruleType>IsNotAllowedToMakeSkipCall</ruleType>
-      <fromMod>Presentation</fromMod>
-      <toMod>Presentation</toMod>
-    </violation>
-    <violation>
-      <from>presentation.relationrules.skip_call_ban.ViolatingCall_2_2</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>6</line>
-      <depType>Declaration</depType>
-      <depSubType>Instance Variable</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Layer Presentation is not allowed to skip a layer (skip call)</message>
-      <ruleType>IsNotAllowedToMakeSkipCall</ruleType>
-      <fromMod>Presentation</fromMod>
-      <toMod>Presentation</toMod>
-    </violation>
-    <violation>
-      <from>presentation.relationrules.skip_call_ban.ViolatingCall_2_2</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>9</line>
-      <depType>Call</depType>
-      <depSubType>Instance Method</depSubType>
       <indirect>false</indirect>
       <severity>High</severity>
       <message>Layer Presentation is not allowed to skip a layer (skip call)</message>
@@ -192,20 +127,7 @@
       <toMod>Technology.PropertyRules.Component</toMod>
     </violation>
     <violation>
-      <from>technology.propertyrules.facade_convention.IlLegalAccess</from>
-      <to>technology.propertyrules.component.IllegalVisibility1</to>
-      <line>9</line>
-      <depType>Reference</depType>
-      <depSubType>Type of Variable</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Component Technology.PropertyRules.Component may only be accessed via its interface(s)</message>
-      <ruleType>FacadeConvention</ruleType>
-      <fromMod>Technology.PropertyRules.Component</fromMod>
-      <toMod>Technology.PropertyRules.Component</toMod>
-    </violation>
-    <violation>
-      <from>domain.relationrules.back_call_ban.ViolatingAccess_2_1</from>
+      <from>domain.relationrules.back_call_ban.ViolatingExtend_2_1</from>
       <to>presentation.relationrules.notallowed.ASocialNetwork</to>
       <line>3</line>
       <depType>Import</depType>
@@ -218,24 +140,11 @@
       <toMod>Domain</toMod>
     </violation>
     <violation>
-      <from>domain.relationrules.back_call_ban.ViolatingAccess_2_1</from>
+      <from>domain.relationrules.back_call_ban.ViolatingExtend_2_1</from>
       <to>presentation.relationrules.notallowed.ASocialNetwork</to>
       <line>6</line>
-      <depType>Declaration</depType>
-      <depSubType>Instance Variable</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>Layer Domain is not allowed to make use of a higher level layer (back call)</message>
-      <ruleType>IsNotAllowedToMakeBackCall</ruleType>
-      <fromMod>Domain</fromMod>
-      <toMod>Domain</toMod>
-    </violation>
-    <violation>
-      <from>domain.relationrules.back_call_ban.ViolatingAccess_2_1</from>
-      <to>presentation.relationrules.notallowed.ASocialNetwork</to>
-      <line>8</line>
-      <depType>Access</depType>
-      <depSubType>Instance Variable</depSubType>
+      <depType>Inheritance</depType>
+      <depSubType>Extends Class</depSubType>
       <indirect>false</indirect>
       <severity>High</severity>
       <message>Layer Domain is not allowed to make use of a higher level layer (back call)</message>
@@ -283,7 +192,7 @@
       <toMod>Domain</toMod>
     </violation>
     <violation>
-      <from>domain.relationrules.back_call_ban.ViolatingExtend_2_1</from>
+      <from>domain.relationrules.back_call_ban.ViolatingAccess_2_1</from>
       <to>presentation.relationrules.notallowed.ASocialNetwork</to>
       <line>3</line>
       <depType>Import</depType>
@@ -296,17 +205,69 @@
       <toMod>Domain</toMod>
     </violation>
     <violation>
-      <from>domain.relationrules.back_call_ban.ViolatingExtend_2_1</from>
+      <from>domain.relationrules.back_call_ban.ViolatingAccess_2_1</from>
       <to>presentation.relationrules.notallowed.ASocialNetwork</to>
       <line>6</line>
-      <depType>Inheritance</depType>
-      <depSubType>Extends Class</depSubType>
+      <depType>Declaration</depType>
+      <depSubType>Instance Variable</depSubType>
       <indirect>false</indirect>
       <severity>High</severity>
       <message>Layer Domain is not allowed to make use of a higher level layer (back call)</message>
       <ruleType>IsNotAllowedToMakeBackCall</ruleType>
       <fromMod>Domain</fromMod>
       <toMod>Domain</toMod>
+    </violation>
+    <violation>
+      <from>domain.relationrules.back_call_ban.ViolatingAccess_2_1</from>
+      <to>presentation.relationrules.notallowed.ASocialNetwork</to>
+      <line>8</line>
+      <depType>Access</depType>
+      <depSubType>Instance Variable</depSubType>
+      <indirect>false</indirect>
+      <severity>High</severity>
+      <message>Layer Domain is not allowed to make use of a higher level layer (back call)</message>
+      <ruleType>IsNotAllowedToMakeBackCall</ruleType>
+      <fromMod>Domain</fromMod>
+      <toMod>Domain</toMod>
+    </violation>
+    <violation>
+      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2</from>
+      <to>technology.relationrules.notallowed.ASocialNetwork</to>
+      <line>3</line>
+      <depType>Import</depType>
+      <depSubType />
+      <indirect>false</indirect>
+      <severity>High</severity>
+      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use SubSystem Technology.RelationRules.NotAllowed</message>
+      <ruleType>IsNotAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
+      <toMod>Technology.RelationRules.NotAllowed</toMod>
+    </violation>
+    <violation>
+      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2</from>
+      <to>technology.relationrules.notallowed.ASocialNetwork</to>
+      <line>6</line>
+      <depType>Declaration</depType>
+      <depSubType>Instance Variable</depSubType>
+      <indirect>false</indirect>
+      <severity>High</severity>
+      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use SubSystem Technology.RelationRules.NotAllowed</message>
+      <ruleType>IsNotAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
+      <toMod>Technology.RelationRules.NotAllowed</toMod>
+    </violation>
+    <violation>
+      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2</from>
+      <to>technology.relationrules.notallowed.ASocialNetwork</to>
+      <line>9</line>
+      <depType>Call</depType>
+      <depSubType>Instance Method</depSubType>
+      <indirect>false</indirect>
+      <severity>High</severity>
+      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use SubSystem Technology.RelationRules.NotAllowed</message>
+      <ruleType>IsNotAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
+      <toMod>Technology.RelationRules.NotAllowed</toMod>
     </violation>
     <violation>
       <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingExtend_2</from>
@@ -374,43 +335,43 @@
       <toMod>Technology.RelationRules.NotAllowed</toMod>
     </violation>
     <violation>
-      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2</from>
+      <from>domain.relationrules.is_only_allowed_to_use.ViolatingAccess_1_1</from>
       <to>technology.relationrules.notallowed.ASocialNetwork</to>
       <line>3</line>
       <depType>Import</depType>
       <depSubType />
       <indirect>false</indirect>
       <severity>High</severity>
-      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use SubSystem Technology.RelationRules.NotAllowed</message>
-      <ruleType>IsNotAllowedToUse</ruleType>
-      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
-      <toMod>Technology.RelationRules.NotAllowed</toMod>
+      <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
+      <ruleType>IsOnlyAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsOnlyAllowedToUse</fromMod>
+      <toMod>Technology.RelationRules.Allowed</toMod>
     </violation>
     <violation>
-      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2</from>
+      <from>domain.relationrules.is_only_allowed_to_use.ViolatingAccess_1_1</from>
       <to>technology.relationrules.notallowed.ASocialNetwork</to>
       <line>6</line>
       <depType>Declaration</depType>
       <depSubType>Instance Variable</depSubType>
       <indirect>false</indirect>
       <severity>High</severity>
-      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use SubSystem Technology.RelationRules.NotAllowed</message>
-      <ruleType>IsNotAllowedToUse</ruleType>
-      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
-      <toMod>Technology.RelationRules.NotAllowed</toMod>
+      <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
+      <ruleType>IsOnlyAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsOnlyAllowedToUse</fromMod>
+      <toMod>Technology.RelationRules.Allowed</toMod>
     </violation>
     <violation>
-      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCall_2</from>
+      <from>domain.relationrules.is_only_allowed_to_use.ViolatingAccess_1_1</from>
       <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>9</line>
-      <depType>Call</depType>
-      <depSubType>Instance Method</depSubType>
+      <line>8</line>
+      <depType>Access</depType>
+      <depSubType>Instance Variable</depSubType>
       <indirect>false</indirect>
       <severity>High</severity>
-      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use SubSystem Technology.RelationRules.NotAllowed</message>
-      <ruleType>IsNotAllowedToUse</ruleType>
-      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
-      <toMod>Technology.RelationRules.NotAllowed</toMod>
+      <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
+      <ruleType>IsOnlyAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsOnlyAllowedToUse</fromMod>
+      <toMod>Technology.RelationRules.Allowed</toMod>
     </violation>
     <violation>
       <from>domain.relationrules.is_only_allowed_to_use.ViolatingExtend_1_1</from>
@@ -470,45 +431,6 @@
       <line>9</line>
       <depType>Call</depType>
       <depSubType>Instance Method</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
-      <ruleType>IsOnlyAllowedToUse</ruleType>
-      <fromMod>Domain.RelationRules.IsOnlyAllowedToUse</fromMod>
-      <toMod>Technology.RelationRules.Allowed</toMod>
-    </violation>
-    <violation>
-      <from>domain.relationrules.is_only_allowed_to_use.ViolatingAccess_1_1</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>3</line>
-      <depType>Import</depType>
-      <depSubType />
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
-      <ruleType>IsOnlyAllowedToUse</ruleType>
-      <fromMod>Domain.RelationRules.IsOnlyAllowedToUse</fromMod>
-      <toMod>Technology.RelationRules.Allowed</toMod>
-    </violation>
-    <violation>
-      <from>domain.relationrules.is_only_allowed_to_use.ViolatingAccess_1_1</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>6</line>
-      <depType>Declaration</depType>
-      <depSubType>Instance Variable</depSubType>
-      <indirect>false</indirect>
-      <severity>High</severity>
-      <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
-      <ruleType>IsOnlyAllowedToUse</ruleType>
-      <fromMod>Domain.RelationRules.IsOnlyAllowedToUse</fromMod>
-      <toMod>Technology.RelationRules.Allowed</toMod>
-    </violation>
-    <violation>
-      <from>domain.relationrules.is_only_allowed_to_use.ViolatingAccess_1_1</from>
-      <to>technology.relationrules.notallowed.ASocialNetwork</to>
-      <line>8</line>
-      <depType>Access</depType>
-      <depSubType>Instance Variable</depSubType>
       <indirect>false</indirect>
       <severity>High</severity>
       <message>SubSystem Domain.RelationRules.IsOnlyAllowedToUse is only allowed to use SubSystem Technology.RelationRules.Allowed</message>
@@ -712,7 +634,33 @@
       <toMod>Technology.PropertyRules.NamingPrefix</toMod>
     </violation>
     <violation>
+      <from>technology.propertyrules.component.sub.IllegalVisibility2</from>
+      <to />
+      <line>0</line>
+      <depType>public</depType>
+      <depSubType />
+      <indirect>false</indirect>
+      <severity>Medium</severity>
+      <message>Component Technology.PropertyRules.Component must have visibility: default, private or protected</message>
+      <ruleType>VisibilityConvention</ruleType>
+      <fromMod>Technology.PropertyRules.Component</fromMod>
+      <toMod>Technology.PropertyRules.Component</toMod>
+    </violation>
+    <violation>
       <from>technology.propertyrules.component.IllegalVisibility1</from>
+      <to />
+      <line>0</line>
+      <depType>public</depType>
+      <depSubType />
+      <indirect>false</indirect>
+      <severity>Medium</severity>
+      <message>Component Technology.PropertyRules.Component must have visibility: default, private or protected</message>
+      <ruleType>VisibilityConvention</ruleType>
+      <fromMod>Technology.PropertyRules.Component</fromMod>
+      <toMod>Technology.PropertyRules.Component</toMod>
+    </violation>
+    <violation>
+      <from>technology.propertyrules.component.ComponentDTO</from>
       <to />
       <line>0</line>
       <depType>public</depType>
@@ -738,30 +686,69 @@
       <toMod>Technology.PropertyRules.Component</toMod>
     </violation>
     <violation>
-      <from>technology.propertyrules.component.sub.IllegalVisibility2</from>
-      <to />
-      <line>0</line>
-      <depType>public</depType>
-      <depSubType />
+      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCallInstanceLibraryClass_2</from>
+      <to>xLibraries.fi.foyt.foursquare.api.FoursquareApi</to>
+      <line>11</line>
+      <depType>Call</depType>
+      <depSubType>Library Method</depSubType>
       <indirect>false</indirect>
-      <severity>Medium</severity>
-      <message>Component Technology.PropertyRules.Component must have visibility: default, private or protected</message>
-      <ruleType>VisibilityConvention</ruleType>
-      <fromMod>Technology.PropertyRules.Component</fromMod>
-      <toMod>Technology.PropertyRules.Component</toMod>
+      <severity>High</severity>
+      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use ExternalLibrary ExternalSystems.FourSquare</message>
+      <ruleType>IsNotAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
+      <toMod>ExternalSystems.FourSquare</toMod>
     </violation>
     <violation>
-      <from>technology.propertyrules.component.ComponentDTO</from>
-      <to />
+      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCallInstanceLibraryClass_2</from>
+      <to>xLibraries.fi.foyt.foursquare.api.FoursquareApi</to>
+      <line>3</line>
+      <depType>Import</depType>
+      <depSubType />
+      <indirect>false</indirect>
+      <severity>High</severity>
+      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use ExternalLibrary ExternalSystems.FourSquare</message>
+      <ruleType>IsNotAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
+      <toMod>ExternalSystems.FourSquare</toMod>
+    </violation>
+    <violation>
+      <from>domain.relationrules.is_not_allowed_to_use.violating.ViolatingCallInstanceLibraryClass_2</from>
+      <to>xLibraries.fi.foyt.foursquare.api.FoursquareApi</to>
+      <line>7</line>
+      <depType>Declaration</depType>
+      <depSubType>Instance Variable</depSubType>
+      <indirect>false</indirect>
+      <severity>High</severity>
+      <message>SubSystem Domain.RelationRules.IsNotAllowedToUse is not allowed to use ExternalLibrary ExternalSystems.FourSquare</message>
+      <ruleType>IsNotAllowedToUse</ruleType>
+      <fromMod>Domain.RelationRules.IsNotAllowedToUse</fromMod>
+      <toMod>ExternalSystems.FourSquare</toMod>
+    </violation>
+    <violation>
+      <from>technology.propertyrules.superclass_inheritance.NoInheritanceSuper</from>
+      <to>technology.propertyrules.Datasource</to>
       <line>0</line>
-      <depType>public</depType>
+      <depType />
       <depSubType />
       <indirect>false</indirect>
       <severity>Medium</severity>
-      <message>Component Technology.PropertyRules.Component must have visibility: default, private or protected</message>
-      <ruleType>VisibilityConvention</ruleType>
-      <fromMod>Technology.PropertyRules.Component</fromMod>
-      <toMod>Technology.PropertyRules.Component</toMod>
+      <message>SubSystem Technology.PropertyRules.SuperclassInheritance must inherit from SubSystem Technology.PropertyRules.DataSource</message>
+      <ruleType>InheritanceConvention</ruleType>
+      <fromMod>Technology.PropertyRules.SuperclassInheritance</fromMod>
+      <toMod>Technology.PropertyRules.DataSource</toMod>
+    </violation>
+    <violation>
+      <from>technology.propertyrules.interface_inheritance.NoInheritanceInterface</from>
+      <to>technology.propertyrules.IDatasource</to>
+      <line>0</line>
+      <depType />
+      <depSubType />
+      <indirect>false</indirect>
+      <severity>Medium</severity>
+      <message>SubSystem Technology.PropertyRules.InterfaceInheritance must inherit from SubSystem Technology.PropertyRules.IDataSource</message>
+      <ruleType>InheritanceConvention</ruleType>
+      <fromMod>Technology.PropertyRules.InterfaceInheritance</fromMod>
+      <toMod>Technology.PropertyRules.IDataSource</toMod>
     </violation>
   </violations>
 </report>
