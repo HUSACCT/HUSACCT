@@ -30,8 +30,8 @@ public class AboutDialog extends JDialog{
 	private JPanel textPanel, gitForkPanel;
 	private JLabel forkLabel,pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
 	private JButton okButton, creditsButton;
-	private String versionNumber = "5.4";
-	private String copyRightText = "\u00a9 2017 HUSACCT (GNU General Public License)";
+	private String versionNumber = "5.5";
+	private String copyRightText = "\u00a9 2022 HUSACCT (GNU General Public License)";
 	private MainController mainController;
 	private JPanel forkLabelPanel;
 
