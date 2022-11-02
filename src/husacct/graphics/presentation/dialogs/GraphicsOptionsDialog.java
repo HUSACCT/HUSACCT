@@ -68,12 +68,12 @@ public class GraphicsOptionsDialog extends HelpableJDialog {
 		currentSettings.put("libraries", false);
 		currentSettings.put("layoutStrategy", ModuleLayoutsEnum.BASIC_LAYOUT);
 		
-		totalWidth = 550;
-		totalHeight = 290;
+		totalWidth = 580;
+		totalHeight = 300;
 		paddingSize = 10;
 		labelWidth = 110;
 		elementHeight = 20;
-		elementWidth = totalWidth - labelWidth - paddingSize * 2 - 20;
+		elementWidth = totalWidth - labelWidth - paddingSize * 2 - 50;
 		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
