@@ -3,15 +3,16 @@ Copyright © 2014 HU University of Applied Sciences, Utrecht, The Netherlands (ht
     You can make use of HUSACCT free of charge.
     
     This program (HUSACCT) is free software under the terms of the 
-    GNU Affero General Public License as
+    GNU General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
-    You can redistribute the software and/or modify it for your own use, but you are not allowed to include the
-    software, parts of the software or documentation, in other products (for commercial or non-commercial use).    
-
+    You can redistribute the software and/or modify it for your own use. And you are allowed to include the
+    software, parts of the software or documentation, in other products (for commercial or non-commercial use) 
+    if you pass on to the recipients the same freedoms that you received.  
+    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    See <http://www.gnu.org/licenses/>.
+    See https://www.gnu.org/licenses/gpl-3.0.txt.
